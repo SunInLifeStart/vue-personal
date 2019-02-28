@@ -1,0 +1,51 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+	<title>平台版跨浏览器最精简示例</title>
+	<script type="text/javascript">
+	 var TANGER_OCX_OBJ;
+
+	function init() {
+	     TANGER_OCX_OBJ = document.getElementById("TANGER_OCX");
+	     TANGER_OCX_OBJ.activate(true);
+	     if (window.navigator.platform == "Win64") {
+	          TANGER_OCX_OBJ.AddDocTypePlugin(".tif", "tif.NtkoDocument", "4.0.0.2", "officecontrol/ntkooledocallx64.cab", 51, true);
+	          TANGER_OCX_OBJ.AddDocTypePlugin(".pdf", "PDF.NtkoDocument", "4.0.0.2", "officecontrol/ntkooledocallx64.cab", 51, true);
+	     } else {
+	          TANGER_OCX_OBJ.AddDocTypePlugin(".pdf", "PDF.NtkoDocument", "4.0.0.2", "officecontrol/ntkooledocall.cab", 51, true);
+	         TANGER_OCX_OBJ.AddDocTypePlugin(".tif", "tif.NtkoDocument", "4.0.0.2", "officecontrol/ntkooledocall.cab", 51, true);
+
+		}
+
+	        // if (window.location.href.indexOf("createNew") > -1) {
+		
+		
+		//} else {
+		
+		//}
+	           // }
+
+	TANGER_OCX_OBJ.createnew("word.document");
+	}
+	function createFile() {
+	  var result = TANGER_OCX_OBJ.SaveToURL("http://59.110.172.228/api/v1/ntko/upload", "file", "", "newdoc.doc", 0)
+	  window.parent.postMessage(JSON.stringify(result), "*");
+	}
+	function saveFile() {
+	  //var result = TANGER_OCX_OBJ.SaveToURL("http://59.110.172.228/api/v1/ntko/upload", "file", "", "newdoc.doc", 0)
+	    var url = 'http://59.110.172.228/api/v1/ntko/files/cfmw5DemvQvJJzAkxDJWKBDI.doc';
+	    TANGER_OCX_OBJ.OpenFromURL(url);
+	}
+	</script>
+
+</head>
+
+<body onload="init();">
+	<form enctype="multipart/form-data" style="height:800px">
+		<script type="text/javascript" src="officecontrol/ntkoofficecontrol.js"></script>
+	</form>
+
+</body>
+
+</html>

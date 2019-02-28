@@ -1,0 +1,344 @@
+.el-menu--horizontal>.el-submenu .el-submenu__title {
+    height: 48px;
+    line-height: 48px;
+}
+
+.el-button--text {
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.el-menu.el-menu--horizontal {
+    border-bottom: none;
+}
+
+.el-button--text.actions {
+    font-size: 16px;
+}
+
+
+@font-face {
+    font-family: 'Emoji';
+    src: url('../assets/seguiemj.eot');
+    src: url('../assets/seguiemj.eot?#iefix') format('embedded-opentype'),
+        url('../assets/seguiemj.ttf') format('truetype');
+}
+
+#PortalAppDetail{
+    .content{
+        p{
+            font-size: 16px;
+            line-height: 2.2;
+            color:#666;
+        }
+    }
+   
+    img{
+        max-width: 800px;
+        display: block;
+        margin: 0px auto;
+        
+    }
+}
+
+.emoji ul {
+    list-style-type: none;
+    padding: 0px;
+    margin: 0px;
+
+    li {
+        font-family: 'Segoe UI Emoji', 'Emoji';
+        list-style: none;
+        width: 28px;
+        height: 28px;
+        float: left;
+        font-size: 16px;
+    }
+}
+
+.el-notification {
+    top: 17px !important;
+}
+
+.fullScreen {
+    bottom: 0px;
+    overflow: scroll;
+    position: fixed;
+    top: 0px;
+    z-index: 10;
+    background: #fff;
+    left: 0px;
+    right: 0px;
+
+    .formContent {
+        padding: 15px 30px;
+        flex: 1;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 15px 30px;
+        bottom: 0px;
+    }
+
+    #actionList {
+        padding-left: 20px;
+    }
+}
+
+.el-step__icon-inner[class*=el-icon]:not(.is-status) {
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.el-dialog__header {
+    font-weight: 700;
+    text-align: center
+}
+
+.el-dialog__title {
+    line-height: 24px;
+    font-size: 26px;
+    color: #005a9e;
+}
+
+.el-dialog {
+    padding: 0 20px;
+}
+
+.header .search .el-input {
+    .el-input__inner {
+        background: rgba(255, 255, 255, 0.7);
+        border: none;
+        border-radius: 2px;
+        color: #303133;
+    }
+
+    ::-webkit-input-placeholder {
+        color: rgb(96, 98, 102);
+        font-size: 13px;
+    }
+
+    .el-input__icon {
+        color: rgb(96, 98, 102);
+    }
+}
+
+.uploadBtn {
+    border: 1px dashed #c0c4cc !important;
+
+    .el-upload {
+        width: 100%;
+        height: 100%;
+
+        i {
+            font-size: 30px !important;
+        }
+    }
+}
+
+.line {
+    height: 1px;
+    background-color: #e0e6ed;
+    margin: 20px 0;
+}
+
+
+.tablePrint {
+    border-left: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-collapse: collapse;
+}
+
+.tablePrint td,
+.tablePrint th {
+    padding: 0px;
+    margin: 0px;
+    border-top: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    font-size: 13px;
+    height: 28px;
+    text-align: center;
+}
+
+.tablePrint thead th {
+    background-color: #cce8eb;
+}
+
+.tablePrint tr:nth-child(odd) {
+    background: #fff;
+}
+
+.tablePrint tr:nth-child(even) {
+    background: #fff;
+}
+
+#basemessage {
+    .upload-demo {
+        width: 100%;
+    }
+
+    .el-upload {
+        width: 100%;
+
+        .el-upload-dragger {
+            width: 100%;
+            padding-top: 100px;
+            height: 430px;
+        }
+    }
+}
+
+.items {
+    width: 100%;
+    height: 100%;
+    font-size: 14px;
+
+    .item {
+        display: flex;
+        border-left-width: 4px;
+        border-left-style: solid;
+        border-left-color: transparent;
+        padding-right: 24px;
+        border-bottom: 1px solid #eaeaea;
+        padding: 12px 12px 12px 0;
+
+        .avatar {
+            flex: 0 0 auto;
+            width: 48px;
+            text-align: center;
+            color: #ccc;
+
+        }
+
+        ;
+
+        .content {
+            // display: flex;
+            flex-flow: column nowrap;
+            flex: 1 1 auto;
+            overflow: hidden;
+            line-height: 20px;
+
+            .from {
+                display: flex;
+
+                .from-title {
+                    flex: 1 1 auto;
+                }
+
+                .from-type {
+                    flex: 0 0 auto;
+                    width: 100px;
+                    font-weight: 400;
+                    text-align: right;
+                    padding-right: 10px;
+                }
+            }
+
+            .title.readed {
+                color: #0078d7;
+            }
+
+            ;
+
+            .readed {
+                font-weight: 600;
+            }
+
+            .title.todo {
+                color: #0078d7;
+            }
+
+            .todo {
+                font-weight: 600;
+            }
+
+            .title.readed {
+                color: #2c3e50;
+            }
+
+            .readed {
+                font-weight: normal;
+            }
+
+            ;
+
+            .describe {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                color: #666666;
+            }
+
+            ;
+        }
+
+        ;
+
+        &:hover:not(.active) {
+            background: #eaeaea;
+        }
+    }
+
+    .active {
+        background: #c7e0f4;
+    }
+}
+
+.drawer {
+    display: flex;
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+    align-items: center;
+
+    .icon {
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .panel {
+        display: flex;
+        width: 100%;
+        height: 60px;
+        text-align: left;
+        align-items: center;
+        font-size: 21px;
+        justify-content: space-between;
+
+        .title {
+            flex-flow: row nowrap;
+            flex: 1;
+            font-weight: 100;
+        }
+
+        .close {
+            display: flex;
+            justify-content: flex-end;
+            font-size: 21px;
+            cursor: pointer;
+            color: #ccc;
+        }
+    }
+
+    &:hover {
+        background: #004578;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb:vertical {
+    background-color: #ccc;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+    width: 5px;
+}
+
+.el-popover {
+    text-align: center;
+}
