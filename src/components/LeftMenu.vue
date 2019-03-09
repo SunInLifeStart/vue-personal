@@ -85,71 +85,11 @@ export default {
                             to: 'asset'
                         },
                         {
-                            id: 4,
-                            name: '品牌活动备案',
-                            icon: 'el-icon-huodongbaogao',
-                            to: 'activity'
-                        },
-                        {
-                            id: 6,
-                            name: '车辆管理',
-                            icon: 'el-icon-cheliang-',
-                            to: 'vehicle'
-                        },
-                        {
-                            id: 7,
-                            name: '公文管理',
-                            icon: 'el-icon-doc',
-                            to: 'doc'
-                        },
-                        {
-                            id: 8,
-                            name: '合同管理',
-                            icon: 'el-icon-hetongguanli',
-                            to: 'contract'
-                        },
-                        {
-                            id: 9,
-                            name: '办公用品',
-                            icon: 'el-icon-bangongyongpin',
-                            to: 'supply'
-                        },
-                        {
-                            id: 13,
-                            name: '纪检监察',
-                            icon: 'el-icon-supervise',
-                            to: 'super'
-                        },
-                        {
-                            id: 14,
-                            name: '综合信息发布',
-                            icon: 'el-icon-publish',
-                            to: 'publish'
-                        },
-                        {
                             id: 15,
                             name: '督办管理',
                             icon: 'el-icon-inspect',
                             to: 'inspect'
                         },
-                        {
-                            id: 16,
-                            name: '三会议案',
-                            icon: 'el-icon-huiyi',
-                            to: 'motion'
-                        },
-                        {
-                            id: 17,
-                            name: '外事申报',
-                            icon: 'el-icon-motion',
-                            to: 'foreign'
-                        },
-                        {
-                            id: 18,
-                            name: '信息披露',
-                            icon: 'el-icon-xinxi',
-                            to: 'anno'
-                        }
                     ]
                 },
                 {
@@ -221,141 +161,17 @@ export default {
                     type: '品牌宣传管理',
                     children: [
                         {
-                            id: 421,
-                            name: '宣传物料',
-                            icon: 'el-icon-zhengcexuanchuan',
-                            to: 'material'
-                        },
-                        {
                             id: 422,
                             name: '新闻管理',
                             icon: 'el-icon-xinwenguanli1',
                             to: 'news'
                         },
-                        {
-                            id: 423,
-                            name: '媒体报道',
-                            icon: 'el-icon-mtbd',
-                            to: 'medium'
+                    {
+                            id: 8,
+                            name: '合同管理',
+                            icon: 'el-icon-hetongguanli',
+                            to: 'contract'
                         },
-                        {
-                            id: 424,
-                            name: '政务采用',
-                            icon: 'el-icon-zhengzhi',
-                            to: 'government'
-                        },
-                        {
-                            id: 425,
-                            name: '图文统计',
-                            icon: 'el-icon-tongji',
-                            to: 'newsstatistics'
-                        }
-                    ]
-                },
-                {
-                    type: '其他应用',
-                    children: [
-                        {
-                            id: 321,
-                            name: '财务报表',
-                            icon: 'el-icon-yuangongcaiwubaobiao',
-                            target: true,
-                            to: 'financialstatement',
-                            href: 'http://172.16.3.38:9797/netrep/index.jsp'
-                        },
-                        {
-                            id: 323,
-                            name: '知识产权',
-                            icon: 'el-icon-zhishichanquan',
-                            click: true,
-                            to: 'intellectualproperty'
-                        },
-                        {
-                            id: 325,
-                            name: '产业投资',
-                            click: true,
-                            icon: 'el-icon-touzi',
-                            to: 'Industryinvestment'
-                        },
-                        {
-                            id: 327,
-                            name: '资金结算',
-                            target: true,
-                            icon: 'el-icon-zhijiandan',
-                            to: 'capital',
-                            href: `http://10.0.6.10:8080/zhongfazhan/loginAction.action`
-                        },
-                        {
-                            id: 327334,
-                            name: '金融管理',
-                            target: true,
-                            icon: 'el-icon-icon-test',
-                            to: 'financialinformation',
-                            href: `http://www.zfz-data.com/sso.action?ipHash=7221e78520bd32faa404518ed72c7024&username=${md5(
-                                'zfzsso-' +
-                                    this.$store.getters.LoginData.username
-                            )}`
-                        },
-                        {
-                            id: 444,
-                            name: '会议系统',
-                            target: true,
-                            icon: 'el-icon-duorenhuiyi',
-                            to: 'meetingmanagement',
-                            href: `http://61.135.44.177:8081/login/sso?ipHash=7221e78520bd32faa404518ed72c7024&username=${
-                                this.$store.getters.LoginData.username
-                            }&stamp=111&token=${sha1(
-                                '3Onicf' +
-                                    this.$store.getters.LoginData.username +
-                                    '111'
-                            )}`
-                        },
-                        {
-                            id: 329,
-                            name: '集团门户管理',
-                            icon: 'el-icon-gaiicon-',
-                            to: 'portalmananger'
-                        },
-                        {
-                            id: 4534535,
-                            name: '统计分析',
-                            target: true,
-                            icon: 'el-icon-tongjifenxi2 ',
-                            to: 'statisticalanalysis',
-                            href: `http://statistics.zgcgroup.vpn/#/index`
-                        },
-                        {
-                            id: 6456456,
-                            name: '园区管理',
-                            target: true,
-                            icon: 'el-icon-fengxianfenxi',
-                            to: 'parkmanagement',
-                            href: `http://park.zgcgroup.vpn/#/index`
-                        },
-                        {
-                            id: 303494,
-                            name: '园区产业公共服务平台',
-                            target: true,
-                            icon: 'el-icon-nav_user',
-                            to: 'parkIndustryevaluation',
-                            href: `https://zgcg.hsmap.com/#/?from=custom`
-                        },
-                        {
-                            id: 412728,
-                            name: '国有资本',
-                            target: true,
-                            icon: 'el-icon-zichan',
-                            to: 'governmentcapital',
-                            href: `http://jawny.zgcgroup.vpn/#/index`
-                        },
-                        {
-                            id: 412729,
-                            name: '协同资源',
-                            target: true,
-                            icon: 'el-icon-xietong',
-                            to: 'collaborativeresources',
-                            href: `http://resources.zgcgroup.vpn/#/index`
-                        }
                     ]
                 }
             ]
