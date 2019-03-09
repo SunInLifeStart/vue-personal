@@ -35,12 +35,6 @@ export default {
                 expense:"报销申请",
                 travel:"出差申请",
                 portalmananger:"集团门户管理"
-                // budgetplanCompany:"资金计划公司汇总人（财务领导）总经理董事长",
-                // budgetsys: "预算系统",
-                // budgeting: "部门预算",
-                // budgetingsignal: "部门预算情况单",
-                // budgetingform: "部门预算报表",
-                // fundplan: "资金计划（部门）"
             }
         };
     },
