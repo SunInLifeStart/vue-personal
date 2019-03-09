@@ -4,7 +4,7 @@
         <div class="top-bar">
             <div class="logo">
                 <LeftMenu />
-                <a href="" style="height:26px"><img class="app-name" src="@/assets/logo.png" height="28"></a>
+                <a href="" style="height:26px"><img class="app-name" src="@/assets/logo.png" height="25"></a>
 
             </div>
             <div class="navmenu">
@@ -163,7 +163,7 @@ export default {
     .logo {
         display: flex;
         align-items: center;
-        width: 220px;
+        width: 320px;
         .app-name {
             margin-left: 10px;
         }

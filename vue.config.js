@@ -64,7 +64,7 @@ module.exports = {
             });
     },
     devServer: {
-        port: 8888,
+        port: 8889,
         proxy: {
             "/api/": {
             target: "http://59.110.172.228"

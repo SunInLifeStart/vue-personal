@@ -3,7 +3,7 @@
         <div class="login">
             <div class="box-card">
                 <div class="left">
-                    <img src="@/assets/logo.png" alt="">
+                    <img src="@/assets/logo.png" alt=""  width="350px">
                 </div>
                 <div class="right">
                     <el-form ref="form" :rules="rules2" :model="form" label-position="top" label-width="80px">
@@ -28,7 +28,7 @@
 
             </div>
         </div>
-        <div class="footer">©2018 中关村发展集团</div>
+        <div class="footer">©2019 中关村协同发展</div>
     </div>
 </template>
 

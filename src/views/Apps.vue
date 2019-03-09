@@ -22,7 +22,6 @@ export default {
                 outgoing: "发文拟稿",
                 incoming: "收文登记",
                 submission: "部门呈报",
-                supply: "办公用品",
                 asset: "资产申请",
                 contract: "合同管理",
                 news: "新闻管理",
@@ -35,7 +34,7 @@ export default {
                 payment:"付款申请",
                 expense:"报销申请",
                 travel:"出差申请",
-                portalmananger:"集团门户管理",
+                portalmananger:"集团门户管理"
                 // budgetplanCompany:"资金计划公司汇总人（财务领导）总经理董事长",
                 // budgetsys: "预算系统",
                 // budgeting: "部门预算",
