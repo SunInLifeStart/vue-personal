@@ -28,6 +28,8 @@ export default {
                 inspect: "督办管理",
                 gmomeeting: "总办会会议纪要",
                 boardmeeting: "董事会会议纪要",
+                discussion: "议题上会单",
+                applymeeting: "会议申请",
                 specmeeting: "专题会会议纪要",
                 partymeeting: "党委会会议纪要",
                 loan: "借款申请",

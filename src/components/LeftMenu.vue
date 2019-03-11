@@ -113,12 +113,17 @@ export default {
                             icon: 'el-icon-huiyidengji',
                             to: 'gmomeeting'
                         },
-
                         {
                             id: 127,
                             name: '专题会',
                             icon: 'el-icon-huiyishi',
                             to: 'specmeeting'
+                        },
+                        {
+                            id: 128,
+                            name: '议题',
+                            icon: 'el-icon-huiyishi',
+                            to: 'discussion'
                         }
                     ]
                 },
