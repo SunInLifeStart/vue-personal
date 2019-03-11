@@ -111,8 +111,8 @@
           </el-col>
           <el-col :span="8">
             <el-row>
-              <router-link :to="{path:'/portal/list2'}"><img class="dang" src="@/assets/dang.jpg"></router-link>
-              <div class="article jianbao">
+              <!-- <router-link :to="{path:'/portal/list2'}"><img class="dang" src="@/assets/dang.jpg"></router-link> -->
+              <div class="article article2">
                   <h3>工作简报<router-link :to="{path:'/portal/list/briefing/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
                     <li v-for="(item,index) in briefing" :key="item.articleId" style="padding-left:35px; height:40px;line-height:40px">
@@ -125,33 +125,22 @@
               </div>
             </el-row>            
           </el-col>
-          <el-col :span="8">
-             <el-row>
-              <div class="article huibiao">
-                  <h3>集团会表<router-link :to="{path:'/portal/list/meetingTable/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+            <el-col :span="8">
+             <div class="article article2">
+                  <h3>最新文档<router-link :to="{path:'/docs'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
-                    <li v-for="(item,index) in meetingTable" :key="item.articleId" style="padding-left:40px; height:40px;line-height:40px" v-if="index == 0">
-                     <img src="@/assets/new.png"  v-if="index == 0"> 
-                     <router-link :to="'/portal/list/meetingTable/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
+                    <li v-for="(item,index) in newDocs" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px"  @click="showDocs(item)">
+                       <img src="@/assets/arrow.png"  v-if="index == 0" style="top:15px;"> 
+                       <img src="@/assets/arrow2.png"  v-if="index != 0" style="top:15px;"> 
+                       {{item.name | formTxt}}
                       <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
                     </li>
                   </ul>
               </div>
-               <div class="article tongxun">
-                  <h3>集团通讯录<router-link :to="{path:'/portal/list/addressList/1'}"><el-button size="mini">更多</el-button></router-link></h3>
-                  <ul>
-                    <li v-for="(item,index) in addressList" :key="item.articleId" style="padding-left:20px; height:40px;line-height:40px">
-                      <img src="@/assets/phone2.png"  v-if="index == 0" style="top:12px;"> 
-                      <img src="@/assets/phone.png"  v-if="index != 0" style="top:12px;"> 
-                     <router-link :to="'/portal/list/addressList/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
-                      <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
-                    </li>
-                  </ul>
-              </div>
-            </el-row>    
           </el-col>
         </el-row>
-        <el-row class="articles" :gutter="15">
+
+        <!-- <el-row class="articles" :gutter="15">
           <el-col :span="12">
            <div class="article wendang">
                   <h3>最新文档<router-link :to="{path:'/docs'}"><el-button size="mini">更多</el-button></router-link></h3>
@@ -176,11 +165,11 @@
                   </ul>
               </div>           
           </el-col>
-        </el-row>
+        </el-row> -->
       </div>
       <div class="footer">
           <div class="contennt">
-              <img src="@/assets/mh_logo.png" />
+              <img src="@/assets/footerlogo.png" width="228px" />
               <div style="float:right">
                   <p>运维电话：18510862905运维邮箱：18510862905@163.com</p>
                   <p>Copyright  2019 DHC software Co. Ltd.</p>

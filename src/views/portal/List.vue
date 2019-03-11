@@ -42,7 +42,7 @@
         </div>
          <div class="footer">
           <div class="contennt">
-              <img src="@/assets/mh_logo.png" />
+              <img src="@/assets/footerlogo.png" width="228px" />
               <div style="float:right">
                   <p>运维电话：18510862905运维邮箱：18510862905@163.com</p>
                   <p>Copyright  2019 DHC software Co. Ltd.</p>
