@@ -123,7 +123,15 @@ export default {
                             id: 128,
                             name: '议题',
                             icon: 'el-icon-huiyishi',
-                            to: 'discussion'
+                            to: 'discussion',
+                            isVist: true
+                        },
+                        {
+                            id: 129,
+                            name: '申请表',
+                            icon: 'el-icon-huiyishi',
+                            to: 'applymeeting',
+                            isVist: true
                         }
                     ]
                 },
