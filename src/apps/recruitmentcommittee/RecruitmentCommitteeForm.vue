@@ -1,5 +1,5 @@
 <template>
-    <div id="ApplyMeetingForm">
+    <div id="RecruitmentCommitteeForm">
         <el-form :model="rows" label-width="150px" ref="formupdate">
             <el-row>
                 <el-col :span="8" offset="16">
@@ -83,6 +83,28 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="列席人员" prop="phone">
+                            <tr v-for="(item,index) in rows.evections" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                                <td colspan="4" style="width: 21%;">
+                                    <el-select v-model="item.currency" placeholder="请输入参会部门" @change="">
+                                        <el-option v-for="item in []" :key="item.value" :label="item.label" :value="{value:item.value, label: item.label}">
+                                        </el-option>
+                                    </el-select>
+                                </td>
+                                <td colspan="4">
+                                    <el-input v-model="item.number" @input="" placeholder="请输入部门人员"></el-input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="8" style="height: 30px;">
+                                    <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                </td>
+                            </tr>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
             </table>
             <el-row>
                 <el-col :span="24">
@@ -112,7 +134,7 @@ import axios from 'axios';
 import moment from 'moment';
 import FilesOperate from '../FilesOperate';
 export default {
-    name: 'ApplyMeetingForm',
+    name: 'RecruitmentCommitteeForm',
     data() {
         return {
             tabledata: [],
@@ -461,7 +483,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#ApplyMeetingForm {
+#RecruitmentCommitteeForm {
     .tableNoBorder {
         width: 100%;
         table-layout: fixed;

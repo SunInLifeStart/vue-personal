@@ -2,6 +2,13 @@
     <div id="DiscussionForm">
         <el-form :model="rows" label-width="150px" ref="formupdate">
             <el-row>
+                <el-col :span="8" offset="16">
+                    <el-form-item label="流水号:" prop="numbers">
+                        {{rows.numbers}}
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
                 <el-col :span="8">
                     <el-form-item label="提单人" prop="numbers">
                         <el-input v-model="rows.numbers" :disabled="true"></el-input>

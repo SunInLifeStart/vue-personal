@@ -30,6 +30,8 @@ export default {
                 boardmeeting: "董事会会议纪要",
                 discussion: "议题上会单",
                 applymeeting: "会议申请",
+                agentapply: "会议申请(总办会)",
+                recruitmentcommittee: "招采委员会",
                 specmeeting: "专题会会议纪要",
                 partymeeting: "党委会会议纪要",
                 loan: "借款申请",

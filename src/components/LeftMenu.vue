@@ -132,6 +132,20 @@ export default {
                             icon: 'el-icon-huiyishi',
                             to: 'applymeeting',
                             isVist: true
+                        },
+                        {
+                            id: 130,
+                            name: '招采委员会',
+                            icon: 'el-icon-huiyishi',
+                            to: 'recruitmentcommittee',
+                            isVist: true
+                        },
+                        {
+                            id: 131,
+                            name: '会议申请(总办会)',
+                            icon: 'el-icon-huiyishi',
+                            to: 'agentapply',
+                            isVist: true
                         }
                     ]
                 },
