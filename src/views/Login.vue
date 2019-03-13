@@ -28,7 +28,7 @@
 
             </div>
         </div>
-        <div class="footer">©2018 中关村发展集团</div>
+        <div class="footer">©2018 中关村协同发展</div>
     </div>
 </template>
 

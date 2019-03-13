@@ -300,7 +300,7 @@ export default {
             console.log(this.params.rows);
             let params = {};
             if (
-                this.params.rows.crtDept == '中关村发展集团' &&
+                this.params.rows.crtDept == '中关村协同发展' &&
                 !this.params.rows.crtDeptId
             ) {
                 params = {

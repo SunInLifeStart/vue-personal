@@ -2,7 +2,7 @@
     <div id="YuSuanZhiXing" class="main-container">
         <div class="content-container">
             <el-card class="box-card">
-                <p style="font-size: 20px;">中发展集团xx年预算执行情况单</p>
+                <p style="font-size: 20px;">协同发展集团xx年预算执行情况单</p>
                 <YuSuanDoFilter @searchList="getSearchOptions" style="margin-top: 10px;" v-if="this.yusuando == true"></YuSuanDoFilter>
                 <YuSuanShengDoFilter @searchShengList="getShengSearchOptions" v-if="this.yusuanshengdo == true"></YuSuanShengDoFilter>
                 <div class="toolbar">

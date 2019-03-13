@@ -11,7 +11,7 @@
         <el-card class="box-card">
             <PartyMeetingDetail :formId="formPartyId"></PartyMeetingDetail>
         </el-card>
-        <el-dialog title="中关村发展集团党委会会议纪要" :visible.sync="dialogFormVisiblePartyMeeting" max-width="1280px" width="70%" style="text-align: center">
+        <el-dialog title="中关村协同发展党委会会议纪要" :visible.sync="dialogFormVisiblePartyMeeting" max-width="1280px" width="70%" style="text-align: center">
             <PartyMeetingForm @refreshData="refreshPartyData" ref="partymeetingform" :formId="dialogPartyFormId" :operationType="operationPartyType"></PartyMeetingForm>
             <div slot="footer" class="dialog-footer">
                 <el-button type="default" @click="savePartyForm">保存</el-button>

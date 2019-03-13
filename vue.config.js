@@ -94,14 +94,14 @@ module.exports = {
             template: './public/index.html',
             entry: './src/main.js',
             filename: 'index.html',
-            title: '首页-中关村发展'
+            title: '首页-中关村协同发展'
         },
         login:
         {
             template: './public/login.html',
             entry: './src/pages/login/main.js',
             filename: 'login.html',
-            title: '登录-中关村发展'
+            title: '登录-中关村协同发展'
         }
     }
 };

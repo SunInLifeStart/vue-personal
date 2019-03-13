@@ -1,6 +1,6 @@
 <template>
     <div id="withdraw12">
-         <p style="text-align: center;">中关村发展集团股份有限公司<span style="float:right">单位：元</span></p>
+         <p style="text-align: center;">中关村协同发展<span style="float:right">单位：元</span></p>
         <table style="width: 100%; table-layout: fixed; word-break: break-all;">
             <col style="width: 7%" />
             <col style="width: 7%" />

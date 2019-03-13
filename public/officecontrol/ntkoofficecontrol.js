@@ -146,7 +146,7 @@ document.write('<param name="TitlebarColor" value="15658734">   ');
 // document.write('<param name="ProductCaption" value="北京市规划和国土资源管理委员会西城分局"> ');
 // document.write('<param name="ProductKey" value="7DA7F481A2F4C416FF170E6FCB9A7B35ED957210">');
 // document.write('<param name="NoExpireKey" value="F993A72F801313B04D8FABD4C7234078"> ');
-document.write('<param name="ProductCaption" value="中关村发展集团股份有限公司"> ');
+document.write('<param name="ProductCaption" value="中关村协同发展"> ');
 document.write('<param name="ProductKey" value="AC44EE760CDB3D708534F4B00CA06E788E105DE4">');
 
 
@@ -178,7 +178,7 @@ document.write('<param name="isoptforopenspeed" value="0">   ');
 document.write('<param name="TitlebarTextColor" value="0">   ');
 
 
-document.write('<param name="ProductCaption" value="中关村发展集团股份有限公司"> ');
+document.write('<param name="ProductCaption" value="中关村协同发展"> ');
 document.write('<param name="ProductKey" value="AC44EE760CDB3D708534F4B00CA06E788E105DE4">');
 document.write('<param name="MenubarColor" value="14402205">   ');
 document.write('<param name="MenuButtonColor" VALUE="16180947">   ');
@@ -205,7 +205,7 @@ document.write('ForOnFileCommand="FileCommand"');
 document.write('ForOnCustomMenuCmd2="CustomMenuCmd"');
 document.write('_IsUseUTF8URL="-1"   ');
 
-document.write('_ProductCaption="中关村发展集团股份有限公司" ');
+document.write('_ProductCaption="中关村协同发展" ');
 document.write('_ProductKey="AC44EE760CDB3D708534F4B00CA06E788E105DE4"');
 
 document.write('_IsUseUTF8Data="-1"   ');
@@ -230,7 +230,7 @@ document.write('ForOnDoWebExecute2="webExecute2"');
 document.write('ForOnFileCommand="FileCommand"');
 
 
-document.write('_ProductCaption="中关村发展集团股份有限公司" ');
+document.write('_ProductCaption="中关村协同发展" ');
 document.write('_ProductKey="AC44EE760CDB3D708534F4B00CA06E788E105DE4"');
 
 document.write('ForOnCustomMenuCmd2="CustomMenuCmd"');

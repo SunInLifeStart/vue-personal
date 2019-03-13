@@ -1,6 +1,6 @@
 <template>
     <div id="envelope" style="width: 100%">
-        <h1 style="text-align:center;margin-top:20px">中关村发展集团{{this.oname}}部门</h1>
+        <h1 style="text-align:center;margin-top:20px">中关村协同发展{{this.oname}}部门</h1>
         <h2 style="text-align:center; font-size:50px; margin-top:200px">
             <!--
             <el-select v-model="tableDate.year" placeholder="请选择" style="width:130px;">

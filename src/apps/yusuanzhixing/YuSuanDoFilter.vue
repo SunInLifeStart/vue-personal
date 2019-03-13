@@ -46,7 +46,7 @@ export default {
                 this.combinedUnit = res.data;
                 this.combinedUnit.push({
                     id: '3232323223',
-                    name: '中发展集团'
+                    name: '协同发展'
                 });
             });
         },

@@ -69,7 +69,6 @@ export default {
             let self = this;
             this.$refs["form"].validate(valid => {
                 if (valid) {
-                    let host = 'zgcgroup.vpn';
                     let formdata = {
                         username: this.form.username,
                         password: this.form.password,
@@ -84,12 +83,7 @@ export default {
                         localStorage.zfzpassword = '';
                         localStorage.zfzchecked = false;
                     }
-                    if (process.env.NODE_ENV == 'production') {
-                        formdata.host = host;
-                    }
-                    if(window.location.host=='work.yxpe.com.cn'){
-                        formdata.host = 'yxpe.com.cn';
-                    }
+
                     this.$store
                         .dispatch("Login", formdata)
                         .then(data => {

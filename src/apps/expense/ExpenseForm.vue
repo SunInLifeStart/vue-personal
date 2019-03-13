@@ -514,7 +514,7 @@ export default {
                 },
                 shares: [
                     {
-                        bearUnit: '中关村发展集团',
+                        bearUnit: '中关村协同发展',
                         bearDep: '',
                         payProject: '',
                         bearSum: this.common.toDecimal2(0),
@@ -1326,7 +1326,7 @@ export default {
                 }
                 if (boolean) {
                     this.rows.shares.push({
-                        bearUnit: '中关村发展集团',
+                        bearUnit: '中关村协同发展',
                         bearDep: '',
                         payProject: '',
                         bearSum: this.common.toDecimal2(0),
@@ -2019,7 +2019,7 @@ export default {
                 },
                 shares: [
                     {
-                        bearUnit: '中关村发展集团',
+                        bearUnit: '中关村协同发展',
                         bearDep: '',
                         payProject: '',
                         bearSum: this.common.toDecimal2(0),
@@ -2102,7 +2102,7 @@ export default {
                     },
                     shares: [
                         {
-                            bearUnit: '中关村发展集团',
+                            bearUnit: '中关村协同发展',
                             bearDep: '',
                             payProject: '',
                             bearSum: this.common.toDecimal2(0),

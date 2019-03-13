@@ -11,7 +11,7 @@
         <el-card class="box-card">
             <BoardMeetingDetail :formId="formBoardId"></BoardMeetingDetail>
         </el-card>
-        <el-dialog title="中关村发展集团董事会办公室流程" :visible.sync="dialogFormVisibleBoardMeeting" max-width="1280px" width="70%" style="text-align: center;">
+        <el-dialog title="中关村协同发展董事会办公室流程" :visible.sync="dialogFormVisibleBoardMeeting" max-width="1280px" width="70%" style="text-align: center;">
             <BoardMeetingForm @refreshData="refreshBoardData" ref="boardmeetingform" :formId="dialogBoardFormId" :operationType="operationBoardType"></BoardMeetingForm>
             <div slot="footer" class="dialog-footer">
                 <el-button type="default" @click="saveBoardForm">保存</el-button>

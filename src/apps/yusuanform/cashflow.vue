@@ -1,6 +1,6 @@
 <template>
     <div id="cashflow" style="height: 100%; width: 100%">
-        <p style="text-align: center;">中关村发展集团股份有限公司</p>
+        <p style="text-align: center;">中关村协同发展</p>
         <h3 style="text-align: center;">2018年现金流量预算表</h3>
         <span style="float:right">单位：元</span>
         <table style="width: 100%; table-layout: fixed; word-break: break-all;">

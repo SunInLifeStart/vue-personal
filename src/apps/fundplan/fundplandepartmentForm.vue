@@ -25,7 +25,7 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <p style="text-align: center">中关村发展集团股份有限公司</p>
+      <p style="text-align: center">中关村协同发展</p>
       <p style="text-align: center;color: #e01e1e;">{{rows.year}}年{{rows.month}}滚动资金计划收支表</p>
       <p class="rmb">
         <span>党委办公室/集团办公室</span>

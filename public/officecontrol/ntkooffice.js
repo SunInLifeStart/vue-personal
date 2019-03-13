@@ -18,7 +18,7 @@ var MakerCaption="";
 //买断授权密钥如果不是买断可以不用写
 var MakerKey="";
 //密钥
-var ProductCaption="中关村发展集团股份有限公司";
+var ProductCaption="中关村协同发展";
 //密钥
 var ProductKey="AC44EE760CDB3D708534F4B00CA06E788E105DE4";
 
@@ -123,7 +123,7 @@ if (browser=="IE"){
 		document.write('<param name="ProductKey" value="'+ProductKey+'">   ');	
 		document.write('<param name="IsUseUTF8URL" value="-1">   ');
 		document.write('<param name="IsUseUTF8Data" value="-1">   ');
-		document.write('<param name="ProductCaption" value="中关村发展集团股份有限公司"> ');
+		document.write('<param name="ProductCaption" value="中关村协同发展"> ');
 		document.write('<param name="ProductKey" value="AC44EE760CDB3D708534F4B00CA06E788E105DE4">');
 		document.write('<param name="Caption" value="NTKO OFFICE文档控件示例演示 http://www.ntko.com">   ');
 		document.write('<SPAN STYLE="color:red">不能装载文档控件。请在检查浏览器的选项中检查浏览器的安全设置。</SPAN>   ');

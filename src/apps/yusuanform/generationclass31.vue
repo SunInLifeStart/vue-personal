@@ -1,9 +1,9 @@
 <template>
     <div>
-        <h3>中关村发展集团股份有限公司</h3>
+        <h3>中关村协同发展</h3>
         <h3>2018年代持类预算表</h3>
         <div class="contant">
-            <span>中关村发展集团股份有限公司</span>
+            <span>中关村协同发展</span>
             <span class="unit">单位：元</span>
         </div>
         <!--1-4表-->

@@ -2,7 +2,7 @@
     <div>
         <h3>人工成本明细表</h3>
         <div class="contant">
-            <span>中关村发展集团股份有限公司</span>
+            <span>中关村协同发展</span>
             <span class="unit">单位：元</span>
         </div>
         <!--2-1-1 表-->

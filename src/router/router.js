@@ -19,7 +19,7 @@ let routes = new Router({
     },
     {
       path: '/home/:type',
-      name: '中关村发展集团',
+      name: '中关村协同发展',
       component: () => import('../views/Home.vue'),
       props: true
     }, {

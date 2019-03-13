@@ -11,7 +11,7 @@
         <el-card class="box-card">
             <SpecMeetingDetail :formId="formSpecId" @refreshData="refreshSpecDataList" ref="SpecMeetingDetail"></SpecMeetingDetail>
         </el-card>
-        <el-dialog title="中关村发展集团专题会" :visible.sync="dialogFormVisibleSpecMeeting" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+        <el-dialog title="中关村协同发展专题会" :visible.sync="dialogFormVisibleSpecMeeting" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
             <SpecMeetingForm @refreshData="refreshSpecData" @refreshDetail="refreshDetail" @saveStatus="saveStatus" ref="specmeetingform" :formId="dialogSpecFormId" :operationType="operationSpecType"></SpecMeetingForm>
             <div slot="footer" class="dialog-footer">
                 <el-button type="default" v-if="this.statusNews == ''" @click="saveSpecForm">保存</el-button>

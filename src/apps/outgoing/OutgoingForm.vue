@@ -78,7 +78,7 @@
                 <el-col :span="8">
                     <el-form-item label="印制">
                         <el-select v-model="rows.printer" style="width: 100%;">
-                            <el-option label="中关村发展集团办公室" value="中关村发展集团办公室"></el-option>
+                            <el-option label="中关村协同发展办公室" value="中关村协同发展办公室"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>

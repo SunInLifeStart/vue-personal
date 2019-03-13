@@ -1,6 +1,6 @@
 <template>
     <div id="assetliabilities" class="main-container">
-        <p style="margin-top: 15px; text-align: center;">中关村发展集团股份有限公司</p>
+        <p style="margin-top: 15px; text-align: center;">中关村协同发展</p>
         <p style="margin-top: 5px; text-align: center;font-size: 20px;font-weight: bold;">2018年资产负债预算表</p>
         <table border="1px solid #f00" style="width: 95%; height: 80%; table-layout: fixed; word-break: break-all;margin-top:20px;" class="gridtable">
             <col style="width: 15%" />

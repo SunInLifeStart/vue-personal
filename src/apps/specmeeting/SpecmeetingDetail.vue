@@ -115,7 +115,7 @@
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                 </span>
             </el-dialog>
-            <el-dialog title="中关村发展集团专题会" :visible.sync="dialogFormDeit" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+            <el-dialog title="中关村协同发展专题会" :visible.sync="dialogFormDeit" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
                 <SpecMeetingForm @saveStatus="saveStatus" ref="specmeetingform" :formId="dialogSpecFormId"></SpecMeetingForm>
                 <div slot="footer" class="dialog-footer">
                     <el-button type="default" @click="saveSpecForm">保存</el-button>

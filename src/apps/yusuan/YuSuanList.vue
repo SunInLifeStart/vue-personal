@@ -5,17 +5,17 @@
             </el-table-column>
             <el-table-column label="年度预算" min-width="450px">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="template('',scope.row)" v-show="scope.row.crtDept != '中关村发展集团'">{{scope.row.title}}</el-button>
-                    <el-button type="text" @click="template('临时汇总',scope.row)" v-show="scope.row.crtDept == '中关村发展集团'">临时汇总</el-button>
-                    <el-button type="text" @click="template('汇总编制',scope.row)" v-show="scope.row.crtDept == '中关村发展集团'">汇总编制</el-button>
+                    <el-button type="text" @click="template('',scope.row)" v-show="scope.row.crtDept != '中关村协同发展'">{{scope.row.title}}</el-button>
+                    <el-button type="text" @click="template('临时汇总',scope.row)" v-show="scope.row.crtDept == '中关村协同发展'">临时汇总</el-button>
+                    <el-button type="text" @click="template('汇总编制',scope.row)" v-show="scope.row.crtDept == '中关村协同发展'">汇总编制</el-button>
                 </template>
             </el-table-column>
             <el-table-column label="执行情况" min-width="350px">
                 <template slot-scope="scope">
-                    <el-button type="text" @click="jumpzhixing('临时查看',scope.row)" v-show="scope.row.crtDept == '中关村发展集团'">临时查看</el-button>
-                    <el-button type="text" @click="jumpzhixing('生成执行汇总',scope.row)" v-show="scope.row.crtDept == '中关村发展集团'">生成执行汇总</el-button>
-                    <el-button type="text" @click="jumpzhixing('未生成',scope.row)" v-if="!scope.row.status && scope.row.crtDept != '中关村发展集团'">未生成</el-button>
-                    <el-button type="text" @click="jumpzhixing('查看',scope.row)" v-if="scope.row.status&& scope.row.crtDept != '中关村发展集团'">查看</el-button>
+                    <el-button type="text" @click="jumpzhixing('临时查看',scope.row)" v-show="scope.row.crtDept == '中关村协同发展'">临时查看</el-button>
+                    <el-button type="text" @click="jumpzhixing('生成执行汇总',scope.row)" v-show="scope.row.crtDept == '中关村协同发展'">生成执行汇总</el-button>
+                    <el-button type="text" @click="jumpzhixing('未生成',scope.row)" v-if="!scope.row.status && scope.row.crtDept != '中关村协同发展'">未生成</el-button>
+                    <el-button type="text" @click="jumpzhixing('查看',scope.row)" v-if="scope.row.status&& scope.row.crtDept != '中关村协同发展'">查看</el-button>
                 </template>
             </el-table-column>
             <el-table-column label="操作按钮" min-width="100px">
@@ -77,7 +77,7 @@ export default {
                 .then(res => {
                     self.tableData.push({
                         id: '',
-                        crtDept: '中关村发展集团',
+                        crtDept: '中关村协同发展',
                         status: '中关村',
                         committed: ''
                     });
