@@ -461,8 +461,8 @@ export default {
                   if(action.required[0].split(":")[0] == "leadership"){
                     this.seleteUserLabel_approve = '请领导签批';
                     this.approve_users = [
-                        {id:7,name:"赵长山"},
-                        {id:8,name:"宣鸿"},
+                        {id:497,name:"赵长山"},
+                        {id:498,name:"隋明军"},
                     ];
                    }
                  }
