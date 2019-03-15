@@ -43,7 +43,7 @@
                 <el-col :span="12">
                     <el-form-item label="主送" prop="mainTo_1">
                         <el-select v-model="rows.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                         <!-- <el-cascader :options="options" :show-all-levels="false"  filterable style="width:100%" v-model="rows.mainTo_1"></el-cascader> -->
                     </el-form-item>
@@ -51,7 +51,7 @@
                 <el-col :span="12">
                     <el-form-item label="抄送">
                         <el-select v-model="rows.copyto_1" multiple filterable allow-create default-first-option placeholder="请选择抄送部门" style="width:100%">
-                            <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                            <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                         <!-- <el-cascader :options="options" :show-all-levels="false" filterable style="width:100%" v-model="rows.copyto_1"></el-cascader> -->
                     </el-form-item>
@@ -78,7 +78,7 @@
                 <el-col :span="8">
                     <el-form-item label="印制">
                         <el-select v-model="rows.printer" style="width: 100%;">
-                            <el-option label="中关村协同发展办公室" value="中关村协同发展办公室"></el-option>
+                            <el-option label="中关村发展集团办公室" value="中关村发展集团办公室"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -251,19 +251,13 @@ export default {
         getSedOrgan() {
             const self = this;
             axios
-                .get("/api/v1/outgoing_forms/listOrg")
+                .get("/api/v1/users/sub/organ/list")
                 .then(res => {
-                    let a,b;
-                    if(res.data[0].children[0].label == "集团各部（室）"){
-                          b = res.data[0].children[1].children;
-                          a = res.data[0].children[0];
-                          self.options =  [a].concat(b);
-                    }else{
-                          a = res.data[0].children[0].children;
-                          b = res.data[0].children[1];
-                          self.options =  [b].concat(a);
+                    for(let item of res.data){
+                        item.label = item.value = item.name;
                     }
-                     
+                    // res.data.unshift({value:"集团各部（室）",id:"01",label:"集团各部（室）"});
+                    self.options = res.data; 
                 })
                 .catch(function() {
                     self.$message({
