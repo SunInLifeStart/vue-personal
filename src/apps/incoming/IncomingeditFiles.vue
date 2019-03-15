@@ -17,7 +17,8 @@ export default {
     data() {
         return {
             dialogForm: false,
-            timer:null
+            timer:null,
+            openUrl:"",
         };
     },
 
@@ -59,11 +60,12 @@ export default {
                 }
                 if (url) {
                     ntkoBrowser.openWindow(
-                       "http://" + window.location.host + "/edit.html?token="+res.data+"&url="+url
+                       this.openUrl + "token="+res.data+"&url=" + url
                     );
                 } else {
+                    console.log(this.openUrl);
                     ntkoBrowser.openWindow(
-                          "http://" + window.location.host + "/edit.html?token=" + res.data
+                           this.openUrl + "token=" + res.data
                     );
                 }
 
@@ -79,14 +81,21 @@ export default {
         },
         openPrinter(url){
              ntkoBrowser.openWindow(
-                     "http://" + window.location.host + "/edit.html?token=print&url="+url
-                );
+                    this.openUrl +"token=print&url="+url
+            );
         },
         clearTime(){
             if(this.timer){
                  clearInterval(this.timer);
             }  
         },
+    },
+    mounted(){
+        if(process.env.NODE_ENV === 'production'){
+            this.openUrl = "http://static.zgcgroup.vpn/edit.html?"
+        }else{
+            this.openUrl = "http://static.yxpe.com.cn/edit.html?"
+        }
     }
 };
 </script>

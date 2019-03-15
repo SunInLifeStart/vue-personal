@@ -462,10 +462,10 @@ export default {
         //         );
         //     }
         // },
-        saveFormValidate() {
+        saveFormValidate(data) {
             this.$refs['formupdate'].validate(valid => {
                 if (valid) {
-                    this.saveForm();
+                    this.saveForm(data);
                     this.$emit('saveStatus', false);
                 }
             });
@@ -514,6 +514,9 @@ export default {
                     self.setMemo();
                     if (action == 'save') {
                         self.submitForm();
+                    }else if (action == "fromEdit") {
+                        self.$emit("refreshForm");
+                        return false;
                     } else {
                         self.$emit('refreshData');
                         if (this.operationType == 'edit') {

@@ -112,6 +112,12 @@
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                 </span>
             </el-dialog>
+            <el-dialog title="收文拟稿" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%">
+                    <incomingForm ref="incomingform" :formId="dialogFormId" :operationType="operationType" @refreshForm = "refreshForm" ></incomingForm>
+            <div slot="footer" class="dialog-footer">
+                <el-button type="default" @click="saveEditForm">保存</el-button>
+            </div>
+        </el-dialog>
         </div>
         <IncomingeditFiles ref="IncomingeditFiles" @editWordData="editWordData"></IncomingeditFiles>
     </div>
@@ -122,6 +128,7 @@ import moment from 'moment';
 import Comment from '../Comment';
 import IncomingeditFiles from "./IncomingeditFiles.vue";
 import FilesOperate from "../FilesOperate";
+import incomingForm from "./IncomingForm.vue";
 // import PdfJs from "../PdfJs";
 export default {
     name: 'IncomingDetail',
@@ -168,13 +175,15 @@ export default {
             fullScreen: false,
             crumbNodeName: '',
             comtename:'',
+            dialogFormVisible:false,
+            dialogFormId: "",
+            operationType: "edit",
         };
     },
     props: ['formId'],
     mounted() {
         this.getForm();
         if (this.formId != '') {
-            this.getForm();
             this.getCrumbs();
             this.getActions();
             this.getAllUsers();
@@ -186,15 +195,25 @@ export default {
             this.getCrumbs();
             this.getActions();
             this.getAllUsers();
+            this.refreshForm();
         }
     },
     components: {
         Comment,
         IncomingeditFiles,
-        FilesOperate
+        FilesOperate,
+        incomingForm
         // PdfJs
     },
     methods: {
+        saveEditForm() {
+            this.$refs.incomingform.saveFormValidate("fromEdit");
+            this.dialogFormVisible = false;
+            // this.getForm();
+        },
+        refreshForm(){
+            this.getForm();
+        },
          handleSuccess(response, file) {
             const self = this;
             if (response.length > 0) {
@@ -335,7 +354,15 @@ export default {
                         this.crumb.index = index;
                         this.flowDomName = item.name == '拟办' ? '拟办' : '';
                         if (item.assignes) {
-                            item.name = item.name + '(' + item.assignes + ')';
+                            if(item.addAssigneeList && item.assigneeList){
+                                item.name = item.name + "(前加签：" + item.addAssigneeList.join(',') + ',会签：'+ item.assigneeList.join(',')+")"; 
+                            }else if(item.addAssigneeList){
+                                 item.name = item.name + "(前加签：" + item.addAssigneeList.join(',') +")"; 
+                            }else if(item.assigneeList){
+                                 item.name = item.name + "(会签：" + item.assigneeList.join(',') +")"; 
+                            }else{
+                                 item.name = item.name + "(" + item.assignes + ")";
+                            }
                         }
                     }
                 });
@@ -420,7 +447,6 @@ export default {
                     name: '关闭全屏'
                 });
                 this.fullScreen = true;
-                // this.common.open(`/#/apps/outgoing/${this.formId}`);
             } else if ('closeFullScreen'.includes(action.type)) {
                 this.actions.splice(this.actions.length - 1, 1);
                 this.actions.push({
@@ -434,7 +460,10 @@ export default {
                     .then(res => {
                         this.previewDoc(res.data);
                     });
-            }else {
+            }else if ("EDIT".includes(action.type)) {
+                this.dialogFormVisible = true;
+                this.dialogFormId = this.formId;
+            } else {
                 this.dialogVisible = true;
             }
         },
@@ -480,52 +509,52 @@ export default {
         },
         submitForm() {
             let self = this;
-
-            //如果是不需要走流程的节点
-            if (
-                'SAVE,PREVIEW,COMMENT,PULL,PRINTER,EDIT'.includes(
-                    self.currentAction.type
-                )
-            ) {
-            } else {
-                //退回
-                // if (self.currentAction.type == 'REJECT') {
-                //     if (self.seleteUsers) {
-                //         self.submitData.rejectTarget = self.rejectTarget;
-                //     } else {
-                //         self.$message.error('请选择驳回节点');
-                //         return false;
-                //     }
-                // }
-
-                //前加签
-                if (self.currentAction.required) {
-                    if (self.seleteUsers.length > 0) {
-                        var key = self.currentAction.required[0].split(':')[0];
+            if (self.currentAction.type == 'REJECT') {
+                if (self.rejectTarget) {
+                    self.submitData.rejectTarget = self.rejectTarget;
+                } else {
+                    self.$message.error('请选择驳回节点');
+                    return false;
+                }
+            }
+            //必须选择人员节点
+            if (self.currentAction.required) {
+                if(self.currentAction.required[0].split(":")[1] == "array"){ //多选人
+                      if (self.seleteUsers.length > 0) {
+                        var key = self.currentAction.required[0].split(":")[0];
                         self.submitData[key] = self.seleteUsers;
                     } else {
                         self.$message.error(self.seleteUserLabel);
                         return false;
                     }
+                }else{ // 单选人
+                    if(self.seleteUsers_approve){
+                        self.submitData[self.currentAction.required[0].split(":")[0]] = self.seleteUsers_approve;   
+                    }else{
+                        self.$message.error(self.seleteUserLabel_approve); 
+                        return false;  
+                    }
                 }
-                self.submitData.action = self.currentAction.type;
-                axios
-                    .put(
-                        `/api/v1/incomings/${self.formId}/signal`,
-                        self.submitData
-                    )
-                    .then(res => {
-                        self.dialogVisible = false;
-                        self.comment();
-                        if (self.flowDomName == '拟办') {
-                            self.setMemo();
-                        }
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                    });
             }
+
+            self.submitData.action = self.currentAction.type;
+            axios
+                .put(
+                    `/api/v1/incomings/${self.formId}/signal`,
+                    self.submitData
+                )
+                .then(res => {
+                    self.dialogVisible = false;
+                    self.comment();
+                    if (self.flowDomName == '拟办') {
+                        self.setMemo();
+                    }
+                    self.$message({
+                        message: self.currentAction.name + '成功',
+                        type: 'success'
+                    });
+                });
+            
         },
         downloadFile(item) {
             // window.open(url, '_blank');
