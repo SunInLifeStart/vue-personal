@@ -106,6 +106,11 @@
                             <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item :label="seleteUserLabel_approve" v-show="approve_status">
+                        <el-select v-model="seleteUsers_approve" filterable style="width:100%;">
+                            <el-option v-for="user in approve_users" :key="user.id" :label="user.name" :value="user.id"></el-option>
+                        </el-select>
+                    </el-form-item>
                     <el-form-item label="审批意见">
                         <el-input type="textarea" placeholder="请输入审批意见" v-model="textarea" :autosize="{ minRows: 10, maxRows: 30}">
                         </el-input>
@@ -141,13 +146,17 @@ export default {
             crumb: { items: [] },
             pageType: 'show',
             users: [],
+            approve_users:[],
             actions: [],
             rejectTarget: '',
             rejectList: [],
             reject_status: false,
             presign_status: false,
+            approve_status: false,
             seleteUsers: [],
+            seleteUsers_approve:"",
             seleteUserLabel: '',
+            seleteUserLabel_approve:'',
             textarea: '',
             dialogVisible: false,
             currentAction: '',
@@ -156,7 +165,9 @@ export default {
             crumbNodeName: '',
             crumbNodeAction: '',
             replaceAttach:false,
-            copyData:{}
+            copyData:{},
+            multiple:true,
+            staticUser:[],
         };
     },
     props: ['formId'],
@@ -253,6 +264,7 @@ export default {
                 });
         },
         editWordData(data) {
+            
             if (!data.url) {
                 return false;
             }
@@ -349,13 +361,18 @@ export default {
                         this.crumbNodeName = item.key;
                         this.crumbNodeAction = item.name;
                         if (item.assignes) {
-                                console.log(this.$store.getters.LoginData.uname);
-                                console.log( item.assignes);
                               if(this.crumbNodeAction == "会签" && item.assignes.includes(this.$store.getters.LoginData.uname)){
                                   this.replaceAttach = true;
                               }
-                            item.name = item.name + '(' + item.assignes + ')';
-                          
+                             if(item.addAssigneeList && item.assigneeList){
+                                item.name = item.name + "(前加签：" + item.addAssigneeList.join(',') + ',会签：'+ item.assigneeList.join(',')+")"; 
+                            }else if(item.addAssigneeList){
+                                 item.name = item.name + "(前加签：" + item.addAssigneeList.join(',')+")"; 
+                            }else if(item.assigneeList){
+                                 item.name = item.name + "(会签：" + item.assigneeList.join(',')+")"; 
+                            }else{
+                                 item.name = item.name + "(" + item.assignes + ")";
+                            }
                         }
                         this.crumb.index = index;
                     }
@@ -379,10 +396,8 @@ export default {
         doAction(action) {
             this.clearForm();
             this.currentAction = action;
-            console.log(this.currentAction)
             // 不需要弹出框
             if ('ARCHIVE,DISPATCH,TEMPLATE,PULL,COMMIT'.includes(action.type)) {
-                this.clearForm();
                 let self = this; //套红，归档，分发
                 if (action.type == 'PULL') {
                     axios
@@ -447,11 +462,25 @@ export default {
                         this.previewDoc(res.data);
                     });
             } else {
+              if(action.required && "APPROVE".includes(action.type)){
+                   this.approve_status = true;
+                   this.seleteUserLabel_approve = '请选择主管领导';
+                    axios.get("/api/v1/users/role/deptLeader").then(res => {
+                        this.approve_users = res.data;
+                    });
+              }
+              if(action.required && "SUPERIOR".includes(action.type)){
+                   this.approve_status = true;
+                   this.seleteUserLabel_approve = '请领导签批';
+                   this.approve_users = [
+                       {id:497,name:"高中成"},
+                        {id:498,name:"隋明军"},
+                   ];
+              }
                 this.dialogVisible = true;
             }
         },
         previewDoc(url) {
-            console.log(url)
             this.$refs.SubmissioneditFiles.openPrinter(url);
         },
         clearForm() {
@@ -459,14 +488,22 @@ export default {
             this.presign_status = false;
             this.textarea = '';
             this.submitData = {};
+            this.seleteUsers = [];
+            this.seleteUserLabel_approve = "";
+            this.seleteUsers_approve = "";
+            this.approve_status = false;
         },
         comment() {
             let self = this;
+            if(self.currentAction.type == "SUPERIOR"){
+                    self.textarea = self.textarea ? self.textarea : "同意,请领导签批";
+            };
             axios
                 .put(`/api/v1/submission_forms/${self.formId}/comment`, {
                     content: self.textarea || self.currentAction.name,
                     action: this.crumbNodeAction,
-                    node: this.crumbNodeAction
+                    node: this.crumbNodeAction,
+                    keyId: this.crumbNodeName
                 })
                 .then(res => {
                     self.refreshFormData();
@@ -486,25 +523,23 @@ export default {
                     return false;
                 }
             }
-
-            //前加签
-            if (self.currentAction.required && self.currentAction.type != 'SIGNOUT') {
-                if (self.seleteUsers.length > 0) {
-                    var key = self.currentAction.required[0].split(':')[0];
-                    self.submitData[key] = self.seleteUsers;
-                } else {
-                    self.$message.error(self.seleteUserLabel);
-                    return false;
-                }
-            }
-
-            //前加签
-            if (self.currentAction.type == 'PRESIGN') {
-                if (self.seleteUsers.length > 0) {
-                    self.submitData[key] = self.seleteUsers;
-                } else {
-                    self.$message.error(self.seleteUserLabel);
-                    return false;
+            //必须选择人员节点
+            if (self.currentAction.required) {
+                if(self.currentAction.required[0].split(":")[1] == "array"){ //多选人
+                      if (self.seleteUsers.length > 0) {
+                        var key = self.currentAction.required[0].split(":")[0];
+                        self.submitData[key] = self.seleteUsers;
+                    } else {
+                        self.$message.error(self.seleteUserLabel);
+                        return false;
+                    }
+                }else{ // 单选人
+                    if(self.seleteUsers_approve){
+                        self.submitData[self.currentAction.required[0].split(":")[0]] = self.seleteUsers_approve;   
+                    }else{
+                        self.$message.error(self.seleteUserLabel_approve); 
+                        return false;  
+                    }
                 }
             }
             self.submitData.action = self.currentAction.type;

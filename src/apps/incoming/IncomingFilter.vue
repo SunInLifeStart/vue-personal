@@ -1,28 +1,44 @@
 <template>
     <div id="IncomingFilter">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="公文标题">
-                <el-input v-model="formInline.title" placeholder="公文标题"></el-input>
-            </el-form-item>
-            <el-form-item label="来文机关">
-                <el-input v-model="formInline.organ" placeholder="来文机关"></el-input>
-            </el-form-item>
-            <el-form-item label="来文字号">
-                <el-input v-model="formInline.wordNo" placeholder="来文字号"></el-input>
-            </el-form-item>
-            <el-form-item label="单据状态">
-                <el-select v-model="formInline.status" placeholder="请选择">
-                    <el-option v-for="item in formInline.options_status" :key="item" :label="item" :value="item">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="收文日期">
-                <el-date-picker v-model="formInline.created" placeholder="收文日期"></el-date-picker>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
-                 <el-button type="primary" @click="onReset">重置</el-button>
-            </el-form-item>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="公文标题">
+                        <el-input v-model="formInline.title" placeholder="公文标题"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="来文机关">
+                        <el-input v-model="formInline.organ" placeholder="来文机关"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="来文字号">
+                        <el-input v-model="formInline.wordNo" placeholder="来文字号"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="单据状态">
+                        <el-select v-model="formInline.status" placeholder="请选择">
+                            <el-option v-for="item in formInline.options_status" :key="item" :label="item" :value="item">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="收文日期">
+                        <el-date-picker v-model="formInline.created" placeholder="收文日期"></el-date-picker>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button type="primary" @click="onReset">重置</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
         </el-form>
     </div>
 </template>
