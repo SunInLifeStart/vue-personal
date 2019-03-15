@@ -188,7 +188,7 @@ export default {
     mounted() {
         const self = this;
         self.getSedOrgan();
-        self.getWordNo();
+        //self.getWordNo();
         if (self.operationType == "edit") {
             self.getForm();
             // this.getActions();

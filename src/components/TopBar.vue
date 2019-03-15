@@ -15,20 +15,9 @@
                     <el-menu-item index="/docs">文档中心</el-menu-item>
                     <el-submenu index="2">
                         <template slot="title">常用链接</template>
-                        <el-menu-item index=""><a href="http://www.bjzcdi.com/zgc/" style="color:#fff" target="_blank">集团官网</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://zgcgroup.21tb.com/login/login.init.do" style="color:#fff" target="_blank">网络学院</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://172.30.30.2:8088/ESAIS/flex/index.jsp?nodecode=Z32701" style="color:#fff" target="_blank">档案查询</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://nc.zgcgroup.com.cn/login.jsp?nodecode=E32709" style="color:#fff" target="_blank">NC门户</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://www.beijing.gov.cn/?nodecode=Z32708" style="color:#fff" target="_blank">首都之窗</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://fgw.beijing.gov.cn" style="color:#fff" target="_blank">市发改委</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://www.bjeit.gov.cn/?nodecode=Z32704" style="color:#fff" target="_blank">市经信委</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://kw.beijing.gov.cn" style="color:#fff" target="_blank">市科委</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://sww.beijing.gov.cn/?nodecode=Z32705" style="color:#fff" target="_blank">市商委</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://zgcgw.beijing.gov.cn" style="color:#fff" target="_blank">中关村管委会</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://www.bjzgh12351.org/template/10021/index.jsp" style="color:#fff" target="_blank">12351职工服务网</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://www.bjzgh.org" style="color:#fff" target="_blank">北京市总工会</a></el-menu-item>
-                        <el-menu-item index=""><a href="http://www.cnki.net" style="color:#fff" target="_blank">知网</a></el-menu-item>
-        
+                        <el-menu-item index=""><a href="https://www.fxiaoke.com/" style="color:#fff;display:block" target="_blank">纷享销客</a></el-menu-item>
+                        <el-menu-item index=""><a href="http://zhizhao.bjzcdi.com" style="color:#fff;display:block" target="_blank">大数据平台</a></el-menu-item>
+                        <el-menu-item index=""><a href="https://www.wind.com.cn/newsite/data.html" style="color:#fff;display:block" target="_blank">wind-数据服务</a></el-menu-item>       
                     </el-submenu>
                 </el-menu>
             </div>
