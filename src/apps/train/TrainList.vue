@@ -49,6 +49,7 @@ export default {
         }
     },
     methods: {
+        // 查询列表
         getList() {
             const self = this;
             const params = {

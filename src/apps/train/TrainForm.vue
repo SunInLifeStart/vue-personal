@@ -1,10 +1,10 @@
 <template>
     <div id="TrainForm">
         <el-form :model="rows" label-width="100px" :rules="rules" ref="formupdate">
-            <el-row style="float:left;margin-botton:20px">
-                <el-col :span="24" > 
+            <el-row >
+                <el-col  :span="8" :offset="16" > 
                      <el-form-item label="流水号：" prop="suggestion">
-                        <span style="font-weight:normal">{{rows.serialNumber}}</span>
+                        <span >{{rows.serialNumber}}</span>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -446,6 +446,7 @@ export default {
                 }
             });
         },
+        // 提交保存
         saveForm(action = '') {
             const self = this;
             //  if (self.rows.delegate.length > 0) {
@@ -576,6 +577,7 @@ export default {
                     });
                 });
         },
+        // 删除
         deleteAttachment(id) {
             const self = this;
             if (this.rows.attachments.length > 0) {

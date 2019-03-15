@@ -2,10 +2,10 @@
     <div id="nmployeesForm">
          
         <el-form :model="rows" label-width="100px" :rules="rules" ref="formupdate">
-           <el-row style="float:left;margin-botton:20px">
-                <el-col :span="24" > 
+           <el-row >
+                <el-col  :span="8" offset="16" > 
                      <el-form-item label="流水号：" >
-                        <span style="font-weight:normal">{{rows.serialNumber}}</span>
+                        <span >{{rows.serialNumber}}</span>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -84,17 +84,21 @@
                 </el-col>
             </el-row>
             <el-row >
-                <el-col :span="12">
+                <el-col :span="8">
                     <el-form-item label="试用部门" style="float:left">
                        <el-input v-model="rows.department" placeholder="请输入试用部门" ></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
+                <el-col :span="8">
                     <el-form-item label="试用岗位" style="float:left">
                        <el-input v-model="rows.probationary" placeholder="请输入试用岗位" ></el-input>
                     </el-form-item>
                 </el-col>
-                
+                <el-col :span="8">
+                    <!-- <el-form-item label="试用岗位" style="float:left">
+                       <el-input v-model="rows.probationary" placeholder="请输入试用岗位" ></el-input>
+                    </el-form-item> -->
+                </el-col>
             </el-row>
              <el-row>
                 <el-col :span="24">
@@ -116,17 +120,24 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="14">
+                <el-col :span="24">
                     <el-form-item label="指导人试用期鉴定">
-                        <el-input type="textarea" v-model="rows.insufficient" placeholder="请输入不足"></el-input>
-                        <el-input type="textarea" v-model="rows.improvement" placeholder="请输入改进意见"></el-input>
-                        
-                     </el-form-item>
-                </el-col>
-                <el-col :span="10">
-                    <el-form-item label="">
-                       <el-input type="text" v-model="rows.sign" placeholder="请签字"></el-input>
-                        <el-input type="text" v-model="rows.signtime" placeholder="请输入日期"></el-input>
+                        <tr>
+                            <td colspan="4" style="width:21%">
+                                <el-input type="textarea" v-model="rows.insufficient" placeholder="请输入不足"></el-input>
+                            </td>
+                            <td colspan="4" >
+                                <el-input type="textarea" v-model="rows.improvement" placeholder="请输入改进意见"></el-input>
+                            </td>
+                        </tr>
+                        <tr>
+                             <td colspan="4" >
+                                <el-input type="text" v-model="rows.sign" placeholder="请签字"></el-input>
+                            </td>
+                             <td colspan="4" >
+                                <el-input type="text" v-model="rows.signtime" placeholder="请输入日期"></el-input>
+                            </td>
+                        </tr>
                     </el-form-item>
                 </el-col>
             </el-row>
