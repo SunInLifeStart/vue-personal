@@ -13,10 +13,9 @@
                     <el-menu-item index="/home/todo">我的工作</el-menu-item>
                     <el-menu-item index="/leader" v-show="$store.getters.getMenusByType('leader')">领导驾驶舱</el-menu-item>
                     <el-menu-item index="/docs">文档中心</el-menu-item>
-                    <el-menu-item index=""><a target="_blank" href="/api/v1/portal/zfzmail">我的邮箱</a></el-menu-item>
                     <el-submenu index="2">
                         <template slot="title">常用链接</template>
-                        <el-menu-item index=""><a href="http://www.zgcgroup.com.cn" style="color:#fff" target="_blank">集团官网</a></el-menu-item>
+                        <el-menu-item index=""><a href="http://www.bjzcdi.com/zgc/" style="color:#fff" target="_blank">集团官网</a></el-menu-item>
                         <el-menu-item index=""><a href="http://zgcgroup.21tb.com/login/login.init.do" style="color:#fff" target="_blank">网络学院</a></el-menu-item>
                         <el-menu-item index=""><a href="http://172.30.30.2:8088/ESAIS/flex/index.jsp?nodecode=Z32701" style="color:#fff" target="_blank">档案查询</a></el-menu-item>
                         <el-menu-item index=""><a href="http://nc.zgcgroup.com.cn/login.jsp?nodecode=E32709" style="color:#fff" target="_blank">NC门户</a></el-menu-item>
@@ -127,9 +126,9 @@ export default {
     mounted() {
         let url = "";
         if (process.env.NODE_ENV === "production") {
-            url = "http://172.16.3.17";
+            url = "/";
         } else {
-            url = "http://59.110.172.228:10988";
+            url = "http://116.117.157.232:10088";
         }
         if (!Vue.prototype.socket) {
             Vue.prototype.socket = io(url);

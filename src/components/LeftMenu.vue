@@ -78,7 +78,7 @@ export default {
                             icon: 'el-icon-chengbaoshenpi',
                             to: 'submission'
                         },
-                        {
+                        /*{
                             id: 3,
                             name: '资产管理',
                             icon: 'el-icon-zichanguanli',
@@ -89,10 +89,10 @@ export default {
                             name: '督办管理',
                             icon: 'el-icon-inspect',
                             to: 'inspect'
-                        },
+                        },*/
                     ]
                 },
-                {
+                /*{
                     type: '会议纪要',
                     children: [
                         {
@@ -200,7 +200,7 @@ export default {
                             to: 'contract'
                         },
                     ]
-                }
+                }*/
             ]
         };
     },

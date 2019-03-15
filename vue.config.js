@@ -67,22 +67,22 @@ module.exports = {
         port: 8889,
         proxy: {
             "/api/": {
-            target: "http://59.110.172.228"
+            target: "http://116.117.157.232"
             },
             "/budget/": {
-            target: "http://59.110.172.228:10074"
+            target: "http://116.117.157.232"
             },
             "/workflow/": {
-            target: "http://59.110.172.228"
+            target: "http://116.117.157.232"
             },
             "/solr": {
-                target: "http://59.110.172.228"
+                target: "http://116.117.157.232"
             },
             "/thumb": {
-                target: "http://59.110.172.228"
+                target: "http://116.117.157.232"
             },
             "/socket.io": {
-                target: "http://59.110.172.228",
+                target: "http://116.117.157.232",
                 ws: true,
                 changeOrigin: true
             }
