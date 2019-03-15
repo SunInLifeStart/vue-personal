@@ -130,6 +130,11 @@
                     </el-option>
                 </el-select>
             </el-form-item>
+             <el-form-item :label="seleteUserLabel_approve" v-show="approve_status">
+                        <el-select v-model="seleteUsers_approve" filterable style="width:100%;">
+                            <el-option v-for="user in approve_users" :key="user.id" :label="user.name" :value="user.id"></el-option>
+                        </el-select>
+            </el-form-item>
              <el-form-item :label="seleteUserLabel" v-show="presign_status">
                  <el-select v-model="seleteUsers" filterable multiple style="width:100%;">
                     <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
@@ -194,7 +199,11 @@ export default {
             submitData: {},
             copyData: {},
             replaceButton: false,
-            fullScreen: false
+            fullScreen: false,
+            seleteUserLabel_approve:'',
+            seleteUsers_approve:"",
+            approve_status: false,
+            approve_users:[]
         };
     },
     props: ["formId", "hideFullScreen"],
@@ -441,7 +450,23 @@ export default {
                         this.previewDoc(res.data);
                     });
             } else {
-                    this.dialogVisible = true;
+                if(action.required && "APPROVE".includes(action.type)){
+                   this.approve_status = true;
+                   if(action.required[0].split(":")[0] == "deptLeader"){
+                        this.seleteUserLabel_approve = '请选择主管领导';
+                        axios.get("/api/v1/users/list/deptLeader/"+ this.$store.getters.LoginData.oid).then(res => {
+                            this.approve_users = res.data;
+                        });
+                   }
+                  if(action.required[0].split(":")[0] == "leadership"){
+                    this.seleteUserLabel_approve = '请领导签批';
+                    this.approve_users = [
+                        {id:7,name:"赵长山"},
+                        {id:8,name:"宣鸿"},
+                    ];
+                   }
+                 }
+                 this.dialogVisible = true;
             }
         },
         previewDoc(url) {
@@ -505,6 +530,8 @@ export default {
             this.presign_status = false;
             this.textarea = "";
             this.submitData = {};
+            this.seleteUsers_approve = "";
+            this.approve_status = false;
         },
         comment() {
             let self = this;
@@ -523,7 +550,8 @@ export default {
         },
         submitForm() {
             let self = this;
-            //如果是不需要走流程的节点
+
+            //如果是驳回节点
             if (self.currentAction.type == "REJECT") {
                 if (self.rejectTarget) {
                     self.submitData.rejectTarget = self.rejectTarget;
@@ -532,25 +560,58 @@ export default {
                     return false;
                 }
             }
-            //前加签
+            //必须选择人员节点
             if (self.currentAction.required) {
-                if (self.seleteUsers.length > 0) {
-                    var key = self.currentAction.required[0].split(":")[0];
-                    self.submitData[key] = self.seleteUsers;
-                } else {
-                    self.$message.error(self.seleteUserLabel);
-                    return false;
+                if(self.currentAction.required[0].split(":")[1] == "array"){ //多选人
+                      if (self.seleteUsers.length > 0) {
+                        var key = self.currentAction.required[0].split(":")[0];
+                        self.submitData[key] = self.seleteUsers;
+                    } else {
+                        self.$message.error(self.seleteUserLabel);
+                        return false;
+                    }
+                }else{ // 单选人
+                    if(self.seleteUsers_approve){
+                        self.submitData[self.currentAction.required[0].split(":")[0]] = self.seleteUsers_approve;   
+                    }else{
+                        self.$message.error(self.seleteUserLabel_approve); 
+                        return false;  
+                    }
                 }
             }
-
-       
             self.submitData.action = self.currentAction.type;
             axios
                 .put(`/api/v1/outgoings/${self.formId}/signal`, self.submitData)
                 .then(res => {
                     self.dialogVisible = false;
                     self.comment();
+                    if(self.currentAction.type == 'DISPATCH'){
+                        self.doDispatch();
+                     }
                 });
+        },
+        doDispatch(){
+            let self = this;
+             let organName = [],organId = [];
+                    if(self.tableData.mainTo){
+                        organName = self.tableData.mainTo.split(',');
+                    }
+                    if(self.tableData.copyto){
+                        organName = organName.concat(self.tableData.copyto.split(","));
+                    }
+                    organName =  Array.from(new Set(organName));
+                    axios
+                        .get(`/api/v1/users/sub/organ/list`)
+                        .then(res => {
+                                for(let item  of res.data){
+                                    for(let name of organName){
+                                        if(name == item.name){
+                                            organId.push(item.id);
+                                        }   
+                                    }
+                                                        };
+                         axios.post('/api/v1/outgoings/'+self.tableData.id+'/distributeMessages',{oids:organId}).then(res => {})
+                    });
         },
         getAllUsers() {
             let self = this;
@@ -599,9 +660,6 @@ export default {
         getCrumbs() {
             axios.get(`/api/v1/outgoings/${this.formId}/crumb`).then(res => {
                 this.crumb = { items: res.data, index: -1 };
-                for (let item of res.data) {
-                    
-                    }
                 res.data.forEach((item, index) => {
                     if (item.active) {
                         this.crumbNodeName = item.name;
@@ -613,7 +671,15 @@ export default {
                             ) {
                                 this.replaceButton = true;
                             }
-                            item.name = item.name + "(" + item.assignes + ")";
+                            if(item.addAssigneeList && item.assigneeList){
+                                item.name = item.name + "(前加签：" + item.addAssigneeList.join(',') + ',会签：'+ item.assigneeList.join(',')+")"; 
+                            }else if(item.addAssigneeList){
+                                 item.name = item.name + "(前加签：" + item.addAssigneeList.join(',')+")"; 
+                            }else if(item.assigneeList){
+                                 item.name = item.name + "(会签：" + item.assigneeList.join(',')+")"; 
+                            }else{
+                                 item.name = item.name + "(" + item.assignes + ")";
+                            }
                         }
                         this.crumb.index = index;
                     }
