@@ -78,6 +78,12 @@ export default {
                             icon: 'el-icon-chengbaoshenpi',
                             to: 'submission'
                         },
+                         {
+                            id: 11,
+                            name: '请休假申请',
+                            icon: 'el-icon-chengbaoshenpi',
+                            to: 'submission'
+                        },
                         /*{
                             id: 3,
                             name: '资产管理',
