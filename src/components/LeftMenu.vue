@@ -82,7 +82,7 @@ export default {
                             id: 11,
                             name: '请休假申请',
                             icon: 'el-icon-chengbaoshenpi',
-                            to: 'submission'
+                            to: 'leave'
                         },
                         /*{
                             id: 3,
