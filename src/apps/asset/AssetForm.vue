@@ -24,6 +24,14 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="24">
+                    <el-form-item label="资产类型" prop="remark">
+                       <el-select v-model="selectItem.assetType" placeholder="请选择" filterable>
+                            <el-option v-for="item in assetTypes" :key="item.id" :label="item.name" :value="item.name">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="24">
                     <el-form-item label="备注" prop="remark">
                         <el-input v-model="selectItem.remark"></el-input>
                     </el-form-item>
@@ -60,6 +68,11 @@
                             <el-table-column prop="totalPrice" label="计划总价">
                                 <template slot-scope="scope">
                                     <el-input v-model="scope.row.totalPrice" disabled></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="kucun" label="库存数量">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.kucun"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="buyTime" label="要求购入时间" width="160px">
@@ -136,10 +149,25 @@ export default {
                 proposerId: '',
                 applyDeptId: '',
                 proposer: this.cookie_uname,
-                applyDept: this.cookie_oname
+                applyDept: this.cookie_oname,
+                assetType:''//资产类型
             },
             payeePeople: [],
             payeeOrgan: [],
+            assetTypes: [
+                {
+                    id:'01',
+                    name:'租赁资产',
+                },
+                {
+                    id:'02',
+                    name:'固定资产',
+                },
+                {
+                    id:'03',
+                    name:'低值易耗品',
+                },
+            ],
             cookie_uname: '',
             cookie_oname: '',
             cookie_uid: '',

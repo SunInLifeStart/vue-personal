@@ -84,13 +84,13 @@ export default {
                             icon: 'el-icon-chengbaoshenpi',
                             to: 'leave'
                         },
-                        /*{
+                        {
                             id: 3,
                             name: '资产管理',
                             icon: 'el-icon-zichanguanli',
                             to: 'asset'
                         },
-                        {
+                        /*{
                             id: 15,
                             name: '督办管理',
                             icon: 'el-icon-inspect',

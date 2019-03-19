@@ -3,16 +3,16 @@
         <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow" :highlight-current-row='true'>
             <el-table-column prop="proposer" label="申请人">
             </el-table-column>
-            <el-table-column prop="applyDept" label="申请部门" min-width='200px'>
+            <el-table-column prop="applyDept" label="申请部门" min-width='150px'>
+            </el-table-column>
+            <el-table-column prop="number" label="资产类型" min-width='120px'>
             </el-table-column>
             <el-table-column prop="applyDate" label="申请日期" sortable min-width='120px'>
                 <template slot-scope="scope">
                     {{scope.row.applyDate | dateformat('YYYY-MM-DD')}}
                 </template>
             </el-table-column>
-            <!-- <el-table-column prop="number" label="合计数量" min-width='120px'>
-            </el-table-column>
-            <el-table-column prop="money" label="合计金额" min-width='120px'>
+            <!-- <el-table-column prop="money" label="合计金额" min-width='120px'>
             </el-table-column>
             <el-table-column prop="remark" label="备注" min-width='120px'>
             </el-table-column> 
