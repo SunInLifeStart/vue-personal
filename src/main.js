@@ -22,6 +22,7 @@ import axios from 'axios'
 Vue.component('split-pane', splitPane);
 Vue.use(Print);
 Vue.prototype.common = common;
+Vue.prototype.$axios = axios;
 
 Vue.config.productionTip = false;
 moment.locale('zh-cn');

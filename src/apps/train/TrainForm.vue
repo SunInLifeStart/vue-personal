@@ -1,4 +1,5 @@
 <template>
+<el-dialog title="外部培训申请表" :visible.sync="dialogFormVisibleTrain" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">  
     <div id="TrainForm">
         <el-form :model="rows" label-width="100px" :rules="rules" ref="formupdate">
             <el-row >
@@ -9,107 +10,68 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="24">
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="8">
+                <el-col :span="12">
                     <el-form-item label="申请人" prop="submitter">
                         <el-input v-model="rows.submitter" placeholder="请输入申请人"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                    <el-form-item label="所属部门" prop="department">
+                <el-col :span="12">
+                    <el-form-item label="所属部门" prop="department" label-width="120px">
                         <el-input v-model="rows.department" placeholder="请输入所属部门"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                    <el-form-item label="提单时间">
-                        <!-- :disabled="true" -->
-                        <el-input v-model="rows.committed" placeholder="请输入提单时间" ></el-input>
-                    </el-form-item>
-                </el-col>
+               
             </el-row>
             <el-row>
-                 <el-col :span="11">
-                    <el-form-item label="培训时间">
-                        <!-- <el-date-picker v-model="rows.draftTime" style="width:100%" type="date">
-                        </el-date-picker> -->
-                        <el-date-picker v-model="rows.draftTime" unlink-panels range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
-                        type="daterange" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptions2" clearable @change="time_change"
-                        align="right" size="mini" >
-                        </el-date-picker>
-                    </el-form-item>
+                <el-col :span="12">
+                <el-form-item label="创建时间">
+                        <el-date-picker v-model="rows.createdTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%"></el-date-picker>
+                </el-form-item>
                 </el-col>
-                <el-col :span="11">
-                    <el-form-item label="是否纳入年度培训计划" style="width:400px;margin-left:30px" >
-                        <!-- <el-input v-model="rows.draftUnit" placeholder="请输入是否纳入年度培训计划" ></el-input> -->
-                        <el-radio v-model="rows.isAnnualPlan" label="1">是</el-radio>
-                        <el-radio v-model="rows.isAnnualPlan" label="2">否</el-radio>
+                <el-col :span="12">
+                     <el-form-item label="培训/学习(项目)" prop="trainingPrograms" label-width="120px">
+                        <el-input v-model="rows.trainingPrograms" placeholder="请输入项目" ></el-input>
                     </el-form-item>
                 </el-col>
               </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="培训/学习(项目)" prop="trainingPrograms">
-                    <!-- type="textarea" :autosize="{ minRows: 2, maxRows: 20}" :rows="3" -->
-                        <el-input v-model="rows.trainingPrograms" placeholder="请输入项目" ></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
                     <el-form-item label="培训/学习(目的内容)">
-                        <el-input v-model="rows.trainingContent" placeholder="请输入目的内容"></el-input>
+                        <el-input type="textarea" :autosize="{minRows: 3}" v-model="rows.trainingContent"  placeholder="请输入目的内容"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
              <el-row>
                 <el-col :span="24">
                     <el-form-item label="培训/学习(参加人员)">
-                        <el-input v-model="rows.participant" placeholder="请输入参加人员"></el-input>
+                        <!-- <el-input v-model="rows.participant" placeholder="请输入参加人员"></el-input> -->
+                         <el-input type="textarea" :autosize="{minRows: 3}" v-model="rows.participant"  placeholder="请输入参加人员"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
              <el-row>
-                <el-col :span="24">
+                <el-col :span="12">
                     <el-form-item label="日程安排">
                         <el-input v-model="rows.schedule" placeholder="请输入日程安排"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="是否资金计划内"  label-width="250px">
+                        <span style="float:left">
+                             <el-radio v-model="rows.processId" label="1">是</el-radio>
+                             <el-radio v-model="rows.processId" label="2">否</el-radio>
+                        </span>
+                      
                     </el-form-item>
                 </el-col>
             </el-row>
              
              <el-row>
+                
                 <el-col :span="24">
-                    <el-col :span="2"><div class="grid-content bg-purple">
-                        <el-form-item label="费用预算"></el-form-item> </div>
-                    </el-col>
-                    <el-col :span="14">
-                        <div style="">
-                            小写：<el-input type="lowercase" clearable style="max-width:400px" @change="numberToChinese(rows.lowercase)" v-model="rows.lowercase" placeholder="小写入费用预算"></el-input>
-                            <!-- 大写：<el-input style="max-width:400px" v-model="rows.lowercase" placeholder="大写入费用预算"></el-input> -->
-                      </div>
-                    </el-col>
-                    
-                </el-col>
-                 <el-col :span="24">
-                    <el-col :span="2"><div class="grid-content bg-purple">
-                        <el-form-item label=""></el-form-item> </div>
-                    </el-col>
-                    <el-col :span="14">
-                        <div style="">
-                            <!-- 小写：<el-input style="max-width:400px" v-model="rows.consts" placeholder="小写入费用预算"></el-input> -->
-                            大写：<el-input clearable style="max-width:400px" v-model="rows.upper" placeholder="大写入费用预算"></el-input>
-                      </div>
-                    </el-col>
-                    
-                </el-col>
-            </el-row>
-             <el-row style="margin-top:20px">
-                <el-col :span="24">
-                    <el-form-item label="是否资金计划内" style="float:left">
-                       <el-radio v-model="rows.processId" label="1">是</el-radio>
-                        <el-radio v-model="rows.processId" label="2">否</el-radio>
+                    <el-form-item label="费用预算">
+                       <span style="float:left"><el-input type="lowercase" clearable style="max-width:400px" @change="numberToChinese(rows.lowercase)" v-model="rows.lowercase" placeholder="小写入费用预算"></el-input></span>
+                      <span  style="float:left"><el-input clearable style="max-width:400px" v-model="rows.upper" placeholder="大写入费用预算"></el-input></span>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -134,6 +96,12 @@
             </el-row>
         </el-form>
     </div>
+    <div slot="footer" class="dialog-footer">
+        <el-button type="default" @click="saveFormValidate()">保存</el-button>
+        <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+    </div>
+    </el-dialog>
+  
 </template>
 <script>
 /* eslint-disable */
@@ -158,38 +126,10 @@ export default {
             }
         };
         return {
+            counter: this.initialCounter,
+            dialogFormVisibleTrain:false,
             tabledata: [],
              unit: new Array("仟", "佰", "拾", "", "仟", "佰", "拾", "", "角", "分"),
-            pickerOptions2: {
-                shortcuts: [{
-                    text: "最近一周",
-                    onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
-                        picker.$emit("pick", [start, end]);
-                    }
-                    },
-                    {
-                    text: "最近一个月",
-                    onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
-                        picker.$emit("pick", [start, end]);
-                    }
-                    },
-                    {
-                    text: "最近三个月",
-                    onClick(picker) {
-                        const end = new Date();
-                        const start = new Date();
-                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
-                        picker.$emit("pick", [start, end]);
-                    }
-                    }
-                ]
-            },
             rows: {
                 department:'',
                 departmentId:123,
@@ -216,7 +156,10 @@ export default {
                 lowercase:'',
                 schedule:'',
                 remarks: '',
-                writer: ''
+                writer: '',
+                createdTime:'',
+                createForm_status:true  //判断是新建还是编辑表单
+                
                 // delegate:[],
             },
             users: [],
@@ -326,134 +269,86 @@ export default {
             }
         };
     },
-    props: ['formId', 'operationType'],
+    props: ['formId','formDataFromIndex'],
     components: {
         FilesOperate
     },
     watch: {
-        formId: function() {
-            if (this.operationType == 'edit') {
-                console.log(this.formId)
-                console.log(666)
-                this.getForm();
-            } else {
-                clearForm();
-            }
-        },
-        operationType: function() {
-            if (this.operationType == 'create') {
-                this.clearForm();
-            } else if (this.operationType == 'edit') {
-                this.getForm();
-            }
+         formDataFromIndex: {
+            handler: function() {
+                this.dialogFormVisibleTrain = true;
+                this.rows = this.formDataFromIndex;
+                this.createForm_status = false;
+            },
+            deep: true
         }
-    },
-    mounted() {
-        // debugger
-        const cookieItems = document.cookie.split(';');
-        for (let item of cookieItems) {
-            if (item.indexOf('uname') > -1) {
-                // 提单时间
-                // this.rows.committed = decodeURIComponent(item.split('=')[1]);
-            }
-            if (item.indexOf('oname') > -1) {
-                this.rows.draftUnit = decodeURIComponent(item.split('=')[1]);
-            }
-        }
-        if (this.operationType == 'edit') {
-            this.getForm();
-        } else if (this.operationType == 'create') {
-        }
-        // this.getUserList();
     },
     methods: {
-        toDx(n) {   //阿拉伯数字转换函数
-            switch (n) {
-            case "0":
-                return "零";
-            case "1":
-                return "壹";
-            case "2":
-                return "贰";
-            case "3":
-                return "叁";
-            case "4":
-                return "肆";
-            case "5":
-                return "伍";
-            case "6":
-                return "陆";
-            case "7":
-                return "柒";
-            case "8":
-                return "捌";
-            case "9":
-                return "玖";
-            }
-      },
-      // 转换算法主函数
-      numberToChinese(m){
-        let self = this;
-        // debugger
-        m *= 100;
-        m += "";
-        var length = m.length;
+    //     toDx(n) {   //阿拉伯数字转换函数
+    //         switch (n) {
+    //         case "0":
+    //             return "零";
+    //         case "1":
+    //             return "壹";
+    //         case "2":
+    //             return "贰";
+    //         case "3":
+    //             return "叁";
+    //         case "4":
+    //             return "肆";
+    //         case "5":
+    //             return "伍";
+    //         case "6":
+    //             return "陆";
+    //         case "7":
+    //             return "柒";
+    //         case "8":
+    //             return "捌";
+    //         case "9":
+    //             return "玖";
+    //         }
+    //   },
+    //   // 转换算法主函数
+    //   numberToChinese(m){
+    //     let self = this;
+    //     // debugger
+    //     m *= 100;
+    //     m += "";
+    //     var length = m.length;
  
-        var result = "";
-        for (var i = 0; i < length; i++) {
-          if (i == 2) {
-            result = "元" + result;
-          } else if (i == 6) {
-            result = "万" + result;
-          }
-          if (m.charAt(length - i - 1) == 0) {
-            if (i != 0 && i != 1) {
-              if (result.charAt(0) != '零' && result.charAt(0) != '元' && result.charAt(0) != '万') {
-                result = "零" + result;
-              }
-            }
-            continue;
-          }
-          result = this.toDx(m.charAt(length - i - 1)) + this.unit[this.unit.length - i - 1] + result;
-        }
-        result += result.charAt(result.length - 1) == '元' ? "整" : "";
-        this.rows.upper=result;
+    //     var result = "";
+    //     for (var i = 0; i < length; i++) {
+    //       if (i == 2) {
+    //         result = "元" + result;
+    //       } else if (i == 6) {
+    //         result = "万" + result;
+    //       }
+    //       if (m.charAt(length - i - 1) == 0) {
+    //         if (i != 0 && i != 1) {
+    //           if (result.charAt(0) != '零' && result.charAt(0) != '元' && result.charAt(0) != '万') {
+    //             result = "零" + result;
+    //           }
+    //         }
+    //         continue;
+    //       }
+    //       result = this.toDx(m.charAt(length - i - 1)) + this.unit[this.unit.length - i - 1] + result;
+    //     }
+    //     result += result.charAt(result.length - 1) == '元' ? "整" : "";
+    //     this.rows.upper=result;
     
-      },
-      time_change() {
-        // 改变时间获取数据
-       if (this.rows.draftTime == null) {
-          this.rows.draftTime = []
-          this.rows.startTime = ''
-          this.rows.endTime = ''
-        //   this.getForm()
-        }
-        else {
-          this.rows.startTime = this.rows.draftTime[0]
-          this.rows.endTime = this.rows.draftTime[1]
-        //   this.getForm();
-        }
-      },
-        getId(id) {
-            let self = this;
-            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                self.rows.attachments.forEach(function(value, index) {
-                    if (value.id == id) {
-                        // axios
-                        //     .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
-                        //     .then(res => {
-                        //         self.rows.attachments.splice(index, 1);
-                        //     });
-                        // self.rows.attachments.splice(index, 1);
-                    }
-                });
-            });
-        },
-        // getUserList() {
-        //     axios.get('/api/v1/users', '').then(res => {
-        //         this.users = res.data;
-        //     });
-        // },
+    //   },
+    //   time_change() {
+    //     // 改变时间获取数据
+    //    if (this.rows.draftTime == null) {
+    //       this.rows.draftTime = []
+    //       this.rows.startTime = ''
+    //       this.rows.endTime = ''
+    //     }
+    //     else {
+    //       this.rows.startTime = this.rows.draftTime[0]
+    //       this.rows.endTime = this.rows.draftTime[1]
+    //     }
+    //   },
         clearForm() {
             this.rows = {
                 attachments: [],
@@ -483,190 +378,70 @@ export default {
                 writer: ''
             };
         },
-        getForm() {
-            const self = this;
-            if (this.formId != '') {
-                // axios
-                //     .get('/trainingApplication/save/' + this.formId)
-                //     .then(res => {
-                //         //res.data.delegate = res.data.delegate.split(",");
-                //         self.rows = res.data;
-                //     })
-                //     .catch(function() {
-                //         self.$message({
-                //             message: '操作失败',
-                //             type: 'error'
-                //         });
-                //     });
-            }
-        },
+        // getForm() {
+        //     const self = this;
+        //     if (this.formId != '') {
+        //         // axios
+        //         //     .get('/trainingApplication/save/' + this.formId)
+        //         //     .then(res => {
+        //         //         //res.data.delegate = res.data.delegate.split(",");
+        //         //         self.rows = res.data;
+        //         //     })
+        //         //     .catch(function() {
+        //         //         self.$message({
+        //         //             message: '操作失败',
+        //         //             type: 'error'
+        //         //         });
+        //         //     });
+        //     }
+        // },
         saveFormValidate(type) {
             this.$refs['formupdate'].validate(valid => {
                 if (valid) {
                     this.saveForm(type);
-                    this.$emit('saveStatus', false);
                 }
             });
         },
         // 提交保存
-        saveForm(action = '') {
-            const self = this;
-            const cookieItems=document.cookie.split(';');
-            if (action == 'submit') {
-                self.submitForm();
-            }
-            //  for (let item of cookieItems) {
-            //     if (item.indexOf('uid') > -1) {
-            //         // 提单时间
-            //        this.rows.id = item.split('=')[1];
-            //     }
-            // }
-            //  if (self.rows.delegate.length > 0) {
-            //     self.rows.delegate = self.rows.delegate.join(",");
-            // } else {
-            //     self.rows.delegate = "";
-            // }
-            else{
+        saveForm(params) {
+            const $self = this;
             axios
                 .post(
-                   '/trainingApplication/save',
-                    JSON.stringify(self.rows),
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
+                   '/trainingApplication/save', $self.rows
                 )
-                .then(res => {
-                    self.currentFormId = res.data.id;
-                    if (self.operationType == 'create') {
-                        self.clearForm();
-                    }
-                     else {
-                        self.$emit('refreshData');
-                        if (this.operationType == 'edit') {
-                            self.$emit('refreshDetail');
-                            
-                        }
-                    }
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-           }
-        },
-        submitForm() {
-           const self = this;
-            self.rows.id=this.formId
-            axios
-                .post(
-                    '/trainingApplication/save',
-                    JSON.stringify(self.rows),
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    self.$message({
-                        message: '修改成功',
+                .then(response => {
+                    $self.dialogFormVisibleTrain = false;
+                    $self.$message({
+                        message: '保存成功！',
                         type: 'success'
                     });
-                     self.$emit('refreshData');
-                     this.clearForm();
-                    
+                    if($self.createForm_status){ //如果是新建表单刷新列表
+                        $self.$emit("reloadList","reload");
+                    }else{ //如果是编辑表单刷新详情页
+                        $self.$emit("reloadList",$self.rows); 
+                    }
+
+                    if(params){//如果是提交启动工作流
+                       $self.startSignal();
+                    }
+
                 })
                 .catch(function() {
-                    self.$message({
-                        message: '修改失败',
+                    $self.$message({
+                        message: '保存失败',
                         type: 'error'
                     });
                 });
+           
         },
-       
-        comment() {
-            let self = this;
-            // axios
-            //     .put(
-            //         `/api/v1/board_meeting_forms/${self.currentFormId}/comment`,
-            //         {
-            //             content: '提交',
-            //             action: 'COMMIT',
-            //             node: '提交'
-            //         }
-            //     )
-            //     .then(res => {});
+        startSignal() {
+                 this.$message({
+                        message: '启动工作流！',
+                        type: 'success'
+                    });
         },
-        startProcess() {
-            const self = this;
-            const params = {
-                action: 'COMMIT'
-            };
-            // axios
-            //     .put(
-            //         '/api/v1/board_meetings/' + this.currentFormId + '/signal',
-            //         JSON.stringify(params),
-            //         {
-            //             headers: {
-            //                 'Content-type': 'application/json'
-            //             }
-            //         }
-            //     )
-            //     .then(res => {
-            //         self.$emit('refreshData');
-            //         if (this.operationType == 'edit') {
-            //             self.$emit('refreshDetail');
-            //         }
-            //     })
-            //     .catch(function() {
-            //         self.$message({
-            //             message: '操作失败',
-            //             type: 'error'
-            //         });
-            //     });
-        },
-        // 删除
-        // deleteAttachment(id) {
-        //     const self = this;
-        //     if (this.rows.attachments.length > 0) {
-        //         this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
-        //             () => {
-        //                 const params = {
-        //                     id: id
-        //                 };
-        //                 axios
-        //                     .get(
-        //                         '/api/v1/board_meeting_forms/deleteAtt/' + id,
-        //                         {
-        //                             headers: {
-        //                                 'Content-type': 'application/json'
-        //                             }
-        //                         }
-        //                     )
-        //                     .then(res => {
-        //                         self.rows.attachments.forEach(function(
-        //                             item,
-        //                             index
-        //                         ) {
-        //                             if (item.id == id) {
-        //                                 self.rows.attachments.splice(index, 1);
-        //                             }
-        //                         });
-        //                     })
-        //                     .catch(function() {
-        //                         self.$message({
-        //                             message: '操作失败',
-        //                             type: 'error'
-        //                         });
-        //                     });
-        //             }
-        //         );
-        //     }
-        // },
+         
+
         handleSuccess(response, file) {
             const self = this;
             if (response.length > 0) {

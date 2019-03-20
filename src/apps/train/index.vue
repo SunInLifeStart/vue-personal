@@ -1,98 +1,154 @@
 <template>
     <div id="Train">
+
+       
         <el-card class="box-card">
-            <TrainFilter @searchList="getBoardSearchOptions"></TrainFilter>
-            <div class="toolbar">
-                <el-button type="primary" icon="el-icon-plus" @click="cleanform">新建</el-button>
+               <!-- 查询 -->
+                <div id="TrainFilter">
+                    <el-form :inline="true" class="demo-form-inline">
+                        <el-form-item label="申请人">
+                            <el-input placeholder="请输入申请人" v-model="params.submitter"></el-input>
+                        </el-form-item>
+                        <el-form-item label="所属部门">
+                            <el-input placeholder="请输入所属部门" v-model="params.department"></el-input>
+                        </el-form-item>
+                        <el-form-item>
+                            <el-button type="primary" @click="searchList">查询</el-button>
+                            <el-button type="primary" @click="resetInput">重置</el-button>
+                        </el-form-item>
+                    </el-form>
+                </div>
+
+                  <!-- 新建 -->
+                <div class="toolbar">
+                    <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
+                </div>
+                <div id="TrainList">
+                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
+                    <el-table-column prop="submitter" label="申请人">
+                    </el-table-column>
+                    <el-table-column prop="department" label="所属部门">
+                    </el-table-column>
+                    <el-table-column prop="committed" label="提单时间">
+                    </el-table-column>
+                    <el-table-column prop="participant" label="培训/学习(参加人员)">
+                    </el-table-column>
+                    <el-table-column prop="schedule" label="日程安排">
+                    </el-table-column> -->
+                     <el-table-column label="操作" width="200">
+                        <template slot-scope="scope">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" >
+                                <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                                <el-button type="text" icon="el-icon-delete" @click="deleteItem(scope.row)"></el-button>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                   <br />
+                 <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
             </div>
-            <TrainList ref="Trainlist" @formId="getBoardFormId" @editForm="editBoardForm" :searchOptions="searchBoardOptions" @showStatus="showStatus"></TrainList>
-        </el-card>
+          </el-card>
         <br>
         <el-card class="box-card">
-            <TrainDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="TrainDetail"></TrainDetail>
+            <TrainDetail :formId="formId" ref="TrainDetail"></TrainDetail>
         </el-card>
-        <el-dialog title="外部培训申请表" :visible.sync="dialogFormVisibleTrain" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
-            <TrainForm @refreshData="refreshBoardData" @refreshDetail="refreshDetail" @saveStatus="saveStatus" ref="Trainform" :formId="dialogBoardFormId" :operationType="operationBoardType"></TrainForm>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="default" v-if="this.statusNews == ''" @click="saveBoardForm">保存</el-button>
-                <el-button type="primary" @click="submitBoardForm">提交</el-button>
-                <!-- <el-button type="default">撤销</el-button> -->
-            </div>
-        </el-dialog>
+         <TrainForm :formDataFromIndex="formDataFromIndex"  ref="TrainForm" @reloadList = "reloadList"></TrainForm>
     </div>
 </template>
 <script>
-import TrainFilter from './TrainFilter';
 import TrainForm from './TrainForm';
-import TrainList from './TrainList';
-import TrainDetail from './TrainDetail';
+import TrainDetail from "./TrainDetail";
 export default {
-    name: 'Train',
-    mounted() {},
+    name: "Train",
     data() {
         return {
-            dialogFormVisibleTrain: false,
-            searchBoardOptions: [],
-            formBoardId: '',
-            dialogBoardFormId: '',
-            operationBoardType: 'create',
-            statusNews: ''
+            tableData:[],
+            formDetails:{},
+            formId:"",
+            formDataFromIndex:{},
+            params:{
+                pageNum: 1,
+                pageSize: 5,
+                department:"",
+                submitter:"",
+                total:0
+            },
         };
     },
     components: {
-        TrainFilter,
         TrainForm,
-        TrainList,
         TrainDetail
     },
     methods: {
-        cleanform() {
-            this.operationBoardType = 'create';
-            this.statusNews = '';
-            this.dialogFormVisibleTrain = true;
+        //获取列表
+        getList(pageNum) {
+            let $self = this;
+            $self.$axios
+                .post("/trainingApplication/queryList", $self.params)
+                .then(response => {
+                        if(response.data.content.list.length > 0){
+                            $self.formId = response.data.content.list[0].id;
+                        }
+                        $self.tableData = response.data.content.list;
+                        $self.params.total = response.data.content.total;
+                })
+                .catch(function() {
+                    $self.$message({
+                        message: "获取列表失败！",
+                        type: "warning"
+                    });
+                });
         },
-        showStatus(status) {
-            if (status == '已保存') {
-                this.statusNews = '';
-            } else {
-                this.statusNews = '已驳回';
+
+        //选择行
+        showCurrentId(row){
+           this.formId = row.id;
+        },
+
+        //新建
+        createNewForm(){
+            this.$refs.TrainForm.dialogFormVisibleTrain =  this.$refs.TrainForm.createForm_status =  true;
+        },
+
+        //编辑
+        editForm(data){
+            //data.timestamp = new Date().getTime();
+          //  this.currentItem = data;
+            this.formDataFromIndex = data;
+          // console.log(this.formDataFromIndex);
+        },
+        reloadList(params){
+            if(params == "reload"){
+                this.getList();
+            }else{
+                this.$refs.TrainDetail.getFormDetails(params.id);
+               // this.$set(this.currentItem,params);
             }
         },
-        handleClick(tab, event) {},
-        getBoardSearchOptions(searchOptions) {
-            this.searchBoardOptions = searchOptions;
+
+
+
+        //分页
+        currentChange(pageNum) {
+            this.params.pageNum = pageNum;
+            this.getList(pageNum);
         },
-        getBoardFormId(id) {
-            this.formBoardId = '';
-            this.formBoardId = id;
+        sizeChange(pageSize) {
+            this.params.pageSize = pageSize;
+            this.getList();
         },
-        editBoardForm(id) {
-            this.dialogBoardFormId = id;
-            this.dialogFormVisibleTrain = true;
-            this.operationBoardType = 'edit';
+        searchList(){
+            this.getList();
         },
-        refreshDetail() {
-            this.$refs.TrainDetail.getForm();
-            this.$refs.TrainDetail.getActions();
-            this.$refs.TrainDetail.getCrumbs();
-        },
-        refreshBoardData() {
-            this.$refs.Trainlist.getList();
-            // if (this.operationBoardType == "edit") {
-            //     this.$refs.TrainDetail.getForm();
-            // }
-        },
-        saveBoardForm() {
-            // this.$refs.Trainform.saveForm();
-            this.$refs.Trainform.saveFormValidate();
-        },
-        submitBoardForm() {
-            this.$refs.Trainform.saveFormValidate('submit');
-            // this.dialogFormVisibleTrain = false;
-        },
-        saveStatus(status) {
-            this.dialogFormVisibleTrain = status;
+        resetInput(){
+            this.params.submitter = this.params.department = "";
         }
+        
+    },
+    mounted() {
+        this.getList();
     }
 };
 </script>

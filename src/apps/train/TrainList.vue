@@ -1,32 +1,5 @@
 <template>
-    <div id="TrainList">
-        <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-            <el-table-column prop="submitter" label="申请人">
-            </el-table-column>
-            <el-table-column prop="department" label="所属部门">
-            </el-table-column>
-            <el-table-column prop="committed" label="提单时间">
-            </el-table-column>
-            <el-table-column prop="participant" label="培训/学习(参加人员)">
-            </el-table-column>
-            <el-table-column prop="schedule" label="日程安排">
-            </el-table-column>
-            <!-- <el-table-column prop="status" label="单据状态" width="200"></el-table-column> -->
-            <el-table-column label="操作" width="200">
-                <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" content="编辑" placement="left" >
-                        <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
-                    </el-tooltip>
-                    <el-tooltip class="item" effect="dark" content="删除" placement="left">
-                        <el-button type="text" icon="el-icon-delete" @click="deleteItem(scope.row)"></el-button>
-                    </el-tooltip>
-                </template>
-            </el-table-column>
-        </el-table>
-        <br />
-        <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total">
-        </el-pagination>
-    </div>
+  
 </template>
 <script>
 /* eslint-disable */
