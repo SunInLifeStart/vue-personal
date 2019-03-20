@@ -2,7 +2,7 @@
     <div id="ApplyMeetingForm">
         <el-form :model="rows" label-width="150px" ref="formupdate">
             <el-row>
-                <el-col :span="8" offset="16">
+                <el-col :span="8" :offset="16">
                     <el-form-item label="流水号:" prop="numbers">
                         {{rows.numbers}}
                     </el-form-item>
@@ -21,7 +21,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="提单时间">
-                        <el-date-picker v-model="rows.drafter" style="width:100%" type="date" :disabled="true">
+                        <el-date-picker v-model="rows.draftTime" style="width:100%" type="date" :disabled="true">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -64,7 +64,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="参会人员" prop="phone">
-                            <tr v-for="(item,index) in rows.evections" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                            <tr v-for="(item,index) in rows.personal" :key="index" @contextmenu.prevent="deleteItem(item,index,'personal')">
                                 <td colspan="4" style="width: 21%;">
                                     <el-select v-model="item.currency" placeholder="请输入参会部门" @change="">
                                         <el-option v-for="item in []" :key="item.value" :label="item.label" :value="{value:item.value, label: item.label}">
@@ -77,7 +77,7 @@
                             </tr>
                             <tr>
                                 <td colspan="8" style="height: 30px;">
-                                    <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                    <span @click="addItem('personal')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
                                 </td>
                             </tr>
                         </el-form-item>
@@ -119,9 +119,9 @@ export default {
             rows: {
                 attachments: [],
                 evections: [{}],
+                personal: [{}],
                 numbers: '',
                 filetitle: '',
-                numbers: '',
                 drafter: '',
                 draftUnit: '',
                 draftTime: moment(new Date()).format('YYYY-MM-DD'),
@@ -201,12 +201,16 @@ export default {
                     } else {
                         this.rows.evections.splice(index, 1);
                     }
+                } else {
+                    this.rows.personal.splice(index, 1)
                 }
             });
         },
         addItem(type) {
-            if (type == 'message') {
+            if (type === 'message') {
                 this.rows.evections.push({});
+            } else if (type === 'personal') {
+                this.rows.personal.push({});
             }
         },
         getId(id) {

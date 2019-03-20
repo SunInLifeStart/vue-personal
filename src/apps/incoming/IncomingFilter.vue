@@ -119,3 +119,22 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+    #IncomingFilter {
+        .el-date-editor.el-input, .el-date-editor.el-input__inner {
+            width: 100%;
+        }
+        .el-form-item--small.el-form-item{
+            width: 100%;
+        }
+        .el-select {
+            width: 100%;
+        }
+    }
+</style>
+<style scoped>
+    #IncomingFilter >>> .el-form-item__content{
+        width: calc(100% - 80px);
+    }
+</style>

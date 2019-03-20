@@ -131,4 +131,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+    #SubmissionFilter {
+        .el-date-editor.el-input, .el-date-editor.el-input__inner {
+            width: 100%;
+        }
+        .el-form-item--small.el-form-item{
+            width: 100%;
+        }
+        .el-select {
+            width: 100%;
+        }
+    }
+</style>
+<style scoped>
+    #SubmissionFilter >>> .el-form-item__content{
+        width: calc(100% - 110px);
+    }
 </style>

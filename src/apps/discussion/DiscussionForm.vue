@@ -121,7 +121,6 @@ export default {
                 evections: [{}],
                 numbers: '',
                 filetitle: '',
-                numbers: '',
                 drafter: '',
                 draftUnit: '',
                 draftTime: moment(new Date()).format('YYYY-MM-DD'),
