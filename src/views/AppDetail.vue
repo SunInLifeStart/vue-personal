@@ -31,7 +31,8 @@ export default {
         publish: "综合事务信息发布",
         doc: "公文管理",
         supervise: "纪检监察",
-        meeting: "会议纪要"
+        meeting: "会议纪要",
+        leave:"请休假申请"
       }
     };
   },

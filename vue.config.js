@@ -85,6 +85,16 @@ module.exports = {
                 target: "http://116.117.157.232",
                 ws: true,
                 changeOrigin: true
+            },
+            "query": {
+                target: "http://192.168.0.253:10148",
+                ws: true,
+                changeOrigin: true
+            },
+            "/get":{
+                target: "http://192.168.0.253:10148",
+                ws: true,
+                changeOrigin: true
             }
         }
     },
