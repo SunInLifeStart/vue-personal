@@ -16,21 +16,21 @@
                 </el-steps>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="申请人：">{{tabledata.numbers}}
+                        <el-form-item label="申请人：">{{tabledata.submitter}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属部门：">{{tabledata.filetitle}}
+                        <el-form-item label="所属部门：">{{tabledata.department}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提单时间：">{{tabledata.drafter}}
+                        <el-form-item label="提单时间：">{{tabledata.committed}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="培训/学习(项目)：">{{tabledata.content}}
+                        <el-form-item label="培训/学习(项目)：">{{tabledata.trainingPrograms}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -44,13 +44,13 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="培训/学习(目的内容)：">{{tabledata.contentLine}}
+                        <el-form-item label="培训/学习(目的内容)：">{{tabledata.trainingContent}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="培训/学习(参加人员)：">{{tabledata.contentPeople}}
+                        <el-form-item label="培训/学习(参加人员)：">{{tabledata.participant}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -60,7 +60,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <!-- <el-row>
+                <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：" v-if="tabledata.attachments && tabledata.attachments.length > 0">
                             <div v-for="item in tabledata.attachments" :key="item.id" style="float:left">
@@ -84,7 +84,7 @@
                             </div>
                         </div>
                     </el-col>
-                </el-row> -->
+                </el-row>
 
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
@@ -149,7 +149,7 @@ export default {
     mounted() {
         this.getForm();
         if (this.formId != '') {
-            this.getActions();
+            // this.getActions();
             this.getCrumbs();
             this.getAllUsers();
         }
@@ -158,7 +158,7 @@ export default {
         formId: function() {
             this.getForm();
             if (this.formId) {
-                this.getActions();
+                // this.getActions();
                 this.getCrumbs();
                 this.getAllUsers();
             } else {
@@ -170,22 +170,22 @@ export default {
         getForm() {
             const self = this;
             if (this.formId != '') {
-                axios
-                    .get('/api/v1/board_meeting_forms/' + this.formId)
-                    .then(res => {
-                        self.tabledata = res.data;
-                        if (self.tabledata.draftTime) {
-                            self.tabledata.draftTime = moment(
-                                self.tabledata.draftTime
-                            ).format('YYYY-MM-DD');
-                        }
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
+                // axios
+                //     .get('/api/v1/board_meeting_forms/' + this.formId)
+                //     .then(res => {
+                //         self.tabledata = res.data;
+                //         if (self.tabledata.draftTime) {
+                //             self.tabledata.draftTime = moment(
+                //                 self.tabledata.draftTime
+                //             ).format('YYYY-MM-DD');
+                //         }
+                //     })
+                //     .catch(function() {
+                //         self.$message({
+                //             message: '操作失败',
+                //             type: 'error'
+                //         });
+                //     });
             }
         },
         downloadFile(url) {
@@ -193,56 +193,56 @@ export default {
         },
         getActions() {
             let self = this;
-            axios
-                .get(`/api/v1/board_meetings/${this.formId}/actions`)
-                .then(res => {
-                    res.data.types = res.data.types || [];
-                    if (this.fullScreen) {
-                        res.data.types.push({
-                            type: 'closeFullScreen',
-                            name: '关闭全屏'
-                        });
-                    } else {
-                        res.data.types.push({
-                            type: 'fullScreen',
-                            name: '全屏显示'
-                        });
-                    }
-                    self.actions = res.data.types;
-                });
+            // axios
+            //     .get(`/api/v1/board_meetings/${this.formId}/actions`)
+            //     .then(res => {
+            //         res.data.types = res.data.types || [];
+            //         if (this.fullScreen) {
+            //             res.data.types.push({
+            //                 type: 'closeFullScreen',
+            //                 name: '关闭全屏'
+            //             });
+            //         } else {
+            //             res.data.types.push({
+            //                 type: 'fullScreen',
+            //                 name: '全屏显示'
+            //             });
+            //         }
+            //         self.actions = res.data.types;
+            //     });
         },
         getCrumbs() {
-            axios
-                .get(`/api/v1/board_meetings/${this.formId}/crumb`)
-                .then(res => {
-                    this.crumb = { items: res.data, index: -1 };
-                    res.data.forEach((item, index) => {
-                        if (item.active) {
-                            this.crumbNodeName = item.name;
-                            if (item.assignes) {
-                                item.name =
-                                    item.name + '(' + item.assignes + ')';
-                            }
-                            this.crumb.index = index;
-                        }
-                    });
-                });
+            // axios
+            //     .get(`/api/v1/board_meetings/${this.formId}/crumb`)
+            //     .then(res => {
+            //         this.crumb = { items: res.data, index: -1 };
+            //         res.data.forEach((item, index) => {
+            //             if (item.active) {
+            //                 this.crumbNodeName = item.name;
+            //                 if (item.assignes) {
+            //                     item.name =
+            //                         item.name + '(' + item.assignes + ')';
+            //                 }
+            //                 this.crumb.index = index;
+            //             }
+            //         });
+            //     });
         },
         getRejectList() {
             let self = this;
-            axios
-                .get(
-                    '/api/v1/board_meetings/' + this.formId + '/reject/targets'
-                )
-                .then(res => {
-                    self.rejectList = res.data;
-                });
+            // axios
+            //     .get(
+            //         '/api/v1/board_meetings/' + this.formId + '/reject/targets'
+            //     )
+            //     .then(res => {
+            //         self.rejectList = res.data;
+            //     });
         },
         getAllUsers() {
             let self = this;
-            axios.get(`/api/v1/users`).then(res => {
-                self.users = res.data;
-            });
+            // axios.get(`/api/v1/users`).then(res => {
+            //     self.users = res.data;
+            // });
         },
         doAction(action) {
             this.clearForm();
@@ -252,13 +252,13 @@ export default {
                 this.clearForm();
                 let self = this; //套红，归档，分发
                 if (action.type == 'PULL') {
-                    axios
-                        .get(`/api/v1/board_meetings/${self.formId}/pull`)
-                        .then(res => {
-                            self.comment('formOnlyComment');
-                            self.getActions();
-                            self.getCrumbs();
-                        });
+                    // axios
+                    //     .get(`/api/v1/board_meetings/${self.formId}/pull`)
+                    //     .then(res => {
+                    //         // self.comment('formOnlyComment');
+                    //         // self.getActions();
+                    //         self.getCrumbs();
+                    //     });
                 }
                 if (action.type == 'COMMIT' && this.crumbNodeName == '拟稿') {
                     this.submitForm();
@@ -278,7 +278,7 @@ export default {
                 this.dialogVisible = true;
                 //需要弹出并填写意见，选择驳回节点或选择其他人
                 if (action.type == 'REJECT') {
-                    this.getRejectList();
+                    // this.getRejectList();
                     this.reject_status = true;
                 }
                 if (action.type == 'PRESIGN') {
@@ -314,28 +314,27 @@ export default {
         },
         comment(comment) {
             let self = this;
-            axios
-                .put(`/api/v1/board_meeting_forms/${self.formId}/comment`, {
-                    content: self.textarea || self.currentAction.name,
-                    action: self.currentAction.type,
-                    node: this.crumbNodeName
-                })
-                .then(res => {
-                    self.getActions();
-                    self.getForm();
-                    self.getCrumbs();
-                    if (comment == 'formOnlyComment') {
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                    }
-                });
+            // axios
+            //     .put(`/api/v1/board_meeting_forms/${self.formId}/comment`, {
+            //         content: self.textarea || self.currentAction.name,
+            //         action: self.currentAction.type,
+            //         node: this.crumbNodeName
+            //     })
+            //     .then(res => {
+            //         // self.getActions();
+            //         // self.getForm();
+            //         self.getCrumbs();
+            //         if (comment == 'formOnlyComment') {
+            //             self.$message({
+            //                 message: self.currentAction.name + '成功',
+            //                 type: 'success'
+            //             });
+            //         }
+            //     });
         },
         submitForm() {
             let self = this;
-
-            //如果是不需要走流程的节点
+           //如果是不需要走流程的节点
             if (
                 'SAVE,PREVIEW,COMMENT,PULL,PRINTER,EDIT'.includes(
                     self.currentAction.type
@@ -363,20 +362,20 @@ export default {
                     }
                 }
                 self.submitData.action = self.currentAction.type;
-                axios
-                    .put(
-                        `/api/v1/board_meetings/${self.formId}/signal`,
-                        self.submitData
-                    )
-                    .then(res => {
-                        self.dialogVisible = false;
-                        self.comment();
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                        self.$emit('refreshData');
-                    });
+                // axios
+                //     .put(
+                //         `/api/v1/board_meetings/${self.formId}/signal`,
+                //         self.submitData
+                //     )
+                //     .then(res => {
+                //         self.dialogVisible = false;
+                //         // self.comment();
+                //         self.$message({
+                //             message: self.currentAction.name + '成功',
+                //             type: 'success'
+                //         });
+                //         self.$emit('refreshData');
+                //     });
             }
         }
     }

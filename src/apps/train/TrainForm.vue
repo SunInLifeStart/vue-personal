@@ -4,7 +4,7 @@
             <el-row >
                 <el-col  :span="8" :offset="16" > 
                      <el-form-item label="流水号：" prop="suggestion">
-                        <span >{{rows.serialNumber}}</span>
+                        <span >{{rows.number}}</span>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -14,56 +14,60 @@
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="申请人" prop="numbers">
-                        <el-input v-model="rows.numbers" placeholder="请输入申请人"></el-input>
+                    <el-form-item label="申请人" prop="submitter">
+                        <el-input v-model="rows.submitter" placeholder="请输入申请人"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="所属部门" prop="filetitle">
-                        <el-input v-model="rows.filetitle" placeholder="请输入所属部门"></el-input>
+                    <el-form-item label="所属部门" prop="department">
+                        <el-input v-model="rows.department" placeholder="请输入所属部门"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="提单时间">
                         <!-- :disabled="true" -->
-                        <el-input v-model="rows.drafter" placeholder="请输入提单时间" ></el-input>
+                        <el-input v-model="rows.committed" placeholder="请输入提单时间" ></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
-                 <el-col :span="8">
+                 <el-col :span="11">
                     <el-form-item label="培训时间">
-                        <el-date-picker v-model="rows.draftTime" style="width:100%" type="date">
+                        <!-- <el-date-picker v-model="rows.draftTime" style="width:100%" type="date">
+                        </el-date-picker> -->
+                        <el-date-picker v-model="rows.draftTime" unlink-panels range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"
+                        type="daterange" value-format="yyyy-MM-dd HH:mm:ss" :picker-options="pickerOptions2" clearable @change="time_change"
+                        align="right" size="mini" >
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
-                <el-col :span="10">
+                <el-col :span="11">
                     <el-form-item label="是否纳入年度培训计划" style="width:400px;margin-left:30px" >
                         <!-- <el-input v-model="rows.draftUnit" placeholder="请输入是否纳入年度培训计划" ></el-input> -->
-                        <el-radio v-model="rows.trainingPlan" label="1">是</el-radio>
-                        <el-radio v-model="rows.trainingPlan" label="2">否</el-radio>
+                        <el-radio v-model="rows.isAnnualPlan" label="1">是</el-radio>
+                        <el-radio v-model="rows.isAnnualPlan" label="2">否</el-radio>
                     </el-form-item>
                 </el-col>
               </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="培训/学习(项目)" prop="content">
+                    <el-form-item label="培训/学习(项目)" prop="trainingPrograms">
                     <!-- type="textarea" :autosize="{ minRows: 2, maxRows: 20}" :rows="3" -->
-                        <el-input v-model="rows.content" placeholder="请输入项目" ></el-input>
+                        <el-input v-model="rows.trainingPrograms" placeholder="请输入项目" ></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="培训/学习(目的内容)">
-                        <el-input v-model="rows.contentLine" placeholder="请输入目的内容"></el-input>
+                        <el-input v-model="rows.trainingContent" placeholder="请输入目的内容"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
              <el-row>
                 <el-col :span="24">
                     <el-form-item label="培训/学习(参加人员)">
-                        <el-input v-model="rows.contentPeople" placeholder="请输入参加人员"></el-input>
+                        <el-input v-model="rows.participant" placeholder="请输入参加人员"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -82,8 +86,8 @@
                     </el-col>
                     <el-col :span="14">
                         <div style="">
-                            小写：<el-input style="max-width:400px" @change="numberToChinese(rows.consts)" v-model="rows.consts" placeholder="小写入费用预算"></el-input>
-                            <!-- 大写：<el-input style="max-width:400px" v-model="rows.consts" placeholder="大写入费用预算"></el-input> -->
+                            小写：<el-input type="lowercase" clearable style="max-width:400px" @change="numberToChinese(rows.lowercase)" v-model="rows.lowercase" placeholder="小写入费用预算"></el-input>
+                            <!-- 大写：<el-input style="max-width:400px" v-model="rows.lowercase" placeholder="大写入费用预算"></el-input> -->
                       </div>
                     </el-col>
                     
@@ -95,7 +99,7 @@
                     <el-col :span="14">
                         <div style="">
                             <!-- 小写：<el-input style="max-width:400px" v-model="rows.consts" placeholder="小写入费用预算"></el-input> -->
-                            大写：<el-input style="max-width:400px" v-model="rows.constsTwo" placeholder="大写入费用预算"></el-input>
+                            大写：<el-input clearable style="max-width:400px" v-model="rows.upper" placeholder="大写入费用预算"></el-input>
                       </div>
                     </el-col>
                     
@@ -104,20 +108,19 @@
              <el-row style="margin-top:20px">
                 <el-col :span="24">
                     <el-form-item label="是否资金计划内" style="float:left">
-                        <!-- <el-input v-model="rows.remarks" placeholder="备注"></el-input> -->
-                        <el-radio v-model="rows.draftline" label="1">是</el-radio>
-                        <el-radio v-model="rows.draftline" label="2">否</el-radio>
+                       <el-radio v-model="rows.processId" label="1">是</el-radio>
+                        <el-radio v-model="rows.processId" label="2">否</el-radio>
                     </el-form-item>
                 </el-col>
             </el-row>
              <el-row>
                 <el-col :span="24">
                     <el-form-item label="审批意见">
-                        <el-input type="textarea" v-model="rows.suggestion" placeholder="请输入审批意见"></el-input>
+                        <el-input type="textarea" v-model="rows.remarks" placeholder="请输入审批意见"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
-            <!-- <el-row>
+            <el-row>
                 <el-col :span="24">
                     <el-form-item label="附件">
                         <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
@@ -128,7 +131,7 @@
                         </div>
                     </el-form-item>
                 </el-col>
-            </el-row> -->
+            </el-row>
         </el-form>
     </div>
 </template>
@@ -137,6 +140,7 @@
 import axios from 'axios';
 import moment from 'moment';
 import FilesOperate from '../FilesOperate';
+import { debug, debuglog } from 'util';
 export default {
     name: 'TrainForm',
     data() {
@@ -156,23 +160,60 @@ export default {
         return {
             tabledata: [],
              unit: new Array("仟", "佰", "拾", "", "仟", "佰", "拾", "", "角", "分"),
+            pickerOptions2: {
+                shortcuts: [{
+                    text: "最近一周",
+                    onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 7);
+                        picker.$emit("pick", [start, end]);
+                    }
+                    },
+                    {
+                    text: "最近一个月",
+                    onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 30);
+                        picker.$emit("pick", [start, end]);
+                    }
+                    },
+                    {
+                    text: "最近三个月",
+                    onClick(picker) {
+                        const end = new Date();
+                        const start = new Date();
+                        start.setTime(start.getTime() - 3600 * 1000 * 24 * 90);
+                        picker.$emit("pick", [start, end]);
+                    }
+                    }
+                ]
+            },
             rows: {
+                department:'',
+                departmentId:123,
                 attachments: [],
-                numbers: '',//申请人
-                filetitle: '',//所属部门
-                drafter: '',//提单时间
-                trainingPlan:'',//培训计划
+                submitter: '',//申请人
+                department: '',//所属部门
+                committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),//提单时间
+                isAnnualPlan:'',//培训计划
                 draftUnit: '',
-                draftTime: moment(new Date()).format('YYYY-MM-DD'),
+                // id:document.cookie.uid,
+                // draftTime: moment(new Date()).format('YYYY-MM-DD'),
+                draftTime:[],
+                startTime:'',
+                endTime:'',
                 phone: '',
-                serialNumber:'123',
-                content: '',
-                contentLine:'',
-                contentPeople:'',
-                draftline:'',
+                number:'',
+                trainingPrograms: '',
+                trainingContent:'',
+                participant:'',
+                processId:'',
                 suggestion:'',
                 consts:'',
-                constsTwo:'',
+                upper:'',
+                lowercase:'',
                 schedule:'',
                 remarks: '',
                 writer: ''
@@ -183,21 +224,21 @@ export default {
             formLabelWidth: '120px',
             currentFormId: this.operationType == 'create' ? '' : this.formId,
             rules: {
-                numbers: [
+                submitter: [
                     {
                         required: true, //是否必填
                         trigger: 'blur', //何事件触发
                         message: '请输入申请人'
                     }
                 ],
-                filetitle: [
+                department: [
                     {
                         required: true, //是否必填
                         trigger: 'blur', //何事件触发
                         message: '请输入所属部门'
                     }
                 ],
-                trainingPlan: [
+                isAnnualPlan: [
                     {
                         required: false, //是否必填
                         trigger: 'blur', //何事件触发
@@ -205,28 +246,28 @@ export default {
                     }
                 ],
              
-                drafter: [
+                committed: [
                     {
                         required: false, //是否必填
                         message: '请选择提单时间',
                         trigger: 'blur'
                     }
                 ],
-                content: [
+                trainingPrograms: [
                     {
                         required: false, //是否必填
                         trigger: 'blur', //何事件触发
                         message: '请输入培训/学习(项目)'
                     }
                 ],
-                contentLine: [
+                trainingContent: [
                     {
                         required: false, //是否必填
                         trigger: 'blur', //何事件触发
                         message: '请输入培训/学习(目的内容)'
                     }
                 ],
-                contentPeople: [
+                participant: [
                     {
                         required: false, //是否必填
                         trigger: 'blur', //何事件触发
@@ -247,14 +288,14 @@ export default {
                         message: '请输入费用预算'
                     }
                 ],
-                constsTwo: [
-                    {
-                        required: false, //是否必填
-                        trigger: 'blur', //何事件触发
-                        message: '请输入费用预算'
-                    }
-                ],
-                draftline: [
+                // upper: [
+                //     {
+                //         required: false, //是否必填
+                //         trigger: 'blur', //何事件触发
+                //         message: '请输入费用预算'
+                //     }
+                // ],
+                processId: [
                     {
                         required: false, //是否必填
                         trigger: 'blur', //何事件触发
@@ -292,6 +333,8 @@ export default {
     watch: {
         formId: function() {
             if (this.operationType == 'edit') {
+                console.log(this.formId)
+                console.log(666)
                 this.getForm();
             } else {
                 clearForm();
@@ -306,11 +349,12 @@ export default {
         }
     },
     mounted() {
+        // debugger
         const cookieItems = document.cookie.split(';');
         for (let item of cookieItems) {
             if (item.indexOf('uname') > -1) {
                 // 提单时间
-                // this.rows.drafter = decodeURIComponent(item.split('=')[1]);
+                // this.rows.committed = decodeURIComponent(item.split('=')[1]);
             }
             if (item.indexOf('oname') > -1) {
                 this.rows.draftUnit = decodeURIComponent(item.split('=')[1]);
@@ -320,7 +364,7 @@ export default {
             this.getForm();
         } else if (this.operationType == 'create') {
         }
-        this.getUserList();
+        // this.getUserList();
     },
     methods: {
         toDx(n) {   //阿拉伯数字转换函数
@@ -373,48 +417,66 @@ export default {
           result = this.toDx(m.charAt(length - i - 1)) + this.unit[this.unit.length - i - 1] + result;
         }
         result += result.charAt(result.length - 1) == '元' ? "整" : "";
-        this.rows.constsTwo=result;
+        this.rows.upper=result;
     
-     },
+      },
+      time_change() {
+        // 改变时间获取数据
+       if (this.rows.draftTime == null) {
+          this.rows.draftTime = []
+          this.rows.startTime = ''
+          this.rows.endTime = ''
+        //   this.getForm()
+        }
+        else {
+          this.rows.startTime = this.rows.draftTime[0]
+          this.rows.endTime = this.rows.draftTime[1]
+        //   this.getForm();
+        }
+      },
         getId(id) {
             let self = this;
             self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 self.rows.attachments.forEach(function(value, index) {
                     if (value.id == id) {
-                        axios
-                            .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
-                            .then(res => {
-                                self.rows.attachments.splice(index, 1);
-                            });
-                        self.rows.attachments.splice(index, 1);
+                        // axios
+                        //     .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
+                        //     .then(res => {
+                        //         self.rows.attachments.splice(index, 1);
+                        //     });
+                        // self.rows.attachments.splice(index, 1);
                     }
                 });
             });
         },
-        getUserList() {
-            axios.get('/api/v1/users', '').then(res => {
-                this.users = res.data;
-            });
-        },
+        // getUserList() {
+        //     axios.get('/api/v1/users', '').then(res => {
+        //         this.users = res.data;
+        //     });
+        // },
         clearForm() {
             this.rows = {
                 attachments: [],
-                numbers: '',//申请人
-                filetitle: '',//所属部门
-                // drafter: this.rows.drafter,//提单时间
-                 drafter:'',
-                trainingPlan:'',
+                submitter: '',//申请人
+                department: '',//所属部门
+                id:'',
+                committed: this.rows.committed,//提单时间
+                isAnnualPlan:'',
                 draftUnit: this.rows.draftUnit,
-                draftTime: moment(new Date()).format('YYYY-MM-DD'),
-                serialNumber:'',
+                // draftTime: moment(new Date()).format('YYYY-MM-DD'),
+                draftTime:[],
+                startTime:'',
+                endTime:'',
+                number:'',
                 phone: '',
-                content: '',
-                contentLine:'',
-                contentPeople:'',
-                draftline:'',
+                trainingPrograms: '',
+                trainingContent:'',
+                participant:'',
+                processId:'',
                 suggestion:'',
                 consts:'',
-                constsTwo:'',
+                upper:'',
+                lowercase:'',
                 schedule:'',
                 remarks: '',
                 // delegate:[],
@@ -424,18 +486,18 @@ export default {
         getForm() {
             const self = this;
             if (this.formId != '') {
-                axios
-                    .get('/api/v1/board_meeting_forms/' + this.formId)
-                    .then(res => {
-                        //res.data.delegate = res.data.delegate.split(",");
-                        self.rows = res.data;
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
+                // axios
+                //     .get('/trainingApplication/save/' + this.formId)
+                //     .then(res => {
+                //         //res.data.delegate = res.data.delegate.split(",");
+                //         self.rows = res.data;
+                //     })
+                //     .catch(function() {
+                //         self.$message({
+                //             message: '操作失败',
+                //             type: 'error'
+                //         });
+                //     });
             }
         },
         saveFormValidate(type) {
@@ -449,14 +511,25 @@ export default {
         // 提交保存
         saveForm(action = '') {
             const self = this;
+            const cookieItems=document.cookie.split(';');
+            if (action == 'submit') {
+                self.submitForm();
+            }
+            //  for (let item of cookieItems) {
+            //     if (item.indexOf('uid') > -1) {
+            //         // 提单时间
+            //        this.rows.id = item.split('=')[1];
+            //     }
+            // }
             //  if (self.rows.delegate.length > 0) {
             //     self.rows.delegate = self.rows.delegate.join(",");
             // } else {
             //     self.rows.delegate = "";
             // }
+            else{
             axios
                 .post(
-                    '/api/v1/board_meeting_forms/save',
+                   '/trainingApplication/save',
                     JSON.stringify(self.rows),
                     {
                         headers: {
@@ -469,12 +542,11 @@ export default {
                     if (self.operationType == 'create') {
                         self.clearForm();
                     }
-                    if (action == 'submit') {
-                        self.submitForm();
-                    } else {
+                     else {
                         self.$emit('refreshData');
                         if (this.operationType == 'edit') {
                             self.$emit('refreshDetail');
+                            
                         }
                     }
                 })
@@ -484,14 +556,15 @@ export default {
                         type: 'error'
                     });
                 });
+           }
         },
-        submitCheck() {},
         submitForm() {
-            const self = this;
+           const self = this;
+            self.rows.id=this.formId
             axios
                 .post(
-                    '/api/v1/board_meetings/' + this.currentFormId + '/create',
-                    '',
+                    '/trainingApplication/save',
+                    JSON.stringify(self.rows),
                     {
                         headers: {
                             'Content-type': 'application/json'
@@ -499,122 +572,101 @@ export default {
                     }
                 )
                 .then(res => {
-                    if (res.data.id != '') {
-                        self.commitForm(res.data.id);
-                    }
+                    self.$message({
+                        message: '修改成功',
+                        type: 'success'
+                    });
+                     self.$emit('refreshData');
+                     this.clearForm();
+                    
                 })
                 .catch(function() {
                     self.$message({
-                        message: '操作失败',
+                        message: '修改失败',
                         type: 'error'
                     });
                 });
         },
-        commitForm(processId) {
-            const self = this;
-            axios
-                .put(
-                    '/api/v1/board_meeting_forms/' +
-                        this.currentFormId +
-                        '/commit/' +
-                        processId,
-                    '',
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    self.comment();
-                    this.startProcess();
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
+       
         comment() {
             let self = this;
-            axios
-                .put(
-                    `/api/v1/board_meeting_forms/${self.currentFormId}/comment`,
-                    {
-                        content: '提交',
-                        action: 'COMMIT',
-                        node: '提交'
-                    }
-                )
-                .then(res => {});
+            // axios
+            //     .put(
+            //         `/api/v1/board_meeting_forms/${self.currentFormId}/comment`,
+            //         {
+            //             content: '提交',
+            //             action: 'COMMIT',
+            //             node: '提交'
+            //         }
+            //     )
+            //     .then(res => {});
         },
         startProcess() {
             const self = this;
             const params = {
                 action: 'COMMIT'
             };
-            axios
-                .put(
-                    '/api/v1/board_meetings/' + this.currentFormId + '/signal',
-                    JSON.stringify(params),
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    self.$emit('refreshData');
-                    if (this.operationType == 'edit') {
-                        self.$emit('refreshDetail');
-                    }
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
+            // axios
+            //     .put(
+            //         '/api/v1/board_meetings/' + this.currentFormId + '/signal',
+            //         JSON.stringify(params),
+            //         {
+            //             headers: {
+            //                 'Content-type': 'application/json'
+            //             }
+            //         }
+            //     )
+            //     .then(res => {
+            //         self.$emit('refreshData');
+            //         if (this.operationType == 'edit') {
+            //             self.$emit('refreshDetail');
+            //         }
+            //     })
+            //     .catch(function() {
+            //         self.$message({
+            //             message: '操作失败',
+            //             type: 'error'
+            //         });
+            //     });
         },
         // 删除
-        deleteAttachment(id) {
-            const self = this;
-            if (this.rows.attachments.length > 0) {
-                this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
-                    () => {
-                        const params = {
-                            id: id
-                        };
-                        axios
-                            .get(
-                                '/api/v1/board_meeting_forms/deleteAtt/' + id,
-                                {
-                                    headers: {
-                                        'Content-type': 'application/json'
-                                    }
-                                }
-                            )
-                            .then(res => {
-                                self.rows.attachments.forEach(function(
-                                    item,
-                                    index
-                                ) {
-                                    if (item.id == id) {
-                                        self.rows.attachments.splice(index, 1);
-                                    }
-                                });
-                            })
-                            .catch(function() {
-                                self.$message({
-                                    message: '操作失败',
-                                    type: 'error'
-                                });
-                            });
-                    }
-                );
-            }
-        },
+        // deleteAttachment(id) {
+        //     const self = this;
+        //     if (this.rows.attachments.length > 0) {
+        //         this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
+        //             () => {
+        //                 const params = {
+        //                     id: id
+        //                 };
+        //                 axios
+        //                     .get(
+        //                         '/api/v1/board_meeting_forms/deleteAtt/' + id,
+        //                         {
+        //                             headers: {
+        //                                 'Content-type': 'application/json'
+        //                             }
+        //                         }
+        //                     )
+        //                     .then(res => {
+        //                         self.rows.attachments.forEach(function(
+        //                             item,
+        //                             index
+        //                         ) {
+        //                             if (item.id == id) {
+        //                                 self.rows.attachments.splice(index, 1);
+        //                             }
+        //                         });
+        //                     })
+        //                     .catch(function() {
+        //                         self.$message({
+        //                             message: '操作失败',
+        //                             type: 'error'
+        //                         });
+        //                     });
+        //             }
+        //         );
+        //     }
+        // },
         handleSuccess(response, file) {
             const self = this;
             if (response.length > 0) {
