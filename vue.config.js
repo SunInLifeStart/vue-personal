@@ -81,6 +81,9 @@ module.exports = {
             "/thumb": {
                 target: "http://116.117.157.232"
             },
+            "/trainingApplication": {
+                target: "http://192.168.1.113:8751"
+            },
             "/socket.io": {
                 target: "http://116.117.157.232",
                 ws: true,

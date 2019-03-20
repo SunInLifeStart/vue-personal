@@ -1,14 +1,14 @@
 <template>
     <div id="TrainFilter">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <!-- <el-form-item label="董事会编号">
-                <el-input v-model="formInline.numbers" placeholder="请输入董事会编号"></el-input>
-            </el-form-item> -->
-            <el-form-item label="所属部门">
-                <el-input v-model="formInline.filetitle" placeholder="请输入所属部门"></el-input>
+            <el-form-item label="申请人">
+                <el-input v-model="formInline.submitter" placeholder="请输入申请人"></el-input>
             </el-form-item>
-            <!-- <el-form-item label="拟稿人">
-                <el-input v-model="formInline.drafter" placeholder="请输入拟稿人"></el-input>
+            <el-form-item label="所属部门">
+                <el-input v-model="formInline.department" placeholder="请输入所属部门"></el-input>
+            </el-form-item>
+            <!-- <el-form-item label="提单时间">
+                <el-input v-model="formInline.committed" placeholder="请输入提单时间"></el-input>
             </el-form-item>
             <el-form-item label="拟稿单位">
                 <el-input v-model="formInline.draftUnit" placeholder="请输入拟稿单位"></el-input>
@@ -34,9 +34,9 @@ export default {
     data() {
         return {
             formInline: {
-                numbers: '',
-                filetitle: '',
-                drafter: '',
+                submitter: '',
+                department: '',
+                committed: '',
                 draftUnit: '',
                 status: '',
                 options_status: ['已保存', '已驳回', '审核中', '已完成']
@@ -46,50 +46,39 @@ export default {
     },
     methods: {
         onReset() {
-            this.formInline.numbers = '';
-            this.formInline.filetitle = '';
-            this.formInline.drafter = '';
-            this.formInline.draftUnit = '';
+            this.formInline.submitter = '';
+            this.formInline.department = '';
+            // this.formInline.committed = '';
+            // this.formInline.draftUnit = '';
             this.formInline.status = '';
             this.onSubmit();
         },
         onSubmit() {
             this.searchOptions = [];
-            if (this.formInline.filetitle.trim() !== '') {
+            if (this.formInline.department.trim() !== '') {
                 this.searchOptions.push({
-                    field: 'filetitle',
+                    field: 'department',
                     filter: 'LIKE',
-                    value: this.formInline.filetitle
+                    value: this.formInline.department
                 });
+                //  this.searchOptions.push(this.formInline.department);
             }
-            if (this.formInline.numbers.trim() !== '') {
-                this.searchOptions.push({
-                    field: 'numbers',
+            if (this.formInline.submitter.trim() !== '') {
+                 this.searchOptions.push({
+                    field: 'submitter',
                     filter: 'LIKE',
-                    value: this.formInline.numbers
+                    value: this.formInline.submitter
                 });
+                // this.searchOptions.push( this.formInline.submitter);
             }
-            if (this.formInline.draftUnit.trim() !== '') {
-                this.searchOptions.push({
-                    field: 'draftUnit',
-                    filter: 'LIKE',
-                    value: this.formInline.draftUnit
-                });
-            }
-            if (this.formInline.drafter.trim() !== '') {
-                this.searchOptions.push({
-                    field: 'drafter',
-                    filter: 'LIKE',
-                    value: this.formInline.drafter
-                });
-            }
-            if (this.formInline.status.trim() !== '') {
-                this.searchOptions.push({
-                    field: 'status',
-                    filter: 'EQUAL',
-                    value: this.formInline.status
-                });
-            }
+           
+            // if (this.formInline.status.trim() !== '') {
+            //     this.searchOptions.push({
+            //         field: 'status',
+            //         filter: 'EQUAL',
+            //         value: this.formInline.status
+            //     });
+            // }
             // if (this.formInline.created && this.formInline.created.length > 0) {
             //     this.searchOptions.push({
             //         field: 'created',

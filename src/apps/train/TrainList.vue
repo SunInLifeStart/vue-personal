@@ -1,13 +1,15 @@
 <template>
     <div id="TrainList">
         <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-            <el-table-column prop="numbers" label="申请人">
+            <el-table-column prop="submitter" label="申请人">
             </el-table-column>
-            <el-table-column prop="filetitle" label="所属部门">
+            <el-table-column prop="department" label="所属部门">
             </el-table-column>
-            <el-table-column prop="drafter" label="提单时间">
+            <el-table-column prop="committed" label="提单时间">
             </el-table-column>
-            <el-table-column prop="draftTime" label="培训时间">
+            <el-table-column prop="participant" label="培训/学习(参加人员)">
+            </el-table-column>
+            <el-table-column prop="schedule" label="日程安排">
             </el-table-column>
             <!-- <el-table-column prop="status" label="单据状态" width="200"></el-table-column> -->
             <el-table-column label="操作" width="200">
@@ -29,11 +31,14 @@
 <script>
 /* eslint-disable */
 import axios from 'axios';
+import { debug, debuglog } from 'util';
 export default {
     name: 'TrainList',
     data() {
         return {
             tableData: [],
+            departmentones:'',
+            submitterone:'',
             params: {
                 pageNum: 1,
                 pageSize: 5,
@@ -52,16 +57,30 @@ export default {
         // 查询列表
         getList() {
             const self = this;
+            let aa=this.searchOptions
+            this.searchOptions.forEach(val => {
+               this.$nextTick(() => {
+                   if(val.field=='department'){
+                    self.departmentones=val.value
+                    }
+                    if(val.field=='submitter'){
+                        self.submitterone=val.value
+                    }
+               })
+                
+            });
             const params = {
-                page: this.params.pageNum,
+                pageNum: this.params.pageNum,
                 pageSize: this.params.pageSize,
-                orderBy: 'created',
-                desc: true,
-                options: this.searchOptions
+                // orderBy: 'created',
+                // desc: true,
+                // options: this.searchOptions,
+                department:this.departmentones,
+                submitter:this.submitterone
             };
             axios
                 .post(
-                    '/api/v1/board_meeting_forms/query',
+                    '/trainingApplication/queryList',
                     JSON.stringify(params),
                     {
                         headers: {
@@ -70,31 +89,33 @@ export default {
                     }
                 )
                 .then(res => {
-                    for (let data of res.data.forms) {
-                        let creatorname = '';
-                        if (data.comments && data.comments.length > 0) {
-                            for (let arr of data.comments) {
-                                if (arr.node == '提交') {
-                                    creatorname = arr.creatorId;
-                                }
-                            }
+                    if(res.data.status==200){
+                        // for (let data of res.data.forms) {
+                        //     let creatorname = '';
+                        //     if (data.comments && data.comments.length > 0) {
+                        //         for (let arr of data.comments) {
+                        //             if (arr.node == '提交') {
+                        //                 creatorname = arr.creatorId;
+                        //             }
+                        //         }
+                        //     }
+                        //     if (data.status == '已驳回') {
+                        //         if (
+                        //             creatorname == this.$store.getters.LoginData.uid
+                        //         ) {
+                        //             data.showedit = true;
+                        //         } else {
+                        //             data.showedit = false;
+                        //         }
+                        //     }
+                        // }
+                        self.tableData = res.data.content.list;
+                        self.params.total = res.data.content.total;
+                        if (res.data.content.list.length > 0) {
+                            self.$emit('formId', res.data.content.list[0].id);
+                        } else {
+                            self.$emit('formId', '');
                         }
-                        if (data.status == '已驳回') {
-                            if (
-                                creatorname == this.$store.getters.LoginData.uid
-                            ) {
-                                data.showedit = true;
-                            } else {
-                                data.showedit = false;
-                            }
-                        }
-                    }
-                    self.tableData = res.data.forms;
-                    self.params.total = res.data.totalCount;
-                    if (res.data.forms.length > 0) {
-                        self.$emit('formId', res.data.forms[0].id);
-                    } else {
-                        self.$emit('formId', '');
                     }
                 })
                 .catch(function() {
@@ -108,20 +129,25 @@ export default {
             this.$emit('formId', row.id);
         },
         editForm(row) {
-            this.$emit('editForm', row.id);
+            this.$emit('editForm', row);
             this.$emit('showStatus', row.status);
         },
         deleteItem(row) {
             const self = this;
+            let rowid={
+                id:row.id
+            }
             this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 axios
-                    .get('/api/v1/board_meeting_forms/delete/' + row.id)
+                    .get('/trainingApplication/' + rowid.id+'/delete')
                     .then(res => {
-                        self.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        self.getList();
+                        if(res.status==200){
+                            self.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            });
+                            self.getList();
+                        }
                     })
                     .catch(function() {
                         self.$message({
@@ -136,6 +162,7 @@ export default {
             this.getList();
         },
         sizeChange(pageSize) {
+            debugger
             this.params.pageSize = pageSize;
             this.getList();
         },
