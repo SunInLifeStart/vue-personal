@@ -294,6 +294,21 @@ export default {
                     .get('/get/' + this.formId)
                     .then(res => {
                         self.tableData = res.data.content;
+                        if(self.tableData.type==1){
+                            self.tableData.type = '事假'
+                        }else if(self.tableData.type==2){
+                            self.tableData.type = '病假'
+                        }else if(self.tableData.type==3){
+                            self.tableData.type = '婚假'
+                        }else if(self.tableData.type==4){
+                            self.tableData.type = '产假'
+                        }else if(self.tableData.type==5){
+                            self.tableData.type = '丧假'
+                        }else if(self.tableData.type==6){
+                            self.tableData.type = '工伤假'
+                        }else if(self.tableData.type==7){
+                            self.tableData.type = '年休假'
+                        }
                         this.getAgree();
                     })
                     .catch(function() {

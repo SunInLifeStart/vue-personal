@@ -80,9 +80,9 @@ export default {
                 })
                 .then(res => {
                     self.tableData = res.data.content.list;
-                    self.params.total = res.data.content.pageSize;
-                    if (res.data.list.length > 0) {
-                        self.$emit('formId', res.data.list[0].id);
+                    self.params.total = res.data.content.total;
+                    if (res.data.content.list.length > 0) {
+                        self.$emit('formId', res.data.content.list[0].id);
                     } else {
                         self.$emit('formId', '');
                     }
