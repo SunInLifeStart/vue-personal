@@ -45,27 +45,18 @@
                         提单人
                     </td>
                     <td colspan="1">
-                        <el-input v-model="rows.submitter" disabled="disabled"></el-input>
+                        <el-input v-model="rows.uname" disabled="disabled"></el-input>
                     </td>
                     <td colspan="1">
-                        <span class="span1">*</span> 所属部门
+                        所属部门
+                        <!-- <span class="span1">*</span>  -->
                     </td>
                     <td colspan="2">
-                        <!-- <el-input v-model="rows.subOrganName"></el-input> -->
-                        <!-- <el-form-item label="" prop="subOrganName"> -->
-                        <el-select style="width:100%" v-model="rows.subOrganName" value-key="id" @change="changeOrgans()" placeholder="">
-                            <el-option v-for="item in organs" :key="item.id" :label="item.name" :value="item.name">
-                            </el-option>
-                        </el-select>
-                        <!-- </el-form-item> -->
-                        <!-- <el-select style="width:100%" v-model="rows.subOrganName" value-key="id" @change="changeOrgans()" placeholder="">
-                            <el-option v-for="item in organs" :key="item.id" :label="item.name" :value="item.name">
-                            </el-option>
-                        </el-select> -->
+                        <el-input v-model="rows.oname"></el-input>
                     </td>
                     <td colspan="1">申请时间</td>
                     <td colspan="2">
-                        <el-date-picker style="width:100%" disabled="disabled" v-model="rows.submitted" value-format="yyyy-MM-dd HH:mm:ss" type="datetime">
+                        <el-date-picker style="width:100%" disabled="disabled" v-model="rows.applyTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime">
                         </el-date-picker>
                     </td>
                 </tr>
@@ -74,7 +65,8 @@
                 </tr>
                 <tr>
                     <td colspan="1">
-                        <span class="span1">*</span>申请缘由
+                        <!-- <span class="span1">*</span> -->
+                        申请缘由
                     </td>
                     <td colspan="7">
                         <el-input v-model="rows.reason"></el-input>
@@ -93,10 +85,10 @@
                         <template>
                             <el-date-picker v-model="rows.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始时间" @input="getTime()">
                             </el-date-picker>至
-                             <el-date-picker v-model="rows.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束时间" @input="getTime()">
+                            <el-date-picker v-model="rows.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束时间" @input="getTime()">
                             </el-date-picker>
                         </template>
-                        共({{rows.dateNumber}})天
+                        共({{rows.day}})天
                     </td>
                 </tr>
                 <tr>
@@ -138,63 +130,46 @@ export default {
             getoid: '',
             options: [
                 {
-                    value: '事假',
+                    value: '1',
                     label: '事假'
                 },
                 {
-                    value: '病假',
+                    value: '2',
                     label: '病假'
                 },
                 {
-                    value: '婚假',
+                    value: '3',
                     label: '婚假'
                 },
                 {
-                    value: '产假',
+                    value: '4',
                     label: '产假'
                 },
                 {
-                    value: '丧假',
+                    value: '5',
                     label: '丧假'
                 },
                 {
-                    value: '工伤假',
+                    value: '6',
                     label: '工伤假'
                 },
                 {
-                    value: '年休假',
+                    value: '7',
                     label: '年休假'
                 },
                 {
-                    value: '其他',
+                    value: '8',
                     label: '其他'
                 }
             ],
             rows: {
-                submission2: {},
-                submissionName: '',
-                submissionId: '',
-                number: '',
-                submitter: '',
-                subOrganName: '',
-                total: '0.00',
+                uname: '',
+                oname: '',
                 reason: '',
                 type: '',
-                bname: '',
-                bid: '',
-                bname1: '',
-                borganName: '',
-                ranks: '',
-                departure: '',
-                destination: '',
-                dateNumber: '',
                 startTime: '',
                 endTime: '',
-                reason: '',
-                attachments: [],
-                upper: '零元整',
-                submitted: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-                // .format('YYYY-MM-DD hh:mm:ss')
+                attachments: []
             },
             users: [],
             currentFormId: this.operationType == 'create' ? '' : this.formId,
@@ -274,15 +249,14 @@ export default {
         if (this.operationType == 'edit') {
             this.getForm();
         }
-
         const cookieItems = document.cookie.split(';');
         cookieItems.forEach(function(item) {
             if (item.indexOf('uname') > 0) {
-                self.rows.submitter = decodeURIComponent(item.split('=')[1]);
+                self.rows.uname = decodeURIComponent(item.split('=')[1]);
                 self.cookie_uname = decodeURIComponent(item.split('=')[1]);
             }
             if (item.indexOf('oname') > 0) {
-                self.rows.subOrganName = decodeURIComponent(item.split('=')[1]);
+                self.rows.oname = decodeURIComponent(item.split('=')[1]);
                 self.cookie_oname = decodeURIComponent(item.split('=')[1]);
             }
         });
@@ -370,7 +344,7 @@ export default {
                     });
                     this.rows.endTime = '';
                 } else {
-                    this.rows.dateNumber = time4 + 1;
+                    this.rows.day = time4 + 1;
                 }
             }
         },
@@ -379,7 +353,6 @@ export default {
                 this.organs = res.data;
             });
         },
-
         getClass() {
             const self = this;
             this.getclass = [];
@@ -543,54 +516,7 @@ export default {
                 axios
                     .get('/get/' + this.formId)
                     .then(res => {
-                        let array = [];
-                        if (res.data.estimate.length > 0) {
-                            for (let data of res.data.estimate) {
-                                let select = [];
-                                select[0] = data.bigType;
-                                select[1] = data.smallType
-                                    ? data.smallType
-                                    : '';
-                                array.push({
-                                    bsType: select,
-                                    created: data.created,
-                                    id: data.id,
-                                    number: data.number,
-                                    price: data.price,
-                                    currency: {
-                                        value: data.currency.curValue,
-                                        label: data.currency.label
-                                    },
-                                    rate: data.rate,
-                                    principal: data.principal,
-                                    subtotal: data.subtotal
-                                });
-                            }
-                        }
-                        res.data.estimate = [];
-                        res.data.estimate = array;
-                        let array1 = [];
-                        if (res.data.evections.length > 0) {
-                            for (let data of res.data.evections) {
-                                array1.push({
-                                    bname1: data.bname,
-                                    bname: data.bname,
-                                    ranks: data.ranks,
-                                    id: data.id,
-                                    borganName: data.borganName,
-                                    number: data.number,
-                                    departure: data.departure,
-                                    destination: data.destination,
-                                    dateNumber: data.dateNumber,
-                                    startTime: data.startTime,
-                                    endTime: data.endTime
-                                });
-                            }
-                        }
-                        res.data.evections = [];
-                        res.data.evections = array1;
-                        this.rows = res.data;
-                        this.rows.submission2 = res.data.submissionName;
+                        this.rows = res.data.content;
                     })
                     .catch(function() {
                         self.$message({
@@ -602,21 +528,20 @@ export default {
         },
         dialogVisibleab() {
             this.dialogVisible = false;
-            // this.$refs['formupdate'].validate((valid) => {
-            //     if (valid) {
-            this.saveForm();
-            this.$emit('saveStatus', false);
-            //     } else {
-            //         this.$emit('saveStatus', true);
-            //     }
-            // });
+            this.$refs['formupdate'].validate(valid => {
+                if (valid) {
+                    this.saveForm();
+                    this.$emit('saveStatus', false);
+                } else {
+                    this.$emit('saveStatus', true);
+                }
+            });
         },
         saveFormValidate() {
-           
-            this.$refs['formupdate'].validate((valid) => {
+            this.$refs['formupdate'].validate(valid => {
                 if (valid) {
-            this.saveForm();
-            this.$emit('saveStatus', false);
+                    this.saveForm();
+                    this.$emit('saveStatus', false);
                 } else {
                     this.$emit('saveStatus', true);
                     // this.dialogVisible = true;
@@ -625,71 +550,55 @@ export default {
         },
         saveForm(action = '') {
             const self = this;
-            if (self.rows.submitted) {
-                self.rows.submitted = moment(self.rows.submitted).format(
-                    'YYYY-MM-DD HH:mm:ss'
-                );
-            } else {
-                self.rows.submitted = '';
-            }
-            for (let data of this.rows.evections) {
-                if (data.bname1.name) {
-                    data.bname = data.bname1.name;
-                } else {
-                    data.bname = data.bname1;
-                }
-                data.bid = data.bname1.id;
-            }
-            if (this.rows.estimate.length > 0) {
-                let array = [];
-                array = this.rows.estimate;
-                this.rows.estimate = [];
-                for (let data of array) {
-                    this.rows.estimate.push({
-                        bigType: data.bsType[0],
-                        price: data.price,
-                        number: data.number,
-                        id: data.id ? data.id : '',
-                        currency: {
-                            curValue: data.currency.value,
-                            label: data.currency.label
-                        },
-                        rate: data.rate,
-                        principal: data.principal,
-                        subtotal: data.subtotal,
-                        smallType: data.bsType[1]
-                    });
-                }
-            } else {
-                this.rows.estimate = [];
-            }
-            if (this.rows.submission2) {
-                this.rows.submissionName = this.rows.submission2.submissionNo;
-                this.rows.submissionId = this.rows.submission2.id;
-            }
-            axios
-                .post('/api/v1/travel_forms/save', JSON.stringify(this.rows), {
-                    headers: {
-                        'Content-type': 'application/json'
-                    }
-                })
-                .then(res => {
-                    self.currentFormId = res.data.id;
-                    if (action == 'save') {
-                        self.submitForm();
-                    } else {
-                        self.$emit('refreshData');
-                        if (this.operationType == 'edit') {
-                            self.$emit('refreshDetail');
+            if (self.operationType == 'create') {
+                axios
+                    .post('/save', JSON.stringify(this.rows), {
+                        headers: {
+                            'Content-type': 'application/json'
                         }
-                    }
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
+                    })
+                    .then(res => {
+                        self.currentFormId = res.data.id;
+                        if (action == 'save') {
+                            self.submitForm();
+                        } else {
+                            self.$emit('refreshData');
+                            if (this.operationType == 'edit') {
+                                self.$emit('refreshDetail');
+                            }
+                        }
+                    })
+                    .catch(function() {
+                        self.$message({
+                            message: '操作失败',
+                            type: 'error'
+                        });
                     });
-                });
+            } else {
+                axios
+                    .post('/update', JSON.stringify(this.rows), {
+                        headers: {
+                            'Content-type': 'application/json'
+                        }
+                    })
+                    .then(res => {
+                        self.currentFormId = res.data.id;
+                        if (action == 'save') {
+                            self.submitForm();
+                        } else {
+                            self.$emit('refreshData');
+                            if (this.operationType == 'edit') {
+                                self.$emit('refreshDetail');
+                            }
+                        }
+                    })
+                    .catch(function() {
+                        self.$message({
+                            message: '操作失败',
+                            type: 'error'
+                        });
+                    });
+            }
         },
         comment(comment) {
             let self = this;
@@ -701,65 +610,8 @@ export default {
                 })
                 .then(res => {});
         },
-
         submitCheck() {
-            if (this.rows.subOrganName == '集团领导') {
-                alert('费用承担部门选择错误，请重新选择');
-            } else if (
-                this.rows.reason == '' ||
-                this.rows.evections.borganName == '' ||
-                this.rows.evections.departure == '' ||
-                this.rows.evections.destination == '' ||
-                this.rows.evections.startTime == '' ||
-                this.rows.evections.endTime == '' ||
-                this.rows.estimate.bsType == '' ||
-                this.rows.estimate.number == ''
-            ) {
-                this.dialogVisible = true;
-            } else {
-                this.saveForm('save');
-                this.$emit('saveStatus', false);
-            }
-            this.vacancy = [];
-            for (let item of this.rows.evections) {
-                if (item.ranks == '') {
-                    alert('有必输项职务未填写，请继续填写');
-                    this.dialogVisible = false;
-                }
-            }
-            if (this.rows.reason == '') {
-                this.vacancy.push('出差事由');
-            }
-            for (let item of this.rows.evections) {
-                if (item.borganName == '') {
-                    this.vacancy.push('所属部门');
-                }
-                if (item.departure == '') {
-                    this.vacancy.push('出发地');
-                }
-                if (item.destination == '') {
-                    this.vacancy.push('目的地');
-                }
-                if (item.startTime == '') {
-                    this.vacancy.push('出差开始时间');
-                }
-                if (item.endTime == '') {
-                    this.vacancy.push('出差结束时间');
-                }
-            }
-            for (let item of this.rows.estimate) {
-                if (item.bsType == '') {
-                    this.vacancy.push('费用类别');
-                }
-                if (item.number == '') {
-                    this.vacancy.push('数量');
-                }
-            }
-            // if (this.operationType == 'create') {
-            //     this.saveForm('save');
-            // } else {
-            //     this.submitForm();
-            // }
+            this.commitForm();
         },
         submitForm() {
             const self = this;
@@ -784,18 +636,11 @@ export default {
         commitForm(processId) {
             const self = this;
             axios
-                .put(
-                    '/api/v1/travel_forms/' +
-                        this.currentFormId +
-                        '/commit/' +
-                        processId,
-                    '',
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
+                .put(this.currentFormId + '/commit/' + processId, '', {
+                    headers: {
+                        'Content-type': 'application/json'
                     }
-                )
+                })
                 .then(res => {
                     self.startProcess();
                 })
@@ -946,45 +791,14 @@ export default {
         clearForm() {
             this.rows = {
                 number: this.rows.number,
-                submitter: this.cookie_uname,
-                subOrganName: this.cookie_oname,
-                total: '0.00',
-                upper: '零元整',
+                uname: this.cookie_uname,
+                oname: this.cookie_oname,
                 reason: '',
                 type: '',
-                evections: [
-                    {
-                        bname: '',
-                        bname1: '',
-                        borganName: '',
-                        ranks: '',
-                        departure: '',
-                        destination: '',
-                        dateNumber: '',
-                        startTime: '',
-                        endTime: ''
-                    }
-                ],
-                estimate: [
-                    {
-                        bigType: '',
-                        bsType: [],
-                        price: '',
-                        smallType: '',
-                        number: '',
-                        currency: {
-                            value: '￥',
-                            label: '人民币'
-                        },
-                        rate: '1',
-                        principal: 0,
-                        subtotal: ''
-                    }
-                ],
                 attachments: [],
-                submitted: moment()
-                    .utc()
-                    .format('YYYY-MM-DD hh:mm:ss')
+                applyTime: moment()
+                    // .utc()
+                    .format('YYYY-MM-DD HH:mm:ss')
             };
             this.getNum();
         }

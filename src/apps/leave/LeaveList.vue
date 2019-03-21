@@ -1,22 +1,18 @@
 <template>
     <div id="travelList">
         <el-table :data="tableData" stripe @row-click="clickTableRow">
-            <el-table-column prop="submitter" label="提单人" align="center">
+            <el-table-column prop="uname" label="提单人" align="center">
             </el-table-column>
-            <el-table-column prop="subOrganName" label="费用承担部门" align="center">
+            <el-table-column prop="oname" label="所属部门" align="center">
             </el-table-column>
-            <el-table-column prop="number" label="流水号" align="center">
+            <el-table-column prop="no" label="流水号" align="center">
             </el-table-column>
-            <el-table-column prop="submitted" label="提单时间" align="center">
+            <el-table-column prop="applyTime" label="提单时间" align="center">
             </el-table-column>
             <el-table-column prop="status" label="状态" align="center">
             </el-table-column>
             <el-table-column label="操作">
                 <template slot-scope="scope">
-                    <!-- <el-button @click="editForm(scope.row)" type="primary" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">编辑
-                    </el-button>
-                    <el-button type="danger" @click="deleteItem(scope.row)" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">删除
-                    </el-button> -->
                     <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">
                         <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                     </el-tooltip>
@@ -76,18 +72,17 @@ export default {
                 options: this.searchOptions
             };
             axios
-                .post('query', 
-                // JSON.stringify(params), 
+                .post('query', JSON.stringify(params), 
                 {
                     headers: {
                         'Content-type': 'application/json'
                     }
                 })
                 .then(res => {
-                    self.tableData = res.data.forms;
-                    self.params.total = res.data.totalCount;
-                    if (res.data.forms.length > 0) {
-                        self.$emit('formId', res.data.forms[0].id);
+                    self.tableData = res.data.content.list;
+                    self.params.total = res.data.content.pageSize;
+                    if (res.data.list.length > 0) {
+                        self.$emit('formId', res.data.list[0].id);
                     } else {
                         self.$emit('formId', '');
                     }
@@ -104,7 +99,7 @@ export default {
             this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 const self = this;
                 axios
-                    .delete('/api/v1/travel_forms/delete/' + row.id)
+                    .get('/delete/' + row.id)
                     .then(res => {
                         self.$message({
                             message: '删除成功',
@@ -133,6 +128,7 @@ export default {
         },
         sizeChange(pageSize) {
             this.params.pageSize = pageSize;
+            console.log(pageSize)
             this.getList();
         },
         handleSuccess(response, file) {

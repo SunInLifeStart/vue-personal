@@ -98,6 +98,26 @@ module.exports = {
                 target: "http://192.168.0.253:10148",
                 ws: true,
                 changeOrigin: true
+            },
+            "/save":{
+                target: "http://192.168.0.253:10148",
+                ws: true,
+                changeOrigin: true
+            },
+            "/update":{
+                target: "http://192.168.0.253:10148",
+                ws: true,
+                changeOrigin: true
+            },
+            "/delete":{
+                target: "http://192.168.0.253:10148",
+                ws: true,
+                changeOrigin: true
+            },
+            "/commit":{
+                target: "http://192.168.0.253:10148",
+                ws: true,
+                changeOrigin: true
             }
         }
     },

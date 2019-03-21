@@ -20,7 +20,7 @@
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
                 <el-row style="margin-top: 25px;">
                     <el-col :span="8">
-                         <el-form-item label="流水单号：">{{tableData.number}}
+                         <el-form-item label="流水单号：">{{tableData.no}}
                         </el-form-item>
                     </el-col>
                     <!-- <el-col :span="8">
@@ -52,17 +52,17 @@
                             提单人
                         </td>
                         <td colspan="1">
-                            {{rows.submitter}}
+                            {{tableData.uname}}
                         </td>
                         <td colspan="1">
                             <span class="span1">*</span> 所属部门
                         </td>
                         <td colspan="2">
-                           {{rows.subOrganName}}
+                           {{tableData.oname}}
                         </td>
                         <td colspan="1">申请时间</td>
                         <td colspan="2">
-                          {{rows.submitted}}
+                          {{tableData.applyTime}}
                         </td>
                     </tr>
                     <tr>
@@ -73,28 +73,26 @@
                             <span class="span1">*</span>申请缘由
                         </td>
                         <td colspan="7">
-                            <el-input v-model="rows.reason"></el-input>
+                            <el-input v-model="tableData.reason"></el-input>
                         </td>
                     </tr>
                     <tr>
                         <td>申请休假种类</td>
                         <td colspan="2">
-                            {{rows.type}}
+                            {{tableData.type}}
                         </td>
                         <td>拟休时间</td>
                         <td colspan="5">
                             <template>
-                               {{rows.startTime}}至
-                               {{rows.endTime}}
+                               {{tableData.startTime}}至
+                               {{tableData.endTime}}
                             </template>
-                            共({{rows.dateNumber}})天
+                            共({{tableData.day}})天
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
-                            <!-- <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false"> -->
                             <span>附件上传</span>
-                            <!-- </el-upload> -->
                         </td>
                         <td colspan="6">
                             <div class="attachments" v-for="item in tableData.attachments" :key="item.id" @click="downloadFile(item)">
@@ -293,9 +291,9 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/api/v1/travel_forms/' + this.formId)
+                    .get('/get/' + this.formId)
                     .then(res => {
-                        self.tableData = res.data;
+                        self.tableData = res.data.content;
                         this.getAgree();
                     })
                     .catch(function() {
