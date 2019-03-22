@@ -1,13 +1,19 @@
 <template>
     <div id="DiscussionFilter">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="文件标题">
-                <el-input v-model="formInline.filetitle" placeholder="请输入文件标题"></el-input>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
-                <el-button type="primary" @click="onReset">重置</el-button>
-            </el-form-item>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="文件标题">
+                        <el-input v-model="formInline.filetitle" placeholder="请输入文件标题"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button type="primary" @click="onReset">重置</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
         </el-form>
     </div>
 </template>
@@ -47,3 +53,16 @@ export default {
     }
 };
 </script>
+
+<style lang="scss" scoped>
+    #DiscussionFilter {
+        .el-form-item--small.el-form-item{
+            width: 100%;
+        }
+    }
+</style>
+<style scoped>
+    #DiscussionFilter >>> .el-form-item__content{
+        width: calc(100% - 80px);
+    }
+</style>

@@ -69,7 +69,10 @@
                         申请缘由
                     </td>
                     <td colspan="7">
-                        <el-input v-model="rows.reason"></el-input>
+                        <!-- <el-input v-model="rows.reason"></el-input> -->
+                        <el-input type="textarea" placeholder="" v-model="rows.reason" :autosize="{ minRows: 4, maxRows: 30}">
+                        </el-input>
+
                     </td>
                 </tr>
                 <tr>
