@@ -298,7 +298,7 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/issuesReported/detail/' + this.formId)
+                    .get('/api/v1/issuesReported/detail/' + this.formId)
                     .then(res => {
                         //res.data.delegate = res.data.delegate.split(",");
                         self.rows = res.data.content;
@@ -335,7 +335,7 @@ export default {
             })
             axios
                 .post(
-                    '/issuesReported/save',
+                    '/api/v1/issuesReported/save',
                     JSON.stringify(self.rows),
                     {
                         headers: {

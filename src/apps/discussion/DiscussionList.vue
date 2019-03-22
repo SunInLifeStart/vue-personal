@@ -64,7 +64,7 @@ export default {
             };
             axios
                 .post(
-                    '/issuesReported/queryList',
+                    '/api/v1/issuesReported/queryList',
                     JSON.stringify(params),
                     {
                         headers: {
@@ -118,7 +118,7 @@ export default {
             const self = this;
             this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 axios
-                    .get('/issuesReported/'+ row.id + '/delete')
+                    .get('/api/v1/issuesReported/'+ row.id + '/delete')
                     .then(res => {
                         self.$message({
                             message: '删除成功',

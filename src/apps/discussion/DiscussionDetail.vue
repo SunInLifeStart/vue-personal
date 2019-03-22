@@ -165,7 +165,7 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/issuesReported/detail/' + this.formId)
+                    .get('/api/v1/issuesReported/detail/' + this.formId)
                     .then(res => {
                         self.tabledata = res.data.content;
                         if (self.tabledata.draftTime) {
