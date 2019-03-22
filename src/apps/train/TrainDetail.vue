@@ -154,7 +154,7 @@ export default {
                 .catch(function() {
                     $self.msgTips("获取表单详情失败！", "warning");
             });
-           // $self.getActions();
+          // $self.getActions();
         },
         doAction(action) {
             let self = this;
@@ -164,7 +164,8 @@ export default {
                 this.users = action.addAssigneeList;
                 this.dialogVisible = this.presign_status = true;
                 this.selContent_status = false;
-            } else if (action.assigneeList && action.assigneeList.length > 0) {
+            } 
+            else if (action.assigneeList && action.assigneeList.length > 0) {
                 this.seleteUserLabel = "请选择会签人";
                 this.users = action.assigneeList;
                 this.dialogVisible = this.presign_status = true;
@@ -190,7 +191,7 @@ export default {
         startSignal(params) {
             let $self = this;
             $self.$axios.put($self.signalUrl, params).then(res => {
-             //   $self.getActions();
+              //   $self.getActions();
             });
         },
         getActions() {

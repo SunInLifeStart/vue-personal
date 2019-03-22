@@ -39,7 +39,8 @@ export default {
                 expense:"报销申请",
                 travel:"出差申请",
                 portalmananger:"集团门户管理",
-                leave:"请休假申请"
+                leave:"请休假申请",
+                train:"培训"
             }
         };
     },
