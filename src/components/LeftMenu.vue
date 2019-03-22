@@ -85,6 +85,12 @@ export default {
                             to: 'leave'
                         },
                         {
+                            id: 8,
+                            name: '合同管理',
+                            icon: 'el-icon-hetongguanli',
+                            to: 'contract'
+                        },
+                        {
                             id: 3,
                             name: '资产管理',
                             icon: 'el-icon-zichanguanli',
