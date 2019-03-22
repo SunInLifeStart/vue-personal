@@ -72,7 +72,7 @@ export default {
                 options: this.searchOptions
             };
             axios
-                .post('query', JSON.stringify(params), 
+                .post('/api/v1/motor-holiday/query', JSON.stringify(params), 
                 {
                     headers: {
                         'Content-type': 'application/json'
@@ -80,9 +80,9 @@ export default {
                 })
                 .then(res => {
                     self.tableData = res.data.content.list;
-                    self.params.total = res.data.content.pageSize;
-                    if (res.data.list.length > 0) {
-                        self.$emit('formId', res.data.list[0].id);
+                    self.params.total = res.data.content.total;
+                    if (res.data.content.list.length > 0) {
+                        self.$emit('formId', res.data.content.list[0].id);
                     } else {
                         self.$emit('formId', '');
                     }
@@ -99,7 +99,7 @@ export default {
             this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 const self = this;
                 axios
-                    .get('/delete/' + row.id)
+                    .get('/api/v1/motor-holiday/delete/' + row.id)
                     .then(res => {
                         self.$message({
                             message: '删除成功',
