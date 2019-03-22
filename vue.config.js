@@ -66,24 +66,6 @@ module.exports = {
     devServer: {
         port: 8889,
         proxy: {
-            "/api/v1/contract_forms/": {
-                target: "http://59.110.172.228"
-            },
-            "/api/v1/contracts/": {
-                target: "http://59.110.172.228"
-            },
-            "/api/v1/files/": {
-                target: "http://59.110.172.228"
-            },
-            "/api/v1/users": {
-                target: "http://59.110.172.228"
-            },
-            "/api/v1/motor-holiday": {
-                target: "http://192.168.0.253:10148"
-            },
-            "/api/v1/asset_forms": {
-                target: "http://192.168.0.253:10112"
-            },
             "/api/": {
             target: "http://116.117.157.232"
             },
