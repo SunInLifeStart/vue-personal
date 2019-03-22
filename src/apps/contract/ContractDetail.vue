@@ -342,9 +342,7 @@ export default {
         const self = this;
         this.getForm();
         if (this.formId != '') {
-            // this.getForm();
-            this.getCrumbs();
-            // this.getActions();
+            // this.getCrumbs();
             this.getAllUsers();
         }
         const cookieItems = document.cookie.split(';');
@@ -360,8 +358,7 @@ export default {
     watch: {
         formId: function () {
             this.getForm();
-            this.getCrumbs();
-            // this.getActions();
+            // this.getCrumbs();
         }
     },
     methods: {
@@ -629,7 +626,7 @@ export default {
                         } else {
                             self.created = '';
                         }
-                        this.getActions();
+                        // this.getActions();
                     })
                     .catch(function () {
                         self.$message({
@@ -820,8 +817,8 @@ export default {
                         .get(`/api/v1/contracts/${self.formId}/pull`)
                         .then(res => {
                             self.comment('formOnlyComment');
-                            self.getActions();
-                            self.getCrumbs();
+                            // self.getActions();
+                            // self.getCrumbs();
                         });
                 }
                 if (
@@ -925,7 +922,7 @@ export default {
                 .then(res => {
                     this.getForm();
                     if (comment == 'formOnlyComment') {
-                        this.getCrumbs();
+                        // this.getCrumbs();
                         self.$message({
                             message: self.currentAction.name + '成功',
                             type: 'success'
@@ -952,9 +949,8 @@ export default {
                             self.dialogVisible = false;
                             self.riskWarningShow = false;
                             self.comment();
-                            self.getActions();
-                            // self.getForm();
-                            self.getCrumbs();
+                            // self.getActions();
+                            // self.getCrumbs();
                             self.$message({
                                 message: self.currentAction.name + '成功',
                                 type: 'success'
@@ -994,9 +990,8 @@ export default {
                     .then(res => {
                         self.dialogVisible = false;
                         self.comment();
-                        self.getActions();
-                        // self.getForm();
-                        self.getCrumbs();
+                        // self.getActions();
+                        // self.getCrumbs();
                         self.$message({
                             message: self.currentAction.name + '成功',
                             type: 'success'
@@ -1009,7 +1004,7 @@ export default {
         },
 
         refreshFormData() {
-            this.getCrumbs();
+            // this.getCrumbs();
             this.getForm();
         },
         setMemo() {
