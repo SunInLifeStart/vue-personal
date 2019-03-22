@@ -1,6 +1,6 @@
 <template>
     <div id="TrainDetail">
-        <!-- <div id="actionList" :class="{btnhide:actions.length == 0}">
+        <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
                     <span v-for="action in actions" :key="action.type" class="btnList" @click="doAction(action)">
@@ -8,7 +8,7 @@
                     </span>
                 </div>
             </el-row>
-        </div> -->
+        </div>
         <div class="formContent">
             <el-form :model='tableData' class="formList">
              
@@ -84,14 +84,8 @@
                     </el-col>
                 </el-row>
             </el-form>
-            <!-- <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
+            <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
-                    <el-form-item label="请选择驳回节点" v-show="reject_status">
-                        <el-select v-model="rejectTarget" style="width:100%;">
-                            <el-option v-for="user in rejectList" :key="user" :label="user" :value="user">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
                     <el-form-item :label="seleteUserLabel" v-show="presign_status">
                         <el-select v-model="seleteUsers" filterable multiple style="width:100%;">
                             <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
@@ -106,55 +100,118 @@
                     <el-button @click="dialogVisible = false">取 消</el-button>
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                 </span>
-            </el-dialog> -->
+            </el-dialog>
         </div>
     </div>
 </template>
 <script>
-import axios from 'axios';
-import moment from 'moment';
-import Comment from '../Comment';
-import FilesOperate from '../FilesOperate';
+import moment from "moment";
+import Comment from "../Comment";
+import FilesOperate from "../FilesOperate";
 export default {
-    name: 'TrainDetail',
+    name: "TrainDetail",
     data() {
         return {
             tableData: {},
+            actions: [],
+            formId: "",
+            actions:[],
+            textarea:"",
+            dialogVisible:false,
+            presign_status:false,
+            seleteUsers:[],
+            users:[],
+            seleteUserLabel:"",
+	        selContent_status:false,
+            seleteContents:[],
+            Contents:[],
+            seleteContentLabel:"",
+            currentAction:{},
+            formArr:[],
         };
     },
-    props: ['formId'],
     components: {
         Comment,
         FilesOperate
     },
-
-    watch: {
-        formId: {
-            handler: function() {
-                this.getFormDetails(this.formId);
-            },
-            deep: true
-        }
-    },
     methods: {
-           getFormDetails(formId){
+        getFormDetails(formId) {
             let $self = this;
+            $self.formId = formId;
+
+            $self.signalUrl = `/workflow/motor-trainingapplication_train/${
+                $self.formId
+            }/${$self.$store.getters.LoginData.uid}/signal`;
+            $self.actionsUrl = `/workflow/motor-trainingapplication_train/${
+                $self.formId
+            }/${$self.$store.getters.LoginData.uid}/actions`;
+
             $self.$axios
                 .get("/trainingApplication/detail/" + formId)
                 .then(response => {
-                         $self.tableData = response.data.content;
+                    $self.tableData = response.data.content;
                 })
                 .catch(function() {
-                    $self.$message({
-                        message: "获取表单详情失败！",
-                        type: "warning"
-                    });
-                });   
-           }     
-    },
-    mounted() {
-       
-    },
+                    $self.msgTips("获取表单详情失败！", "warning");
+            });
+            $self.getActions();
+        },
+        doAction(action) {
+            let self = this;
+            self.currentAction = action;
+            if (action.addAssigneeList && action.addAssigneeList.length > 0) {
+                this.seleteUserLabel = "请选择前加签人";
+                this.users = action.addAssigneeList;
+                this.dialogVisible = this.presign_status = true;
+                this.selContent_status = false;
+            } else if (action.assigneeList && action.assigneeList.length > 0) {
+                if (!this.juderRequired(action)) {
+                    return false;
+                }
+                this.seleteUserLabel = "请选择会签人";
+                this.users = action.assigneeList;
+                this.dialogVisible = this.presign_status = true;
+                this.dialogVisible = this.presign_status = true;
+                this.selContent_status = false;
+            } else if (action.selContents && action.selContents.length > 0) {
+                if (!this.juderRequired(action)) {
+                    return false;
+                }
+                this.seleteContentLabel = "请选择ssss";
+                this.Contents = action.selContents;
+                this.dialogVisible = this.selContent_status = true;
+                this.dialogVisible = this.selContent_status = true;
+                this.users = null;
+                this.presign_status = false;
+                this.presign_status = false;
+            } else if (
+                "START,CANCEL,COMMIT,PULL,SELCOMMIT,test,PULL".includes(
+                    action.type
+                )
+            ) {
+
+                this.startSignal(action);
+                
+            }
+        },
+        startSignal(params) {
+            let $self = this;
+            $self.$axios.put($self.signalUrl, params).then(res => {
+                $self.getActions();
+            });
+        },
+        getActions() {
+            let $self = this;
+            $self.$axios
+                .get($self.actionsUrl)
+                .then(response => {
+                    $self.actions = response.data.types;
+                })
+                .catch(function() {
+                    $self.msgTips("获取动作失败！", "warning");
+                });
+        }
+    }
 };
 </script>
 <style lang="scss">
