@@ -108,6 +108,12 @@ export default {
                             icon: 'el-icon-hetong',
                             to: 'contract'
                         },
+                         {
+                            id: 9,
+                            name: '新闻管理',
+                            icon: 'el-icon-xinwenguanli1',
+                            to: 'news'
+                        },
                         /*{
                             id: 15,
                             name: '督办管理',
