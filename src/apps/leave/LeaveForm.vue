@@ -803,7 +803,7 @@ export default {
                     // .utc()
                     .format('YYYY-MM-DD HH:mm:ss')
             };
-            this.getNum();
+            // this.getNum();
         }
     }
 };
