@@ -115,7 +115,7 @@ export default {
                 })
                 .catch(function() {
                     self.$message({
-                        message: '操作失败',
+                        message: '删除失败',
                         type: 'error'
                     });
                 });

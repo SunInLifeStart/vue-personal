@@ -322,23 +322,23 @@ export default {
             window.open(url, '_blank');
         },
         getActions() {
-            axios.get(`/api/v1/contracts/${this.formId}/actions`).then(res => {
-                this.actions = res.data.types;
-            });
-            axios.get(`/api/v1/contracts/${this.formId}/crumb`).then(res => {
-                for (let item of res.data) {
-                    if (item.name == '风控' && item.active == true) {
-                        this.pneumatic = true;
-                    }
-                }
-                this.crumb = { items: res.data, index: -1 };
-                res.data.forEach((item, index) => {
-                    if (item.active) {
-                        this.crumb.index = index;
-                    }
-                });
-            });
-            this.getRejectList();
+            // axios.get(`/api/v1/contracts/${this.formId}/actions`).then(res => {
+            //     this.actions = res.data.types;
+            // });
+            // axios.get(`/api/v1/contracts/${this.formId}/crumb`).then(res => {
+            //     for (let item of res.data) {
+            //         if (item.name == '风控' && item.active == true) {
+            //             this.pneumatic = true;
+            //         }
+            //     }
+            //     this.crumb = { items: res.data, index: -1 };
+            //     res.data.forEach((item, index) => {
+            //         if (item.active) {
+            //             this.crumb.index = index;
+            //         }
+            //     });
+            // });
+            // this.getRejectList();
         },
         doComment(action) {
             let atIds = this.$refs.comment.getIds();
@@ -387,7 +387,7 @@ export default {
                 })
                 .catch(function() {
                     self.$message({
-                        message: '操作失败',
+                        message: '操作失败1',
                         type: 'error'
                     });
                 });
