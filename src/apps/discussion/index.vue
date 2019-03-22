@@ -14,8 +14,8 @@
         <el-dialog title="议题呈报" :visible.sync="dialogFormVisibleDiscussion" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
             <DiscussionForm @refreshData="refreshBoardData" @refreshDetail="refreshDetail" @saveStatus="saveStatus" ref="Discussionform" :formId="dialogBoardFormId" :operationType="operationBoardType"></DiscussionForm>
             <div slot="footer" class="dialog-footer">
-                <el-button type="default" v-if="this.statusNews == ''" @click="saveBoardForm">保存</el-button>
-                <el-button type="primary" @click="submitBoardForm">提交</el-button>
+                <el-button type="default" @click="saveBoardForm">保存</el-button>
+                <!--<el-button type="primary" @click="submitBoardForm">提交</el-button>-->
                 <!-- <el-button type="default">撤销</el-button> -->
             </div>
         </el-dialog>

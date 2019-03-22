@@ -23,6 +23,12 @@ Vue.component('split-pane', splitPane);
 Vue.use(Print);
 Vue.prototype.common = common;
 Vue.prototype.$axios = axios;
+Vue.prototype.msgTips = function msgTips(message,type){
+    this.$message({ 
+      message: message,
+      type: type
+    });
+}
 
 Vue.config.productionTip = false;
 moment.locale('zh-cn');

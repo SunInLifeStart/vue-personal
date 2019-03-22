@@ -1,6 +1,7 @@
 <template>
   <div id="APPROVE">
-    <TrainDetail :formId="formId" ref="TrainDetail"> </TrainDetail>
+    <TrainDetail ref="TrainDetail"> </TrainDetail>
+     <!-- :formId="formId" -->
   </div>
 </template>
 <script>
@@ -13,7 +14,7 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.IncomingDetail.setTab();
+         this.$refs.TrainDetail.getFormDetails(this.formId);
     },
     components: {
        TrainDetail

@@ -2,26 +2,26 @@
     <div id="DiscussionForm">
         <el-form :model="rows" label-width="150px" ref="formupdate">
             <el-row>
-                <el-col :span="8" offset="16">
-                    <el-form-item label="流水号:" prop="numbers">
-                        {{rows.numbers}}
+                <el-col :span="8" :offset="16">
+                    <el-form-item label="流水号:">
+                        <el-input v-model="rows.number"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="提单人" prop="numbers">
-                        <el-input v-model="rows.numbers" :disabled="true"></el-input>
+                        <el-input v-model="rows.creatorName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="所属部门" prop="filetitle">
-                        <el-input v-model="rows.filetitle" :disabled="true"></el-input>
+                        <el-input v-model="rows.organName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="提单时间">
-                        <el-date-picker v-model="rows.drafter" style="width:100%" type="date" :disabled="true">
+                        <el-date-picker v-model="rows.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -29,18 +29,18 @@
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="提请部门">
-                        <el-input v-model="rows.draftUnit" placeholder="请输入拟稿单位"></el-input>
+                        <el-input v-model="rows.applyDepartment" placeholder="请输入拟稿单位"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="提请时间">
-                        <el-date-picker v-model="rows.draftTime" style="width:100%" type="date">
+                        <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="rows.timeApplication" style="width:100%" type="date">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="议题名称">
-                        <el-input v-model="rows.draftUnit"></el-input>
+                        <el-input v-model="rows.topicName"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -48,15 +48,27 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="参会部门" prop="phone">
-                            <tr v-for="(item,index) in rows.evections" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                            <tr v-for="(item,index) in rows.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
                                 <td colspan="4" style="width: 21%;">
-                                    <el-select v-model="item.currency" placeholder="请输入参会部门" @change="">
-                                        <el-option v-for="item in []" :key="item.value" :label="item.label" :value="{value:item.value, label: item.label}">
+                                    <el-select v-model="item.department" placeholder="请输入参会部门" @change="">
+                                        <el-option v-for="i in options"
+                                                   :key="i.value"
+                                                   :label="i.label"
+                                                   :value="i.value">
+                                                   <!--:value="{value:i.value, label: i.label}">-->
                                         </el-option>
                                     </el-select>
                                 </td>
                                 <td colspan="4">
-                                    <el-input v-model="item.number" @input="" placeholder="请输入部门人员"></el-input>
+                                    <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
+                                        <el-option
+                                                v-for="i in personOptions"
+                                                :key="i.value"
+                                                :label="i.label"
+                                                :value="i.value">
+                                                <!--:value="{value:i.value, label: i.label}">-->
+                                        </el-option>
+                                    </el-select>
                                 </td>
                             </tr>
                             <tr>
@@ -70,14 +82,14 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="提请事项" prop="content">
-                            <tr v-for="(item,index) in rows.evections" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                            <tr v-for="(item,index) in rows.requestedItems" :key="index" @contextmenu.prevent="deleteItem(item,index,'personal')">
                                 <td colspan="8" style="width: 20%;">
-                                    <el-input v-model="item.number" placeholder="请输入提请事项"></el-input>
+                                    <el-input v-model="item.content" placeholder="请输入提请事项"></el-input>
                                 </td>
                             </tr>
                             <tr>
                                 <td colspan="8" style="height: 30px;">
-                                    <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                    <span @click="addItem('personal')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
                                 </td>
                             </tr>
                         </el-form-item>
@@ -99,7 +111,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="各级领导意见及审批">
-                        <el-input v-model="rows.remarks"></el-input>
+                        <el-input v-model="rows.idea" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -116,19 +128,45 @@ export default {
     data() {
         return {
             tabledata: [],
+            options: [
+                {
+                    value: '1',
+                    label: '主管部门'
+                },
+                {
+                    value: '2',
+                    label: '部门'
+                }
+            ],
+            personOptions: [
+                {
+                    value: '1',
+                    label: '杨静'
+                },
+                {
+                    value: '2',
+                    label: '刘思雨'
+                }
+            ],
             rows: {
                 attachments: [],
-                evections: [{}],
+                attendingDepartment: [{
+                    people: [],
+                    department: ''
+                }],
+                requestedItems: [{}],
                 numbers: '',
-                filetitle: '',
-                drafter: '',
-                draftUnit: '',
-                draftTime: moment(new Date()).format('YYYY-MM-DD'),
-                phone: '',
-                content: '',
-                remarks: '',
-                writer: ''
-                // delegate:[],
+                created: '',
+                // comments: [],
+                idea: '',
+                committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+                applyDepartment: this.$store.getters.LoginData.oname || '',
+                timeApplication: '',
+                topicName: '',
+                organName: this.$store.getters.LoginData.oname || '',
+                creatorName: this.$store.getters.LoginData.uname || '',
+                creatorId: this.$store.getters.LoginData.uid || '',
+                organId: this.$store.getters.LoginData.oid || ''
             },
             users: [],
             uploadId: 0,
@@ -154,7 +192,7 @@ export default {
             if (this.operationType == 'edit') {
                 this.getForm();
             } else {
-                clearForm();
+                this.clearForm();
             }
         },
         operationType: function() {
@@ -179,9 +217,11 @@ export default {
             this.getForm();
         } else if (this.operationType == 'create') {
         }
-        this.getUserList();
     },
     methods: {
+        changePeople() {
+            this.$forceUpdate()
+        },
         deleteItem(item, index, type) {
             this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 if (type == 'message') {
@@ -189,7 +229,7 @@ export default {
                         // axios
                         //     .get('/api/v1/travel_forms/delEvection/' + item.id)
                         //     .then(res => {
-                        this.rows.evections.splice(index, 1);
+                        this.rows.attendingDepartment.splice(index, 1);
                             // })
                             // .catch(function() {
                             //     self.$message({
@@ -198,14 +238,18 @@ export default {
                             //     });
                             // });
                     } else {
-                        this.rows.evections.splice(index, 1);
+                        this.rows.attendingDepartment.splice(index, 1);
                     }
+                } else if (type == 'personal') {
+                    this.rows.requestedItems.splice(index, 1);
                 }
             });
         },
         addItem(type) {
             if (type == 'message') {
-                this.rows.evections.push({});
+                this.rows.attendingDepartment.push({});
+            } else if (type == 'personal') {
+                this.rows.requestedItems.push({})
             }
         },
         getId(id) {
@@ -229,29 +273,42 @@ export default {
             });
         },
         clearForm() {
-            this.rows = {
+            this.rows =  {
                 attachments: [],
+                attendingDepartment: [{
+                    people: [],
+                    department: ''
+                }],
+                requestedItems: [{}],
                 numbers: '',
-                filetitle: '',
-                numbers: '',
-                drafter: this.rows.drafter,
-                draftUnit: this.rows.draftUnit,
-                draftTime: moment(new Date()).format('YYYY-MM-DD'),
-                phone: '',
-                content: '',
-                remarks: '',
-                // delegate:[],
-                writer: ''
-            };
+                created: '',
+                // comments: [],
+                idea: '',
+                committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+                applyDepartment: this.$store.getters.LoginData.oname || '',
+                timeApplication: '',
+                topicName: '',
+                organName: this.$store.getters.LoginData.oname || '',
+                creatorName: this.$store.getters.LoginData.uname || '',
+                creatorId: this.$store.getters.LoginData.uid || '',
+                organId: this.$store.getters.LoginData.oid || ''
+            }
         },
         getForm() {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/api/v1/board_meeting_forms/' + this.formId)
+                    .get('/api/v1/issuesReported/detail/' + this.formId)
                     .then(res => {
                         //res.data.delegate = res.data.delegate.split(",");
-                        self.rows = res.data;
+                        self.rows = res.data.content;
+                        if (self.rows.attendingDepartment) {
+                            self.rows.attendingDepartment.forEach(item => {
+                                if (item.person) {
+                                    item.people = item.person.split(',')
+                                }
+                            })
+                        }
                     })
                     .catch(function() {
                         self.$message({
@@ -271,14 +328,14 @@ export default {
         },
         saveForm(action = '') {
             const self = this;
-            //  if (self.rows.delegate.length > 0) {
-            //     self.rows.delegate = self.rows.delegate.join(",");
-            // } else {
-            //     self.rows.delegate = "";
-            // }
+            self.rows.attendingDepartment.forEach(item => {
+                if (item.people) {
+                    item.person = item.people.join(',')
+                }
+            })
             axios
                 .post(
-                    '/api/v1/board_meeting_forms/save',
+                    '/api/v1/issuesReported/save',
                     JSON.stringify(self.rows),
                     {
                         headers: {
@@ -308,30 +365,30 @@ export default {
                 });
         },
         submitCheck() {},
-        submitForm() {
-            const self = this;
-            axios
-                .post(
-                    '/api/v1/board_meetings/' + this.currentFormId + '/create',
-                    '',
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    if (res.data.id != '') {
-                        self.commitForm(res.data.id);
-                    }
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
+        // submitForm() {
+        //     const self = this;
+        //     axios
+        //         .post(
+        //             '/api/v1/board_meetings/' + this.currentFormId + '/create',
+        //             '',
+        //             {
+        //                 headers: {
+        //                     'Content-type': 'application/json'
+        //                 }
+        //             }
+        //         )
+        //         .then(res => {
+        //             if (res.data.id != '') {
+        //                 self.commitForm(res.data.id);
+        //             }
+        //         })
+        //         .catch(function() {
+        //             self.$message({
+        //                 message: '操作失败',
+        //                 type: 'error'
+        //             });
+        //         });
+        // },
         commitForm(processId) {
             const self = this;
             axios
