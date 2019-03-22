@@ -265,7 +265,7 @@ export default {
         });
         // this.getNum();
         this.remoteMethod();
-        this.getClass();
+        // this.getClass();
         this.organs();
         this.getSubmissionlList();
     },
