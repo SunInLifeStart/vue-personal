@@ -70,9 +70,9 @@
                                     <el-input v-model="scope.row.totalPrice" disabled></el-input>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="kucun" label="库存数量">
+                            <el-table-column prop="inventory" label="库存数量">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.kucun"></el-input>
+                                    <el-input v-model="scope.row.inventory"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column prop="buyTime" label="要求购入时间" width="160px">

@@ -78,7 +78,12 @@ module.exports = {
             "/api/v1/users": {
                 target: "http://59.110.172.228"
             },
-            
+            "/api/v1/motor-holiday": {
+                target: "http://192.168.0.253:10148"
+            },
+            "/api/v1/asset_forms": {
+                target: "http://192.168.0.253:10112"
+            },
             "/api/": {
             target: "http://116.117.157.232"
             },
@@ -102,36 +107,7 @@ module.exports = {
                 ws: true,
                 changeOrigin: true
             },
-            "query": {
-                target: "http://192.168.0.253:10148",
-                ws: true,
-                changeOrigin: true
-            },
-            "/get":{
-                target: "http://192.168.0.253:10148",
-                ws: true,
-                changeOrigin: true
-            },
-            "/save":{
-                target: "http://192.168.0.253:10148",
-                ws: true,
-                changeOrigin: true
-            },
-            "/update":{
-                target: "http://192.168.0.253:10148",
-                ws: true,
-                changeOrigin: true
-            },
-            "/delete":{
-                target: "http://192.168.0.253:10148",
-                ws: true,
-                changeOrigin: true
-            },
-            "/commit":{
-                target: "http://192.168.0.253:10148",
-                ws: true,
-                changeOrigin: true
-            }
+           
         }
     },
     pages: {

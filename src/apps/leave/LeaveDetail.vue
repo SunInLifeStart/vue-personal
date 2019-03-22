@@ -291,7 +291,7 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/get/' + this.formId)
+                    .get('/api/v1/asset_forms/get/' + this.formId)
                     .then(res => {
                         self.tableData = res.data.content;
                         if(self.tableData.type==1){

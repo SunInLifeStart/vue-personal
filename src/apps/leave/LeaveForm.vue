@@ -514,7 +514,7 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/get/' + this.formId)
+                    .get('/api/v1/motor-holiday/get/' + this.formId)
                     .then(res => {
                         this.rows = res.data.content;
                     })
@@ -552,7 +552,7 @@ export default {
             const self = this;
             if (self.operationType == 'create') {
                 axios
-                    .post('/save', JSON.stringify(this.rows), {
+                    .post('/api/v1/motor-holiday/save', JSON.stringify(this.rows), {
                         headers: {
                             'Content-type': 'application/json'
                         }
