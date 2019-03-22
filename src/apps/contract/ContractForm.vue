@@ -45,13 +45,20 @@
                         <el-input v-model="selectItem.otherParty"></el-input>
                     </el-form-item>
                 </el-col>
-            </el-row>
-            <el-row>
                 <el-col :span="8">
                     <el-form-item label="合同金额" prop="contractAmount">
-                        <el-input v-model="selectItem.contractAmount"></el-input>
+                        <el-input v-model="selectItem.contractAmount" v-if="selectItem.type=='2'"></el-input>
+                        <el-input v-model.number="selectItem.contractAmount" type='number' @mousewheel.native.prevent v-else>
+                            <template slot="append">元</template>
+                        </el-input>
                     </el-form-item>
                 </el-col>
+                <el-col :span="8" style="margin-left:20px; margin-top:8px">
+                    <el-radio v-model="selectItem.type" :label="1">有金额</el-radio>
+                    <el-radio v-model="selectItem.type" :label="2">无金额</el-radio>
+                </el-col>
+            </el-row>
+            <el-row>
                 <el-col :span="16">
                     <el-form-item class="hetong" label="合同期限" prop="created" style=" width: 50%; float: left;">
                         <el-input v-model="selectItem.effectiveStart" style="margin-right: 5px;"></el-input>
@@ -63,8 +70,6 @@
                         <el-input v-model="selectItem.effectiveEnd"></el-input>
                     </el-form-item>
                 </el-col>
-            </el-row>
-            <el-row>
                 <el-col :span="8">
                     <el-form-item label="是否历史合同">
                         <el-select v-model="selectItem.historyContract" placeholder="请选择">
@@ -188,7 +193,8 @@ export default {
                 historyContract: '',
                 effectiveStart: '',
                 effectiveEnd: '',
-                attachments: []
+                attachments: [],
+                type: 1
             },
             contractNum1: '',
             created: [],
@@ -309,7 +315,7 @@ export default {
             this.getForm();
         }
         const cookieItems = document.cookie.split(';');
-        cookieItems.forEach(function(item) {
+        cookieItems.forEach(function (item) {
             if (item.indexOf('uname') > 0) {
                 self.selectItem.manager = decodeURIComponent(
                     item.split('=')[1]
@@ -326,10 +332,10 @@ export default {
         this.getUser();
     },
     watch: {
-        formId: function() {
+        formId: function () {
             this.getForm();
         },
-        operationType: function() {
+        operationType: function () {
             if (this.operationType == 'create') {
                 this.clearForm();
             }
@@ -341,12 +347,17 @@ export default {
     methods: {
         clearForm() {
             this.selectItem = {
-                manager: this.cookie_uname,
-                organName: this.cookie_oname,
+                manager: cookies.get('uname'),
                 creatorId: cookies.get('uid'),
                 creatorName: cookies.get('uname'),
                 organId: cookies.get('oid'),
-                organName: cookies.get('oname')
+                organName: cookies.get('oname'),
+                contractNum: '',
+                historyContract: '',
+                effectiveStart: '',
+                effectiveEnd: '',
+                attachments: [],
+                type: 1
             };
             this.created = [''];
             this.value = '';
@@ -359,7 +370,7 @@ export default {
                 .then(res => {
                     self.options = res.data;
                 })
-                .catch(function() {
+                .catch(function () {
                     self.$message({
                         message: '操作失败',
                         type: 'error'
@@ -373,21 +384,16 @@ export default {
                 .utc()
                 .format('YYYY');
             const type = self.selectItem.contractType;
-            const dept = this.getDept(encodeURI(this.cookie_oname));
+            const dept = this.getDept(this.cookie_oname);
             axios
                 .get(
-                    '/api/v1/contract_forms/contractNum/year/' +
-                        year +
-                        '?type=' +
-                        type +
-                        '&dept=' +
-                        dept
+                    '/api/v1/contract_forms/contractNum/year/' + year + '?type=' + type + '&dept=' + dept
                 )
                 .then(res => {
                     self.contractNum1 = res.data;
                     self.selectItem.contractNum = self.contractNum1;
                 })
-                .catch(function() {
+                .catch(function () {
                     self.$message({
                         message: '合同编号获取失败',
                         type: 'error'
@@ -452,12 +458,13 @@ export default {
                     .get('/api/v1/contract_forms/' + this.formId)
                     .then(res => {
                         self.selectItem = res.data;
+                        self.value = self.selectItem.tpxzName;
                         // console.log(res.data)
                         // self.created = [];
                         // self.created.push(self.selectItem. effectiveStart);
                         // self.created.push(self.selectItem.effectiveEnd);
                     })
-                    .catch(function() {
+                    .catch(function () {
                         self.$message({
                             message: '详细信息查询失败',
                             type: 'error'
@@ -466,6 +473,9 @@ export default {
             }
         },
         saveForm1(action) {
+            // if (this.selectItem.type == '2') {
+            //     this.selectItem.contractAmount = '0';
+            // }
             this.$refs['ruleForm'].validate(valid => {
                 if (valid) {
                     this.saveForm(action);
@@ -488,7 +498,6 @@ export default {
                 .post('/api/v1/contract_forms/save', this.selectItem)
                 .then(res => {
                     self.currentFormId = res.data.id;
-
                     if (action == 'save') {
                         self.submitForm();
                     } else {
@@ -499,7 +508,7 @@ export default {
                         });
                     }
                 })
-                .catch(function() {
+                .catch(function () {
                     self.$message({
                         message: '保存操作失败',
                         type: 'error'
@@ -514,8 +523,8 @@ export default {
                         'Content-type': 'application/json'
                     }
                 })
-                .then(res => {})
-                .catch(function() {
+                .then(res => { })
+                .catch(function () {
                     self.$message({
                         message: '终结操作失败',
                         type: 'error'
@@ -543,7 +552,7 @@ export default {
                             self.commitForm(res.data.id);
                         }
                     })
-                    .catch(function() {
+                    .catch(function () {
                         self.$message({
                             message: '提交操作失败',
                             type: 'error'
@@ -558,9 +567,9 @@ export default {
             axios
                 .put(
                     '/api/v1/contract_forms/' +
-                        this.currentFormId +
-                        '/commit/' +
-                        processId,
+                    this.currentFormId +
+                    '/commit/' +
+                    processId,
                     '',
                     {
                         headers: {
@@ -571,7 +580,7 @@ export default {
                 .then(res => {
                     self.startProcess();
                 })
-                .catch(function() {
+                .catch(function () {
                     self.$message({
                         message: '提交操作失败',
                         type: 'error'
@@ -604,7 +613,7 @@ export default {
                         type: 'success'
                     });
                 })
-                .catch(function() {
+                .catch(function () {
                     self.$message({
                         message: 'startProcess操作失败',
                         type: 'error'
@@ -633,8 +642,8 @@ export default {
             //window.open(url, '_blank');
             this.common.preview(item);
         },
-        handlePreview() {},
-        handleRemove() {},
+        handlePreview() { },
+        handleRemove() { },
         submitUpload() {
             this.$refs.upload.submit();
         },
@@ -651,7 +660,7 @@ export default {
                     action: 'COMMIT',
                     node: '提交'
                 })
-                .then(res => {});
+                .then(res => { });
         },
         getId(id) {
             const self = this;
@@ -671,7 +680,7 @@ export default {
                                 }
                             )
                             .then(res => {
-                                self.selectItem.attachments.forEach(function(
+                                self.selectItem.attachments.forEach(function (
                                     item,
                                     index
                                 ) {
@@ -683,7 +692,7 @@ export default {
                                     }
                                 });
                             })
-                            .catch(function() {
+                            .catch(function () {
                                 self.$message({
                                     message: '操作失败',
                                     type: 'error'
@@ -698,94 +707,102 @@ export default {
 </script>
 <style lang="scss">
 #ContractForm {
-    .uploadBtn {
-        margin-right: 10px;
-        width: 100px;
-        height: 120px;
-        text-align: center;
-        float: left;
-        border: 1px solid #c0c4cc;
-        border-radius: 2px;
-        cursor: pointer;
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+    margin: 0;
+  }
+  input[type='number'] {
+    -moz-appearance: textfield;
+  }
+  .uploadBtn {
+    margin-right: 10px;
+    width: 100px;
+    height: 120px;
+    text-align: center;
+    float: left;
+    border: 1px solid #c0c4cc;
+    border-radius: 2px;
+    cursor: pointer;
 
-        .el-upload {
-            width: 100%;
-            height: 100%;
+    .el-upload {
+      width: 100%;
+      height: 100%;
 
-            i {
-                font-size: 50px;
-                margin-top: 35px;
-            }
-        }
+      i {
+        font-size: 50px;
+        margin-top: 35px;
+      }
+    }
+  }
+
+  .attachments {
+    position: relative;
+    margin-bottom: 40px;
+    margin-right: 10px;
+    width: 100px;
+    height: 120px;
+    text-align: center;
+    display: inline-block;
+    border: 1px solid #c0c4cc;
+
+    border-radius: 2px;
+    cursor: pointer;
+    img {
+      width: 100px;
+      height: 120px;
     }
 
-    .attachments {
-        position: relative;
-        margin-bottom: 40px;
-        margin-right: 10px;
-        width: 100px;
-        height: 120px;
-        text-align: center;
-        display: inline-block;
-        border: 1px solid #c0c4cc;
-
-        border-radius: 2px;
-        cursor: pointer;
-        img {
-            width: 100px;
-            height: 120px;
-        }
-
-        p {
-            margin: 0;
-            line-height: 20px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        i {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 5px;
-            &:hover {
-                color: red;
-            }
-        }
+    p {
+      margin: 0;
+      line-height: 20px;
+      color: #606266;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .hehe {
+
+    i {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 5px;
+      &:hover {
         color: red;
-        padding-left: 65px;
-        li {
-            font-size: 17px;
-        }
+      }
     }
-    table {
-        border-collapse: collapse;
-        margin: 0 auto;
-        text-align: center;
-        width: 100%;
+  }
+  .hehe {
+    color: red;
+    padding-left: 65px;
+    li {
+      font-size: 17px;
     }
-    table td,
-    table th {
-        border: 1px solid #dcdfe6;
-        color: #000;
-        height: 40px;
-        vertical-align: middle;
-    }
-    table thead th {
-        background-color: #cce8eb;
-    }
-    table tr:nth-child(odd) {
-        background: #fff;
-    }
-    table tr:nth-child(even) {
-        background: #fff;
-    }
-    .el-form-item .el-form-item .el-form-item__label {
-        line-height: 120px;
-    }
+  }
+  table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+  }
+  table td,
+  table th {
+    border: 1px solid #dcdfe6;
+    color: #000;
+    height: 40px;
+    vertical-align: middle;
+  }
+  table thead th {
+    background-color: #cce8eb;
+  }
+  table tr:nth-child(odd) {
+    background: #fff;
+  }
+  table tr:nth-child(even) {
+    background: #fff;
+  }
+  .el-form-item .el-form-item .el-form-item__label {
+    line-height: 120px;
+  }
 }
 </style>

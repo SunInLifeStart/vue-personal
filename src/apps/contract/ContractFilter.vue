@@ -1,25 +1,38 @@
 <template>
     <div id="ContractFilter">
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="合同名称：">
-                <el-input v-model="formInline.contractName"></el-input>
-            </el-form-item>
-            <el-form-item label="合同对方：">
-                <el-input v-model="formInline.partyB"></el-input>
-            </el-form-item>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="合同名称：">
+                        <el-input v-model="formInline.contractName"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="合同对方：">
+                        <el-input v-model="formInline.partyB"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="单据状态：">
+                        <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
+                            <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">&nbsp;</el-col>
+                <el-col :span="8">
+                    <el-form-item>
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button type="primary" @click="onReset">重置</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <!-- <el-form-item label="合同状态：">
                 <el-input v-model="formInline.contractStatus"></el-input>
             </el-form-item> -->
-            <el-form-item label="单据状态：">
-                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
-                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" @click="onSubmit">查询</el-button>
-                <el-button type="primary" @click="onReset">重置</el-button>
-            </el-form-item>
         </el-form>
     </div>
 </template>

@@ -54,7 +54,8 @@
                         <el-form-item label="其他方：">{{tabledata.otherParty}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同金额：">{{tabledata.contractAmount}}</el-form-item>
+                        <el-form-item label="合同金额：" v-if="tabledata.type =='2'">{{tabledata.contractAmount}}</el-form-item>
+                        <el-form-item label="合同金额：" v-else>{{tabledata.contractAmount | numFilter}}</el-form-item>
                     </el-col>
                     <el-col :span="16">
                         <el-form-item label="合同期限：">{{created}}</el-form-item>
@@ -327,6 +328,7 @@ export default {
             fengkong1: false,
             fengkong2: false,
             comcname: '',
+            keyId: "",
             addPrint: false
         };
     },
@@ -346,7 +348,7 @@ export default {
             this.getAllUsers();
         }
         const cookieItems = document.cookie.split(';');
-        cookieItems.forEach(function(item) {
+        cookieItems.forEach(function (item) {
             if (item.indexOf('uname') > 0) {
                 self.cookie_uname = decodeURIComponent(item.split('=')[1]);
             }
@@ -356,7 +358,7 @@ export default {
         });
     },
     watch: {
-        formId: function() {
+        formId: function () {
             this.getForm();
             this.getCrumbs();
             // this.getActions();
@@ -393,7 +395,7 @@ export default {
                     type: 'warning'
                 })
                 .then(() => {
-                    self.tabledata.attachments.forEach(function(value, index) {
+                    self.tabledata.attachments.forEach(function (value, index) {
                         if (
                             value.id == repelaceData.id &&
                             value.attType == repelaceData.item.attType
@@ -401,7 +403,7 @@ export default {
                             axios
                                 .get(
                                     '/api/v1/contract_forms/deleteAttachment/' +
-                                        repelaceData.id
+                                    repelaceData.id
                                 )
                                 .then(res => {
                                     self.tabledata.attachments.splice(index, 1);
@@ -426,8 +428,8 @@ export default {
             const self = this;
             axios
                 .post('/api/v1/contract_forms/save', this.tabledata)
-                .then(res => {})
-                .catch(function() {});
+                .then(res => { })
+                .catch(function () { });
         },
         getId(id) {
             const self = this;
@@ -447,7 +449,7 @@ export default {
                                 }
                             )
                             .then(res => {
-                                self.tabledata.attachments.forEach(function(
+                                self.tabledata.attachments.forEach(function (
                                     item,
                                     index
                                 ) {
@@ -459,7 +461,7 @@ export default {
                                     }
                                 });
                             })
-                            .catch(function() {
+                            .catch(function () {
                                 self.$message({
                                     message: '操作失败',
                                     type: 'error'
@@ -502,18 +504,18 @@ export default {
             axios
                 .get(
                     '/api/v1/contract_forms/contractNum/year/' +
-                        year +
-                        '?type=' +
-                        this.type +
-                        '&dept=' +
-                        dept
+                    year +
+                    '?type=' +
+                    this.type +
+                    '&dept=' +
+                    dept
                 )
                 .then(res => {
                     self.contractNum1 = res.data;
                     self.tabledata.contractNum = self.contractNum1;
                     this.saveForm();
                 })
-                .catch(function() {
+                .catch(function () {
                     self.$message({
                         message: '合同编号获取失败',
                         type: 'error'
@@ -584,7 +586,7 @@ export default {
                         // });
                         // }
                     })
-                    .catch(function() {
+                    .catch(function () {
                         self.$message({
                             message: '保存失败',
                             type: 'error'
@@ -597,8 +599,8 @@ export default {
             if (this.tabledata.riskWarning) {
                 axios
                     .post('/api/v1/contract_forms/save', this.tabledata)
-                    .then(res => {})
-                    .catch(function() {
+                    .then(res => { })
+                    .catch(function () {
                         self.$message({
                             message: '风险提示或说明保存失败',
                             type: 'error'
@@ -629,7 +631,7 @@ export default {
                         }
                         this.getActions();
                     })
-                    .catch(function() {
+                    .catch(function () {
                         self.$message({
                             message: '查看详情失败',
                             type: 'error'
@@ -659,7 +661,7 @@ export default {
                 .then(res => {
                     self.rejectList = res.data;
                 })
-                .catch(function() {
+                .catch(function () {
                     self.$message({
                         message: '操作失败',
                         type: 'error'
@@ -672,14 +674,19 @@ export default {
             this.showGuis = false;
             axios.get(`/api/v1/contracts/${this.formId}/actions`).then(res => {
                 res.data.types = res.data.types || [];
-                if (this.addPrint && res.data.types.length > 0) {
+                let addPRINT = true;
+                for (let item of res.data.types) {
+                    if (item.name == '打印') {
+                        addPRINT = false;
+                    }
+                }
+                if (this.addPrint && res.data.types.length > 0 && addPRINT == true) {
                     res.data.types.push({
                         type: 'print',
                         name: '打印'
                     });
                 }
-
-                if (this.tabledata.status == '已完成') {
+                if (this.tabledata.status == '已完成' && addPRINT == true) {
                     res.data.types.push({
                         type: 'print',
                         name: '打印'
@@ -784,6 +791,7 @@ export default {
                 this.crumb = { items: res.data, index: -1 };
                 res.data.forEach((item, index) => {
                     if (item.active) {
+                        this.keyId = item.key;
                         this.crumb.index = index;
                         (this.comcname = item.name),
                             (this.crumbNodeName = item.key);
@@ -830,11 +838,6 @@ export default {
                         }
                     }
                 }
-                //打印表单的方法
-                // if (action.type == 'PRINT') {
-                //     this.$print(this.$refs.formupdate.$el);
-                //     this.comment();
-                // }
                 if (action.type == 'ARCHIVE') {
                     this.submitForm();
                 }
@@ -898,7 +901,6 @@ export default {
             }
         },
         previewDoc(url) {
-            console.log(url);
             this.$refs.contracteditFiles.openPrinter(url);
         },
         clearForm() {
@@ -909,11 +911,16 @@ export default {
         },
         comment(comment) {
             let self = this;
+            if (self.currentAction.type == "COUNTERSIGN") {
+                self.textarea = self.textarea ? self.textarea : "同意";
+            }
+
             axios
                 .put(`/api/v1/contract_forms/${self.formId}/comment`, {
                     content: self.textarea || self.currentAction.name,
                     action: self.currentAction.type,
-                    node: self.comcname
+                    node: self.comcname,
+                    keyId: this.keyId
                 })
                 .then(res => {
                     this.getForm();
@@ -1012,8 +1019,8 @@ export default {
                     memo: '',
                     id: self.formId
                 })
-                .then(res => {})
-                .catch(function() {
+                .then(res => { })
+                .catch(function () {
                     self.$message({
                         message: '操作失败',
                         type: 'error'
@@ -1025,170 +1032,170 @@ export default {
 </script>
 <style lang="scss" scope>
 #ContractDetail {
-    .uploadBtn {
-        margin-right: 10px;
-        width: 100px;
-        height: 120px;
-        text-align: center;
-        float: left;
-        border: 1px solid #c0c4cc;
-        border-radius: 2px;
-        cursor: pointer;
+  .uploadBtn {
+    margin-right: 10px;
+    width: 100px;
+    height: 120px;
+    text-align: center;
+    float: left;
+    border: 1px solid #c0c4cc;
+    border-radius: 2px;
+    cursor: pointer;
 
-        .el-upload {
-            width: 100%;
-            height: 100%;
+    .el-upload {
+      width: 100%;
+      height: 100%;
 
-            i {
-                font-size: 50px;
-                margin-top: 35px;
-            }
+      i {
+        font-size: 50px;
+        margin-top: 35px;
+      }
+    }
+  }
+  .el-step__main {
+    margin-top: 10px;
+  }
+  .hehe {
+    color: red;
+    padding-left: 65px;
+    li {
+      font-size: 17px;
+    }
+  }
+  .attachments {
+    margin-left: 10px;
+    width: 100px;
+    height: 120px;
+    text-align: center;
+    display: inline-block;
+    border: 1px solid #c0c4cc;
+    border-radius: 2px;
+    cursor: pointer;
+    img {
+      width: 100px;
+      height: 120px;
+    }
+    p {
+      margin: 0;
+      line-height: 15px;
+      color: #606266;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+  .audit {
+    position: relative;
+    margin-bottom: 10px;
+    font-size: 14px;
+    box-shadow: none;
+    border: 0;
+    .avatar {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 36px;
+      height: 36px;
+      img {
+        width: 36px;
+        height: 36px;
+        border: 1px solid #dddddd;
+        border-radius: 50%;
+      }
+    }
+    .info {
+      margin-left: 60px;
+      display: inline-block;
+      width: calc(100% - 60px);
+      .creator {
+        height: 32px;
+        line-height: 32px;
+        a {
+          color: #4a6495;
+          text-decoration-line: none;
         }
+      }
+      .content {
+        min-height: 32px;
+      }
     }
-    .el-step__main {
-        margin-top: 10px;
+  }
+  .input-with-select {
+    width: 0px;
+    margin-right: 10px;
+    .el-input-group__prepend {
+      background-color: #409eff;
+      border-color: #409eff;
+      color: #ffffff;
+      border-radius: 4px;
     }
-    .hehe {
-        color: red;
-        padding-left: 65px;
-        li {
-            font-size: 17px;
-        }
+    &.reject .el-input-group__prepend {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
     }
-    .attachments {
-        margin-left: 10px;
-        width: 100px;
-        height: 120px;
-        text-align: center;
-        display: inline-block;
-        border: 1px solid #c0c4cc;
-        border-radius: 2px;
-        cursor: pointer;
-        img {
-            width: 100px;
-            height: 120px;
-        }
-        p {
-            margin: 0;
-            line-height: 15px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
+    .el-input__inner {
+      width: 0;
+      padding: 0;
+      border: 0;
     }
-    .audit {
-        position: relative;
-        margin-bottom: 10px;
-        font-size: 14px;
-        box-shadow: none;
-        border: 0;
-        .avatar {
-            position: absolute;
-            left: 5px;
-            top: 5px;
-            width: 36px;
-            height: 36px;
-            img {
-                width: 36px;
-                height: 36px;
-                border: 1px solid #dddddd;
-                border-radius: 50%;
-            }
-        }
-        .info {
-            margin-left: 60px;
-            display: inline-block;
-            width: calc(100% - 60px);
-            .creator {
-                height: 32px;
-                line-height: 32px;
-                a {
-                    color: #4a6495;
-                    text-decoration-line: none;
-                }
-            }
-            .content {
-                min-height: 32px;
-            }
-        }
+    .el-input__suffix {
+      left: 8px;
     }
-    .input-with-select {
-        width: 0px;
-        margin-right: 10px;
-        .el-input-group__prepend {
-            background-color: #409eff;
-            border-color: #409eff;
-            color: #ffffff;
-            border-radius: 4px;
-        }
-        &.reject .el-input-group__prepend {
-            border-top-right-radius: 0;
-            border-bottom-right-radius: 0;
-        }
-        .el-input__inner {
-            width: 0;
-            padding: 0;
-            border: 0;
-        }
-        .el-input__suffix {
-            left: 8px;
-        }
-    }
-    table {
-        border-collapse: collapse;
-        margin: 0 auto;
-        text-align: center;
-        width: 100%;
-    }
-    table td,
-    table th {
-        border: 1px solid #dcdfe6;
-        color: #000;
-        height: 40px;
-        vertical-align: middle;
-    }
-    table thead th {
-        background-color: #cce8eb;
-    }
-    table tr:nth-child(odd) {
-        background: #fff;
-    }
-    table tr:nth-child(even) {
-        background: #fff;
-    }
-    .el-form-item .el-form-item .el-form-item__label {
-        line-height: 120px;
-    }
+  }
+  table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+  }
+  table td,
+  table th {
+    border: 1px solid #dcdfe6;
+    color: #000;
+    height: 40px;
+    vertical-align: middle;
+  }
+  table thead th {
+    background-color: #cce8eb;
+  }
+  table tr:nth-child(odd) {
+    background: #fff;
+  }
+  table tr:nth-child(even) {
+    background: #fff;
+  }
+  .el-form-item .el-form-item .el-form-item__label {
+    line-height: 120px;
+  }
 }
 #actionList {
-    background: #f4f4f4;
-    border-bottom: 1px solid #eaeaea;
-    height: 40px;
-    width: 100%;
-    z-index: 10;
-    font-weight: bold;
-    .btnList {
-        line-height: 40px;
-        padding: 12px 10px;
-        cursor: pointer;
-    }
-    .btnList:hover {
-        background: #c7e0f4;
-    }
+  background: #f4f4f4;
+  border-bottom: 1px solid #eaeaea;
+  height: 40px;
+  width: 100%;
+  z-index: 10;
+  font-weight: bold;
+  .btnList {
+    line-height: 40px;
+    padding: 12px 10px;
+    cursor: pointer;
+  }
+  .btnList:hover {
+    background: #c7e0f4;
+  }
 }
 .btnhide {
-    display: none;
+  display: none;
 }
 .crumbList {
-    margin: 15px 0px;
+  margin: 15px 0px;
 }
 .fullScreen {
-    position: fixed;
-    top: 0px;
-    z-index: 10;
-    background: #fff;
-    left: 0px;
-    right: 0px;
+  position: fixed;
+  top: 0px;
+  z-index: 10;
+  background: #fff;
+  left: 0px;
+  right: 0px;
 }
 </style>

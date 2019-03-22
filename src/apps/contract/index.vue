@@ -1,8 +1,10 @@
 <template>
     <div id="Contract" class="main-container">
         <div class="content-container">
+            ceshi
             <el-tabs v-model="activeName">
-                <el-tab-pane label="合同管理" name="first" v-if="this.htsq">
+                <!-- <el-tab-pane label="合同管理" name="first" v-if="this.htsq"> -->
+                <el-tab-pane label="合同管理" name="first">
                     <el-card class="box-card">
                         <ContractFilter @searchList="getSearchOptions"></ContractFilter>
                         <div class="toolbar">
@@ -15,7 +17,8 @@
                         <ContractDetail :formId="formId" ref="ContractDetail" @refreshData="refreshData"></ContractDetail>
                     </el-card>
                 </el-tab-pane>
-                <el-tab-pane label="统计查询" name="second" v-if="this.tjcx">
+                <!-- <el-tab-pane label="统计查询" name="second" v-if="this.tjcx"> -->
+                <el-tab-pane label="统计查询" name="second">
                     <ContractStatistics :formId="formId" @formId="getFormId"></ContractStatistics>
                 </el-tab-pane>
             </el-tabs>
@@ -25,8 +28,6 @@
             <div slot="footer" class="dialog-footer">
                 <el-button type="default" @click="saveForm">保存</el-button>
                 <el-button type="primary" @click="submitForm">提交</el-button>
-                <!--el-button type="primary" v-show="operationType!=='create'">归档</el-button>
-                <el-button type="primary" v-show="operationType!== 'create'" @click="terminalForm">终结</el-button-->
             </div>
         </el-dialog>
     </div>
