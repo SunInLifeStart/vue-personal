@@ -50,7 +50,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="备注：">{{tabledata.remarks}}
+                        <el-form-item label="各级领导意见及审批：">{{tabledata.remarks}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -142,22 +142,22 @@ export default {
     },
     mounted() {
         this.getForm();
-        if (this.formId != '') {
-            this.getActions();
-            this.getCrumbs();
-            this.getAllUsers();
-        }
+        // if (this.formId != '') {
+        //     this.getActions();
+        //     this.getCrumbs();
+        //     this.getAllUsers();
+        // }
     },
     watch: {
         formId: function() {
             this.getForm();
-            if (this.formId) {
-                this.getActions();
-                this.getCrumbs();
-                this.getAllUsers();
-            } else {
-                this.tabledata = {};
-            }
+            // if (this.formId) {
+            //     this.getActions();
+            //     this.getCrumbs();
+            //     this.getAllUsers();
+            // } else {
+            //     this.tabledata = {};
+            // }
         }
     },
     methods: {

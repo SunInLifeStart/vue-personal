@@ -62,7 +62,7 @@
                                 <td colspan="4">
                                     <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
                                         <el-option
-                                                v-for="i in options"
+                                                v-for="i in personOptions"
                                                 :key="i.value"
                                                 :label="i.label"
                                                 :value="i.value">
@@ -136,6 +136,16 @@ export default {
                 {
                     value: '2',
                     label: '部门'
+                }
+            ],
+            personOptions: [
+                {
+                    value: '1',
+                    label: '杨静'
+                },
+                {
+                    value: '2',
+                    label: '刘思雨'
                 }
             ],
             rows: {

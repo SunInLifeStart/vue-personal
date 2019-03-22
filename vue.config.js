@@ -66,6 +66,9 @@ module.exports = {
     devServer: {
         port: 8889,
         proxy: {
+            "/issuesReported": {
+                target: "http://116.117.157.232"
+            },
             "/api/": {
             target: "http://116.117.157.232"
             },
