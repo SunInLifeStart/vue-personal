@@ -271,7 +271,9 @@ export default {
                 .post("/api/v1/trainingApplication/save", $self.formData)
                 .then(response => {
                     $self.msgTips("保存成功", "success");
-                    $self.formId = response.data.content.id;
+                    if( response.data.content &&  response.data.content.id){
+                         $self.formId = response.data.content.id;
+                    }
                     $self.dialogFormVisibleTrain = false;
                     $self.actionsUrl = `/workflow/motor-trainingapplication_train/${
                         $self.formId
@@ -280,16 +282,17 @@ export default {
                     $self.signalUrl = `/workflow/motor-trainingapplication_train/${
                         $self.formId
                     }/${$self.$store.getters.LoginData.uid}/signal`;
-                    // if (params) {
-                    //     $self.startSignalForStart(); //如果是 "提交" 启动工作流
-                    // } else {
-                    //     $self.startSignalForSave(); //如果是 "保存"  启动保存工作流
-                    // }
+
                      if ($self.createForm_status) {
                         $self.$emit("reloadList", "reload"); //如果是 "新建" 表单刷新 "列表"
                     } else {
                         $self.$emit("reloadList", $self.formData); //如果是 "编辑" 表单刷新 "详情页"
                     }
+                    // if (params) {
+                    //     $self.startSignalForStart(); //如果是 "提交" 启动工作流
+                    // } else {
+                    //     $self.startSignalForSave(); //如果是 "保存"  启动保存工作流
+                    // }
                 })
                 .catch(function() {
                     $self.msgTips("保存失败！", "warning");

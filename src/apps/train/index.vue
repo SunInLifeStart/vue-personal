@@ -103,7 +103,7 @@ export default {
 
         //选择行
         showCurrentId(row){
-           this.formId = row.id;
+           this.$refs.TrainDetail.getFormDetails(row.id);
         },
 
         //新建
