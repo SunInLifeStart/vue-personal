@@ -66,8 +66,17 @@ module.exports = {
     devServer: {
         port: 8889,
         proxy: {
+            "/api/v1/push":{
+              target: "http://192.168.1.116:18765"
+            },
+            "/api/v1/trainingApplication": {
+                target: "http://192.168.1.113:8751"
+            },
             "/api/": {
-            target: "http://116.117.157.232"
+                target: "http://116.117.157.232"
+            },
+            "/api/v1/push":{
+                target: "http://192.168.1.116:18765"
             },
             "/budget/": {
             target: "http://116.117.157.232"
@@ -81,7 +90,7 @@ module.exports = {
             "/thumb": {
                 target: "http://116.117.157.232"
             },
-            "/trainingApplication": {
+            "/api/v1/trainingApplication": {
                 target: "http://192.168.1.113:8751"
             },
             "/socket.io": {
@@ -89,7 +98,19 @@ module.exports = {
                 ws: true,
                 changeOrigin: true
             },
-           
+            // "query": {
+            //     target: "http://192.168.0.253:10148",
+            //     ws: true,
+            //     changeOrigin: true
+            // },
+            "/workflow/": {
+                target: "http://192.168.1.116:18765"
+               },
+            "/get":{
+                target: "http://192.168.0.253:10148",
+                ws: true,
+                changeOrigin: true
+            }
         }
     },
     pages: {
