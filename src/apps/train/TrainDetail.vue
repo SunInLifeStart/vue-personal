@@ -147,14 +147,14 @@ export default {
             }/${$self.$store.getters.LoginData.uid}/actions`;
 
             $self.$axios
-                .get("/trainingApplication/detail/" + formId)
+                .get("/api/v1/trainingApplication/detail/" + formId)
                 .then(response => {
                     $self.tableData = response.data.content;
                 })
                 .catch(function() {
                     $self.msgTips("获取表单详情失败！", "warning");
             });
-            $self.getActions();
+           // $self.getActions();
         },
         doAction(action) {
             let self = this;
@@ -165,31 +165,24 @@ export default {
                 this.dialogVisible = this.presign_status = true;
                 this.selContent_status = false;
             } else if (action.assigneeList && action.assigneeList.length > 0) {
-                if (!this.juderRequired(action)) {
-                    return false;
-                }
                 this.seleteUserLabel = "请选择会签人";
                 this.users = action.assigneeList;
                 this.dialogVisible = this.presign_status = true;
                 this.dialogVisible = this.presign_status = true;
                 this.selContent_status = false;
             } else if (action.selContents && action.selContents.length > 0) {
-                if (!this.juderRequired(action)) {
-                    return false;
-                }
-                this.seleteContentLabel = "请选择ssss";
-                this.Contents = action.selContents;
-                this.dialogVisible = this.selContent_status = true;
-                this.dialogVisible = this.selContent_status = true;
-                this.users = null;
-                this.presign_status = false;
-                this.presign_status = false;
+                // this.seleteContentLabel = "请选择ssss";
+                // this.Contents = action.selContents;
+                // this.dialogVisible = this.selContent_status = true;
+                // this.dialogVisible = this.selContent_status = true;
+                // this.users = null;
+                // this.presign_status = false;
+                // this.presign_status = false;
             } else if (
                 "START,CANCEL,COMMIT,PULL,SELCOMMIT,test,PULL".includes(
                     action.type
                 )
             ) {
-
                 this.startSignal(action);
                 
             }
@@ -197,7 +190,7 @@ export default {
         startSignal(params) {
             let $self = this;
             $self.$axios.put($self.signalUrl, params).then(res => {
-                $self.getActions();
+             //   $self.getActions();
             });
         },
         getActions() {

@@ -70,7 +70,8 @@
                 
                 <el-col :span="24">
                     <el-form-item label="费用预算">
-                       <span style="float:left"><el-input type="lowercase" clearable style="max-width:400px" @change="numberToChinese(formData.lowercase)" v-model="formData.lowercase" placeholder="小写入费用预算"></el-input></span>
+                       <span style="float:left"><el-input type="lowercase" clearable style="max-width:400px"  v-model="formData.lowercase" placeholder="小写入费用预算"></el-input></span>
+                       <!-- @change="numberToChinese(formData.lowercase)" -->
                       <span  style="float:left"><el-input clearable style="max-width:400px" v-model="formData.upper" placeholder="大写入费用预算"></el-input></span>
                     </el-form-item>
                 </el-col>
@@ -267,7 +268,7 @@ export default {
         saveForm(params) {
             const $self = this;
             $self.$axios
-                .post("/trainingApplication/save", $self.formData)
+                .post("/api/v1/trainingApplication/save", $self.formData)
                 .then(response => {
                     $self.msgTips("保存成功", "success");
                     $self.formId = response.data.content.id;
@@ -279,10 +280,15 @@ export default {
                     $self.signalUrl = `/workflow/motor-trainingapplication_train/${
                         $self.formId
                     }/${$self.$store.getters.LoginData.uid}/signal`;
-                    if (params) {
-                        $self.startSignalForStart(); //如果是 "提交" 启动工作流
+                    // if (params) {
+                    //     $self.startSignalForStart(); //如果是 "提交" 启动工作流
+                    // } else {
+                    //     $self.startSignalForSave(); //如果是 "保存"  启动保存工作流
+                    // }
+                     if ($self.createForm_status) {
+                        $self.$emit("reloadList", "reload"); //如果是 "新建" 表单刷新 "列表"
                     } else {
-                        $self.startSignalForSave(); //如果是 "保存"  启动保存工作流
+                        $self.$emit("reloadList", $self.formData); //如果是 "编辑" 表单刷新 "详情页"
                     }
                 })
                 .catch(function() {
@@ -298,7 +304,10 @@ export default {
             let actions = await this.getActions();
             let complete = await this.startSignal(actions.data.types[0]);
             let actions2 = await this.getActions();
-            let complete2 = await this.startSignal(actions2.data.types[1]);
+            actions2.data.types = actions2.data.types.filter(function (item) {
+                        return item.action == "COMMIT";
+            });
+            let complete2 = await this.startSignal(actions2.data.types[0]);
             await this.emitMsg();
         },
         async getActions() {

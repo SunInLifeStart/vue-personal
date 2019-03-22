@@ -87,7 +87,7 @@ export default {
         getList(pageNum) {
             let $self = this;
             $self.$axios
-                .post("/trainingApplication/queryList", $self.params)
+                .post("/api/v1/trainingApplication/queryList", $self.params)
                 .then(response => {
                         if(response.data.content.list.length > 0){
                             let formId = response.data.content.list[0].id;

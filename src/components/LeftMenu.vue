@@ -73,28 +73,40 @@ export default {
                             to: 'incoming'
                         },
                         {
-                            id: 10,
+                            id: 3,
                             name: '部门呈报',
                             icon: 'el-icon-chengbaoshenpi',
                             to: 'submission'
                         },
                         {
-                            id: 11,
+                            id: 4,
                             name: '请休假申请',
-                            icon: 'el-icon-chengbaoshenpi',
+                            icon: 'el-icon-icon-test1',
                             to: 'leave'
                         },
                         {
-                            id: 8,
-                            name: '合同管理',
-                            icon: 'el-icon-hetongguanli',
-                            to: 'contract'
-                        },
-                        {
-                            id: 3,
+                            id: 5,
                             name: '资产管理',
                             icon: 'el-icon-zichanguanli',
                             to: 'asset'
+                        },
+                        {
+                            id: 6,
+                            name: '培训',
+                            icon: 'el-icon-peixun',
+                            to: 'train'
+                        },
+                           {
+                            id: 7,
+                            name: '上会单',
+                            icon: 'el-icon-duorenhuiyi',
+                            to: 'discussion'
+                        },
+                           {
+                            id: 8,
+                            name: '合同管理',
+                            icon: 'el-icon-hetong',
+                            to: 'contract'
                         },
                         /*{
                             id: 15,

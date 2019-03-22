@@ -1,7 +1,6 @@
 <template>
     <div id="Contract" class="main-container">
         <div class="content-container">
-            ceshi
             <el-tabs v-model="activeName">
                 <!-- <el-tab-pane label="合同管理" name="first" v-if="this.htsq"> -->
                 <el-tab-pane label="合同管理" name="first">
