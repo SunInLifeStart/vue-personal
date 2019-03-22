@@ -2,7 +2,7 @@
     <div id="DiscussionForm">
         <el-form :model="rows" label-width="150px" ref="formupdate">
             <el-row>
-                <el-col :span="8" :offset="16">
+                <el-col :span="8">
                     <el-form-item label="流水号:">
                         <el-input v-model="rows.number"></el-input>
                     </el-form-item>

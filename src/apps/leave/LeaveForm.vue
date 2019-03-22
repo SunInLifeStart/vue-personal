@@ -169,7 +169,10 @@ export default {
                 type: '',
                 startTime: '',
                 endTime: '',
-                attachments: []
+                attachments: [],
+                applyTime: moment()
+                    // .utc()
+                    .format('YYYY-MM-DD HH:mm:ss')
             },
             users: [],
             currentFormId: this.operationType == 'create' ? '' : this.formId,
@@ -260,9 +263,9 @@ export default {
                 self.cookie_oname = decodeURIComponent(item.split('=')[1]);
             }
         });
-        this.getNum();
+        // this.getNum();
         this.remoteMethod();
-        this.getClass();
+        // this.getClass();
         this.organs();
         this.getSubmissionlList();
     },
@@ -800,7 +803,7 @@ export default {
                     // .utc()
                     .format('YYYY-MM-DD HH:mm:ss')
             };
-            this.getNum();
+            // this.getNum();
         }
     }
 };

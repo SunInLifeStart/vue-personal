@@ -217,14 +217,14 @@ export default {
         this.getAllUsers();
         if (this.formId != '') {
             this.getForm();
-            this.getActions();
+            // this.getActions();
         }
     },
     watch: {
         formId: function() {
             if (this.formId != '') {
                 this.getForm();
-                this.getActions();
+                // this.getActions();
             } else {
                 this.tableData = {};
             }
@@ -291,7 +291,7 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/api/v1/asset_forms/get/' + this.formId)
+                    .get('/api/v1/motor-holiday/get/' + this.formId)
                     .then(res => {
                         self.tableData = res.data.content;
                         if(self.tableData.type==1){
@@ -322,6 +322,8 @@ export default {
         downloadFile(url) {
             this.common.preview(url);
         },
+        /** */
+        /** 
         getActions() {
             axios.get(`/api/v1/travels/${this.formId}/actions`).then(res => {
                 res.data.types = res.data.types || [];
@@ -344,6 +346,7 @@ export default {
                 });
             });
         },
+        */
         doComment(action) {
             this.getForm();
             let atIds = this.$refs.comment.getIds();
