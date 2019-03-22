@@ -170,16 +170,16 @@ export default {
     mounted() {
         if (this.formId != '') {
             this.getForm();
-            this.getCrumbs();
-            this.getActions();
+            // this.getCrumbs();
+            // this.getActions();
             this.getAllUsers();
         }
     },
     watch: {
         formId: function() {
             this.getForm();
-            this.getCrumbs();
-            this.getActions();
+            // this.getCrumbs();
+            // this.getActions();
         }
     },
     methods: {
@@ -264,8 +264,8 @@ export default {
                         .get(`/api/v1/assets/${self.formId}/pull`)
                         .then(res => {
                             self.comment('formOnlyComment');
-                            self.getActions();
-                            self.getCrumbs();
+                            // self.getActions();
+                            // self.getCrumbs();
                         });
                 }
                 if (action.type == 'COMMIT' && this.crumbNodeName == '申请') {
@@ -336,7 +336,7 @@ export default {
                 })
                 .then(res => {
                     if (comment == 'formOnlyComment') {
-                        this.getCrumbs();
+                        // this.getCrumbs();
                         self.$message({
                             message: self.currentAction.name + '成功',
                             type: 'success'
@@ -383,8 +383,8 @@ export default {
                     .then(res => {
                         self.dialogVisible = false;
                         self.comment();
-                        self.getActions();
-                        self.getCrumbs();
+                        // self.getActions();
+                        // self.getCrumbs();
                         self.$message({
                             message: self.currentAction.name + '成功',
                             type: 'success'
@@ -398,7 +398,7 @@ export default {
         },
 
         refreshFormData() {
-            this.getCrumbs();
+            // this.getCrumbs();
             this.getForm();
         },
         setMemo() {
