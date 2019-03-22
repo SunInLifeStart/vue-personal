@@ -1,21 +1,25 @@
 <template>
     <div id="DiscussionList">
         <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-            <el-table-column prop="numbers" label="董事会编号">
+            <el-table-column prop="number" label="流水号">
             </el-table-column>
-            <el-table-column prop="filetitle" label="文件标题">
+            <el-table-column prop="creatorName" label="提单人">
             </el-table-column>
-            <el-table-column prop="drafter" label="拟稿人">
+            <el-table-column prop="organName" label="所属部门">
             </el-table-column>
-            <el-table-column prop="draftUnit" label="拟稿单位">
+            <el-table-column prop="committed" label="提单时间">
             </el-table-column>
-            <el-table-column prop="status" label="单据状态" width="200"></el-table-column>
+            <el-table-column prop="applyDepartment" label="提请部门">
+            </el-table-column>
+            <el-table-column prop="timeApplication" label="提请时间">
+            </el-table-column>
+            <!--<el-table-column prop="status" label="单据状态" width="200"></el-table-column>-->
             <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
-                    <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.showedit== true || scope.row.status == '已保存'">
+                    <el-tooltip class="item" effect="dark" content="编辑" placement="left">
                         <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                     </el-tooltip>
-                    <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '已保存'">
+                    <el-tooltip class="item" effect="dark" content="删除" placement="left">
                         <el-button type="text" icon="el-icon-delete" @click="deleteItem(scope.row)"></el-button>
                     </el-tooltip>
                 </template>
@@ -52,7 +56,7 @@ export default {
         getList() {
             const self = this;
             const params = {
-                page: this.params.pageNum,
+                pageNum: this.params.pageNum,
                 pageSize: this.params.pageSize,
                 orderBy: 'created',
                 desc: true,
@@ -60,7 +64,7 @@ export default {
             };
             axios
                 .post(
-                    '/api/v1/board_meeting_forms/query',
+                    '/issuesReported/queryList',
                     JSON.stringify(params),
                     {
                         headers: {
@@ -69,29 +73,29 @@ export default {
                     }
                 )
                 .then(res => {
-                    for (let data of res.data.forms) {
-                        let creatorname = '';
-                        if (data.comments && data.comments.length > 0) {
-                            for (let arr of data.comments) {
-                                if (arr.node == '提交') {
-                                    creatorname = arr.creatorId;
-                                }
-                            }
-                        }
-                        if (data.status == '已驳回') {
-                            if (
-                                creatorname == this.$store.getters.LoginData.uid
-                            ) {
-                                data.showedit = true;
-                            } else {
-                                data.showedit = false;
-                            }
-                        }
-                    }
-                    self.tableData = res.data.forms;
-                    self.params.total = res.data.totalCount;
-                    if (res.data.forms.length > 0) {
-                        self.$emit('formId', res.data.forms[0].id);
+                    // for (let data of res.data.forms) {
+                    //     let creatorname = '';
+                    //     if (data.comments && data.comments.length > 0) {
+                    //         for (let arr of data.comments) {
+                    //             if (arr.node == '提交') {
+                    //                 creatorname = arr.creatorId;
+                    //             }
+                    //         }
+                    //     }
+                    //     if (data.status == '已驳回') {
+                    //         if (
+                    //             creatorname == this.$store.getters.LoginData.uid
+                    //         ) {
+                    //             data.showedit = true;
+                    //         } else {
+                    //             data.showedit = false;
+                    //         }
+                    //     }
+                    // }
+                    self.tableData = res.data.content.list;
+                    self.params.total = res.data.content.total;
+                    if (res.data.content.list.length > 0) {
+                        self.$emit('formId', res.data.content.list[0].id);
                     } else {
                         self.$emit('formId', '');
                     }
@@ -114,7 +118,7 @@ export default {
             const self = this;
             this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 axios
-                    .get('/api/v1/board_meeting_forms/delete/' + row.id)
+                    .get('/issuesReported/'+ row.id + '/delete')
                     .then(res => {
                         self.$message({
                             message: '删除成功',

@@ -16,35 +16,35 @@
                 </el-steps>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="董事会编号：">{{tabledata.numbers}}
+                        <el-form-item label="流水号：">{{tabledata.number}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="文件标题：">{{tabledata.filetitle}}
+                        <el-form-item label="提单人：">{{tabledata.creatorName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="拟稿人：">{{tabledata.drafter}}
+                        <el-form-item label="所属部门：">{{tabledata.organName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="拟稿单位：">{{tabledata.draftUnit}}
+                        <el-form-item label="提单时间：">{{tabledata.committed}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="拟稿时间：">{{tabledata.draftTime}}
+                        <el-form-item label="提请部门：">{{tabledata.applyDepartment}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="电话：">{{tabledata.phone}}
+                        <el-form-item label="提请时间：">{{tabledata.timeApplication}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="正文：">{{tabledata.content}}
+                        <el-form-item label="议题名称：">{{tabledata.topicName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -165,9 +165,9 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/api/v1/board_meeting_forms/' + this.formId)
+                    .get('/issuesReported/detail/' + this.formId)
                     .then(res => {
-                        self.tabledata = res.data;
+                        self.tabledata = res.data.content;
                         if (self.tabledata.draftTime) {
                             self.tabledata.draftTime = moment(
                                 self.tabledata.draftTime
