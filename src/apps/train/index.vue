@@ -53,8 +53,10 @@
         <br>
         <el-card class="box-card">
             <TrainDetail :formId="formId" ref="TrainDetail"></TrainDetail>
+             <!-- :formId="formId" -->
         </el-card>
-         <TrainForm :formDataFromIndex="formDataFromIndex"  ref="TrainForm" @reloadList = "reloadList"></TrainForm>
+         <TrainForm  ref="TrainForm" @reloadList = "reloadList"></TrainForm>
+         <!-- :formDataFromIndex="formDataFromIndex"  -->
     </div>
 </template>
 <script>
@@ -67,7 +69,6 @@ export default {
             tableData:[],
             formDetails:{},
             formId:"",
-            formDataFromIndex:{},
             params:{
                 pageNum: 1,
                 pageSize: 5,
@@ -89,16 +90,14 @@ export default {
                 .post("/trainingApplication/queryList", $self.params)
                 .then(response => {
                         if(response.data.content.list.length > 0){
-                            $self.formId = response.data.content.list[0].id;
+                            let formId = response.data.content.list[0].id;
+                            $self.$refs.TrainDetail.getFormDetails(formId);
                         }
                         $self.tableData = response.data.content.list;
                         $self.params.total = response.data.content.total;
                 })
                 .catch(function() {
-                    $self.$message({
-                        message: "获取列表失败！",
-                        type: "warning"
-                    });
+                     $self.msgTips("获取列表失败！","warning"); 
                 });
         },
 
@@ -109,26 +108,21 @@ export default {
 
         //新建
         createNewForm(){
-            this.$refs.TrainForm.dialogFormVisibleTrain =  this.$refs.TrainForm.createForm_status =  true;
+             this.$refs.TrainForm.creatForm();
         },
 
         //编辑
         editForm(data){
-            //data.timestamp = new Date().getTime();
-          //  this.currentItem = data;
-            this.formDataFromIndex = data;
-          // console.log(this.formDataFromIndex);
+            this.$refs.TrainForm.setDataFromParent(data);
         },
         reloadList(params){
             if(params == "reload"){
+                this.params.pageNum = 1;
                 this.getList();
             }else{
                 this.$refs.TrainDetail.getFormDetails(params.id);
-               // this.$set(this.currentItem,params);
             }
         },
-
-
 
         //分页
         currentChange(pageNum) {
