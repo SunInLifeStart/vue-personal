@@ -169,7 +169,7 @@ export default {
     }
 </style>
 <style lang="scss" scoped>
-    #leave {
+    #Leave {
         .searchBtn {
             padding-right: 10px;
             .positionBtn{

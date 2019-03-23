@@ -1,6 +1,6 @@
 <template>
     <div id="NewsFilter">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="100px">
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="标题">
@@ -141,6 +141,6 @@ export default {
 </style>
 <style scoped>
     #NewsFilter >>> .el-form-item__content{
-        width: calc(100% - 80px);
+        width: calc(100% - 100px);
     }
 </style>
