@@ -20,20 +20,36 @@
                         <el-input v-model="formData.department" placeholder="请输入所属部门"></el-input>
                     </el-form-item>
                 </el-col>
-               
             </el-row>
             <el-row>
                 <el-col :span="12">
-                <el-form-item label="创建时间">
-                        <el-date-picker v-model="formData.createdTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%"></el-date-picker>
-                </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                     <el-form-item label="培训/学习(项目)" prop="trainingPrograms" label-width="120px">
-                        <el-input v-model="formData.trainingPrograms" placeholder="请输入项目" ></el-input>
+                    <el-form-item label="提单时间" prop="submitter">
+                        <el-input v-model="formData.submitter" placeholder="提单时间"></el-input>
                     </el-form-item>
                 </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="12">
+                    <el-form-item label="是否资金计划内">
+                        <span style="float:left">
+                             <el-radio v-model="formData.processId" label="1">是</el-radio>
+                             <el-radio v-model="formData.processId" label="2">否</el-radio>
+                        </span>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                <el-form-item label="培训时间" label-width="120px">
+                        <el-date-picker v-model="formData.createdTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
+                </el-form-item>
+                </el-col>
               </el-row>
+            <el-row>
+                <el-col :span="24">
+                  <el-form-item label="培训/学习(项目)" prop="trainingPrograms">
+                        <el-input type="textarea"  v-model="formData.trainingPrograms"  :autosize="{minRows: 3}"  placeholder="请输入项目" ></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="培训/学习(目的内容)">
@@ -50,24 +66,13 @@
                 </el-col>
             </el-row>
              <el-row>
-                <el-col :span="12">
+                <el-col :span="24">
                     <el-form-item label="日程安排">
-                        <el-input v-model="formData.schedule" placeholder="请输入日程安排"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="是否资金计划内"  label-width="250px">
-                        <span style="float:left">
-                             <el-radio v-model="formData.processId" label="1">是</el-radio>
-                             <el-radio v-model="formData.processId" label="2">否</el-radio>
-                        </span>
-                      
+                        <el-input  type="textarea" :autosize="{minRows: 3}"  v-model="formData.schedule" placeholder="请输入日程安排"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
-             
              <el-row>
-                
                 <el-col :span="24">
                     <el-form-item label="费用预算">
                        <span style="float:left"><el-input type="lowercase" clearable style="max-width:400px"  v-model="formData.lowercase" placeholder="小写入费用预算"></el-input></span>
@@ -233,7 +238,7 @@ export default {
                 submitter: "", //申请人
                 department: "", //所属部门
                 id: "",
-                //  committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
+                //committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
                 committed: "",
                 isAnnualPlan: "",
                 draftUnit: "",
@@ -265,74 +270,37 @@ export default {
             });
         },
         // 提交保存
-        saveForm(params) {
+        async saveForm(params) {
+            console.log(this.formData);
             const $self = this;
-            $self.$axios
-                .post("/api/v1/trainingApplication/save", $self.formData)
-                .then(response => {
-                    $self.msgTips("保存成功", "success");
-                    if( response.data.content &&  response.data.content.id){
-                         $self.formId = response.data.content.id;
-                    }
-                    $self.dialogFormVisibleTrain = false;
-                    $self.actionsUrl = `/workflow/motor-trainingapplication_train/${
-                        $self.formId
-                    }/${$self.$store.getters.LoginData.uid}/actions`;
+            let response = await $self.$application.saveFormData("/api/v1/trainingApplication/save",$self.formData,$self);
+            if (response) {
+                $self.formId = response.data.content.id;
+                $self.dialogFormVisibleTrain = false;
+                $self.actionsUrl = `/workflow/motor-trainingapplication_train/${
+                    $self.formId
+                }/${$self.$store.getters.LoginData.uid}/actions`;
 
-                    $self.signalUrl = `/workflow/motor-trainingapplication_train/${
-                        $self.formId
-                    }/${$self.$store.getters.LoginData.uid}/signal`;
+                $self.signalUrl = `/workflow/motor-trainingapplication_train/${
+                    $self.formId
+                }/${$self.$store.getters.LoginData.uid}/signal`;
 
-                     if ($self.createForm_status) {
-                        $self.$emit("reloadList", "reload"); //如果是 "新建" 表单刷新 "列表"
-                    } else {
-                        $self.$emit("reloadList", $self.formData); //如果是 "编辑" 表单刷新 "详情页"
-                    }
-                    // if (params) {
-                    //     $self.startSignalForStart(); //如果是 "提交" 启动工作流
-                    // } else {
-                    //     $self.startSignalForSave(); //如果是 "保存"  启动保存工作流
-                    // }
-                })
-                .catch(function() {
-                    $self.msgTips("保存失败！", "warning");
-                });
-        },
-        async startSignalForSave() {
-            let actions = await this.getActions();
-            let complete = await this.startSignal(actions.data.types[0]);
-            await this.emitMsg();
-        },
-        async startSignalForStart() {
-            let actions = await this.getActions();
-            let complete = await this.startSignal(actions.data.types[0]);
-            let actions2 = await this.getActions();
-            actions2.data.types = actions2.data.types.filter(function (item) {
-                        return item.action == "COMMIT";
-            });
-            let complete2 = await this.startSignal(actions2.data.types[0]);
-            await this.emitMsg();
-        },
-        async getActions() {
-            return await this.$axios.get(this.actionsUrl);
-        },
-        async startSignal(params) {
-            return await this.$axios.put(this.signalUrl, params);
-        },
-        async emitMsg() {
-            let $self = this;
-            if ($self.createForm_status) {
-                $self.$emit("reloadList", "reload"); //如果是 "新建" 表单刷新 "列表"
-            } else {
-                $self.$emit("reloadList", $self.formData); //如果是 "编辑" 表单刷新 "详情页"
+                if (params) {
+                    $self.$application.msgTips($self, "提交成功", "success");
+                    $self.$application.startSignalForStart($self); //如果是 "提交" 启动工作流
+                } else {
+                    $self.$application.msgTips($self, "保存成功", "success");
+                    $self.$application.startSignalForSave($self); //如果是 "保存"  启动保存工作流
+                }
+            }else{
+                 if (params) {
+                    $self.$application.msgTips($self, "提交失败", "warning");
+                } else {
+                    $self.$application.msgTips($self, "保存失败", "warning");
+                }
             }
         },
-        // getUsers() {
-        //     let $self = this;
-        //    this.axios.get("/api/v1/users").then(res => {
-        //        $self.users = res.data;
-        //     });
-        // },
+
 
         handleSuccess(response, file) {
             const self = this;
