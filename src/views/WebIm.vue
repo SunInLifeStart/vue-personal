@@ -24,19 +24,25 @@
                             </div>
                             <div class="main-users">
                                 <div v-if="searchNameResult.length == 0">
-                                <div :key="organ.id" v-for="organ in users" style="position:relative" >
-                                    <div class="organname" @click="setUserShow(organ)">{{organ.name}}
-                                        <i class="el-icon-arrow-left" v-show="!organ.status" style="float:right;color:rgb(0, 90, 158)"></i>
-                                        <i class="el-icon-arrow-down" v-show="organ.status" style="float:right;color:rgb(0, 90, 158)"></i></div>
-                                    <el-collapse-transition>
-                                        <div v-show="organ.status">
-                                            <div class="transition-box user" :key="user.id" :class="{active:toUser.id==user.id}" v-show="!user.hideCurrent" v-for="user in organ.users" @click="selectUser(user)" style="position:relative">
-                                                <span style="display:inline-block;width:22px;height:22px; text-align:center; line-height:22px; font-size:12px; background:#ccc;border-radius:50%;color:#FFF" :class="{'onlineavatar':user.online}">{{user.name[0]}}</span>
-                                                <span class="name" style="font-size:13px;font-weight:bold;color:#666">{{user.name}}</span>
-                                            </div>
-                                        </div>
-                                    </el-collapse-transition>
-                                </div>
+                                    <el-tree :data="users" :props="defaultProps" @node-click="selectUser">
+                                        <span class="custom-tree-node" slot-scope="{ node, data }">
+                                            <span v-if="!data.type" style="display:inline-block;width:22px;height:22px; text-align:center; line-height:22px; font-size:12px; background:#ccc;border-radius:50%;color:#FFF" :class="{'onlineavatar':data.online}">{{node.label[0]}}</span>
+                                            <span style="font-size:13px;font-weight:bold;color:#666">{{ node.label }}</span>
+                                        </span>
+                                    </el-tree>
+                                    <!--<div :key="organ.id" v-for="organ in users" style="position:relative" >-->
+                                    <!--<div class="organname" @click="setUserShow(organ)">{{organ.name}}-->
+                                        <!--<i class="el-icon-arrow-left" v-show="!organ.status" style="float:right;color:rgb(0, 90, 158)"></i>-->
+                                        <!--<i class="el-icon-arrow-down" v-show="organ.status" style="float:right;color:rgb(0, 90, 158)"></i></div>-->
+                                    <!--<el-collapse-transition>-->
+                                        <!--<div v-show="organ.status">-->
+                                            <!--<div class="transition-box user" :key="user.id" :class="{active:toUser.id==user.id}" v-show="!user.hideCurrent" v-for="user in organ.users" @click="selectUser(user)" style="position:relative">-->
+                                                <!--<span style="display:inline-block;width:22px;height:22px; text-align:center; line-height:22px; font-size:12px; background:#ccc;border-radius:50%;color:#FFF" :class="{'onlineavatar':user.online}">{{user.name[0]}}</span>-->
+                                                <!--<span class="name" style="font-size:13px;font-weight:bold;color:#666">{{user.name}}</span>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                    <!--</el-collapse-transition>-->
+                                <!--</div>-->
                                 </div>
                                 <div  v-if="searchNameResult.length > 0">
                                 <div class="user" :key="user.id" v-for="user in searchNameResult" @click="selectUser(user)" style="position:relative">
@@ -206,6 +212,10 @@ export default {
     name: "webim",
     data() {
         return {
+            defaultProps: {
+                children: 'children',
+                label: 'name'
+            },
             msgList: [],
             dialogList: [],
             content: "",
@@ -517,15 +527,15 @@ export default {
             });
         },
         selectUser(user) {
-            //if(this.$store.getters.LoginData.uid != user.id){
-            user.uid = user.id;
-            this.toUser = user;
-            this.currentPage = 0;
-            this.countpage = 1;
-            this.msgList = [];
-            this.getPerDialogHistory({ uid: user.id });
-            this.addDussList(this.toUser);
-            //}
+            if(!user.type){
+                user.uid = user.id;
+                this.toUser = user;
+                this.currentPage = 0;
+                this.countpage = 1;
+                this.msgList = [];
+                this.getPerDialogHistory({ uid: user.id });
+                this.addDussList(this.toUser);
+            }
         },
         selectDialog(user) {
             this.$set(user, "newMessageIcon", false);
@@ -633,7 +643,7 @@ export default {
                 this.arrGroupUsers = res.data;
             });
 
-            axios.get("/api/v1/users/list/organ").then(res => {
+            axios.get("/api/v1/users/list/organs").then(res => {
                 this.users = res.data;
             });
         },
@@ -888,6 +898,7 @@ export default {
             overflow: auto;
             -webkit-box-flex: 1;
             height: 100%;
+            padding-bottom: 50px;
             .emptytips {
                 text-align: center;
                 line-height: 200px;
@@ -900,7 +911,9 @@ export default {
                 cursor: pointer;
                 font-size: 13px;
             }
-
+            .onlineavatar {
+                background: #3b97dd !important;
+            }
             .user {
                 // display: flex;
                 justify-content: flex-start;
