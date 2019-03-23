@@ -1,21 +1,27 @@
 <template>
     <div id="Train">
-
-       
         <el-card class="box-card">
                <!-- 查询 -->
                 <div id="TrainFilter">
-                    <el-form :inline="true" class="demo-form-inline">
-                        <el-form-item label="申请人">
-                            <el-input placeholder="请输入申请人" v-model="params.submitter"></el-input>
-                        </el-form-item>
-                        <el-form-item label="所属部门">
-                            <el-input placeholder="请输入所属部门" v-model="params.department"></el-input>
-                        </el-form-item>
-                        <el-form-item>
-                            <el-button type="primary" @click="searchList">查询</el-button>
-                            <el-button type="primary" @click="resetInput">重置</el-button>
-                        </el-form-item>
+                    <el-form :inline="true" label-width="70px" label-position="left" class="demo-form-inline">
+                        <el-row>
+                            <el-col :span="8">
+                                <el-form-item label="申请人">
+                                    <el-input placeholder="请输入申请人" v-model="params.submitter"></el-input>
+                                </el-form-item>
+                            </el-col>
+                           <el-col :span="8">
+                                <el-form-item label="所属部门">
+                                    <el-input placeholder="请输入所属部门" v-model="params.department"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8" >
+                                <el-form-item class="">
+                                    <el-button type="primary" @click="searchList">查询</el-button>
+                                    <el-button  @click="resetInput">重置</el-button>
+                                </el-form-item>
+                            </el-col>
+                         </el-row>
                     </el-form>
                 </div>
 
@@ -33,9 +39,9 @@
                     </el-table-column>
                     <el-table-column prop="participant" label="培训/学习(参加人员)">
                     </el-table-column>
-                    <el-table-column prop="schedule" label="日程安排">
+                    <el-table-column prop="schedule" width="250" label="日程安排">
                     </el-table-column> -->
-                     <el-table-column label="操作" width="200">
+                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left" >
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
@@ -60,22 +66,22 @@
     </div>
 </template>
 <script>
-import TrainForm from './TrainForm';
+import TrainForm from "./TrainForm";
 import TrainDetail from "./TrainDetail";
 export default {
     name: "Train",
     data() {
         return {
-            tableData:[],
-            formDetails:{},
-            formId:"",
-            params:{
+            tableData: [],
+            formDetails: {},
+            formId: "",
+            params: {
                 pageNum: 1,
                 pageSize: 5,
-                department:"",
-                submitter:"",
-                total:0
-            },
+                department: "",
+                submitter: "",
+                total: 0
+            }
         };
     },
     components: {
@@ -84,42 +90,41 @@ export default {
     },
     methods: {
         //获取列表
-        getList(pageNum) {
+         async getList(pageNum) {
             let $self = this;
-            $self.$axios
-                .post("/api/v1/trainingApplication/queryList", $self.params)
-                .then(response => {
-                        if(response.data.content.list.length > 0){
-                            let formId = response.data.content.list[0].id;
-                            $self.$refs.TrainDetail.getFormDetails(formId);
-                        }
-                        $self.tableData = response.data.content.list;
-                        $self.params.total = response.data.content.total;
-                })
-                .catch(function() {
-                     $self.msgTips("获取列表失败！","warning"); 
-                });
+            $self.url = "/api/v1/trainingApplication/queryList";
+            let response = await $self.$application.getQueryList($self);
+            if (response) {
+                if (response.data.content.list.length > 0) {
+                    let formId = response.data.content.list[0].id;
+                    $self.$refs.TrainDetail.getFormDetails(formId);
+                }
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
+            } else {
+                $self.$application.msgTips($self, "获取列表失败", "warning");
+            }
         },
 
         //选择行
-        showCurrentId(row){
-           this.$refs.TrainDetail.getFormDetails(row.id);
+        showCurrentId(row) {
+            this.$refs.TrainDetail.getFormDetails(row.id);
         },
 
         //新建
-        createNewForm(){
-             this.$refs.TrainForm.creatForm();
+        createNewForm() {
+            this.$refs.TrainForm.creatForm();
         },
 
         //编辑
-        editForm(data){
+        editForm(data) {
             this.$refs.TrainForm.setDataFromParent(data);
         },
-        reloadList(params){
-            if(params == "reload"){
+        reloadList(params) {
+            if (params == "reload") {
                 this.params.pageNum = 1;
                 this.getList();
-            }else{
+            } else {
                 this.$refs.TrainDetail.getFormDetails(params.id);
             }
         },
@@ -133,13 +138,12 @@ export default {
             this.params.pageSize = pageSize;
             this.getList();
         },
-        searchList(){
+        searchList() {
             this.getList();
         },
-        resetInput(){
+        resetInput() {
             this.params.submitter = this.params.department = "";
         }
-        
     },
     mounted() {
         this.getList();
@@ -147,4 +151,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+   
+      #TrainFilter  .el-form-item--small.el-form-item{
+            width: 100%;
+        }
+</style>
+<style scoped>
+  #TrainFilter >>> .el-form-item__content{
+        width: calc(100% - 80px);
+    }
 </style>

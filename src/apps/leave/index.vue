@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="Leave">
         <el-card class="box-card">
             <LeaveFilter @searchList="getSearchOptions"></LeaveFilter>
             <div class="toolbar">

@@ -1,6 +1,6 @@
 <template>
     <div id="DiscussionForm">
-        <el-form :model="rows" label-width="150px" ref="formupdate">
+        <el-form :model="rows" label-width="140px" ref="formupdate">
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="流水号:">
@@ -569,5 +569,8 @@ export default {
 <style scoped>
     .tableNoBorder >>> .el-input--small .el-input__inner{
         border: none;
+    }
+    #DiscussionForm >>> .el-form-item__content{
+        width: calc(100% - 140px);
     }
 </style>

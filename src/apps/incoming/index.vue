@@ -3,13 +3,14 @@
         <div class="content-container">
             <el-card class="box-card">
                 <IncomingFilter @searchList="getSearchOptions"></IncomingFilter>
+            </el-card>
+            <el-card class="box-card card_margin_10">
                 <div class="toolbar">
                     <el-button type="primary" icon="el-icon-plus" @click="createForm">新建</el-button>
                 </div>
                 <IncomingList ref="incominglist" @showStatus="showStatus" @formId="getFormId" @editForm="editForm" :searchOptions="searchOptions"></IncomingList>
             </el-card>
-            <br>
-            <el-card class="box-card">
+            <el-card class="box-card card_margin_10">
                 <IncomingDetail :formId="formId" ref="incomingdetail"></IncomingDetail>
             </el-card>
         </div>
@@ -97,4 +98,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+    #Incoming {
+        .card_margin_10 {
+            margin-top: 10px;
+        }
+    }
 </style>
