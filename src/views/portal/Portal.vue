@@ -29,34 +29,34 @@
                <countTo :startVal='0' :endVal='totalAssets' :duration='1000'></countTo>
                <label class="unit">亿</label>
             </span>
-            <p>总资产</p>
+            <p>总投资额</p>
           </el-col>
           <el-col :span="6">
            <span class="number">
                <countTo :startVal='0' :endVal='fundedProjects' :duration='1000'></countTo>
-              <label class="unit">个</label>
+              <label class="unit">家</label>
             </span>
-             <p>出资项目</p>
+             <p>企业落地数量</p>
           </el-col>
           <el-col :span="6">
            <span class="number">
                <countTo :startVal='0' :endVal='serviceFirm' :duration='1000'></countTo>
-                <label class="unit">家</label>
+                <label class="unit">千万</label>
             </span>
-              <p>年均服务科技企业</p>
+              <p>年税收额</p>
           </el-col>
           <el-col :span="6">
             <span class="number">
                <countTo :startVal='0' :endVal='construction' :duration='1000'></countTo>
-                <label class="unit">万平方米</label>
+                <label class="unit">家</label>
             </span>
-              <p>建设科技载体</p>
+              <p>企业动工数量</p>
           </el-col>
         </el-row>
         <el-row class="articles" :gutter="15">
           <el-col :span="8">
               <div class="article">
-                  <h3>领导讲话<router-link :to="{path:'/portal/list/leaderSpeech/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+                  <h3>通知公告<router-link :to="{path:'/portal/list/leaderSpeech/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
                     <li v-for="(item,index) in leaderSpeech" :key="item.articleId">
                      <img src="@/assets/leader3.png" align="middle" v-if="index == 0"> 
@@ -70,7 +70,7 @@
           </el-col>
           <el-col :span="8">
               <div class="article">
-                  <h3>通知公告<router-link :to="{path:'/portal/list/anno/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+                  <h3>公司发文<router-link :to="{path:'/portal/list/anno/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
                     <li v-for="(item,index) in anno" :key="item.articleId" style="padding-left:10px;">
                     <span style="color: #ea3476;"  v-if="index == 0"> •</span>
@@ -83,7 +83,7 @@
           </el-col>
           <el-col :span="8">
              <div class="article">
-                  <h3>集团发文<router-link :to="{path:'/portal/list/outgoing/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+                  <h3>通讯录/会表<router-link :to="{path:'/portal/list/outgoing/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
                     <li v-for="(item,index) in outgoing" :key="item.articleId" style="padding-left:10px;">
                     <span style="color: #ea3476;"  v-if="index == 0"> •</span>
@@ -98,7 +98,7 @@
         <el-row class="articles" :gutter="15">
           <el-col :span="8">
              <div class="article article2">
-                  <h3>规章制度<router-link :to="{path:'/portal/list/nstitution/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+                  <h3>督办上墙<router-link :to="{path:'/portal/list/nstitution/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
                     <li v-for="(item,index) in nstitution" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px">
                        <img src="@/assets/arrow.png"  v-if="index == 0" style="top:15px;"> 
@@ -113,7 +113,7 @@
             <el-row>
               <!-- <router-link :to="{path:'/portal/list2'}"><img class="dang" src="@/assets/dang.jpg"></router-link> -->
               <div class="article article2">
-                  <h3>工作简报<router-link :to="{path:'/portal/list/briefing/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+                  <h3>规章制度<router-link :to="{path:'/portal/list/briefing/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
                     <li v-for="(item,index) in briefing" :key="item.articleId" style="padding-left:35px; height:40px;line-height:40px">
                       <img src="@/assets/briefing.png"  v-if="index != 0"> 
