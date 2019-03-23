@@ -125,6 +125,12 @@ export default {
 </script>
 <style lang="scss" scoped>
     #OutgoingFilter {
+        .searchBtn {
+            padding-right: 10px;
+            .positionBtn{
+                text-align: right;
+            }
+        }
         .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
             width: 100%;
         }
@@ -133,16 +139,6 @@ export default {
         }
         .el-select {
             width: 100%;
-        }
-    }
-</style>
-<style lang="scss" scoped>
-    #Outgoing {
-        .searchBtn {
-            padding-right: 10px;
-            .positionBtn{
-                text-align: right;
-            }
         }
     }
 </style>

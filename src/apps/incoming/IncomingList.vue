@@ -7,12 +7,12 @@
             </el-table-column>
             <el-table-column prop="wordNo" label="来文字号">
             </el-table-column>
-            <el-table-column prop="status" label="单据状态" width="200">
+            <el-table-column prop="status" label="单据状态" width="100">
                 <template slot-scope="scope">
                     {{scope.row.status | filterStatus }}
                 </template>
             </el-table-column>
-            <el-table-column prop="receiptDate" label="收文日期">
+            <el-table-column prop="receiptDate" label="收文日期" width="100">
             </el-table-column>
             <el-table-column label="操作" width="200">
                 <!-- <template slot-scope="scope">
