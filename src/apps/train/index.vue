@@ -60,22 +60,22 @@
     </div>
 </template>
 <script>
-import TrainForm from './TrainForm';
+import TrainForm from "./TrainForm";
 import TrainDetail from "./TrainDetail";
 export default {
     name: "Train",
     data() {
         return {
-            tableData:[],
-            formDetails:{},
-            formId:"",
-            params:{
+            tableData: [],
+            formDetails: {},
+            formId: "",
+            params: {
                 pageNum: 1,
                 pageSize: 5,
-                department:"",
-                submitter:"",
-                total:0
-            },
+                department: "",
+                submitter: "",
+                total: 0
+            }
         };
     },
     components: {
@@ -84,42 +84,41 @@ export default {
     },
     methods: {
         //获取列表
-        getList(pageNum) {
+         async getList(pageNum) {
             let $self = this;
-            $self.$axios
-                .post("/api/v1/trainingApplication/queryList", $self.params)
-                .then(response => {
-                        if(response.data.content.list.length > 0){
-                            let formId = response.data.content.list[0].id;
-                            $self.$refs.TrainDetail.getFormDetails(formId);
-                        }
-                        $self.tableData = response.data.content.list;
-                        $self.params.total = response.data.content.total;
-                })
-                .catch(function() {
-                     $self.msgTips("获取列表失败！","warning"); 
-                });
+            $self.url = "/api/v1/trainingApplication/queryList";
+            let response = await $self.$application.getQueryList($self);
+            if (response) {
+                if (response.data.content.list.length > 0) {
+                    let formId = response.data.content.list[0].id;
+                    $self.$refs.TrainDetail.getFormDetails(formId);
+                }
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
+            } else {
+                $self.$application.msgTips($self, "获取列表失败", "warning");
+            }
         },
 
         //选择行
-        showCurrentId(row){
-           this.$refs.TrainDetail.getFormDetails(row.id);
+        showCurrentId(row) {
+            this.$refs.TrainDetail.getFormDetails(row.id);
         },
 
         //新建
-        createNewForm(){
-             this.$refs.TrainForm.creatForm();
+        createNewForm() {
+            this.$refs.TrainForm.creatForm();
         },
 
         //编辑
-        editForm(data){
+        editForm(data) {
             this.$refs.TrainForm.setDataFromParent(data);
         },
-        reloadList(params){
-            if(params == "reload"){
+        reloadList(params) {
+            if (params == "reload") {
                 this.params.pageNum = 1;
                 this.getList();
-            }else{
+            } else {
                 this.$refs.TrainDetail.getFormDetails(params.id);
             }
         },
@@ -133,13 +132,12 @@ export default {
             this.params.pageSize = pageSize;
             this.getList();
         },
-        searchList(){
+        searchList() {
             this.getList();
         },
-        resetInput(){
+        resetInput() {
             this.params.submitter = this.params.department = "";
         }
-        
     },
     mounted() {
         this.getList();

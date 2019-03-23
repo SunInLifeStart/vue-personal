@@ -7,6 +7,7 @@ import store from './store'
 import moment from 'moment'
 import common from './plugins/common.js'
 import Print from './plugins/print.js'
+import application from './apps/application.js'
 import './assets/animate.css'
 import './assets/normalize.css'
 import './scss/element-variables.scss'
@@ -23,12 +24,7 @@ Vue.component('split-pane', splitPane);
 Vue.use(Print);
 Vue.prototype.common = common;
 Vue.prototype.$axios = axios;
-Vue.prototype.msgTips = function msgTips(message,type){
-    this.$message({ 
-      message: message,
-      type: type
-    });
-}
+Vue.prototype.$application = application;
 
 Vue.config.productionTip = false;
 moment.locale('zh-cn');
