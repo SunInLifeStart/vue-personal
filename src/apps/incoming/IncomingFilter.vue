@@ -32,10 +32,10 @@
                         <el-date-picker v-model="formInline.created" placeholder="收文日期"></el-date-picker>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                    <el-form-item>
+                <el-col :span="8" class="searchBtn">
+                    <el-form-item class="positionBtn">
                         <el-button type="primary" @click="onSubmit">查询</el-button>
-                        <el-button type="primary" @click="onReset">重置</el-button>
+                        <el-button @click="onReset">重置</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -122,6 +122,12 @@ export default {
 
 <style lang="scss" scoped>
     #IncomingFilter {
+        .searchBtn {
+            padding-right: 10px;
+            .positionBtn{
+                text-align: right;
+            }
+        }
         .el-date-editor.el-input, .el-date-editor.el-input__inner {
             width: 100%;
         }
