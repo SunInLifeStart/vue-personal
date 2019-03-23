@@ -2,13 +2,14 @@
     <div id="Discussion">
         <el-card class="box-card">
             <DiscussionFilter @searchList="getBoardSearchOptions"></DiscussionFilter>
+        </el-card>
+        <el-card class="box-card card_margin_10">
             <div class="toolbar">
                 <el-button type="primary" icon="el-icon-plus" @click="cleanform">新建</el-button>
             </div>
             <DiscussionList ref="Discussionlist" @formId="getBoardFormId" @editForm="editBoardForm" :searchOptions="searchBoardOptions" @showStatus="showStatus"></DiscussionList>
         </el-card>
-        <br>
-        <el-card class="box-card">
+        <el-card class="box-card card_margin_10">
             <DiscussionDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="DiscussionDetail"></DiscussionDetail>
         </el-card>
         <el-dialog title="议题呈报" :visible.sync="dialogFormVisibleDiscussion" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
@@ -97,4 +98,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+    #Discussion {
+        .card_margin_10 {
+            margin-top: 10px;
+        }
+    }
 </style>
