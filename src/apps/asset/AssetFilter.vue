@@ -1,28 +1,43 @@
 <template>
     <div id="AssetFilter">
-        <el-form :inline="true" :model="formInline" class="demo-form-inline">
-            <el-form-item label="申请人：">
-                <el-input placeholder="申请人" v-model="formInline.proposer"></el-input>
-            </el-form-item>
-            <el-form-item label="申请部门：">
-                <el-input placeholder="申请部门" v-model="formInline.applyDept "></el-input>
-            </el-form-item>
-            <el-form-item label="单据状态：" prop="status">
-                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
-                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
-                    </el-option>
-                </el-select>
-            </el-form-item>
-            <el-form-item label="申请时间：">
-                <div class="block">
-                    <el-date-picker v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                    </el-date-picker>
-                </div>
-            </el-form-item>
-            <el-form-item>
-                <el-button type="primary" v-on:click="onSubmit">查询</el-button>
-                <el-button type="primary" v-on:click="onReset">重置</el-button>
-            </el-form-item>
+        <el-form :inline="true" :model="formInline" class="demo-form-inline" label-width="100px">
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="申请人：">
+                        <el-input v-model="formInline.proposer" placeholder="申请人："></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="申请部门：">
+                        <el-input v-model="formInline.applyDept" placeholder="申请部门："></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="单据状态：" prop="status">
+                        <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
+                            <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="申请时间：">
+                        <div class="block">
+                            <el-date-picker v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                            </el-date-picker>
+                        </div>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="16" class="searchBtn">
+                    <el-form-item class="positionBtn">
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button @click="onReset">重置</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
         </el-form>
     </div>
 </template>
@@ -97,3 +112,31 @@ export default {
     }
 };
 </script>
+<style lang="scss" scoped>
+    #AssetFilter {
+        .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
+            width: 100%;
+        }
+        .el-form-item--small.el-form-item{
+            width: 100%;
+        }
+        .el-select {
+            width: 100%;
+        }
+    }
+</style>
+<style lang="scss" scoped>
+    #Asset {
+        .searchBtn {
+            padding-right: 10px;
+            .positionBtn{
+                text-align: right;
+            }
+        }
+    }
+</style>
+<style scoped>
+    #AssetFilter >>> .el-form-item__content{
+        width: calc(100% - 100px);
+    }
+</style>

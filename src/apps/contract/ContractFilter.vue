@@ -22,9 +22,8 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="8">&nbsp;</el-col>
-                <el-col :span="8">
-                    <el-form-item>
+                <el-col :span="24" class="searchBtn">
+                    <el-form-item class="positionBtn">
                         <el-button type="primary" @click="onSubmit">查询</el-button>
                         <el-button type="primary" @click="onReset">重置</el-button>
                     </el-form-item>
@@ -99,3 +98,31 @@ export default {
     }
 };
 </script>
+<style lang="scss" scoped>
+    #ContractFilter {
+        .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {
+            width: 100%;
+        }
+        .el-form-item--small.el-form-item{
+            width: 100%;
+        }
+        .el-select {
+            width: 100%;
+        }
+    }
+</style>
+<style lang="scss" scoped>
+    #Contract {
+        .searchBtn {
+            padding-right: 10px;
+            .positionBtn{
+                text-align: right;
+            }
+        }
+    }
+</style>
+<style scoped>
+    #ContractFilter >>> .el-form-item__content{
+        width: calc(100% - 90px);
+    }
+</style>
