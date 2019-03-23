@@ -25,7 +25,7 @@
                 </el-col>
                 <el-col :span="24">
                     <el-form-item label="资产类型" prop="remark">
-                       <el-select v-model="selectItem.assetsType" placeholder="请选择" filterable>
+                       <el-select v-model="selectItem.assetType" placeholder="请选择" filterable>
                             <el-option v-for="item in assetTypes" :key="item.id" :label="item.name" :value="item.name">
                             </el-option>
                         </el-select>
