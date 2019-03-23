@@ -66,8 +66,9 @@ module.exports = {
     devServer: {
         port: 8889,
         proxy: {
+
             "/api/": {
-            target: "http://116.117.157.232"
+                target: "http://116.117.157.232"
             },
             "/budget/": {
             target: "http://116.117.157.232"
@@ -81,15 +82,21 @@ module.exports = {
             "/thumb": {
                 target: "http://116.117.157.232"
             },
-            "/trainingApplication": {
-                target: "http://192.168.1.113:8751"
-            },
             "/socket.io": {
                 target: "http://116.117.157.232",
                 ws: true,
                 changeOrigin: true
             },
-           
+            // "query": {
+            //     target: "http://192.168.0.253:10148",
+            //     ws: true,
+            //     changeOrigin: true
+            // },
+            "/get":{
+                target: "http://192.168.0.253:10148",
+                ws: true,
+                changeOrigin: true
+            }
         }
     },
     pages: {

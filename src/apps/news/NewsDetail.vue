@@ -188,7 +188,7 @@ export default {
     mounted() {
         if (this.formId != '') {
             this.getForm();
-            this.getActions();
+            // this.getActions();
             this.getAllUsers();
         }
     },
@@ -196,7 +196,7 @@ export default {
         formId: function() {
             this.getForm();
             if (this.formId != '') {
-                this.getActions();
+                // this.getActions();
                 this.getAllUsers();
             } else {
                 this.tableData = {};
@@ -299,8 +299,8 @@ export default {
                 if (action.type == 'PULL') {
                     axios.get(`/api/v1/news/${self.formId}/pull`).then(res => {
                         self.comment('formOnlyComment');
-                        self.getActions();
-                        self.getCrumbs();
+                        // self.getActions();
+                        // self.getCrumbs();
                     });
                 }
                 if (action.type == 'COMMIT' && this.crumbNodeName == '申请') {
@@ -360,7 +360,7 @@ export default {
                 })
                 .then(res => {
                     self.getForm();
-                    self.getActions();
+                    // self.getActions();
                     if (comment == 'formOnlyComment') {
                         self.$message({
                             message: self.currentAction.name + '成功',
@@ -502,7 +502,7 @@ export default {
                                 assignees: atIds
                             })
                             .then(res => {
-                                this.getActions();
+                                // this.getActions();
                             });
                     }
                 });
