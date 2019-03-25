@@ -1,5 +1,5 @@
 <template>
-<el-dialog title="外部培训申请表" :visible.sync="dialogFormVisibleTrain" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">  
+<el-dialog title="外部培训申请表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">  
     <div id="TrainForm">
         <el-form :model="formData" label-width="100px" :rules="rules" ref="formupdate">
             <!-- <el-row >
@@ -32,14 +32,14 @@
                 <el-col :span="12">
                     <el-form-item label="是否资金计划内">
                         <span style="float:left">
-                             <el-radio v-model="formData.processId" label="1">是</el-radio>
-                             <el-radio v-model="formData.processId" label="2">否</el-radio>
+                             <el-radio v-model="formData.type" label="true">是</el-radio>
+                             <el-radio v-model="formData.type" label="false">否</el-radio>
                         </span>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                 <el-form-item label="培训时间" label-width="120px">
-                        <el-date-picker v-model="formData.createdTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%" value-format="yyyy-MM-dd hh:mm:ss"></el-date-picker>
+                        <el-date-picker v-model="formData.trainingTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%" value-format="yyyy-MM-dd"></el-date-picker>
                 </el-form-item>
                 </el-col>
               </el-row>
@@ -113,16 +113,17 @@
 /* eslint-disable */
 import moment from "moment";
 import FilesOperate from "../FilesOperate";
-import { debug, debuglog } from "util";
+import { application } from "../application.js";
+import { publicMethods } from "../application.js";
 export default {
+    mixins: [publicMethods],
     name: "TrainForm",
     data() {
         return {
-            dialogFormVisibleTrain: false,
+            dialogFormVisible: false,
             formData: this.resetForm(),
-            formId: "108",
-            signalUrl: "",
             users: [],
+            appFlowName: "motor-trainingapplication_train",
             rules: {
                 submitter: [
                     {
@@ -225,12 +226,13 @@ export default {
     methods: {
         setDataFromParent(data) {
             this.formData = data;
-            this.dialogFormVisibleTrain = true;
+            this.formId = data.id;
+            this.dialogFormVisible = true;
             this.createForm_status = false;
         },
-        creatForm() {
+        createForm() {
             this.formData = this.resetForm();
-            this.dialogFormVisibleTrain = this.createForm_status = true;
+            this.dialogFormVisible = this.createForm_status = true;
         },
         resetForm() {
             let formData = {
@@ -251,13 +253,15 @@ export default {
                 trainingContent: "",
                 participant: "",
                 processId: "",
+                type: "true",
                 suggestion: "",
                 consts: "",
                 upper: "",
                 lowercase: "",
                 schedule: "",
                 remarks: "",
-                writer: ""
+                writer: "",
+                trainingTime: []
                 //  created: moment(new Date()).format("YYYY-MM-DD")
             };
             return formData;
@@ -271,37 +275,44 @@ export default {
         },
         // 提交保存
         async saveForm(params) {
-            console.log(this.formData);
             const $self = this;
-            let response = await $self.$application.saveFormData("/api/v1/trainingApplication/save",$self.formData,$self);
+            let response = await $self.saveFormData(
+                "/api/v1/trainingApplication/save",
+                $self.formData
+            );
             if (response) {
                 $self.formId = response.data.content.id;
-                $self.dialogFormVisibleTrain = false;
-                $self.actionsUrl = `/workflow/motor-trainingapplication_train/${
-                    $self.formId
-                }/${$self.$store.getters.LoginData.uid}/actions`;
-
-                $self.signalUrl = `/workflow/motor-trainingapplication_train/${
-                    $self.formId
-                }/${$self.$store.getters.LoginData.uid}/signal`;
-
+                $self.dialogFormVisible = false;
                 if (params) {
-                    $self.$application.msgTips($self, "提交成功", "success");
-                    $self.$application.startSignalForStart($self); //如果是 "提交" 启动工作流
+                    $self.msgTips("提交成功", "success");
+                    if (this.createForm_status) {
+                        $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
+                    } else {                              
+                        let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
+                        actions.data.types = actions.data.types.filter(
+                            function(item) {
+                                return item.action == "COMMIT";
+                            }
+                        );
+                       await $self.startSignal(actions.data.types[0]);
+                       $self.emitMessage();
+                    }
                 } else {
-                    $self.$application.msgTips($self, "保存成功", "success");
-                    $self.$application.startSignalForSave($self); //如果是 "保存"  启动保存工作流
+                    $self.msgTips("保存成功", "success");
+                    if (this.createForm_status) {
+                        $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
+                    } else {
+                        $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
+                    }
                 }
-            }else{
-                 if (params) {
-                    $self.$application.msgTips($self, "提交失败", "warning");
+            } else {
+                if (params) {
+                    $self.msgTips($self, "提交失败", "warning");
                 } else {
-                    $self.$application.msgTips($self, "保存失败", "warning");
+                    $self.msgTips($self, "保存失败", "warning");
                 }
             }
         },
-
-
         handleSuccess(response, file) {
             const self = this;
             if (response.length > 0) {
