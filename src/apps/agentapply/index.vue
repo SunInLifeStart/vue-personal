@@ -2,20 +2,21 @@
     <div id="AgentApply">
         <el-card class="box-card">
             <AgentApplyFilter @searchList="getBoardSearchOptions"></AgentApplyFilter>
+        </el-card>
+        <el-card class="box-card card_margin_10">
             <div class="toolbar">
                 <el-button type="primary" icon="el-icon-plus" @click="cleanform">新建</el-button>
             </div>
             <AgentApplyList ref="AgentApplylist" @formId="getBoardFormId" @editForm="editBoardForm" :searchOptions="searchBoardOptions" @showStatus="showStatus"></AgentApplyList>
         </el-card>
-        <br>
-        <el-card class="box-card">
+        <el-card class="box-card card_margin_10">
             <AgentApplyDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="AgentApplyDetail"></AgentApplyDetail>
         </el-card>
         <el-dialog title="会议申请(总办会/党支委会)" :visible.sync="dialogFormVisibleAgentApply" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
             <AgentApplyForm @refreshData="refreshBoardData" @refreshDetail="refreshDetail" @saveStatus="saveStatus" ref="AgentApplyform" :formId="dialogBoardFormId" :operationType="operationBoardType"></AgentApplyForm>
             <div slot="footer" class="dialog-footer">
-                <el-button type="default" v-if="this.statusNews == ''" @click="saveBoardForm">保存</el-button>
-                <el-button type="primary" @click="submitBoardForm">提交</el-button>
+                <el-button type="primary" v-if="this.statusNews == ''" @click="saveBoardForm">保存</el-button>
+                <!--<el-button type="primary" @click="submitBoardForm">提交</el-button>-->
                 <!-- <el-button type="default">撤销</el-button> -->
             </div>
         </el-dialog>
@@ -97,4 +98,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+    #AgentApply {
+        .card_margin_10 {
+            margin-top: 10px;
+        }
+    }
 </style>

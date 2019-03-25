@@ -1,15 +1,18 @@
 <template>
     <div id="ApplyMeetingList">
         <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-            <el-table-column prop="numbers" label="董事会编号">
+            <el-table-column prop="number" label="流水号">
             </el-table-column>
-            <el-table-column prop="filetitle" label="文件标题">
+            <el-table-column prop="creatorName" label="提单人">
             </el-table-column>
-            <el-table-column prop="drafter" label="拟稿人">
+            <el-table-column prop="organName" label="所属部门">
             </el-table-column>
-            <el-table-column prop="draftUnit" label="拟稿单位">
+            <el-table-column prop="committed" label="提单时间">
             </el-table-column>
-            <el-table-column prop="status" label="单据状态" width="200"></el-table-column>
+            <el-table-column prop="applyDepartment" label="提请部门">
+            </el-table-column>
+            <el-table-column prop="timeApplication" label="提请时间">
+            </el-table-column>
             <el-table-column label="操作" width="200">
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.showedit== true || scope.row.status == '已保存'">

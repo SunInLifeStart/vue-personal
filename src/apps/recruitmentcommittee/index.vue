@@ -2,20 +2,21 @@
     <div id="RecruitmentCommittee">
         <el-card class="box-card">
             <RecruitmentCommitteeFilter @searchList="getBoardSearchOptions"></RecruitmentCommitteeFilter>
+        </el-card>
+        <el-card class="box-card card_margin_10">
             <div class="toolbar">
                 <el-button type="primary" icon="el-icon-plus" @click="cleanform">新建</el-button>
             </div>
             <RecruitmentCommitteeList ref="RecruitmentCommitteelist" @formId="getBoardFormId" @editForm="editBoardForm" :searchOptions="searchBoardOptions" @showStatus="showStatus"></RecruitmentCommitteeList>
         </el-card>
-        <br>
-        <el-card class="box-card">
+        <el-card class="box-card card_margin_10">
             <RecruitmentCommitteeDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="RecruitmentCommitteeDetail"></RecruitmentCommitteeDetail>
         </el-card>
         <el-dialog title="会议申请(招采委员会)" :visible.sync="dialogFormVisibleRecruitmentCommittee" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
             <RecruitmentCommitteeForm @refreshData="refreshBoardData" @refreshDetail="refreshDetail" @saveStatus="saveStatus" ref="RecruitmentCommitteeform" :formId="dialogBoardFormId" :operationType="operationBoardType"></RecruitmentCommitteeForm>
             <div slot="footer" class="dialog-footer">
-                <el-button type="default" v-if="this.statusNews == ''" @click="saveBoardForm">保存</el-button>
-                <el-button type="primary" @click="submitBoardForm">提交</el-button>
+                <el-button type="primary" v-if="this.statusNews == ''" @click="saveBoardForm">保存</el-button>
+                <!--<el-button type="primary" @click="submitBoardForm">提交</el-button>-->
                 <!-- <el-button type="default">撤销</el-button> -->
             </div>
         </el-dialog>
@@ -97,4 +98,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+    #RecruitmentCommittee {
+        .card_margin_10 {
+            margin-top: 10px;
+        }
+    }
 </style>

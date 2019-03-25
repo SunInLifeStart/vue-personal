@@ -2,20 +2,21 @@
     <div id="ApplyMeeting">
         <el-card class="box-card">
             <ApplyMeetingFilter @searchList="getBoardSearchOptions"></ApplyMeetingFilter>
+        </el-card>
+        <el-card class="box-card card_margin_10">
             <div class="toolbar">
                 <el-button type="primary" icon="el-icon-plus" @click="cleanform">新建</el-button>
             </div>
             <ApplyMeetingList ref="ApplyMeetinglist" @formId="getBoardFormId" @editForm="editBoardForm" :searchOptions="searchBoardOptions" @showStatus="showStatus"></ApplyMeetingList>
         </el-card>
-        <br>
-        <el-card class="box-card">
+        <el-card class="box-card card_margin_10">
             <ApplyMeetingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ApplyMeetingDetail"></ApplyMeetingDetail>
         </el-card>
         <el-dialog title="会议申请" :visible.sync="dialogFormVisibleApplyMeeting" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
             <ApplyMeetingForm @refreshData="refreshBoardData" @refreshDetail="refreshDetail" @saveStatus="saveStatus" ref="ApplyMeetingform" :formId="dialogBoardFormId" :operationType="operationBoardType"></ApplyMeetingForm>
             <div slot="footer" class="dialog-footer">
                 <el-button type="default" v-if="this.statusNews == ''" @click="saveBoardForm">保存</el-button>
-                <el-button type="primary" @click="submitBoardForm">提交</el-button>
+                <!--<el-button type="primary" @click="submitBoardForm">提交</el-button>-->
                 <!-- <el-button type="default">撤销</el-button> -->
             </div>
         </el-dialog>
@@ -97,4 +98,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+    #ApplyMeeting {
+        .card_margin_10 {
+            margin-top: 10px;
+        }
+    }
 </style>
