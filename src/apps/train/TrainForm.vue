@@ -75,9 +75,9 @@
              <el-row>
                 <el-col :span="24">
                     <el-form-item label="费用预算">
-                       <span style="float:left"><el-input type="lowercase" clearable style="max-width:400px"  v-model="formData.lowercase" placeholder="小写入费用预算"></el-input></span>
+                       <span style="float:left"><el-input type="number" clearable style="width:400px"  v-model="formData.lowercase" placeholder="小写入费用预算"></el-input></span>
                        <!-- @change="numberToChinese(formData.lowercase)" -->
-                      <span  style="float:left"><el-input clearable style="max-width:400px" v-model="formData.upper" placeholder="大写入费用预算"></el-input></span>
+                      <span  style="float:left"><el-input clearable style="width:400px" v-model="formData.upper" placeholder="大写入费用预算" disabled></el-input></span>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -220,6 +220,11 @@ export default {
             }
         };
     },
+     watch: {
+      'formData.lowercase'(val) {
+          this.formData.upper = val ? this.convertCurrency(val) : "";
+      }
+    },
     components: {
         FilesOperate
     },
@@ -353,5 +358,9 @@ export default {
             }
         }
     }
+    input[type=number]::-webkit-inner-spin-button,  
+    input[type=number]::-webkit-outer-spin-button {  
+    -webkit-appearance: none;
+}
 }
 </style>
