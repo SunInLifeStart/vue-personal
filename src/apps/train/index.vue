@@ -40,14 +40,14 @@
                     <el-table-column prop="participant" label="培训/学习(参加人员)">
                     </el-table-column>
                     <el-table-column prop="schedule" width="250" label="日程安排">
-                    </el-table-column>
+                    </el-table-column> -->
                      <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left" >
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
                             <el-tooltip class="item" effect="dark" content="删除" placement="left">
-                                <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
+                                <el-button type="text" icon="el-icon-delete" @click="deleteItem(scope.row)"></el-button>
                             </el-tooltip>
                         </template>
                     </el-table-column>
@@ -68,9 +68,7 @@
 <script>
 import TrainForm from "./TrainForm";
 import TrainDetail from "./TrainDetail";
-import {publicMethods} from "../application.js";
 export default {
-    mixins:[publicMethods],
     name: "Train",
     data() {
         return {
@@ -83,8 +81,7 @@ export default {
                 department: "",
                 submitter: "",
                 total: 0
-            },
-            formName:"trainingApplication"
+            }
         };
     },
     components: {
@@ -96,16 +93,16 @@ export default {
          async getList(pageNum) {
             let $self = this;
             $self.url = "/api/v1/trainingApplication/queryList";
-            let response = await $self.getQueryList();
+            let response = await $self.$application.getQueryList($self);
             if (response) {
                 if (response.data.content.list.length > 0) {
-                   let formId = response.data.content.list[0].id;
-                   $self.$refs.TrainDetail.getFormDetails(formId);
+                    let formId = response.data.content.list[0].id;
+                    $self.$refs.TrainDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.content.list;
                 $self.params.total = response.data.content.total;
             } else {
-                $self.msgTips("获取列表失败", "warning");
+                $self.$application.msgTips($self, "获取列表失败", "warning");
             }
         },
 
@@ -116,7 +113,7 @@ export default {
 
         //新建
         createNewForm() {
-            this.$refs.TrainForm.createForm();
+            this.$refs.TrainForm.creatForm();
         },
 
         //编辑
@@ -154,7 +151,13 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+   
       #TrainFilter  .el-form-item--small.el-form-item{
             width: 100%;
         }
+</style>
+<style scoped>
+  #TrainFilter >>> .el-form-item__content{
+        width: calc(100% - 80px);
+    }
 </style>

@@ -9,7 +9,6 @@
                 </div>
             </el-row>
         </div>
-        <br />
         <div class="formContent">
             <el-form :model='tableData' class="formList">
              
@@ -88,8 +87,8 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
-                            <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
+                        <el-select v-model="item.checkedValue" filterable multiple style="width:100%;">
+                            <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="审批意见">
@@ -109,20 +108,27 @@
 import moment from "moment";
 import Comment from "../Comment";
 import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
 export default {
-    mixins:[publicMethods],
     name: "TrainDetail",
     data() {
         return {
             tableData: {},
             actions: [],
             formId: "",
+            actions: [],
             textarea: "",
             dialogVisible: false,
+            presign_status: false,
+            seleteUsers: [],
             users: [],
-            actionsDialogArr: [],
-            appFlowName:'motor-trainingapplication_train'
+            seleteUserLabel: "",
+            selContent_status: false,
+            seleteContents: [],
+            Contents: [],
+            seleteContentLabel: "",
+            currentAction: {},
+            formArr: [],
+            actionsDialogArr: []
         };
     },
     components: {
@@ -133,19 +139,57 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/trainingApplication/detail/" + $self.formId;
-            $self.getFormDetailsData();
+            $self.url = "/api/v1/trainingApplication/detail/" + $self.formId;
+            $self.signalUrl = `/workflow/motor-trainingapplication_train/${
+                $self.formId
+            }/${$self.$store.getters.LoginData.uid}/signal`;
+            $self.actionsUrl = `/workflow/motor-trainingapplication_train/${
+                $self.formId
+            }/${$self.$store.getters.LoginData.uid}/actions`;
+             $self.getFormDetailsData();
         },
-        async getFormDetailsData() {
+        async getFormDetailsData(){
             let $self = this;
-            let response = await $self.getDetails();
-            if (response) {
-                $self.tableData = response.data.content;
-            } else {
-                $self.msgTips("获取表单失败", "warning");
+            $self.$application.getActions($self);
+            let response =  await $self.$application.getDetails($self);
+            if(response){
+                 $self.tableData = response.data.content;
+            }else{
+                $self.$application.msgTips($self, "获取表单失败", "warning");
             }
-            let actions = await $self.getActions();
-            $self.actions = actions.data.types;
+        },
+        doAction(action) {
+            let $self = this;
+            $self.currentAction = action;
+
+            if (action.addAssigneeList && action.addAssigneeList.length > 0) {
+                 $self.actionsDialogArr.push({
+                    seletList: action.addAssigneeList,
+                    label: action.addAssigneeListLabel,
+                    multiple: action.addAssigneeListMul == "true" ? true : false,
+                    checkedValue: action.addAssigneeListMul == "true" ? [] : ""
+                });
+            }
+
+            if (action.assigneeList && action.assigneeList.length > 0) {
+                 $self.actionsDialogArr.push({
+                    seletList: action.assigneeList,
+                    label: action.assigneeListLabel,
+                    multiple: action.assigneeListMul == "true" ? true : false,
+                    checkedValue: action.assigneeListMul == "true" ? [] : ""
+                });
+            }
+
+            if($self.actionsDialogArr.length > 0){
+                
+            }
+            $self.startSignal();
+        },
+       async startSignal() {
+            let $self = this;
+            await $self.$application.startSignal($self);
+            $self.$application.getActions($self);
+            $self.$application.getFormDetailsData($self);
         }
     }
 };
