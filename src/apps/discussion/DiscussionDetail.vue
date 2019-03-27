@@ -133,7 +133,7 @@ export default {
             textarea: '',
             dialogVisible: false,
             currentAction: '',
-            appFlowName:'motor-issuesReported',
+            appFlowName:'motor-issuesreported_party-agendasheet',
             submitData: {},
             crumbNodeName: ''
         };

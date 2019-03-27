@@ -79,6 +79,7 @@ export default {
             dialogBoardFormId: '',
             operationBoardType: 'create',
             formName:"issuesReported",
+            appFlowName:'motor-issuesreported_party-agendasheet',
             statusNews: ''
         };
     },
@@ -97,6 +98,9 @@ export default {
             } else {
                 this.$refs.DiscussionDetail.getFormDetails(params.id);
             }
+        },
+        searchList() {
+            this.getList();
         },
         async getList() {
             const $self = this;

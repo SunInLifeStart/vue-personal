@@ -30,18 +30,18 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="会议地点">
-                            <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                            <el-input v-model="formData.meetingPlace" placeholder="请输入拟稿单位"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="开会时间">
-                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.timeApplication" style="width:100%" type="date">
+                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="date">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="会议名称">
-                            <el-input v-model="formData.topicName"></el-input>
+                            <el-input v-model="formData.conferenceTitle"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -99,9 +99,9 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="列席人员" prop="phone">
-                                <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                                <tr v-for="(item,index) in formData.sitIn" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
                                     <td colspan="4" style="width: 21%;">
-                                        <el-select v-model="item.department" placeholder="" @change="">
+                                        <el-select v-model="item.department" placeholder="请输入列席部门" @change="">
                                             <el-option v-for="i in options"
                                                        :key="i.value"
                                                        :label="i.label"
@@ -124,7 +124,7 @@
                                 </tr>
                                 <tr>
                                     <td colspan="8" style="height: 30px;">
-                                        <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                        <span @click="addItem('sitIn')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
                                     </td>
                                 </tr>
                             </el-form-item>
@@ -222,6 +222,8 @@
                         }
                     } else if (type == 'personal') {
                         this.formData.requestedItems.splice(index, 1);
+                    } else if (type == 'sitIn') {
+                        this.formData.sitIn.splice(index, 1);
                     }
                 });
             },
@@ -230,6 +232,8 @@
                     this.formData.attendingDepartment.push({});
                 } else if (type == 'personal') {
                     this.formData.requestedItems.push({})
+                } else if (type == 'sitIn') {
+                    this.formData.sitIn.push({})
                 }
             },
             getId(id) {
@@ -255,14 +259,15 @@
                         department: ''
                     }],
                     requestedItems: [{}],
+                    sitIn: [{}],
                     numbers: '',
                     created: '',
                     // comments: [],
                     idea: '',
                     committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
-                    applyDepartment: this.$store.getters.LoginData.oname || '',
-                    timeApplication: '',
-                    topicName: '',
+                    meetingPlace: '',
+                    meetingTime: '',
+                    conferenceTitle: '',
                     organName: this.$store.getters.LoginData.oname || '',
                     creatorName: this.$store.getters.LoginData.uname || '',
                     creatorId: this.$store.getters.LoginData.uid || '',
@@ -274,11 +279,16 @@
                 const self = this;
                 if (this.formId != '') {
                     axios
-                        .get('/api/v1/issuesReported/detail/' + this.formId)
+                        .get('/api/v1/meetingApply/zb/detail/' + this.formId)
                         .then(res => {
                             self.formData = res.data.content;
                             if (self.formData.attendingDepartment) {
                                 self.formData.attendingDepartment.forEach(item => {
+                                    if (item.person) {
+                                        item.people = item.person.split(',')
+                                    }
+                                })
+                                self.formData.sitIn.forEach(item => {
                                     if (item.person) {
                                         item.people = item.person.split(',')
                                     }
@@ -317,8 +327,13 @@
                         item.person = item.people.join(',')
                     }
                 })
+                $self.formData.sitIn.forEach(item => {
+                    if (item.people) {
+                        item.person = item.people.join(',')
+                    }
+                })
                 let response = await $self.saveFormData(
-                    "/api/v1/issuesReported/save",
+                    "/api/v1/meetingApply/zb/save",
                     $self.formData
                 );
                 if (response) {

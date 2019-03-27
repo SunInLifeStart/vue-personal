@@ -4,8 +4,8 @@
             <el-form :inline="true" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="议题名称">
-                            <el-input v-model="params.topicName" placeholder="请输入议题名称"></el-input>
+                        <el-form-item label="会议名称">
+                            <el-input v-model="params.conferenceTitle" placeholder="请输入议题名称"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -23,7 +23,7 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-                <el-table-column prop="topicName" label="议题名称">
+                <el-table-column prop="conferenceTitle" label="会议名称">
                 </el-table-column>
                 <el-table-column prop="creatorName" label="提单人">
                 </el-table-column>
@@ -31,11 +31,10 @@
                 </el-table-column>
                 <el-table-column prop="committed" label="提单时间">
                 </el-table-column>
-                <el-table-column prop="applyDepartment" label="提请部门">
+                <el-table-column prop="meetingPlace" label="会议地点">
                 </el-table-column>
-                <el-table-column prop="timeApplication" label="提请时间">
+                <el-table-column prop="meetingTime" label="开会时间">
                 </el-table-column>
-                <!--<el-table-column prop="status" label="单据状态" width="200"></el-table-column>-->
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
                         <el-tooltip class="item" effect="dark" content="编辑" placement="left">
@@ -71,7 +70,7 @@
                 params: {
                     pageNum: 1,
                     pageSize: 5,
-                    topicName: '',
+                    conferenceTitle: '',
                     total: 0
                 },
                 dialogFormVisibleApplyMeeting: false,
@@ -79,7 +78,7 @@
                 formBoardId: '',
                 dialogBoardFormId: '',
                 operationBoardType: 'create',
-                formName:"issuesReported",
+                formName:"meetingApply/zb",
                 statusNews: ''
             };
         },
@@ -99,9 +98,12 @@
                     this.$refs.ApplyMeetingDetail.getFormDetails(params.id);
                 }
             },
+            searchList() {
+                this.getList();
+            },
             async getList() {
                 const $self = this;
-                $self.url = "/api/v1/issuesReported/queryList";
+                $self.url = "/api/v1/meetingApply/zb/queryList";
                 let response = await $self.getQueryList();
                 if (response) {
                     if (response.data.content.list.length > 0) {
@@ -129,7 +131,7 @@
                 this.getList();
             },
             onReset() {
-                this.params.topicName = '';
+                this.params.conferenceTitle = '';
                 this.onSubmit();
             },
             onSubmit() {

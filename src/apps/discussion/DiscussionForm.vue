@@ -10,7 +10,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="议题呈报">
-                        <el-select v-model="appFlowName" placeholder="请选择">
+                        <el-select v-model="formData.branchlineTo" placeholder="请选择">
                             <el-option
                                 v-for="item in discussionOption"
                                 :key="item.value"
@@ -161,12 +161,12 @@ export default {
             ],
             discussionOption: [
                 {
-                    value: 'motor-trainingapplication_train',
-                    label: '党支委会'
+                    value: 'chairman',
+                    label: '总办会'
                 },
                 {
-                    value: 'motor-trainingapplication_discussion',
-                    label: '总办会'
+                    value: 'general',
+                    label: '党支委会'
                 }
             ],
             personOptions: [
@@ -182,9 +182,7 @@ export default {
             formData: this.resetForm(),
             users: [],
             uploadId: 0,
-            formLabelWidth: '120px',
-            appFlowName: "motor-trainingapplication_train",
-            currentFormId: this.operationType == 'create' ? '' : this.formId
+            appFlowName:'motor-issuesreported_party-agendasheet'
         };
     },
     components: {
@@ -242,6 +240,7 @@ export default {
                     people: [],
                     department: ''
                 }],
+                branchlineTo: "chairman",
                 requestedItems: [{}],
                 numbers: '',
                 created: '',

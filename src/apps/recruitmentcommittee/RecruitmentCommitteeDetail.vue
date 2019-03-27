@@ -34,23 +34,23 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提请部门：">{{tableData.applyDepartment}}
+                        <el-form-item label="会议地点：">{{tableData.meetingPlace}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提请时间：">{{tableData.timeApplication}}
+                        <el-form-item label="开会时间：">{{tableData.meetingTime}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="议题名称：">{{tableData.topicName}}
+                        <el-form-item label="会议名称：">{{tableData.conferenceTitle}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="各级领导意见及审批：">{{tableData.remarks}}
+                        <el-form-item label="各级领导意见及审批：">{{tableData.idea}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -146,7 +146,7 @@
             getFormDetails(formId) {
                 let $self = this;
                 $self.formId = formId;
-                $self.url= "/api/v1/issuesReported/detail/" + $self.formId;
+                $self.url= "/api/v1/meetingApply/zb/detail/" + $self.formId;
                 $self.getFormDetailsData();
             },
             async getFormDetailsData() {
