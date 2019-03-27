@@ -100,7 +100,7 @@ export const publicMethods = {
                 });
             }
 
-            if ($self.currentAction.action == 'PULL') {
+            if ($self.currentAction.action == 'PULL' || $self.currentAction.action == 'REJECT') {
                 await $self.startSignal();
                 $self.msgTips($self.currentAction.name +"成功","success");
                 $self.getFormDetailsData();
