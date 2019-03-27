@@ -3,7 +3,7 @@
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
-                    <span v-for="action in actions" :key="action.type" class="btnList" @click="doAction(action)">
+                    <span v-for="(action, index) in actions" :key="action.index" class="btnList" @click="doAction(action)">
                         {{action.name}}
                     </span>
                 </div>
@@ -11,8 +11,8 @@
         </div>
         <div class="formContent">
             <el-form :model='tableData' class="formList">
-                <el-steps :active="crumb.index" finish-status="success" class="crumbList">
-                    <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>
+                <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                    <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
                 </el-steps>
                 <el-row>
                     <el-col :span="8">
@@ -43,7 +43,19 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="24">
+                    <el-col :span="8">
+                        <el-form-item label="议题呈报">
+                            <el-select v-model="tableData.branchlineTo" style="width: 60%" placeholder="请选择" :disabled="true">
+                                <el-option
+                                        v-for="item in discussionOption"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item label="议题名称：">{{tableData.topicName}}
                         </el-form-item>
                     </el-col>
@@ -119,6 +131,7 @@ export default {
             fullScreen: false,
             typesStatus: false,
             users: [],
+            crumbs: [],
             rejectTarget: '',
             rejectList: [],
             reject_status: false,
@@ -130,6 +143,16 @@ export default {
             currentAction: '',
             appFlowName:'motor-issuesreported_party-agendasheet',
             submitData: {},
+            discussionOption: [
+                {
+                    value: 'chairman',
+                    label: '总办会'
+                },
+                {
+                    value: 'general',
+                    label: '党支委会'
+                }
+            ],
             crumbNodeName: ''
         };
     },
@@ -152,42 +175,18 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
+            // debugger;
             let actions = await $self.getActions();
+            let crumbs = await $self.getCrumbs();
             $self.actions = actions.data.types;
+            $self.crumbs =  { items: crumbs.data, index: -1 };
+            for(var i= 0; i<$self.crumbs.items.length; i++){
+                if($self.crumbs.items[i].active){
+                    $self.crumbs.index = i;
+                }
+            }
+
         },
-        getCrumbs() {
-            axios
-                .get(`/api/v1/board_meetings/${this.formId}/crumb`)
-                .then(res => {
-                    this.crumb = { items: res.data, index: -1 };
-                    res.data.forEach((item, index) => {
-                        if (item.active) {
-                            this.crumbNodeName = item.name;
-                            if (item.assignes) {
-                                item.name =
-                                    item.name + '(' + item.assignes + ')';
-                            }
-                            this.crumb.index = index;
-                        }
-                    });
-                });
-        },
-        getRejectList() {
-            let self = this;
-            axios
-                .get(
-                    '/api/v1/board_meetings/' + this.formId + '/reject/targets'
-                )
-                .then(res => {
-                    self.rejectList = res.data;
-                });
-        },
-        getAllUsers() {
-            let self = this;
-            axios.get(`/api/v1/users`).then(res => {
-                self.users = res.data;
-            });
-        }
     }
 };
 </script>
