@@ -1,6 +1,6 @@
 <template>
   <div id="APPROVE">
-    <RecruitmentCommitteeDetail :formId="formId" ref="RecruitmentCommitteeDetail"></RecruitmentCommitteeDetail>
+    <RecruitmentCommitteeDetail ref="RecruitmentCommitteeDetail"></RecruitmentCommitteeDetail>
   </div>
 </template>
 <script>
@@ -13,7 +13,7 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.IncomingDetail.setTab();
+        this.$refs.RecruitmentCommitteeDetail.getFormDetails(this.formId);
     },
     components: {
         RecruitmentCommitteeDetail

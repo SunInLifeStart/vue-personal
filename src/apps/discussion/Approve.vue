@@ -1,6 +1,6 @@
 <template>
   <div id="APPROVE">
-    <DiscussionDetail :formId="formId" ref="DiscussionDetail"></DiscussionDetail>
+    <DiscussionDetail ref="DiscussionDetail"></DiscussionDetail>
   </div>
 </template>
 <script>
@@ -13,7 +13,7 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.IncomingDetail.setTab();
+        this.$refs.DiscussionDetail.getFormDetails(this.formId);
     },
     components: {
         DiscussionDetail
