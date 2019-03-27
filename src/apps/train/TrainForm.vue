@@ -23,8 +23,13 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="提单时间" prop="submitter">
-                        <el-input v-model="formData.submitter" placeholder="提单时间"></el-input>
+                    <el-form-item label="提单时间" prop="committed">
+                        <el-input v-model="formData.committed" placeholder="提单时间"></el-input>
+                    </el-form-item>
+                </el-col>
+                 <el-col :span="12">
+                    <el-form-item label="培训时间" label-width="120px">
+                            <el-date-picker v-model="formData.trainingTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%" value-format="yyyy-MM-dd"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -37,10 +42,13 @@
                         </span>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                <el-form-item label="培训时间" label-width="120px">
-                        <el-date-picker v-model="formData.trainingTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%" value-format="yyyy-MM-dd"></el-date-picker>
-                </el-form-item>
+               <el-col :span="12">
+                    <el-form-item label="是否纳入年度计划">
+                        <span style="float:left">
+                             <el-radio v-model="formData.isAnnualPlan" label="true">是</el-radio>
+                             <el-radio v-model="formData.isAnnualPlan" label="false">否</el-radio>
+                        </span>
+                    </el-form-item>
                 </el-col>
               </el-row>
             <el-row>
@@ -245,9 +253,9 @@ export default {
                 submitter: "", //申请人
                 department: "", //所属部门
                 id: "",
-                //committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
-                committed: "",
-                isAnnualPlan: "",
+                committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
+                // committed: "",
+                isAnnualPlan: "true",
                 draftUnit: "",
                 draftTime: [],
                 startTime: "",
