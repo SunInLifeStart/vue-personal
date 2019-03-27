@@ -120,7 +120,7 @@ export const publicMethods = {
         //提交表单
         async submitForm() {
             let $self = this;
-            $self.currentAction["comment"] = $self.textarea ? $self.currentAction.name : $self.textarea;
+            $self.currentAction["comment"] = $self.textarea ? $self.textarea : $self.currentAction.name;
             $self.hasRequired($self.currentAction);
             if ($self.actionsDialogArr.length > 0) {
                 for (let item of $self.actionsDialogArr) {
