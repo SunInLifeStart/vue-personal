@@ -83,15 +83,9 @@
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
-                    <el-form-item label="请选择驳回节点" v-show="reject_status">
-                        <el-select v-model="rejectTarget" style="width:100%;">
-                            <el-option v-for="user in rejectList" :key="user" :label="user" :value="user">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item :label="seleteUserLabel" v-show="presign_status">
-                        <el-select v-model="seleteUsers" filterable multiple style="width:100%;">
-                            <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
+                    <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
+                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                            <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="审批意见">
@@ -120,6 +114,7 @@ export default {
         return {
             tableData: {},
             actions: [],
+            actionsDialogArr: [],
             crumb: { items: [] },
             fullScreen: false,
             typesStatus: false,
