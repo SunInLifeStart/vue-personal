@@ -259,7 +259,10 @@
                         department: ''
                     }],
                     requestedItems: [{}],
-                    sitIn: [{}],
+                    sitIn: [{
+                        people: [],
+                        department: ''
+                    }],
                     numbers: '',
                     created: '',
                     // comments: [],

@@ -78,7 +78,7 @@
                 formBoardId: '',
                 dialogBoardFormId: '',
                 operationBoardType: 'create',
-                formName:"meetingApply/zb",
+                formName:"meetingApply/zd",
                 statusNews: ''
             };
         },
@@ -103,7 +103,7 @@
             },
             async getList() {
                 const $self = this;
-                $self.url = "/api/v1/meetingApply/zb/queryList";
+                $self.url = "/api/v1/meetingApply/zd/queryList";
                 let response = await $self.getQueryList();
                 if (response) {
                     if (response.data.content.list.length > 0) {

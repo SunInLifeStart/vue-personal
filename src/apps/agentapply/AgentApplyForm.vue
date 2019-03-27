@@ -259,7 +259,10 @@
                         department: ''
                     }],
                     requestedItems: [{}],
-                    sitIn: [{}],
+                    sitIn: [{
+                        people: [],
+                        department: ''
+                    }],
                     numbers: '',
                     created: '',
                     // comments: [],
@@ -279,7 +282,7 @@
                 const self = this;
                 if (this.formId != '') {
                     axios
-                        .get('/api/v1/meetingApply/zb/detail/' + this.formId)
+                        .get('/api/v1/meetingApply/zd/detail/' + this.formId)
                         .then(res => {
                             self.formData = res.data.content;
                             if (self.formData.attendingDepartment) {
@@ -333,7 +336,7 @@
                     }
                 })
                 let response = await $self.saveFormData(
-                    "/api/v1/meetingApply/zb/save",
+                    "/api/v1/meetingApply/zd/save",
                     $self.formData
                 );
                 if (response) {

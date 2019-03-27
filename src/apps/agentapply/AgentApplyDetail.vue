@@ -146,7 +146,7 @@
             getFormDetails(formId) {
                 let $self = this;
                 $self.formId = formId;
-                $self.url= "/api/v1/meetingApply/zb/detail/" + $self.formId;
+                $self.url= "/api/v1/meetingApply/zd/detail/" + $self.formId;
                 $self.getFormDetailsData();
             },
             async getFormDetailsData() {
