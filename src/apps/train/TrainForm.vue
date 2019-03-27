@@ -222,7 +222,6 @@ export default {
     },
      watch: {
       'formData.lowercase'(val) {
-          
           this.formData.upper = val ? this.convertCurrency(val) : "";
       }
     },
@@ -290,7 +289,6 @@ export default {
                 $self.formId = response.data.content.id;
                 $self.dialogFormVisible = false;
                 if (params) {
-                    $self.msgTips("提交成功", "success");
                     if (this.createForm_status) {
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {                              
@@ -302,14 +300,16 @@ export default {
                         );
                        await $self.startSignal(actions.data.types[0]);
                        $self.emitMessage();
+                       $self.msgTips("提交成功", "success");
                     }
                 } else {
-                    $self.msgTips("保存成功", "success");
                     if (this.createForm_status) {
-                        $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
+                        $self.startSignalForSave();
+                         //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
                         $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
                     }
+                     $self.msgTips("保存成功", "success");
                 }
             } else {
                 if (params) {

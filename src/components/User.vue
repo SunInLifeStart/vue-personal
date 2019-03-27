@@ -73,11 +73,12 @@ export default {
         Cookies.remove("uid");
         Cookies.remove("uname");
         Cookies.remove("username");
-        if (process.env.NODE_ENV == 'test') {
-          window.location.href = "/logout";
-        } else {
-          window.location.href = "login.html";
-        }       
+        window.location.href = "login.html";
+        // if (process.env.NODE_ENV == 'test') {
+        //   window.location.href = "/logout";
+        // } else {
+        //   window.location.href = "login.html";
+        // }       
       });
     },
     aaa() {

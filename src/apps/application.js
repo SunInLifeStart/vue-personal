@@ -15,10 +15,29 @@ export const publicMethods = {
                 return false;
             }
         },
-
+        async getQueryList() {
+            try {
+                return await this.$axios.post(this.url, this.params);
+            } catch (err) {
+                return false;
+            }
+        },
+        async emitMessage() {
+            if (this.createForm_status) {
+                this.$emit("reloadList", "reload"); //如果是 "新建" 表单刷新 "列表"
+            } else {
+                this.$emit("reloadList", this.formData); //如果是 "编辑" 表单刷新 "详情页"
+            }
+        },
+        async startSignal(actions) {
+            let url = `/workflow/${this.appFlowName}/${
+                this.formId
+                }/${this.$store.getters.LoginData.uid}/signal`;
+            return await this.$axios.put(url, actions ? actions : this.currentAction);
+        },
         async startSignalForSave(type) {
             let actions = await this.getActions();
-            actions.data.types[0]["options"] = ["oid=" + this.$store.getters.LoginData.oid];
+            this.hasRequired(actions.data.types[0]);
             let complete = await this.startSignal(actions.data.types[0]);
             if (!type) {
                 await this.emitMessage(self);
@@ -30,57 +49,34 @@ export const publicMethods = {
             actions2.data.types = actions2.data.types.filter(function (item) {
                 return item.action == "COMMIT";
             });
+            this.hasRequired(actions2.data.types[0]);
             let complete2 = await this.startSignal(actions2.data.types[0]);
             await this.emitMessage(self);
         },
-        async getActions() {
-            let url = `/workflow/${this.appFlowName}/${
-                this.formId
-                }/${this.$store.getters.LoginData.uid}/actions`;
-            return await this.$axios.get(url);
-        },
-        async startSignal(actions) {
-            let url = `/workflow/${this.appFlowName}/${
-                this.formId
-                }/${this.$store.getters.LoginData.uid}/signal`;
-            return await this.$axios.put(url, actions ? actions : this.currentAction);
-        },
-        async emitMessage() {
-            if (this.createForm_status) {
-                this.$emit("reloadList", "reload"); //如果是 "新建" 表单刷新 "列表"
-            } else {
-                this.$emit("reloadList", this.formData); //如果是 "编辑" 表单刷新 "详情页"
-            }
-        },
-        getUsers() {
-            this.$axios.get("/api/v1/users").then(res => {
-                // $self.users = res.data;
-            });
-        },
-        deleteCurrentLine(id) {
+         hasRequired(data) {
             let $self = this;
-            $self.$axios.get("/api/v1/" + this.formName + "/delete/" + id).then(res => {
-                $self.msgTips("删除成功", "success");
-                $self.searchList();
-            });
+            let detailsData = {};
+            if (data.required && data.required.length > 0) {
+                for (let item of data.required) {
+                    let key = item.split(":")[0];
+                    detailsData = $self.tableData ? $self.tableData : $self.formData
+                    if (detailsData[key]) {
+                       data["options"] = [key + "=" + detailsData[key]];
+                    } else {
+                        if(key == "oid"){
+                            data["options"] = [key + "=" + this.$store.getters.LoginData.oid];
+                        }else{
+                            $self.message('依赖的' + key + '表单中找不到', "warning");
+                            return false;
+                        }
+                       
+                    }
+                }
+            };
         },
-        msgTips(message, type) {
-            this.$message({
-                message: message,
-                type: type
-            });
-        },
-        async getQueryList() {
-            try {
-                return await this.$axios.post(this.url, this.params);
-            } catch (err) {
-                return false;
-            }
-        },
-
 
         //点击审批动作
-        doAction(action) {
+        async doAction(action) {
             let $self = this;
             $self.actionsDialogArr = [];
             $self.currentAction = action;
@@ -105,50 +101,71 @@ export const publicMethods = {
             }
 
             if ($self.currentAction.action == 'PULL') {
-                $self.startSignalRefresh();
+                await $self.startSignal();
+                $self.msgTips($self.currentAction.name +"成功","success");
+                $self.getFormDetailsData();
             } else {
                 $self.dialogVisible = true;
             }
-
         },
         //提交表单
-        submitForm() {
+        async submitForm() {
             let $self = this;
-            if ($self.currentAction.required && $self.currentAction.required.length > 0) {
-                $self.dialogVisible = true;
-                for (let item of $self.currentAction.required) {
-                    let key = item.split(":")[0];
-                    if ($self.tableData[key]) {
-                        $self.currentAction["options"] = [key + "=" + $self.tableData[key]];
-                    } else {
-                        $self.message('依赖的' + key + '表单中找不到', "warning");
-                        return false;
-                    }
-                }
-            };
             $self.currentAction["comment"] = $self.textarea ? $self.currentAction.name : $self.textarea;
+            $self.hasRequired($self.currentAction);
             if ($self.actionsDialogArr.length > 0) {
                 for (let item of $self.actionsDialogArr) {
                     $self.currentAction[item.labelName] = item.checkedValue;
                 }
-                $self.startSignalRefresh();
+                await $self.startSignal();
+                $self.getFormDetailsData();
             } else {
-                $self.startSignalRefresh();
+                await $self.startSignal();
+                $self.getFormDetailsData();
             }
-        },
-        async startSignalRefresh() {
-            let $self = this;
-            await $self.startSignal();
-            $self.getFormDetailsData();
             $self.dialogVisible = false;
+            $self.msgTips($self.currentAction.name +"成功","success");
         },
+ 
+        
 
-
-
-
-
-
-
+        async getCrumbs() {
+            let url = `/workflow/${this.appFlowName}/${
+                this.formId
+                }/${this.$store.getters.LoginData.uid}/crumb`;
+            return await this.$axios.get(url);
+        },
+        async getActions() {
+            let url = `/workflow/${this.appFlowName}/${
+                this.formId
+                }/${this.$store.getters.LoginData.uid}/actions`;
+            return await this.$axios.get(url);
+        },
+        getComments(url) {
+            this.$axios.get(url).then(res => {
+                // $self.users = res.data;
+            });
+        },
+        getUsers(url) {
+            this.$axios.get(url).then(res => {
+                // $self.users = res.data;
+            });
+        },
+        deleteCurrentLine(id) {
+            let $self = this;
+            $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+                $self.$axios.get("/api/v1/" + $self.formName + "/delete/" + id).then(res => {
+                    $self.msgTips("删除成功", "success");
+                    $self.searchList();
+                });
+            });
+        },
+        msgTips(message, type) {
+            this.$message({
+                message: message,
+                type: type
+            });
+        },
 
          //金额阿拉伯数字转大写金额
          convertCurrency(money) {  

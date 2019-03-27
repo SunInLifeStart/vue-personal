@@ -11,8 +11,11 @@
         </div>
         <br />
         <div class="formContent">
+             <!--  -->
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
             <el-form :model='tableData' class="formList">
-             
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.submitter}}
@@ -117,6 +120,7 @@ export default {
         return {
             tableData: {},
             actions: [],
+            crumbs:[],
             formId: "",
             textarea: "",
             dialogVisible: false,
@@ -144,8 +148,17 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
+            // debugger;
             let actions = await $self.getActions();
+            let crumbs = await $self.getCrumbs();
             $self.actions = actions.data.types;
+            $self.crumbs =  { items: crumbs.data, index: -1 };
+            for(var i= 0; i<$self.crumbs.items.length; i++){
+                if($self.crumbs.items[i].active){
+                    $self.crumbs.index = i;    
+                }
+            }
+
         }
     }
 };
