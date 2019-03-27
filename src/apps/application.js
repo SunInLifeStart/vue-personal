@@ -66,7 +66,7 @@ export const publicMethods = {
                         if(key == "oid"){
                             data["options"] = [key + "=" + this.$store.getters.LoginData.oid];
                         }else{
-                            $self.message('依赖的' + key + '表单中找不到', "warning");
+                            $self.msgTips('依赖的' + key + '表单中找不到', "warning");
                             return false;
                         }
                        
