@@ -222,10 +222,6 @@ export default {
     },
      watch: {
       'formData.lowercase'(val) {
-<<<<<<< HEAD
-=======
-          
->>>>>>> e4fb4301530d1def6d51dc680000a2c8db25f719
           this.formData.upper = val ? this.convertCurrency(val) : "";
       }
     },

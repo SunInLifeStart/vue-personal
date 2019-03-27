@@ -10,64 +10,64 @@
             </el-row>
         </div>
         <div class="formContent">
-            <el-form :model='tabledata' class="formList">
+            <el-form :model='tableData' class="formList">
                 <el-steps :active="crumb.index" finish-status="success" class="crumbList">
                     <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>
                 </el-steps>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="流水号：">{{tabledata.number}}
+                        <el-form-item label="流水号：">{{tableData.number}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提单人：">{{tabledata.creatorName}}
+                        <el-form-item label="提单人：">{{tableData.creatorName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属部门：">{{tabledata.organName}}
+                        <el-form-item label="所属部门：">{{tableData.organName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="提单时间：">{{tabledata.committed}}
+                        <el-form-item label="提单时间：">{{tableData.committed}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提请部门：">{{tabledata.applyDepartment}}
+                        <el-form-item label="提请部门：">{{tableData.applyDepartment}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提请时间：">{{tabledata.timeApplication}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="议题名称：">{{tabledata.topicName}}
+                        <el-form-item label="提请时间：">{{tableData.timeApplication}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="各级领导意见及审批：">{{tabledata.remarks}}
+                        <el-form-item label="议题名称：">{{tableData.topicName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tabledata.attachments && tabledata.attachments.length > 0">
-                            <div v-for="item in tabledata.attachments" :key="item.id" style="float:left">
+                        <el-form-item label="各级领导意见及审批：">{{tableData.remarks}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row v-if="tabledata.comments && tabledata.comments.length > 0">
+                <el-row v-if="tableData.comments && tableData.comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
                         <div class="items">
-                            <div class="item" v-for="item in tabledata.comments" :key="item.id">
+                            <div class="item" v-for="item in tableData.comments" :key="item.id">
                                 <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
                                 <div class="info">
                                     <div class="creator">
@@ -112,11 +112,13 @@ import axios from 'axios';
 import moment from 'moment';
 import Comment from '../Comment';
 import FilesOperate from '../FilesOperate';
+import { publicMethods } from "../application.js";
 export default {
+    mixins:[publicMethods],
     name: 'DiscussionDetail',
     data() {
         return {
-            tabledata: {},
+            tableData: {},
             actions: [],
             crumb: { items: [] },
             fullScreen: false,
@@ -131,79 +133,32 @@ export default {
             textarea: '',
             dialogVisible: false,
             currentAction: '',
+            appFlowName:'motor-issuesReported',
             submitData: {},
             crumbNodeName: ''
         };
     },
-    props: ['formId'],
     components: {
         Comment,
         FilesOperate
     },
-    mounted() {
-        this.getForm();
-        // if (this.formId != '') {
-        //     this.getActions();
-        //     this.getCrumbs();
-        //     this.getAllUsers();
-        // }
-    },
-    watch: {
-        formId: function() {
-            this.getForm();
-            // if (this.formId) {
-            //     this.getActions();
-            //     this.getCrumbs();
-            //     this.getAllUsers();
-            // } else {
-            //     this.tabledata = {};
-            // }
-        }
-    },
     methods: {
-        getForm() {
-            const self = this;
-            if (this.formId != '') {
-                axios
-                    .get('/api/v1/issuesReported/detail/' + this.formId)
-                    .then(res => {
-                        self.tabledata = res.data.content;
-                        if (self.tabledata.draftTime) {
-                            self.tabledata.draftTime = moment(
-                                self.tabledata.draftTime
-                            ).format('YYYY-MM-DD');
-                        }
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
+        getFormDetails(formId) {
+            let $self = this;
+            $self.formId = formId;
+            $self.url= "/api/v1/issuesReported/detail/" + $self.formId;
+            $self.getFormDetailsData();
+        },
+        async getFormDetailsData() {
+            let $self = this;
+            let response = await $self.getDetails();
+            if (response) {
+                $self.tableData = response.data.content;
+            } else {
+                $self.msgTips("获取表单失败", "warning");
             }
-        },
-        downloadFile(url) {
-            window.open(url, '_blank');
-        },
-        getActions() {
-            let self = this;
-            axios
-                .get(`/api/v1/board_meetings/${this.formId}/actions`)
-                .then(res => {
-                    res.data.types = res.data.types || [];
-                    if (this.fullScreen) {
-                        res.data.types.push({
-                            type: 'closeFullScreen',
-                            name: '关闭全屏'
-                        });
-                    } else {
-                        res.data.types.push({
-                            type: 'fullScreen',
-                            name: '全屏显示'
-                        });
-                    }
-                    self.actions = res.data.types;
-                });
+            let actions = await $self.getActions();
+            $self.actions = actions.data.types;
         },
         getCrumbs() {
             axios
@@ -237,141 +192,6 @@ export default {
             axios.get(`/api/v1/users`).then(res => {
                 self.users = res.data;
             });
-        },
-        doAction(action) {
-            this.clearForm();
-            this.currentAction = action;
-            // 不需要弹出框
-            if ('ARCHIVE,DISPATCH,TEMPLATE,PULL,COMMIT'.includes(action.type)) {
-                this.clearForm();
-                let self = this; //套红，归档，分发
-                if (action.type == 'PULL') {
-                    axios
-                        .get(`/api/v1/board_meetings/${self.formId}/pull`)
-                        .then(res => {
-                            self.comment('formOnlyComment');
-                            self.getActions();
-                            self.getCrumbs();
-                        });
-                }
-                if (action.type == 'COMMIT' && this.crumbNodeName == '拟稿') {
-                    this.submitForm();
-                } else {
-                    if (action.type == 'COMMIT') {
-                        self.dialogVisible = true;
-                        if (action.required) {
-                            if (action.type == 'COMMIT') {
-                                self.presign_status = true;
-                                self.seleteUserLabel = '请选择拟办人';
-                            }
-                        }
-                    }
-                }
-            } else if ('REJECT,PRESIGN'.includes(action.type)) {
-                //拒绝，加签
-                this.dialogVisible = true;
-                //需要弹出并填写意见，选择驳回节点或选择其他人
-                if (action.type == 'REJECT') {
-                    this.getRejectList();
-                    this.reject_status = true;
-                }
-                if (action.type == 'PRESIGN') {
-                    this.presign_status = true;
-                    this.seleteUserLabel = '请选择前加签人';
-                }
-            } else if ('fullScreen'.includes(action.type)) {
-                this.actions.splice(this.actions.length - 1, 1);
-                this.actions.push({
-                    type: 'closeFullScreen',
-                    name: '关闭全屏'
-                });
-                this.fullScreen = true;
-                //this.common.open(`/#/apps/annos/${this.formId}`);
-            } else if ('closeFullScreen'.includes(action.type)) {
-                this.actions.splice(this.actions.length - 1, 1);
-                this.actions.push({
-                    type: 'fullScreen',
-                    name: '全屏显示'
-                });
-                this.fullScreen = false;
-            } else {
-                this.dialogVisible = true;
-            }
-        },
-        clearForm() {
-            this.reject_status = false;
-            this.presign_status = false;
-            this.seleteUsers = [];
-            this.rejectTarget = '';
-            this.textarea = '';
-            this.submitData = {};
-        },
-        comment(comment) {
-            let self = this;
-            axios
-                .put(`/api/v1/board_meeting_forms/${self.formId}/comment`, {
-                    content: self.textarea || self.currentAction.name,
-                    action: self.currentAction.type,
-                    node: this.crumbNodeName
-                })
-                .then(res => {
-                    self.getActions();
-                    self.getForm();
-                    self.getCrumbs();
-                    if (comment == 'formOnlyComment') {
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                    }
-                });
-        },
-        submitForm() {
-            let self = this;
-
-            //如果是不需要走流程的节点
-            if (
-                'SAVE,PREVIEW,COMMENT,PULL,PRINTER,EDIT'.includes(
-                    self.currentAction.type
-                )
-            ) {
-            } else {
-                //退回
-                if (self.currentAction.type == 'REJECT') {
-                    if (self.rejectTarget != '') {
-                        self.submitData.rejectTarget = self.rejectTarget;
-                    } else {
-                        self.$message.error('请选择驳回节点');
-                        return false;
-                    }
-                }
-
-                //前加签
-                if (self.currentAction.required) {
-                    if (self.seleteUsers.length > 0) {
-                        var key = self.currentAction.required[0].split(':')[0];
-                        self.submitData[key] = self.seleteUsers;
-                    } else {
-                        self.$message.error(self.seleteUserLabel);
-                        return false;
-                    }
-                }
-                self.submitData.action = self.currentAction.type;
-                axios
-                    .put(
-                        `/api/v1/board_meetings/${self.formId}/signal`,
-                        self.submitData
-                    )
-                    .then(res => {
-                        self.dialogVisible = false;
-                        self.comment();
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                        self.$emit('refreshData');
-                    });
-            }
         }
     }
 };

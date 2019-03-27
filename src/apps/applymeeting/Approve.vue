@@ -1,10 +1,9 @@
 <template>
   <div id="APPROVE">
-    <ApplyMeetingDetail :formId="formId" ref="ApplyMeetingDetail"></ApplyMeetingDetail>
+    <ApplyMeetingDetail ref="ApplyMeetingDetail"></ApplyMeetingDetail>
   </div>
 </template>
 <script>
-import axios from "axios";
 import ApplyMeetingDetail from "./ApplyMeetingDetail";
 export default {
     name: "APPROVE",
@@ -13,7 +12,7 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.IncomingDetail.setTab();
+        this.$refs.ApplyMeetingDetail.getFormDetails(this.formId);
     },
     components: {
         ApplyMeetingDetail

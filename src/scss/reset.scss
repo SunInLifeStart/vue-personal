@@ -15,6 +15,13 @@
 .el-button--text.actions {
     font-size: 16px;
 }
+.btnList{
+    font-weight: bold;
+}
+input[type=number]::-webkit-inner-spin-button,  
+input[type=number]::-webkit-outer-spin-button {  
+            -webkit-appearance: none;
+}
 
 
 @font-face {

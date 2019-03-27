@@ -10,8 +10,11 @@
             </el-row>
         </div>
         <div class="formContent">
+             <!--  -->
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
             <el-form :model='tableData' class="formList">
-             
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.submitter}}
@@ -114,6 +117,7 @@ export default {
         return {
             tableData: {},
             actions: [],
+            crumbs:[],
             formId: "",
             actions: [],
             textarea: "",
@@ -170,26 +174,17 @@ export default {
                     checkedValue: action.addAssigneeListMul == "true" ? [] : ""
                 });
             }
-
-            if (action.assigneeList && action.assigneeList.length > 0) {
-                 $self.actionsDialogArr.push({
-                    seletList: action.assigneeList,
-                    label: action.assigneeListLabel,
-                    multiple: action.assigneeListMul == "true" ? true : false,
-                    checkedValue: action.assigneeListMul == "true" ? [] : ""
-                });
+            // debugger;
+            let actions = await $self.getActions();
+            let crumbs = await $self.getCrumbs();
+            $self.actions = actions.data.types;
+            $self.crumbs =  { items: crumbs.data, index: -1 };
+            for(var i= 0; i<$self.crumbs.items.length; i++){
+                if($self.crumbs.items[i].active){
+                    $self.crumbs.index = i;    
+                }
             }
 
-            if($self.actionsDialogArr.length > 0){
-                
-            }
-            $self.startSignal();
-        },
-       async startSignal() {
-            let $self = this;
-            await $self.$application.startSignal($self);
-            $self.$application.getActions($self);
-            $self.$application.getFormDetailsData($self);
         }
     }
 };
