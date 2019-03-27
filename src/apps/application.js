@@ -55,21 +55,28 @@ export const publicMethods = {
         },
          hasRequired(data) {
             let $self = this;
-            let detailsData = {};
+            let detailsData = $self.tableData ? $self.tableData : $self.formData;
+            let options = [];
             if (data.required && data.required.length > 0) {
                 for (let item of data.required) {
                     let key = item.split(":")[0];
-                    detailsData = $self.tableData ? $self.tableData : $self.formData
                     if (detailsData[key]) {
-                       data["options"] = [key + "=" + detailsData[key]];
+                        options.push(key + "=" + detailsData[key]);
                     } else {
                         if(key == "oid"){
-                            data["options"] = [key + "=" + this.$store.getters.LoginData.oid];
+                            options.push(key + "=" + this.$store.getters.LoginData.oid);
                         }else{
                             $self.msgTips('依赖的' + key + '表单中找不到', "warning");
                             return false;
                         }
                        
+                    }
+                };
+                if(detailsData.options){
+                    detailsData.options.concat(options); 
+                }else{
+                    if(options){
+                        detailsData.options = options;
                     }
                 }
             };
