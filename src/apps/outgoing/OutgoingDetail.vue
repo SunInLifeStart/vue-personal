@@ -454,7 +454,7 @@ export default {
                    this.approve_status = true;
                    if(action.required[0].split(":")[0] == "deptLeader"){
                         this.seleteUserLabel_approve = '请选择主管领导';
-                        axios.get("/api/v1/users/list/deptLeader/"+ this.$store.getters.LoginData.oid).then(res => {
+                        axios.get("/api/v1/users/list/xtfz_deptLeader/"+ this.$store.getters.LoginData.oid).then(res => {
                             this.approve_users = res.data;
                         });
                    }

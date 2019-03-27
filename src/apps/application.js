@@ -50,6 +50,7 @@ export const publicMethods = {
                 return item.action == "COMMIT";
             });
             this.hasRequired(actions2.data.types[0]);
+            actions2.data.types[0]["comment"] = actions2.data.types[0].name;
             let complete2 = await this.startSignal(actions2.data.types[0]);
             await this.emitMessage(self);
         },
@@ -72,11 +73,11 @@ export const publicMethods = {
                        
                     }
                 };
-                if(detailsData.options){
-                    detailsData.options.concat(options); 
+                if(data.options && data.options.length > 0){
+                    data.options.concat(options); 
                 }else{
                     if(options){
-                        detailsData.options = options;
+                        data.options = options;
                     }
                 }
             };
@@ -108,6 +109,7 @@ export const publicMethods = {
             }
 
             if ($self.currentAction.action == 'PULL' || $self.currentAction.action == 'REJECT') {
+                $self.currentAction["comment"] =  $self.currentAction.name;
                 await $self.startSignal();
                 $self.msgTips($self.currentAction.name +"成功","success");
                 $self.getFormDetailsData();
@@ -148,10 +150,11 @@ export const publicMethods = {
                 }/${this.$store.getters.LoginData.uid}/actions`;
             return await this.$axios.get(url);
         },
-        getComments(url) {
-            this.$axios.get(url).then(res => {
-                // $self.users = res.data;
-            });
+        async getComments() {
+            let url = `/workflow/${this.appFlowName}/${
+                this.formId
+                }/getComments`;
+                return await this.$axios.get(url);
         },
         getUsers(url) {
             this.$axios.get(url).then(res => {
