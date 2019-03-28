@@ -167,16 +167,16 @@
                                  let a = actions.data.types[i].required[j];
                                  let key_a = a.split("==")[0].split(":")[1];
                                  let value = a.split("==")[1];
-                                 if($self.tableData[key_a] != value){
+                                 if('"'+$self.tableData[key_a]+'"' !=  value){
                                    actions.data.types[i].hideCurrent = true;
                                  }
                               }else{
                                   let a = actions.data.types[i].required[j];
                                   let key_a = a.split("!=")[0].split(":")[1];
                                   let value = a.split("!=")[1];
-                                if($self.tableData[key_a] == value){
-                                     actions.data.types[i].hideCurrent = true;
-                                }
+                                    if('"'+$self.tableData[key_a]+'"' ==  value){
+                                        actions.data.types[i].hideCurrent = true;
+                                    }
                               }
                            }
                        }

@@ -11,7 +11,8 @@
         </div>
         <br />
         <div class="formContent">
-             <!--  -->
+
+             <span @click="dialogVisibleCrumb = true">流程图</span>
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
@@ -105,6 +106,11 @@
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                 </span>
             </el-dialog>
+            <el-dialog :visible.sync="dialogVisibleCrumb" center width="70%" height="600px" append-to-body>
+                <el-form>
+                    <iframe src="/bpmn-viewer/index.html?url=test.bpmn" width="100%" height="550px" frameborder="0"></iframe>
+                </el-form>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -127,7 +133,8 @@ export default {
             users: [],
             actionsDialogArr: [],
             appFlowName:'motor-trainingapplication_train',
-            comments:[]
+            comments:[],
+            dialogVisibleCrumb:false
         };
     },
     components: {
@@ -143,6 +150,12 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            let url = `/workflow/${this.appFlowName}/processContent`;
+            $self.$axios.get(url).then(res => {
+                console.log(res);
+            });
+
+      
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
@@ -161,7 +174,6 @@ export default {
                     $self.crumbs.index = i;    
                 }
             }
-
         }
     }
 };
