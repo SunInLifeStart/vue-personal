@@ -130,7 +130,7 @@ export default {
                             id: "metting_1",
                             name: '会议申请单',
                             icon: 'el-icon-huiyi',
-                            to: 'meetingApplication',
+                            to: 'meetingApply',
                             // 没有
                         },
                         {
