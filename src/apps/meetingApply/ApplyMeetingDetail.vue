@@ -45,7 +45,7 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="议题呈报：">
-                            {{tableData.branchlineTo_1}}
+                         <span  v-html="discussionOption[tableData.branchlineTo]" ></span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -152,11 +152,6 @@
                 let response = await $self.getDetails();
                 if (response) {
                     $self.tableData = response.data.content;
-                    if (response.data.content.branchlineTo) {
-                        $self.tableData.branchlineTo_1 = this.discussionOption[response.data.content.branchlineTo];
-                    } else {
-                        $self.tableData.branchlineTo = ''
-                    }
                 } else {
                     $self.msgTips("获取表单失败", "warning");
                 }
