@@ -129,14 +129,14 @@ export default {
                         {
                             id: "metting_1",
                             name: '会议申请单',
-                            icon: 'el-icon-icon-test2',
-                            to: 'meetingApply',
+                            icon: 'el-icon-huiyi',
+                            to: 'meetingApplication',
                             // 没有
                         },
                         {
                             id: "metting_3",
                             name: '会议纪要',
-                            icon: 'el-icon-huiyi1',
+                            icon: 'el-icon-ziyuan',
                             to: 'summary'
                             //没有
                         },
@@ -168,7 +168,7 @@ export default {
                         {
                             id: "personnel_4",
                             name: '出差审批表',
-                            icon: 'el-icon-chucha',
+                            icon: 'el-icon-chuchashenqing',
                             to: 'travel'
                             //没有
                         },
@@ -203,7 +203,7 @@ export default {
                         {
                             id: "finance_4",
                             name: '招待费审批表',
-                            icon: 'el-icon-zhaodaifeijiesuan',
+                            icon: 'el-icon-qian4',
                             to: 'expenses'
                             //没有
                         },
