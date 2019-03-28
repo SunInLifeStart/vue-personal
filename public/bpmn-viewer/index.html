@@ -1,0 +1,24 @@
+<html>
+  <head>
+    <title>Camunda commons UI library</title>
+   
+    <link rel="icon" href="resources/img/favicon.ico" />
+    <link href="styles.css" rel="stylesheet" />
+  </head>
+  <body>
+        <div ng-controller='testController'>
+          <div cam-widget-bpmn-viewer
+            diagram-data='diagramXML'
+            id='viewer1'
+            control='control'
+            on-click='handleClick(element)'
+            on-load='handleLoad()'
+            on-mouse-enter='mouseEnter(element)'
+            on-mouse-leave='mouseLeave(element)'
+            style="height: 100%"></div>
+        </div>
+
+
+    <script src="bpmn-viewer.js"></script>
+  </body>
+</html>
