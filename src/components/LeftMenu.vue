@@ -10,7 +10,7 @@
                 <div class="parent" :key="index" v-for="(items,index) in apps" v-show="searchKey.length==0">
                     <div class="type">{{items.type}}</div>
                     <div class="children">
-                        <router-link :target="item.id" v-if="!item.target && !item.click && item.isVist" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
+                        <router-link :target="item.id" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
                             <i outside=true class="iconfont" :class="item.icon" size="24" />
                             <div outside=true class="name">{{item.name}}</div>
                         </router-link>
@@ -59,178 +59,226 @@ export default {
             apps: [
                 {
                     type: '常用办公',
+                    id:'commonly',
                     children: [
                         {
-                            id: 1,
-                            name: '发文',
+                            id: "commonly_1",
+                            name: '文件签发单',
                             icon: 'el-icon-fawen',
                             to: 'outgoing'
                         },
                         {
-                            id: 2,
-                            name: '收文',
+                            id: "commonly_2",
+                            name: '收文阅办单',
                             icon: 'el-icon-shouwen',
                             to: 'incoming'
                         },
                         {
-                            id: 3,
-                            name: '部门呈报',
+                            id: "commonly_3",
+                            name: '部门呈报件',
                             icon: 'el-icon-chengbaoshenpi',
                             to: 'submission'
                         },
                         {
-                            id: 4,
-                            name: '请休假申请',
+                            id: "commonly_4",
+                            name: '名片/文件印刷',
+                            icon: 'el-icon-mingpian',
+                            to: 'files'
+                            // 没有
+                        },
+                        {
+                            id: "commonly_5",
+                            name: '资产采购申请',
+                            icon: 'el-icon-zichanguanli',
+                            to: 'asset'
+                        },
+                         {
+                            id: "commonly_6",
+                            name: '用印审批表',
+                            icon: 'el-icon-yongyin',
+                            to: 'approval'
+                            // 没有
+                        },
+                         {
+                            id: "commonly_8",
+                            name: '物品领用申请',
+                            icon: 'el-icon-wupinfanghang',
+                            to: 'goods'
+                            // 没有
+                        },
+                         {
+                            id: "commonly_9",
+                            name: '公司新闻发布',
+                            icon: 'el-icon-xinwenguanli1',
+                            to: 'news'
+                        },
+                        
+                    ]
+                },
+                {
+                    type: '会议管理',
+                     id: "metting",
+                    children: [
+                        {
+                            id: "metting_2",
+                            name: '议题上会单',
+                            icon: 'el-icon-duorenhuiyi',
+                            to: 'discussion'
+                            
+                        },
+                        {
+                            id: "metting_1",
+                            name: '会议申请单',
+                            icon: 'el-icon-icon-test2',
+                            to: 'meetingApplication',
+                            // 没有
+                        },
+                        {
+                            id: "metting_3",
+                            name: '会议纪要',
+                            icon: 'el-icon-huiyi1',
+                            to: 'summary'
+                            //没有
+                        },
+                    ]
+                },
+                {
+                    type: '人事管理',
+                    id: "personnel",
+                    children: [
+                        {
+                            id: "personnel_1",
+                            name: '培训审批表',
+                            icon: 'el-icon-peixun',
+                            to: 'train'
+                        },
+                        {
+                            id: "personnel_2",
+                            name: '入职办理审批表',
+                            icon: 'el-icon-yuangongruzhi',
+                            to: 'processing'
+                            //没有
+                        },
+                         {
+                            id: "personnel_3",
+                            name: '请假申请表',
                             icon: 'el-icon-icon-test1',
                             to: 'leave'
                         },
                         {
-                            id: 5,
-                            name: '资产管理',
-                            icon: 'el-icon-zichanguanli',
-                            to: 'asset'
+                            id: "personnel_4",
+                            name: '出差审批表',
+                            icon: 'el-icon-chucha',
+                            to: 'travel'
+                            //没有
+                        },
+                       
+                    ]
+                },
+                 {
+                    type: '财务报销',
+                    id: "finance",
+                    children: [
+                        {
+                            id: "finance_1",
+                            name: '借款单',
+                            icon: 'el-icon-jiekuan',
+                             to: 'loan'
+                            //没有
                         },
                         {
-                            id: 6,
-                            name: '培训',
-                            icon: 'el-icon-peixun',
-                            to: 'train'
+                            id: "finance_2",
+                            name: '报销审批单',
+                            icon: 'el-icon-baoxiao',
+                            to: 'reimbursement'
+                            //没有
                         },
-                           {
-                            id: 7,
-                            name: '上会单',
-                            icon: 'el-icon-duorenhuiyi',
-                            to: 'discussion'
+                         {
+                            id: "finance_3",
+                            name: '付款审批单',
+                            icon: 'el-icon-fukuan',
+                            to: 'payment'
+                            //没有
                         },
-                           {
-                            id: 8,
-                            name: '合同管理',
+                        {
+                            id: "finance_4",
+                            name: '招待费审批表',
+                            icon: 'el-icon-zhaodaifeijiesuan',
+                            to: 'expenses'
+                            //没有
+                        },
+                       
+                        {
+                            id: "finance_5",
+                            name: '进行中报销单统计',
+                            icon: 'el-icon-baoxiao1',
+                            to: 'conduct'
+                            //没有
+                        }
+                    ]
+                },
+               {
+                    type: '合同管理',
+                    id: "contract",
+                    children: [
+                        {
+                            id: "contract_1",
+                            name: '合同签订审批表',
                             icon: 'el-icon-hetong',
                             to: 'contract'
                         },
+                       {
+                            id: "contract_2",
+                            name: '合同台账',
+                            icon: 'el-icon-hetongxiazaixin-',
+                            to: 'ledger'
+                            // 没有
+                        },
+                    ]
+                },
+                 {
+                    type: '招采管理',
+                    id: "recruitment",
+                    children: [
+                        {
+                            id: "recruitment_1",
+                            name: '采购方案',
+                            icon: 'el-icon-icon-cart',
+                            to: 'programme'
+                            // 没有
+                        },
+                        
+                        {
+                            id: "recruitment_2",
+                            name: '招标文件',
+                            icon: 'el-icon-zhaobiaofangan',
+                            to: 'tendering'
+                            //没有
+                        },
                          {
-                            id: 9,
-                            name: '新闻管理',
-                            icon: 'el-icon-xinwenguanli1',
-                            to: 'news'
-                        },
-                        /*{
-                            id: 15,
-                            name: '督办管理',
-                            icon: 'el-icon-inspect',
-                            to: 'inspect'
-                        },*/
-                    ]
-                },
-                /*{
-                    type: '会议纪要',
-                    children: [
-                        {
-                            id: 125,
-                            name: '党委会',
-                            icon: 'el-icon-ziyuan',
-                            to: 'partymeeting'
+                            id: "recruitment_3",
+                            name: '采购结果',
+                            icon: 'el-icon-caigoudan',
+                            to: 'results'
+                            // 没有
                         },
                         {
-                            id: 121,
-                            name: '董事会',
-                            icon: 'el-icon-meeting',
-                            to: 'boardmeeting'
+                            id: "recruitment_4",
+                            name: '招标异常事项',
+                            icon: 'el-icon-zhaobiaojieshu2',
+                            to: 'abnormal'
+                            // 没有
                         },
+                       
                         {
-                            id: 123,
-                            name: '总办会',
-                            icon: 'el-icon-huiyidengji',
-                            to: 'gmomeeting'
-                        },
-                        {
-                            id: 127,
-                            name: '专题会',
-                            icon: 'el-icon-huiyishi',
-                            to: 'specmeeting'
-                        },
-                        {
-                            id: 128,
-                            name: '议题',
-                            icon: 'el-icon-huiyishi',
-                            to: 'discussion',
-                            isVist: true
-                        },
-                        {
-                            id: 129,
-                            name: '申请表',
-                            icon: 'el-icon-huiyishi',
-                            to: 'applymeeting',
-                            isVist: true
-                        },
-                        {
-                            id: 130,
-                            name: '招采委员会',
-                            icon: 'el-icon-huiyishi',
-                            to: 'recruitmentcommittee',
-                            isVist: true
-                        },
-                        {
-                            id: 131,
-                            name: '会议申请(总办会)',
-                            icon: 'el-icon-huiyishi',
-                            to: 'agentapply',
-                            isVist: true
+                            id: "recruitment_5",
+                            name: '供应商引入审批',
+                            icon: 'el-icon-supplier',
+                            to: 'supplier'
+                            // 没有
                         }
                     ]
                 },
-                {
-                    type: '财务报销',
-                    children: [
-                        {
-                            id: 221,
-                            name: '对私报销',
-                            icon: 'el-icon-icon-test',
-                            to: 'expense'
-                        },
-                        {
-                            id: 223,
-                            name: '付款申请',
-                            icon: 'el-icon-fukuan',
-                            to: 'payment'
-                        },
-                        {
-                            id: 225,
-                            name: '借款',
-                            icon: 'el-icon-jiekuan',
-                            to: 'loan'
-                        },
-                        {
-                            id: 227,
-                            name: '出差审批',
-                            icon: 'el-icon-chuchashenqing',
-                            to: 'travel'
-                        },
-                        {
-                            id: 229,
-                            name: '报销查询',
-                            icon: 'el-icon-baoxiao',
-                            to: 'statistics'
-                        }
-                    ]
-                },
-                {
-                    type: '品牌宣传管理',
-                    children: [
-                        {
-                            id: 422,
-                            name: '新闻管理',
-                            icon: 'el-icon-xinwenguanli1',
-                            to: 'news'
-                        },
-                    {
-                            id: 8,
-                            name: '合同管理',
-                            icon: 'el-icon-hetongguanli',
-                            to: 'contract'
-                        },
-                    ]
-                }*/
             ]
         };
     },
