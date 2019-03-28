@@ -67,8 +67,11 @@ export const publicMethods = {
                         if(key == "oid"){
                             options.push(key + "=" + this.$store.getters.LoginData.oid);
                         }else{
-                            $self.msgTips('依赖的' + key + '表单中找不到', "warning");
-                            return false;
+                            if(key.indexOf("filterButton") > -1){
+                            }else{
+                                $self.msgTips('依赖的' + key + '表单中找不到', "warning");
+                                return false;
+                            }
                         }
                        
                     }
