@@ -229,7 +229,7 @@
                 users: [],
                 uploadId: 0,
                 formLabelWidth: '120px',
-                appFlowName: "motor-trainingapplication_train",
+                appFlowName: "motor-meetingApply_application-meeting",
                 currentFormId: this.operationType == 'create' ? '' : this.formId
             };
         },
@@ -299,7 +299,8 @@
                         department: ''
                     }],
                     numbers: '',
-                    branchlineTo: '',
+                    branchlineTo: 'specMeeting',
+                    businessType: '',
                     created: '',
                     // comments: [],
                     idea: '',
@@ -371,6 +372,9 @@
                         item.person = item.people.join(',')
                     }
                 })
+                let business = this.discussionOption.filter((item) => { return item.value === this.formData.branchlineTo})
+                if (business.length > 0)
+                this.formData.businessType = business[0].value + '_' +  business[0].label
                 let response = await $self.saveFormData(
                     "/api/v1/meetingApply/save",
                     $self.formData

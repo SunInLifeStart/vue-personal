@@ -126,7 +126,7 @@
                 comments: [],
                 textarea: '',
                 dialogVisible: false,
-                appFlowName:'motor-issuesReported',
+                appFlowName:'motor-meetingApply_application-meeting',
                 discussionOption: {
                     specMeeting: '专题会',
                     gmoMeeting: '总办会',

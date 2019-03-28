@@ -247,6 +247,7 @@ export default {
                 created: '',
                 // comments: [],
                 idea: '',
+                business: '',
                 committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
                 applyDepartment: this.$store.getters.LoginData.oname || '',
                 timeApplication: '',
