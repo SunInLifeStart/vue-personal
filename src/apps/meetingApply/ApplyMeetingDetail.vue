@@ -3,7 +3,7 @@
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
-                    <span v-for="(action, index) in actions" :key="action.index" class="btnList" @click="doAction(action)">
+                    <span v-for="(action, index) in actions" :key="index" class="btnList" @click="doAction(action)" v-if="!action.hideCurrent">
                         {{action.name}}
                     </span>
                 </div>
@@ -45,7 +45,7 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="议题呈报：">
-                            {{tableData.branchlineTo}}
+                            {{tableData.branchlineTo_1}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -148,12 +148,12 @@
                 $self.getFormDetailsData();
             },
             async getFormDetailsData() {
-                let $self = this;
+                 let $self = this;
                 let response = await $self.getDetails();
                 if (response) {
                     $self.tableData = response.data.content;
                     if (response.data.content.branchlineTo) {
-                        $self.tableData.branchlineTo = this.discussionOption[response.data.content.branchlineTo]
+                        $self.tableData.branchlineTo_1 = this.discussionOption[response.data.content.branchlineTo];
                     } else {
                         $self.tableData.branchlineTo = ''
                     }
@@ -164,6 +164,29 @@
                 let actions = await $self.getActions();
                 let crumbs = await $self.getCrumbs();
                 let comments =  await $self.getComments();
+                for(let i = 0; i < actions.data.types.length; i++){
+                   if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
+                       for(let j = 0; j<actions.data.types[i].required.length; j++){
+                           if(actions.data.types[i].required[j].indexOf("filterButton") > -1){
+                              if(actions.data.types[i].required[j].indexOf("==") > -1){
+                                 let a = actions.data.types[i].required[j];
+                                 let key_a = a.split("==")[0].split(":")[1];
+                                 let value = a.split("==")[1];
+                                 if($self.tableData[key_a] != value){
+                                   actions.data.types[i].hideCurrent = true;
+                                 }
+                              }else{
+                                  let a = actions.data.types[i].required[j];
+                                  let key_a = a.split("!=")[0].split(":")[1];
+                                  let value = a.split("!=")[1];
+                                if($self.tableData[key_a] == value){
+                                     actions.data.types[i].hideCurrent = true;
+                                }
+                              }
+                           }
+                       }
+                   }
+                };
                 $self.actions = actions.data.types;
                 $self.crumbs =  {items: crumbs.data, index: -1};
                 $self.comments = comments.data;

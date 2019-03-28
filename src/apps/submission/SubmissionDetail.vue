@@ -465,7 +465,7 @@ export default {
               if(action.required && "APPROVE".includes(action.type)){
                    this.approve_status = true;
                    this.seleteUserLabel_approve = '请选择主管领导';
-                    axios.get("/api/v1/users/role/deptLeader").then(res => {
+                    axios.get("/api/v1/users/role/xtfz_deptLeader").then(res => {
                         this.approve_users = res.data;
                     });
               }
