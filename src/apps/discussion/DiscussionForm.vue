@@ -200,14 +200,15 @@ export default {
         },
         deleteItem(item, index, type) {
             this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                if (type == 'message') {
-                    if (item.id) {
-                        this.formData.attendingDepartment.splice(index, 1);
-                    } else {
-                        this.formData.attendingDepartment.splice(index, 1);
-                    }
-                } else if (type == 'personal') {
+                if (type == 'message' && this.formData.attendingDepartment.length > 1) {
+                    this.formData.attendingDepartment.splice(index, 1);
+                } else if (type == 'personal' && this.formData.requestedItems.length > 1) {
                     this.formData.requestedItems.splice(index, 1);
+                } else {
+                    this.$message({
+                        message: '最后一组不能删除',
+                        type: 'error'
+                    });
                 }
             });
         },

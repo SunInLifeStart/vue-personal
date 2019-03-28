@@ -1,19 +1,19 @@
 <template>
-    <div id="ApplyMeetingDetail" :class="{fullScreen:fullScreen}">
+    <div id="ApplyMeetingDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
-                    <span v-for="action in actions" :key="action.type" class="btnList" @click="doAction(action)">
+                    <span v-for="(action, index) in actions" :key="action.index" class="btnList" @click="doAction(action)">
                         {{action.name}}
                     </span>
                 </div>
             </el-row>
         </div>
         <div class="formContent">
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
             <el-form :model='tableData' class="formList">
-                <el-steps :active="crumb.index" finish-status="success" class="crumbList">
-                    <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>
-                </el-steps>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号：">{{tableData.number}}
@@ -43,7 +43,12 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="24">
+                    <el-col :span="8">
+                        <el-form-item label="议题呈报：">
+                            {{tableData.branchlineTo}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item label="会议名称：">{{tableData.conferenceTitle}}
                         </el-form-item>
                     </el-col>
@@ -63,17 +68,17 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row v-if="tableData.comments && tableData.comments.length > 0">
+                <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
                         <div class="items">
-                            <div class="item" v-for="item in tableData.comments" :key="item.id">
+                            <div class="item" v-for="item in comments" :key="item.id">
                                 <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
                                 <div class="info">
                                     <div class="creator">
-                                        <span href="#">{{item.creatorName}}</span> &nbsp; ({{item.created | dateformat}})
+                                        <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
                                     </div>
-                                    <div class="content">{{item.content}}</div>
+                                    <div class="content">{{item.fullMessage}}</div>
                                 </div>
                             </div>
                         </div>
@@ -115,22 +120,20 @@
                 tableData: {},
                 actions: [],
                 actionsDialogArr: [],
-                crumb: { items: [] },
-                fullScreen: false,
-                typesStatus: false,
                 users: [],
-                rejectTarget: '',
-                rejectList: [],
-                reject_status: false,
-                presign_status: false,
-                seleteUsers: [],
-                seleteUserLabel: '',
+                formId: "",
+                crumbs: [],
+                comments: [],
                 textarea: '',
                 dialogVisible: false,
-                currentAction: '',
                 appFlowName:'motor-issuesReported',
-                submitData: {},
-                crumbNodeName: ''
+                discussionOption: {
+                    specMeeting: '专题会',
+                    gmoMeeting: '总办会',
+                    partyMeeting: '党支委会',
+                    recruMeeting: '招采委员会',
+                    communMeeting: '班子沟通会'
+                }
             };
         },
         components: {
@@ -141,7 +144,7 @@
             getFormDetails(formId) {
                 let $self = this;
                 $self.formId = formId;
-                $self.url= "/api/v1/meetingApply/zb/detail/" + $self.formId;
+                $self.url= "/api/v1/meetingApply/detail/" + $self.formId;
                 $self.getFormDetailsData();
             },
             async getFormDetailsData() {
@@ -149,44 +152,27 @@
                 let response = await $self.getDetails();
                 if (response) {
                     $self.tableData = response.data.content;
+                    if (response.data.content.branchlineTo) {
+                        $self.tableData.branchlineTo = this.discussionOption[response.data.content.branchlineTo]
+                    } else {
+                        $self.tableData.branchlineTo = ''
+                    }
                 } else {
                     $self.msgTips("获取表单失败", "warning");
                 }
+                // debugger;
                 let actions = await $self.getActions();
+                let crumbs = await $self.getCrumbs();
+                let comments =  await $self.getComments();
                 $self.actions = actions.data.types;
-            },
-            getCrumbs() {
-                axios
-                    .get(`/api/v1/board_meetings/${this.formId}/crumb`)
-                    .then(res => {
-                        this.crumb = { items: res.data, index: -1 };
-                        res.data.forEach((item, index) => {
-                            if (item.active) {
-                                this.crumbNodeName = item.name;
-                                if (item.assignes) {
-                                    item.name =
-                                        item.name + '(' + item.assignes + ')';
-                                }
-                                this.crumb.index = index;
-                            }
-                        });
-                    });
-            },
-            getRejectList() {
-                let self = this;
-                axios
-                    .get(
-                        '/api/v1/board_meetings/' + this.formId + '/reject/targets'
-                    )
-                    .then(res => {
-                        self.rejectList = res.data;
-                    });
-            },
-            getAllUsers() {
-                let self = this;
-                axios.get(`/api/v1/users`).then(res => {
-                    self.users = res.data;
-                });
+                $self.crumbs =  {items: crumbs.data, index: -1};
+                $self.comments = comments.data;
+                for(var i= 0; i<$self.crumbs.items.length; i++){
+                    if($self.crumbs.items[i].active){
+                        $self.crumbs.index = i;
+                    }
+                }
+
             }
         }
     };

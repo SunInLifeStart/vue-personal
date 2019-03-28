@@ -8,6 +8,18 @@
                             <el-input v-model="formData.number"></el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="议题呈报">
+                            <el-select v-model="formData.branchlineTo" placeholder="请选择">
+                                <el-option
+                                        v-for="item in discussionOption"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
@@ -171,6 +183,28 @@
         data() {
             return {
                 dialogFormVisible: false,
+                discussionOption: [
+                    {
+                        value: 'specMeeting',
+                        label: '专题会'
+                    },
+                    {
+                        value: 'communMeeting',
+                        label: '班子沟通会'
+                    },
+                    {
+                        value: 'gmoMeeting',
+                        label: '总办会'
+                    },
+                    {
+                        value: 'partyMeeting',
+                        label: '党支委会'
+                    },
+                    {
+                        value: 'recruMeeting',
+                        label: '招采委员会'
+                    }
+                ],
                 options: [
                     {
                         value: '1',
@@ -214,16 +248,17 @@
             },
             deleteItem(item, index, type) {
                 this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                    if (type == 'message') {
-                        if (item.id) {
-                            this.formData.attendingDepartment.splice(index, 1);
-                        } else {
-                            this.formData.attendingDepartment.splice(index, 1);
-                        }
-                    } else if (type == 'personal') {
+                    if (type == 'message' && this.formData.attendingDepartment.length > 1) {
+                        this.formData.attendingDepartment.splice(index, 1);
+                    } else if (type == 'personal' && this.formData.requestedItems.length > 1) {
                         this.formData.requestedItems.splice(index, 1);
-                    } else if (type == 'sitIn') {
+                    } else if (type == 'sitIn' && this.formData.sitIn.length > 1) {
                         this.formData.sitIn.splice(index, 1);
+                    } else {
+                        this.$message({
+                            message: '最后一组不能删除',
+                            type: 'error'
+                        });
                     }
                 });
             },
@@ -264,6 +299,7 @@
                         department: ''
                     }],
                     numbers: '',
+                    branchlineTo: '',
                     created: '',
                     // comments: [],
                     idea: '',
@@ -282,7 +318,7 @@
                 const self = this;
                 if (this.formId != '') {
                     axios
-                        .get('/api/v1/meetingApply/zb/detail/' + this.formId)
+                        .get('/api/v1/meetingApply/detail/' + this.formId)
                         .then(res => {
                             self.formData = res.data.content;
                             if (self.formData.attendingDepartment) {
@@ -336,7 +372,7 @@
                     }
                 })
                 let response = await $self.saveFormData(
-                    "/api/v1/meetingApply/zb/save",
+                    "/api/v1/meetingApply/save",
                     $self.formData
                 );
                 if (response) {

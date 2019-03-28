@@ -1,5 +1,5 @@
 <template>
-    <div id="DiscussionDetail" :class="{fullScreen:fullScreen}">
+    <div id="DiscussionDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -44,15 +44,8 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="议题呈报">
-                            <el-select v-model="tableData.branchlineTo" style="width: 60%" placeholder="请选择" :disabled="true">
-                                <el-option
-                                        v-for="item in discussionOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                        <el-form-item label="议题呈报：">
+                            {{tableData.branchlineTo}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -127,34 +120,16 @@ export default {
             tableData: {},
             actions: [],
             actionsDialogArr: [],
-            crumb: { items: [] },
-            fullScreen: false,
-            typesStatus: false,
             users: [],
             crumbs: [],
-            rejectTarget: '',
-            rejectList: [],
             comments: [],
-            reject_status: false,
-            presign_status: false,
-            seleteUsers: [],
-            seleteUserLabel: '',
             textarea: '',
             dialogVisible: false,
-            currentAction: '',
             appFlowName:'motor-issuesreported_party-agendasheet',
-            submitData: {},
-            discussionOption: [
-                {
-                    value: 'chairman',
-                    label: '总办会'
-                },
-                {
-                    value: 'general',
-                    label: '党支委会'
-                }
-            ],
-            crumbNodeName: ''
+            discussionOption: {
+                chairman: '总办会',
+                general: '党支委会'
+            }
         };
     },
     components: {
@@ -173,6 +148,11 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
+                if (response.data.content.branchlineTo) {
+                    $self.tableData.branchlineTo = this.discussionOption[response.data.content.branchlineTo]
+                } else {
+                    $self.tableData.branchlineTo = ''
+                }
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
