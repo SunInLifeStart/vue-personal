@@ -45,7 +45,7 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="议题呈报：">
-                            {{tableData.branchlineTo}}
+                            <span  v-html="discussionOption[tableData.branchlineTo]" ></span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -148,11 +148,6 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
-                if (response.data.content.branchlineTo) {
-                    $self.tableData.branchlineTo = this.discussionOption[response.data.content.branchlineTo]
-                } else {
-                    $self.tableData.branchlineTo = ''
-                }
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
@@ -160,6 +155,29 @@ export default {
             let actions = await $self.getActions();
             let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();
+            for(let i = 0; i < actions.data.types.length; i++){
+                if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
+                    for(let j = 0; j<actions.data.types[i].required.length; j++){
+                        if(actions.data.types[i].required[j].indexOf("filterButton") > -1){
+                            if(actions.data.types[i].required[j].indexOf("==") > -1){
+                                let a = actions.data.types[i].required[j];
+                                let key_a = a.split("==")[0].split(":")[1];
+                                let value = a.split("==")[1];
+                                if($self.tableData[key_a] != value){
+                                    actions.data.types[i].hideCurrent = true;
+                                }
+                            }else{
+                                let a = actions.data.types[i].required[j];
+                                let key_a = a.split("!=")[0].split(":")[1];
+                                let value = a.split("!=")[1];
+                                if($self.tableData[key_a] == value){
+                                    actions.data.types[i].hideCurrent = true;
+                                }
+                            }
+                        }
+                    }
+                }
+            };
             $self.actions = actions.data.types;
             $self.crumbs =  {items: crumbs.data, index: -1};
             $self.comments = comments.data;
