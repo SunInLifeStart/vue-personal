@@ -1,30 +1,11 @@
 <template>
     <div id="leavelForm">
-        <!-- <div class="notice">
-            <h2>注意</h2>
-            <ol>
-                <li>完整填写所有出差人员；</li>
-                <li>预估费用按照厉行节俭的要求严格控制，费用标准请参考集团国内差旅制度；</li>
-                <li>出差补助金额不需计入。</li>
-            </ol>
-        </div> -->
         <el-form :model='rows' class="demo-form-inline" ref="formupdate">
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="流水单号：">{{rows.number}}
+                    <el-form-item label="流水单号：">{{rows.no}}
                     </el-form-item>
                 </el-col>
-                <!-- <el-col :span="8">
-                    <el-form-item label="呈报件：" label-width="30px;">
-                        <el-select v-model="rows.submission2" value-key="id" placeholder="选择呈报件" @change="SubmissionChange">
-                            <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item">
-                            </el-option>
-                        </el-select>
-                        <el-tooltip class="item" effect="dark" content="查看" placement="right">
-                            <el-button type="text" style="margin-left: 10px;" icon="el-icon-view" @click="submissionDetail"></el-button>
-                        </el-tooltip>
-                    </el-form-item>
-                </el-col> -->
             </el-row>
             <table style="width: 100%; table-layout: fixed; word-break: break-all;">
                 <col style="width: 14%" />
@@ -77,21 +58,25 @@
                 </tr>
                 <tr>
                     <td>申请休假种类</td>
-                    <td colspan="2">
+                    <td colspan="1">
                         <el-select v-model="rows.type" placeholder="请选择">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                             </el-option>
                         </el-select>
                     </td>
                     <td>拟休时间</td>
-                    <td colspan="5">
+                    <td colspan="4">
                         <template>
-                            <el-date-picker v-model="rows.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始时间" @input="getTime()">
+                            <el-date-picker v-model="rows.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="开始时间" @input="getTime()">
                             </el-date-picker>至
-                            <el-date-picker v-model="rows.endTime" value-format="yyyy-MM-dd" type="date" placeholder="结束时间" @input="getTime()">
+                            <el-date-picker v-model="rows.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间" @input="getTime()">
                             </el-date-picker>
                         </template>
-                        共({{rows.day}})天
+                        <!-- 共({{rows.day}})天 -->
+                    </td>
+                    <td colspan="2">
+                        <el-input placeholder="" v-model="rows.day">
+                        </el-input>
                     </td>
                 </tr>
                 <tr>
@@ -110,13 +95,6 @@
 
             </table>
         </el-form>
-        <el-dialog title="提示" append-to-body :visible.sync="dialogVisible" width="30%">
-            <span v-for="item in this.vacancy" :key="item">"{{item}}",</span>未填写，是否继续
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="dialogVisibleab">确 定</el-button>
-            </span>
-        </el-dialog>
     </div>
 </template>
 <script>
@@ -128,7 +106,6 @@ export default {
     name: 'leavelForm',
     data() {
         return {
-            dialogVisible: false,
             submissionSelections: [],
             getoid: '',
             options: [
@@ -166,6 +143,7 @@ export default {
                 }
             ],
             rows: {
+                no: '',
                 uname: '',
                 oname: '',
                 reason: '',
@@ -179,43 +157,6 @@ export default {
             },
             users: [],
             currentFormId: this.operationType == 'create' ? '' : this.formId,
-            pickerOptions2: {
-                shortcuts: [
-                    {
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(
-                                start.getTime() - 3600 * 1000 * 24 * 7
-                            );
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(
-                                start.getTime() - 3600 * 1000 * 24 * 30
-                            );
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(
-                                start.getTime() - 3600 * 1000 * 24 * 90
-                            );
-                            picker.$emit('pick', [start, end]);
-                        }
-                    }
-                ]
-            },
             pickerOptions1: {
                 shortcuts: [
                     {
@@ -266,11 +207,7 @@ export default {
                 self.cookie_oname = decodeURIComponent(item.split('=')[1]);
             }
         });
-        // this.getNum();
-        this.remoteMethod();
-        // this.getClass();
-        this.organs();
-        this.getSubmissionlList();
+        this.getNum();
     },
     watch: {
         formId: function() {
@@ -283,155 +220,37 @@ export default {
         }
     },
     methods: {
-        //根据uid获取部门呈报件
-        getSubmissionlList() {
-            const self = this;
-            if (self.cookie_uid != '') {
-                axios
-                    .post(
-                        '/api/v1/submission_forms/queryDone/' + this.cookie_uid
-                    )
-                    .then(res => {
-                        self.submissionSelections = res.data;
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
-            }
-        },
-        //部门呈报件改变
-        SubmissionChange() {
-            this.rows.submissionId = this.rows.submission2.id;
-        },
-        submissionDetail() {
-            if (this.rows.submission2 && this.rows.submission2 != null) {
-                this.common.open('#/apps/submission/' + this.rows.submissionId);
-            }
-        },
-        currencyChange2(item, index) {
-            for (let data of this.rows.estimate) {
-                data.currency = item.currency;
-                data.rate = item.rate;
-            }
-        },
-        currencyChange() {
-            if (
-                this.rows.estimate.length > 1 &&
-                this.rows.estimate[0].currency
-            ) {
-                for (let data of this.options2) {
-                    if (data != this.rows.estimate[0].currency) {
-                        data.disabled = true;
-                    }
-                }
-            } else {
-                for (let data of this.options2) {
-                    data.disabled = false;
-                }
-            }
-        },
-        getTime() {
-            const time1 = Date.parse(
-                new Date(this.rows.startTime.replace(/-/g, '/'))
-            );
-            const time2 = Date.parse(
-                new Date(this.rows.endTime.replace(/-/g, '/'))
-            );
-            const time3 = time2 - time1;
-            const time4 = Math.floor(time3 / (24 * 3600 * 1000));
-            if (this.rows.startTime && this.rows.endTime) {
-                if (time1 > time2) {
-                    this.$message({
-                        message: '开始日期应小于结束日期',
-                        type: 'warning'
-                    });
-                    this.rows.endTime = '';
-                } else {
-                    this.rows.day = time4 + 1;
-                }
-            }
-        },
-        organs() {
-            axios.get('/api/v1/users/get/allOrgans').then(res => {
-                this.organs = res.data;
-            });
-        },
-        getClass() {
-            const self = this;
-            this.getclass = [];
-            axios.get('/api/v1/reim/code/021001020').then(res => {
-                let array = [];
-                for (let data of res.data[0].children) {
-                    if (data.name != '补助费') {
-                        array.push(data);
-                    }
-                }
-                self.getclass.push({
-                    id: '134',
-                    name: '差旅费(国内)',
-                    children: array
-                });
-                axios.get('/api/v1/reim/code/021001005').then(res => {
-                    self.getclass.push(res.data[0]);
-                });
-            });
-        },
-        changeUser(item, index) {
-            for (let data of this.users) {
-                if (item.bname1.id == data.id) {
-                    if (data.organ) {
-                        item.borganName = data.organ.name;
-                    } else {
-                        item.borganName = '';
-                    }
-                }
-            }
-        },
-        changeOrgans() {},
-        remoteMethod() {
-            axios.get('/api/v1/users').then(res => {
-                this.users = res.data;
-            });
-        },
-        addItem(type) {
-            if (type == 'message') {
-                this.rows.evections.push({});
-            }
-            if (type == 'fenDetaill') {
-                this.rows.estimate.push({
-                    bsType: [],
-                    price: '',
-                    smallType: '',
-                    number: '',
-                    currency:
-                        this.rows.estimate.length == 0
-                            ? {
-                                  value: '￥',
-                                  label: '人民币'
-                              }
-                            : this.rows.estimate[0].currency,
-                    rate:
-                        this.rows.estimate.length == 0
-                            ? '1'
-                            : this.rows.estimate[0].rate,
-                    principal: 0,
-                    subtotal: 0
-                });
-            }
-        },
+        // getTime() {
+        //     const time1 = Date.parse(
+        //         new Date(this.rows.startTime.replace(/-/g, '/'))
+        //     );
+        //     const time2 = Date.parse(
+        //         new Date(this.rows.endTime.replace(/-/g, '/'))
+        //     );
+        //     const time3 = time2 - time1;
+        //     const time4 = Math.floor(time3 / (24 * 3600 * 1000));
+        //     if (this.rows.startTime && this.rows.endTime) {
+        //         if (time1 > time2) {
+        //             this.$message({
+        //                 message: '开始日期应小于结束日期',
+        //                 type: 'warning'
+        //             });
+        //             this.rows.endTime = '';
+        //         } else {
+        //             this.rows.day = time4 + 1;
+        //         }
+        //     }
+        // },
         getNum() {
             const self = this;
             axios
-                .get('/api/v1/travel_forms/no', {
+                .get('/api/v1/motor-holiday/getNo', {
                     headers: {
                         'Content-type': 'application/json'
                     }
                 })
                 .then(res => {
-                    this.rows.number = res.data;
+                    this.rows.no = res.data;
                 })
                 .catch(function() {
                     self.$message({
@@ -439,80 +258,6 @@ export default {
                         type: 'error'
                     });
                 });
-        },
-        money() {
-            if (this.rows.total) {
-                this.rows.upper = this.common.DX(this.rows.total);
-            } else {
-                this.rows.upper = '零元整';
-            }
-        },
-        getAmount(item) {
-            for (let data of this.rows.estimate) {
-                data.rate = item.rate;
-                if (data.price && data.number && data.rate) {
-                    data.principal = this.common.toDecimal2(
-                        data.price * data.rate * data.number
-                    );
-                } else {
-                    data.principal = 0;
-                }
-                if (data.number && data.price != 0) {
-                    item.subtotal = this.common.toDecimal2(
-                        item.price * item.number
-                    );
-                } else {
-                    data.subtotal = 0;
-                }
-            }
-
-            this.getAmounta();
-            this.money();
-        },
-        getAmounta() {
-            let sum = 0;
-            for (let data of this.rows.estimate) {
-                sum += parseFloat(data.subtotal);
-            }
-            this.rows.total = sum;
-        },
-        deleteItem(item, index, type) {
-            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                if (type == 'message') {
-                    if (item.id) {
-                        axios
-                            .get('/api/v1/travel_forms/delEvection/' + item.id)
-                            .then(res => {
-                                this.rows.evections.splice(index, 1);
-                            })
-                            .catch(function() {
-                                self.$message({
-                                    message: '操作失败',
-                                    type: 'error'
-                                });
-                            });
-                    } else {
-                        this.rows.evections.splice(index, 1);
-                    }
-                }
-                if (type == 'cost') {
-                    if (item.id) {
-                        axios
-                            .get('/api/v1/travel_forms/delEstimate/' + item.id)
-                            .then(res => {
-                                this.rows.estimate.splice(index, 1);
-                            })
-                            .catch(function() {
-                                self.$message({
-                                    message: '操作失败',
-                                    type: 'error'
-                                });
-                            });
-                    } else {
-                        this.rows.estimate.splice(index, 1);
-                    }
-                }
-            });
         },
         handleClick() {},
         getForm() {
@@ -533,7 +278,6 @@ export default {
             }
         },
         dialogVisibleab() {
-            this.dialogVisible = false;
             this.$refs['formupdate'].validate(valid => {
                 if (valid) {
                     this.saveForm();
@@ -550,7 +294,6 @@ export default {
                     this.$emit('saveStatus', false);
                 } else {
                     this.$emit('saveStatus', true);
-                    // this.dialogVisible = true;
                 }
             });
         },
@@ -558,11 +301,15 @@ export default {
             const self = this;
             if (self.operationType == 'create') {
                 axios
-                    .post('/api/v1/motor-holiday/save', JSON.stringify(this.rows), {
-                        headers: {
-                            'Content-type': 'application/json'
+                    .post(
+                        '/api/v1/motor-holiday/save',
+                        JSON.stringify(this.rows),
+                        {
+                            headers: {
+                                'Content-type': 'application/json'
+                            }
                         }
-                    })
+                    )
                     .then(res => {
                         self.currentFormId = res.data.id;
                         if (action == 'save') {
@@ -796,7 +543,7 @@ export default {
         },
         clearForm() {
             this.rows = {
-                number: this.rows.number,
+                no: this.rows.no,
                 uname: this.cookie_uname,
                 oname: this.cookie_oname,
                 reason: '',
@@ -806,7 +553,7 @@ export default {
                     // .utc()
                     .format('YYYY-MM-DD HH:mm:ss')
             };
-            // this.getNum();
+            this.getNum();
         }
     }
 };

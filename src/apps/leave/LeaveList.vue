@@ -65,7 +65,7 @@ export default {
         getList() {
             const self = this;
             const params = {
-                page: this.params.pageNum,
+                pageNum: this.params.pageNum,
                 pageSize: this.params.pageSize,
                 orderBy: 'created',
                 desc: true,
@@ -127,8 +127,7 @@ export default {
             this.getList();
         },
         sizeChange(pageSize) {
-            this.params.pageSize = pageSize;
-            console.log(pageSize)
+            this.params.pageNum = pageSize;
             this.getList();
         },
         handleSuccess(response, file) {

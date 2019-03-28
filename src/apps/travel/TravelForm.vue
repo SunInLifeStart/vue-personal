@@ -19,6 +19,14 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                    <el-form-item label="出差类型：">
+                        <el-select v-model="rows.traveltype" placeholder="选择出差类型" @change="SubmissionChange">
+                            <el-option v-for="item in typeoption" :key="item.id" :label="item.label" :value="label">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
                     <el-form-item label="呈报件：" label-width="30px;">
                         <el-select v-model="rows.submission2" value-key="id" placeholder="选择呈报件" @change="SubmissionChange">
                             <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item">
@@ -55,17 +63,10 @@
                         <span class="span1">*</span> 费用承担部门
                     </td>
                     <td colspan="2">
-                        <!-- <el-input v-model="rows.subOrganName"></el-input> -->
-                        <!-- <el-form-item label="" prop="subOrganName"> -->
-                             <el-select style="width:100%" v-model="rows.subOrganName" value-key="id" @change="changeOrgans()" placeholder="">
+                        <el-select style="width:100%" v-model="rows.subOrganName" value-key="id" @change="changeOrgans()" placeholder="">
                             <el-option v-for="item in organs" :key="item.id" :label="item.name" :value="item.name">
                             </el-option>
                         </el-select>
-                        <!-- </el-form-item> -->
-                        <!-- <el-select style="width:100%" v-model="rows.subOrganName" value-key="id" @change="changeOrgans()" placeholder="">
-                            <el-option v-for="item in organs" :key="item.id" :label="item.name" :value="item.name">
-                            </el-option>
-                        </el-select> -->
                     </td>
                     <td colspan="1">提单时间</td>
                     <td colspan="2">
@@ -85,12 +86,17 @@
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="1"><span class="span1">*</span>出差人员</td>
+                    <td colspan="1">
+                        <span class="span1">*</span>出差人员</td>
                     <td colspan="1">所属部门</td>
-                    <td colspan="1"> <span class="span1">*</span>职务</td>
-                    <td colspan="1"><span class="span1">*</span>出发地</td>
-                    <td colspan="1"><span class="span1">*</span>目的地</td>
-                    <td colspan="2"><span class="span1">*</span>出差时间</td>
+                    <td colspan="1">
+                        <span class="span1">*</span>职务</td>
+                    <td colspan="1">
+                        <span class="span1">*</span>出发地</td>
+                    <td colspan="1">
+                        <span class="span1">*</span>目的地</td>
+                    <td colspan="2">
+                        <span class="span1">*</span>出差时间</td>
                     <td colspan="1">出差天数（天）</td>
                 </tr>
                 <tr v-for="(item,index) in this.rows.evections" :key="item.index" @contextmenu.prevent="deleteItem(item,index,'message')">
@@ -145,9 +151,12 @@
                     <td colspan="8" style="font-weight:bold;">预估费用</td>
                 </tr>
                 <tr>
-                    <td colspan="2"><span class="span1">*</span>费用类别</td>
-                    <td colspan="1"><span class="span1">*</span>单价</td>
-                    <td colspan="1"><span class="span1">*</span>数量</td>
+                    <td colspan="2">
+                        <span class="span1">*</span>费用类别</td>
+                    <td colspan="1">
+                        <span class="span1">*</span>单价</td>
+                    <td colspan="1">
+                        <span class="span1">*</span>数量/公里</td>
                     <td colspan="1">币种</td>
                     <td colspan="1">预估汇率</td>
                     <td colspan="1">原币金额合计</td>
@@ -215,7 +224,7 @@
 
             </table>
         </el-form>
-        <el-dialog title="提示"  append-to-body  :visible.sync="dialogVisible" width="30%">
+        <el-dialog title="提示" append-to-body :visible.sync="dialogVisible" width="30%">
             <span v-for="item in this.vacancy" :key="item">"{{item}}",</span>未填写，是否继续
             <span slot="footer" class="dialog-footer">
                 <el-button @click="dialogVisible = false">取 消</el-button>
@@ -233,10 +242,19 @@ export default {
     name: 'travelForm',
     data() {
         return {
-            dialogVisible:false,
+            dialogVisible: false,
             submissionSelections: [],
             getoid: '',
-            //options2: CURRENCY['currency'],
+            typeoption:[
+                {
+                    label:'市内',
+                    value:'市内'
+                },
+                {
+                    label:'市外',
+                    value:'市外'
+                }
+            ],
             options2: [
                 {
                     value: 'C$',
@@ -316,9 +334,9 @@ export default {
                 }
             ],
             rows: {
-                submission2:{},
-                submissionName:'',
-                submissionId:'',
+                submission2: {},
+                submissionName: '',
+                submissionId: '',
                 number: '',
                 submitter: '',
                 subOrganName: '',
@@ -438,7 +456,7 @@ export default {
             //         { required: true, message: '请选择活动区域', trigger: 'change' }
             //     ],
             // },
-            vacancy:[],
+            vacancy: []
         };
     },
     props: ['formId', 'operationType'],
@@ -495,9 +513,9 @@ export default {
                     });
             }
         },
-         //部门呈报件改变
+        //部门呈报件改变
         SubmissionChange() {
-            this.rows.submissionId = this.rows.submission2.id
+            this.rows.submissionId = this.rows.submission2.id;
         },
         submissionDetail() {
             if (this.rows.submission2 && this.rows.submission2 != null) {
@@ -571,10 +589,9 @@ export default {
                     children: array
                 });
                 axios.get('/api/v1/reim/code/021001005').then(res => {
-                    self.getclass.push(res.data[0]);            
+                    self.getclass.push(res.data[0]);
                 });
             });
-            
         },
         changeUser(item, index) {
             for (let data of this.users) {
@@ -766,7 +783,7 @@ export default {
                         res.data.evections = [];
                         res.data.evections = array1;
                         this.rows = res.data;
-                        this.rows.submission2 =res.data.submissionName
+                        this.rows.submission2 = res.data.submissionName;
                     })
                     .catch(function() {
                         self.$message({
@@ -776,17 +793,16 @@ export default {
                     });
             }
         },
-        dialogVisibleab(){
+        dialogVisibleab() {
             this.dialogVisible = false;
             // this.$refs['formupdate'].validate((valid) => {
             //     if (valid) {
-                    this.saveForm();
-                    this.$emit('saveStatus', false);
+            this.saveForm();
+            this.$emit('saveStatus', false);
             //     } else {
             //         this.$emit('saveStatus', true);
             //     }
             // });
-           
         },
         saveFormValidate() {
             let showCheck = true;
@@ -802,53 +818,61 @@ export default {
                     message: '请输入预估费用的单价',
                     type: 'error'
                 });
-            } else if(this.rows.reason == '' || this.rows.evections.borganName == '' ||this.rows.evections.departure == ''||this.rows.evections.destination == ''
-            ||this.rows.evections.startTime == '' ||this.rows.evections.endTime == '' ||this.rows.estimate.bsType == '' ||this.rows.estimate.number == '' ){
-                 this.dialogVisible = true;
-            }else{
+            } else if (
+                this.rows.reason == '' ||
+                this.rows.evections.borganName == '' ||
+                this.rows.evections.departure == '' ||
+                this.rows.evections.destination == '' ||
+                this.rows.evections.startTime == '' ||
+                this.rows.evections.endTime == '' ||
+                this.rows.estimate.bsType == '' ||
+                this.rows.estimate.number == ''
+            ) {
+                this.dialogVisible = true;
+            } else {
                 // this.$refs['formupdate'].validate((valid) => {
                 //     if (valid) {
-                        this.saveForm();
-                        this.$emit('saveStatus', false);
+                this.saveForm();
+                this.$emit('saveStatus', false);
                 //     } else {
                 //         this.$emit('saveStatus', true);
                 //         // this.dialogVisible = true;
                 //     }
                 // });
-            };
+            }
             this.vacancy = [];
-            for(let item of this.rows.evections){
-                if(item.ranks == ''){
+            for (let item of this.rows.evections) {
+                if (item.ranks == '') {
                     alert('有必输项职务未填写，请继续填写');
                     this.dialogVisible = false;
                 }
             }
-            if(this.rows.reason == ''){
-                this.vacancy.push('出差事由')
+            if (this.rows.reason == '') {
+                this.vacancy.push('出差事由');
             }
-            for(let item of this.rows.evections){
-                if(item.borganName == ''){
-                    this.vacancy.push('所属部门')
+            for (let item of this.rows.evections) {
+                if (item.borganName == '') {
+                    this.vacancy.push('所属部门');
                 }
-                if(item.departure == ''){
-                    this.vacancy.push('出发地')
+                if (item.departure == '') {
+                    this.vacancy.push('出发地');
                 }
-                if(item.destination == ''){
-                    this.vacancy.push('目的地')
+                if (item.destination == '') {
+                    this.vacancy.push('目的地');
                 }
-                if(item.startTime == ''){
-                    this.vacancy.push('出差开始时间')
+                if (item.startTime == '') {
+                    this.vacancy.push('出差开始时间');
                 }
-                if(item.endTime == ''){
-                    this.vacancy.push('出差结束时间')
+                if (item.endTime == '') {
+                    this.vacancy.push('出差结束时间');
                 }
             }
-            for(let item of this.rows.estimate){
-                if(item.bsType == ''){
-                    this.vacancy.push('费用类别')
+            for (let item of this.rows.estimate) {
+                if (item.bsType == '') {
+                    this.vacancy.push('费用类别');
                 }
-                if(item.number == ''){
-                    this.vacancy.push('数量')
+                if (item.number == '') {
+                    this.vacancy.push('数量');
                 }
             }
         },
@@ -892,7 +916,7 @@ export default {
             } else {
                 this.rows.estimate = [];
             }
-            if(this.rows.submission2){
+            if (this.rows.submission2) {
                 this.rows.submissionName = this.rows.submission2.submissionNo;
                 this.rows.submissionId = this.rows.submission2.id;
             }
@@ -926,7 +950,7 @@ export default {
                 .put(`/api/v1/travel_forms/${self.currentFormId}/comment`, {
                     content: '提交',
                     node: '提交',
-                    action: 'COMMIT',
+                    action: 'COMMIT'
                 })
                 .then(res => {});
         },
@@ -934,46 +958,54 @@ export default {
         submitCheck() {
             if (this.rows.subOrganName == '集团领导') {
                 alert('费用承担部门选择错误，请重新选择');
-            } else if(this.rows.reason == '' || this.rows.evections.borganName == '' ||this.rows.evections.departure == ''||this.rows.evections.destination == ''
-            ||this.rows.evections.startTime == '' ||this.rows.evections.endTime == '' ||this.rows.estimate.bsType == '' ||this.rows.estimate.number == '' ){
-                 this.dialogVisible = true;
+            } else if (
+                this.rows.reason == '' ||
+                this.rows.evections.borganName == '' ||
+                this.rows.evections.departure == '' ||
+                this.rows.evections.destination == '' ||
+                this.rows.evections.startTime == '' ||
+                this.rows.evections.endTime == '' ||
+                this.rows.estimate.bsType == '' ||
+                this.rows.estimate.number == ''
+            ) {
+                this.dialogVisible = true;
             } else {
                 this.saveForm('save');
                 this.$emit('saveStatus', false);
             }
             this.vacancy = [];
-            for(let item of this.rows.evections){
-                if(item.ranks == ''){
+            for (let item of this.rows.evections) {
+                if (item.ranks == '') {
                     alert('有必输项职务未填写，请继续填写');
                     this.dialogVisible = false;
                 }
             }
-            if(this.rows.reason == ''){
-                this.vacancy.push('出差事由')
+            if (this.rows.reason == '') {
+                this.vacancy.push('出差事由');
             }
-            for(let item of this.rows.evections){
-                if(item.borganName == ''){
-                    this.vacancy.push('所属部门')
+            for (let item of this.rows.evections) {
+                if (item.borganName == '') {
+                    this.vacancy.push('所属部门');
                 }
-                if(item.departure == ''){
-                    this.vacancy.push('出发地')
+                if (item.departure == '') {
+                    this.vacancy.push('出发地');
                 }
-                if(item.destination == ''){
-                    this.vacancy.push('目的地')
+                if (item.destination == '') {
+                    this.vacancy.push('目的地');
                 }
-                if(item.startTime == ''){
-                    this.vacancy.push('出差开始时间')
+                if (item.startTime == '') {
+                    this.vacancy.push('出差开始时间');
                 }
-                if(item.endTime == ''){
-                    this.vacancy.push('出差结束时间')
+                if (item.endTime == '') {
+                    this.vacancy.push('出差结束时间');
                 }
             }
-            for(let item of this.rows.estimate){
-                if(item.bsType == ''){
-                    this.vacancy.push('费用类别')
+            for (let item of this.rows.estimate) {
+                if (item.bsType == '') {
+                    this.vacancy.push('费用类别');
                 }
-                if(item.number == ''){
-                    this.vacancy.push('数量')
+                if (item.number == '') {
+                    this.vacancy.push('数量');
                 }
             }
             // if (this.operationType == 'create') {
@@ -1207,7 +1239,7 @@ export default {
                     .utc()
                     .format('YYYY-MM-DD hh:mm:ss')
             };
-            this.getNum()
+            this.getNum();
         }
     }
 };
@@ -1226,8 +1258,8 @@ export default {
         color: #000;
         height: 40px;
         vertical-align: middle;
-        .span1{
-            color:red;
+        .span1 {
+            color: red;
             margin-right: 5px;
         }
     }
@@ -1283,9 +1315,9 @@ export default {
             text-align: right;
         }
     }
-    .notice{
+    .notice {
         color: red;
-        ol{
+        ol {
             font-size: 17px;
         }
     }
