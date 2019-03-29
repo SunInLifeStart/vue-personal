@@ -1,112 +1,195 @@
 <template>
     <div id="Leave">
         <el-card class="box-card">
-            <LeaveFilter @searchList="getSearchOptions"></LeaveFilter>
-            <div class="toolbar">
-                <el-button type="primary" icon="el-icon-plus" @click="createForm">新建</el-button>
+            <div id="LeaveFilter">
+                <el-form :inline="true" :model="params" label-width="70px" label-position="left" class="demo-form-inline">
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="提单人">
+                                <el-input v-model="params.uname" placeholder="提单人"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="所属部门">
+                                <el-input v-model="params.creatorName" placeholder="所属部门"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="提单时间">
+                                <el-input v-model="params.organName" placeholder="提单时间"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="单据状态">
+                                <el-select v-model="params.status" placeholder="请选择">
+                                    <el-option v-for="item in params.options_status" :key="item" :label="item" :value="item">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="创建时间">
+                                <el-date-picker v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8" class="">
+                            <el-form-item class="">
+                                <el-button type="primary" @click="searchList">查询</el-button>
+                                <el-button @click="resetInput">重置</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
             </div>
-            <LeaveList @searchList="getSearchOptions" ref="Leavelist" @formId="getFormId" @editForm="editForm" @showStatus="showStatusT" :searchOptions="searchOptions"></LeaveList>
+            <div class="toolbar">
+                <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
+            </div>
+            <div id="LeaveList">
+                <el-table :data="tableData" stripe @row-click="showCurrentId">
+                    <el-table-column prop="uname" label="提单人" align="center">
+                    </el-table-column>
+                    <el-table-column prop="oname" label="所属部门" align="center">
+                    </el-table-column>
+                    <el-table-column prop="no" label="流水号" align="center">
+                    </el-table-column>
+                    <el-table-column prop="applyTime" label="提单时间" align="center">
+                    </el-table-column>
+                    <el-table-column prop="status" label="状态" align="center">
+                    </el-table-column>
+                    <el-table-column label="操作">
+                        <template slot-scope="scope">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">
+                                <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '已保存'">
+                                <el-button type="text" icon="el-icon-delete" @click="deleteItem(scope.row)"></el-button>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <br>
+                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+            </div>
         </el-card>
         <br>
         <el-card class="box-card">
             <LeaveDetail :formId="formId" ref="LeaveDetail"></LeaveDetail>
         </el-card>
-        <el-dialog title="请休假申请" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="1240px">
+        <LeaveForm ref="LeaveForm" @reloadList="reloadList"></LeaveForm>
+        <!-- <el-dialog title="请休假申请" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="1240px">
             <LeaveForm ref="Leaveform" @refreshData="refreshData" @refreshDetail="refreshDetail" :formId="dialogFormId" :operationType="operationType" @saveStatus="saveStatus"></LeaveForm>
             <div slot="footer" class="dialog-footer">
                 <el-button type="default" v-if="this.showStatus == ''" @click="saveForm">保存</el-button>
-                <!-- v-if="this.showStatus == ''"  -->
                 <el-button type="primary" @click="submitForm">提交</el-button>
-                <!-- s<el-button type="default" @click="cancelForm">撤销</el-button> -->
             </div>
-        </el-dialog>
+        </el-dialog> -->
 
     </div>
 </template>
 <script>
-import LeaveList from './LeaveList';
+// import LeaveList from './LeaveList';
 import LeaveForm from './LeaveForm';
-import LeaveFilter from './LeaveFilter';
+// import LeaveFilter from './LeaveFilter';
 import LeaveDetail from './LeaveDetail';
+import { publicMethods } from '../application.js';
 export default {
+    mixins: [publicMethods],
     name: 'Leave',
     data() {
         return {
-            activeName: 'first',
-            dialogFormVisible: false,
-            searchOptions: [
-                {
-                    field: 'id',
-                    filter: 'IS_NOT_NULL'
-                }
-            ],
+            params: {},
+            tableData: [],
+            formDetails: {},
             formId: '',
-            dialogFormId: '',
-            operationType: 'create',
-            showStatus: ''
+            params: {
+                pageNum: 1,
+                pageSize: 5,
+                department: '',
+                submitter: '',
+                total: 0
+            },
+            formName: 'trainingApplication'
         };
     },
+
     methods: {
-        handleClick() {},
-        getSearchOptions(searchOptions) {
-            this.searchOptions = searchOptions;
-        },
-        getFormId(id) {
-            this.formId = id;
-        },
-        refreshDetail() {
-            if (this.$refs.LeaveDetail) {
-                this.$refs.LeaveDetail.getForm();
-                this.$refs.LeaveDetail.getActions();
-            }
-        },
-        showStatusT(status) {
-            if (status == '已保存') {
-                this.showStatus = '';
+        async getList(pageNum) {
+            let $self = this;
+            $self.url = '/api/v1/motor-holiday/query';
+            let response = await $self.getQueryList();
+            if (response) {
+                if (response.data.content.list.length > 0) {
+                    let formId = response.data.content.list[0].id;
+                    $self.$refs.LeaveDetail.getFormDetails(formId);
+                }
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
             } else {
-                this.showStatus = '已驳回';
+                $self.msgTips('获取列表失败', 'warning');
             }
         },
-        editForm(id) {
-            this.dialogFormId = id;
-            this.dialogFormVisible = true;
-            this.operationType = 'edit';
-            if (this.$refs.Leaveform) {
-                this.$refs.Leaveform.getForm();
+        //选择行
+        showCurrentId(row) {
+            this.$refs.LeaveDetail.getFormDetails(row.id);
+        },
+
+        //新建
+        createNewForm() {
+            this.$refs.LeaveForm.createForm();
+        },
+
+        //编辑
+        editForm(data) {
+            this.$refs.LeaveForm.setDataFromParent(data);
+        },
+        reloadList(params) {
+            if (params == 'reload') {
+                this.params.pageNum = 1;
+                this.getList();
+            } else {
+                this.$refs.LeaveDetail.getFormDetails(params.id);
             }
         },
-        refreshData() {
-            this.$refs.Leavelist.getList();
+
+        //分页
+        currentChange(pageNum) {
+            this.params.pageNum = pageNum;
+            this.getList(pageNum);
         },
-        saveForm() {
-            this.$refs.Leaveform.saveFormValidate();
-            // this.dialogFormVisible = false;
+        sizeChange(pageSize) {
+            this.params.pageSize = pageSize;
+            this.getList();
         },
-        saveStatus(status) {
-            this.dialogFormVisible = status;
+        searchList() {
+            this.getList();
         },
-        submitForm() {
-            this.$refs.Leaveform.submitCheck();
-            // this.dialogFormVisible = false;
-        },
-        createForm() {
-            this.showStatus = '';
-            this.dialogFormVisible = true;
-            this.operationType = 'create';
-            if (this.$refs.Leaveform) {
-                this.$refs.Leaveform.clearForm();
-            }
+        resetInput() {
+            this.params.submitter = this.params.department = '';
         }
     },
+    mounted() {
+        this.getList();
+    },
     components: {
-        LeaveList,
+        // LeaveList,
         LeaveForm,
-        LeaveFilter,
+        // LeaveFilter,
         LeaveDetail
     }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss" >
+#LeaveFilter .el-form-item--small.el-form-item {
+    width: 100%;
+}
+#LeaveFilter .el-form-item--small .el-form-item__content{
+    width: 80%;
+}
+#LeaveFilter .el-range-editor--small.el-input__inner{
+    width: 100%;
+}
 </style>
 
 

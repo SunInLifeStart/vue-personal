@@ -23,16 +23,6 @@
                          <el-form-item label="流水单号：">{{tableData.no}}
                         </el-form-item>
                     </el-col>
-                    <!-- <el-col :span="8">
-                        <el-form-item label="呈报件：">
-                            {{tableData.submissionName}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="1">
-                        <el-tooltip class="item" effect="dark" content="查看" placement="right">
-                            <el-button type="text" icon="el-icon-view" @click="ViewDetail('chengbao')"></el-button>
-                        </el-tooltip>
-                    </el-col> -->
                 </el-row>
                 <table class="tablePrint" style=" width: 100%;">
                     <col style="width: 12%" />
@@ -171,7 +161,10 @@
 <script>
 import axios from 'axios';
 import Comment from '../Comment';
+import FilesOperate from "../FilesOperate";
+import { publicMethods } from "../application.js";
 export default {
+     mixins:[publicMethods],
     name: 'leaveDetail',
     data() {
         return {
@@ -179,7 +172,7 @@ export default {
             activeName: 'first',
             rows:{},
             tableData: {
-                number: '',
+                no: '',
                 submitter: '',
                 subOrganName: '',
                 reason: '',
@@ -190,8 +183,6 @@ export default {
             fileleng: 'show',
             actions: [],
             crumb: { items: [] },
-            isEdit: false,
-            editBtnText: '编辑',
             rejectTarget: '',
             rejectList: [],
             attachments: [],
@@ -203,341 +194,46 @@ export default {
             seleteUserLabel: '',
             textarea: '',
             dialogVisible: false,
-            currentAction: '',
-            submitData: {},
-            crumbNodeName: ''
         };
     },
-    props: ['formId'],
+    // props: ['formId'],
     components: {
-        Comment
-    },
-    mounted() {
-        // this.getAgree()
-        this.getAllUsers();
-        if (this.formId != '') {
-            this.getForm();
-            // this.getActions();
-        }
-    },
-    watch: {
-        formId: function() {
-            if (this.formId != '') {
-                this.getForm();
-                // this.getActions();
-            } else {
-                this.tableData = {};
-            }
-        }
+        Comment,
+        FilesOperate
     },
     methods: {
-        ViewDetail(view) {
-            if (view == 'borrow') {
-                if (
-                    this.tableData.borrow.borrowId &&
-                    this.tableData.borrow.borrowId != ''
-                ) {
-                    this.common.open(
-                        '#/apps/loan/' + this.tableData.borrow.borrowId
-                    );
-                }
-            } else if (view == 'chengbao') {
-                if (this.tableData.submissionId && this.tableData.submissionId != '') {
-                    this.common.open(
-                        '#/apps/submission/' + this.tableData.submissionId
-                    );
-                }
-            }
+        getFormDetails(formId) {
+            let $self = this;
+            $self.formId = formId;
+            $self.url= "/api/v1/motor-holiday/get/" + $self.formId;
+            $self.getFormDetailsData();
         },
-        cope() {
-            this.$print(this.$refs.formupdate.$el);
-        },
-        getAllUsers() {
-            let self = this;
-            axios.get(`/api/v1/users`).then(res => {
-                self.users = res.data;
-            });
-        },
-        getAgree() {
-            this.array = [];
-            let j = -1;
-            let p ;
-            for (var i = 0; i < this.tableData.comments.length; i++) {
-                if (this.tableData.comments[i].action == 'REJECT') {
-                    j = i;
-                }else if(this.tableData.comments[i].action == 'PULL'){
-                    p= i;
-                    j = 2;
-                }
-            }
-            if (j == -1) {
-                this.array = this.tableData.comments;
-            }else if(j = 2){
-                for (var a = 0; a < this.tableData.comments.length; a++) {
-                    if(a == p || a == p - 1){
-                         this.array =  this.array
-                    }else{
-                        this.array.push(this.tableData.comments[a]);
-                    }
-                }
+        async getFormDetailsData() {
+            let $self = this;
+            let response = await $self.getDetails();
+            if (response) {
+                $self.tableData = response.data.content;
             } else {
-                for (var k = j + 2; k < this.tableData.comments.length; k++) {
-                    this.array.push(this.tableData.comments[k]);
+                $self.msgTips("获取表单失败", "warning");
+            }
+            // debugger;
+            let actions = await $self.getActions();
+            let crumbs = await $self.getCrumbs();
+            let comments =  await $self.getComments();
+            $self.actions = actions.data.types;
+            $self.crumbs =  {items: crumbs.data, index: -1};
+            $self.comments = comments.data;
+            for(var i= 0; i<$self.crumbs.items.length; i++){
+                if($self.crumbs.items[i].active){
+                    $self.crumbs.index = i;    
                 }
             }
-            
-        },
-        getForm() {
-            const self = this;
-            if (this.formId != '') {
-                axios
-                    .get('/api/v1/motor-holiday/get/' + this.formId)
-                    .then(res => {
-                        self.tableData = res.data.content;
-                        if(self.tableData.type==1){
-                            self.tableData.type = '事假'
-                        }else if(self.tableData.type==2){
-                            self.tableData.type = '病假'
-                        }else if(self.tableData.type==3){
-                            self.tableData.type = '婚假'
-                        }else if(self.tableData.type==4){
-                            self.tableData.type = '产假'
-                        }else if(self.tableData.type==5){
-                            self.tableData.type = '丧假'
-                        }else if(self.tableData.type==6){
-                            self.tableData.type = '工伤假'
-                        }else if(self.tableData.type==7){
-                            self.tableData.type = '年休假'
-                        }
-                        this.getAgree();
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
-            }
-        },
-        downloadFile(url) {
-            this.common.preview(url);
-        },
-        /** */
-        /** 
-        getActions() {
-            axios.get(`/api/v1/travels/${this.formId}/actions`).then(res => {
-                res.data.types = res.data.types || [];
-                res.data.types.push({
-                    type: 'fullScreen',
-                    name: '全屏显示'
-                });
-                this.actions = res.data.types;
-            });
-            axios.get(`/api/v1/travels/${this.formId}/crumb`).then(res => {
-                this.crumb = { items: res.data, index: -1 };
-                res.data.forEach((item, index) => {
-                    if (item.active) {
-                        this.crumbNodeName = item.name;
-                        if (item.assignes) {
-                            item.name = item.name + '(' + item.assignes + ')';
-                        }
-                        this.crumb.index = index;
-                    }
-                });
-            });
-        },
-        */
-        doComment(action) {
-            this.getForm();
-            let atIds = this.$refs.comment.getIds();
-            let comment = this.$refs.comment.getComment();
 
-            if (this.$refs.comment.isEmpty()) {
-                comment = action.name;
-            }
-            axios
-                .put(`/api/v1/travel_forms/${this.formId}/comment`, {
-                    content: comment,
-                    action: action.type
-                })
-                .then(res => {
-                    if (action.type == 'REJECT') {
-                        (this.tableData.committed = ''),
-                            axios.post(
-                                '/api/v1/travel_forms/save',
-                                JSON.stringify(this.tableData),
-                                {
-                                    headers: {
-                                        'Content-type': 'application/json'
-                                    }
-                                }
-                            );
-                    } else if (action.type == 'APPROVE') {
-                        axios.put(
-                            '/api/v1/travel_forms/' +
-                                this.tableData.id +
-                                '/commit/' +
-                                this.tableData.processId,
-                            '',
-                            {
-                                headers: {
-                                    'Content-type': 'application/json'
-                                }
-                            }
-                        );
-                    }
-
-                    comment = '';
-                    this.$refs.comment.clearComment();
-                    this.getForm();
-                    if (!'SAVE,PREVIEW,COMMENT'.includes(action.type)) {
-                        axios
-                            .put(`/api/v1/travels/${this.formId}/signal`, {
-                                action: action.type,
-                                assignees: atIds
-                            })
-                            .then(res => {
-                                this.getActions();
-                            });
-                    }
-                });
-        },
-        doAction(action) {
-            this.clearForm();
-            this.currentAction = action;
-            // 不需要弹出框
-            if ('ARCHIVE,DISPATCH,TEMPLATE,PULL,COMMIT'.includes(action.type)) {
-                this.clearForm();
-                let self = this; //套红，归档，分发
-                if (action.type == 'PULL') {
-                    axios
-                        .get(`/api/v1/travels/${self.formId}/pull`)
-                        .then(res => {
-                            self.comment('formOnlyComment');
-                            self.getActions();
-                            self.getCrumbs();
-                        });
-                }
-                if (action.type == 'COMMIT' && this.crumbNodeName == '申请') {
-                    this.submitForm();
-                } else {
-                    if (action.type == 'COMMIT') {
-                        self.dialogVisible = true;
-                        if (action.required) {
-                            if (action.type == 'COMMIT') {
-                                self.presign_status = true;
-                                self.seleteUserLabel = '请选择拟办人';
-                            }
-                        }
-                    }
-                }
-            } else if ('PRESIGN'.includes(action.type)) {
-                //拒绝，加签
-                this.dialogVisible = true;
-                //需要弹出并填写意见，选择驳回节点或选择其他人
-                if (action.type == 'REJECT') {
-                    this.getRejectList();
-                    this.reject_status = true;
-                }
-                if (action.type == 'PRESIGN') {
-                    this.presign_status = true;
-                    this.seleteUserLabel = '前选择前加签人';
-                }
-            } else if (
-                'SUPERIOR,APPROVE,SIGNOUT,REJECT,CANCEL'.includes(action.type)
-            ) {
-                //拟办，同意
-                this.dialogVisible = true;
-                //只需要填写意见
-            } else if ('fullScreen'.includes(action.type)) {
-                this.common.open(`/#/apps/travels/${this.formId}`);
-            }
-        },
-        getRejectList() {
-            let self = this;
-            axios
-                .get('/api/v1/travels/' + this.formId + '/reject/targets')
-                .then(res => {
-                    self.rejectList = res.data;
-                });
-        },
-        submitForm() {
-            let self = this;
-
-            //如果是不需要走流程的节点
-            if (
-                'SAVE,PREVIEW,COMMENT,PULL,PRINTER,EDIT'.includes(
-                    self.currentAction.type
-                )
-            ) {
-            } else {
-                //退回
-                if (self.currentAction.type == 'REJECT') {
-                    if (self.seleteUsers) {
-                        self.submitData.rejectTarget = self.rejectTarget;
-                    } else {
-                        self.$message.error('请选择驳回节点');
-                        return false;
-                    }
-                }
-
-                //前加签
-                if (self.currentAction.required) {
-                    if (self.seleteUsers.length > 0) {
-                        var key = self.currentAction.required[0].split(':')[0];
-                        self.submitData[key] = self.seleteUsers;
-                    } else {
-                        self.$message.error(self.seleteUserLabel);
-                        return false;
-                    }
-                }
-                self.submitData.action = self.currentAction.type;
-                axios
-                    .put(
-                        `/api/v1/travels/${self.formId}/signal`,
-                        self.submitData
-                    )
-                    .then(res => {
-                        self.dialogVisible = false;
-                        self.comment();
-                        // self.getForm();
-                        self.getActions();
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                    });
-            }
-        },
-        comment(comment) {
-            let self = this;
-            axios
-                .put(`/api/v1/travel_forms/${self.formId}/comment`, {
-                    content: self.textarea || self.currentAction.name,
-                    node: this.crumbNodeName,
-                    action: self.currentAction.type
-                })
-                .then(res => {
-                    if (comment == 'formOnlyComment') {
-                        this.getActions();
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                    }
-                    this.getForm();
-                });
-        },
-        clearForm() {
-            this.reject_status = false;
-            this.presign_status = false;
-            this.textarea = '';
-            this.submitData = {};
         }
     }
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss">
 #leaveDetail {
     .attachments {
         margin-left: 10px;
