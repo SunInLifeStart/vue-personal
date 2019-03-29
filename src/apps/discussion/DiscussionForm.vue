@@ -28,7 +28,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="所属部门" prop="number">
+                    <el-form-item label="所属部门">
                         <el-input v-model="formData.organName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
@@ -167,29 +167,29 @@ export default {
             users: [],
             rules: {
                 number: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    { required: true, message: '请输入流水单号', trigger: 'blur' }
                 ],
                 branchlineTo: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' }
-                ],
-                creatorName: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' }
-                ],
-                organName: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    { required: true, message: '请输入会议类型', trigger: 'blur' }
                 ],
                 committed: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    { required: true, message: '请输入提单时间', trigger: 'blur' }
                 ],
-                applyDepartment: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' }
-                ],
-                timeApplication: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' }
-                ],
-                topicName: [
-                    { required: true, message: '请输入活动名称', trigger: 'blur' }
-                ]
+                // creatorName: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ],
+                // organName: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ],
+                // applyDepartment: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ],
+                // timeApplication: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ],
+                // topicName: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ]
             },
             uploadId: 0,
             appFlowName:'motor-issuesreported_party-agendasheet'

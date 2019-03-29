@@ -28,7 +28,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属部门" prop="organName">
+                        <el-form-item label="所属部门">
                             <el-input v-model="formData.organName" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
@@ -210,29 +210,29 @@
                 ],
                 rules: {
                     number: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' }
+                        { required: true, message: '请输入流水号', trigger: 'blur' }
                     ],
                     branchlineTo: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' }
+                        { required: true, message: '请输入会议类型', trigger: 'blur' }
                     ],
-                    creatorName: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    ],
-                    organName: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    ],
+                    // creatorName: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ],
+                    // organName: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ],
                     committed: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' }
+                        { required: true, message: '请输入提单时间', trigger: 'blur' }
                     ],
-                    meetingPlace: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    ],
-                    meetingTime: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    ],
-                    conferenceTitle: [
-                        { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    ]
+                    // meetingPlace: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ],
+                    // meetingTime: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ],
+                    // conferenceTitle: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ]
                 },
                 personOptions: [],
                 formData: this.resetForm(),
