@@ -161,7 +161,7 @@ export const publicMethods = {
                 }/getComments`;
             return await this.$axios.get(url);
         },
-        getUsers(url) {
+        async getUsers(url) {
             return await this.$axios.get(url);
         },
         deleteCurrentLine(id,params) {
