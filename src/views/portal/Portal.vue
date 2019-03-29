@@ -55,7 +55,7 @@
         </el-row>
         <el-row class="articles" :gutter="15">
           <el-col :span="8">
-              <div class="article">
+              <!-- <div class="article">
                   <h3>通知公告<router-link :to="{path:'/portal/list/leaderSpeech/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
                     <li v-for="(item,index) in leaderSpeech" :key="item.articleId">
@@ -65,12 +65,9 @@
                       <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
                     </li>
                   </ul>
-              </div>
-            
-          </el-col>
-          <el-col :span="8">
-              <div class="article">
-                  <h3>公司发文<router-link :to="{path:'/portal/list/anno/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+              </div> -->
+               <div class="article">
+                  <h3>通知公告<router-link :to="{path:'/portal/list/anno/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
                     <li v-for="(item,index) in anno" :key="item.articleId" style="padding-left:10px;">
                     <span style="color: #ea3476;"  v-if="index == 0"> •</span>
@@ -82,13 +79,26 @@
               </div>
           </el-col>
           <el-col :span="8">
-             <div class="article">
-                  <h3>通讯录/会表<router-link :to="{path:'/portal/list/outgoing/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+               <div class="article">
+                  <h3>公司发文<router-link :to="{path:'/portal/list/outgoing/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
                     <li v-for="(item,index) in outgoing" :key="item.articleId" style="padding-left:10px;">
                     <span style="color: #ea3476;"  v-if="index == 0"> •</span>
                     <span style="color: #3488ea;"  v-if="index != 0"> •</span>
                      <router-link :to="'/portal/list/outgoing/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
+                      <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
+                    </li>
+                  </ul>
+              </div>
+          </el-col>
+          <el-col :span="8">
+                  <div class="article">
+                  <h3>通讯录/会表<router-link :to="{path:'/portal/list/addressList/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+                  <ul>
+                    <li v-for="(item,index) in addressList" :key="item.articleId" style="padding-left:20px; height:40px;line-height:40px">
+                      <img src="@/assets/phone2.png"  v-if="index == 0" style="top:12px;"> 
+                      <img src="@/assets/phone.png"  v-if="index != 0" style="top:12px;"> 
+                     <router-link :to="'/portal/list/addressList/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
                       <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
                     </li>
                   </ul>
@@ -112,13 +122,13 @@
           <el-col :span="8">
             <el-row>
               <!-- <router-link :to="{path:'/portal/list2'}"><img class="dang" src="@/assets/dang.jpg"></router-link> -->
-              <div class="article article2">
-                  <h3>规章制度<router-link :to="{path:'/portal/list/briefing/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+                 <div class="article article2">
+                  <h3>规章制度<router-link :to="{path:'/portal/list/nstitution/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
-                    <li v-for="(item,index) in briefing" :key="item.articleId" style="padding-left:35px; height:40px;line-height:40px">
-                      <img src="@/assets/briefing.png"  v-if="index != 0"> 
-                      <img src="@/assets/briefing2.png"  v-if="index == 0"> 
-                      <router-link :to="'/portal/list/briefing/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
+                    <li v-for="(item,index) in nstitution" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px">
+                       <img src="@/assets/arrow.png"  v-if="index == 0" style="top:15px;"> 
+                       <img src="@/assets/arrow2.png"  v-if="index != 0" style="top:15px;"> 
+                       <router-link :to="'/portal/list/nstitution/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
                       <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
                     </li>
                   </ul>

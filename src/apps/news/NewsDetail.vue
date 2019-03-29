@@ -1,10 +1,10 @@
 <template>
     <div id="NewsDetail" :class="{fullScreen:fullScreen}">
-        <!--
+<!--         
         <el-steps :active="crumb.index" finish-status="success">
             <el-step :title="item.name" :key="item.id" v-for="item in crumb.items"></el-step>
-        </el-steps>
-        -->
+        </el-steps> -->
+       
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -213,6 +213,7 @@ export default {
                         self.tableData = res.data;
                         document.getElementById('messageContent').innerHTML =
                             self.tableData.content;
+                              this.getActions();
                     })
                     .catch(function() {
                         self.$message({
