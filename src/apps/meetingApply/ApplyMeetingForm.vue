@@ -319,7 +319,7 @@
                     branchlineTo: '',
                     businessType: '',
                     created: '',
-                    // comments: [],
+                    sendMessage: [],
                     idea: '',
                     committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
                     meetingPlace: '',
@@ -379,14 +379,17 @@
             },
             async saveForm(params) {
                 const $self = this;
+                this.formData.sendMessage = []
                 $self.formData.attendingDepartment.forEach(item => {
                     if (item.people) {
                         item.person = item.people.join(',')
+                        this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
                     }
                 })
                 $self.formData.sitIn.forEach(item => {
                     if (item.people) {
                         item.person = item.people.join(',')
+                        this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
                     }
                 })
                 let business = this.discussionOption.filter((item) => { return item.value === this.formData.branchlineTo})

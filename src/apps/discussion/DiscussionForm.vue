@@ -254,6 +254,7 @@ export default {
         resetForm() {
             let formData =  {
                 attachments: [],
+                sendMessage: [],
                 attendingDepartment: [{
                     people: [],
                     department: ''
@@ -318,10 +319,12 @@ export default {
         },
         async saveForm(params) {
             const $self = this;
+            this.formData.sendMessage = []
             $self.formData.attendingDepartment.forEach(item => {
                 if (item.people) {
                     item.person = item.people.join(',')
                 }
+                this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
             })
             let response = await $self.saveFormData(
                 "/api/v1/issuesReported/save",
