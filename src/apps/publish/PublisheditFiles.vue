@@ -62,7 +62,6 @@ export default {
                        this.openUrl + "token="+res.data+"&url=" + url
                     );
                 } else {
-                      console.log(this.openUrl);
                     ntkoBrowser.openWindow(
                            this.openUrl + "token=" + res.data
                     );
@@ -93,7 +92,7 @@ export default {
         if(process.env.NODE_ENV === 'production'){
             this.openUrl = "http://static.zgcgroup.vpn/edit.html?"
         }else{
-            this.openUrl = "http://static.yxpe.com.cn/edit.html?"
+            this.openUrl = "http://static1.yxpe.com.cn/edit.html?"
         }
     }
 };

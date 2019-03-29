@@ -94,7 +94,7 @@ export default {
         if(process.env.NODE_ENV === 'production'){
             this.openUrl = "http://static.zgcgroup.vpn/edit.html?"
         }else{
-            this.openUrl = "http://static.yxpe.com.cn/edit.html?"
+            this.openUrl = "http://static1.yxpe.com.cn/edit.html?"
         }
     }
 };

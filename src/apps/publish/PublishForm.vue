@@ -12,10 +12,10 @@
                 <el-col :span="12">
                     <el-form-item label="信息栏目:" prop="columns">
                         <el-select v-model="selectItem.columns" placeholder="请选择信息类型" style="width:100%">
-                            <el-option label="领导讲话" value="领导讲话" v-if="this.showldjh"></el-option>
-                            <el-option label="规章制度" value="规章制度" v-if="this.showgzzd"></el-option>
-                            <el-option label="通知公告" value="通知公告" v-if="this.showtzgg"></el-option>
-                            <el-option label="工作简报" value="工作简报" v-if="this.showgzjb"></el-option>
+                            <el-option label="领导讲话" value="领导讲话"></el-option>
+                            <el-option label="规章制度" value="规章制度"></el-option>
+                            <el-option label="通知公告" value="通知公告"></el-option>
+                            <!-- <el-option label="工作简报" value="工作简报"></el-option> -->
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -102,17 +102,17 @@ export default {
     },
     props: ['formId', 'operationType'],
     mounted() {
-        for (let data of this.$store.getters.getMenusByType('publish')) {
-            if (data.code == 'ldjh') {
-                this.showldjh = true;
-            } else if (data.code == 'gzzd') {
-                this.showgzzd = true;
-            } else if (data.code == 'tzgg') {
-                this.showtzgg = true;
-            } else if (data.code == 'gzjb') {
-                this.showgzjb = true;
-            }
-        }
+        // for (let data of this.$store.getters.getMenusByType('publish')) {
+        //     if (data.code == 'ldjh') {
+        //         this.showldjh = true;
+        //     } else if (data.code == 'gzzd') {
+        //         this.showgzzd = true;
+        //     } else if (data.code == 'tzgg') {
+        //         this.showtzgg = true;
+        //     } else if (data.code == 'gzjb') {
+        //         this.showgzjb = true;
+        //     }
+        // }
 
         const self = this;
         if (this.operationType == 'edit') {

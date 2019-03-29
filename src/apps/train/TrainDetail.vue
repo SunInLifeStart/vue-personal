@@ -163,8 +163,8 @@ export default {
             // let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();
             $self.actions = actions.data.types;
+            $self.comments = comments.data;
             // $self.crumbs =  {items: crumbs.data, index: -1};
-            // $self.comments = comments.data;
             // for(var i= 0; i<$self.crumbs.items.length; i++){
             //     if($self.crumbs.items[i].active){
             //         $self.crumbs.index = i;    

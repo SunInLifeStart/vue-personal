@@ -162,9 +162,7 @@ export const publicMethods = {
             return await this.$axios.get(url);
         },
         getUsers(url) {
-            this.$axios.get(url).then(res => {
-                // $self.users = res.data;
-            });
+            return await this.$axios.get(url);
         },
         deleteCurrentLine(id,params) {
             let $self = this;
@@ -185,7 +183,7 @@ export const publicMethods = {
             let currentNodeUrl = `/workflow/${$self.appFlowName}/${$self.formId}/curActions`;
             let bpmnData =  await this.$axios.get(url);
             let bpmnDataCurrent = await this.$axios.get(currentNodeUrl);
-            $self.flowNodeUrl =  `/bpmn-viewer/index.html?url=/${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0]}`; 
+            $self.flowNodeUrl =  `/bpmn-viewer/index.html?url=/${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0].taskDefinitionKey}`; 
             $self.dialogVisibleCrumb = true;
             console.log($self.flowNodeUrl);
         },
