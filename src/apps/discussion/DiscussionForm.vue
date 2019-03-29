@@ -154,11 +154,11 @@ export default {
             ],
             discussionOption: [
                 {
-                    value: 'chairman',
+                    value: 'general',
                     label: '总办会'
                 },
                 {
-                    value: 'general',
+                    value: 'chairman',
                     label: '党支委会'
                 }
             ],

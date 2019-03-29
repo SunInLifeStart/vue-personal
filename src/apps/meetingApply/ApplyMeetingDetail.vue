@@ -53,12 +53,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <!--<el-row>-->
-                    <!--<el-col :span="24">-->
-                        <!--<el-form-item label="各级领导意见及审批：">{{tableData.idea}}-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                <!--</el-row>-->
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
