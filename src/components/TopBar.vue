@@ -9,7 +9,7 @@
             </div>
             <div class="navmenu">
                 <el-menu :default-active="this.$router.currentRoute.path" mode="horizontal" background-color="#005a9e" text-color="#fff" :router="true" active-text-color="#ffd04b" popper-class="menu">
-                    <el-menu-item index="/portal">集团门户</el-menu-item>
+                    <el-menu-item index="/portal">公司门户</el-menu-item>
                     <el-menu-item index="/home/todo">我的工作</el-menu-item>
                     <el-menu-item index="/leader" v-show="$store.getters.getMenusByType('leader')">领导驾驶舱</el-menu-item>
                     <el-menu-item index="/docs">文档中心</el-menu-item>
