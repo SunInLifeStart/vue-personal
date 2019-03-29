@@ -121,8 +121,8 @@ export default {
             dialogVisible: false,
             appFlowName:'motor-issuesreported_party-agendasheet',
             discussionOption: {
-                chairman: '总办会',
-                general: '党支委会'
+                general: '总办会',
+                chairman: '党支委会'
             }
         };
     },
