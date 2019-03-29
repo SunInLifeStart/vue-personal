@@ -209,17 +209,17 @@ export default {
         if (this.operationType == 'edit') {
             this.getForm();
         }
-        const cookieItems = document.cookie.split(';');
-        cookieItems.forEach(function(item) {
-            if (item.indexOf('uname') > 0) {
-                self.formData.uname = decodeURIComponent(item.split('=')[1]);
-                self.cookie_uname = decodeURIComponent(item.split('=')[1]);
-            }
-            if (item.indexOf('oname') > 0) {
-                self.formData.oname = decodeURIComponent(item.split('=')[1]);
-                self.cookie_oname = decodeURIComponent(item.split('=')[1]);
-            }
-        });
+        // const cookieItems = document.cookie.split(';');
+        // cookieItems.forEach(function(item) {
+        //     if (item.indexOf('uname') > 0) {
+        //         self.formData.uname = decodeURIComponent(item.split('=')[1]);
+        //         self.cookie_uname = decodeURIComponent(item.split('=')[1]);
+        //     }
+        //     if (item.indexOf('oname') > 0) {
+        //         self.formData.oname = decodeURIComponent(item.split('=')[1]);
+        //         self.cookie_oname = decodeURIComponent(item.split('=')[1]);
+        //     }
+        // });
         self.getNum();
     },
     watch: {
@@ -251,6 +251,11 @@ export default {
         },
         setDataFromParent(data) {
             this.formData = data;
+            for(let item of this.options){
+                if(item.value == this.formData.type){
+                    this.formData.type = item.label
+                }
+            }
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
@@ -301,18 +306,25 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
-            // if(params == true){
-            //     for(let item of options){
-            //         if($self.formData.type == item.label){
-            //             $self.formData.type = item.value
-            //         }
-            //     }
-                
-            // }
-            let response = await $self.saveFormData(
-                '/api/v1/motor-holiday/save',
-                $self.formData
-            );
+            for(let item of $self.options){
+                if($self.formData.type == item.label){
+                    $self.formData.type = item.value
+                }
+
+            } 
+            let response
+            if($self.formData.id){
+                response = await $self.saveFormData(
+                    '/api/v1/motor-holiday/update',
+                    $self.formData
+                );
+            }else{
+                response = await $self.saveFormData(
+                    '/api/v1/motor-holiday/save',
+                    $self.formData
+                );
+
+            }
             if (response) {
                 $self.formId = response.data.content.id;
                 $self.dialogFormVisible = false;
