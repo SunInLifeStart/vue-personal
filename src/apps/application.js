@@ -168,9 +168,9 @@ export const publicMethods = {
         },
         deleteCurrentLine(id,params) {
             let $self = this;
-            $self.$confirm("是否撤销或删除?", "提示", { type: "warning" }).then(() => {
+            $self.$confirm( params ? "是否撤销?" : "是否删除?", "提示", { type: "warning" }).then(() => {
                 $self.$axios.get("/api/v1/" + $self.formName + "/delete/" + id).then(res => {
-                    $self.msgTips("撤销或删除成功", "success");
+                    $self.msgTips( params ? "撤销成功" : "删除成功", "success");
                     if(params){
                         $self.$emit("reloadList", "reload");
                     }else{
