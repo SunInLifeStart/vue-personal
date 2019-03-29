@@ -11,11 +11,11 @@
         </div>
         <br />
         <div class="formContent">
-
-             <span @click="dialogVisibleCrumb = true">流程图</span>
-            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <br />
+            <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-            </el-steps>
+            </el-steps> -->
             <el-form :model='tableData' class="formList">
                 <el-row>
                     <el-col :span="8">
@@ -106,9 +106,9 @@
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                 </span>
             </el-dialog>
-            <el-dialog :visible.sync="dialogVisibleCrumb" center width="70%" height="600px" append-to-body>
+            <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
                 <el-form>
-                    <iframe src="/bpmn-viewer/index.html?url=test.bpmn" width="100%" height="550px" frameborder="0"></iframe>
+                    <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
                 </el-form>
             </el-dialog>
         </div>
@@ -133,8 +133,10 @@ export default {
             users: [],
             actionsDialogArr: [],
             appFlowName:'motor-trainingapplication_train',
+            formName:'trainingApplication',
             comments:[],
-            dialogVisibleCrumb:false
+            dialogVisibleCrumb:false,
+            flowNodeUrl:"",
         };
     },
     components: {
@@ -145,17 +147,11 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/trainingApplication/detail/" + $self.formId;
+            $self.url= "/api/v1/"+$self.formName+"/detail/" + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
             let $self = this;
-            let url = `/workflow/${this.appFlowName}/processContent`;
-            $self.$axios.get(url).then(res => {
-                console.log(res);
-            });
-
-      
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
@@ -164,16 +160,16 @@ export default {
             }
             // debugger;
             let actions = await $self.getActions();
-            let crumbs = await $self.getCrumbs();
+            // let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();
             $self.actions = actions.data.types;
-            $self.crumbs =  {items: crumbs.data, index: -1};
-            $self.comments = comments.data;
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;    
-                }
-            }
+            // $self.crumbs =  {items: crumbs.data, index: -1};
+            // $self.comments = comments.data;
+            // for(var i= 0; i<$self.crumbs.items.length; i++){
+            //     if($self.crumbs.items[i].active){
+            //         $self.crumbs.index = i;    
+            //     }
+            // }
         }
     }
 };

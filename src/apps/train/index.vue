@@ -58,7 +58,7 @@
           </el-card>
         <br>
         <el-card class="box-card">
-            <TrainDetail :formId="formId" ref="TrainDetail"></TrainDetail>
+            <TrainDetail :formId="formId" ref="TrainDetail" @reloadList = "reloadList"></TrainDetail>
              <!-- :formId="formId" -->
         </el-card>
          <TrainForm  ref="TrainForm" @reloadList = "reloadList"></TrainForm>

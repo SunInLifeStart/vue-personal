@@ -110,13 +110,15 @@ export const publicMethods = {
                     labelName: "assigneeList"
                 });
             }
-
             if ($self.currentAction.action == 'PULL' || $self.currentAction.action == 'REJECT') {
                 $self.currentAction["comment"] = $self.currentAction.name;
                 await $self.startSignal();
                 $self.msgTips($self.currentAction.name + "成功", "success");
                 $self.getFormDetailsData();
-            } else {
+            } else if($self.currentAction.action == 'CANCEL') {
+                await $self.startSignal();
+                $self.deleteCurrentLine($self.tableData.id,"CANCEL");
+            }else{
                 $self.dialogVisible = true;
             }
         },
@@ -164,14 +166,28 @@ export const publicMethods = {
                 // $self.users = res.data;
             });
         },
-        deleteCurrentLine(id) {
+        deleteCurrentLine(id,params) {
             let $self = this;
-            $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+            $self.$confirm("是否撤销或删除?", "提示", { type: "warning" }).then(() => {
                 $self.$axios.get("/api/v1/" + $self.formName + "/delete/" + id).then(res => {
-                    $self.msgTips("删除成功", "success");
-                    $self.searchList();
+                    $self.msgTips("撤销或删除成功", "success");
+                    if(params){
+                        $self.$emit("reloadList", "reload");
+                    }else{
+                        $self.getList();
+                    }
                 });
             });
+        },
+        async getFlowNode() {
+            let $self = this;
+            let url = `/workflow/${$self.appFlowName}/processContent`;
+            let currentNodeUrl = `/workflow/${$self.appFlowName}/${$self.formId}/curActions`;
+            let bpmnData =  await this.$axios.get(url);
+            let bpmnDataCurrent = await this.$axios.get(currentNodeUrl);
+            $self.flowNodeUrl =  `/bpmn-viewer/index.html?url=/${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0]}`; 
+            $self.dialogVisibleCrumb = true;
+            console.log($self.flowNodeUrl);
         },
         msgTips(message, type) {
             this.$message({
@@ -179,6 +195,8 @@ export const publicMethods = {
                 type: type
             });
         },
+       
+
 
         //金额阿拉伯数字转大写金额
         convertCurrency(money) {
