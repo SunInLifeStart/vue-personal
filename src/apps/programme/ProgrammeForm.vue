@@ -1,6 +1,6 @@
 <template>
     <el-dialog title="会议申请(总办会/党支委会)" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
-        <div id="AgentApplyForm">
+        <div id="ProgrammeForm">
             <el-form :model="formData" label-width="140px" ref="formupdate">
                 <el-row>
                     <el-col :span="8">
@@ -11,39 +11,44 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="提单人" prop="numbers">
+                        <el-form-item label="项目名称" prop="numbers">
                             <el-input v-model="formData.creatorName" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属部门" prop="filetitle">
+                        <el-form-item label="采购项目名称" prop="filetitle">
                             <el-input v-model="formData.organName" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提单时间">
-                            <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">
-                            </el-date-picker>
+                        <el-form-item label="采购标的简述">
+                            <el-input v-model="formData.committed" :disabled="true"></el-input>
+                            <!--<el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">-->
+                            <!--</el-date-picker>-->
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="会议地点">
-                            <el-input v-model="formData.meetingPlace" placeholder="请输入拟稿单位"></el-input>
+                    <el-col :span="24">
+                        <el-form-item label="采购业务类别">
+                            <el-radio-group v-model="formData.radio">
+                                <el-radio
+                                        v-for="item in radioOption"
+                                        :label="item.value">{{item.label}}</el-radio>
+                            </el-radio-group>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="开会时间">
-                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="date">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="会议名称">
-                            <el-input v-model="formData.conferenceTitle"></el-input>
-                        </el-form-item>
-                    </el-col>
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="开会时间">-->
+                            <!--<el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="date">-->
+                            <!--</el-date-picker>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="会议名称">-->
+                            <!--<el-input v-model="formData.conferenceTitle"></el-input>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
                 </el-row>
                 <table class="tableNoBorder">
                     <el-row>
@@ -167,10 +172,24 @@
     import { publicMethods } from "../application.js";
     export default {
         mixins: [publicMethods],
-        name: 'AgentApplyForm',
+        name: 'ProgrammeForm',
         data() {
             return {
                 dialogFormVisible: false,
+                radioOption: [
+                    {
+                        value: '1',
+                        label: '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)'
+                    },
+                    {
+                        value: '2',
+                        label: '非开发建设类采购(招标方式：估算金额>=30万)'
+                    },
+                    {
+                        value: '3',
+                        label: '行政非业务类采购(招标方式：估算金额>=30万)'
+                    }
+                ],
                 options: [
                     {
                         value: '1',
@@ -390,7 +409,7 @@
     };
 </script>
 <style lang="scss" scoped>
-    #AgentApplyForm {
+    #ProgrammeForm {
         .tableNoBorder {
             width: 100%;
             table-layout: fixed;
@@ -443,7 +462,7 @@
     .tableNoBorder >>> .el-input--small .el-input__inner{
         border: none;
     }
-    #AgentApplyForm >>> .el-form-item__content{
+    #ProgrammeForm >>> .el-form-item__content{
         width: calc(100% - 140px);
     }
 </style>

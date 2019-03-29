@@ -10,10 +10,12 @@
             </el-row>
         </div>
         <div class="formContent">
+            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <br />
             <el-form :model='tableData' class="formList">
-                <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                    <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-                </el-steps>
+                <!--<el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">-->
+                    <!--<el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>-->
+                <!--</el-steps>-->
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号：">{{tableData.number}}
@@ -44,7 +46,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="议题呈报：">
+                        <el-form-item label="会议类型：">
                             <span  v-html="discussionOption[tableData.branchlineTo]" ></span>
                         </el-form-item>
                     </el-col>
@@ -97,6 +99,11 @@
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                 </span>
             </el-dialog>
+            <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
+                <el-form>
+                    <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
+                </el-form>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -123,7 +130,10 @@ export default {
             discussionOption: {
                 general: '总办会',
                 chairman: '党支委会'
-            }
+            },
+            formName:'issuesReported',
+            dialogVisibleCrumb:false,
+            flowNodeUrl:"",
         };
     },
     components: {

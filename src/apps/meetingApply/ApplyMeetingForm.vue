@@ -9,8 +9,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="议题呈报">
-                            <el-select v-model="formData.branchlineTo" placeholder="请选择">
+                        <el-form-item label="会议类型">
+                            <el-select v-model="formData.branchlineTo" placeholder="请选择会议类型">
                                 <el-option
                                         v-for="item in discussionOption"
                                         :key="item.value"
@@ -92,9 +92,9 @@
                                         <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
                                             <el-option
                                                     v-for="i in personOptions"
-                                                    :key="i.value"
-                                                    :label="i.label"
-                                                    :value="i.value">
+                                                    :key="i.id"
+                                                    :label="i.name"
+                                                    :value="i.username">
                                                 <!--:value="{value:i.value, label: i.label}">-->
                                             </el-option>
                                         </el-select>
@@ -126,9 +126,9 @@
                                         <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
                                             <el-option
                                                     v-for="i in personOptions"
-                                                    :key="i.value"
-                                                    :label="i.label"
-                                                    :value="i.value">
+                                                    :key="i.id"
+                                                    :label="i.name"
+                                                    :value="i.username">
                                                 <!--:value="{value:i.value, label: i.label}">-->
                                             </el-option>
                                         </el-select>
@@ -208,16 +208,7 @@
                         label: '部门'
                     }
                 ],
-                personOptions: [
-                    {
-                        value: '1',
-                        label: '杨静'
-                    },
-                    {
-                        value: '2',
-                        label: '刘思雨'
-                    }
-                ],
+                personOptions: [],
                 formData: this.resetForm(),
                 users: [],
                 uploadId: 0,
@@ -235,7 +226,14 @@
                 this.formData.upper = val ? this.convertCurrency(val) : "";
             }
         },
+        mounted() {
+            this.getDiscussionUser()
+        },
         methods: {
+            async getDiscussionUser() {
+                let user = await this.getUsers("/api/v1/users")
+                if (user) this.personOptions = user.data
+            },
             changePeople() {
                 this.$forceUpdate()
             },
@@ -292,7 +290,7 @@
                         department: ''
                     }],
                     numbers: '',
-                    branchlineTo: 'specMeeting',
+                    branchlineTo: '',
                     businessType: '',
                     created: '',
                     // comments: [],

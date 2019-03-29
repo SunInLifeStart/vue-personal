@@ -44,7 +44,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="议题呈报：">
+                        <el-form-item label="会议类型：">
                          <span  v-html="discussionOption[tableData.branchlineTo]" ></span>
                         </el-form-item>
                     </el-col>

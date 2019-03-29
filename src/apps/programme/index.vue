@@ -1,5 +1,5 @@
 <template>
-    <div id="AgentApply">
+    <div id="Programme">
         <el-card class="box-card">
             <el-form :inline="true" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
@@ -51,19 +51,19 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <AgentApplyDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="AgentApplyDetail"></AgentApplyDetail>
+            <ProgrammeDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ProgrammeDetail"></ProgrammeDetail>
         </el-card>
-        <AgentApplyForm  ref="AgentApplyForm" @reloadList = "reloadList"></AgentApplyForm>
+        <ProgrammeForm  ref="ProgrammeForm" @reloadList = "reloadList"></ProgrammeForm>
     </div>
 </template>
 <script>
-    import AgentApplyForm from './AgentApplyForm';
-    import AgentApplyDetail from './AgentApplyDetail';
+    import ProgrammeForm from './ProgrammeForm';
+    import ProgrammeDetail from './ProgrammeDetail';
     import {publicMethods} from "../application.js";
     import axios from 'axios';
     export default {
         mixins:[publicMethods],
-        name: 'AgentApply',
+        name: 'Programme',
         data() {
             return {
                 tableData: [],
@@ -73,7 +73,7 @@
                     conferenceTitle: '',
                     total: 0
                 },
-                dialogFormVisibleAgentApply: false,
+                dialogFormVisibleProgramme: false,
                 searchBoardOptions: [],
                 formBoardId: '',
                 dialogBoardFormId: '',
@@ -83,8 +83,8 @@
             };
         },
         components: {
-            AgentApplyForm,
-            AgentApplyDetail
+            ProgrammeForm,
+            ProgrammeDetail
         },
         mounted() {
             this.getList();
@@ -95,7 +95,7 @@
                     this.params.pageNum = 1;
                     this.getList();
                 } else {
-                    this.$refs.AgentApplyDetail.getFormDetails(params.id);
+                    this.$refs.ProgrammeDetail.getFormDetails(params.id);
                 }
             },
             searchList() {
@@ -108,7 +108,7 @@
                 if (response) {
                     if (response.data.content.list.length > 0) {
                         let formId = response.data.content.list[0].id;
-                        $self.$refs.AgentApplyDetail.getFormDetails(formId);
+                        $self.$refs.ProgrammeDetail.getFormDetails(formId);
                     }
                     $self.tableData = response.data.content.list;
                     $self.params.total = response.data.content.total;
@@ -117,10 +117,10 @@
                 }
             },
             clickTableRow(row) {
-                this.$refs.AgentApplyDetail.getFormDetails(row.id);
+                this.$refs.ProgrammeDetail.getFormDetails(row.id);
             },
             editForm(data) {
-                this.$refs.AgentApplyForm.setDataFromParent(data);
+                this.$refs.ProgrammeForm.setDataFromParent(data);
             },
             currentChange(pageNum) {
                 this.params.pageNum = pageNum;
@@ -138,7 +138,7 @@
                 this.getList();
             },
             cleanform() {
-                this.$refs.AgentApplyForm.createForm();
+                this.$refs.ProgrammeForm.createForm();
             },
             refreshBoardData() {
                 this.getList();
@@ -147,7 +147,7 @@
     };
 </script>
 <style lang="scss" scoped>
-    #AgentApply {
+    #Programme {
         .card_margin_10 {
             margin-top: 10px;
         }
@@ -157,7 +157,7 @@
     }
 </style>
 <style scoped>
-    #AgentApply .filterForm >>> .el-form-item__content{
+    #Programme .filterForm >>> .el-form-item__content{
         width: calc(100% - 80px);
     }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <div id="AgentApplyDetail">
+    <div id="ProgrammeDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -109,7 +109,7 @@
     import { publicMethods } from "../application.js";
     export default {
         mixins:[publicMethods],
-        name: 'AgentApplyDetail',
+        name: 'ProgrammeDetail',
         data() {
             return {
                 tableData: {},
@@ -161,7 +161,7 @@
     };
 </script>
 <style lang="scss">
-    #AgentApplyDetail {
+    #ProgrammeDetail {
         .el-step__main {
             margin-top: 10px;
         }
