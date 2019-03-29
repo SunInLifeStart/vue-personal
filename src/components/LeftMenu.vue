@@ -112,6 +112,12 @@ export default {
                             icon: 'el-icon-xinwenguanli1',
                             to: 'news'
                         },
+                        {
+                            id: "commonly_10",
+                            name: '综合信息发布',
+                            icon: 'el-icon-publish',
+                            to: 'publish'
+                        },
                         
                     ]
                 },

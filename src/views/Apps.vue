@@ -27,6 +27,7 @@ export default {
                 goods: "物品领用申请",
                 asset: "资产采购申请",
                 news: "公司新闻发布",
+                publish:"综合信息发布",
                 discussion: "议题上会单",
                 meetingApply: "会议申请单",
                 summary: "会议纪要",
