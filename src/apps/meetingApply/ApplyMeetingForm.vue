@@ -94,7 +94,7 @@
                                                     v-for="i in personOptions"
                                                     :key="i.id"
                                                     :label="i.name"
-                                                    :value="i.username">
+                                                    :value="i.id">
                                                 <!--:value="{value:i.value, label: i.label}">-->
                                             </el-option>
                                         </el-select>
@@ -128,7 +128,8 @@
                                                     v-for="i in personOptions"
                                                     :key="i.id"
                                                     :label="i.name"
-                                                    :value="i.username">
+                                                    :value="i.id">
+                                                {{i.name}}
                                                 <!--:value="{value:i.value, label: i.label}">-->
                                             </el-option>
                                         </el-select>
@@ -339,18 +340,26 @@
                         .get('/api/v1/meetingApply/detail/' + this.formId)
                         .then(res => {
                             self.formData = res.data.content;
-                            if (self.formData.attendingDepartment) {
-                                self.formData.attendingDepartment.forEach(item => {
-                                    if (item.person) {
-                                        item.people = item.person.split(',')
-                                    }
-                                })
-                                self.formData.sitIn.forEach(item => {
-                                    if (item.person) {
-                                        item.people = item.person.split(',')
-                                    }
-                                })
-                            }
+                            // self.$nextTick(() => {
+                                if (self.formData.attendingDepartment) {
+                                    self.formData.attendingDepartment.forEach(item => {
+                                        if (item.person) {
+                                            item.people = item.person.split(',')
+                                        }
+                                        for (let i = 0; i<item.people.length; i++) {
+                                            item.people[i] = parseInt(item.people[i])
+                                        }
+                                    })
+                                    self.formData.sitIn.forEach(item => {
+                                        if (item.person) {
+                                            item.people = item.person.split(',')
+                                        }
+                                        for (let i = 0; i<item.people.length; i++) {
+                                            item.people[i] = parseInt(item.people[i])
+                                        }
+                                    })
+                                }
+                            // })
                         })
                         .catch(function() {
                             self.$message({
@@ -392,6 +401,7 @@
                         this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
                     }
                 })
+                this.formData.sendMessage = this.formData.sendMessage.join(',')
                 let business = this.discussionOption.filter((item) => { return item.value === this.formData.branchlineTo})
                 if (business.length > 0)
                 this.formData.businessType = business[0].value + '_' +  business[0].label

@@ -78,7 +78,7 @@
                                                 v-for="i in personOptions"
                                                 :key="i.id"
                                                 :label="i.name"
-                                                :value="i.username">
+                                                :value="i.id">
                                                 <!--:value="{value:i.value, label: i.label}">-->
                                         </el-option>
                                     </el-select>
@@ -289,6 +289,9 @@ export default {
                                 if (item.person) {
                                     item.people = item.person.split(',')
                                 }
+                                for (let i = 0; i<item.people.length; i++) {
+                                    item.people[i] = parseInt(item.people[i])
+                                }
                             })
                         }
                     })
@@ -326,6 +329,7 @@ export default {
                 }
                 this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
             })
+            this.formData.sendMessage = this.formData.sendMessage.join(',')
             let response = await $self.saveFormData(
                 "/api/v1/issuesReported/save",
                 $self.formData
