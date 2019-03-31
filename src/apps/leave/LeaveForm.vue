@@ -66,13 +66,13 @@
                         <td colspan="1">拟休时间</td>
                         <td colspan="2">
                             <template>
-                                <el-date-picker v-model="formData.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="开始时间" @input="getTime()">
+                                <el-date-picker v-model="formData.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="开始时间">
                                 </el-date-picker>
                             </template>
                         </td>
                         <td colspan="2">
                             <template>
-                                <el-date-picker v-model="formData.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间" @input="getTime()">
+                                <el-date-picker v-model="formData.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间">
                                 </el-date-picker>
                             </template>
                         </td>
@@ -202,7 +202,7 @@ export default {
             dataaa: [],
             cookie_uid: cookies.get('uid'),
             vacancy: [],
-            appFlowName: "motor-holiday_leave",
+            appFlowName: 'motor-holiday_leave'
         };
     },
     mounted() {
@@ -210,17 +210,6 @@ export default {
         if (this.operationType == 'edit') {
             this.getForm();
         }
-        // const cookieItems = document.cookie.split(';');
-        // cookieItems.forEach(function(item) {
-        //     if (item.indexOf('uname') > 0) {
-        //         self.formData.uname = decodeURIComponent(item.split('=')[1]);
-        //         self.cookie_uname = decodeURIComponent(item.split('=')[1]);
-        //     }
-        //     if (item.indexOf('oname') > 0) {
-        //         self.formData.oname = decodeURIComponent(item.split('=')[1]);
-        //         self.cookie_oname = decodeURIComponent(item.split('=')[1]);
-        //     }
-        // });
         self.getNum();
     },
     watch: {
@@ -252,9 +241,9 @@ export default {
         },
         setDataFromParent(data) {
             this.formData = data;
-            for(let item of this.options){
-                if(item.value == this.formData.type){
-                    this.formData.type = item.label
+            for (let item of this.options) {
+                if (item.value == this.formData.type) {
+                    this.formData.type = item.label;
                 }
             }
             this.formId = data.id;
@@ -303,43 +292,44 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
-            for(let item of $self.options){
-                if($self.formData.type == item.label){
-                    $self.formData.type = item.value
+            for (let item of $self.options) {
+                if ($self.formData.type == item.label) {
+                    $self.formData.type = item.value;
                 }
-
-            } 
-            let response
-            if($self.formData.id){
+            }
+            let response;
+            if ($self.formData.id) {
                 response = await $self.saveFormData(
                     '/api/v1/motor-holiday/update',
                     $self.formData
                 );
-            }else{
+            } else {
                 response = await $self.saveFormData(
                     '/api/v1/motor-holiday/save',
                     $self.formData
                 );
-
             }
             if (response) {
                 $self.formId = response.data.content;
                 $self.dialogFormVisible = false;
                 if (params) {
-                    $self.msgTips("提交成功", "success");
+                    $self.msgTips('提交成功', 'success');
                     if (this.createForm_status) {
+                        console.log(this.createForm_status)
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
-                    } else {                              
+                    } else {
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-                       
-                        actions.data.types = actions.data.types.filter(
-                            function(item) {
-                                return item.action == "COMMIT";
-                            }
-                        );
-                         console.log(actions.data.types)
-                       await $self.startSignal(actions.data.types[0]);
-                       $self.emitMessage();
+
+                        actions.data.types = actions.data.types.filter(function(
+                            item
+                        ) {
+                            return item.action == 'COMMIT';
+                        });
+                        actions.data.types[0].day = this.formData.day;
+                        actions.data.types[0].role = cookies.get('Role');
+                        //  console.log(actions.data.types[0])
+                        await $self.startSignal(actions.data.types[0]);
+                        $self.emitMessage();
                     }
                 } else {
                     $self.msgTips('保存成功', 'success');
@@ -375,7 +365,11 @@ export default {
             if (this.formData.attachments.length > 0) {
                 this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
                     () => {
-                        for (let i = 0; i <= this.formData.attachments.length; i++) {
+                        for (
+                            let i = 0;
+                            i <= this.formData.attachments.length;
+                            i++
+                        ) {
                             if (this.formData.attachments[i].id == id) {
                                 let aa = this.formData.attachments.splice(i, 1);
                             }
@@ -383,7 +377,7 @@ export default {
                     }
                 );
             }
-        },
+        }
     }
 };
 </script>

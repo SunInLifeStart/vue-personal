@@ -114,19 +114,17 @@
                 </table>
 
             </el-form>
-            <el-row v-if="tableData.comments && tableData.comments.length > 0">
+            <el-row v-if="comments && comments.length > 0">
                 <el-col :span="24">
                     <h3>审批意见</h3>
                     <div class="items">
-                        <div class="item" v-for="item in tableData.comments" :key="item.id">
+                        <div class="item" v-for="item in comments" :key="item.id">
                             <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
                             <div class="info">
                                 <div class="creator">
-                                    <span href="#">{{item.creatorName}}</span> &nbsp; ({{item.created | dateformat}})
-                                    <span v-show="item.action == 'APPROVE'">【同意】</span>
-                                    <span v-if="item.action == 'REJECT'">【驳回】</span>
+                                    <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
                                 </div>
-                                <div class="content">{{item.content}}</div>
+                                <div class="content">{{item.fullMessage}}</div>
                             </div>
                         </div>
                     </div>
@@ -134,28 +132,28 @@
             </el-row>
         </div>
         <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
-                <el-form>
-                    <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
-                            <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item label="审批意见">
-                        <el-input type="textarea" placeholder="请输入审批意见" v-model="textarea" :autosize="{ minRows: 10, maxRows: 30}">
-                        </el-input>
-                    </el-form-item>
-                </el-form>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="submitForm()">确 定</el-button>
-                </span>
-            </el-dialog>
-            <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
-                <el-form>
-                    <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
-                </el-form>
-            </el-dialog>
-        </div>
+            <el-form>
+                <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
+                    <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
+                        <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label="审批意见">
+                    <el-input type="textarea" placeholder="请输入审批意见" v-model="textarea" :autosize="{ minRows: 10, maxRows: 30}">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisible = false">取 消</el-button>
+                <el-button type="primary" @click="submitForm()">确 定</el-button>
+            </span>
+        </el-dialog>
+        <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
+            <el-form>
+                <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
+            </el-form>
+        </el-dialog>
+    </div>
 </template>
 <script>
 import axios from 'axios';
@@ -169,7 +167,7 @@ export default {
         return {
             actions: [],
             crumbs: [],
-            crumb:[],
+            crumb: [],
             formId: '',
             users: [],
             actionsDialogArr: [],
@@ -237,7 +235,7 @@ export default {
                     $self.crumbs.index = i;
                 }
             }
-        },
+        }
     }
 };
 </script>
