@@ -315,7 +315,6 @@ export default {
                 if (params) {
                     $self.msgTips('提交成功', 'success');
                     if (this.createForm_status) {
-                        console.log(this.createForm_status)
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
