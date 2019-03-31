@@ -195,7 +195,7 @@ export const publicMethods = {
             let currentNodeUrl = `/workflow/${$self.appFlowName}/${$self.formId}/curActions`;
             let bpmnData =  await this.$axios.get(url);
             let bpmnDataCurrent = await this.$axios.get(currentNodeUrl);
-            $self.flowNodeUrl =  `/bpmn-viewer/index.html?url=${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0].taskDefinitionKey}`; 
+            $self.flowNodeUrl =  `/bpmn-viewer/view.html?url=${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0].taskDefinitionKey}`; 
             $self.dialogVisibleCrumb = true;
             console.log($self.flowNodeUrl);
         },
