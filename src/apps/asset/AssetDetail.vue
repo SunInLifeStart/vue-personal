@@ -202,6 +202,7 @@ export default {
             let crumbs = await $self.getCrumbs();
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
+            console.log('actions1', actions)
             $self.crumbs = { items: crumbs.data, index: -1 };
             $self.comments = comments.data;
             for (var i = 0; i < $self.crumbs.items.length; i++) {
@@ -209,25 +210,6 @@ export default {
                     $self.crumbs.index = i;
                 }
             }
-        },
-        //增加全屏显示，目前先不做
-        getActions1() {
-            let self = this;
-            axios.get(`/api/v1/assets/${this.formId}/actions`).then(res => {
-                res.data.types = res.data.types || [];
-                if (this.fullScreen) {
-                    res.data.types.push({
-                        type: 'closeFullScreen',
-                        name: '关闭全屏'
-                    });
-                } else {
-                    res.data.types.push({
-                        type: 'fullScreen',
-                        name: '全屏显示'
-                    });
-                }
-                self.actions = res.data.types;
-            });
         },
         getRejectList() {
             let self = this;
@@ -249,71 +231,73 @@ export default {
                 self.users = res.data;
             });
         },
-        doAction(action) {
-            this.clearForm();
-            this.currentAction = action;
-            // 不需要弹出框
-            if ('ARCHIVE,DISPATCH,TEMPLATE,PULL,COMMIT'.includes(action.type)) {
-                let self = this; //套红，归档，分发
-                if (action.type == 'PULL') {
-                    axios
-                        .get(`/api/v1/assets/${self.formId}/pull`)
-                        .then(res => {
-                            self.comment('formOnlyComment');
-                        });
-                }
-                if (action.type == 'COMMIT' && this.crumbNodeName == '申请') {
-                    this.submitForm();
-                } else if (action.type == 'COMMIT') {
-                    self.dialogVisible = true;
-                    if (action.required) {
-                        if (action.type == 'COMMIT') {
-                            self.presign_status = true;
-                            self.seleteUserLabel = '请选择拟办人';
-                        }
-                    }
-                }
-            } else if ('PERSIGN,PRESIGN'.includes(action.type)) {
-                //拒绝，加签
-                this.dialogVisible = true;
-                //需要弹出并填写意见，选择驳回节点或选择其他人
-                if (action.type == 'REJECT') {
-                    this.getRejectList();
-                    this.reject_status = true;
-                }
-                if (action.type == 'PERSIGN') {
-                    this.presign_status = true;
-                    this.seleteUserLabel = '请选择前加签人';
-                    if (this.currentAction.required == null) {
-                        this.currentAction.required = ['childList:array'];
-                    }
-                }
-                if (action.type == 'PRESIGN') {
-                    this.presign_status = true;
-                    this.seleteUserLabel = '请选择前加签人';
-                    if (this.currentAction.required == null) {
-                        this.currentAction.required = ['childList:array'];
-                    }
-                }
-            } else if ('fullScreen'.includes(action.type)) {
-                this.actions.splice(this.actions.length - 1, 1);
-                this.actions.push({
-                    type: 'closeFullScreen',
-                    name: '关闭全屏'
-                });
-                this.fullScreen = true;
-                // this.common.open(`/#/apps/outgoing/${this.formId}`);
-            } else if ('closeFullScreen'.includes(action.type)) {
-                this.actions.splice(this.actions.length - 1, 1);
-                this.actions.push({
-                    type: 'fullScreen',
-                    name: '全屏显示'
-                });
-                this.fullScreen = false;
-            } else {
-                this.dialogVisible = true;
-            }
-        },
+        // doAction(action) {
+        //     this.clearForm();
+        //     this.currentAction = action;
+        //     // this.submitData = action;
+        //     console.log(' this.currentAction', this.currentAction)
+        //     // 不需要弹出框
+        //     if ('ARCHIVE,DISPATCH,TEMPLATE,PULL,COMMIT'.includes(action.type)) {
+        //         let self = this; //套红，归档，分发
+        //         if (action.type == 'PULL') {
+        //             axios
+        //                 .get(`/workflow/asset-form_asset/${self.formId}/pull`)
+        //                 .then(res => {
+        //                     self.comment('formOnlyComment');
+        //                 });
+        //         }
+        //         if (action.type == 'COMMIT' && this.crumbNodeName == '申请') {
+        //             this.submitForm();
+        //         } else if (action.type == 'COMMIT') {
+        //             self.dialogVisible = true;
+        //             if (action.required) {
+        //                 if (action.type == 'COMMIT') {
+        //                     self.presign_status = true;
+        //                     self.seleteUserLabel = '请选择拟办人';
+        //                 }
+        //             }
+        //         }
+        //     } else if ('PERSIGN,PRESIGN'.includes(action.type)) {
+        //         //拒绝，加签
+        //         this.dialogVisible = true;
+        //         //需要弹出并填写意见，选择驳回节点或选择其他人
+        //         if (action.type == 'REJECT') {
+        //             this.getRejectList();
+        //             this.reject_status = true;
+        //         }
+        //         if (action.type == 'PERSIGN') {
+        //             this.presign_status = true;
+        //             this.seleteUserLabel = '请选择前加签人';
+        //             if (this.currentAction.required == null) {
+        //                 this.currentAction.required = ['childList:array'];
+        //             }
+        //         }
+        //         if (action.type == 'PRESIGN') {
+        //             this.presign_status = true;
+        //             this.seleteUserLabel = '请选择前加签人';
+        //             if (this.currentAction.required == null) {
+        //                 this.currentAction.required = ['childList:array'];
+        //             }
+        //         }
+        //     } else if ('fullScreen'.includes(action.type)) {
+        //         this.actions.splice(this.actions.length - 1, 1);
+        //         this.actions.push({
+        //             type: 'closeFullScreen',
+        //             name: '关闭全屏'
+        //         });
+        //         this.fullScreen = true;
+        //         // this.common.open(`/#/apps/outgoing/${this.formId}`);
+        //     } else if ('closeFullScreen'.includes(action.type)) {
+        //         this.actions.splice(this.actions.length - 1, 1);
+        //         this.actions.push({
+        //             type: 'fullScreen',
+        //             name: '全屏显示'
+        //         });
+        //         this.fullScreen = false;
+        //     } else {
+        //         this.dialogVisible = true;
+        //     }
+        // },
         clearForm() {
             this.reject_status = false;
             this.presign_status = false;
@@ -339,44 +323,46 @@ export default {
                     this.getForm();
                 });
         },
-        submitForm() {
-            let self = this;
-            //如果是不需要走流程的节点
-            if (
-                'SAVE,PREVIEW,COMMENT,PULL,PRINTER,EDIT'.includes(
-                    self.currentAction.type
-                )
-            ) {
-            } else {
-                if (self.currentAction.required) {
-                    if (self.seleteUsers.length > 0) {
-                        var key = self.currentAction.required[0].split(':')[0];
-                        self.submitData[key] = self.seleteUsers;
-                    } else {
-                        self.$message.error(self.seleteUserLabel);
-                        return false;
-                    }
-                }
-                self.submitData.action = self.currentAction.type;
-                axios
-                    .put(
-                        `/api/v1/assets/${self.formId}/signal`,
-                        self.submitData
-                    )
-                    .then(res => {
-                        self.dialogVisible = false;
-                        self.comment();
+        // submitForm() {
+        //     let self = this;
+        //     //如果是不需要走流程的节点
+        //     if (
+        //         'SAVE,PREVIEW,COMMENT,PULL,PRINTER,EDIT'.includes(
+        //             self.currentAction.type
+        //         )
+        //     ) {
+        //     } else {
+        //         console.log('1', self.currentAction.required)
+        //         console.log('2', self.seleteUsers)
+        //         if (self.currentAction.required) {
+        //             if (self.seleteUsers.length > 0) {
+        //                 var key = self.currentAction.required[0].split(':')[0];
+        //                 self.submitData[key] = self.seleteUsers;
+        //             } else {
+        //                 self.$message.error(self.seleteUserLabel);
+        //                 return false;
+        //             }
+        //         }
+        //         self.submitData.action = self.currentAction.type;
+        //         axios
+        //             .put(
+        //                 `/workflow/asset-form_asset/${self.formId}/signal`,
+        //                 self.submitData
+        //             )
+        //             .then(res => {
+        //                 self.dialogVisible = false;
+        //                 self.comment();
 
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                        if (self.currentAction.type == 'CANCEL') {
-                            self.$emit('refreshData');
-                        }
-                    });
-            }
-        },
+        //                 self.$message({
+        //                     message: self.currentAction.name + '成功',
+        //                     type: 'success'
+        //                 });
+        //                 if (self.currentAction.type == 'CANCEL') {
+        //                     self.$emit('refreshData');
+        //                 }
+        //             });
+        //     }
+        // },
         refreshFormData() {
             this.getForm();
         },

@@ -23,10 +23,10 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        </el-row>
-                        <el-row>
+                    </el-row>
+                    <el-row>
                         <el-col :span="16">
-                            <el-form-item label="申请时间：" >
+                            <el-form-item label="申请时间：">
                                 <div>
                                     <el-date-picker v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                                     </el-date-picker>
@@ -60,7 +60,7 @@
                             {{scope.row.applyDate | dateformat('YYYY-MM-DD')}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="status" label="单据状态" min-width='100px'>
+                    <el-table-column prop="status" label="单据状态" min-width='100px' :formatter="fomatterStatus">
                     </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
@@ -102,15 +102,15 @@ export default {
             formDetails: {},
             formId: "",
             params: {
-                desc:true,
+                desc: true,
                 page: 1,
                 pageSize: 5,
                 department: "",
                 submitter: "",
                 total: 0,
                 orderBy: 'created',
-                desc:true,
-                options:[]
+                desc: true,
+                options: []
             },
             searchOptions: [],
             formName: "asset_forms",
@@ -143,7 +143,7 @@ export default {
                     });
                     self.getList();
                 })
-                .catch(function() {
+                .catch(function () {
                     self.$message({
                         message: '操作失败',
                         type: 'error'
@@ -163,7 +163,7 @@ export default {
                 }
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
-                
+
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
@@ -249,11 +249,33 @@ export default {
             this.formInline.applyDate = [];
             this.formInline.status = '';
             this.getList();
-        }
+        },
+        fomatterStatus(row, column) {
+            let state;
+            //0已保存1审核中2驳回3撤销4完成
+            switch (row.status) {
+                case '00':
+                  state = "已保存";
+                  break;
+                case '01':
+                    state = "审核中";
+                    break;
+                case '02':
+                    state = "驳回";
+                    break;
+                case '03':
+                    state = "撤销";
+                    break;
+                case '04':
+                  state = "已完成";
+                  break;
+            }
+            return state;
+        },
     },
     mounted() {
         this.getList();
-        
+
     }
 };
 </script>

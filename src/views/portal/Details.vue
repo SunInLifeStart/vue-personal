@@ -21,7 +21,7 @@
                     <div>附件：</div>
                     <br />
                     <div v-for="url of data.url" :key="url.type"  style="color:#0066cc;display:block;line-height:2; cursor:pointer; font-size:18px;">
-                       <img src="@/assets/arrow2.png"  style="top:15px;"> &nbsp; <span @click="showPreview(url)"> {{url.name}}</span> &nbsp; &nbsp; &nbsp;<a  :href="url.url" :download="url.name">下载</a>
+                       <img src="@/assets/arrow2.png"  style="top:15px;"> &nbsp; <span @click="windowPreview(url.url)"> {{url.name}}</span> &nbsp; &nbsp; &nbsp;<a  :href="url.url" :download="url.name">下载</a>
                     </div>
                  </div>
             </div>
@@ -66,6 +66,13 @@ export default {
             //     url = url.replace('/files/','/oldfiles/');
             // }
             this.common.preview(url);
+        },
+        windowPreview(url){
+            this.openUrl = "http://static1.yxpe.com.cn/edit.html?";
+                ntkoBrowser.openWindow(
+                     this.openUrl +"removeBar=true" + "&&url=" + url
+            );
+              console.log( this.openUrl + "&url=" + url);
         }
     },
     filters: {
@@ -115,11 +122,13 @@ export default {
          
                 }
                 if(data.text && JSON.parse(data.text).name){
-                        this.pdfUrl =  "/op/view.aspx?src=http://work.zgcgroup.vpn" + JSON.parse(data.text).url;
+                      //  this.pdfUrl =  "/op/view.aspx?src=http://work.zgcgroup.vpn" + JSON.parse(data.text).url;
+                        this.pdfUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&&url="+ JSON.parse(data.text).url;
                         data.url.push(JSON.parse(data.text));
                 }else if(data.url.length>0){
                     if ('PDF,DOCX,PPTX,XLSX,DOC,XLS'.includes(data.url[0].type.toUpperCase())) {
-                        this.pdfUrl = "/op/view.aspx?src=http://work.zgcgroup.vpn" + data.url[0].url;
+                       // this.pdfUrl = "/op/view.aspx?src=http://work.zgcgroup.vpn" + data.url[0].url;
+                        this.pdfUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&&url=" + data.url[0].url;
                     }
                     // else if (''.includes(data.url[0].type)) {
                     //     // axios.get('/onlinePreview?url='+data.url[0].url).then(res => {

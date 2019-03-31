@@ -12,7 +12,7 @@
                 <el-col :span="12">
                     <el-form-item label="信息栏目:" prop="columns">
                         <el-select v-model="selectItem.columns" placeholder="请选择信息类型" style="width:100%">
-                            <el-option label="领导讲话" value="领导讲话"></el-option>
+                            <!-- <el-option label="领导讲话" value="领导讲话"></el-option> -->
                             <el-option label="规章制度" value="规章制度"></el-option>
                             <el-option label="通知公告" value="通知公告"></el-option>
                             <!-- <el-option label="工作简报" value="工作简报"></el-option> -->
