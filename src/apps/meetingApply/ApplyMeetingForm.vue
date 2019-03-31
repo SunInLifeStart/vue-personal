@@ -42,7 +42,7 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="会议地点" prop="meetingPlace">
-                            <el-input v-model="formData.meetingPlace" placeholder="请输入拟稿单位"></el-input>
+                            <el-input v-model="formData.meetingPlace" placeholder="请输入会议地点"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
