@@ -57,12 +57,12 @@
                                 </el-table-column>
                                 <el-table-column prop="number" label="计划采购数量">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.number" @input="getAmount(scope.row)" type="number"></el-input>
+                                        <el-input v-model.number="scope.row.number" @input="getAmount(scope.row)" @mousewheel.native.prevent type="number"></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="price" label="计划单价">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.price" @input="getAmount(scope.row)" onkeyup="this.value=this.value.replace(/[^0-9.]+/,'');"></el-input>
+                                        <el-input v-model.number="scope.row.price" @input="getAmount(scope.row)" type="number" @mousewheel.native.prevent></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="totalPrice" label="计划总价">
@@ -72,7 +72,7 @@
                                 </el-table-column>
                                 <el-table-column prop="inventory" label="库存数量">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.inventory"></el-input>
+                                        <el-input v-model.number="scope.row.inventory" type="number" @mousewheel.native.prevent></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="buyTime" label="要求购入时间" width="160px">
@@ -207,6 +207,7 @@ export default {
             };
             return formData;
         },
+
         saveFormValidate(type) {
             this.$refs["formupdate"].validate(valid => {
                 if (valid) {
@@ -228,7 +229,7 @@ export default {
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-                        console.log('actions',actions.data)
+                        console.log('actions', actions.data)
                         actions.data.types = actions.data.types.filter(
                             function (item) {
                                 return item.action == "COMMIT";
