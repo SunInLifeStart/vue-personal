@@ -139,11 +139,32 @@ export default {
                             to: 'meetingApply',
                             // 没有
                         },
+                        // {
+                        //     id: "metting_3",
+                        //     name: '会议纪要',
+                        //     icon: 'el-icon-ziyuan',
+                        //     to: 'summary'
+                        //     //没有
+                        // },
                         {
                             id: "metting_3",
-                            name: '会议纪要',
+                            name: '总办会会议纪要',
+                            icon: 'el-icon-huiyidengji',
+                            to: 'gmomeeting'
+                            //没有
+                        },
+                        {
+                            id: "metting_4",
+                            name: '专题会会议纪要',
+                            icon: 'el-icon-huiyishi',
+                            to: 'specmeeting'
+                            //没有
+                        },
+                        {
+                            id: "metting_5",
+                            name: '党委会会议纪要',
                             icon: 'el-icon-ziyuan',
-                            to: 'summary'
+                            to: 'partymeeting'
                             //没有
                         },
                     ]
