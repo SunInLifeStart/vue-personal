@@ -5,7 +5,7 @@
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="会议名称">
-                            <el-input v-model="params.conferenceTitle" placeholder="请输入议题名称"></el-input>
+                            <el-input v-model="params.conferenceTitle" placeholder="请输入会议名称"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">

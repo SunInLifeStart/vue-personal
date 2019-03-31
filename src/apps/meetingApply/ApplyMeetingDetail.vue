@@ -10,6 +10,7 @@
             </el-row>
         </div>
         <div class="formContent">
+            <br />
             <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
             <br />
             <!--<el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">-->
