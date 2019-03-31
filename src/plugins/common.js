@@ -11,10 +11,10 @@ export default {
     },
     preview(file) {
         //let src = "59.110.172.228:8012";
-        let src2 = "http://59.110.172.228";
+        let src2 = "http://116.117.157.232";
         if (process.env.NODE_ENV === 'production') {
             //src = 'thumb1.zgcgroup.vpn:8012';
-            src2 = "http://work.zgcgroup.vpn";
+            // src2 = "http://work.zgcgroup.vpn";
         }
         if(!file.type){
             file.type = file.url.substring(file.url.lastIndexOf('.')+1,file.url.length).toUpperCase();
@@ -22,7 +22,8 @@ export default {
         
         let url='';
         if('DOC,DOCX,PPT,PPTX,XLS,XLSX,PDF'.includes(file.type.toUpperCase())){
-            url = "http://172.16.3.44/op/view.aspx?src=" +  encodeURI(src2 + file.url);
+         //  url = "http://172.16.3.44/op/view.aspx?src=" +  encodeURI(src2 + file.url);
+         url = src2 + file.url;
         }else{
             url = src2 + file.url;
         }
