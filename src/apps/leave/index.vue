@@ -11,12 +11,12 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="所属部门">
-                                <el-input v-model="params.creatorName" placeholder="所属部门"></el-input>
+                                <el-input v-model="params.oname" placeholder="所属部门"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="提单时间">
-                                <el-input v-model="params.organName" placeholder="提单时间"></el-input>
+                                <el-input v-model="params.applyTime" placeholder="提单时间"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -29,13 +29,13 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <!-- <el-col :span="8">
                             <el-form-item label="创建时间">
                                 <el-date-picker v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
                             </el-form-item>
-                        </el-col>
-                        <el-col :span="8" class="">
-                            <el-form-item class="">
+                        </el-col> -->
+                        <el-col :span="16" class="">
+                            <el-form-item class="" style=" text-align: right">
                                 <el-button type="primary" @click="searchList">查询</el-button>
                                 <el-button @click="resetInput">重置</el-button>
                             </el-form-item>
@@ -64,7 +64,7 @@
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
                             <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '已保存'">
-                                <el-button type="text" icon="el-icon-delete" @click="deleteItem(scope.row)"></el-button>
+                                <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
                     </el-table-column>
@@ -75,7 +75,7 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <LeaveDetail :formId="formId" ref="LeaveDetail"></LeaveDetail>
+            <LeaveDetail :formId="formId" ref="LeaveDetail"  @reloadList = "reloadList"></LeaveDetail>
         </el-card>
         <LeaveForm ref="LeaveForm" @reloadList="reloadList"></LeaveForm>
         <!-- <el-dialog title="请休假申请" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="1240px">
@@ -110,7 +110,7 @@ export default {
                 submitter: '',
                 total: 0
             },
-            formName: 'trainingApplication'
+            formName: 'motor-holiday'
         };
     },
 

@@ -7,12 +7,13 @@
                         {{action.name}}
                     </span>
                 </div>
-                
+
             </el-row>
         </div>
         <div class="formContent">
-            <el-steps :active="crumb.index" finish-status="success" class="crumbList">
-                <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>
+            <!-- <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div> -->
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList">
+                <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <div style="text-align:right">
                 <el-button type="primary" @click="cope()">打 印</el-button>
@@ -20,7 +21,7 @@
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
                 <el-row style="margin-top: 25px;">
                     <el-col :span="8">
-                         <el-form-item label="流水单号：">{{tableData.no}}
+                        <el-form-item label="流水单号：">{{tableData.no}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -48,11 +49,11 @@
                             <span class="span1">*</span> 所属部门
                         </td>
                         <td colspan="2">
-                           {{tableData.oname}}
+                            {{tableData.oname}}
                         </td>
                         <td colspan="1">申请时间</td>
                         <td colspan="2">
-                          {{tableData.applyTime}}
+                            {{tableData.applyTime}}
                         </td>
                     </tr>
                     <tr>
@@ -74,8 +75,7 @@
                         <td>拟休时间</td>
                         <td colspan="5">
                             <template>
-                               {{tableData.startTime}}至
-                               {{tableData.endTime}}
+                                {{tableData.startTime}}至 {{tableData.endTime}}
                             </template>
                             共({{tableData.day}})天
                         </td>
@@ -156,21 +156,36 @@
                 <el-button type="primary" @click="submitForm()">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
+            <el-form>
+                <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
+            </el-form>
+        </el-dialog>
     </div>
 </template>
 <script>
 import axios from 'axios';
 import Comment from '../Comment';
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 export default {
-     mixins:[publicMethods],
+    mixins: [publicMethods],
     name: 'leaveDetail',
     data() {
         return {
+            actions: [],
+            crumbs: [],
+            crumb:[],
+            formId: '',
+            users: [],
+            actionsDialogArr: [],
+            comments: [],
+            dialogVisibleCrumb: false,
+            flowNodeUrl: '',
+            // qqq
             subStatus: false,
             activeName: 'first',
-            rows:{},
+            rows: {},
             tableData: {
                 no: '',
                 submitter: '',
@@ -182,7 +197,6 @@ export default {
             },
             fileleng: 'show',
             actions: [],
-            crumb: { items: [] },
             rejectTarget: '',
             rejectList: [],
             attachments: [],
@@ -194,7 +208,8 @@ export default {
             seleteUserLabel: '',
             textarea: '',
             dialogVisible: false,
-            appFlowName:'motor-holiday_leave'
+            appFlowName: 'motor-holiday_leave',
+            formName: 'motor-holiday'
         };
     },
     // props: ['formId'],
@@ -206,7 +221,7 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/motor-holiday/get/" + $self.formId;
+            $self.url = '/api/v1/motor-holiday/get/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -215,21 +230,20 @@ export default {
             if (response) {
                 $self.tableData = response.data.content;
             } else {
-                $self.msgTips("获取表单失败", "warning");
+                $self.msgTips('获取表单失败', 'warning');
             }
             // debugger;
             let actions = await $self.getActions();
             let crumbs = await $self.getCrumbs();
-            let comments =  await $self.getComments();
+            let comments = await $self.getComments();
             $self.actions = actions.data.types;
-            $self.crumbs =  {items: crumbs.data, index: -1};
+            $self.crumbs = { items: crumbs.data, index: -1 };
             $self.comments = comments.data;
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;    
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
                 }
             }
-
         }
     }
 };

@@ -170,7 +170,7 @@ export default {
                     .format('YYYY-MM-DD HH:mm:ss')
             },
             users: [],
-            currentFormId: this.operationType == 'create' ? '' : this.formId,
+            // currentFormId: this.operationType == 'create' ? '' : this.formId,
             pickerOptions1: {
                 shortcuts: [
                     {
@@ -201,7 +201,8 @@ export default {
             getclass: [],
             dataaa: [],
             cookie_uid: cookies.get('uid'),
-            vacancy: []
+            vacancy: [],
+            appFlowName: "motor-holiday_leave",
         };
     },
     mounted() {
@@ -277,13 +278,9 @@ export default {
                 draftTime: [],
                 startTime: '',
                 endTime: '',
-                number: '',
-                phone: '',
-                trainingPrograms: '',
-                trainingContent: '',
                 participant: '',
                 processId: '',
-                type: 'true',
+                type: '事假',
                 suggestion: '',
                 consts: '',
                 upper: '',
@@ -326,21 +323,21 @@ export default {
 
             }
             if (response) {
-                $self.formId = response.data.content.id;
+                $self.formId = response.data.content;
                 $self.dialogFormVisible = false;
                 if (params) {
-                    $self.msgTips('提交成功', 'success');
+                    $self.msgTips("提交成功", "success");
                     if (this.createForm_status) {
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
-                    } else {
+                    } else {                              
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-                        actions.data.types = actions.data.types.filter(function(
-                            item
-                        ) {
-                            return item.action == 'COMMIT';
-                        });
-                        await $self.startSignal(actions.data.types[0]);
-                        $self.emitMessage();
+                        actions.data.types = actions.data.types.filter(
+                            function(item) {
+                                return item.action == "COMMIT";
+                            }
+                        );
+                       await $self.startSignal(actions.data.types[0]);
+                       $self.emitMessage();
                     }
                 } else {
                     $self.msgTips('保存成功', 'success');
