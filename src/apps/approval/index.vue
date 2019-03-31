@@ -1,18 +1,18 @@
 <template>
-    <div id="Train">
+    <div id="Approval">
         <el-card class="box-card">
                <!-- 查询 -->
-                <div id="TrainFilter">
-                    <el-form :inline="true"  class="demo-form-inline">
+                <div id="ApprovalFilter">
+                    <el-form :inline="true" label-position="left" class="demo-form-inline">
                         <el-row class="filterForm">
-                            <el-col :span="8">
-                                <el-form-item label="申请人">
-                                    <el-input placeholder="请输入申请人" v-model="params.submitter"></el-input>
+                            <!-- <el-col :span="8">
+                                <el-form-item label="使用物品">
+                                    <el-input placeholder="请输入使用物品" v-model="params.submitter"></el-input>
                                 </el-form-item>
-                            </el-col>
+                            </el-col> -->
                            <el-col :span="8">
-                                <el-form-item label="所属部门">
-                                    <el-input placeholder="请输入所属部门" v-model="params.department"></el-input>
+                                <el-form-item label="经办人">
+                                    <el-input placeholder="请输入经办人" v-model="params.department"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8" >
@@ -29,18 +29,18 @@
                 <div class="toolbar">
                     <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
                 </div>
-                <div id="TrainList">
+                <div id="ApprovalList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
-                    <el-table-column prop="submitter" label="申请人">
+                    <el-table-column prop="submitter" label="使用物品">
                     </el-table-column>
-                    <el-table-column prop="department" label="所属部门">
+                    <el-table-column prop="department" label="经办人">
                     </el-table-column>
-                    <el-table-column prop="committed" label="提单时间">
+                    <el-table-column prop="committed" label="领用时间">
                     </el-table-column>
-                    <el-table-column prop="participant" label="培训/学习(参加人员)">
+                    <el-table-column prop="participant" label="用印文件">
                     </el-table-column>
-                    <el-table-column prop="schedule" width="250" label="日程安排"></el-table-column>
-                     <el-table-column prop="status" width="250" label="状态"></el-table-column>
+                    <el-table-column prop="schedule" width="250" label="用印份数"></el-table-column>
+                     <!-- <el-table-column prop="status" width="250" label="状态"></el-table-column> -->
                     
                      <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
@@ -59,20 +59,20 @@
           </el-card>
         <br>
         <el-card class="box-card">
-            <TrainDetail :formId="formId" ref="TrainDetail" @reloadList = "reloadList"></TrainDetail>
+            <ApprovalDetail :formId="formId" ref="ApprovalDetail" @reloadList = "reloadList"></ApprovalDetail>
              <!-- :formId="formId" -->
         </el-card>
-         <TrainForm  ref="TrainForm" @reloadList = "reloadList"></TrainForm>
+         <ApprovalForm  ref="ApprovalForm" @reloadList = "reloadList"></ApprovalForm>
          <!-- :formDataFromIndex="formDataFromIndex"  -->
     </div>
 </template>
 <script>
-import TrainForm from "./TrainForm";
-import TrainDetail from "./TrainDetail";
+import ApprovalForm from "./ApprovalForm";
+import ApprovalDetail from "./ApprovalDetail";
 import {publicMethods} from "../application.js";
 export default {
     mixins:[publicMethods],
-    name: "Train",
+    name: "Approval",
     data() {
         return {
             tableData: [],
@@ -85,12 +85,12 @@ export default {
                 submitter: "",
                 total: 0
             },
-            formName:"trainingApplication"
+            formName:"approvalingApplication"
         };
     },
     components: {
-        TrainForm,
-        TrainDetail
+        ApprovalForm,
+        ApprovalDetail
     },
     methods: {
         //获取列表
@@ -101,7 +101,7 @@ export default {
             if (response) {
                 if (response.data.content.list.length > 0) {
                    let formId = response.data.content.list[0].id;
-                   $self.$refs.TrainDetail.getFormDetails(formId);
+                   $self.$refs.ApprovalDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.content.list;
                 $self.params.total = response.data.content.total;
@@ -112,24 +112,24 @@ export default {
 
         //选择行
         showCurrentId(row) {
-            this.$refs.TrainDetail.getFormDetails(row.id);
+            this.$refs.ApprovalDetail.getFormDetails(row.id);
         },
 
         //新建
         createNewForm() {
-            this.$refs.TrainForm.createForm();
+            this.$refs.ApprovalForm.createForm();
         },
 
         //编辑
         editForm(data) {
-            this.$refs.TrainForm.setDataFromParent(data);
+            this.$refs.ApprovalForm.setDataFromParent(data);
         },
         reloadList(params) {
             if (params == "reload") {
                 this.params.pageNum = 1;
                 this.getList();
             } else {
-                this.$refs.TrainDetail.getFormDetails(params.id);
+                this.$refs.ApprovalDetail.getFormDetails(params.id);
             }
         },
 
@@ -154,14 +154,11 @@ export default {
     }
 };
 </script>
-<style lang="scss" scoped>
-      #TrainFilter  .el-form-item--small.el-form-item{
+<style scoped>
+      #ApprovalFilter  .el-form-item--small.el-form-item{
             width: 100%;
         }
-</style>
-<style scoped>
-#TrainFilter .filterForm >>> .el-form-item__content{
+     #ApprovalFilter .filterForm >>> .el-form-item__content{
         width: calc(100% - 80px);
     }
 </style>
-
