@@ -4,10 +4,28 @@
     <div class="portal">
         <div class="portalList">
             <div class="title">
-                {{name}}
+                <span v-if="name == '集团发文'">
+                     公司发文
+                </span>
+                <span v-if="name != '集团发文' && name != '通讯录' ">
+                     {{name}}
+                </span>
+                <span v-if="name == '通讯录'">
+                     通讯录/会表
+                </span>
                 <div><img src="@/assets/title.png" /></div>
             </div>
-            <div style="padding:15px 10px"><router-link :to="{path:'/portal'}">首页</router-link> > {{name}}  <el-button size="mini" button v-if="name == '新闻中心'"  style="float:right" @click="changeType">{{showSquTips}}</el-button></div>
+            <div style="padding:15px 10px"><router-link :to="{path:'/portal'}">首页</router-link> > 
+                <span v-if="name == '集团发文'">
+                     公司发文
+                </span>
+                <span v-if="name != '集团发文' && name != '通讯录' ">
+                     {{name}}
+                </span>
+                <span v-if="name == '通讯录'">
+                     通讯录/会表
+                </span>
+             <el-button size="mini" button v-if="name == '新闻中心'"  style="float:right" @click="changeType">{{showSquTips}}</el-button></div>
             <div v-if="showSquTips == '展示列表'" class="newsList">
                 <div class="list" v-for="item of list" :key="item.articleId"  @click="routerTo(item)">
                     <div><img :src="item.img"></div>
@@ -130,11 +148,11 @@ export default {
             newsListToList:"新闻中心",
             leaderSpeech: "领导讲话",
             anno: "通知公告",
-            outgoing: "公司发文",
+            outgoing: "集团发文",
             nstitution: "nstitution",
             briefing: "工作简报",
             meetingTable: "公司会表",
-            addressList: "通讯录/会表",
+            addressList: "通讯录",
             nstitution: "规章制度",
             partyActive:"党建活动",
             sociatyList:"工会活动",
