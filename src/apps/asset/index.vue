@@ -7,7 +7,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="申请人：">
-                                <el-input v-model="formInline.proposer" placeholder=""></el-input>
+                                <el-input v-model="formInline.proposer" placeholder="" style="width:100%"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -28,7 +28,7 @@
                         <el-col :span="16">
                             <el-form-item label="申请时间：">
                                 <div>
-                                    <el-date-picker v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    <el-date-picker style="width:141%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
