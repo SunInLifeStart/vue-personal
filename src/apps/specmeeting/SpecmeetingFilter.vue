@@ -1,6 +1,6 @@
 <template>
     <div id="SpecMeetingFilter">
-        <el-form :inline="true" label-width="100px" :model="formInline" class="demo-form-inline">
+        <el-form :inline="true" label-position="left" label-width="100px" :model="formInline" class="demo-form-inline">
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="专题会编号">
@@ -144,6 +144,6 @@ export default {
 </style>
 <style scoped>
     #SpecMeetingFilter >>> .el-form-item__content{
-        width: calc(100% - 100px);
+        width: calc(100% - 110px);
     }
 </style>

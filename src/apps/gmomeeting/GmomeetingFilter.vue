@@ -1,6 +1,6 @@
 <template>
     <div id="GmoMeetingFilter">
-        <el-form :inline="true" :model="formInline" label-width="100px" class="demo-form-inline">
+        <el-form :inline="true" label-position="left" :model="formInline" label-width="100px" class="demo-form-inline">
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="总办会编号">
@@ -141,6 +141,6 @@ export default {
 </style>
 <style scoped>
     #GmoMeetingFilter >>> .el-form-item__content{
-        width: calc(100% - 100px);
+        width: calc(100% - 110px);
     }
 </style>
