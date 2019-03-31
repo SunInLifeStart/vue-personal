@@ -1,91 +1,264 @@
 <template>
-    <div id="Asset" class="main-container">
-        <div class="content-container">
-            <el-card class="box-card">
-                <AssetFilter @searchList="getSearchOptions"></AssetFilter>
-                <div class="toolbar">
-                    <el-button type="primary" icon="el-icon-plus" @click="newForm">新建</el-button>
-                </div>
-                <AssetList ref="Assetlist" @formId="getFormId" @editForm="editForm" :searchOptions="searchOptions"></AssetList>
-                <br>
-            </el-card>
-            <br>
-            <el-card class="box-card">
-                <AssetDetail :formId="formId" ref="AssetDetail" @refreshData="refreshData"></AssetDetail>
-            </el-card>
-        </div>
-        <el-dialog title="资产管理" :visible.sync="dialogFormVisible" max-width="1280px" width="70%" :close-on-click-modal="false">
-            <AssetForm ref="Assetform" @refreshData="refreshData" @saveStatus="getSaveStatus" :formId="dialogFormId" :operationType="operationType"></AssetForm>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="default" @click="saveForm">保存</el-button>
-                <el-button type="primary" @click="submitForm">提交</el-button>
-                <el-button type="primary" v-show="false" @click="repealForm">撤销</el-button>
+    <div id="Asset">
+        <el-card class="box-card">
+            <!-- 查询 -->
+            <div id="AssetFilter">
+                <el-form :inline="true" label-width="100px" label-position="left" class="demo-form-inline">
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="申请人：">
+                                <el-input v-model="formInline.proposer" placeholder=""></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="申请部门：">
+                                <el-input v-model="formInline.applyDept" placeholder=""></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="单据状态：" prop="status">
+                                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
+                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        </el-row>
+                        <el-row>
+                        <el-col :span="16">
+                            <el-form-item label="申请时间：" >
+                                <div>
+                                    <el-date-picker v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item class="">
+                                <el-button type="primary" @click="searchList">查询</el-button>
+                                <el-button @click="resetInput">重置</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
             </div>
-        </el-dialog>
+
+            <!-- 新建 -->
+            <div class="toolbar">
+                <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
+            </div>
+            <div id="AssetList">
+                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
+                    <el-table-column prop="proposer" label="申请人">
+                    </el-table-column>
+                    <el-table-column prop="applyDept" label="申请部门" min-width='150px'>
+                    </el-table-column>
+                    <el-table-column prop="assetsType" label="资产类型" min-width='120px'>
+                    </el-table-column>
+                    <el-table-column prop="applyDate" label="申请日期" sortable min-width='120px'>
+                        <template slot-scope="scope">
+                            {{scope.row.applyDate | dateformat('YYYY-MM-DD')}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="status" label="单据状态" min-width='100px'>
+                    </el-table-column>
+                    <el-table-column label="操作" width="100">
+                        <template slot-scope="scope">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left">
+                                <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                                <!-- <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button> -->
+                                <el-button type="text" icon="el-icon-delete" @click.stop="deleteItem(scope.row.id)"></el-button>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <br />
+                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+            </div>
+        </el-card>
+        <br>
+        <el-card class="box-card">
+            <AssetDetail :formId="formId" ref="AssetDetail"></AssetDetail>
+        </el-card>
+        <AssetForm ref="AssetForm" @reloadList="reloadList"></AssetForm>
     </div>
 </template>
 <script>
-import AssetForm from './AssetForm';
-import AssetFilter from './AssetFilter';
-import AssetList from './AssetList';
-import AssetDetail from './AssetDetail';
+import moment from 'moment';
+import axios from 'axios';
+import AssetForm from "./AssetForm";
+import AssetDetail from "./AssetDetail";
+import { CONFIG } from '../data.js';
+import { publicMethods } from "../application.js";
 export default {
-    name: 'Asset',
-    mounted() {},
+    mixins: [publicMethods],
+    name: "Asset",
     data() {
         return {
-            dialogFormVisible: false,
+            statusAll: CONFIG['status'],
+            tableData: [],
+            formDetails: {},
+            formId: "",
+            params: {
+                desc:true,
+                page: 1,
+                pageSize: 5,
+                department: "",
+                submitter: "",
+                total: 0,
+                orderBy: 'created',
+                desc:true,
+                options:[]
+            },
             searchOptions: [],
-            formId: '',
-            dialogFormId: '',
-            operationType: 'create'
+            formName: "asset_forms",
+            formInline: {
+                proposer: '',
+                applyDept: '',
+                applyDate: [],
+                status: ''
+            },
         };
     },
     components: {
         AssetForm,
-        AssetFilter,
-        AssetList,
         AssetDetail
     },
     methods: {
-        getSearchOptions(searchOptions) {
-            this.searchOptions = searchOptions;
+        deleteItem(row) {
+            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                this.deleteAffirm(row);
+            });
         },
-        getSaveStatus(saveStatus) {
-            this.dialogFormVisible = saveStatus;
+        deleteAffirm(row) {
+            const self = this;
+            axios
+                .delete('/api/v1/asset_forms/delete/' + row)
+                .then(res => {
+                    self.$message({
+                        message: '删除成功?',
+                        type: 'success'
+                    });
+                    self.getList();
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '操作失败',
+                        type: 'error'
+                    });
+                });
         },
-        getFormId(id) {
-            this.formId = id;
-        },
-        editForm(id) {
-            this.dialogFormId = id;
-            this.dialogFormVisible = true;
-            this.operationType = 'edit';
-        },
-        refreshData() {
-            this.$refs.Assetlist.getList();
-            this.$refs.AssetDetail.getForm();
-            // this.dialogFormVisible = false;
-        },
-        newForm() {
-            this.dialogFormVisible = true;
-            this.operationType = 'create';
-            if (this.$refs.Assetform) {
-                this.$refs.Assetform.clearForm();
+        //获取列表
+        async getList(pageNum) {
+            this.onSubmit();
+            let $self = this;
+            $self.url = "/api/v1/asset_forms/query";
+            let response = await $self.getQueryList();
+            if (response) {
+                if (response.data.forms.length > 0) {
+                    let formId = response.data.forms[0].id;
+                    $self.$refs.AssetDetail.getFormDetails(formId);
+                }
+                $self.tableData = response.data.forms;
+                $self.params.total = response.data.totalCount;
+                
+            } else {
+                $self.msgTips("获取列表失败", "warning");
             }
         },
-        saveForm() {
-            this.$refs.Assetform.saveForm();
+        onSubmit() {
+            this.searchOptions = [];
+            if (this.formInline.proposer.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'proposer',
+                    filter: 'LIKE',
+                    value: this.formInline.proposer
+                });
+            }
+            if (this.formInline.applyDept.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'applyDept',
+                    filter: 'LIKE',
+                    value: this.formInline.applyDept
+                });
+            }
+            if (
+                this.formInline.applyDate &&
+                this.formInline.applyDate.length > 0
+            ) {
+                this.searchOptions.push({
+                    field: 'applyDate',
+                    filter: 'BETWEEN',
+                    value: moment(this.formInline.applyDate[0]).format(
+                        'YYYY-MM-DD'
+                    ),
+                    value2: moment(this.formInline.applyDate[1]).format(
+                        'YYYY-MM-DD'
+                    )
+                });
+            }
+            if (this.formInline.status.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'status',
+                    filter: 'LIKE',
+                    value: this.formInline.status
+                });
+            }
+            this.params.options = this.searchOptions;
         },
-        submitForm() {
-            this.$refs.Assetform.submitCheck();
+        //选择行
+        showCurrentId(row) {
+            this.$refs.AssetDetail.getFormDetails(row.id);
         },
-        repealForm() {
-            this.$refs.Assetform.repealForm();
-            this.dialogFormVisible = false;
+
+        //新建
+        createNewForm() {
+            this.$refs.AssetForm.createForm();
+        },
+
+        //编辑
+        editForm(data) {
+            this.$refs.AssetForm.setDataFromParent(data);
+        },
+        reloadList(params) {
+            if (params == "reload") {
+                this.params.page = 1;
+                this.getList();
+            } else {
+                this.$refs.AssetDetail.getFormDetails(params.id);
+            }
+        },
+
+        //分页
+        currentChange(pageNum) {
+            this.params.page = pageNum;
+            this.getList(pageNum);
+        },
+        sizeChange(pageSize) {
+            this.params.pageSize = pageSize;
+            this.getList();
+        },
+        searchList() {
+            this.getList();
+        },
+        resetInput() {
+            this.formInline.proposer = '';
+            this.formInline.applyDept = '';
+            this.formInline.applyDate = [];
+            this.formInline.status = '';
+            this.getList();
         }
+    },
+    mounted() {
+        this.getList();
+        
     }
 };
 </script>
 <style lang="scss" scoped>
+#AssetFilter .el-form-item--small.el-form-item {
+  width: 100%;
+}
 </style>

@@ -1,69 +1,72 @@
 <template>
-    <div id="AssetDetail" :class="{fullScreen:fullScreen}">
+    <div id="AssetDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
-                    <span v-for="action in actions" :key="action.type" class="btnList" @click="doAction(action)">
+                    <span v-for="(action,index) in actions" :key="index" class="btnList" @click="doAction(action)">
                         {{action.name}}
                     </span>
                 </div>
             </el-row>
         </div>
+        <br />
         <div class="formContent">
-            <el-steps :active="crumb.index" finish-status="success" class="crumbList">
-                <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model="tabledata" class="formList">
+            <el-form :model="tableData" class="formList">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="申请人：">{{tabledata.proposer}}</el-form-item>
+                        <el-form-item label="申请人：">{{tableData.proposer}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="申请部门：">{{tabledata.applyDept}}</el-form-item>
+                        <el-form-item label="申请部门：">{{tableData.applyDept}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="申请日期：">{{tabledata.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="申请日期：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="备注：">{{tabledata.remark}}</el-form-item>
+                        <el-form-item label="资产类型：">{{tableData.assetsType}}</el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="备注：">{{tableData.remark}}</el-form-item>
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="采购明细：">
-                            <el-table :data="tabledata.detail" border style="width: 100%; margin-top: 5px;" @selection-change="handleSelectionChange">
+                            <el-table :data="tableData.detail" border style="width: 100%; margin-top: 5px;">
                                 <el-table-column prop="name" label="物品名称">
                                     <template slot-scope="scope">
-                                        <!-- <el-input v-model="scope.row.name" placeholder="" :disabled="pageType == 'show'"></el-input> -->
                                         {{scope.row.name}}
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="specification" label="规格说明">
                                     <template slot-scope="scope">
                                         {{scope.row.specification}}
-                                        <!-- <el-input v-model="scope.row.specification" placeholder="" :disabled="pageType == 'show'"></el-input> -->
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="number" label="计划采购数量">
                                     <template slot-scope="scope">
                                         {{scope.row.number}}
-                                        <!-- <el-input v-model="scope.row.number" placeholder="" :disabled="pageType == 'show'"></el-input> -->
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="price" label="计划单价">
                                     <template slot-scope="scope">
                                         {{scope.row.price}}
-                                        <!-- <el-input v-model="scope.row.price" placeholder="" :disabled="pageType == 'show'"></el-input> -->
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="totalPrice" label="计划总价">
                                     <template slot-scope="scope">
                                         {{scope.row.totalPrice}}
-                                        <!-- <el-input v-model="scope.row.totalPrice" placeholder="" :disabled="pageType == 'show'"></el-input> -->
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="inventory" label="库存数量">
+                                    <template slot-scope="scope">
+                                        {{scope.row.inventory}}
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="buyTime" label="要求购入时间" width="160px">
                                     <template slot-scope="scope">
                                         {{scope.row.buyTime}}
-                                        <!-- <el-date-picker v-model="scope.row.buyTime" type="date" placeholder="" value-format="yyyy-MM-dd" style="width:135px" :disabled="pageType == 'show'"></el-date-picker> -->
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="reason" label="用途及申购原因" show-overflow-tooltip>
@@ -74,24 +77,21 @@
                             </el-table>
                         </el-form-item>
                     </el-col>
-                    <!-- <el-col :span="24">
-                    <el-form-item label="部门负责人意见：">{{tabledata.opinion}}</el-form-item>
-                </el-col> -->
                 </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：">
-                            <div v-for="item in tabledata.attachments" :key="item.id" style="float:left">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row v-if="tabledata.comments && tabledata.comments.length > 0">
+                <el-row v-if="tableData.comments && tableData.comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
                         <div class="items">
-                            <div class="item" v-for="item in tabledata.comments" :key="item.id">
+                            <div class="item" v-for="item in tableData.comments" :key="item.id">
                                 <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
                                 <div class="info">
                                     <div class="creator">
@@ -130,77 +130,88 @@
         </div>
     </div>
 </template>
-
 <script>
 import axios from 'axios';
-import moment from 'moment';
-import Comment from '../Comment';
-import FilesOperate from '../FilesOperate';
+import moment from "moment";
+import Comment from "../Comment";
+import FilesOperate from "../FilesOperate";
+import { publicMethods } from "../application.js";
 export default {
-    name: 'AssetDetail',
+    mixins: [publicMethods],
+    name: "AssetDetail",
     data() {
         return {
+            tableData: {},
             actions: [],
+            crumbs: [],
+            formId: "",
+            textarea: "",
+            dialogVisible: false,
+            users: [],
+            actionsDialogArr: [],
+            appFlowName: 'asset-form_asset',//固定资产流程 asset-form_fixedAsset  低值易耗办公品  asset-form_lowAsset 
+            comments: [],
+            dialogVisibleCrumb: false,
+
             crumb: { items: [] },
             tabledata: {
                 detail: []
             },
             pageType: 'show',
             actions_status: false,
-            users: [],
             rejectTarget: '',
             rejectList: [],
             reject_status: false,
             presign_status: false,
             seleteUsers: [],
             seleteUserLabel: '',
-            textarea: '',
-            dialogVisible: false,
             currentAction: '',
             submitData: {},
             fullScreen: false,
             crumbNodeName: ''
         };
     },
-    props: ['formId'],
     components: {
         Comment,
         FilesOperate
     },
     mounted() {
-        if (this.formId != '') {
-            this.getForm();
-            // this.getCrumbs();
-            // this.getActions();
-            this.getAllUsers();
-        }
-    },
-    watch: {
-        formId: function() {
-            this.getForm();
-            // this.getCrumbs();
-            // this.getActions();
-        }
+        this.getAllUsers();
     },
     methods: {
-        handleSelectionChange() {},
-        getForm() {
-            const self = this;
-            if (this.formId != '') {
-                axios
-                    .get('/api/v1/asset_forms/' + this.formId)
-                    .then(res => {
-                        self.tabledata = res.data;
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
+        getFormDetails(formId) {
+            let $self = this;
+            $self.formId = formId;
+            $self.url = "/api/v1/asset_forms/" + $self.formId;
+            $self.getFormDetailsData();
+        },
+        async getFormDetailsData() {
+            let $self = this;
+            // let url = `/workflow/${this.appFlowName}/processContent`;
+            // $self.$axios.get(url).then(res => {
+            //     console.log(res);
+            // });
+            let response = await $self.getDetails();
+            if (response) {
+                $self.tableData = response.data;
+            } else {
+                $self.msgTips("获取表单失败", "warning");
+            }
+            // debugger;
+            let actions = await $self.getActions();
+            let crumbs = await $self.getCrumbs();
+            let comments = await $self.getComments();
+            $self.actions = actions.data.types;
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            $self.comments = comments.data;
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
+                }
             }
         },
-        getActions() {
+        //增加全屏显示，目前先不做
+        getActions1() {
             let self = this;
             axios.get(`/api/v1/assets/${this.formId}/actions`).then(res => {
                 res.data.types = res.data.types || [];
@@ -218,20 +229,6 @@ export default {
                 self.actions = res.data.types;
             });
         },
-        getCrumbs() {
-            axios.get(`/api/v1/assets/${this.formId}/crumb`).then(res => {
-                this.crumb = { items: res.data, index: -1 };
-                res.data.forEach((item, index) => {
-                    if (item.active) {
-                        this.crumb.index = index;
-                        this.crumbNodeName = item.name;
-                        if (item.assignes) {
-                            item.name = item.name + '(' + item.assignes + ')';
-                        }
-                    }
-                });
-            });
-        },
         getRejectList() {
             let self = this;
             axios
@@ -239,7 +236,7 @@ export default {
                 .then(res => {
                     self.rejectList = res.data;
                 })
-                .catch(function() {
+                .catch(function () {
                     self.$message({
                         message: '驳回节点查询失败',
                         type: 'error'
@@ -257,15 +254,12 @@ export default {
             this.currentAction = action;
             // 不需要弹出框
             if ('ARCHIVE,DISPATCH,TEMPLATE,PULL,COMMIT'.includes(action.type)) {
-                this.clearForm();
                 let self = this; //套红，归档，分发
                 if (action.type == 'PULL') {
                     axios
                         .get(`/api/v1/assets/${self.formId}/pull`)
                         .then(res => {
                             self.comment('formOnlyComment');
-                            // self.getActions();
-                            // self.getCrumbs();
                         });
                 }
                 if (action.type == 'COMMIT' && this.crumbNodeName == '申请') {
@@ -332,11 +326,11 @@ export default {
                 .put(`/api/v1/asset_forms/${self.formId}/comment`, {
                     content: self.textarea || self.currentAction.name,
                     action: self.currentAction.type,
-                    node:self.crumbNodeName
+                    node: self.crumbNodeName
                 })
                 .then(res => {
                     if (comment == 'formOnlyComment') {
-                        // this.getCrumbs();
+
                         self.$message({
                             message: self.currentAction.name + '成功',
                             type: 'success'
@@ -354,17 +348,6 @@ export default {
                 )
             ) {
             } else {
-                //退回
-                // if (self.currentAction.type == 'REJECT') {
-                //     if (self.rejectTarget) {
-                //         self.submitData.rejectTarget = self.rejectTarget;
-                //     } else {
-                //         self.$message.error('请选择驳回节点');
-                //         return false;
-                //     }
-                // }
-                //前加签
-
                 if (self.currentAction.required) {
                     if (self.seleteUsers.length > 0) {
                         var key = self.currentAction.required[0].split(':')[0];
@@ -383,22 +366,18 @@ export default {
                     .then(res => {
                         self.dialogVisible = false;
                         self.comment();
-                        // self.getActions();
-                        // self.getCrumbs();
+
                         self.$message({
                             message: self.currentAction.name + '成功',
                             type: 'success'
                         });
-                        // self.getForm();
                         if (self.currentAction.type == 'CANCEL') {
                             self.$emit('refreshData');
                         }
                     });
             }
         },
-
         refreshFormData() {
-            // this.getCrumbs();
             this.getForm();
         },
         setMemo() {
@@ -408,8 +387,8 @@ export default {
                     memo: '',
                     id: self.formId
                 })
-                .then(res => {})
-                .catch(function() {
+                .then(res => { })
+                .catch(function () {
                     self.$message({
                         message: '操作失败',
                         type: 'error'
@@ -419,81 +398,98 @@ export default {
     }
 };
 </script>
-
-
 <style lang="scss">
 #AssetDetail {
-    .el-step__main {
-        margin-top: 10px;
+  .el-step__main {
+    margin-top: 10px;
+  }
+  .audit {
+    position: relative;
+    margin-bottom: 10px;
+    font-size: 14px;
+    box-shadow: none;
+    border: 0;
+    font-weight: bold;
+    .avatar {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 36px;
+      height: 36px;
+      img {
+        width: 36px;
+        height: 36px;
+        border: 1px solid #dddddd;
+        border-radius: 50%;
+      }
     }
-    .audit {
-        position: relative;
-        margin-bottom: 10px;
-        font-size: 14px;
-        box-shadow: none;
-        border: 0;
-        .avatar {
-            position: absolute;
-            left: 5px;
-            top: 5px;
-            width: 36px;
-            height: 36px;
-            img {
-                width: 36px;
-                height: 36px;
-                border: 1px solid #dddddd;
-                border-radius: 50%;
-            }
+    .info {
+      margin-left: 60px;
+      display: inline-block;
+      width: calc(100% - 60px);
+      .creator {
+        height: 32px;
+        line-height: 32px;
+        a {
+          color: #4a6495;
+          text-decoration-line: none;
         }
-        .info {
-            margin-left: 60px;
-            display: inline-block;
-            width: calc(100% - 60px);
-            .creator {
-                height: 32px;
-                line-height: 32px;
-                a {
-                    color: #4a6495;
-                    text-decoration-line: none;
-                }
-            }
-            .content {
-                min-height: 32px;
-            }
-        }
+      }
+      .content {
+        min-height: 32px;
+      }
     }
-}
-#actionList {
+  }
+  .input-with-select {
+    width: 0px;
+    margin-right: 10px;
+    .el-input-group__prepend {
+      background-color: #409eff;
+      border-color: #409eff;
+      color: #ffffff;
+      border-radius: 4px;
+    }
+    &.reject .el-input-group__prepend {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .el-input__inner {
+      width: 0;
+      padding: 0;
+      border: 0;
+    }
+    .el-input__suffix {
+      left: 8px;
+    }
+  }
+  #actionList {
     background: #f4f4f4;
     border-bottom: 1px solid #eaeaea;
     height: 40px;
     width: 100%;
     z-index: 10;
-    font-weight: bold;
     .btnList {
-        line-height: 40px;
-        padding: 12px 10px;
-        cursor: pointer;
+      line-height: 40px;
+      padding: 12px 10px;
+      cursor: pointer;
     }
     .btnList:hover {
-        background: #c7e0f4;
+      background: #c7e0f4;
     }
-}
-.btnhide {
+  }
+  .btnhide {
     display: none;
-}
-.crumbList {
+  }
+  .crumbList {
     margin: 15px 0px;
-}
-.tooltip {
-    width: 100px;
+  }
 }
 .fullScreen {
-    position: fixed;
-    top: 0px;
-    z-index: 10;
-    background: #fff;
-    left: 0px;
-    right: 0px;
+  position: fixed;
+  top: 0px;
+  z-index: 10;
+  background: #fff;
+  left: 0px;
+  right: 0px;
 }
 </style>
