@@ -361,12 +361,6 @@
                                 }
                             // })
                         })
-                        .catch(function() {
-                            self.$message({
-                                message: '操作失败',
-                                type: 'error'
-                            });
-                        });
                 }
             },
             setDataFromParent(data) {
