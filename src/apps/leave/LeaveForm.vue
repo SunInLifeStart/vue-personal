@@ -331,11 +331,13 @@ export default {
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {                              
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
+                       
                         actions.data.types = actions.data.types.filter(
                             function(item) {
                                 return item.action == "COMMIT";
                             }
                         );
+                         console.log(actions.data.types)
                        await $self.startSignal(actions.data.types[0]);
                        $self.emitMessage();
                     }

@@ -5,18 +5,18 @@
                <el-form ref="form">
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="总资产（亿）：" label-width="200px"><el-input v-model="totalAssets" type="number"></el-input></el-form-item>
+                            <el-form-item label="总投资额(亿) ：" label-width="200px"><el-input v-model="totalAssets" type="number"></el-input></el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="出资项目（个）：" label-width="200px"><el-input v-model="fundedProjects" type="number"></el-input></el-form-item>
+                            <el-form-item label="企业落地数量（家） ：" label-width="200px"><el-input v-model="fundedProjects" type="number"></el-input></el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="12">
-                            <el-form-item label="年均服务企业（家）：" label-width="200px"><el-input v-model="serviceFirm" type="number"></el-input></el-form-item>
+                            <el-form-item label="年税收额(亿)：" label-width="200px"><el-input v-model="serviceFirm" type="number"></el-input></el-form-item>
                         </el-col>
                         <el-col :span="12">
-                            <el-form-item label="建设科技载体（万平方米）：" label-width="200px"><el-input v-model="construction" type="number"></el-input></el-form-item>
+                            <el-form-item label="企业动工数量（家） ：" label-width="200px"><el-input v-model="construction" type="number"></el-input></el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>

@@ -134,34 +134,28 @@
             </el-row>
         </div>
         <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
-            <el-form>
-                <el-form-item label="请选择驳回节点" v-show="reject_status">
-                    <el-select v-model="rejectTarget" style="width:100%;">
-                        <el-option v-for="user in rejectList" :key="user" :label="user" :value="user">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="seleteUserLabel" v-show="presign_status">
-                    <el-select v-model="seleteUsers" filterable multiple style="width:100%;">
-                        <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="审批意见">
-                    <el-input type="textarea" :rows="2" placeholder="请输入审批意见" v-model="textarea">
-                    </el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="dialogVisible = false">取 消</el-button>
-                <el-button type="primary" @click="submitForm()">确 定</el-button>
-            </span>
-        </el-dialog>
-        <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
-            <el-form>
-                <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
-            </el-form>
-        </el-dialog>
-    </div>
+                <el-form>
+                    <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
+                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                            <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="审批意见">
+                        <el-input type="textarea" placeholder="请输入审批意见" v-model="textarea" :autosize="{ minRows: 10, maxRows: 30}">
+                        </el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="submitForm()">确 定</el-button>
+                </span>
+            </el-dialog>
+            <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
+                <el-form>
+                    <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
+                </el-form>
+            </el-dialog>
+        </div>
 </template>
 <script>
 import axios from 'axios';
@@ -185,7 +179,6 @@ export default {
             // qqq
             subStatus: false,
             activeName: 'first',
-            rows: {},
             tableData: {
                 no: '',
                 submitter: '',
@@ -244,7 +237,7 @@ export default {
                     $self.crumbs.index = i;
                 }
             }
-        }
+        },
     }
 };
 </script>

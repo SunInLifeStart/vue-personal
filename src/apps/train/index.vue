@@ -39,8 +39,9 @@
                     </el-table-column>
                     <el-table-column prop="participant" label="培训/学习(参加人员)">
                     </el-table-column>
-                    <el-table-column prop="schedule" width="250" label="日程安排">
-                    </el-table-column>
+                    <el-table-column prop="schedule" width="250" label="日程安排"></el-table-column>
+                     <el-table-column prop="status" width="250" label="状态"></el-table-column>
+                    
                      <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left" >

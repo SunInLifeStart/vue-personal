@@ -3,23 +3,30 @@
     <TopBar/>
     <div class="portal">
       <div class="portal-container">
-        <el-row>
+             <el-row>
           <el-col :span="24">
             <el-card shadow="always" class="news-carousel">
-              <el-carousel :interval="3000" arrow="always">
-                <el-carousel-item v-for="item in newsList" :key="item.articleId" @click="routerTo(item)">
-                  <div style="padding:0px 80px">
-                    <div class="newsBaner">
-                        <img :src="item.img[0]" width="100%" height="100%">
+               <div class="newsBaner">
+                 <el-carousel height="200px" :interval="6000" indicator-position = "outside">
+                    <el-carousel-item v-for="item in newsList" :key="item.articleId" >
+                         <router-link :to="{path:'/portal/list/newsList/1/'+item.articleId}"> 
+                            <img :src="item.img[0]" width="100%" height="100%" />
+                            <div class="scrollImgTitle" :title="item.title">{{item.title}}</div>
+                         </router-link>
+                    </el-carousel-item>
+                    </el-carousel>
+            </div>
+               <div class="newsContent">
+                   <div v-for="(item,index) in newsListRight" :key="item.articleId" v-if="index < 5">
+                        <h4 style="margin:0px;font-weight:normal;border-bottom: 1px solid #f9f8f8;">
+                            <router-link :to="{path:'/portal/list/newsList/1/'+item.articleId}">
+                                <span style="color: rgb(52, 136, 234);"> •</span> {{item.title | formTxtTitle}} 
+                                <span style="float:right;display:inline-block">{{item.time | formDate}}</span>
+                             </router-link>
+                        </h4>
                     </div>
-                    <div class="newsContent">
-                        <h3>{{item.title}}</h3>
-                         <p><router-link :to="{path:'/portal/list/newsList/1/'+item.articleId}">{{item.about}} &nbsp;&nbsp;&nbsp; <span style="color:#0066cc">详情..</span></router-link></p>
-                         <div><router-link :to="{path:'/portal/list/newsList/1'}"><el-button size="mini">更多</el-button></router-link></div>
-                    </div>
-                  </div>
-                </el-carousel-item>
-              </el-carousel>
+                    <div style="float:right"><router-link :to="{path:'/portal/list/newsList/1'}"><el-button size="mini">更多</el-button></router-link></div>
+                 </div>
             </el-card>
           </el-col>
         </el-row>
@@ -41,7 +48,7 @@
           <el-col :span="6">
            <span class="number">
                <countTo :startVal='0' :endVal='serviceFirm' :duration='1000'></countTo>
-                <label class="unit">千万</label>
+                <label class="unit">亿</label>
             </span>
               <p>年税收额</p>
           </el-col>
@@ -108,12 +115,12 @@
         <el-row class="articles" :gutter="15">
           <el-col :span="8">
              <div class="article article2">
-                  <h3>督办上墙<router-link :to="{path:'/portal/list/nstitution/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+                  <h3>督办上墙<router-link :to="{path:'/portal/list/duban/1'}"><el-button size="mini">更多</el-button></router-link></h3>
                   <ul>
-                    <li v-for="(item,index) in nstitution" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px">
+                    <li v-for="(item,index) in duban" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px">
                        <img src="@/assets/arrow.png"  v-if="index == 0" style="top:15px;"> 
                        <img src="@/assets/arrow2.png"  v-if="index != 0" style="top:15px;"> 
-                       <router-link :to="'/portal/list/nstitution/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
+                       <router-link :to="'/portal/list/duban/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
                       <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
                     </li>
                   </ul>
@@ -214,7 +221,9 @@ export default {
             meetingTable:[],
             addressList:[],
             newDocs:[],
-            yq:[]
+            yq:[],
+            newsListRight:[],
+            duban:[]
         };
     },
     components: {
@@ -223,8 +232,14 @@ export default {
     },
     watch: {},
     methods: {
+        // showDocs(item){
+        //     this.common.preview(item);
+        // },
         showDocs(item){
-            this.common.preview(item);
+              this.openUrl = "http://static1.yxpe.com.cn/edit.html?";
+              ntkoBrowser.openWindow(
+                    this.openUrl +"removeBar=true" + "&&url=" + item.url
+            );
         },
         getMsgList() {
             let self = this;
@@ -248,13 +263,21 @@ export default {
                 "集团会表",
                 "通讯录"
             ];
-
             for (let item of type) {
-              
-                let params = {
-                   type: item,
-                    page: 1,
-                    size: item == "规章制度" ? 10 : 5
+                let params
+                if(item === '新闻中心') {
+                    params = {
+                        type: item,
+                        page: 1,
+                        putaway: true,
+                        size: (item == "规章制度" || item == "新闻中心") ? 10 : 5
+                    } 
+                } else {
+                    params = {
+                        type: item,
+                        page: 1,
+                        size: (item == "规章制度" || item == "新闻中心") ? 10 : 5
+                    } 
                 }
                 axios
                     .get("/api/v1/portal/article", {
@@ -263,7 +286,15 @@ export default {
                     .then(res => {
                         switch (item) {
                             case "新闻中心":
-                                this.newsList = res.data.data;
+                               // this.newsList = res.data.data;
+                                let arr_5 = [];
+                                for(var i = 0; i<res.data.data.length; i++){
+                                    if(res.data.data[i].img.length > 0){
+                                        arr_5.push(res.data.data[i]);
+                                    } 
+                                }
+                                this.newsListRight = res.data.data;
+                                this.newsList = arr_5.slice(0,5);
                                 break;
                             case "领导讲话":
                                 this.leaderSpeech = res.data.data;
@@ -304,23 +335,21 @@ export default {
                     .then(res => {  
                          self.yq = res.data.data.splice(0,13);
                     })
-      
-
         }
     },
     filters: {
         formDate: function(date) {
             return  date ?  date.replace(/(^\s*)|(\s*$)/g, "").split(" ")[0] : "";
-          
-           
-          // return moment(date).format("YYYY-MM-DD");
+        },
+        formTxtTitle:function(txt) {
+            return txt.length > 48 ? txt.slice(0,48) + "..." : txt;
         },
         formTxt: function(txt) {
             return txt.length > 18 ? txt.slice(0, 18) + "..." : txt;
         }
     },
     mounted() {
-        document.title = "集团门户-中关村协同发展";
+        document.title = "集团门户-中关村发展";
         this.getMsgList();
         this.getNewDocs();
     }
@@ -335,6 +364,8 @@ export default {
     background: #f6f6f6 url("../../assets/portal.png") no-repeat center;
     background-position-y: 0px;
     background-size: 100%;
+
+   
 
     .portal-container {
         ul {
@@ -351,9 +382,29 @@ export default {
                 width: 350px;
                 height: 200px;
                 float: left;
+                //  .el-carousel__indicators .el-carousel__indicator button{
+                //        width: 22px;
+                //  }
+                .scrollImgTitle{
+                  position:absolute;
+                  background:#ccc;
+                  bottom:0px;
+                  width:100%;
+                  height:20px;
+                  padding:3px 5px;
+                  line-height: 1.7;
+               //   background: rgba(31,140,222,0.6);
+                  background: rgba(0,0,0,0.5);
+                  color:#FFF;
+                  overflow: hidden;
+                  text-overflow:ellipsis;
+                  white-space: nowrap;
+                  font-size: 12px;
+                  letter-spacing: 1px;
+                }
             }
             .newsContent{
-                width: 615px;
+                width: 775px;
                 float: left;
                 margin-left: 30px;
                 h3{
@@ -365,6 +416,18 @@ export default {
                     text-overflow:ellipsis;
                     white-space: nowrap;
                     font-size:20px;
+                }
+                a{
+                    padding:9px;
+                    display: inline-block;
+                    width: 100%;
+                    color:#2c3e50;
+                }
+                 a:hover{
+                    color: #0066cc
+                }
+                a:visited{
+                    color: normal;
                 }
                 p{
                      margin:5px;
@@ -408,7 +471,7 @@ export default {
                 border-radius: 5px;
                 padding: 0px 10px;
                 a{
-                    color: #2c3e50
+                    color: #2c3e50;
                 }
                  a:hover{
                     color: #0066cc
