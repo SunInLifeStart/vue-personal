@@ -51,7 +51,8 @@ export const publicMethods = {
             });
             this.hasRequired(actions2.data.types[0]);
             actions2.data.types[0]["comment"] = actions2.data.types[0].name;
-            let complete2 = await this.startSignal(actions2.data.types[0]);
+           // let complete2 = await this.action(actions2.data.types[0]);
+           let complete2 = await this.startSignal(actions2.data.types[0]);
             await this.emitMessage(self);
         },
         hasRequired(data) {
@@ -127,18 +128,29 @@ export const publicMethods = {
             let $self = this;
             $self.currentAction["comment"] = $self.textarea ? $self.textarea : $self.currentAction.name;
             $self.hasRequired($self.currentAction);
-            if ($self.actionsDialogArr.length > 0) {
+            if ($self.actionsDialogArr.length > 0 && ($self.actionsDialogArr[0].checkedValue != "" || $self.actionsDialogArr[0].checkedValue.length > 0)) {
                 for (let item of $self.actionsDialogArr) {
                     $self.currentAction[item.labelName] = item.checkedValue;
                 }
                 await $self.startSignal();
                 $self.getFormDetailsData();
+                $self.dialogVisible = false;
+                $self.msgTips($self.currentAction.name + "成功", "success");
             } else {
-                await $self.startSignal();
-                $self.getFormDetailsData();
+                if($self.currentAction.assigneeList && $self.currentAction.assigneeList.length > 0){
+                    $self.msgTips($self.currentAction.assigneeListLabel, "warning");
+                    return false;
+                }else if($self.currentAction.addAssigneeList && $self.currentAction.addAssigneeList.length > 0){
+                    $self.msgTips($self.currentAction.addAssigneeListLabel, "warning");
+                    return false;
+                }else{
+                    await $self.startSignal();
+                    $self.getFormDetailsData();
+                    $self.dialogVisible = false;
+                    $self.msgTips($self.currentAction.name + "成功", "success");
+                }
             }
-            $self.dialogVisible = false;
-            $self.msgTips($self.currentAction.name + "成功", "success");
+            
         },
 
 
