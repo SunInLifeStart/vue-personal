@@ -14,18 +14,23 @@
                                 <el-input v-model="params.oname" placeholder="所属部门"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <!-- <el-col :span="8">
                             <el-form-item label="提单时间">
-                                <el-input v-model="params.applyTime" placeholder="提单时间"></el-input>
+                                <el-date-picker v-model="params.applyTime" type="datetime" placeholder="选择日期时间">
+                                </el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row> -->
                         <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="params.status" placeholder="请选择">
-                                    <el-option v-for="item in params.options_status" :key="item" :label="item" :value="item">
-                                    </el-option>
+                                    <!-- <el-option v-for="item in params.options_status" :key="item" :label="item" :value="item">
+                                    </el-option> -->
+                                    <el-option label="已保存" value="已保存"></el-option>
+                                    <el-option label="审核中" value="审核中"></el-option>
+                                    <el-option label="已驳回" value="已驳回"></el-option>
+                                    <el-option label="已完成" value="已完成"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -34,7 +39,7 @@
                                 <el-date-picker v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
                             </el-form-item>
                         </el-col> -->
-                        <el-col :span="16" class="">
+                        <el-col :span="24" class="">
                             <el-form-item class="" style=" text-align: right">
                                 <el-button type="primary" @click="searchList">查询</el-button>
                                 <el-button @click="resetInput">重置</el-button>
@@ -75,7 +80,7 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <LeaveDetail :formId="formId" ref="LeaveDetail"  @reloadList = "reloadList"></LeaveDetail>
+            <LeaveDetail :formId="formId" ref="LeaveDetail" @reloadList="reloadList"></LeaveDetail>
         </el-card>
         <LeaveForm ref="LeaveForm" @reloadList="reloadList"></LeaveForm>
         <!-- <el-dialog title="请休假申请" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="1240px">
@@ -110,7 +115,33 @@ export default {
                 submitter: '',
                 total: 0
             },
-            formName: 'motor-holiday'
+            formName: 'motor-holiday',
+            pickerOptions1: {
+                shortcuts: [
+                    {
+                        text: '今天',
+                        onClick(picker) {
+                            picker.$emit('pick', new Date());
+                        }
+                    },
+                    {
+                        text: '昨天',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24);
+                            picker.$emit('pick', date);
+                        }
+                    },
+                    {
+                        text: '一周前',
+                        onClick(picker) {
+                            const date = new Date();
+                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                            picker.$emit('pick', date);
+                        }
+                    }
+                ]
+            }
         };
     },
 
@@ -184,10 +215,10 @@ export default {
 #LeaveFilter .el-form-item--small.el-form-item {
     width: 100%;
 }
-#LeaveFilter .el-form-item--small .el-form-item__content{
+#LeaveFilter .el-form-item--small .el-form-item__content {
     width: 80%;
 }
-#LeaveFilter .el-range-editor--small.el-input__inner{
+#LeaveFilter .el-range-editor--small.el-input__inner {
     width: 100%;
 }
 </style>
