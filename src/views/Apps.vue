@@ -45,8 +45,9 @@ export default {
                 programme: "采购方案",
                 tendering: "招标文件",
                 results:"采购结果",
-                 abnormal: "招标异常事项",
+                abnormal: "招标异常事项",
                 supplier: "供应商引入审批",
+                portalmananger:"门户管理后台"
             }
         };
     },

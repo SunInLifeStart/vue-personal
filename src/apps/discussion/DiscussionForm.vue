@@ -1,15 +1,15 @@
 <template>
     <el-dialog title="议题呈报" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
         <div id="DiscussionForm">
-        <el-form :model="formData" label-width="140px" ref="formupdate">
+        <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="流水号:">
+                    <el-form-item label="流水号:" prop="number">
                         <el-input v-model="formData.number"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="会议类型">
+                    <el-form-item label="会议类型" prop="branchlineTo">
                         <el-select v-model="formData.branchlineTo" placeholder="请选择会议类型">
                             <el-option
                                 v-for="item in discussionOption"
@@ -23,17 +23,17 @@
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="提单人" prop="numbers">
+                    <el-form-item label="提单人" prop="creatorName">
                         <el-input v-model="formData.creatorName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="所属部门" prop="filetitle">
+                    <el-form-item label="所属部门">
                         <el-input v-model="formData.organName" :disabled="true"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="提单时间">
+                    <el-form-item label="提单时间" prop="committed">
                         <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">
                         </el-date-picker>
                     </el-form-item>
@@ -41,18 +41,18 @@
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="提请部门">
+                    <el-form-item label="提请部门" prop="applyDepartment">
                         <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="提请时间">
+                    <el-form-item label="提请时间" prop="timeApplication">
                         <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.timeApplication" style="width:100%" type="date">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="议题名称">
+                    <el-form-item label="议题名称" prop="topicName">
                         <el-input v-model="formData.topicName"></el-input>
                     </el-form-item>
                 </el-col>
@@ -165,6 +165,32 @@ export default {
             personOptions: [],
             formData: this.resetForm(),
             users: [],
+            rules: {
+                number: [
+                    { required: true, message: '请输入流水单号', trigger: 'blur' }
+                ],
+                branchlineTo: [
+                    { required: true, message: '请输入会议类型', trigger: 'blur' }
+                ],
+                committed: [
+                    { required: true, message: '请输入提单时间', trigger: 'blur' }
+                ],
+                // creatorName: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ],
+                // organName: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ],
+                // applyDepartment: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ],
+                // timeApplication: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ],
+                // topicName: [
+                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                // ]
+            },
             uploadId: 0,
             appFlowName:'motor-issuesreported_party-agendasheet'
         };
@@ -228,6 +254,7 @@ export default {
         resetForm() {
             let formData =  {
                 attachments: [],
+                sendMessage: [],
                 attendingDepartment: [{
                     people: [],
                     department: ''
@@ -284,7 +311,7 @@ export default {
             this.dialogFormVisible = this.createForm_status = true;
         },
         saveFormValidate(type) {
-            this.$refs['formupdate'].validate(valid => {
+            this.$refs['formData'].validate(valid => {
                 if (valid) {
                     this.saveForm(type);
                 }
@@ -292,10 +319,12 @@ export default {
         },
         async saveForm(params) {
             const $self = this;
+            this.formData.sendMessage = []
             $self.formData.attendingDepartment.forEach(item => {
                 if (item.people) {
                     item.person = item.people.join(',')
                 }
+                this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
             })
             let response = await $self.saveFormData(
                 "/api/v1/issuesReported/save",

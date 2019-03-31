@@ -1,15 +1,15 @@
 <template>
     <el-dialog title="会议申请" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
         <div id="ApplyMeetingForm">
-            <el-form :model="formData" label-width="140px" ref="formupdate">
+            <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="流水号:">
+                        <el-form-item label="流水号:" prop="number">
                             <el-input v-model="formData.number"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="会议类型">
+                        <el-form-item label="会议类型" prop="branchlineTo">
                             <el-select v-model="formData.branchlineTo" placeholder="请选择会议类型">
                                 <el-option
                                         v-for="item in discussionOption"
@@ -23,17 +23,17 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="提单人" prop="numbers">
+                        <el-form-item label="提单人" prop="creatorName">
                             <el-input v-model="formData.creatorName" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属部门" prop="filetitle">
+                        <el-form-item label="所属部门">
                             <el-input v-model="formData.organName" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提单时间">
+                        <el-form-item label="提单时间" prop="committed">
                             <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">
                             </el-date-picker>
                         </el-form-item>
@@ -41,18 +41,18 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="会议地点">
+                        <el-form-item label="会议地点" prop="meetingPlace">
                             <el-input v-model="formData.meetingPlace" placeholder="请输入拟稿单位"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="开会时间">
+                        <el-form-item label="开会时间" prop="meetingTime">
                             <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="date">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="会议名称">
+                        <el-form-item label="会议名称" prop="conferenceTitle">
                             <el-input v-model="formData.conferenceTitle"></el-input>
                         </el-form-item>
                     </el-col>
@@ -208,6 +208,32 @@
                         label: '部门'
                     }
                 ],
+                rules: {
+                    number: [
+                        { required: true, message: '请输入流水号', trigger: 'blur' }
+                    ],
+                    branchlineTo: [
+                        { required: true, message: '请输入会议类型', trigger: 'blur' }
+                    ],
+                    // creatorName: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ],
+                    // organName: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ],
+                    committed: [
+                        { required: true, message: '请输入提单时间', trigger: 'blur' }
+                    ],
+                    // meetingPlace: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ],
+                    // meetingTime: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ],
+                    // conferenceTitle: [
+                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
+                    // ]
+                },
                 personOptions: [],
                 formData: this.resetForm(),
                 users: [],
@@ -293,7 +319,7 @@
                     branchlineTo: '',
                     businessType: '',
                     created: '',
-                    // comments: [],
+                    sendMessage: [],
                     idea: '',
                     committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
                     meetingPlace: '',
@@ -345,7 +371,7 @@
                 this.dialogFormVisible = this.createForm_status = true;
             },
             saveFormValidate(type) {
-                this.$refs['formupdate'].validate(valid => {
+                this.$refs['formData'].validate(valid => {
                     if (valid) {
                         this.saveForm(type);
                     }
@@ -353,14 +379,17 @@
             },
             async saveForm(params) {
                 const $self = this;
+                this.formData.sendMessage = []
                 $self.formData.attendingDepartment.forEach(item => {
                     if (item.people) {
                         item.person = item.people.join(',')
+                        this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
                     }
                 })
                 $self.formData.sitIn.forEach(item => {
                     if (item.people) {
                         item.person = item.people.join(',')
+                        this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
                     }
                 })
                 let business = this.discussionOption.filter((item) => { return item.value === this.formData.branchlineTo})
