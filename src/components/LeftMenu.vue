@@ -126,19 +126,20 @@ export default {
                      id: "metting",
                     children: [
                         {
-                            id: "metting_2",
-                            name: '议题上会',
-                            icon: 'el-icon-duorenhuiyi',
-                            to: 'discussion'
-                            
-                        },
-                        {
                             id: "metting_1",
                             name: '会议申请',
                             icon: 'el-icon-huiyi',
                             to: 'meetingApply',
                             // 没有
                         },
+                        {
+                            id: "metting_2",
+                            name: '议题上会',
+                            icon: 'el-icon-duorenhuiyi',
+                            to: 'discussion'
+                            
+                        },
+                        
                         // {
                         //     id: "metting_3",
                         //     name: '会议纪要',
@@ -250,7 +251,7 @@ export default {
                     children: [
                         {
                             id: "contract_1",
-                            name: '合同签订审批',
+                            name: '合同审批',
                             icon: 'el-icon-hetong',
                             to: 'contract'
                         },
@@ -399,7 +400,7 @@ export default {
     top: 48px;
     left: 0;
     bottom: 0;
-    width: 480px;
+    width: 470px;
     background: #ffffff;
     box-shadow: rgba(0, 0, 0, 0.2) 30px 0px 30px -30px;
     padding: 20px;
@@ -410,7 +411,7 @@ export default {
     z-index: 9999;
     overflow-y: auto;
     .search {
-        width: 475px;
+        width: 450px;
     }
     .parent {
         margin-top: 10px;
@@ -423,12 +424,12 @@ export default {
             flex-wrap: wrap;
             justify-content: flex-start;
             align-content: flex-start;
-            width: 480px;
+            width: 470px;
             .app {
                 background: #f8f8f8;
-                width: 75px;
+                width: 80px;
                 height: 75px;
-                margin: 0 5px 5px 0;
+                margin: 0 12px 8px 0;
                 font-size: 12px;
                 font-weight: 400;
                 position: relative;
