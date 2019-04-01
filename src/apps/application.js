@@ -63,7 +63,11 @@ export const publicMethods = {
                 for (let item of data.required) {
                     let key = item.split(":")[0];
                     if (detailsData[key]) {
-                        options.push(key + "=" + detailsData[key]);
+                        if(item.split(":")[1] == "arrays" && typeof(detailsData[key]) == "string"){
+                            options.push(key + "=" + '[' + detailsData[key] + ']');
+                        }else{
+                            options.push(key + "=" + detailsData[key]);
+                        }
                     } else {
                         if (key == "oid") {
                             options.push(key + "=" + this.$store.getters.LoginData.oid);
