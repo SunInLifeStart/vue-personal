@@ -228,9 +228,9 @@
                     // meetingPlace: [
                     //     { required: true, message: '请输入活动名称', trigger: 'blur' }
                     // ],
-                    // meetingTime: [
-                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    // ],
+                    meetingTime: [
+                        { required: true, message: '请输入开会时间', trigger: 'blur' }
+                    ]
                     // conferenceTitle: [
                     //     { required: true, message: '请输入活动名称', trigger: 'blur' }
                     // ]
