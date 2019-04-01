@@ -151,6 +151,7 @@ export default {
             users: [],
             actionsDialogArr: [],
             appFlowName: 'asset-form_asset',//固定资产流程 asset-form_fixedAsset  低值易耗办公品  asset-form_lowAsset 
+            formName:'asset_forms',
             comments: [],
             dialogVisibleCrumb: false,
             flowNodeUrl:"",

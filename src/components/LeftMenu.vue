@@ -63,58 +63,58 @@ export default {
                     children: [
                         {
                             id: "commonly_1",
-                            name: '文件签发单',
+                            name: '文件签发',
                             icon: 'el-icon-fawen',
                             to: 'outgoing'
                         },
                         {
                             id: "commonly_2",
-                            name: '收文阅办单',
+                            name: '收文阅办',
                             icon: 'el-icon-shouwen',
                             to: 'incoming'
                         },
                         {
                             id: "commonly_3",
-                            name: '部门呈报件',
+                            name: '部门呈报',
                             icon: 'el-icon-chengbaoshenpi',
                             to: 'submission'
                         },
                         {
                             id: "commonly_4",
-                            name: '名片/文件印刷',
+                            name: '文件印刷',
                             icon: 'el-icon-mingpian',
                             to: 'files'
                             // 没有
                         },
                         {
                             id: "commonly_5",
-                            name: '资产采购申请',
+                            name: '资产采购',
                             icon: 'el-icon-zichanguanli',
                             to: 'asset'
                         },
                          {
                             id: "commonly_6",
-                            name: '用印审批表',
+                            name: '用印审批',
                             icon: 'el-icon-yongyin',
                             to: 'approvals'
                             // 没有
                         },
                          {
                             id: "commonly_8",
-                            name: '物品领用申请',
+                            name: '物品领用',
                             icon: 'el-icon-wupinfanghang',
                             to: 'goods'
                             // 没有
                         },
                          {
                             id: "commonly_9",
-                            name: '公司新闻发布',
+                            name: '新闻发布',
                             icon: 'el-icon-xinwenguanli1',
                             to: 'news'
                         },
                         {
                             id: "commonly_10",
-                            name: '综合信息发布',
+                            name: '信息发布',
                             icon: 'el-icon-publish',
                             to: 'publish'
                         },
@@ -126,19 +126,20 @@ export default {
                      id: "metting",
                     children: [
                         {
-                            id: "metting_2",
-                            name: '议题上会单',
-                            icon: 'el-icon-duorenhuiyi',
-                            to: 'discussion'
-                            
-                        },
-                        {
                             id: "metting_1",
-                            name: '会议申请单',
+                            name: '会议申请',
                             icon: 'el-icon-huiyi',
                             to: 'meetingApply',
                             // 没有
                         },
+                        {
+                            id: "metting_2",
+                            name: '议题上会',
+                            icon: 'el-icon-duorenhuiyi',
+                            to: 'discussion'
+                            
+                        },
+                        
                         // {
                         //     id: "metting_3",
                         //     name: '会议纪要',
@@ -148,21 +149,21 @@ export default {
                         // },
                         {
                             id: "metting_3",
-                            name: '总办会会议纪要',
+                            name: '总办会纪要',
                             icon: 'el-icon-huiyidengji',
                             to: 'gmomeeting'
                             //没有
                         },
                         {
                             id: "metting_4",
-                            name: '专题会会议纪要',
+                            name: '专题会纪要',
                             icon: 'el-icon-huiyishi',
                             to: 'specmeeting'
                             //没有
                         },
                         {
                             id: "metting_5",
-                            name: '党委会会议纪要',
+                            name: '党委会纪要',
                             icon: 'el-icon-ziyuan',
                             to: 'partymeeting'
                             //没有
@@ -175,26 +176,26 @@ export default {
                     children: [
                         {
                             id: "personnel_1",
-                            name: '培训审批表',
+                            name: '培训审批',
                             icon: 'el-icon-peixun',
                             to: 'train'
                         },
                         {
                             id: "personnel_2",
-                            name: '入职办理审批表',
+                            name: '入职审批',
                             icon: 'el-icon-yuangongruzhi',
                             to: 'processing'
                             //没有
                         },
                          {
                             id: "personnel_3",
-                            name: '请假申请表',
+                            name: '请假申请',
                             icon: 'el-icon-icon-test1',
                             to: 'leave'
                         },
                         {
                             id: "personnel_4",
-                            name: '出差审批表',
+                            name: '出差审批',
                             icon: 'el-icon-chuchashenqing',
                             to: 'travel'
                             //没有
@@ -215,21 +216,21 @@ export default {
                         },
                         {
                             id: "finance_2",
-                            name: '报销审批单',
+                            name: '报销审批',
                             icon: 'el-icon-baoxiao',
                             to: 'reimbursement'
                             //没有
                         },
                          {
                             id: "finance_3",
-                            name: '付款审批单',
+                            name: '付款审批',
                             icon: 'el-icon-fukuan',
                             to: 'payment'
                             //没有
                         },
                         {
                             id: "finance_4",
-                            name: '招待费审批表',
+                            name: '招待费审批',
                             icon: 'el-icon-qian4',
                             to: 'expenses'
                             //没有
@@ -237,7 +238,7 @@ export default {
                        
                         {
                             id: "finance_5",
-                            name: '进行中报销单统计',
+                            name: '报销单统计',
                             icon: 'el-icon-baoxiao1',
                             to: 'conduct'
                             //没有
@@ -250,7 +251,7 @@ export default {
                     children: [
                         {
                             id: "contract_1",
-                            name: '合同签订审批表',
+                            name: '合同审批',
                             icon: 'el-icon-hetong',
                             to: 'contract'
                         },
@@ -399,7 +400,7 @@ export default {
     top: 48px;
     left: 0;
     bottom: 0;
-    width: 480px;
+    width: 470px;
     background: #ffffff;
     box-shadow: rgba(0, 0, 0, 0.2) 30px 0px 30px -30px;
     padding: 20px;
@@ -410,7 +411,7 @@ export default {
     z-index: 9999;
     overflow-y: auto;
     .search {
-        width: 475px;
+        width: 450px;
     }
     .parent {
         margin-top: 10px;
@@ -423,12 +424,12 @@ export default {
             flex-wrap: wrap;
             justify-content: flex-start;
             align-content: flex-start;
-            width: 480px;
+            width: 470px;
             .app {
                 background: #f8f8f8;
-                width: 75px;
+                width: 80px;
                 height: 75px;
-                margin: 0 5px 5px 0;
+                margin: 0 12px 8px 0;
                 font-size: 12px;
                 font-weight: 400;
                 position: relative;
