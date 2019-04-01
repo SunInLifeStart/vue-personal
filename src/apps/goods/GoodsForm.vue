@@ -121,7 +121,7 @@ export default {
             selecttabledata: [],
             operations: ['固定资产', '非固定资产'],
             users: [],
-            appFlowName: 'motor-trainingapplication_train',
+            appFlowName: 'motor-receive_articles',
             rules: {
                 /** 
                 submitter: [
