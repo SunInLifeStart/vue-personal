@@ -1,11 +1,12 @@
 <template>
   <div id="APPROVE">
-    <leaveDetail :formId="formId" ref="leaveDetail"></leaveDetail>
+    <LeaveDetail ref="LeaveDetail"> </LeaveDetail>
+     <!-- :formId="formId" -->
   </div>
 </template>
 <script>
 import axios from "axios";
-import leaveDetail from "./LeaveDetail";
+import LeaveDetail from "./LeaveDetail";
 export default {
     name: "APPROVE",
     data() {
@@ -13,10 +14,10 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.leaveDetail.setTab();
+         this.$refs.LeaveDetail.getFormDetails(this.formId);
     },
     components: {
-        leaveDetail
+       LeaveDetail
     },
     watch: {},
 
@@ -26,7 +27,7 @@ export default {
 <style lang="scss" scope>
 #APPROVE {
     height: 100%;
-    #leaveDetail {
+    #LeaveDetail {
         height: 100%;
         width: 100%;
         display: flex;

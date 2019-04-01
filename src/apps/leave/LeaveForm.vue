@@ -318,15 +318,15 @@ export default {
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-
                         actions.data.types = actions.data.types.filter(function(
                             item
                         ) {
                             return item.action == 'COMMIT';
                         });
-                        actions.data.types[0].day = this.formData.day;
-                        actions.data.types[0].role = cookies.get('Role');
-                        //  console.log(actions.data.types[0])
+                        actions.data.types[0]["comment"] = actions.data.types[0].name;
+                        // actions.data.types[0]["required"][1].day = this.formData.day;
+                        // actions.data.types[0]["required"][0].role = cookies.get('Role')
+                        console.log(actions.data.types[0])
                         await $self.startSignal(actions.data.types[0]);
                         $self.emitMessage();
                     }
@@ -340,9 +340,9 @@ export default {
                 }
             } else {
                 if (params) {
-                    $self.msgTips($self, '提交失败', 'warning');
+                    $self.msgTips( '提交失败', 'warning');
                 } else {
-                    $self.msgTips($self, '保存失败', 'warning');
+                    $self.msgTips( '保存失败', 'warning');
                 }
             }
         },

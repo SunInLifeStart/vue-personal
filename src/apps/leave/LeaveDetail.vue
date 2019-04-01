@@ -11,7 +11,8 @@
             </el-row>
         </div>
         <div class="formContent">
-            <!-- <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div> -->
+            <br>
+            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList">
                 <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
