@@ -297,6 +297,7 @@ export default {
                     $self.formData.type = item.value;
                 }
             }
+            this.formData.role = cookies.get('Role')
             let response;
             if ($self.formData.id) {
                 response = await $self.saveFormData(
@@ -324,9 +325,12 @@ export default {
                             return item.action == 'COMMIT';
                         });
                         actions.data.types[0]["comment"] = actions.data.types[0].name;
-                        // actions.data.types[0]["required"][1].day = this.formData.day;
-                        // actions.data.types[0]["required"][0].role = cookies.get('Role')
-                        console.log(actions.data.types[0])
+                        // actions.data.types[0].required[1]:
+                        // actions.data.types[0].required[0] = {role :cookies.get('Role')}
+                       
+                        // actions.data.types[0].required[0].role = cookies.get('Role')
+                        console.log(this.formData)
+                        console.log(actions.data.types[0].required[1])
                         await $self.startSignal(actions.data.types[0]);
                         $self.emitMessage();
                     }
