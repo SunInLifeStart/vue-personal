@@ -3,7 +3,7 @@
         <el-card class="box-card">
             <div id="LeaveFilter">
                 <el-form :inline="true" :model="params" label-width="70px" label-position="left" class="demo-form-inline">
-                    <el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="提单人">
                                 <el-input v-model="params.uname" placeholder="提单人"></el-input>
@@ -14,19 +14,9 @@
                                 <el-input v-model="params.oname" placeholder="所属部门"></el-input>
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :span="8">
-                            <el-form-item label="提单时间">
-                                <el-date-picker v-model="params.applyTime" type="datetime" placeholder="选择日期时间">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row> -->
                         <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="params.status" placeholder="请选择">
-                                    <!-- <el-option v-for="item in params.options_status" :key="item" :label="item" :value="item">
-                                    </el-option> -->
                                     <el-option label="已保存" value="已保存"></el-option>
                                     <el-option label="审核中" value="审核中"></el-option>
                                     <el-option label="已驳回" value="已驳回"></el-option>
@@ -34,11 +24,9 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <!-- <el-col :span="8">
-                            <el-form-item label="创建时间">
-                                <el-date-picker v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-                            </el-form-item>
-                        </el-col> -->
+
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="24" class="">
                             <el-form-item class="" style=" text-align: right">
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -65,10 +53,10 @@
                     </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '已保存'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -200,26 +188,26 @@ export default {
             this.params.submitter = this.params.department = '';
         },
         fomatterStatus(row, column) {
-        //     let state;
-        //     //0已保存1审核中2驳回3撤销4完成
-        //     switch (row.status) {
-        //         case '00':
-        //           state = "已保存";
-        //           break;
-        //         case '01':
-        //             state = "审核中";
-        //             break;
-        //         case '02':
-        //             state = "驳回";
-        //             break;
-        //         case '03':
-        //             state = "撤销";
-        //             break;
-        //         case '04':
-        //           state = "已完成";
-        //           break;
-        //     }
-        //     return state;
+            let state;
+            //0已保存1审核中2驳回3撤销4完成
+            switch (row.status) {
+                case '00':
+                  state = "已保存";
+                  break;
+                case '01':
+                    state = "审核中";
+                    break;
+                case '02':
+                    state = "驳回";
+                    break;
+                case '03':
+                    state = "撤销";
+                    break;
+                case '04':
+                  state = "已完成";
+                  break;
+            }
+            return state;
         },
     },
     mounted() {
@@ -233,15 +221,14 @@ export default {
     }
 };
 </script>
-<style lang="scss" >
+<style lang="scss" scoped>
 #LeaveFilter .el-form-item--small.el-form-item {
     width: 100%;
 }
-#LeaveFilter .el-form-item--small .el-form-item__content {
-    width: 80%;
-}
-#LeaveFilter .el-range-editor--small.el-input__inner {
-    width: 100%;
+</style>
+<style scoped>
+#LeaveFilter .filterForm >>> .el-form-item__content {
+    width: calc(100% - 100px);
 }
 </style>
 
