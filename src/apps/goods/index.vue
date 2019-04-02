@@ -6,7 +6,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="申请人">
-                                <el-input placeholder="请输入申请人" v-model="params.creatorName"></el-input>
+                                <el-input placeholder="请输入申请人" v-model="params.applyUser"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -51,7 +51,7 @@
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '02' || scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="right"  v-if="scope.row.status == '00'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="right" v-if="scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -83,7 +83,7 @@ export default {
             params: {
                 pageNum: 1,
                 pageSize: 5,
-                //  creatorName: '',
+                applyUser: '',
                 // organName: '',
                 total: 0
             },
@@ -127,12 +127,12 @@ export default {
             this.$refs.GoodsForm.setDataFromParent(data);
         },
         reloadList(params) {
-           // if (params == 'reload') {
-                this.params.pageNum = 1;
-                this.getList();
-           // } else {
+            // if (params == 'reload') {
+            this.params.pageNum = 1;
+            this.getList();
+            // } else {
             //    this.$refs.GoodsDetail.getFormDetails(params.id);
-           // }
+            // }
         },
 
         //分页
@@ -148,7 +148,9 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.submitter = this.params.department = '';
+            this.params.applyUser = '';
+            this.params.pageNum = 1;
+            this.getList();
         }
     },
     mounted() {
