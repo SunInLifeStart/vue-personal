@@ -307,6 +307,7 @@ export default {
                                 return item.action == "COMMIT";
                             }
                         );
+                       actions.data.types[0]["comment"] =  actions.data.types[0].name;
                        await $self.startSignal(actions.data.types[0]);
                        $self.emitMessage();
                     }
@@ -320,9 +321,9 @@ export default {
                 }
             } else {
                 if (params) {
-                    $self.msgTips($self, "提交失败", "warning");
+                    $self.msgTips("提交失败", "warning");
                 } else {
-                    $self.msgTips($self, "保存失败", "warning");
+                    $self.msgTips("保存失败", "warning");
                 }
             }
         },
