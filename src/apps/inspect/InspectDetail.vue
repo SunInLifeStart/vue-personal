@@ -1,18 +1,24 @@
 <template>
-    <div id="InspectDetail" :class="{fullScreen:fullScreen}">
+    <div id="InspectDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
-                    <span v-for="action in actions" :key="action.type" class="btnList" @click="doAction(action)">
+                    <span v-for="(action,index) in actions" :key="index" class="btnList" @click="doAction(action)">
                         {{action.name}}
                     </span>
                 </div>
             </el-row>
         </div>
+        <br />
         <div class="formContent">
+            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <br />
             <el-steps :active="crumb.index" finish-status="success" class="crumbList">
                 <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>
             </el-steps>
+            <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps> -->
             <el-form :model='tabledata' class="formList">
                 <el-row>
                     <el-col :span="24">
@@ -76,19 +82,13 @@
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
-                    <el-form-item label="请选择驳回节点" v-show="reject_status">
-                        <el-select v-model="rejectTarget" style="width:100%;">
-                            <el-option v-for="user in rejectList" :key="user" :label="user" :value="user">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                    <el-form-item :label="seleteUserLabel" v-show="presign_status">
-                        <el-select v-model="seleteUsers" filterable multiple style="width:100%;">
-                            <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
+                    <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
+                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                            <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
                     <el-form-item label="审批意见">
-                        <el-input type="textarea" :rows="2" placeholder="请输入审批意见" v-model="textarea">
+                        <el-input type="textarea" placeholder="请输入审批意见" v-model="textarea" :autosize="{ minRows: 10, maxRows: 30}">
                         </el-input>
                     </el-form-item>
                 </el-form>
@@ -97,7 +97,7 @@
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                 </span>
             </el-dialog>
-            <el-dialog :visible.sync="dialogUpload" width="50%" append-to-body>
+            <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
                 <el-row>
                     <el-col :span="24">
                         <el-form label-width="100px">
@@ -120,18 +120,22 @@
                     <el-button @click="dialogUpload = false">取 消</el-button>
                     <el-button type="primary" @click="subAttForm()">确 定</el-button>
                 </span>
+                <!-- <el-form>
+                    <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
+                </el-form> -->
             </el-dialog>
         </div>
     </div>
 </template>
-
 <script>
 import axios from 'axios';
-import moment from 'moment';
-import Comment from '../Comment';
-import FilesOperate from '../FilesOperate';
+import moment from "moment";
+import Comment from "../Comment";
+import FilesOperate from "../FilesOperate";
+import { publicMethods } from "../application.js";
 export default {
-    name: 'InspectDetail',
+    mixins:[publicMethods],
+    name: "InspectDetail",
     data() {
         return {
             attType: '',
@@ -159,395 +163,64 @@ export default {
             dialogUpload: false,
             fullScreen: false,
             crumbNodeName: '',
-            nodename: ''
-
+            nodename: '',
+            tableData: {},
+            actions: [],
+            crumbs:[],
+            formId: "",
+            textarea: "",
+            dialogVisible: false,
+            users: [],
+            actionsDialogArr: [],
+            appFlowName:'motor-Inspectingapplication_Inspect',
+            formName:'inspect_forms',
+            comments:[],
+            dialogVisibleCrumb:false,
+            flowNodeUrl:"",
         };
     },
-    props: ['formId'],
     components: {
         Comment,
         FilesOperate
     },
-    mounted() {
-        this.getForm();
-        this.getAllUsers();
-        if (this.formId != '') {
-            this.getCrumbs();
-            this.getActions();
-        }
-    },
-    watch: {
-        formId: function() {
-            if (this.formId != '') {
-                this.getForm();
-                this.getCrumbs();
-                this.getActions();
-            } else {
-                this.tabledata = {};
-            }
-        }
-    },
     methods: {
-        handleSuccess(response, file) {
-            for (let item of response) {
-                this.tabledata.attachments.push({
-                    iconUrl: item.iconUrl,
-                    id: item.id,
-                    name: item.name,
-                    size: item.size,
-                    type: item.type,
-                    url: item.url,
-                    attType: this.attType
-                });
-            }
-            console.log(this.tabledata.attachments);
+        handleSuccess(){},
+        getFormDetails(formId) {
+          
+            let $self = this;
+            $self.formId = formId;
+            $self.url= "/api/v1/"+$self.formName+"/" + $self.formId;
+            $self.getFormDetailsData();
         },
-        subAttForm() {
-            const self = this;
-            axios
-                .post(
-                    '/api/v1/inspect_forms/save',
-                    JSON.stringify(this.tabledata),
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    this.submitForm();
-                    this.dialogUpload = false;
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        getId(id) {
-            const self = this;
-            if (this.tabledata.attachments.length > 0) {
-                this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
-                    () => {
-                        const params = {
-                            id: id
-                        };
-                        axios
-                            .get('/api/v1/inspect_forms/attachment/' + id, '', {
-                                headers: {
-                                    'Content-type': 'application/json'
-                                }
-                            })
-                            .then(res => {
-                                self.tabledata.attachments.forEach(function(
-                                    item,
-                                    index
-                                ) {
-                                    if (item.id == id) {
-                                        self.tabledata.attachments.splice(
-                                            index,
-                                            1
-                                        );
-                                    }
-                                });
-                            })
-                            .catch(function() {
-                                self.$message({
-                                    message: '操作失败',
-                                    type: 'error'
-                                });
-                            });
-                    }
-                );
-            }
-        },
-        getForm() {
-            const self = this;
-            if (this.formId != '') {
-                axios
-                    .get('/api/v1/inspect_forms/' + this.formId)
-                    .then(res => {
-                        self.tabledata = res.data;
-                        if (self.tabledata.contractPeriodEnd) {
-                            self.tabledata.contractPeriodStart = moment(
-                                self.tabledata.contractPeriodStart
-                            ).format('YYYY-MM-DD');
-                            self.tabledata.contractPeriodEnd = moment(
-                                self.tabledata.contractPeriodEnd
-                            ).format('YYYY-MM-DD');
-                            self.created =
-                                self.tabledata.contractPeriodStart +
-                                ' 至 ' +
-                                self.tabledata.contractPeriodEnd;
-                        } else {
-                            self.created = '';
-                        }
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
-            }
-        },
-        getActions() {
-            let self = this;
-            axios.get(`/api/v1/inspects/${this.formId}/actions`).then(res => {
-                res.data.types = res.data.types || [];
-                if (this.fullScreen) {
-                    res.data.types.push({
-                        type: 'closeFullScreen',
-                        name: '关闭全屏'
-                    });
-                } else {
-                    res.data.types.push({
-                        type: 'fullScreen',
-                        name: '全屏显示'
-                    });
-                }
-                self.actions = res.data.types;
-            });
-        },
-        getCrumbs() {
-            axios.get(`/api/v1/inspects/${this.formId}/crumb`).then(res => {
-                this.crumb = { items: res.data, index: -1 };
-                res.data.forEach((item, index) => {
-                    if (item.active) {
-                        this.nodename = item.name;
-                        this.crumbNodeName = item.key;
-                        this.crumb.index = index;
-                        if (item.assignes) {
-                            item.name = item.name + '(' + item.assignes + ')';
-                        }
-                    }
-                });
-            });
-        },
-        getRejectList() {
-            let self = this;
-            axios
-                .get('/api/v1/inspects/' + this.formId + '/reject/targets')
-                .then(res => {
-                    self.rejectList = res.data;
-                });
-        },
-        getAllUsers() {
-            let self = this;
-            axios.get(`/api/v1/users`).then(res => {
-                self.users = res.data;
-            });
-        },
-        doAction(action) {
-            this.clearForm();
-            this.currentAction = action;
-            // 不需要弹出框
-            if ('ARCHIVE,DISPATCH,TEMPLATE,PULL,COMMIT'.includes(action.type)) {
-                this.clearForm();
-                let self = this; //套红，归档，分发
-                if (action.type == 'PULL') {
-                    axios
-                        .get(`/api/v1/inspects/${self.formId}/pull`)
-                        .then(res => {
-                            self.comment('formOnlyComment');
-                            self.getActions();
-                            self.getCrumbs();
-                        });
-                }
-                if (
-                    action.type == 'COMMIT' &&
-                    this.crumbNodeName == 'Task_01'
-                ) {
-                    this.submitForm();
-                } else if (action.type == 'COMMIT') {
-                    self.dialogVisible = true;
-                    if (action.required) {
-                        if (action.type == 'COMMIT') {
-                            self.presign_status = true;
-                            self.seleteUserLabel = '请选择拟办人';
-                        }
-                    }
-                }
-            } else if ('REJECT,PRESIGN,ASSIGN'.includes(action.type)) {
-                //拒绝，加签
-                this.dialogVisible = true;
-                //需要弹出并填写意见，选择驳回节点或选择其他人
-                if (action.type == 'REJECT') {
-                    this.getRejectList();
-                    this.reject_status = true;
-                }
-                if (action.type == 'PRESIGN') {
-                    this.presign_status = true;
-                    this.seleteUserLabel = '请选择前加签人';
-                }
-                if (action.type == 'ASSIGN') {
-                    this.presign_status = true;
-                    this.seleteUserLabel = '请选择承办人';
-                }
-            } else if ('fullScreen'.includes(action.type)) {
-                this.actions.splice(this.actions.length - 1, 1);
-                this.actions.push({
-                    type: 'closeFullScreen',
-                    name: '关闭全屏'
-                });
-                this.fullScreen = true;
-                // this.common.open(`/#/apps/outgoing/${this.formId}`);
-            } else if ('closeFullScreen'.includes(action.type)) {
-                this.actions.splice(this.actions.length - 1, 1);
-                this.actions.push({
-                    type: 'fullScreen',
-                    name: '全屏显示'
-                });
-                this.fullScreen = false;
-            } else if ('FEEDBACK'.includes(action.type)) {
-                this.dialogUpload = true;
+        async getFormDetailsData() {
+            let $self = this;
+            let response = await $self.getDetails();
+            if (response) {
+                  console.log(1125,response)
+                $self.tabledata = response.data;
             } else {
-                //拟办，同意
-                this.dialogVisible = true;
-                //只需要填写意见
+                $self.msgTips("获取表单失败", "warning");
             }
-        },
-        clearForm() {
-            this.reject_status = false;
-            this.presign_status = false;
-            this.textarea = '';
-            this.submitData = {};
-        },
-        comment(comment) {
-            let self = this;
-            axios
-                .put(`/api/v1/inspect_forms/${self.formId}/comment`, {
-                    content: self.textarea || self.currentAction.name,
-                    action: this.nodename,
-                    node: this.nodename
-                })
-                .then(res => {
-                    if (comment == 'formOnlyComment') {
-                        this.getCrumbs();
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                    }
-                    this.getForm();
-                });
-        },
-        submitForm() {
-            let self = this;
-            //如果是不需要走流程的节点
-            if (
-                'SAVE,PREVIEW,COMMENT,PULL,PRINTER,EDIT'.includes(
-                    self.currentAction.type
-                )
-            ) {
-            } else {
-                //退回
-                if (self.currentAction.type == 'REJECT') {
-                    if (self.seleteUsers) {
-                        self.submitData.rejectTarget = self.rejectTarget;
-                    } else {
-                        self.$message.error('请选择驳回节点');
-                        return false;
-                    }
-                }
-
-                if (self.currentAction.type == 'ASSIGN') {
-                    if (self.seleteUsers.length > 0) {
-                        self.submitData['assignees'] = self.seleteUsers;
-                    } else {
-                        self.$message.error('请选择承办人');
-                        return false;
-                    }
-                }
-                // return false;
-
-                //前加签
-                if (self.currentAction.required) {
-                    if (self.seleteUsers.length > 0) {
-                        var key = self.currentAction.required[0].split(':')[0];
-                        self.submitData[key] = self.seleteUsers;
-                    } else {
-                        self.$message.error(self.seleteUserLabel);
-                        return false;
-                    }
-                }
-                self.submitData.action = self.currentAction.type;
-                axios
-                    .put(
-                        `/api/v1/inspects/${self.formId}/signal`,
-                        self.submitData
-                    )
-                    .then(res => {
-                        self.dialogVisible = false;
-                        self.comment();
-                        // self.getForm();
-                        self.getActions();
-                        self.getCrumbs();
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                        if (self.currentAction.type == 'CANCEL') {
-                            self.$emit('refreshData');
-                        }
-                    });
-            }
-        },
-        downloadFile(item) {
-            // window.open(url, '_blank');
-            this.common.preview(item);
-        },
-        refreshFormData() {
-            this.getCrumbs();
-            this.getForm();
-        },
-        setMemo() {
-            const self = this;
-            axios
-                .post('/api/v1/incoming_forms/setMemo', {
-                    memo: '',
-                    id: self.formId
-                })
-                .then(res => {
-                    console.log(res);
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
+            // debugger;
+            let actions = await $self.getActions();
+            // let crumbs = await $self.getCrumbs();
+            let comments =  await $self.getComments();
+            $self.actions = actions.data.types;
+            $self.comments = comments.data;
+            // $self.crumbs =  {items: crumbs.data, index: -1};
+            // for(var i= 0; i<$self.crumbs.items.length; i++){
+            //     if($self.crumbs.items[i].active){
+            //         $self.crumbs.index = i;    
+            //     }
+            // }
         }
     }
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss">
 #InspectDetail {
     .el-step__main {
         margin-top: 10px;
-    }
-    .attachments {
-        margin-left: 10px;
-        width: 100px;
-        height: 120px;
-        text-align: center;
-        display: inline-block;
-        border: 1px solid #c0c4cc;
-        border-radius: 2px;
-        cursor: pointer;
-        img {
-            width: 100px;
-            height: 120px;
-        }
-        p {
-            margin: 0;
-            line-height: 15px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
     }
     .audit {
         position: relative;
@@ -555,6 +228,7 @@ export default {
         font-size: 14px;
         box-shadow: none;
         border: 0;
+        font-weight: bold;
         .avatar {
             position: absolute;
             left: 5px;
@@ -585,47 +259,48 @@ export default {
             }
         }
     }
-}
-#actionList {
-    background: #f4f4f4;
-    border-bottom: 1px solid #eaeaea;
-    height: 40px;
-    width: 100%;
-    z-index: 10;
-    font-weight: bold;
-    .btnList {
-        line-height: 40px;
-        padding: 12px 10px;
-        cursor: pointer;
-    }
-    .btnList:hover {
-        background: #c7e0f4;
-    }
-}
-.btnhide {
-    display: none;
-}
-.crumbList {
-    margin: 15px 0px;
-}
-.uploadBtn {
-    margin-right: 10px;
-    width: 100px;
-    height: 120px;
-    text-align: center;
-    float: left;
-    border: 1px solid #c0c4cc;
-    border-radius: 2px;
-    cursor: pointer;
-
-    .el-upload {
-        width: 100%;
-        height: 100%;
-
-        i {
-            font-size: 50px;
-            margin-top: 35px;
+    .input-with-select {
+        width: 0px;
+        margin-right: 10px;
+        .el-input-group__prepend {
+            background-color: #409eff;
+            border-color: #409eff;
+            color: #ffffff;
+            border-radius: 4px;
         }
+        &.reject .el-input-group__prepend {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .el-input__inner {
+            width: 0;
+            padding: 0;
+            border: 0;
+        }
+        .el-input__suffix {
+            left: 8px;
+        }
+    }
+    #actionList {
+        background: #f4f4f4;
+        border-bottom: 1px solid #eaeaea;
+        height: 40px;
+        width: 100%;
+        z-index: 10;
+        .btnList {
+            line-height: 40px;
+            padding: 12px 10px;
+            cursor: pointer;
+        }
+        .btnList:hover {
+            background: #c7e0f4;
+        }
+    }
+    .btnhide {
+        display: none;
+    }
+    .crumbList {
+        margin: 15px 0px;
     }
 }
 .fullScreen {

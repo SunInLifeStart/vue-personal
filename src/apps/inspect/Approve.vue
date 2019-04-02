@@ -1,6 +1,8 @@
 <template>
   <div id="APPROVE">
-    <InspectDetail :formId="formId" ref="InspectDetail"></InspectDetail>
+      <InspectDetail :formId="formId" ref="InspectDetail"></InspectDetail>
+    <!-- <TrainDetail ref="TrainDetail"> </TrainDetail> -->
+     <!-- :formId="formId" -->
   </div>
 </template>
 <script>
@@ -13,10 +15,10 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.IncomingDetail.setTab();
+         this.$refs.InspectDetail.getFormDetails(this.formId);
     },
     components: {
-        InspectDetail
+       InspectDetail
     },
     watch: {},
 
@@ -26,7 +28,7 @@ export default {
 <style lang="scss" scope>
 #APPROVE {
     height: 100%;
-    #InspectDetail {
+    #TrainDetail {
         height: 100%;
         width: 100%;
         display: flex;

@@ -1,466 +1,388 @@
 <template>
+  <el-dialog
+    title="督办管理"
+    :visible.sync="dialogFormVisible"
+    :close-on-click-modal="false"
+    max-width="1280px"
+    width="70%"
+    style="text-align: center;"
+  >
     <div id="InspectForm">
-        <el-form ref="selectItem" :model="selectItem" label-width="130px">
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="标题:">
-                        <el-input v-model="selectItem.title"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="立项人:">
-                        <el-input v-model="selectItem.definer" disabled></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="立项单位:">
-                        <el-input v-model="selectItem.definerUnit" disabled></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="12">
-                    <el-form-item label="被督办部门负责人:">
-                        <el-select v-model="selectItem.inspector" @change="getInspectorsId()" filterable placeholder="请选择" style="width:100%">
-                            <el-option v-for="item in inspectors" :key="item.id" :label="item.name" :value="item.name"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="截至日期:">
-                        <el-date-picker style="width:100%" type="date" v-model="selectItem.deadline"></el-date-picker>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <!-- <el-col :span="12">
-                    <el-form-item label="反馈频率:">
-                        <el-input v-model="selectItem.frequency"></el-input>
-                    </el-form-item>
-                </el-col> -->
-                <el-col :span="24">
-                    <el-form-item label="备注:">
-                        <el-input v-model="selectItem.remark"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="内容:">
-                        <el-input type="textarea" :autosize="{minRows: 5}" placeholder="请输入内容" v-model="selectItem.content">
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" @click.native="attType='attType1'" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                        <div v-for="item in selectItem.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
-                            <FilesOperate :item="item" :options="{preview:true,download:true,del:true}" @getId="getId"></FilesOperate>
-                        </div>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
+      <el-form ref="selectItem" :model="selectItem" label-width="130px">
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="标题:">
+              <el-input v-model="selectItem.title"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="立项人:">
+              <el-input v-model="selectItem.definer" disabled></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="立项单位:">
+              <el-input v-model="selectItem.definerUnit" disabled></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="被督办部门负责人:">
+              <el-select
+                v-model="selectItem.inspector"
+                @change="getInspectorsId()"
+                filterable
+                placeholder="请选择"
+                style="width:100%"
+              >
+                <el-option
+                  v-for="item in inspectors"
+                  :key="item.id"
+                  :label="item.name"
+                  :value="item.name"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="截至日期:">
+              <el-date-picker style="width:100%" type="date" v-model="selectItem.deadline"></el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="备注:">
+              <el-input v-model="selectItem.remark"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="内容:">
+              <el-input
+                type="textarea"
+                :autosize="{minRows: 5}"
+                placeholder="请输入内容"
+                v-model="selectItem.content"
+              ></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="24">
+            <el-form-item label="附件">
+              <el-upload
+                name="files"
+                class="upload-demo uploadBtn"
+                ref="upload"
+                @click.native="attType='attType1'"
+                action="/api/v1/files/upload"
+                :on-success="handleSuccess"
+                :auto-upload="true"
+                :with-credentials="true"
+                :show-file-list="false"
+              >
+                <i class="el-icon-plus"></i>
+              </el-upload>
+              <div
+                v-for="item in selectItem.attachments"
+                :key="item.id"
+                style="float:left"
+                v-show="item.attType == 'attType1'"
+              >
+                <FilesOperate
+                  :item="item"
+                  :options="{preview:true,download:true,del:true}"
+                  @getId="getId"
+                ></FilesOperate>
+              </div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
     </div>
+    <div slot="footer" class="dialog-footer">
+      <el-button type="default" @click="saveFormValidate()">保存</el-button>
+      <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+    </div>
+  </el-dialog>
 </template>
-
 <script>
 /* eslint-disable */
-import axios from 'axios';
-import moment from 'moment';
-import FilesOperate from '../FilesOperate';
+import axios from "axios";
+import moment from "moment";
+import cookies from "js-cookie";
+import FilesOperate from "../FilesOperate";
+import { application } from "../application.js";
+import { publicMethods } from "../application.js";
 export default {
-    name: 'InspectForm',
-    data() {
-        return {
-            attType: '',
-            selectItem: {
-                title: '',
-                definer: this.cookie_uname,
-                definerUnit: this.cookie_oname,
-                inspector: '',
-                deadline: '',
-                frequency: '',
-                remark: '',
-                content: '',
-                attachments: []
-            },
-            inspectors: [],
-            currentFormId: this.operationType == 'create' ? '' : this.formId,
-            options: [],
-            value: '',
-            cookie_uname: '',
-            cookie_oname: ''
-        };
-    },
-    components: {
-        FilesOperate
-    },
-    props: ['formId', 'operationType'],
-    mounted() {
-        const self = this;
-        if (this.operationType == 'edit') {
-            this.getForm();
-        }
-        const cookieItems = document.cookie.split(';');
-        cookieItems.forEach(function(item) {
-            if (item.indexOf('uname') > 0) {
-                self.selectItem.definer = decodeURIComponent(
-                    item.split('=')[1]
-                );
-                self.cookie_uname = decodeURIComponent(item.split('=')[1]);
-            }
-            if (item.indexOf('oname') > 0) {
-                self.selectItem.definerUnit = decodeURIComponent(
-                    item.split('=')[1]
-                );
-                self.cookie_oname = decodeURIComponent(item.split('=')[1]);
-            }
-        });
-        this.getUser();
-        this.getInspector();
-    },
-    watch: {
-        formId: function() {
-            this.getForm();
-        },
-        operationType: function() {
-            if (this.operationType == 'create') {
-                this.clearForm();
-            } else {
-                this.getForm();
-            }
-        }
-    },
-    methods: {
-        clearForm() {
-            this.selectItem = {
-                definer: this.cookie_uname,
-                definerUnit: this.cookie_oname,
-                title: '',
-                inspector: '',
-                inspectorId: '',
-                deadline: '',
-                frequency: '',
-                remark: '',
-                content: '',
-                attachments: []
-            };
-        },
-        getUser() {
-            const self = this;
-            axios
-                .get('/api/v1/users')
-                .then(res => {
-                    self.options = res.data;
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        getInspector() {
-            const self = this;
-            axios
-                .get('/api/v1/users/role/deptManager')
-                .then(res => {
-                    self.inspectors = res.data;
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        getInspectorsId() {
-            const name = this.selectItem.inspector;
-            let iid = '';
-            this.inspectors.forEach(function(item) {
-                if (item.name == name) {
-                    iid = item.id;
-                }
-            });
-            this.selectItem.inspectorId = iid;
-            return iid;
-        },
-        getForm() {
-            const self = this;
-            if (this.formId != '') {
-                axios
-                    .get('/api/v1/inspect_forms/' + this.formId)
-                    .then(res => {
-                        self.selectItem = res.data;
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
-            }
-        },
-        saveForm(action) {
-            const self = this;
-            axios
-                .post(
-                    '/api/v1/inspect_forms/save',
-                    JSON.stringify(this.selectItem),
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    self.currentFormId = res.data.id;
-                    if (action == 'save') {
-                        self.submitForm();
-                    } else {
-                        self.$emit('refreshData');
-                        self.$message({
-                            message: '保存成功',
-                            type: 'success'
-                        });
-                        if (this.operationType == 'edit') {
-                            self.$emit('refreshDetail');
-                        }
-                    }
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        submitCheck() {
-            if (this.selectItem.inspector == null) {
-                this.$message({
-                    message: '请选择被督办部门负责人',
-                    type: 'warning'
-                });
-            } else {
-                this.saveForm('save');
-            }
-        },
-        submitForm() {
-            const self = this;
-            axios
-                .post(
-                    '/api/v1/inspects/' + this.currentFormId + '/create',
-                    '',
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    if (res.data.id != '') {
-                        self.commitForm(res.data.id);
-                    }
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        commitForm(processId) {
-            const self = this;
-            axios
-                .put(
-                    '/api/v1/inspect_forms/' +
-                        this.currentFormId +
-                        '/commit/' +
-                        processId,
-                    '',
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    self.startProcess();
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        startProcess() {
-            let atIds = this.selectItem.inspectorId;
-            const self = this;
-            const params = {
-                action: 'COMMIT',
-                assignee: atIds
-            };
-            axios
-                .put(
-                    '/api/v1/inspects/' + this.currentFormId + '/signal',
-                    JSON.stringify(params),
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    self.$emit('refreshData');
-                    if (this.operationType == 'edit') {
-                        self.$emit('refreshDetail');
-                    }
-                    self.comment();
-                    self.$message({
-                        message: '提交成功',
-                        type: 'success'
-                    });
-                })
-                .catch(function() {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        comment(comment) {
-            let self = this;
-            axios
-                .put(`/api/v1/inspect_forms/${self.currentFormId}/comment`, {
-                    content: '提交',
-                    action: 'COMMIT',
-                    node:'提交'
-                })
-                .then(res => {});
-        },
-        handleSuccess(response, file) {
-            for (let item of response) {
-                this.selectItem.attachments.push({
-                    iconUrl: item.iconUrl,
-                    id: item.id,
-                    name: item.name,
-                    size: item.size,
-                    type: item.type,
-                    url: item.url,
-                    attType: this.attType
-                });
-            }
-            console.log(this.selectItem.attachments);
-        },
-        submitUpload() {
-            this.$refs.upload.submit();
-        },
-        getId(id) {
-            const self = this;
-            if (this.selectItem.attachments.length > 0) {
-                this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
-                    () => {
-                        const params = {
-                            id: id
-                        };
-                        axios
-                            .get('/api/v1/inspect_forms/attachment/' + id, '', {
-                                headers: {
-                                    'Content-type': 'application/json'
-                                }
-                            })
-                            .then(res => {
-                                self.selectItem.attachments.forEach(function(
-                                    item,
-                                    index
-                                ) {
-                                    if (item.id == id) {
-                                        self.selectItem.attachments.splice(
-                                            index,
-                                            1
-                                        );
-                                    }
-                                });
-                            })
-                            .catch(function() {
-                                self.$message({
-                                    message: '操作失败',
-                                    type: 'error'
-                                });
-                            });
-                    }
-                );
-            }
-        }
+  mixins: [publicMethods],
+  name: "InspectForm",
+  data() {
+    return {
+      attType: "",
+      // selectItem: {
+      //   title: "",
+      //   definer: cookies.get("uname"),
+      //   definerUnit: cookies.get("oname"),
+      //   inspector: "",
+      //   deadline: "",
+      //   frequency: "",
+      //   remark: "",
+      //   content: "",
+      //   attachments: []
+      // },
+      inspectors: [],
+      currentFormId: this.operationType == "create" ? "" : this.formId,
+      options: [],
+      value: "",
+      dialogFormVisible: false,
+      selectItem: this.resetForm(),
+      users: [],
+      appFlowName: "motor-Inspectingapplication_Inspect",
+      rules: {
+        submitter: [
+          {
+            required: true, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请输入申请人"
+          }
+        ],
+        department: [
+          {
+            required: true, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请输入所属部门"
+          }
+        ],
+        isAnnualPlan: [
+          {
+            required: false, //是否必填
+            trigger: "blur", //何事件触发
+            message: "年度计划"
+          }
+        ],
+
+        committed: [
+          {
+            required: false, //是否必填
+            message: "请选择提单时间",
+            trigger: "blur"
+          }
+        ],
+        InspectingPrograms: [
+          {
+            required: false, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请输入培训/学习(项目)"
+          }
+        ],
+        InspectingContent: [
+          {
+            required: false, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请输入培训/学习(目的内容)"
+          }
+        ],
+        participant: [
+          {
+            required: false, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请输入培训/学习(参加人员)"
+          }
+        ],
+        schedule: [
+          {
+            required: false, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请输入日程安排"
+          }
+        ],
+        consts: [
+          {
+            required: false, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请输入费用预算"
+          }
+        ],
+        processId: [
+          {
+            required: false, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请输入是否资金计划内"
+          }
+        ],
+        suggestion: [
+          {
+            required: false, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请输入审批意见"
+          }
+        ],
+        draftTime: [
+          {
+            required: true, //是否必填
+            trigger: "blur", //何事件触发
+            message: "请选择培训时间"
+          }
+        ],
+        writer: [
+          {
+            required: true, //是否必填
+            trigger: "change", //何事件触发
+            message: "请选择记录人"
+          }
+        ]
+      }
+    };
+  },
+  watch: {
+    "formData.lowercase"(val) {
+      this.selectItem.upper = val ? this.convertCurrency(val) : "";
     }
+  },
+  components: {
+    FilesOperate
+  },
+  methods: {
+    setDataFromParent(data) {
+      this.selectItem = data;
+      this.formId = data.id;
+      this.dialogFormVisible = true;
+      this.createForm_status = false;
+    },
+    createForm() {
+      this.selectItem = this.resetForm();
+      this.dialogFormVisible = this.createForm_status = true;
+    },
+    resetForm() {
+      let selectItem = {
+        title: "",
+        definer: cookies.get("uname"),
+        definerUnit: cookies.get("oname"),
+        inspector: "",
+        deadline: "",
+        frequency: "",
+        remark: "",
+        content: "",
+        attachments: []
+      };
+      return selectItem;
+    },
+    saveFormValidate(type) {
+      this.$refs["selectItem"].validate(valid => {
+        if (valid) {
+          this.saveForm(type);
+        }
+      });
+    },
+    // 提交保存
+    async saveForm(params) {
+      const $self = this;
+      let response = await $self.saveFormData(
+        "/api/v1/inspect_forms/save",
+        $self.selectItem
+      );
+      if (response) {
+        console.log(1125,response)
+        $self.formId = response.data.content.id;
+
+        $self.dialogFormVisible = false;
+        if (params) {
+          $self.msgTips("提交成功", "success");
+          if (this.createForm_status) {
+            $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
+          } else {
+            let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
+            actions.data.types = actions.data.types.filter(function(item) {
+              return item.action == "COMMIT";
+            });
+            await $self.startSignal(actions.data.types[0]);
+            $self.emitMessage();
+          }
+        } else {
+          $self.msgTips("保存成功", "success");
+           $self.$emit('saveok');
+          if (this.createForm_status) {
+            $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
+          } else {
+            $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
+          }
+        }
+      } else {
+        if (params) {
+          $self.msgTips($self, "提交失败", "warning");
+        } else {
+          $self.msgTips($self, "保存失败", "warning");
+        }
+      }
+    },
+    handleSuccess(response, file) {
+      const self = this;
+      if (response.length > 0) {
+        response.forEach(function(item) {
+          self.formData.attachments.push(item);
+        });
+      }
+      this.$refs.upload.clearFiles();
+    },
+    submitUpload() {
+      this.$refs.upload.submit();
+    },
+    handlePreview() {},
+    handleRemove() {},
+    getInspector() {
+      const self = this;
+      
+       
+        
+      axios
+        .get("/api/v1/users/role/deptManager")
+        .then(res => {
+          // self.inspectors = res.data;
+        })
+        .catch(function() {
+          self.$message({
+            message: "操作失败",
+            type: "error"
+          });
+        });
+    }
+  },
+  mounted() {
+    this.getInspector();
+  }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 #InspectForm {
-    .uploadBtn {
-        margin-right: 10px;
-        width: 100px;
-        height: 120px;
-        text-align: center;
-        float: left;
-        border: 1px solid #c0c4cc;
-        border-radius: 2px;
-        cursor: pointer;
+  .uploadBtn {
+    margin-right: 10px;
+    width: 100px;
+    height: 130px;
+    text-align: center;
+    float: left;
+    border: 1px solid #c0c4cc;
+    border-radius: 2px;
+    cursor: pointer;
 
-        .el-upload {
-            width: 100%;
-            height: 100%;
+    .el-upload {
+      width: 100%;
+      height: 100%;
 
-            i {
-                font-size: 50px;
-                margin-top: 35px;
-            }
-        }
+      i {
+        font-size: 50px;
+        margin-top: 35px;
+      }
     }
-
-    .attachments {
-        position: relative;
-        margin-bottom: 40px;
-        margin-right: 10px;
-        width: 100px;
-        height: 120px;
-        text-align: center;
-        display: inline-block;
-        border: 1px solid #c0c4cc;
-
-        border-radius: 2px;
-        cursor: pointer;
-        img {
-            width: 100px;
-            height: 120px;
-        }
-
-        p {
-            margin: 0;
-            line-height: 20px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        i {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 5px;
-            &:hover {
-                color: red;
-            }
-        }
-    }
+  }
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+  }
 }
 </style>
