@@ -27,6 +27,7 @@ export default {
 <style lang="scss" scope>
 #APPROVE {
     height: 100%;
+    overflow-y: auto;
     #LeaveDetail {
         height: 100%;
         width: 100%;

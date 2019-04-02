@@ -154,7 +154,7 @@
                 <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
             </el-form>
         </el-dialog>
-    </div>
+    </div> 
 </template>
 <script>
 import axios from 'axios';
@@ -221,10 +221,30 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
+                if($self.tableData.type == 1){
+                    $self.tableData.type = '事假'
+                }else if($self.tableData.type == 2){
+                     $self.tableData.type = '病假'
+                }else if($self.tableData.type == 3){
+                     $self.tableData.type = '婚假'
+                }else if($self.tableData.type == 4){
+                     $self.tableData.type = '产假'
+                }else if($self.tableData.type == 5){
+                     $self.tableData.type = '丧假'
+                }
+                else if($self.tableData.type == 6){
+                     $self.tableData.type = '工伤假'
+                }
+                else if($self.tableData.type == 7){
+                     $self.tableData.type = '年休假'
+                }
+                else if($self.tableData.type == 8){
+                     $self.tableData.type = '其他'
+                }
             } else {
                 $self.msgTips('获取表单失败', 'warning');
             }
-            // debugger;
+            
             let actions = await $self.getActions();
             let crumbs = await $self.getCrumbs();
             let comments = await $self.getComments();
