@@ -39,13 +39,19 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="status" label="状态">
+                        <template slot-scope="scope">
+                            {{scope.row.status == '00'? '已保存' :scope.row.status == '01' ? '审核中': scope.row.status == '02' ? '已驳回': scope.row.status == '03' ? '已撤销': scope.row.status == '04'? '已完成': ''}}
+                        </template>
                     </el-table-column>
                     <el-table-column label="操作" width="100px">
+                        <!--v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'"
+                         v-if="scope.row.status == '已保存'"
+                        -->
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '02' || scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="right" v-if="scope.row.status == '已保存'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="right"  v-if="scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -57,7 +63,7 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <GoodsDetail :formId="formId" ref="GoodsDetail"></GoodsDetail>
+            <GoodsDetail :formId="formId" ref="GoodsDetail" @reloadList="reloadList"></GoodsDetail>
         </el-card>
         <GoodsForm ref="GoodsForm" @reloadList="reloadList"></GoodsForm>
     </div>
