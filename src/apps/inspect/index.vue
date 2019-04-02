@@ -59,7 +59,6 @@
       <div id="InspectList">
         <el-table
           :data="tableData"
-          stripe
           style="width: 100%; cursor:pointer"
           @row-click="showCurrentId"
         >

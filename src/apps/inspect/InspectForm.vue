@@ -143,7 +143,7 @@ export default {
       dialogFormVisible: false,
       selectItem: this.resetForm(),
       users: [],
-      appFlowName: "motor-Inspectingapplication_Inspect",
+      appFlowName: "inspect-form_super",
       rules: {
         submitter: [
           {

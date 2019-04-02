@@ -98,31 +98,9 @@
                 </span>
             </el-dialog>
             <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form label-width="100px">
-                            <el-form-item label="审批意见">
-                                <el-input type="textarea" :rows="2" placeholder="请输入审批意见" v-model="textarea">
-                                </el-input>
-                            </el-form-item>
-                            <el-form-item label="反馈内容">
-                                <el-upload name="files" class="uploadBtn" ref="upload" @click.native="attType = 'attType2'" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                                    <i class="el-icon-plus"></i>
-                                </el-upload>
-                                <div v-for="item in tabledata.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
-                                    <FilesOperate :item="item" :options="{preview:true,download:true,del:true}" @getId="getId"></FilesOperate>
-                                </div>
-                            </el-form-item>
-                        </el-form>
-                    </el-col>
-                </el-row>
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogUpload = false">取 消</el-button>
-                    <el-button type="primary" @click="subAttForm()">确 定</el-button>
-                </span>
-                <!-- <el-form>
+                <el-form>
                     <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
-                </el-form> -->
+                </el-form>
             </el-dialog>
         </div>
     </div>
@@ -169,10 +147,9 @@ export default {
             crumbs:[],
             formId: "",
             textarea: "",
-            dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'motor-Inspectingapplication_Inspect',
+            appFlowName:'inspect-form_super',
             formName:'inspect_forms',
             comments:[],
             dialogVisibleCrumb:false,
