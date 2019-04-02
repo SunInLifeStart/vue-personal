@@ -127,12 +127,12 @@ export default {
             this.$refs.GoodsForm.setDataFromParent(data);
         },
         reloadList(params) {
-            if (params == 'reload') {
+           // if (params == 'reload') {
                 this.params.pageNum = 1;
                 this.getList();
-            } else {
-                this.$refs.GoodsDetail.getFormDetails(params.id);
-            }
+           // } else {
+            //    this.$refs.GoodsDetail.getFormDetails(params.id);
+           // }
         },
 
         //分页
