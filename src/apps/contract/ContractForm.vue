@@ -120,9 +120,15 @@
                     <tr>
                         <td colspan="2">
                             合同附件
+                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.applicantName"></el-input>
+                            <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
+                                <p :title="item.name">{{item.name}}</p>
+                                <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -214,7 +220,7 @@
                         </td>
                         <td colspan="6">
                             <el-row>
-                                <el-col :span="14" >
+                                <el-col :span="14">
                                     <div style="float:left">
                                         谈判小组成员（不同部门2人或以上）签字：
                                     </div>
@@ -357,6 +363,44 @@ export default {
         FilesOperate
     },
     methods: {
+                //删除附件
+        deleteAttachment(id) {
+            const self = this;
+            if (this.formData.attachments.length > 0) {
+                this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
+                    () => {
+                        const params = {
+                            id: id
+                        };
+                        axios
+                            .get('/api/v1/payment_forms/deleteAtt/' + id, '', {
+                                headers: {
+                                    'Content-type': 'application/json'
+                                }
+                            })
+                            .then(res => {
+                                self.formData.attachments.forEach(function(
+                                    item,
+                                    index
+                                ) {
+                                    if (item.id == id) {
+                                        self.formData.attachments.splice(
+                                            index,
+                                            1
+                                        );
+                                    }
+                                });
+                            })
+                            .catch(function() {
+                                self.$message({
+                                    message: '操作失败',
+                                    type: 'error'
+                                });
+                            });
+                    }
+                );
+            }
+        },
         setDataFromParent(data) {
             this.formData = data;
             this.formId = data.id;
@@ -488,6 +532,43 @@ export default {
   table thead th {
     background-color: #cce8eb;
   }
+
+  .upload {
+    position: relative;
+    margin-right: 30px;
+    // width: 100px;
+    display: inline-block;
+    cursor: pointer;
+  }
+  .attachments {
+    position: relative;
+    // margin-bottom: 40px;
+    margin-right: 30px;
+    width: 200px;
+    // height: 120px;
+    display: inline-block;
+    cursor: pointer;
+    p {
+      margin: 0;
+      line-height: 20px;
+      color: #606266;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      margin-right: 20px;
+    }
+
+    i {
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 5px;
+      &:hover {
+        color: red;
+      }
+    }
+  }
+
   table tr:nth-child(odd) {
     background: #fff;
   }
