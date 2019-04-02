@@ -4,7 +4,7 @@
             <el-form :model="formData" label-width="100px" :rules="rules" ref="formupdate">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="物品类型">
+                        <el-form-item label="物品类型" prop="supplyType">
                             <el-select v-model="formData.supplyType" placeholder="请选择" @change="typeChange">
                                 <el-option v-for="(item,index) in operations" :key="index" :label="item" :value="item">
                                 </el-option>
@@ -15,19 +15,19 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="流水号">
-                            <el-input v-model="formData.no"></el-input>
+                            <el-input v-model="formData.no" disabled></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人">
-                            <el-input v-model="formData.applyUser"></el-input>
+                            <el-input v-model="formData.applyUser" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="所属部门">
-                            <el-input v-model="formData.dept"></el-input>
+                            <el-input v-model="formData.dept" disabled></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -107,6 +107,7 @@
 <script>
 /* eslint-disable */
 import moment from 'moment';
+import axios from 'axios';
 import FilesOperate from '../FilesOperate';
 import cookies from 'js-cookie';
 import { application } from '../application.js';
@@ -123,14 +124,14 @@ export default {
             users: [],
             appFlowName: 'motor-receive_articles',
             rules: {
-                /** 
-                submitter: [
+                supplyType: [
                     {
                         required: true, //是否必填
-                        trigger: 'blur', //何事件触发
-                        message: '请输入申请人'
+                        trigger: 'change', //何事件触发
+                        message: '请输入物品类型'
                     }
-                ],
+                ]
+                /** 
                 department: [
                     {
                         required: true, //是否必填
@@ -229,6 +230,20 @@ export default {
         FilesOperate
     },
     methods: {
+        getNo() {
+            const self = this;
+            axios
+                .get('/api/v1/motor-receive/getNo')
+                .then(res => {
+                    this.formData.no = res.data;
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '获取物品流水号失败',
+                        type: 'error'
+                    });
+                });
+        },
         typeChange(val) {
             console.log(val);
             this.formData.supplyCode = val == '固定资产' ? 'fixed' : 'unfixed';
@@ -249,27 +264,46 @@ export default {
             });
         },
         deleteItem() {
-            const self = this;
-            let addItem = this.selecttabledata.filter(item => item.id == '');
-            let exitsItem = this.selecttabledata.filter(item => item.id != '');
-            console.log(addItem);
-            console.log(exitsItem);
-            addItem.forEach(function(item) {
-                for (var i = 0; i < self.formData.supplies.length; i++) {
-                    if (item.add == self.formData.supplies[i].add) {
-                        self.formData.supplies.splice(i, 1);
-                    }
-                }
-            });
-            if (exitsItem.length > 0) {
-                exitsItem.forEach(function(item) {
-                    for (var i = 0; i < self.formData.supplies.length; i++) {
-                        if (item.id == self.formData.supplies[i].id) {
-                            self.formData.supplies.splice(i, 1);
+            const $self = this;
+            $self
+                .$confirm('是否删除?', '提示', {
+                    type: 'warning'
+                })
+                .then(() => {
+                    const self = this;
+                    let addItem = this.selecttabledata.filter(
+                        item => item.id == ''
+                    );
+                    let exitsItem = this.selecttabledata.filter(
+                        item => item.id != ''
+                    );
+                    console.log(addItem);
+                    console.log(exitsItem);
+                    addItem.forEach(function(item) {
+                        for (
+                            var i = 0;
+                            i < self.formData.supplies.length;
+                            i++
+                        ) {
+                            if (item.add == self.formData.supplies[i].add) {
+                                self.formData.supplies.splice(i, 1);
+                            }
                         }
+                    });
+                    if (exitsItem.length > 0) {
+                        exitsItem.forEach(function(item) {
+                            for (
+                                var i = 0;
+                                i < self.formData.supplies.length;
+                                i++
+                            ) {
+                                if (item.id == self.formData.supplies[i].id) {
+                                    self.formData.supplies.splice(i, 1);
+                                }
+                            }
+                        });
                     }
                 });
-            }
         },
         async setDataFromParent(data) {
             let $self = this;
@@ -288,6 +322,7 @@ export default {
         createForm() {
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
+            this.getNo();
         },
         resetForm() {
             let formData = {
