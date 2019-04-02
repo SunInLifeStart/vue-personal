@@ -40,8 +40,9 @@
                     <el-table-column prop="participant" label="培训/学习(参加人员)">
                     </el-table-column>
                     <el-table-column prop="schedule" width="250" label="日程安排"></el-table-column>
-                     <!-- <el-table-column prop="status" width="250" label="状态"></el-table-column> -->
-                    
+                     <el-table-column  width="100" label="表单状态">
+                         <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
+                     </el-table-column>
                      <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left" >
@@ -59,7 +60,7 @@
           </el-card>
         <br>
         <el-card class="box-card">
-            <TrainDetail :formId="formId" ref="TrainDetail" @reloadList = "reloadList"></TrainDetail>
+            <TrainDetail :formId="formId" ref="TrainDetail" @reloadList = "reloadList" @resetStatus = "resetStatus"></TrainDetail>
              <!-- :formId="formId" -->
         </el-card>
          <TrainForm  ref="TrainForm" @reloadList = "reloadList"></TrainForm>
@@ -91,6 +92,18 @@ export default {
     components: {
         TrainForm,
         TrainDetail
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+               "00":"已保存", 
+               "01":"审核中",
+               "02" :"已驳回",
+               "03" :"已撤销",
+               "04" :"已完成"
+            };
+            return xmlJson[data];
+        }
     },
     methods: {
         //获取列表
@@ -130,6 +143,14 @@ export default {
                 this.getList();
             } else {
                 this.$refs.TrainDetail.getFormDetails(params.id);
+            }
+        },
+        resetStatus(data){
+              let $self = this;
+            for(let item of $self.tableData){
+                if(data.id == item.id){
+                  item.status = data.status;
+                }
             }
         },
 
