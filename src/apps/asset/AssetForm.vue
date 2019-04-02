@@ -21,9 +21,10 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="申请日期" prop="applyDate">
-                            <el-date-picker style="width: 100%" v-model="formData.applyDate" type="date"></el-date-picker>
+                            <el-date-picker v-model="formData.applyDate" type="date"></el-date-picker>
                         </el-form-item>
                     </el-col>
+                    <el-row></el-row>
                     <el-col :span="8">
                         <el-form-item label="资产类型" prop="remark">
                             <el-select v-model="formData.assetsType" placeholder="请选择" filterable>
@@ -248,9 +249,9 @@ export default {
                 }
             } else {
                 if (params) {
-                    $self.msgTips($self, "提交失败", "warning");
+                    $self.msgTips("提交失败", "warning");
                 } else {
-                    $self.msgTips($self, "保存失败", "warning");
+                    $self.msgTips("保存失败", "warning");
                 }
             }
         },

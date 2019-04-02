@@ -11,7 +11,9 @@
         </div>
         <br />
         <div class="formContent">
-            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
+            </div>
             <br />
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
@@ -89,7 +91,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-               <el-row v-if="comments && comments.length > 0">
+                <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
                         <div class="items">
@@ -151,10 +153,10 @@ export default {
             users: [],
             actionsDialogArr: [],
             appFlowName: 'asset-form_asset',//固定资产流程 asset-form_fixedAsset  低值易耗办公品  asset-form_lowAsset 
-            formName:'asset_forms',
+            formName: 'asset_forms',
             comments: [],
             dialogVisibleCrumb: false,
-            flowNodeUrl:"",
+            flowNodeUrl: "",
 
             crumb: { items: [] },
             tabledata: {
@@ -182,9 +184,11 @@ export default {
     },
     methods: {
         getFormDetails(formId) {
+
             let $self = this;
             $self.formId = formId;
             $self.url = "/api/v1/asset_forms/" + $self.formId;
+            console.log('DetailUrl', $self.url)
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -300,6 +304,9 @@ export default {
   .crumbList {
     margin: 15px 0px;
   }
+}
+body .el-table th.gutter {
+  display: table-cell !important;
 }
 .fullScreen {
   position: fixed;

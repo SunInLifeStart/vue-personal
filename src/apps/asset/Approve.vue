@@ -14,6 +14,7 @@ export default {
     },
     props: ["formId"],
     mounted() {
+        console.log('APPROVE-----')
          this.$refs.AssetDetail.getFormDetails(this.formId);
     },
     components: {
