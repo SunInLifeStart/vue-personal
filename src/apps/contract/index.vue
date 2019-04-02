@@ -1,131 +1,190 @@
 <template>
-    <div id="Contract" class="main-container">
-        <div class="content-container">
-            <el-tabs v-model="activeName">
-                <!-- <el-tab-pane label="合同管理" name="first" v-if="this.htsq"> -->
-                <el-tab-pane label="合同管理" name="first">
-                    <el-card class="box-card">
-                        <ContractFilter @searchList="getSearchOptions"></ContractFilter>
-                        <div class="toolbar">
-                            <el-button type="primary" icon="el-icon-plus" @click="newForm">新建</el-button>
-                        </div>
-                        <ContractList ref="contractlist" @formId="getFormId" @editForm="editForm" :searchOptions="searchOptions"></ContractList>
-                    </el-card>
-                    <br>
-                    <el-card class="box-card">
-                        <ContractDetail :formId="formId" ref="ContractDetail" @refreshData="refreshData"></ContractDetail>
-                    </el-card>
-                </el-tab-pane>
-                <!-- <el-tab-pane label="统计查询" name="second" v-if="this.tjcx"> -->
-                <el-tab-pane label="统计查询" name="second">
-                    <ContractStatistics :formId="formId" @formId="getFormId"></ContractStatistics>
-                </el-tab-pane>
-            </el-tabs>
-        </div>
-        <el-dialog title="合同管理" :visible.sync="dialogFormVisible" max-width="1280px" width="70%" :close-on-click-modal="false">
-            <ContractForm ref="contractform" @refreshData="refreshData" @info="getInfo" :formId="dialogFormId" :operationType="operationType"></ContractForm>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="default" @click="saveForm">保存</el-button>
-                <el-button type="primary" @click="submitForm">提交</el-button>
+    <div id="Contract">
+        <el-card class="box-card">
+            <!-- 查询 -->
+            <div id="ContractFilter">
+                <el-form :inline="true" class="demo-form-inline">
+                    <el-row class="filterForm">
+                        <el-col :span="8">
+                            <el-form-item label="合同名称">
+                                <el-input placeholder="" v-model="params.contractName"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="合同对方">
+                                <el-input placeholder="" v-model="params.partyB"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="单据状态">
+                                <el-select v-model="params.status" style="width:100%" filterable placeholder="全部">
+                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <div>
+                                &nbsp;
+                            </div>
+                        </el-col>
+                        <el-col :span="16" class="">
+                            <el-form-item class="">
+                                <el-button type="primary" @click="searchList">查询</el-button>
+                                <el-button @click="resetInput">重置</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
             </div>
-        </el-dialog>
+
+            <!-- 新建 -->
+            <div class="toolbar">
+                <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
+            </div>
+            <div id="ContractList">
+                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
+                    <el-table-column prop="contractName" label="合同名称" min-width="260"></el-table-column>
+                    <el-table-column prop="partyB" label="合同对方" min-width="260"></el-table-column>
+                    <el-table-column prop="contractNum" label="合同编号" min-width="200"></el-table-column>
+                    <el-table-column prop="creatorName" label="制单人" min-width="120"></el-table-column>
+                    <el-table-column prop="status" label="单据状态" min-width="110"></el-table-column>
+                    <el-table-column label="操作" width="100">
+                        <template slot-scope="scope">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left">
+                                <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                                <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <br />
+                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+            </div>
+        </el-card>
+        <br>
+        <el-card class="box-card">
+            <ContractDetail :formId="formId" ref="ContractDetail" @reloadList="reloadList"></ContractDetail>
+            <!-- :formId="formId" -->
+        </el-card>
+        <ContractForm ref="ContractForm" @reloadList="reloadList"></ContractForm>
+        <!-- :formDataFromIndex="formDataFromIndex"  -->
     </div>
 </template>
 <script>
-import ContractForm from './ContractForm';
-import ContractFilter from './ContractFilter';
-import ContractList from './ContractList';
-import ContractDetail from './ContractDetail';
-import ContractStatistics from './ContractStatistics';
+import ContractForm from "./ContractForm";
+import ContractDetail from "./ContractDetail";
+import { publicMethods } from "../application.js";
+import { CONFIG } from '../data.js';
 export default {
-    name: 'Contract',
+    mixins: [publicMethods],
+    name: "Contract",
     data() {
         return {
-            dialogFormVisible: false,
-            searchOptions: [],
-            formId: '',
-            dialogFormId: '',
-            operationType: 'create',
-            activeName: 'first',
-            sstatus: '',
-            tabsManage: [],
-            htsq: false,
-            tjcx: false
+            tableData: [],
+            formDetails: {},
+            formId: "",
+            params: {
+                desc: true,
+                page: 1,
+                pageSize: 5,
+                department: "",
+                submitter: "",
+                total: 0,
+                orderBy: 'created',
+                desc: true,
+                options: []
+            },
+            formName: "trainingApplication",
+
+            statusAll: CONFIG['status'],//单据状态
         };
     },
-    mounted() {
-        this.tabsManage = this.$store.getters.getMenusByType('contract');
-        for (let item of this.tabsManage) {
-            if (item.code == 'htsq') {
-                this.htsq = true;
-            }
-            if (item.code == 'tjcx') {
-                this.tjcx = true;
-            }
-        }
-    },
-
     components: {
         ContractForm,
-        ContractFilter,
-        ContractList,
-        ContractDetail,
-        ContractStatistics
+        ContractDetail
     },
     methods: {
-        newForm() {
-            this.dialogFormVisible = true;
-            this.operationType = 'create';
-            if (this.$refs.contractform) {
-                this.$refs.contractform.clearForm();
-            }
-        },
-        getSearchOptions(searchOptions) {
-            this.searchOptions = searchOptions;
-        },
-        getInfo(info) {
-            this.sstatus = info;
-        },
-        getFormId(id) {
-            this.formId = id;
-        },
-        editForm(id) {
-            this.dialogFormId = id;
-            this.dialogFormVisible = true;
-            this.operationType = 'edit';
-        },
-        refreshData() {
-            this.$refs.contractlist.getList();
-            this.$refs.ContractDetail.getForm();
-            this.dialogFormVisible = false;
-        },
-        saveForm() {
-            this.$refs.contractform.saveForm1();
-            // if (this.sstatus == 'saveRuleSucceed') {
-            //     this.dialogFormVisible = false;
-            //     this.sstatus = '';
-            // }
-        },
-        submitForm() {
-            if (this.$refs.contractform.value != '') {
-                this.$refs.contractform.submitCheck();
+        //获取列表
+        async getList(pageNum) {
+            let $self = this;
+            ///api/v1/contract_forms/query
+            $self.url = "/api/v1/contract_forms/query";
+            let response = await $self.getQueryList();
+            if (response) {
+                if (response.data.forms.length > 0) {
+                    let formId = response.data.forms[0].id;
+                    $self.$refs.ContractDetail.getFormDetails(formId);
+                }
+                $self.tableData = response.data.forms;
+                $self.params.total = response.data.content.total;
             } else {
-                this.$message({
-                    message: '请选择谈判小组成员',
-                    type: 'warning'
-                });
+                $self.msgTips("获取列表失败", "warning");
             }
-            // if (this.sstatus == 'saveRuleSucceed') {
-            //     this.dialogFormVisible = false;
-            //     this.sstatus = '';
-            // }
         },
-        terminalForm() {
-            this.$refs.contractform.terminalForm();
-            this.dialogFormVisible = false;
+
+        //选择行
+        showCurrentId(row) {
+            this.$refs.ContractDetail.getFormDetails(row.id);
+        },
+
+        //新建
+        createNewForm() {
+            this.$refs.ContractForm.createForm();
+        },
+
+        //编辑
+        editForm(data) {
+            this.$refs.ContractForm.setDataFromParent(data);
+        },
+        reloadList(params) {
+            if (params == "reload") {
+                this.params.page = 1;
+                this.getList();
+            } else {
+                this.$refs.ContractDetail.getFormDetails(params.id);
+            }
+        },
+
+        //分页
+        currentChange(pageNum) {
+            this.params.page = pageNum;
+            this.getList(pageNum);
+        },
+        sizeChange(pageSize) {
+            this.params.pageSize = pageSize;
+            this.getList();
+        },
+        searchList() {
+            this.getList();
+        },
+        resetInput() {
+            this.params.submitter = this.params.department = "";
         }
+    },
+    mounted() {
+        this.getList();
     }
 };
 </script>
 <style lang="scss" scoped>
+#ContractFilter .el-form-item--small.el-form-item {
+  width: 100%;
+}
+#Contract {
+  .searchBtn {
+    padding-right: 10px;
+    .positionBtn {
+      text-align: right;
+    }
+  }
+}
 </style>
+<style scoped>
+#ContractFilter .filterForm >>> .el-form-item__content {
+  width: calc(100% - 80px);
+}
+</style>
+
