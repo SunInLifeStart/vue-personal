@@ -1,12 +1,12 @@
 <template>
   <div id="APPROVE">
-    <ContractDetail ref="ContractDetail"> </ContractDetail>
+    <LedgerDetail ref="LedgerDetail"> </LedgerDetail>
      <!-- :formId="formId" -->
   </div>
 </template>
 <script>
 import axios from "axios";
-import ContractDetail from "./ContractDetail";
+import LedgerDetail from "./LedgerDetail";
 export default {
     name: "APPROVE",
     data() {
@@ -14,10 +14,11 @@ export default {
     },
     props: ["formId"],
     mounted() {
-         this.$refs.ContractDetail.getFormDetails(this.formId);
+        console.log('APPROVE-----')
+         this.$refs.LedgerDetail.getFormDetails(this.formId);
     },
     components: {
-       ContractDetail
+       LedgerDetail
     },
     watch: {},
 
@@ -27,7 +28,7 @@ export default {
 <style lang="scss" scope>
 #APPROVE {
     height: 100%;
-    #ContractDetail {
+    #LedgerDetail {
         height: 100%;
         width: 100%;
         display: flex;

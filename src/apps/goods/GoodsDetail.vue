@@ -11,10 +11,15 @@
         </div>
         <br />
         <div class="formContent">
-            <!--  -->
+            <div>
+                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
+            </div>
+            <br />
+            <!-- 
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
+            -->
             <el-form :model='tableData' class="formList">
                 <el-row>
                     <el-col :span="24">
@@ -112,6 +117,11 @@
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                 </span>
             </el-dialog>
+            <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
+                <el-form>
+                    <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
+                </el-form>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -134,7 +144,10 @@ export default {
             users: [],
             actionsDialogArr: [],
             appFlowName: 'motor-receive_articles',
-            comments: []
+            formName: 'motor-receive',
+            comments: [],
+            dialogVisibleCrumb: false,
+            flowNodeUrl: ''
         };
     },
     components: {
@@ -157,13 +170,14 @@ export default {
                 $self.msgTips('获取表单失败', 'warning');
             }
             // debugger;
-            /** 
             let actions = await $self.getActions();
-            let crumbs = await $self.getCrumbs();
+            // let crumbs = await $self.getCrumbs();
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
-            $self.crumbs = { items: crumbs.data, index: -1 };
             $self.comments = comments.data;
+            /** 
+            $self.crumbs = { items: crumbs.data, index: -1 };
+           
             for (var i = 0; i < $self.crumbs.items.length; i++) {
                 if ($self.crumbs.items[i].active) {
                     $self.crumbs.index = i;

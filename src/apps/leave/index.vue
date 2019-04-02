@@ -200,26 +200,26 @@ export default {
             this.params.submitter = this.params.department = '';
         },
         fomatterStatus(row, column) {
-            let state;
-            //0已保存1审核中2驳回3撤销4完成
-            switch (row.status) {
-                case '00':
-                  state = "已保存";
-                  break;
-                case '01':
-                    state = "审核中";
-                    break;
-                case '02':
-                    state = "驳回";
-                    break;
-                case '03':
-                    state = "撤销";
-                    break;
-                case '04':
-                  state = "已完成";
-                  break;
-            }
-            return state;
+        //     let state;
+        //     //0已保存1审核中2驳回3撤销4完成
+        //     switch (row.status) {
+        //         case '00':
+        //           state = "已保存";
+        //           break;
+        //         case '01':
+        //             state = "审核中";
+        //             break;
+        //         case '02':
+        //             state = "驳回";
+        //             break;
+        //         case '03':
+        //             state = "撤销";
+        //             break;
+        //         case '04':
+        //           state = "已完成";
+        //           break;
+        //     }
+        //     return state;
         },
     },
     mounted() {

@@ -1,698 +1,397 @@
 <template>
-    <div id="ContractForm">
-        <div class="hehe" style="margin-bottom:10px">
-            <h2>注意</h2>
-            <ol>
-                <li>合同提交审批前请与相关部门充分沟通，达成一致意见。</li>
-                <li>注意上传合同应为各方沟通确认的最终版本。</li>
-                <li>合同签署完毕后应尽快将纸质合同归档至风险管理部。</li>
-            </ol>
+    <el-dialog title="签订审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+        <div id="ContractForm">
+            <el-form :model="formData" label-width="100px" :rules="rules" ref="formupdate">
+                <!-- <el-row style="margin-bottom:10px">
+                    <el-col :span="7">
+                        <el-form-item label="流水号：">
+                            {{formData.numericalOrder}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label='会议结果：' :required="true" label-width="110px" v-show="this.formData.type == '国内差旅报销(对公)'">
+                            <el-select v-model="formData.travelId" filterable placeholder="选择出差申请单" allow-create @change="travelChange" v-show="this.formData.type == '国内差旅报销(对公)'">
+                                <el-option v-for="item in travelSelections" :key="item.id" :label="item.number" :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.type == '国内差旅报销(对公)'">
+                                <el-button type="text" style="margin-left: 5px;" icon="el-icon-view" @click="travelDetail" :disabled="this.formData.tra!='true'"></el-button>
+                            </el-tooltip>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="9">
+                        <el-form-item label='呈报件：' :required="true" label-width="110px">
+                            <el-select style="min-width:240px" v-model="submission" filterable placeholder="选择呈报件" allow-create @change="SubmissionChange">
+                                <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right">
+                                <el-button type="text" style="margin-left: 20px;" icon="el-icon-view" @click="submissionDetail" :disabled="this.formData.sub!='true'"></el-button>
+                            </el-tooltip>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购方案：" :required="true" label-width="140px" v-show="this.formData.type == '国际差旅报销(对公)'">
+                            <el-select v-model="formData.ranks" placeholder="选择最高职权" @change="hignleaderChange">
+                                <el-option v-for="item in hignLeaderSelections" :key="item.index" :label="item" :value="item">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row> -->
+                <table style="width: 99%; height: 100%;margin-top: 5px; table-layout: fixed; word-break: break-all;">
+                    <col style="width: 9%" />
+                    <col style="width: 11%" />
+                    <col style="width: 11%" />
+                    <col style="width: 10%" />
+                    <col style="width: 10%" />
+                    <col style="width: 10%" />
+                    <col style="width: 11%" />
+                    <col style="width: 10%" />
+                    <tr>
+                        <td colspan="8" style="font-weight:bold">
+                            基本信息
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            提单人
+                        </td>
+                        <td>
+                            <el-input v-model="formData.applicantName" disabled></el-input>
+                        </td>
+                        <td>
+                            所属部门
+                        </td>
+                        <td colspan="2">
+                            <el-input v-model="formData.organ" disabled></el-input>
+                        </td>
+                        <td>
+                            发起时间
+                        </td>
+                        <td colspan="2">
+                            <el-date-picker v-model="formData.applicantTime" type="datetime" placeholder="选择日期" style="width:100%">
+                            </el-date-picker>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" style="font-weight:bold">
+                            合同信息
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同名称
+                        </td>
+                        <td colspan="3">
+                            <el-input v-model="formData.applicantName"></el-input>
+                        </td>
+                        <td>
+                            所属项目
+                        </td>
+                        <td colspan="2">
+                            <el-input v-model="formData.organ"></el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            甲方
+                        </td>
+                        <td colspan="6">
+                            <el-input v-model="formData.applicantName"></el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            乙方
+                        </td>
+                        <td colspan="6">
+                            <el-input v-model="formData.applicantName"></el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            其他方
+                        </td>
+                        <td colspan="6">
+                            <el-input v-model="formData.applicantName"></el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同附件
+                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                        </td>
+                        <td colspan="6">
+                            <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
+                                <p :title="item.name">{{item.name}}</p>
+                                <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同金额
+                        </td>
+                        <td colspan="6">
+                            <el-row>
+                                <el-col :span="14">
+                                    <el-radio v-model="radio" label="1">
+                                        <el-input v-model="formData.applicantName" style="width: 110px"></el-input>
+                                        元</el-radio>
+                                    <el-radio v-model="radio" label="2">其他 成本上线总额
+                                        <el-input v-model="formData.applicantName" style="width: 110px"></el-input>
+                                        元</el-radio>
+                                </el-col>
+                                <el-col :span="10" style="margin-top:8px">
+                                    <el-radio v-model="radio" label="1">预算内</el-radio>
+                                    <el-radio v-model="radio" label="2">预算外</el-radio>
+                                </el-col>
+                            </el-row>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            经办人
+                        </td>
+                        <td colspan="2">
+                            <el-input v-model="formData.applicantName"></el-input>
+                        </td>
+                        <td>
+                            合同期限
+                        </td>
+                        <td colspan="3">
+                            <el-radio v-model="radio" label="1">自
+                                <el-input v-model="formData.applicantName" style="width: 110px"></el-input>
+                                至
+                                <el-input v-model="formData.applicantName" style="width: 110px"></el-input>
+                            </el-radio>
+                            <el-radio v-model="radio" label="2">其他</el-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" rowspan="2">
+                            复审材料
+                        </td>
+                        <td colspan="2">
+                            合同所涉经济行为批准文件
+                        </td>
+                        <td colspan="4">
+                            <el-radio v-model="radio" label="1">股东大会</el-radio>
+                            <el-radio v-model="radio" label="2">董事会决议</el-radio>
+                            <el-radio v-model="radio" label="3">会议纪要</el-radio>
+                            <el-radio v-model="radio" label="4">请示批件</el-radio>
+                            <el-radio v-model="radio" label="5">其他</el-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同相对方资质证照复印件
+                        </td>
+                        <td colspan="4">
+                            <el-radio v-model="radio" label="1">有</el-radio>
+                            <el-radio v-model="radio" label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
+                            <el-radio v-model="radio" label="3">其他</el-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同价格形势
+                        </td>
+                        <td colspan="6">
+                            <el-radio v-model="radio" label="1">固定总价</el-radio>
+                            <el-radio v-model="radio" label="2">固定总和单价</el-radio>
+                            <el-radio v-model="radio" label="3">其他</el-radio>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同付款安排
+                        </td>
+                        <td colspan="6">
+                            <el-input v-model="formData.applicantName"></el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同内容摘要
+                        </td>
+                        <td colspan="6">
+                            <el-row>
+                                <el-col :span="14">
+                                    <div style="float:left">
+                                        谈判小组成员（不同部门2人或以上）签字：
+                                    </div>
+                                </el-col>
+                                <el-col :span="10">
+                                    年 月 日
+                                </el-col>
+                            </el-row>
+                        </td>
+                    </tr>
+                </table>
+            </el-form>
         </div>
-        <el-form ref="ruleForm" :model="selectItem" label-width="125px" :rules="rules">
-            <el-row>
-                <el-col :span="8">
-                    <el-form-item label="合同类型" prop="contractType">
-                        <el-select v-model="selectItem.contractType" @change="getContractNum()" disabled>
-                            <el-option v-for="item in contractTypes" :key="item.id" :label="item.name" :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="合同编号" prop="contractNum">
-                        <el-input v-model="selectItem.contractNum" disabled></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="合同名称" prop="contractName">
-                        <el-input v-model="selectItem.contractName"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="8">
-                    <el-form-item label="甲方" prop="partyA">
-                        <el-input v-model="selectItem.partyA"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="乙方" prop="partyB">
-                        <el-input v-model="selectItem.partyB"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="其他方" prop="otherParty">
-                        <el-input v-model="selectItem.otherParty"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="合同金额" prop="contractAmount">
-                        <el-input v-model="selectItem.contractAmount" v-if="selectItem.type=='2'"></el-input>
-                        <el-input v-model.number="selectItem.contractAmount" type='number' @mousewheel.native.prevent v-else>
-                            <template slot="append">元</template>
-                        </el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8" style="margin-left:20px; margin-top:8px">
-                    <el-radio v-model="selectItem.type" :label="1">有金额</el-radio>
-                    <el-radio v-model="selectItem.type" :label="2">无金额</el-radio>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="16">
-                    <el-form-item class="hetong" label="合同期限" prop="created" style=" width: 50%; float: left;">
-                        <el-input v-model="selectItem.effectiveStart" style="margin-right: 5px;"></el-input>
-                        <!-- <el-input style="width: 305px;" prop="created1" v-model="selectItem.effectiveEnd"></el-input> -->
-                    </el-form-item>
-                    <span style="float: left;line-height: 40px; margin: 0 8px 0 6px;">至</span>
-                    <el-form-item label="" prop="created1" label-width="0" style=" width: 40%; float: left;">
-                        <!-- <el-input v-model="selectItem.effectiveStart" style="width: 305px;margin-right: 5px;" prop="created"></el-input>至 -->
-                        <el-input v-model="selectItem.effectiveEnd"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="是否历史合同">
-                        <el-select v-model="selectItem.historyContract" placeholder="请选择">
-                            <el-option label="是" value="是"></el-option>
-                            <el-option label="否" value="否"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="历史合同已付金额">
-                        <el-input v-model="selectItem.historyContractAmount"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="经办人">
-                        <el-input v-model="selectItem.manager" disabled></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="合同谈判情况" prop="contractNegotiation">
-                        <!-- <el-input v-model="selectItem.contractNegotiation"></el-input> -->
-                        <el-input type="textarea" :autosize="{minRows: 2}" v-model="selectItem.contractNegotiation"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="合同内容摘要" prop="contentAbstract">
-                        <!-- <el-input v-model="selectItem.contentAbstract"></el-input> -->
-                        <el-input type="textarea" :autosize="{minRows: 2}" v-model="selectItem.contentAbstract"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="正文">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" @click.native="attType = 'attType0'" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                        <div v-for="item in selectItem.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType0'">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
-                        </div>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" @click.native="attType = 'attType1'" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                        <div v-for="item in selectItem.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
-                        </div>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="24">
-                    <el-form-item label="附审资料">
-                        <table style="width: 100%;  word-break: break-all;">
-                            <col style="width: 100%" />
-                            <!-- <col style="width: 84%"  table-layout: fixed;/> -->
-                            <tr>
-                                <!-- <td rowspan="2">附审资料</td> -->
-                                <td>
-                                    <el-form-item label="合同所涉经济行为批准文件" label-width="220px">
-                                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" @click.native="attType = 'attType2'" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                                            <i class="el-icon-plus"></i>
-                                        </el-upload>
-                                        <div v-for="item in selectItem.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
-                                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
-                                        </div>
-                                    </el-form-item>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <el-form-item label="合同相对方资质证照复印件" label-width="220px">
-                                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" @click.native="attType = 'attType3'" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                                            <i class="el-icon-plus"></i>
-                                        </el-upload>
-                                        <div v-for="item in selectItem.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType3'">
-                                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
-                                        </div>
-                                    </el-form-item>
-                                </td>
-                            </tr>
-                        </table>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="default" @click="saveFormValidate()">保存</el-button>
+            <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+        </div>
+    </el-dialog>
 
-            <el-row>
-                <el-col :span="24" style="text-align: right;">
-                    <el-form-item>
-                        谈判小组成员
-                        <el-select v-model="value" filterable placeholder="请选择">
-                            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
-    </div>
 </template>
-
 <script>
 /* eslint-disable */
-import axios from 'axios';
-import moment from 'moment';
+import moment from "moment";
+import FilesOperate from "../FilesOperate";
+import { application } from "../application.js";
+import { publicMethods } from "../application.js";
 import cookies from 'js-cookie';
-import FilesOperate from '../FilesOperate';
 export default {
-    name: 'ContractForm',
+    mixins: [publicMethods],
+    name: "ContractForm",
     data() {
         return {
-            attType: '',
-            info: '',
-            selectItem: {
-                creatorId: cookies.get('uid'),
-                creatorName: cookies.get('uname'),
-                organId: cookies.get('oid'),
-                organName: cookies.get('oname'),
-                contractNum: '',
-                historyContract: '',
-                effectiveStart: '',
-                effectiveEnd: '',
-                attachments: [],
-                type: 1
-            },
-            contractNum1: '',
-            created: [],
-            tabledata: [],
-            contractTypes: [
-                {
-                    id: '投',
-                    name: '投资类'
-                },
-                {
-                    id: '采',
-                    name: '采购类'
-                },
-                {
-                    id: '售',
-                    name: '销售类'
-                },
-                {
-                    id: '服',
-                    name: '服务咨询类'
-                },
-                {
-                    id: '金',
-                    name: '金融类'
-                },
-                {
-                    id: '建',
-                    name: '建设类'
-                },
-                {
-                    id: '物',
-                    name: '物业类'
-                },
-                {
-                    id: '合',
-                    name: '其他类'
-                },
-                {
-                    id: '人',
-                    name: '人力资源类'
-                },
-                {
-                    id: '密',
-                    name: '保密类'
-                }
-            ],
-            currentFormId: this.operationType == 'create' ? '' : this.formId,
-            options: [],
-            value: '',
+            radio: '',
+            dialogFormVisible: false,
+            formData: this.resetForm(),
+            users: [],
+            appFlowName: "motor-trainingapplication_train",
             rules: {
-                contractName: [
+                submitter: [
                     {
-                        required: true,
-                        message: '请输入合同名称',
-                        trigger: 'blur'
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入申请人"
                     }
                 ],
-                partyA: [
+                department: [
                     {
-                        required: true,
-                        message: '请输入甲方信息',
-                        trigger: 'blur'
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入所属部门"
                     }
                 ],
-                partyB: [
+                isAnnualPlan: [
                     {
-                        required: true,
-                        message: '请输入乙方信息',
-                        trigger: 'blur'
+                        required: false, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "年度计划"
                     }
                 ],
 
-                contractAmount: [
+                committed: [
                     {
-                        required: true,
-                        message: '请输入合同金额',
-                        trigger: 'blur'
+                        required: false, //是否必填
+                        message: "请选择提单时间",
+                        trigger: "blur"
                     }
                 ],
-                contractNegotiation: [
+                trainingPrograms: [
                     {
-                        required: true,
-                        message: '请输入谈判情况',
-                        trigger: 'blur'
+                        required: false, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入培训/学习(项目)"
                     }
                 ],
-                // created: [
-                //     {
-                //         required: true,
-                //         message: '请输入合同开始日期',
-                //         trigger: 'blur'
-                //     }
-                // ],
-                // created1: [
-                //     {
-                //         required: true,
-                //         message: '请输入合同结束日期',
-                //         trigger: 'blur'
-                //     }
-                // ],
-                contentAbstract: [
+                trainingContent: [
                     {
-                        required: true,
-                        message: '请输入合同摘要',
-                        trigger: 'blur'
+                        required: false, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入培训/学习(目的内容)"
+                    }
+                ],
+                participant: [
+                    {
+                        required: false, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入培训/学习(参加人员)"
+                    }
+                ],
+                schedule: [
+                    {
+                        required: false, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入日程安排"
+                    }
+                ],
+                consts: [
+                    {
+                        required: false, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入费用预算"
+                    }
+                ],
+                processId: [
+                    {
+                        required: false, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入是否资金计划内"
+                    }
+                ],
+                suggestion: [
+                    {
+                        required: false, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入审批意见"
+                    }
+                ],
+                draftTime: [
+                    {
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请选择培训时间"
+                    }
+                ],
+                writer: [
+                    {
+                        required: true, //是否必填
+                        trigger: "change", //何事件触发
+                        message: "请选择记录人"
                     }
                 ]
             }
         };
     },
+    watch: {
+        'formData.lowercase'(val) {
+            this.formData.upper = val ? this.convertCurrency(val) : "";
+        }
+    },
     components: {
         FilesOperate
     },
-    props: ['formId', 'operationType'],
-    mounted() {
-        const self = this;
-        if (this.operationType == 'edit') {
-            this.getForm();
-        }
-        const cookieItems = document.cookie.split(';');
-        cookieItems.forEach(function (item) {
-            if (item.indexOf('uname') > 0) {
-                self.selectItem.manager = decodeURIComponent(
-                    item.split('=')[1]
-                );
-                self.cookie_uname = decodeURIComponent(item.split('=')[1]);
-            }
-            if (item.indexOf('oname') > 0) {
-                self.selectItem.organName = decodeURIComponent(
-                    item.split('=')[1]
-                );
-                self.cookie_oname = decodeURIComponent(item.split('=')[1]);
-            }
-        });
-        this.getUser();
-    },
-    watch: {
-        formId: function () {
-            this.getForm();
-        },
-        operationType: function () {
-            if (this.operationType == 'create') {
-                this.clearForm();
-            }
-            if (this.operationType == 'edit') {
-                this.getForm();
-            }
-        }
-    },
     methods: {
-        clearForm() {
-            this.selectItem = {
-                manager: cookies.get('uname'),
-                creatorId: cookies.get('uid'),
-                creatorName: cookies.get('uname'),
-                organId: cookies.get('oid'),
-                organName: cookies.get('oname'),
-                contractNum: '',
-                historyContract: '',
-                effectiveStart: '',
-                effectiveEnd: '',
-                attachments: [],
-                type: 1
-            };
-            this.created = [''];
-            this.value = '';
-            this.currentFormId = '';
-        },
-        getUser() {
+                //删除附件
+        deleteAttachment(id) {
             const self = this;
-            axios
-                .get('/api/v1/users')
-                .then(res => {
-                    self.options = res.data;
-                })
-                .catch(function () {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-
-        getContractNum() {
-            const self = this;
-            const year = moment()
-                .utc()
-                .format('YYYY');
-            const type = self.selectItem.contractType;
-            const dept = this.getDept(this.cookie_oname);
-            axios
-                .get(
-                    '/api/v1/contract_forms/contractNum/year/' + year + '?type=' + type + '&dept=' + dept
-                )
-                .then(res => {
-                    self.contractNum1 = res.data;
-                    self.selectItem.contractNum = self.contractNum1;
-                })
-                .catch(function () {
-                    self.$message({
-                        message: '合同编号获取失败',
-                        type: 'error'
-                    });
-                });
-        },
-        getDept(oname) {
-            switch (oname) {
-                case '区域合作部':
-                    return (oname = 'QY');
-                    break;
-                case '集团办公室':
-                    return (oname = 'B');
-                    break;
-                case '宣传部':
-                    return (oname = 'X');
-                    break;
-                case '资金财务部':
-                    return (oname = 'C');
-                    break;
-                case '风险管理部':
-                    return (oname = 'F');
-                    break;
-                case '产业投资部':
-                    return (oname = 'T');
-                    break;
-                case '科技园区事业部':
-                    return (oname = 'Y');
-                    break;
-                case '科技金融事业部':
-                    return (oname = 'JR');
-                    break;
-                case '资本运营部':
-                    return (oname = 'J');
-                    break;
-                case '战略管理部':
-                    return (oname = 'G');
-                    break;
-                case '纪检监察部':
-                    return (oname = 'JC');
-                    break;
-                case '海外业务部':
-                    return (oname = 'H');
-                    break;
-                case '人力资源部':
-                    return (oname = 'R');
-                    break;
-                case '党群工作部':
-                    return (oname = 'Q');
-                    break;
-                case '董事会办公室':
-                    return (oname = 'D');
-                    break;
-                default:
-                    return (oname = 'QT');
-            }
-        },
-        getForm() {
-            const self = this;
-            if (this.formId != '') {
-                axios
-                    .get('/api/v1/contract_forms/' + this.formId)
-                    .then(res => {
-                        self.selectItem = res.data;
-                        self.value = self.selectItem.tpxzName;
-                        // console.log(res.data)
-                        // self.created = [];
-                        // self.created.push(self.selectItem. effectiveStart);
-                        // self.created.push(self.selectItem.effectiveEnd);
-                    })
-                    .catch(function () {
-                        self.$message({
-                            message: '详细信息查询失败',
-                            type: 'error'
-                        });
-                    });
-            }
-        },
-        saveForm1(action) {
-            // if (this.selectItem.type == '2') {
-            //     this.selectItem.contractAmount = '0';
-            // }
-            this.$refs['ruleForm'].validate(valid => {
-                if (valid) {
-                    this.saveForm(action);
-                } else {
-                    this.$message({
-                        message: '必输项不能为空',
-                        type: 'warning'
-                    });
-                }
-            });
-        },
-        saveForm(action) {
-            const self = this;
-            for (let item of this.options) {
-                if (this.value == item.id) {
-                    this.selectItem.tpxzName = item.name;
-                }
-            }
-            axios
-                .post('/api/v1/contract_forms/save', this.selectItem)
-                .then(res => {
-                    self.currentFormId = res.data.id;
-                    if (action == 'save') {
-                        self.submitForm();
-                    } else {
-                        self.$emit('refreshData');
-                        self.$message({
-                            message: '保存成功',
-                            type: 'success'
-                        });
-                    }
-                })
-                .catch(function () {
-                    self.$message({
-                        message: '保存操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        terminalForm() {
-            const self = this;
-            axios
-                .put('/api/v1/contracts/' + this.formId + '/terminal', {
-                    headers: {
-                        'Content-type': 'application/json'
-                    }
-                })
-                .then(res => { })
-                .catch(function () {
-                    self.$message({
-                        message: '终结操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        submitCheck() {
-            this.saveForm1('save');
-        },
-        submitForm() {
-            const self = this;
-            if (this.value != '') {
-                axios
-                    .post(
-                        '/api/v1/contracts/' + this.currentFormId + '/create',
-                        '',
-                        {
-                            headers: {
-                                'Content-type': 'application/json'
-                            }
-                        }
-                    )
-                    .then(res => {
-                        if (res.data.id != '') {
-                            self.commitForm(res.data.id);
-                        }
-                    })
-                    .catch(function () {
-                        self.$message({
-                            message: '提交操作失败',
-                            type: 'error'
-                        });
-                    });
-            } else {
-                alert('请选择谈判小组成员');
-            }
-        },
-        commitForm(processId) {
-            const self = this;
-            axios
-                .put(
-                    '/api/v1/contract_forms/' +
-                    this.currentFormId +
-                    '/commit/' +
-                    processId,
-                    '',
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    self.startProcess();
-                })
-                .catch(function () {
-                    self.$message({
-                        message: '提交操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        startProcess() {
-            const self = this;
-            const params = {
-                action: 'COMMIT',
-                assignees: [self.value]
-            };
-            axios
-                .put(
-                    '/api/v1/contracts/' + this.currentFormId + '/signal',
-                    JSON.stringify(params),
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    self.comment();
-                    self.$emit('refreshData');
-                    this.info = 'saveRuleSucceed';
-                    this.$emit('info', this.info);
-                    self.$message({
-                        message: '提交成功',
-                        type: 'success'
-                    });
-                })
-                .catch(function () {
-                    self.$message({
-                        message: 'startProcess操作失败',
-                        type: 'error'
-                    });
-                });
-        },
-        handleSuccess(response, file) {
-            for (let item of response) {
-                console.log(item);
-                this.selectItem.attachments.push({
-                    iconUrl: item.iconUrl,
-                    id: item.id,
-                    name: item.name,
-                    organId: item.organId,
-                    organName: item.organName,
-                    size: item.size,
-                    type: item.type,
-                    uid: item.uid,
-                    uname: item.uname,
-                    url: item.url,
-                    attType: this.attType
-                });
-            }
-        },
-        downloadFile(item) {
-            //window.open(url, '_blank');
-            this.common.preview(item);
-        },
-        handlePreview() { },
-        handleRemove() { },
-        submitUpload() {
-            this.$refs.upload.submit();
-        },
-        deleteItem(index) {
-            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                this.tableData.splice(index, 1);
-            });
-        },
-        comment(comment) {
-            let self = this;
-            axios
-                .put(`/api/v1/contract_forms/${self.currentFormId}/comment`, {
-                    content: '提交',
-                    action: 'COMMIT',
-                    node: '提交'
-                })
-                .then(res => { });
-        },
-        getId(id) {
-            const self = this;
-            if (this.selectItem.attachments.length > 0) {
+            if (this.formData.attachments.length > 0) {
                 this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
                     () => {
                         const params = {
                             id: id
                         };
                         axios
-                            .get(
-                                '/api/v1/contract_forms/deleteAttachment/' + id,
-                                {
-                                    headers: {
-                                        'Content-type': 'application/json'
-                                    }
+                            .get('/api/v1/payment_forms/deleteAtt/' + id, '', {
+                                headers: {
+                                    'Content-type': 'application/json'
                                 }
-                            )
+                            })
                             .then(res => {
-                                self.selectItem.attachments.forEach(function (
+                                self.formData.attachments.forEach(function(
                                     item,
                                     index
                                 ) {
                                     if (item.id == id) {
-                                        self.selectItem.attachments.splice(
+                                        self.formData.attachments.splice(
                                             index,
                                             1
                                         );
                                     }
                                 });
                             })
-                            .catch(function () {
+                            .catch(function() {
                                 self.$message({
                                     message: '操作失败',
                                     type: 'error'
@@ -701,24 +400,106 @@ export default {
                     }
                 );
             }
-        }
-    }
+        },
+        setDataFromParent(data) {
+            this.formData = data;
+            this.formId = data.id;
+            this.dialogFormVisible = true;
+            this.createForm_status = false;
+        },
+        createForm() {
+            this.formData = this.resetForm();
+            this.dialogFormVisible = this.createForm_status = true;
+        },
+        resetForm() {
+            let formData = {
+                applicantTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
+
+                manager: cookies.get('uname'),
+                creatorId: cookies.get('uid'),
+                creatorName: cookies.get('uname'),
+                organId: cookies.get('oid'),
+                organ: cookies.get('oname'),
+                contractNum: '',
+                historyContract: '',
+                effectiveStart: '',
+                effectiveEnd: '',
+                attachments: [],
+                type: 1
+            };
+            return formData;
+        },
+        saveFormValidate(type) {
+            this.$refs["formupdate"].validate(valid => {
+                if (valid) {
+                    this.saveForm(type);
+                }
+            });
+        },
+        // 提交保存
+        async saveForm(params) {
+            const $self = this;
+            let response = await $self.saveFormData(
+                "/api/v1/trainingApplication/save",
+                $self.formData
+            );
+            if (response) {
+                $self.formId = response.data.content.id;
+                $self.dialogFormVisible = false;
+                if (params) {
+                    $self.msgTips("提交成功", "success");
+                    if (this.createForm_status) {
+                        $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
+                    } else {
+                        let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
+                        actions.data.types = actions.data.types.filter(
+                            function (item) {
+                                return item.action == "COMMIT";
+                            }
+                        );
+                        await $self.startSignal(actions.data.types[0]);
+                        $self.emitMessage();
+                    }
+                } else {
+                    $self.msgTips("保存成功", "success");
+                    if (this.createForm_status) {
+                        $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
+                    } else {
+                        $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
+                    }
+                }
+            } else {
+                if (params) {
+                    $self.msgTips($self, "提交失败", "warning");
+                } else {
+                    $self.msgTips($self, "保存失败", "warning");
+                }
+            }
+        },
+        handleSuccess(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function (item) {
+                    self.formData.attachments.push(item);
+                });
+            }
+            this.$refs.upload.clearFiles();
+        },
+        submitUpload() {
+            this.$refs.upload.submit();
+        },
+        handlePreview() { },
+        handleRemove() { }
+    },
+    mounted() { }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 #ContractForm {
-  input::-webkit-outer-spin-button,
-  input::-webkit-inner-spin-button {
-    -webkit-appearance: none !important;
-    margin: 0;
-  }
-  input[type='number'] {
-    -moz-appearance: textfield;
-  }
   .uploadBtn {
     margin-right: 10px;
     width: 100px;
-    height: 120px;
+    height: 130px;
     text-align: center;
     float: left;
     border: 1px solid #c0c4cc;
@@ -735,24 +516,38 @@ export default {
       }
     }
   }
+  table {
+    border-collapse: collapse;
+    margin: 0 auto;
+    text-align: center;
+    width: 100%;
+  }
+  table td,
+  table th {
+    border: 1px solid #000;
+    color: #666;
+    height: 40px;
+    vertical-align: middle;
+  }
+  table thead th {
+    background-color: #cce8eb;
+  }
 
+  .upload {
+    position: relative;
+    margin-right: 30px;
+    // width: 100px;
+    display: inline-block;
+    cursor: pointer;
+  }
   .attachments {
     position: relative;
-    margin-bottom: 40px;
-    margin-right: 10px;
-    width: 100px;
-    height: 120px;
-    text-align: center;
+    // margin-bottom: 40px;
+    margin-right: 30px;
+    width: 200px;
+    // height: 120px;
     display: inline-block;
-    border: 1px solid #c0c4cc;
-
-    border-radius: 2px;
     cursor: pointer;
-    img {
-      width: 100px;
-      height: 120px;
-    }
-
     p {
       margin: 0;
       line-height: 20px;
@@ -760,6 +555,7 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      margin-right: 20px;
     }
 
     i {
@@ -772,37 +568,16 @@ export default {
       }
     }
   }
-  .hehe {
-    color: red;
-    padding-left: 65px;
-    li {
-      font-size: 17px;
-    }
-  }
-  table {
-    border-collapse: collapse;
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
-  }
-  table td,
-  table th {
-    border: 1px solid #dcdfe6;
-    color: #000;
-    height: 40px;
-    vertical-align: middle;
-  }
-  table thead th {
-    background-color: #cce8eb;
-  }
+
   table tr:nth-child(odd) {
     background: #fff;
   }
   table tr:nth-child(even) {
     background: #fff;
   }
-  .el-form-item .el-form-item .el-form-item__label {
-    line-height: 120px;
+  input[type='number']::-webkit-inner-spin-button,
+  input[type='number']::-webkit-outer-spin-button {
+    -webkit-appearance: none;
   }
 }
 </style>
