@@ -19,50 +19,58 @@
             <el-form :model='tableData' class="formList">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="申请人：">{{tableData.submitter}}
+                        <el-form-item label="印章种类：">{{tableData.useItems}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属部门：">{{tableData.department}}
+                        <el-form-item label="申请人：">{{tableData.creatorName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提单时间：">{{tableData.committed}}
+                        <el-form-item label="领用时间：">{{tableData.recipientsTime}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="培训/学习(项目)：">{{tableData.trainingPrograms}}
+                        <el-form-item label="使用事由：">{{tableData.useReason}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="培训时间：">{{tableData.draftTime}}
+                        <el-form-item label="用印文件名称：">{{tableData.fileName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="电话：">{{tableData.phone}}
+                        <el-form-item label="陪同人：">{{tableData.accompanyingPerson}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="结束时间：">{{tableData.endTime}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="申请时间：">{{tableData.created}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="申请部门：">{{tableData.organName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="培训/学习(目的内容)：">{{tableData.trainingContent}}
+                        <el-form-item label="用印份数：">{{tableData.fileNum}}
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <!-- <el-row>
                     <el-col :span="24">
-                        <el-form-item label="培训/学习(参加人员)：">{{tableData.participant}}
+                        <el-form-item label="日程安排：">{{tableData.fileNum}}
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="日程安排：">{{tableData.schedule}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
+                </el-row> -->
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
@@ -133,7 +141,7 @@ export default {
             users: [],
             actionsDialogArr: [],
             appFlowName:'motor-trainingapplication_train',
-            formName:'trainingApplication',
+            formName:'singApproval',
             comments:[],
             dialogVisibleCrumb:false,
             flowNodeUrl:"",

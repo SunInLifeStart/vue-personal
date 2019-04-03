@@ -66,7 +66,9 @@ module.exports = {
     devServer: {
         port: 8889,
         proxy: {
-
+            "/api/v1/singApproval/": {
+                target: "http://192.168.1.110:8754"
+            },
             "/api/": {
                 target: "http://116.117.157.232"
             },
