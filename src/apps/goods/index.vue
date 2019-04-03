@@ -11,7 +11,7 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="所属部门">
-                                <el-input placeholder="请输入所属部门" v-model="params.organName"></el-input>
+                                <el-input placeholder="请输入所属部门" v-model="params.dept"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -87,7 +87,7 @@ export default {
                 pageNum: 1,
                 pageSize: 5,
                 applyUser: '',
-                // organName: '',
+                dept: '',
                 total: 0
             },
             formName: 'motor-receive'
@@ -150,12 +150,12 @@ export default {
             }
         },
         reloadList(params) {
-            // if (params == 'reload') {
-            this.params.pageNum = 1;
-            this.getList();
-            // } else {
-            //    this.$refs.GoodsDetail.getFormDetails(params.id);
-            // }
+            if (params == 'reload') {
+                this.params.pageNum = 1;
+                this.getList();
+            } else {
+                this.$refs.GoodsDetail.getFormDetails(params.id);
+            }
         },
 
         //分页
@@ -171,7 +171,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.applyUser = '';
+            this.params.applyUser = this.params.dept = '';
             this.params.pageNum = 1;
             this.getList();
         }
