@@ -266,7 +266,7 @@ export default {
                 // comments: [],
                 idea: '',
                 business: '',
-                committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+                committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 applyDepartment: this.$store.getters.LoginData.oname || '',
                 timeApplication: '',
                 topicName: '',

@@ -216,24 +216,12 @@
                     branchlineTo: [
                         { required: true, message: '请输入会议类型', trigger: 'blur' }
                     ],
-                    // creatorName: [
-                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    // ],
-                    // organName: [
-                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    // ],
                     committed: [
                         { required: true, message: '请输入提单时间', trigger: 'blur' }
                     ],
-                    // meetingPlace: [
-                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    // ],
                     meetingTime: [
                         { required: true, message: '请输入开会时间', trigger: 'blur' }
                     ]
-                    // conferenceTitle: [
-                    //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                    // ]
                 },
                 personOptions: [],
                 formData: this.resetForm(),
@@ -322,7 +310,7 @@
                     created: '',
                     sendMessage: [],
                     idea: '',
-                    committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
+                    committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                     meetingPlace: '',
                     meetingTime: '',
                     conferenceTitle: '',
