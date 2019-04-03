@@ -1,7 +1,7 @@
 <template>
     <el-dialog title="资产管理" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
         <div id="AssetForm">
-            <el-form ref="formupdate" :model="formData" label-width="110px">
+            <el-form ref="formupdate" :model="formData" :rules="rules" label-width="110px">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人" prop="proposer">
@@ -24,13 +24,25 @@
                             <el-date-picker v-model="formData.applyDate" type="date"></el-date-picker>
                         </el-form-item>
                     </el-col>
-                    <el-row></el-row>
+                    <!-- <el-row></el-row> -->
                     <el-col :span="8">
-                        <el-form-item label="资产类型" prop="remark">
-                            <el-select v-model="formData.assetsType" placeholder="请选择" filterable>
+                        <el-form-item label="资产类型" prop="assetsType">
+                            <el-select v-model="formData.assetsType" placeholder="请选择" filterable @change="typeChange">
                                 <el-option v-for="item in assetTypes" :key="item.id" :label="item.name" :value="item.name">
                                 </el-option>
                             </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="是否月度资金计划内" prop="plan" label-width="140px">
+                            <el-radio v-model="formData.plan" :label="true">是</el-radio>
+                            <el-radio v-model="formData.plan" :label="false">否</el-radio>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="是否年度预算内" prop="budget">
+                            <el-radio v-model="formData.budget" :label="true">是</el-radio>
+                            <el-radio v-model="formData.budget" :label="false">否</el-radio>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
@@ -163,6 +175,36 @@ export default {
             selectionItems: [],
             currentFormId: this.operationType == 'create' ? '' : this.formId,
             // createForm_status: false,
+            rules: {
+                proposer: [
+                    {
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入申请人"
+                    }
+                ],
+                applyDept: [
+                    {
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入申请部门"
+                    }
+                ],
+                applyDate: [
+                    {
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入申请日期"
+                    }
+                ],
+                assetsType: [
+                    {
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入资产类型"
+                    }
+                ],
+            }
         };
     },
     components: {
@@ -173,6 +215,16 @@ export default {
         this.getUsers();
     },
     methods: {
+        //选择资产类型
+        typeChange(val) {
+            if (val == '租赁资产') {
+                this.formData.supplyCode = 'lease';
+            } else if (val == '固定资产') {
+                this.formData.supplyCode = 'fixed';
+            } else if (val == '低值易耗品') {
+                this.formData.supplyCode = 'low';
+            }
+        },
         setDataFromParent(data) {
             this.formData = data;
             this.formId = data.id;
@@ -195,7 +247,8 @@ export default {
                         price: '',
                         totalPrice: '',
                         buyTime: '',
-                        reason: ''
+                        reason: '',
+                        inventory: ''
                     }
                 ],
                 attachments: [],
@@ -204,15 +257,40 @@ export default {
                 applyDeptId: '',
                 proposer: cookies.get('uname'),
                 applyDept: cookies.get('oname'),
-                assetsType: ''//资产类型
+                assetsType: '',//资产类型
+                supplyCode: '',//资产类型-流程判断
+                plan: true,
+                budget: true,
+                inbuget: true,
             };
             return formData;
         },
 
         saveFormValidate(type) {
+            if (this.formData.plan && this.formData.budget) {
+                this.formData.inbuget = true;
+            } else {
+                this.formData.inbuget = false;
+            }
+            let compare = true;
+            for (let data of this.formData.detail) {
+                if (
+                    data.name == '' ||
+                    data.number == '' ||
+                    data.reason == '' ||
+                    data.price == '' || 
+                    data.inventory == ''
+                ) {
+                    compare = false;
+                }
+            }
             this.$refs["formupdate"].validate(valid => {
                 if (valid) {
-                    this.saveForm(type);
+                    if (compare) {
+                        this.saveForm(type);
+                    } else {
+                        alert('请输入采购明细');
+                    }
                 }
             });
         },

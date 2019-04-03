@@ -79,7 +79,7 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <AssetDetail :formId="formId" ref="AssetDetail"></AssetDetail>
+            <AssetDetail :formId="formId" ref="AssetDetail" @reloadList="reloadList" @resetStatus="resetStatus"></AssetDetail>
         </el-card>
         <AssetForm ref="AssetForm" @reloadList="reloadList"></AssetForm>
     </div>
@@ -229,7 +229,14 @@ export default {
                 this.$refs.AssetDetail.getFormDetails(params.id);
             }
         },
-
+        resetStatus(data) {
+            let $self = this;
+            for (let item of $self.tableData) {
+                if (data.id == item.id) {
+                    item.status = data.status;
+                }
+            }
+        },
         //分页
         currentChange(pageNum) {
             this.params.page = pageNum;
@@ -254,8 +261,8 @@ export default {
             //0已保存1审核中2驳回3撤销4完成
             switch (row.status) {
                 case '00':
-                  state = "已保存";
-                  break;
+                    state = "已保存";
+                    break;
                 case '01':
                     state = "审核中";
                     break;
@@ -266,8 +273,8 @@ export default {
                     state = "撤销";
                     break;
                 case '04':
-                  state = "已完成";
-                  break;
+                    state = "已完成";
+                    break;
             }
             return state;
         },
