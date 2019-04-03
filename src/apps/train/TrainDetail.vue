@@ -46,6 +46,17 @@
                     </el-col>
                 </el-row>
                 <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="是否资金计划内：">{{tableData.type}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="是否纳入年度计划：">{{tableData.isAnnualPlan}}
+                        </el-form-item>
+                    </el-col>
+                    
+                </el-row>
+                <el-row>
                     <el-col :span="24">
                         <el-form-item label="培训/学习(目的内容)：">{{tableData.trainingContent}}
                         </el-form-item>
@@ -155,6 +166,21 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
+                   if($self.tableData.type=="true"){
+                        $self.tableData.type='是'
+                        
+                    }
+                    if($self.tableData.isAnnualPlan=="true"){
+                        $self.tableData.isAnnualPlan='是'
+                    }
+                    if($self.tableData.type=="false"){
+                        $self.tableData.type='否'
+                    }
+                    if($self.tableData.isAnnualPlan=="false"){
+                        
+                        $self.tableData.isAnnualPlan='否'
+                    }
+               
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
 
             } else {

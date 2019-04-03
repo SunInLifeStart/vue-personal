@@ -18,7 +18,7 @@
                         <el-col :span="8">
                             <el-form-item label="单据状态：" prop="status">
                                 <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
-                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
+                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.code">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -67,8 +67,8 @@
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)" v-show="scope.row.status!='01'&&scope.row.status!='04'"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
-                                <el-button type="text" icon="el-icon-delete" @click.stop="deleteItem(scope.row.id)" v-show="scope.row.status!='01'&&scope.row.status!='04'"></el-button>
+                            <el-tooltip class="item" effect="dark" content="删除" placement="right">
+                                <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)" v-show="scope.row.status!='01'&&scope.row.status!='04'"></el-button>
                             </el-tooltip>
                         </template>
                     </el-table-column>
@@ -126,29 +126,6 @@ export default {
         AssetDetail
     },
     methods: {
-        deleteItem(row) {
-            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                this.deleteAffirm(row);
-            });
-        },
-        deleteAffirm(row) {
-            const self = this;
-            axios
-                .delete('/api/v1/asset_forms/delete/' + row)
-                .then(res => {
-                    self.$message({
-                        message: '删除成功?',
-                        type: 'success'
-                    });
-                    self.getList();
-                })
-                .catch(function () {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
         //获取列表
         async getList(pageNum) {
             this.onSubmit();

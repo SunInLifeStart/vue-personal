@@ -5,18 +5,36 @@
                 <div id="ApprovalFilter">
                     <el-form :inline="true" label-position="left" class="demo-form-inline">
                         <el-row class="filterForm">
-                            <!-- <el-col :span="8">
-                                <el-form-item label="使用物品">
-                                    <el-input placeholder="请输入使用物品" v-model="params.submitter"></el-input>
-                                </el-form-item>
-                            </el-col> -->
-                           <el-col :span="8">
-                                <el-form-item label="经办人">
-                                    <el-input placeholder="请输入经办人" v-model="params.department"></el-input>
+                            <!-- 印章种类、申请日期、申请人、申请部门 -->
+                            <el-col :span="8">
+                                <el-form-item label="印章种类">
+                                    <el-input placeholder="请输入印章种类" v-model="params.useItems"></el-input>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8" >
-                                <el-form-item class="">
+                           <el-col :span="8">
+                                <el-form-item label="申请人">
+                                    <el-input placeholder="请输入申请人" v-model="params.creatorName"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="申请时间">
+                                    <!-- <el-input placeholder="请输入申请时间" v-model="params.created"></el-input> -->
+                                    <el-date-picker v-model="params.created" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                  </el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                         </el-row>
+                          <el-row class="filterForm">
+                            <el-col :span="8">
+                                <el-form-item label="申请部门">
+                                    <el-input placeholder="请输入申请部门" v-model="params.organName"></el-input>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                               
+                            </el-col>
+                            <el-col :span="8" class="searchBtn">
+                                <el-form-item class="positionBtn">
                                     <el-button type="primary" @click="searchList">查询</el-button>
                                     <el-button  @click="resetInput">重置</el-button>
                                 </el-form-item>
@@ -31,15 +49,15 @@
                 </div>
                 <div id="ApprovalList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
-                    <el-table-column prop="submitter" label="使用物品">
+                    <el-table-column prop="useItems" label="印章种类">
                     </el-table-column>
-                    <el-table-column prop="department" label="经办人">
+                    <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
-                    <el-table-column prop="committed" label="领用时间">
+                    <el-table-column prop="recipientsTime" label="领用时间">
                     </el-table-column>
-                    <el-table-column prop="participant" label="用印文件">
+                    <el-table-column prop="fileName" label="用印文件名称">
                     </el-table-column>
-                    <el-table-column prop="schedule" width="250" label="用印份数"></el-table-column>
+                    <el-table-column prop="fileNum" width="250" label="用印份数"></el-table-column>
                      <!-- <el-table-column prop="status" width="250" label="状态"></el-table-column> -->
                     
                      <el-table-column label="操作" width="100">
@@ -81,11 +99,13 @@ export default {
             params: {
                 pageNum: 1,
                 pageSize: 5,
-                department: "",
-                submitter: "",
-                total: 0
+                creatorName: "",
+                useItems: "",
+                total: 0,
+                created:"",
+                organName:"",
             },
-            formName:"approvalingApplication"
+            formName:"singApproval"
         };
     },
     components: {
@@ -96,7 +116,7 @@ export default {
         //获取列表
          async getList(pageNum) {
             let $self = this;
-            $self.url = "/api/v1/trainingApplication/queryList";
+            $self.url = "/api/v1/singApproval/queryList";
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {
@@ -146,7 +166,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.submitter = this.params.department = "";
+            this.params.useItems = this.params.creatorName = "";
         }
     },
     mounted() {
@@ -155,6 +175,7 @@ export default {
 };
 </script>
 <style scoped>
+
       #ApprovalFilter  .el-form-item--small.el-form-item{
             width: 100%;
         }
@@ -162,3 +183,15 @@ export default {
         width: calc(100% - 80px);
     }
 </style>
+<style lang="scss" scoped>
+ #ApprovalFilter {
+        .searchBtn {
+            padding-right: 25px;
+            .positionBtn{
+                text-align: right;
+            }
+        }
+        
+    }
+</style>
+

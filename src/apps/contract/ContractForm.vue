@@ -58,7 +58,7 @@
                             提单人
                         </td>
                         <td>
-                            <el-input v-model="formData.applicantName" disabled></el-input>
+                            <el-input v-model="formData.manager" disabled></el-input>
                         </td>
                         <td>
                             所属部门
@@ -84,13 +84,13 @@
                             合同名称
                         </td>
                         <td colspan="3">
-                            <el-input v-model="formData.applicantName"></el-input>
+                            <el-input v-model="formData.contractName"></el-input>
                         </td>
                         <td>
                             所属项目
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.organ"></el-input>
+                            <el-input v-model="formData.contractName"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -98,7 +98,7 @@
                             甲方
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.applicantName"></el-input>
+                            <el-input v-model="formData.partyA"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -106,7 +106,7 @@
                             乙方
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.applicantName"></el-input>
+                            <el-input v-model="formData.partyB"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -114,7 +114,7 @@
                             其他方
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.applicantName"></el-input>
+                            <el-input v-model="formData.otherParty"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -139,10 +139,10 @@
                             <el-row>
                                 <el-col :span="14">
                                     <el-radio v-model="radio" label="1">
-                                        <el-input v-model="formData.applicantName" style="width: 110px"></el-input>
+                                        <el-input v-model="formData.contractAmount" style="width: 110px"></el-input>
                                         元</el-radio>
                                     <el-radio v-model="radio" label="2">其他 成本上线总额
-                                        <el-input v-model="formData.applicantName" style="width: 110px"></el-input>
+                                        <el-input v-model="formData.contractAmount" style="width: 110px"></el-input>
                                         元</el-radio>
                                 </el-col>
                                 <el-col :span="10" style="margin-top:8px">
@@ -157,16 +157,16 @@
                             经办人
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.applicantName"></el-input>
+                            <el-input v-model="formData.manager"></el-input>
                         </td>
                         <td>
                             合同期限
                         </td>
                         <td colspan="3">
                             <el-radio v-model="radio" label="1">自
-                                <el-input v-model="formData.applicantName" style="width: 110px"></el-input>
+                                <el-input v-model="formData.applicantTime" style="width: 110px"></el-input>
                                 至
-                                <el-input v-model="formData.applicantName" style="width: 110px"></el-input>
+                                <el-input v-model="formData.applicantTime" style="width: 110px"></el-input>
                             </el-radio>
                             <el-radio v-model="radio" label="2">其他</el-radio>
                         </td>
@@ -211,7 +211,7 @@
                             合同付款安排
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.applicantName"></el-input>
+                            <el-input v-model="formData.contentAbstract"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -363,7 +363,7 @@ export default {
         FilesOperate
     },
     methods: {
-                //删除附件
+        //删除附件
         deleteAttachment(id) {
             const self = this;
             if (this.formData.attachments.length > 0) {
@@ -379,7 +379,7 @@ export default {
                                 }
                             })
                             .then(res => {
-                                self.formData.attachments.forEach(function(
+                                self.formData.attachments.forEach(function (
                                     item,
                                     index
                                 ) {
@@ -391,7 +391,7 @@ export default {
                                     }
                                 });
                             })
-                            .catch(function() {
+                            .catch(function () {
                                 self.$message({
                                     message: '操作失败',
                                     type: 'error'
@@ -414,7 +414,6 @@ export default {
         resetForm() {
             let formData = {
                 applicantTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
-
                 manager: cookies.get('uname'),
                 creatorId: cookies.get('uid'),
                 creatorName: cookies.get('uname'),
@@ -425,7 +424,8 @@ export default {
                 effectiveStart: '',
                 effectiveEnd: '',
                 attachments: [],
-                type: 1
+                type: 1,
+                gid: cookies.get('oid')
             };
             return formData;
         },
@@ -439,10 +439,7 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
-            let response = await $self.saveFormData(
-                "/api/v1/trainingApplication/save",
-                $self.formData
-            );
+            let response = await $self.saveFormData("/api/v1/contract_forms/save", $self.formData);
             if (response) {
                 $self.formId = response.data.content.id;
                 $self.dialogFormVisible = false;

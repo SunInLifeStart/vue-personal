@@ -55,7 +55,7 @@
                                 </el-table-column>
                                 <el-table-column prop="price" label="计划单价">
                                     <template slot-scope="scope">
-                                        {{scope.row.price}}
+                                        {{scope.row.price |numFilter}}
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="totalPrice" label="计划总价">
