@@ -15,7 +15,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="提单时间">
-                            <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请输入提单时间" style="width:100%" type="date">
+                            <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd 00:00:00" placeholder="请输入提单时间" style="width:100%" type="date">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
