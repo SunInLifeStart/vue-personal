@@ -39,6 +39,24 @@ Vue.filter('dateformat', function (dataStr, pattern = 'YYYY-MM-DD HH:mm:ss') {
 Vue.filter('dateFromNow', function (dataStr) {
   return moment(dataStr).fromNow();
 });
+Vue.filter('numFilter', function (value) {
+  if(!value) return '';
+  let intPart =  Number(value)|0; //获取整数部分
+  let intPartFormat = intPart.toString().replace(/(\d)(?=(?:\d{3})+$)/g, '$1,'); //将整数部分逢三一断
+  let floatPart = ".00"; //预定义小数部分
+  let value2Array = value.toString().split(".");
+  //=2表示数据有小数位
+  if(value2Array.length == 2) {
+    floatPart = value2Array[1].toString(); //拿到小数部分
+    if(floatPart.length == 1) { //补0,实际上用不着
+      return intPartFormat + "." + floatPart + '0';
+    } else {
+      return intPartFormat + "." + floatPart;
+    }
+  } else {
+    return intPartFormat + floatPart;
+  }
+});
 // if (process.env.NODE_ENV === 'production') {
 //   Vue.use(VueSocketio, 'http://172.16.3.17');
 // } else {

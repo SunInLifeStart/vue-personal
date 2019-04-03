@@ -440,8 +440,9 @@ export default {
         async saveForm(params) {
             const $self = this;
             let response = await $self.saveFormData("/api/v1/contract_forms/save", $self.formData);
+            console.log(response.data);
             if (response) {
-                $self.formId = response.data.content.id;
+                $self.formId = response.data.id;
                 $self.dialogFormVisible = false;
                 if (params) {
                     $self.msgTips("提交成功", "success");

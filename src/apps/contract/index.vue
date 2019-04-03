@@ -43,7 +43,7 @@
                 <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
             </div>
             <div id="ContractList">
-                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
+                <el-table :data="tableData" style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="contractName" label="合同名称" min-width="260"></el-table-column>
                     <el-table-column prop="partyB" label="合同对方" min-width="260"></el-table-column>
                     <el-table-column prop="contractNum" label="合同编号" min-width="200"></el-table-column>
