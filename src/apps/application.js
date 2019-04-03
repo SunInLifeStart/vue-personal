@@ -156,9 +156,6 @@ export const publicMethods = {
             }
             
         },
-
-
-
         async getCrumbs() {
             let url = `/workflow/${this.appFlowName}/${
                 this.formId
@@ -207,6 +204,22 @@ export const publicMethods = {
             this.$message({
                 message: message,
                 type: type
+            });
+        },
+        deleteAttachments(id) {
+            alert(id);
+            let $self = this;
+            $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+                $self.formData.attachments.forEach(function(value, index) {
+                    $self.formData.attachments.splice(index, 1);
+                    // if (value.id == id) {
+                    //     axios
+                    //         .get("/api/v1/incoming_forms/deleteAtt/" + id)
+                    //         .then(res => {
+                               
+                    //         });
+                    // }
+                });
             });
         },
        

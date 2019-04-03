@@ -43,12 +43,9 @@
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="报送单位" prop="reportingOrg">
-                        <!--@focus="openDialog()"-->
-                        <!-- <el-input v-model="rows.reportingOrg"></el-input> -->
                         <el-select v-model="rows.reportingOrg" multiple filterable allow-create default-first-option placeholder="请选择报送单位" style="width:100%">
-                            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name"></el-option>
                         </el-select>
-                        <!-- <el-cascader :options="options" :show-all-levels="false"  filterable style="width:100%" v-model="rows.mainTo_1"></el-cascader> -->
                     
                     </el-form-item>
                 </el-col>
@@ -56,10 +53,10 @@
             <el-row>
                 <el-form-item label="发布到">
                     <el-col :span="6">
-                        <el-checkbox label="集团网站" v-model="rows.toSite"></el-checkbox>
+                        <el-checkbox label="公司网站" v-model="rows.toSite"></el-checkbox>
                     </el-col>
                     <el-col :span="6">
-                        <el-checkbox label="集团门户" v-model="rows.toPortal"></el-checkbox>
+                        <el-checkbox label="公司门户" v-model="rows.toPortal"></el-checkbox>
                     </el-col>
                     <el-col :span="6">
                         <el-checkbox label="微信" v-model="rows.toWechat"></el-checkbox>
@@ -71,8 +68,8 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <div style="color:#bb4747;padding-left:100px;line-height:30px;">*集团门户图片,推荐宽高比例为16:9,且必须上传</div>
-                    <el-form-item label="集团门户图片">
+                    <div style="color:#bb4747;padding-left:100px;line-height:30px;">*公司门户图片,推荐宽高比例为16:9,且必须上传</div>
+                    <el-form-item label="公司门户图片">
                         <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" @click.native="setType('group')" :before-upload="beforeAvatarUpload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
                             <i class="el-icon-plus"></i>
                         </el-upload>
@@ -98,23 +95,10 @@
                         <div v-for="item in rows.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attachment'">
                             <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachment"></FilesOperate>
                         </div>
-                        <!--
-                        <div class="attachments" v-for="item in rows.attachments" :key="item.id" @click="downloadFile(item)">
-                            <img class="el-icon-document" :src="item.iconUrl" @dragstart="drag($event)" @dragover="allowDrop($event)">
-                            <p :title="item.name">{{item.name}}</p>
-                            <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i>
-                        </div>
-                        -->
                     </el-form-item>
                 </el-col>
             </el-row>
         </el-form>
-        <!-- <el-dialog title="报送单位" :visible.sync="dialogDisabled" width="30%" append-to-body>
-            <el-tree :data="menuData" ref="orgTree" accordion show-checkbox :check-strictly="true" :check-on-click-node="true" node-key="id" :default-expanded-keys="[1]" @check="getCheckedNodes"></el-tree>
-            <span slot="footer" class="dialog-footer">
-                <el-button type="primary" size="small" @click="dialogDisabled = false">确定</el-button>
-            </span>
-        </el-dialog> -->
     </div>
 </template>
 <script>
@@ -150,73 +134,8 @@ export default {
                 title: [
                     { required: true, message: '请输入标题', trigger: 'blur' }
                 ]
-                //  reportingOrg: [
-                //     { required: true, message: "请选择报送单位", trigger: "change" }
-                // ],
             },
             options:[],
-            optionStatic: [
-                        {
-                            value: '党委办公室/集团办公室' ,
-                            label: '党委办公室/集团办公室'
-                        },
-                        {
-                            value: '董事会办公室',
-                            label: '董事会办公室'
-                        },
-                        {
-                            value: '党群工作部',
-                            label: '党群工作部'
-                        },
-                        {
-                            value: '资本运营部',
-                            label: '资本运营部'
-                        },
-                        {
-                            value: '风险管理部',
-                            label: '风险管理部'
-                        },
-                        {
-                            value: '科技金融事业部/中科金',
-                            label: '科技金融事业部/中科金'
-                        },
-                        {
-                            value: '组织部人力资源部',
-                            label: '组织部人力资源部'
-                        },
-                        {
-                            value: '宣传部品牌管理部',
-                            label: '宣传部品牌管理部'
-                        },
-                        {
-                            value: '纪检监察部',
-                            label: '纪检监察部'
-                        },
-                        {
-                            value: '战略管理部',
-                            label: '战略管理部'
-                        },
-                        {
-                            value: '资金财务部',
-                            label: '资金财务部'
-                        },
-                        {
-                           value: '科技园区事业部',
-                            label: '科技园区事业部'
-                        },
-                        {
-                            value: '产业投资部',
-                            label: '产业投资部'
-                        },
-                        {
-                            value: '海外业务部',
-                            label: '海外业务部'
-                        },
-                        {
-                          value: '区域合作部',
-                          label: '区域合作部'
-                        }
-                            ],
             currentFormId: this.operationType == 'create' ? '' : this.formId
         };
     },
@@ -234,17 +153,6 @@ export default {
         if (this.attachments) {
             this.rows.attachments = this.attachments;
         }
-        // const cookieItems = document.cookie.split(';');
-        // cookieItems.forEach(function(item) {
-        //     if (item.indexOf('uname') > 0) {
-        //         self.rows.creatorName = decodeURIComponent(item.split('=')[1]);
-        //     }
-        //     if (item.indexOf('oname') > -1) {
-        //         // self.rows.reportingOrg = decodeURIComponent(item.split('=')[1]);
-        //        self.cookie_oname = decodeURIComponent(item.split('=')[1]);
-        //        self.rows.reportingOrg =[self.cookie_oname];
-        //     }
-        // });
     },
     watch: {
         formId: function() {
@@ -262,16 +170,6 @@ export default {
             axios
                 .get("/api/v1/organs")
                 .then(res => {
-                    // let a,b;
-                    // if(res.data[0].children[0].label == "集团各部（室）"){
-                    //       b = res.data[0].children[1].children;
-                    //       a = res.data[0].children[0];
-                    //       self.options =  [a].concat(self.optionStatic).concat(b);
-                    // }else{
-                    //       a = res.data[0].children[0].children;
-                    //       b = res.data[0].children[1];
-                    //       self.options =  [b].concat(self.optionStatic).concat(a);
-                    // }
                      self.options = res.data;
                 })
                 .catch(function() {
@@ -347,7 +245,7 @@ export default {
                 });
             } else {
                 this.$message({
-                    message: '请选择集团门户图片',
+                    message: '请选择公司门户图片',
                     type: 'error'
                 });
             }
@@ -411,7 +309,7 @@ export default {
                 });
             } else {
                 this.$message({
-                    message: '请选择集团门户图片',
+                    message: '请选择公司门户图片',
                     type: 'error'
                 });
             }

@@ -1,13 +1,27 @@
 <template>
     <div id="OutgoingFilter">
-        <el-form :inline="true" :model="formInline" label-width="70px"  label-position="left" class="demo-form-inline">
+        <el-form :inline="true" :model="formInline"  label-position="left" class="demo-form-inline">
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="标题">
+                    <el-form-item label="标题" label-width="50px">
                         <el-input v-model="formInline.title" placeholder="标题"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
+                    <el-form-item label="单据状态"  label-width="70px">
+                        <el-select v-model="formInline.status" placeholder="请选择">
+                            <el-option v-for="item in formInline.options_status" :key="item" :label="item" :value="item">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+                   <el-col :span="8" class="searchBtn">
+                    <el-form-item class="positionBtn">
+                        <el-button type="primary" @click="onSubmit">查询</el-button>
+                        <el-button @click="resetOptions">重置</el-button>
+                    </el-form-item>
+                </el-col>
+                <!-- <el-col :span="8">
                     <el-form-item label="拟稿人">
                         <el-input v-model="formInline.creatorName" placeholder="拟稿人"></el-input>
                     </el-form-item>
@@ -16,9 +30,9 @@
                     <el-form-item label="部门">
                         <el-input v-model="formInline.organName" placeholder="部门"></el-input>
                     </el-form-item>
-                </el-col>
+                </el-col> -->
             </el-row>
-            <el-row>
+            <!-- <el-row>
                 <el-col :span="8">
                     <el-form-item label="单据状态">
                         <el-select v-model="formInline.status" placeholder="请选择">
@@ -38,7 +52,7 @@
                         <el-button @click="resetOptions">重置</el-button>
                     </el-form-item>
                 </el-col>
-            </el-row>
+            </el-row> -->
         </el-form>
     </div>
 </template>
@@ -128,7 +142,7 @@ export default {
         .searchBtn {
             padding-right: 10px;
             .positionBtn{
-                text-align: right;
+                text-align: left;
             }
         }
         .el-date-editor--daterange.el-input, .el-date-editor--daterange.el-input__inner, .el-date-editor--timerange.el-input, .el-date-editor--timerange.el-input__inner {

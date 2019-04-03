@@ -42,12 +42,12 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <!-- <el-row>
                     <el-col :span="8">
                         <el-form-item label="收文类型：">{{tabledata.type}}
                         </el-form-item>
                     </el-col>
-                </el-row>
+                </el-row> -->
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="公文标题：">{{tabledata.title}}
@@ -286,7 +286,7 @@ export default {
                             self.tabledata.type &&
                             self.tabledata.type == 'group'
                         ) {
-                            self.tabledata.type = '集团收文批办';
+                            self.tabledata.type = '公司收文批办';
                         } else if (
                             self.tabledata.type &&
                             self.tabledata.type == 'copy'
@@ -509,12 +509,9 @@ export default {
         },
         submitForm() {
             let self = this;
-            if (self.currentAction.type == 'REJECT') {
+             if (self.currentAction.type == 'REJECT') {
                 if (self.rejectTarget) {
                     self.submitData.rejectTarget = self.rejectTarget;
-                } else {
-                    self.$message.error('请选择驳回节点');
-                    return false;
                 }
             }
             //必须选择人员节点

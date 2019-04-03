@@ -9,6 +9,7 @@
             </div>
          </el-row>
         </div>
+        <br />
         <div class="formContent">
         <el-steps :active="crumb.index" finish-status="success" class="crumbList" v-if="crumb && crumb.items.length > 0">
             <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>

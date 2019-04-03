@@ -76,10 +76,13 @@
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="印制">
+                    <!-- <el-form-item label="印制">
                         <el-select v-model="rows.printer" style="width: 100%;">
                             <el-option label="中关村发展集团办公室" value="中关村发展集团办公室"></el-option>
                         </el-select>
+                    </el-form-item> -->
+                    <el-form-item label="印制">
+                        <el-input v-model="rows.printer"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -159,9 +162,9 @@ export default {
             cookie_uname: "",
             checkorName: "",
             cookie_oname: "",
-            wordNoList: [],
+            wordNoList: ["协同发展","协同发展党","协同发展综","协同发展人"],
             direction: ["上行文", "下行文", "平行文"],
-            type: ["集团发文", "集团工会发文"],
+            type: ["公司", "党委","公会"],
             urgency: ["一般", "特急"],
             dialogDisabled: false,
             toType: "",
@@ -208,7 +211,7 @@ export default {
                     .get(
                         "/api/v1/users/" +
                             decodeURIComponent(item.split("=")[1]) +
-                            "/organ/role/deptManager"
+                            "/organ/role/xtfz_deptManager"
                     )
                     .then(res => {
                         self.rows.checkorName = self.checkorName =
@@ -216,6 +219,8 @@ export default {
                     });
             }
         });
+
+        this.rows.printer = this.$store.getters.LoginData.oname;
     },
     watch: {
         formId: function() {
@@ -633,7 +638,7 @@ export default {
                 organName: this.cookie_oname,
                 creatorName: this.cookie_uname,
                 checkorName: this.checkorName,
-                printer: "",
+                printer: this.$store.getters.LoginData.oname,
                 verify: "",
                 parts: "",
                 attachments: [],
