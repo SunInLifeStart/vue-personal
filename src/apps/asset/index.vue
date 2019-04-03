@@ -48,7 +48,7 @@
                 <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
             </div>
             <div id="AssetList">
-                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
+                <el-table :data="tableData" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
                     <el-table-column prop="proposer" label="申请人">
                     </el-table-column>
                     <el-table-column prop="applyDept" label="申请部门" min-width='150px'>
