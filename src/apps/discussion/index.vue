@@ -98,10 +98,6 @@ export default {
             params: {
                 pageNum: 1,
                 pageSize: 5,
-                topicName: '',
-                creatorName: '',
-                timeApplication: '',
-                status: '',
                 total: 0
             },
             statusOption: [
