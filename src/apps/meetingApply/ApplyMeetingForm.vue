@@ -342,8 +342,12 @@
                                         if (item.person) {
                                             item.people = item.person.split(',')
                                         }
-                                        for (let i = 0; i<item.people.length; i++) {
-                                            item.people[i] = parseInt(item.people[i])
+                                        if (item.people) {
+                                            for (let i = 0; i<item.people.length; i++) {
+                                                item.people[i] = parseInt(item.people[i])
+                                            }
+                                        } else {
+                                            item.people = []
                                         }
                                     })
                                 }
