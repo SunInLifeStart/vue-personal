@@ -113,7 +113,7 @@
       ></InspectDetail>
       <!-- :formId="formId" -->
     </el-card>
-    <InspectForm ref="InspectForm" @reloadList="reloadList" @saveok="saveok"></InspectForm>
+    <InspectForm ref="InspectForm" @reloadList="reloadList" @saveOk="saveOk" @subOk="subOk"></InspectForm>
     <!-- :formDataFromIndex="formDataFromIndex"  -->
   </div>
 </template>
@@ -225,7 +225,10 @@ export default {
     showCurrentId(row) {
       this.$refs.InspectDetail.getFormDetails(row.id);
     },
-    saveok() {
+    saveOk() {
+      this.getList();
+    },
+    subOk(){
       this.getList();
     },
     //新建
