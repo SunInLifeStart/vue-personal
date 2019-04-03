@@ -7,7 +7,6 @@
                         {{action.name}}
                     </span>
                 </div>
-
             </el-row>
         </div>
         <div class="formContent">
@@ -241,6 +240,7 @@ export default {
                 else if($self.tableData.type == 8){
                      $self.tableData.type = '其他'
                 }
+                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips('获取表单失败', 'warning');
             }

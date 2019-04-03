@@ -66,7 +66,24 @@ module.exports = {
     devServer: {
         port: 8889,
         proxy: {
-
+            // "/api/v1/inspect_forms" :{
+            //     target: "http://192.168.0.253:10130"
+            // },
+            "/api/v1/travel_forms":{
+                target: "http://192.168.0.253:10146"
+            },
+            "/api/v1/motor-receive/":{
+                target: "http://192.168.0.253:10108"
+            },
+            "/api/v1/motor-holiday": {
+                target: "http://192.168.0.253:10148"
+            },
+            "/api/v1/asset_forms": {
+                target: "http://192.168.0.253:10112"
+            },
+            "/api/v1/files":{
+                target: "http://116.117.157.253:10768"
+            },
             "/api/": {
                 target: "http://116.117.157.232"
             },
@@ -74,7 +91,7 @@ module.exports = {
             target: "http://116.117.157.232"
             },
             "/workflow/": {
-            target: "http://116.117.157.232"
+            target: "http://116.117.157.232:10099"
             },
             "/solr": {
                 target: "http://116.117.157.232"

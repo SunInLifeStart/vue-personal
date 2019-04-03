@@ -49,14 +49,15 @@
                     </el-table-column>
                     <el-table-column prop="applyTime" label="提单时间" align="center">
                     </el-table-column>
-                    <el-table-column prop="status" label="状态" align="center" :formatter="fomatterStatus">
+                    <!-- :formatter="fomatterStatus" -->
+                    <el-table-column prop="status" label="状态" align="center" >
                     </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '已保存'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -68,7 +69,7 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <LeaveDetail :formId="formId" ref="LeaveDetail" @reloadList="reloadList"></LeaveDetail>
+            <LeaveDetail :formId="formId" ref="LeaveDetail" @reloadList="reloadList" @resetStatus = "resetStatus"></LeaveDetail>
         </el-card>
         <LeaveForm ref="LeaveForm" @reloadList="reloadList"></LeaveForm>
         <!-- <el-dialog title="请休假申请" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="1240px">
@@ -153,6 +154,14 @@ export default {
         showCurrentId(row) {
             this.$refs.LeaveDetail.getFormDetails(row.id);
         },
+        resetStatus(data){
+              let $self = this;
+            for(let item of $self.tableData){
+                if(data.id == item.id){
+                  item.status = data.status;
+                }
+            }
+        },
 
         //新建
         createNewForm() {
@@ -185,7 +194,8 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.submitter = this.params.department = '';
+            this.params.uname = this.params.oname = this.params.status = '';
+            this.getList();
         },
         fomatterStatus(row, column) {
             let state;

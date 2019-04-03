@@ -224,6 +224,10 @@
                 </span>
             </el-dialog>
         </div>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="default" @click="saveFormValidate()">保存</el-button>
+            <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+        </div>
     </el-dialog>
 </template>
 <script>
@@ -670,33 +674,33 @@ export default {
             let formData = {
                 attachments: [],
                 // number:this.formData.number,
-                travelType:'',
-                submission2:'',
-                submitter:'',
-                subOrganName:'',
+                travelType: '',
+                submission2: '',
+                submitter: '',
+                subOrganName: '',
                 submitted: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-                reason:'',
-                evections:[
+                reason: '',
+                evections: [
                     {
-                        bname1:'',
-                        borganName:'',
-                        ranks:'',
-                        departure:'',
-                        destination:'',
-                        endTime:'',
-                        startTime:'',
-                        dateNumber:'',
+                        bname1: '',
+                        borganName: '',
+                        ranks: '',
+                        departure: '',
+                        destination: '',
+                        endTime: '',
+                        startTime: '',
+                        dateNumber: ''
                     }
                 ],
-                estimate:[
+                estimate: [
                     {
-                        bsType:[],
-                        price:'',
-                        number:'',
-                        currency:'人民币',
-                        rate:'',
-                        subtotal:'',
-                        principal:'',
+                        bsType: [],
+                        price: '',
+                        number: '',
+                        currency: '人民币',
+                        rate: '',
+                        subtotal: '',
+                        principal: ''
                     }
                 ]
             };

@@ -83,17 +83,17 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <TravelDetail :formId="formId" ref="TravelDetail"></TravelDetail>
+            <TravelDetail :formId="formId" ref="TrainDetail" @reloadList = "reloadList" @resetStatus = "resetStatus"></TravelDetail>
         </el-card>
         <TravelForm ref="TrainForm" @reloadList = "reloadList"></TravelForm>
     </div>
 </template>
 <script>
-// import TravelList from './TravelList';
 import TravelForm from './TravelForm';
-// import TravelFilter from './TravelFilter';
 import TravelDetail from './TravelDetail';
+import {publicMethods} from "../application.js";
 export default {
+    mixins:[publicMethods],
     name: 'travel',
     data() {
         return {
@@ -116,11 +116,11 @@ export default {
     methods: {
        async getList(pageNum) {
             let $self = this;
-            $self.url = "/api/v1/trainingApplication/queryList";
+            $self.url = "/api/v1/travel_forms/query";
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {
-                   let formId = response.data.content.list[0].id;
+                   let formId = response.data.content.list[0].id;       
                    $self.$refs.TrainDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.content.list;
@@ -129,7 +129,14 @@ export default {
                 $self.msgTips("获取列表失败", "warning");
             }
         },
-
+        resetStatus(data){
+              let $self = this;
+            for(let item of $self.tableData){
+                if(data.id == item.id){
+                  item.status = data.status;
+                }
+            }
+        },
         //选择行
         showCurrentId(row) {
             this.$refs.TrainDetail.getFormDetails(row.id);
