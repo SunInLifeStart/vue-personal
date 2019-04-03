@@ -18,7 +18,7 @@
                         <el-col :span="8">
                             <el-form-item label="单据状态：" prop="status">
                                 <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
-                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
+                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.code">
                                     </el-option>
                                 </el-select>
                             </el-form-item>

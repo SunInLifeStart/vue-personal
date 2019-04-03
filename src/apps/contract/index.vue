@@ -54,7 +54,7 @@
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="right">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -97,7 +97,7 @@ export default {
                 desc: true,
                 options: []
             },
-            formName: "trainingApplication",
+            formName: "contract_forms",
 
             statusAll: CONFIG['status'],//单据状态
         };
