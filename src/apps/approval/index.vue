@@ -8,7 +8,15 @@
                             <!-- 印章种类、申请日期、申请人、申请部门 -->
                             <el-col :span="8">
                                 <el-form-item label="印章种类">
-                                    <el-input placeholder="请输入印章种类" v-model="params.useItems"></el-input>
+                                    <!-- <el-input placeholder="请输入印章种类" v-model="params.useItems"></el-input> -->
+                                <el-select style="width:100%;" clearable v-model="params.sealType" placeholder="请选择印章种类">
+                                    <el-option
+                                        v-for="item in onOption"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                    </el-option>
+                                </el-select>
                                 </el-form-item>
                             </el-col>
                            <el-col :span="8">
@@ -53,6 +61,8 @@
                     </el-table-column>
                     <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
+                    <el-table-column prop="organName" label="申请部门">
+                    </el-table-column>
                     <el-table-column prop="recipientsTime" label="领用时间">
                     </el-table-column>
                     <el-table-column prop="fileName" label="用印文件名称">
@@ -95,12 +105,38 @@ export default {
         return {
             tableData: [],
             formDetails: {},
+            onOption: [
+                {
+                    value: '党支部章',
+                    label: '党支部章'
+                },
+                {
+                    value: '公章',
+                    label: '公章'
+                },
+                {
+                    value: '合同章',
+                    label: '合同章'
+                },
+                {
+                    value: '工会章',
+                    label: '工会章'
+                },
+                {
+                    value: '营业执照',
+                    label: '营业执照'
+                },
+                {
+                    value: '经审委印章',
+                    label: '经审委印章'
+                },
+            ],
             formId: "",
             params: {
                 pageNum: 1,
                 pageSize: 5,
                 creatorName: "",
-                useItems: "",
+                sealType: "",
                 total: 0,
                 created:"",
                 organName:"",
@@ -166,7 +202,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.useItems = this.params.creatorName = "";
+            this.params.sealType = this.params.creatorName = "";
         }
     },
     mounted() {
