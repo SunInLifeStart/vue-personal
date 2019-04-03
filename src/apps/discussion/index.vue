@@ -1,7 +1,7 @@
 <template>
     <div id="Discussion">
         <el-card class="box-card">
-            <el-form :inline="true" :model="params" class="demo-form-inline">
+            <el-form :inline="true" label-width="70px"  label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="议题名称">
@@ -9,7 +9,34 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item>
+                        <el-form-item label="提单人">
+                            <el-input v-model="params.creatorName" placeholder="请输入提单人"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="提请时间">
+                            <el-date-picker v-model="params.timeApplication" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请输入提请时间" style="width:100%" type="date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="单据状态">
+                            <el-select v-model="params.status" placeholder="请输入单据状态">
+                                <el-option
+                                        v-for="item in statusOption"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">&nbsp;
+                    </el-col>
+                    <el-col :span="8" class="searchBtn">
+                        <el-form-item class="positionBtn">
                             <el-button type="primary" @click="onSubmit">查询</el-button>
                             <el-button @click="onReset">重置</el-button>
                         </el-form-item>
@@ -72,8 +99,33 @@ export default {
                 pageNum: 1,
                 pageSize: 5,
                 topicName: '',
+                creatorName: '',
+                timeApplication: '',
+                status: '',
                 total: 0
             },
+            statusOption: [
+                {
+                    value: '00',
+                    label: '已保存'
+                },
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '03',
+                    label: '已撤销'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ],
             dialogFormVisibleDiscussion: false,
             searchBoardOptions: [],
             formBoardId: '',
@@ -162,6 +214,15 @@ export default {
 </script>
 <style lang="scss" scoped>
     #Discussion {
+        .el-select {
+            width: 100%;
+        }
+        .searchBtn {
+            padding-right: 10px;
+            .positionBtn{
+                text-align: right;
+            }
+        }
         .card_margin_10 {
             margin-top: 10px;
         }
