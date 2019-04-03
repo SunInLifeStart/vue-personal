@@ -8,23 +8,23 @@
     style="text-align: center;"
   >
     <div id="InspectForm">
-      <el-form ref="selectItem" :model="selectItem" label-width="130px">
+      <el-form ref="formData" :model="formData" label-width="130px">
         <el-row>
           <el-col :span="24">
             <el-form-item label="标题:">
-              <el-input v-model="selectItem.title"></el-input>
+              <el-input v-model="formData.title"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
             <el-form-item label="立项人:">
-              <el-input v-model="selectItem.definer" disabled></el-input>
+              <el-input v-model="formData.definer" disabled></el-input>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="立项单位:">
-              <el-input v-model="selectItem.definerUnit" disabled></el-input>
+              <el-input v-model="formData.definerUnit" disabled></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -32,7 +32,7 @@
           <el-col :span="12">
             <el-form-item label="被督办部门负责人:">
               <el-select
-                v-model="selectItem.inspector"
+                v-model="formData.inspector"
                 @change="getInspectorsId()"
                 filterable
                 placeholder="请选择"
@@ -49,14 +49,14 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="截至日期:">
-              <el-date-picker style="width:100%" type="date" v-model="selectItem.deadline"></el-date-picker>
+              <el-date-picker style="width:100%" type="date" v-model="formData.deadline"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="24">
             <el-form-item label="备注:">
-              <el-input v-model="selectItem.remark"></el-input>
+              <el-input v-model="formData.remark"></el-input>
             </el-form-item>
           </el-col>
         </el-row>
@@ -67,7 +67,7 @@
                 type="textarea"
                 :autosize="{minRows: 5}"
                 placeholder="请输入内容"
-                v-model="selectItem.content"
+                v-model="formData.content"
               ></el-input>
             </el-form-item>
           </el-col>
@@ -89,7 +89,7 @@
                 <i class="el-icon-plus"></i>
               </el-upload>
               <div
-                v-for="item in selectItem.attachments"
+                v-for="item in formData.attachments"
                 :key="item.id"
                 style="float:left"
                 v-show="item.attType == 'attType1'"
@@ -126,7 +126,7 @@ export default {
     return {
       // createForm_status :false,
       attType: "",
-      // selectItem: {
+      // formData: {
       //   title: "",
       //   definer: cookies.get("uname"),
       //   definerUnit: cookies.get("oname"),
@@ -142,7 +142,7 @@ export default {
       options: [],
       value: "",
       dialogFormVisible: false,
-      selectItem: this.resetForm(),
+      formData: this.resetForm(),
       users: [],
       appFlowName: "inspect-form_super",
       rules: {
@@ -243,7 +243,7 @@ export default {
   },
   watch: {
     "formData.lowercase"(val) {
-      this.selectItem.upper = val ? this.convertCurrency(val) : "";
+      this.formData.upper = val ? this.convertCurrency(val) : "";
     }
   },
   components: {
@@ -251,17 +251,17 @@ export default {
   },
   methods: {
     setDataFromParent(data) {
-      this.selectItem = data;
+      this.formData = data;
       this.formId = data.id;
       this.dialogFormVisible = true;
       this.createForm_status = false;
     },
     createForm() {
-      this.selectItem = this.resetForm();
+      this.formData = this.resetForm();
       this.dialogFormVisible = this.createForm_status = true;
     },
     resetForm() {
-      let selectItem = {
+      let formData = {
         title: "",
         definer: cookies.get("uname"),
         definerUnit: cookies.get("oname"),
@@ -272,10 +272,10 @@ export default {
         content: "",
         attachments: []
       };
-      return selectItem;
+      return formData;
     },
     saveFormValidate(type) {
-      this.$refs["selectItem"].validate(valid => {
+      this.$refs["formData"].validate(valid => {
         if (valid) {
           this.saveForm(type);
         }
@@ -286,41 +286,45 @@ export default {
       const $self = this;
       let response = await $self.saveFormData(
         "/api/v1/inspect_forms/save",
-        $self.selectItem
+        $self.formData
       );
       if (response) {
-        $self.dialogFormVisible = false;
-        $self.formId = response.data.id;
-        if (params) {
-          $self.msgTips("提交成功", "success");
-          if (this.createForm_status) {
-            $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
-          } else {
-            let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-            actions.data.types = actions.data.types.filter(function(item) {
-              return item.action == "COMMIT";
-            });
-            actions.data.types[0]["comment"] = actions.data.types[0].name;
-            await $self.startSignal(actions.data.types[0]);
-            $self.emitMessage();
-          }
-        } else {
-          $self.msgTips("保存成功", "success");
-
-          if (this.createForm_status) {
+                $self.formId = response.data.id;
+                $self.dialogFormVisible = false;
+                if (params) {
+                    $self.msgTips("提交成功", "success");
+                    if (this.createForm_status) {
+                      console.log(333)
+                        $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
+                    } else {      
+                      console.log(444)                        
+                        let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
+                        actions.data.types = actions.data.types.filter(
+                            function(item) {
+                                return item.action == "COMMIT";
+                            }
+                        );
+                       actions.data.types[0]["comment"] =  actions.data.types[0].name;
+                       await $self.startSignal(actions.data.types[0]);
+                       $self.emitMessage();
+                    }
+                } else {
+                    $self.msgTips("保存成功", "success");
+                    if (this.createForm_status) {
+                      console.log(111)
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
+                      console.log(222)
                         $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
                     }
-        }
-        $self.$emit("saveok");
-      } else {
-        if (params) {
-          $self.msgTips($self, "提交失败", "warning");
-        } else {
-          $self.msgTips($self, "保存失败", "warning");
-        }
-      }
+                }
+            } else {
+                if (params) {
+                    $self.msgTips("提交失败", "warning");
+                } else {
+                    $self.msgTips("保存失败", "warning");
+                }
+            }
     },
     handleSuccess(response, file) {
       const self = this;

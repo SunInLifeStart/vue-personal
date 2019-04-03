@@ -57,11 +57,7 @@
         <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
       </div>
       <div id="InspectList">
-        <el-table
-          :data="tableData"
-          style="width: 100%; cursor:pointer"
-          @row-click="showCurrentId"
-        >
+        <el-table :data="tableData" style="width: 100%; cursor:pointer" @row-click="showCurrentId">
           <el-table-column prop="title" label="标题" min-width="150px" align="center"></el-table-column>
           <el-table-column prop="definer" label="立项人" min-width="150px" align="center"></el-table-column>
           <el-table-column prop="inspector" label="被督办部门负责人" min-width="150px" align="center"></el-table-column>
@@ -109,7 +105,12 @@
     </el-card>
     <br>
     <el-card class="box-card">
-      <InspectDetail :formId="formId" ref="InspectDetail" @reloadList="reloadList" @resetStatus = "resetStatus"></InspectDetail>
+      <InspectDetail
+        :formId="formId"
+        ref="InspectDetail"
+        @reloadList="reloadList"
+        @resetStatus="resetStatus"
+      ></InspectDetail>
       <!-- :formId="formId" -->
     </el-card>
     <InspectForm ref="InspectForm" @reloadList="reloadList" @saveok="saveok"></InspectForm>
@@ -156,14 +157,14 @@ export default {
     InspectDetail
   },
   methods: {
-    resetStatus(data){
-              let $self = this;
-            for(let item of $self.tableData){
-                if(data.id == item.id){
-                  item.status = data.status;
-                }
-            }
-        },
+    resetStatus(data) {
+      let $self = this;
+      for (let item of $self.tableData) {
+        if (data.id == item.id) {
+          item.status = data.status;
+        }
+      }
+    },
     stateFormatter(row, column) {
       let state;
       switch (row.status) {
@@ -201,25 +202,30 @@ export default {
         $self.msgTips("获取列表失败", "warning");
       }
     },
-    deleteCurrentLine(id,params) {
-            let $self = this;
-            $self.$confirm( params ? "是否撤销?" : "是否删除?", "提示", { type: "warning" }).then(() => {
-                $self.$axios.delete("/api/v1/inspect_forms/delete/" + id).then(res => {
-                    $self.msgTips( params ? "撤销成功" : "删除成功", "success");
-                    if(params){
-                        $self.$emit("reloadList", "reload");
-                    }else{
-                        $self.getList();
-                    }
-                });
+    deleteCurrentLine(id, params) {
+      let $self = this;
+      $self
+        .$confirm(params ? "是否撤销?" : "是否删除?", "提示", {
+          type: "warning"
+        })
+        .then(() => {
+          $self.$axios
+            .delete("/api/v1/inspect_forms/delete/" + id)
+            .then(res => {
+              $self.msgTips(params ? "撤销成功" : "删除成功", "success");
+              if (params) {
+                $self.$emit("reloadList", "reload");
+              } else {
+                $self.getList();
+              }
             });
-        },
+        });
+    },
     //选择行
     showCurrentId(row) {
       this.$refs.InspectDetail.getFormDetails(row.id);
-      
     },
-    saveok(){
+    saveok() {
       this.getList();
     },
     //新建
@@ -242,7 +248,7 @@ export default {
 
     //分页
     currentChange(pageNum) {
-      this.params.pageNum = pageNum;
+      this.params.page = pageNum;
       this.getList(pageNum);
     },
     sizeChange(pageSize) {
