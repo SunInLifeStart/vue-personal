@@ -47,7 +47,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="开会时间" prop="meetingTime">
-                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="date">
+                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="datetime">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
