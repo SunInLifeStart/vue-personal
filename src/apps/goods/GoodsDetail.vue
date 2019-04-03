@@ -161,6 +161,11 @@ export default {
             $self.url = '/api/v1/motor-receive/get/' + $self.formId;
             $self.getFormDetailsData();
         },
+        clearForm() {
+            this.tableData = {};
+            this.actions = [];
+            this.comments = [];
+        },
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
