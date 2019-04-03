@@ -49,7 +49,8 @@ export default {
                 results:"采购结果",
                 abnormal: "招标异常事项",
                 supplier: "供应商引入审批",
-                portalmananger:"门户管理后台"
+                portalmananger:"门户管理后台",
+                inspect:"督办管理"
             }
         };
     },
