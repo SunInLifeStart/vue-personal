@@ -124,6 +124,7 @@ export default {
   name: "InspectForm",
   data() {
     return {
+      createForm_status :false,
       attType: "",
       // selectItem: {
       //   title: "",
@@ -274,6 +275,7 @@ export default {
       return selectItem;
     },
     saveFormValidate(type) {
+      console.log(1125,type)
       this.$refs["selectItem"].validate(valid => {
         if (valid) {
           this.saveForm(type);
@@ -282,14 +284,15 @@ export default {
     },
     // 提交保存
     async saveForm(params) {
+      
       const $self = this;
       let response = await $self.saveFormData(
         "/api/v1/inspect_forms/save",
         $self.selectItem
       );
       if (response) {
-        console.log(1125,response)
-        $self.formId = response.data.content.id;
+        
+        $self.formId = response.data.id;
 
         $self.dialogFormVisible = false;
         if (params) {
@@ -298,9 +301,12 @@ export default {
             $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
           } else {
             let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
+            console.log(555555,actions)
             actions.data.types = actions.data.types.filter(function(item) {
               return item.action == "COMMIT";
+              
             });
+            
             await $self.startSignal(actions.data.types[0]);
             $self.emitMessage();
           }
