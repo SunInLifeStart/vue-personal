@@ -15,13 +15,34 @@
                                     <el-input placeholder="请输入所属部门" v-model="params.department"></el-input>
                                 </el-form-item>
                             </el-col>
+                            <el-col :span="8">
+                                 <el-form-item label="培训时间" >
+                                        <el-date-picker v-model="params.trainingTime" type="daterange" range-separator="至" start-placeholder="开始日期" 
+                                        end-placeholder="结束日期"  value-format="yyyy-MM-dd" @change="time_change"></el-date-picker>
+                                </el-form-item>
+                            </el-col>
+                         </el-row>
+                         <el-row class="filterForm">
+                            <el-col :span="8">
+                                <el-form-item label="单据状态">
+                                    <el-select v-model="params.status" placeholder="请选择">
+                                        <el-option v-for="item in s_status" :key="item" :label="item" :value="item">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                            </el-col>
+                            <el-col :span="8">
+                               <el-form-item label="提单时间">
+                                    <el-date-picker v-model="params.committed" type="date" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                                </el-form-item>
+                            </el-col>
                             <el-col :span="8" >
                                 <el-form-item class="">
                                     <el-button type="primary" @click="searchList">查询</el-button>
                                     <el-button  @click="resetInput">重置</el-button>
                                 </el-form-item>
                             </el-col>
-                         </el-row>
+                    </el-row>
                     </el-form>
                 </div>
 
@@ -40,18 +61,18 @@
                     <el-table-column prop="participant" label="培训/学习(参加人员)">
                     </el-table-column>
                     <el-table-column prop="schedule" width="250" label="日程安排"></el-table-column>
-                     <el-table-column  width="100" label="表单状态">
+                     <el-table-column  width="100" label="单据状态">
                          <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                      </el-table-column>
                      <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
                              
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left"
-                             v-if="scope.row.status == '00' || scope.row.status == '02'|| scope.row.status == '03'|| scope.row.status == '04'" >
+                             v-if="scope.row.status == '00' || scope.row.status == '02'" >
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
                             <el-tooltip class="item" effect="dark" content="删除" placement="left"
-                             v-if="scope.row.status == '00' || scope.row.status == '02'|| scope.row.status == '03'|| scope.row.status == '04'">
+                             v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -82,12 +103,24 @@ export default {
             tableData: [],
             formDetails: {},
             formId: "",
+            s_status:[
+                "已保存",
+                "已驳回",
+                "审核中",
+                "已完成",
+            ],
             params: {
                 pageNum: 1,
                 pageSize: 5,
                 department: "",
                 submitter: "",
-                total: 0
+                total: 0,
+                committed:"",
+                status:"",
+                trainingTime:[],
+                startTime:"",
+                endTime:"",
+               
             },
             formName:"trainingApplication"
         };
@@ -109,6 +142,19 @@ export default {
         }
     },
     methods: {
+         time_change(time) {
+            // 改变时间获取数据
+            if (time === null) {
+               this.params.startTime = "";
+                this.params.endTime = "";
+            } else {
+                let time0 = time[0];
+                let time1 = time[1];
+                this.params.startTime = time0;
+                this.params.endTime = time1;
+            }
+           
+        },
         //获取列表
          async getList(pageNum) {
             let $self = this;
@@ -170,7 +216,18 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.submitter = this.params.department = "";
+            // this.params.submitter = this.params.department = "";
+            this.params={
+               department: "",
+                submitter: "",
+                committed:"",
+                status:"",
+                trainingTime:[],
+                 startTime:"",
+                endTime:"",
+               
+            }
+            this.s_status=[]
         }
     },
     mounted() {
@@ -182,10 +239,17 @@ export default {
       #TrainFilter  .el-form-item--small.el-form-item{
             width: 100%;
         }
+        
 </style>
 <style scoped>
 #TrainFilter .filterForm >>> .el-form-item__content{
         width: calc(100% - 80px);
+    }
+    #TrainFilter .filterForm >>> .el-select {
+        width: calc(100% - 15px);
+    }
+    #TrainFilter .filterForm >>> .el-date-editor{
+        width: calc(100% - 0px);
     }
 </style>
 
