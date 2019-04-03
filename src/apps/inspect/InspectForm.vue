@@ -49,7 +49,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="截至日期:">
-              <el-date-picker style="width:100%" type="date" v-model="formData.deadline"></el-date-picker>
+              <el-date-picker style="width:100%" type="date" v-model="formData.deadline" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
@@ -305,6 +305,7 @@ export default {
                        actions.data.types[0]["comment"] =  actions.data.types[0].name;
                        await $self.startSignal(actions.data.types[0]);
                        $self.emitMessage();
+                       $self.$emit("subOk");
                     }
                 } else {
                     $self.msgTips("保存成功", "success");
@@ -313,6 +314,7 @@ export default {
                     } else {
                         $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
                     }
+                    $self.$emit("saveOk");
                 }
             } else {
                 if (params) {
