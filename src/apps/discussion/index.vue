@@ -29,8 +29,6 @@
                 </el-table-column>
                 <el-table-column prop="organName" label="所属部门">
                 </el-table-column>
-                <el-table-column prop="committed" label="提单时间">
-                </el-table-column>
                 <el-table-column prop="applyDepartment" label="提请部门">
                 </el-table-column>
                 <el-table-column prop="timeApplication" label="提请时间">

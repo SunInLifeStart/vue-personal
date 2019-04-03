@@ -8,18 +8,6 @@
                         <el-input v-model="formData.number"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                    <el-form-item label="会议类型" prop="branchlineTo">
-                        <el-select v-model="formData.branchlineTo" placeholder="请选择会议类型">
-                            <el-option
-                                v-for="item in discussionOption"
-                                :key="item.value"
-                                :label="item.label"
-                                :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
             </el-row>
             <el-row>
                 <el-col :span="8">
@@ -33,11 +21,23 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="提单时间" prop="committed">
-                        <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">
-                        </el-date-picker>
+                    <el-form-item label="会议类型" prop="branchlineTo">
+                        <el-select v-model="formData.branchlineTo" placeholder="请选择会议类型">
+                            <el-option
+                                    v-for="item in discussionOption"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
+                <!--<el-col :span="8">-->
+                    <!--<el-form-item label="提单时间" prop="committed">-->
+                        <!--<el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">-->
+                        <!--</el-date-picker>-->
+                    <!--</el-form-item>-->
+                <!--</el-col>-->
             </el-row>
             <el-row>
                 <el-col :span="8">
@@ -172,9 +172,9 @@ export default {
                 branchlineTo: [
                     { required: true, message: '请输入会议类型', trigger: 'blur' }
                 ],
-                committed: [
-                    { required: true, message: '请输入提单时间', trigger: 'blur' }
-                ],
+                // committed: [
+                //     { required: true, message: '请输入提单时间', trigger: 'blur' }
+                // ],
                 // creatorName: [
                 //     { required: true, message: '请输入活动名称', trigger: 'blur' }
                 // ],
@@ -266,7 +266,7 @@ export default {
                 // comments: [],
                 idea: '',
                 business: '',
-                committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                // committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 applyDepartment: this.$store.getters.LoginData.oname || '',
                 timeApplication: '',
                 topicName: '',

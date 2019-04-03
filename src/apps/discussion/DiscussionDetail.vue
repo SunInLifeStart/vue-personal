@@ -32,8 +32,13 @@
                     </el-col>
                 </el-row>
                 <el-row>
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="提单时间：">{{tableData.committed}}-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
                     <el-col :span="8">
-                        <el-form-item label="提单时间：">{{tableData.committed}}
+                        <el-form-item label="会议类型：">
+                            <span  v-html="discussionOption[tableData.branchlineTo]" ></span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -46,11 +51,6 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="会议类型：">
-                            <span  v-html="discussionOption[tableData.branchlineTo]" ></span>
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="议题名称：">{{tableData.topicName}}
                         </el-form-item>
