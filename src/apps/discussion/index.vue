@@ -35,6 +35,9 @@
                 </el-table-column>
                 <el-table-column prop="timeApplication" label="提请时间">
                 </el-table-column>
+                <el-table-column label="单据状态">
+                    <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
+                </el-table-column>
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
                         <el-tooltip class="item" effect="dark" content="编辑" placement="left">
@@ -89,6 +92,18 @@ export default {
     },
     mounted() {
         this.getList();
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+                "00":"已保存",
+                "01":"审核中",
+                "02" :"已驳回",
+                "03" :"已撤销",
+                "04" :"已完成"
+            };
+            return xmlJson[data];
+        }
     },
     methods: {
         reloadList(params) {
