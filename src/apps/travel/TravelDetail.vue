@@ -259,61 +259,35 @@ export default {
     name: 'TravelDetail',
     data() {
         return {
-            subStatus: false,
-            activeName: 'first',
-            tableData: {
-                number: '',
-                submitter: '',
-                subOrganName: '',
-                reason: '',
-                evections: [],
-                estimate: [],
-                attachments: []
-            },
-            fileleng: 'show',
+            tableData: {},
             actions: [],
-            crumb: { items: [] },
-            isEdit: false,
-            editBtnText: '编辑',
-            rejectTarget: '',
-            rejectList: [],
-            attachments: [],
-            array: [],
-            users: [],
-            reject_status: false,
-            presign_status: false,
-            seleteUsers: [],
-            seleteUserLabel: '',
-            textarea: '',
+            crumbs:[],
+            formId: "",
+            textarea: "",
             dialogVisible: false,
-            currentAction: '',
-            submitData: {},
-            crumbNodeName: ''
+            users: [],
+            actionsDialogArr: [],
+            appFlowName:'appFlowName',
+            formName:'travel_forms',
+            comments:[],
+            dialogVisibleCrumb:false,
+            flowNodeUrl:"",
         };
     },
     props: ['formId'],
     components: {
         Comment
     },
-    mounted() {
-        // this.getAgree()
-        this.getAllUsers();
-        if (this.formId != '') {
-            this.getForm();
-            this.getActions();
-        }
-    },
-    watch: {
-        formId: function() {
-            if (this.formId != '') {
-                this.getForm();
-                this.getActions();
-            } else {
-                this.tableData = {};
-            }
-        }
-    },
+    // mounted() {
+    //     // this.getAgree()
+    //     this.getAllUsers();
+    //     if (this.formId != '') {
+    //         this.getForm();
+    //         this.getActions();
+    //     }
+    // },
     methods: {
+       /**
         ViewDetail(view) {
             if (view == 'borrow') {
                 if (
@@ -390,214 +364,35 @@ export default {
         downloadFile(url) {
             this.common.preview(url);
         },
-        getActions() {
-            axios.get(`/api/v1/travels/${this.formId}/actions`).then(res => {
-                res.data.types = res.data.types || [];
-                res.data.types.push({
-                    type: 'fullScreen',
-                    name: '全屏显示'
-                });
-                this.actions = res.data.types;
-            });
-            axios.get(`/api/v1/travels/${this.formId}/crumb`).then(res => {
-                this.crumb = { items: res.data, index: -1 };
-                res.data.forEach((item, index) => {
-                    if (item.active) {
-                        this.crumbNodeName = item.name;
-                        if (item.assignes) {
-                            item.name = item.name + '(' + item.assignes + ')';
-                        }
-                        this.crumb.index = index;
-                    }
-                });
-            });
+        */
+        getFormDetails(formId) {
+            let $self = this;
+            $self.formId = formId;
+            $self.url= "/api/v1/"+$self.formName+"/detail/" + $self.formId;
+            $self.getFormDetailsData();
         },
-        doComment(action) {
-            this.getForm();
-            let atIds = this.$refs.comment.getIds();
-            let comment = this.$refs.comment.getComment();
+        async getFormDetailsData() {
+            let $self = this;
+            let response = await $self.getDetails();
+            if (response) {
+                $self.tableData = response.data.content;
+                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
 
-            if (this.$refs.comment.isEmpty()) {
-                comment = action.name;
-            }
-            axios
-                .put(`/api/v1/travel_forms/${this.formId}/comment`, {
-                    content: comment,
-                    action: action.type
-                })
-                .then(res => {
-                    if (action.type == 'REJECT') {
-                        (this.tableData.committed = ''),
-                            axios.post(
-                                '/api/v1/travel_forms/save',
-                                JSON.stringify(this.tableData),
-                                {
-                                    headers: {
-                                        'Content-type': 'application/json'
-                                    }
-                                }
-                            );
-                    } else if (action.type == 'APPROVE') {
-                        axios.put(
-                            '/api/v1/travel_forms/' +
-                                this.tableData.id +
-                                '/commit/' +
-                                this.tableData.processId,
-                            '',
-                            {
-                                headers: {
-                                    'Content-type': 'application/json'
-                                }
-                            }
-                        );
-                    }
-
-                    comment = '';
-                    this.$refs.comment.clearComment();
-                    this.getForm();
-                    if (!'SAVE,PREVIEW,COMMENT'.includes(action.type)) {
-                        axios
-                            .put(`/api/v1/travels/${this.formId}/signal`, {
-                                action: action.type,
-                                assignees: atIds
-                            })
-                            .then(res => {
-                                this.getActions();
-                            });
-                    }
-                });
-        },
-        doAction(action) {
-            this.clearForm();
-            this.currentAction = action;
-            // 不需要弹出框
-            if ('ARCHIVE,DISPATCH,TEMPLATE,PULL,COMMIT'.includes(action.type)) {
-                this.clearForm();
-                let self = this; //套红，归档，分发
-                if (action.type == 'PULL') {
-                    axios
-                        .get(`/api/v1/travels/${self.formId}/pull`)
-                        .then(res => {
-                            self.comment('formOnlyComment');
-                            self.getActions();
-                            self.getCrumbs();
-                        });
-                }
-                if (action.type == 'COMMIT' && this.crumbNodeName == '申请') {
-                    this.submitForm();
-                } else {
-                    if (action.type == 'COMMIT') {
-                        self.dialogVisible = true;
-                        if (action.required) {
-                            if (action.type == 'COMMIT') {
-                                self.presign_status = true;
-                                self.seleteUserLabel = '请选择拟办人';
-                            }
-                        }
-                    }
-                }
-            } else if ('PRESIGN'.includes(action.type)) {
-                //拒绝，加签
-                this.dialogVisible = true;
-                //需要弹出并填写意见，选择驳回节点或选择其他人
-                if (action.type == 'REJECT') {
-                    this.getRejectList();
-                    this.reject_status = true;
-                }
-                if (action.type == 'PRESIGN') {
-                    this.presign_status = true;
-                    this.seleteUserLabel = '前选择前加签人';
-                }
-            } else if (
-                'SUPERIOR,APPROVE,SIGNOUT,REJECT,CANCEL'.includes(action.type)
-            ) {
-                //拟办，同意
-                this.dialogVisible = true;
-                //只需要填写意见
-            } else if ('fullScreen'.includes(action.type)) {
-                this.common.open(`/#/apps/travels/${this.formId}`);
-            }
-        },
-        getRejectList() {
-            let self = this;
-            axios
-                .get('/api/v1/travels/' + this.formId + '/reject/targets')
-                .then(res => {
-                    self.rejectList = res.data;
-                });
-        },
-        submitForm() {
-            let self = this;
-
-            //如果是不需要走流程的节点
-            if (
-                'SAVE,PREVIEW,COMMENT,PULL,PRINTER,EDIT'.includes(
-                    self.currentAction.type
-                )
-            ) {
             } else {
-                //退回
-                if (self.currentAction.type == 'REJECT') {
-                    if (self.seleteUsers) {
-                        self.submitData.rejectTarget = self.rejectTarget;
-                    } else {
-                        self.$message.error('请选择驳回节点');
-                        return false;
-                    }
-                }
-
-                //前加签
-                if (self.currentAction.required) {
-                    if (self.seleteUsers.length > 0) {
-                        var key = self.currentAction.required[0].split(':')[0];
-                        self.submitData[key] = self.seleteUsers;
-                    } else {
-                        self.$message.error(self.seleteUserLabel);
-                        return false;
-                    }
-                }
-                self.submitData.action = self.currentAction.type;
-                axios
-                    .put(
-                        `/api/v1/travels/${self.formId}/signal`,
-                        self.submitData
-                    )
-                    .then(res => {
-                        self.dialogVisible = false;
-                        self.comment();
-                        // self.getForm();
-                        self.getActions();
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                    });
+                $self.msgTips("获取表单失败", "warning");
             }
-        },
-        comment(comment) {
-            let self = this;
-            axios
-                .put(`/api/v1/travel_forms/${self.formId}/comment`, {
-                    content: self.textarea || self.currentAction.name,
-                    node: this.crumbNodeName,
-                    action: self.currentAction.type
-                })
-                .then(res => {
-                    if (comment == 'formOnlyComment') {
-                        this.getActions();
-                        self.$message({
-                            message: self.currentAction.name + '成功',
-                            type: 'success'
-                        });
-                    }
-                    this.getForm();
-                });
-        },
-        clearForm() {
-            this.reject_status = false;
-            this.presign_status = false;
-            this.textarea = '';
-            this.submitData = {};
+            // debugger;
+            let actions = await $self.getActions();
+            // let crumbs = await $self.getCrumbs();
+            let comments =  await $self.getComments();
+            $self.actions = actions.data.types;
+            $self.comments = comments.data;
+            // $self.crumbs =  {items: crumbs.data, index: -1};
+            // for(var i= 0; i<$self.crumbs.items.length; i++){
+            //     if($self.crumbs.items[i].active){
+            //         $self.crumbs.index = i;    
+            //     }
+            // }
         }
     }
 };

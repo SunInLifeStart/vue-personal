@@ -1,7 +1,7 @@
 <template>
     <div id="IncomingForm">
         <el-form ref="formupdate" :model="rows" label-width="80px" :rules="rules">
-            <el-row>
+            <!-- <el-row>
                 <el-col :span="8">
                     <el-form-item label="收文类型" prop="type">
                         <el-select v-model="rows.type" placeholder="请选择" @change="getIcommingType(rows.type)">
@@ -10,24 +10,21 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-            </el-row>
+            </el-row> -->
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="来文机关" prop="organ" v-show="commonInput">
                         <el-input v-model="rows.organ" placeholder="请填写来文机关"></el-input>
                     </el-form-item>
-                    <el-form-item label="来文机关" prop="organ" v-show="childOptions_status">
-                        <el-select v-model="rows.organ" placeholder="选择子公司" filterable>
-                            <el-option v-for="item in childOptions" :key="item.id" :label="item.name" :value="item.name">
-                            </el-option>
-                        </el-select>
+                    <!-- <el-form-item label="来文机关" prop="organ" v-show="childOptions_status">
+                         <el-input v-model="rows.organ"></el-input>
                     </el-form-item>
                     <el-form-item label="来文机关" prop="organ" v-show="lastCopy_status">
                         <el-select v-model="rows.organ" placeholder="选择上级阅知，抄送待阅" allow-create filterable>
                             <el-option v-for="item in lastCopyOptions" :key="item.id" :label="item.name" :value="item.name">
                             </el-option>
                         </el-select>
-                    </el-form-item>
+                    </el-form-item> -->
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="来文字号" prop="wordNo">
@@ -143,7 +140,7 @@ export default {
                 },
                 {
                     value_type: 'group',
-                    label_type: '集团收文批办'
+                    label_type: '公司收文批办'
                 },
                 {
                     value_type: 'copy',
@@ -335,13 +332,6 @@ export default {
                 type: [
                     { required: true, message: '请输入类型', trigger: 'blur' }
                 ],
-                organ: [
-                    {
-                        required: true,
-                        message: '请输入来文机关',
-                        trigger: 'blur'
-                    }
-                ],
                 // wordNo: [
                 //     {
                 //         required: true,
@@ -397,19 +387,19 @@ export default {
             });
         },
         getIcommingType(type) {
-            if (type) {
-                this.rows.organ = '';
-                if (type == 'superior' || type == 'copy') {
-                    this.childOptions_status = this.commonInput = false;
-                    this.lastCopy_status = true;
-                } else if (type == 'childcom') {
-                    this.lastCopy_status = this.commonInput = false;
-                    this.childOptions_status = true;
-                } else {
-                    this.lastCopy_status = this.childOptions_status = false;
-                    this.commonInput = true;
-                }
-            }
+            // if (type) {
+            //     this.rows.organ = '';
+            //     if (type == 'superior' || type == 'copy') {
+            //         this.childOptions_status = this.commonInput = false;
+            //         this.lastCopy_status = true;
+            //     } else if (type == 'childcom') {
+            //         this.lastCopy_status = this.commonInput = false;
+            //         this.childOptions_status = true;
+            //     } else {
+            //         this.lastCopy_status = this.childOptions_status = false;
+            //         this.commonInput = true;
+            //     }
+            // }
         },
         getForm() {
             const self = this;

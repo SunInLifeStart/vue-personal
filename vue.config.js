@@ -66,9 +66,13 @@ module.exports = {
     devServer: {
         port: 8889,
         proxy: {
+<<<<<<< HEAD
+            
+=======
             "/api/v1/singApproval/": {
                 target: "http://192.168.1.110:8754"
             },
+>>>>>>> 8f6aa7321b281d749981f0b6faf8317fc70b4cc0
             "/api/": {
                 target: "http://116.117.157.232"
             },
@@ -76,7 +80,7 @@ module.exports = {
             target: "http://116.117.157.232"
             },
             "/workflow/": {
-            target: "http://116.117.157.232"
+            target: "http://116.117.157.232:10099"
             },
             "/solr": {
                 target: "http://116.117.157.232"
