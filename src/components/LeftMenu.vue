@@ -259,7 +259,7 @@ export default {
                             id: "contract_2",
                             name: '合同台账',
                             icon: 'el-icon-hetongxiazaixin-',
-                            to: 'ledger'
+                            to: ''
                             // 没有
                         },
                     ]
