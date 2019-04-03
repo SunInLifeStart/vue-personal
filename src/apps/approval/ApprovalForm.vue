@@ -9,11 +9,56 @@
                     </el-form-item>
                 </el-col>
             </el-row> -->
+             <el-row>
+                 <el-col :span="8">
+                    <el-form-item label="申请人" prop="creatorName" >
+                        <el-input v-model="formData.creatorName" :disabled="true" placeholder="请输入申请人"></el-input>
+                    </el-form-item>
+                </el-col>
+                 <el-col :span="8">
+                    <el-form-item label="申请时间" prop="created">
+                        <el-input  v-model="formData.created" :disabled="true" placeholder="请输入申请时间"></el-input>
+                        <!-- <el-date-picker v-model="formData.created" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">
+                        </el-date-picker> -->
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="申请部门" prop="organName" >
+                        <el-input v-model="formData.organName" :disabled="true" placeholder="请输入申请部门"></el-input>
+                    </el-form-item>
+                </el-col>
+           </el-row>
+             <el-row>
+                <el-col :span="8">
+                    <el-form-item label="领用时间"  prop="recipientsTime">
+                        <!-- <el-date-picker @change="getHour(formData.recipientsTime,formData.endTime)" 
+                         value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.recipientsTime" style="width:100%" type="date">
+                        </el-date-picker> -->
+                         <el-date-picker v-model="formData.recipientsTime"  @change="getHour(formData.recipientsTime,formData.endTime)"
+                         value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="领用时间">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-col>
+                 <el-col :span="8">
+                    <el-form-item label="结束时间" prop="endTime">
+                        <!-- <el-date-picker  @change="getHour(formData.recipientsTime,formData.endTime)" 
+                        value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.endTime" style="width:100%" type="date">
+                        </el-date-picker> -->
+                        <el-date-picker v-model="formData.endTime"  @change="getHour(formData.recipientsTime,formData.endTime)"
+                        value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间">
+                        </el-date-picker>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="时长" prop="timeLang">
+                        <el-input v-model="formData.timeLang"  placeholder="时长"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="使用物品" prop="submitter">
-                        <!-- <el-input v-model="formData.submitter" placeholder="请输入使用物品"></el-input> -->
-                         <el-select v-model="formData.submitter" placeholder="请选择会议类型">
+                    <el-form-item label="印章种类" prop="useItems">
+                         <el-select style="width:100%;" clearable v-model="formData.useItems" placeholder="请选择印章种类">
                             <el-option
                                 v-for="item in onOption"
                                 :key="item.value"
@@ -23,102 +68,89 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <el-col :span="12">
-                    <el-form-item label="经办人" prop="department" label-width="120px">
-                        <el-input v-model="formData.department" placeholder="请输入经办人"></el-input>
+                <!-- :style="{display:(formData.useItems=='公章'?'black':'none')}"  -->
+                <el-col :span="12" >
+                    <el-form-item label="类型" :prop="formData.useItems=='公章'?'sealType':''">
+                       <el-select style="width:100%;" clearable v-model="formData.sealType" placeholder="请选择类型" 
+                       :disabled="formData.useItems=='公章'?false:true">
+                       
+                            <el-option
+                                v-for="item in typeOption"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="8">
-                    <el-form-item label="领用时间"  prop="committed">
-                        <!-- <el-input v-model="formData.committed" placeholder="领用时间"></el-input> -->
-                        <el-date-picker v-model="formData.committed" type="date" style="width:100%" value-format="yyyy-MM-dd"></el-date-picker>
-                    </el-form-item>
-                </el-col>
-                 <el-col :span="8">
-                    <el-form-item label="结束时间" prop="trainingTime">
-                            <el-date-picker v-model="formData.trainingTime" type="date" style="width:100%" value-format="yyyy-MM-dd"></el-date-picker>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="时长" prop="timelang" label-width="120px">
-                        <el-input v-model="formData.timelang" placeholder="请输入时长"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+           
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="是否外借" prop="type">
+                    <el-form-item label="是否外借" prop="lendOutType">
                         <span style="float:left">
-                             <el-radio v-model="formData.type" label="true">是</el-radio>
-                             <el-radio v-model="formData.type" label="false">否</el-radio>
+                             <el-radio v-model="formData.lendOutType" label="1">是</el-radio>
+                             <el-radio v-model="formData.lendOutType" label="0">否</el-radio>
                         </span>
                     </el-form-item>
                 </el-col>
                <el-col :span="12">
-                    <el-form-item label="陪同人" prop="isAnnualPlan">
-                         <el-input v-model="formData.isAnnualPlan" placeholder="陪同人" :disabled="formData.type=='false'?true:false"></el-input>
-                       
+                    <el-form-item label="陪同人" :prop="formData.lendOutType=='1'?'accompanyingPerson':''">
+                        <!-- multiple filterable readonly default-first-option -->
+                       <el-select style="width:100%;" v-model="formData.accompanyingPerson"  placeholder="请选择陪同人">
+                            <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.name">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
+                   
                 </el-col>
               </el-row>
             <el-row>
                 <el-col :span="24">
-                  <el-form-item label="使用事由" prop="trainingPrograms" >
-                        <el-input  v-model="formData.trainingPrograms"   placeholder="请输入使用事由" ></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="用印文件名称" prop="trainingContent">
-                        <el-input  v-model="formData.trainingContent"  placeholder="请输入用印文件名称"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-             <el-row>
-                <el-col :span="24">
-                    <el-form-item label="用印文件" prop="participant">
-                       <el-input  v-model="formData.participant"  placeholder="请输入参加人员"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-             <el-row>
-                <el-col :span="24">
-                    <el-form-item label="用印份数(份)" prop="schedule">
-                        <el-input    v-model="formData.schedule" placeholder="请输入用印份数"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-             <!-- <el-row>
-                <el-col :span="24">
-                    <el-form-item label="费用预算">
-                       <span style="float:left"><el-input type="number" clearable style="width:400px"  v-model="formData.lowercase" placeholder="小写入费用预算"></el-input></span>
-                       
-                      <span  style="float:left"><el-input clearable style="width:400px" v-model="formData.upper" placeholder="大写入费用预算" disabled></el-input></span>
-                    </el-form-item>
-                </el-col>
-            </el-row> --> 
-             <el-row>
-                <el-col :span="24">
-                    <el-form-item label="审批意见">
-                        <el-input type="textarea" v-model="formData.remarks" placeholder="请输入审批意见"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                        <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                    <el-form-item label="用印明细">
+                        <div style="float: right;">
+                            <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
+                            <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                         </div>
+                        <el-table :data="formData.usingApproval" border style="width: 100%; margin-top: 5px;"
+                         @selection-change="handleSelectionChange()" 
+                          :row-class-name="tableRowClassName"
+                          @row-click='show'
+                          >
+                            <el-table-column type="selection"></el-table-column>
+                            <el-table-column prop="fileName" label="用印文件名称">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.fileName"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="useReason" label="使用事由">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.useReason"></el-input>
+                                </template>
+                            </el-table-column>
+                        
+                            <el-table-column prop="fileNum" label="用印份数">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.fileNum" ></el-input>
+                                </template>
+                            </el-table-column>
+                             <el-table-column  label="附件" align="center">
+                                <template slot-scope="scope" >
+                                    <el-upload  name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" 
+                                    :on-success="handleSuccess"
+                                     :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                                        <i class="el-icon-plus"></i>
+                                    </el-upload>
+                                    <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
+                                         <!-- @getId="getId" -->
+                                        <FilesOperate :item="item" :options="{preview:true,del:true,download:true}"></FilesOperate>
+                                    </div>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                     </el-form-item>
                 </el-col>
-            </el-row>
+             </el-row> 
         </el-form>
     </div>
     <div slot="footer" class="dialog-footer">
@@ -130,49 +162,61 @@
 </template>
 <script>
 /* eslint-disable */
+import axios from 'axios';
 import moment from "moment";
 import FilesOperate from "../FilesOperate";
 import { application } from "../application.js";
 import { publicMethods } from "../application.js";
+import { debug, debuglog } from 'util';
 export default {
     mixins: [publicMethods],
     name: "ApprovalForm",
     data() {
         return {
+            users:[],
             dialogFormVisible: false,
             formData: this.resetForm(),
+            uploadImageType:'',
             users: [],
+            selectionItems:[],
             appFlowName: "motor-trainingapplication_train",
             rules: {
-                submitter: [
+                useItems: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
-                        message: "请输入使用物品"
+                        message: "请输入印章种类"
                     }
                 ],
-                timelang: [
+                sealType: [
+                    {
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入类型"
+                    }
+                ],
+                timeLang: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
                         message: "时长"
                     }
                 ],
-                department: [
+                creatorName: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
-                        message: "请输入经办人"
+                        message: "请输入申请人"
                     }
                 ],
-                type: [
+                lendOutType: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
                         message: "是否外借"
                     }
                 ],
-                isAnnualPlan: [
+                accompanyingPerson: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
@@ -180,28 +224,28 @@ export default {
                     }
                 ],
 
-                committed: [
+                recipientsTime: [
                     {
                         required: true, //是否必填
                         message: "请选择领用时间",
                         trigger: "blur"
                     }
                 ],
-                trainingTime:[
+                endTime:[
                     {
                         required: true, //是否必填
                         message: "请选择结束时间",
                         trigger: "blur"
                     }
                 ],
-                trainingPrograms: [
+                useReason: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
                         message: "请输入使用事由"
                     }
                 ],
-                trainingContent: [
+                fileName: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
@@ -215,7 +259,7 @@ export default {
                         message: "请输入用印文件"
                     }
                 ],
-                schedule: [
+                fileNum: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
@@ -244,13 +288,7 @@ export default {
                         message: "请选择结束时间"
                     }
                 ],
-                writer: [
-                    {
-                        required: true, //是否必填
-                        trigger: "change", //何事件触发
-                        message: "请选择记录人"
-                    }
-                ]
+   
             },
             onOption: [
                 {
@@ -278,17 +316,122 @@ export default {
                     label: '经审委印章'
                 },
             ],
+            typeOption: [
+                {
+                    value: '拜访函(企业)',
+                    label: '拜访函(企业)'
+                },
+                {
+                    value: '人力资源模板文件',
+                    label: '人力资源模板文件'
+                },
+                {
+                    value: '日常行政管理',
+                    label: '日常行政管理'
+                },
+                // {
+                //     value: '工会章',
+                //     label: '工会章'
+                // },
+                {
+                    value: '其它',
+                    label: '其它'
+                }
+            ],
         };
     },
      watch: {
-      'formData.lowercase'(val) {
-          this.formData.timelang = val ? this.convertCurrency(val) : "";
-      }
+   
     },
     components: {
         FilesOperate
     },
     methods: {
+        // 时长
+        getHour(a1,a2) {
+           var date3 = new Date(a2).getTime() - new Date(a1).getTime();   //时间差的毫秒数   
+            //计算出相差天数  
+            var days=Math.floor(date3/(24*3600*1000))  
+           //计算出小时数  
+           var leave1=date3%(24*3600*1000)    //计算天数后剩余的毫秒数  
+            var hours=(leave1/(3600*1000)).toFixed(1)  
+            if(a1==null || a2 ==null || a1=='' || a2==''){
+                this.formData.timeLang=''
+            }
+            else{
+                this.formData.timeLang=days*12+new Number(hours)
+            }
+            return hours
+        },
+         handleSelectionChange(selection,index) {
+             this.selectionItems = selection;
+        },
+        addItem() {
+             this.formData.usingApproval.push({
+                fileName: '',
+                useReason: '',
+                fileNum: '',
+                attachments: [],
+            });
+        },
+        deleteItem() {
+            const self = this;
+            if (self.selectionItems.length > 0) {
+                self
+                    .$confirm('是否删除?', '提示', { type: 'warning' })
+                    .then(() => {
+                        self.selectionItems.forEach(function (oData) {
+                            if (oData.id == '') {
+                                self.formData.usingApproval.forEach(function (
+                                    item,
+                                    index
+                                ) {
+                                    if (item.count == oData.count) {
+                                        self.formData.usingApproval.splice(index, 1);
+                                    }
+                                });
+                            } else {
+                                axios
+                                    .delete(
+                                        '/api/v1/asset_forms/deleteusingApproval/' +
+                                        oData.id,
+                                        '',
+                                        {
+                                            headers: {
+                                                'Content-type':
+                                                    'application/json'
+                                            }
+                                        }
+                                    )
+                                    .then(res => {
+                                        self.formData.usingApproval.forEach(function (
+                                            item,
+                                            index
+                                        ) {
+                                            if (item.id == oData.id) {
+                                                self.formData.usingApproval.splice(
+                                                    index,
+                                                    1
+                                                );
+                                            }
+                                        });
+                                    })
+                                    .catch(function () {
+                                        self.$message({
+                                            message: '操作失败',
+                                            type: 'error'
+                                        });
+                                    });
+                            }
+                        });
+                    });
+            }
+        },
+        getUserList() {
+            axios.get('/api/v1/users', '').then(res => {
+                this.users = res.data;
+            });
+        },
         setDataFromParent(data) {
             this.formData = data;
             this.formId = data.id;
@@ -301,33 +444,31 @@ export default {
         },
         resetForm() {
             let formData = {
-                attachments: [],
-                submitter: "", //使用物品
-                department: this.$store.getters.LoginData.uname || '', //经办人
-                timelang:'',//时长
+                usingApproval: [
+                    {
+                        fileName: '',
+                        useReason: '',
+                        fileNum: '',
+                        attachments: [],
+                    }
+                ],
+                useItems: "", //印章种类
+                sealType:"",//类型
+                creatorName: this.$store.getters.LoginData.uname || '', //申请人
+                 created: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                timeLang:'',//时长
                 id: "",
-                // committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //领用时间
-                committed: "",
-                isAnnualPlan: "",
-                draftUnit: "",
-                draftTime: [],
-                startTime: "",
-                endTime: "",
-                number: "",
-                phone: "",
-                trainingPrograms: "",
-                trainingContent: "",
+                organName: this.$store.getters.LoginData.oname || '',
+                // recipientsTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //领用时间
+                recipientsTime: "",
+                accompanyingPerson: "",
+                // number: "",
+                useReason: "",
+                fileName: "",
                 participant: "",
-                type: "",
-                suggestion: "",
-                consts: "",
-                upper: "",
-                lowercase: "",
-                schedule: "",
+                fileNum: "",
                 remarks: "",
-                writer: "",
-                trainingTime: ""
-                //  created: moment(new Date()).format("YYYY-MM-DD")
+                endTime: ""
             };
             return formData;
         },
@@ -342,7 +483,7 @@ export default {
         async saveForm(params) {
             const $self = this;
             let response = await $self.saveFormData(
-                "/api/v1/trainingApplication/save",
+                "/api/v1/singApproval/save",
                 $self.formData
             );
             if (response) {
@@ -378,11 +519,23 @@ export default {
                 }
             }
         },
-        handleSuccess(response, file) {
+        tableRowClassName ({row, rowIndex}) {
+        //把每一行的索引放进row
+        row.index = rowIndex;
+      },
+        show(row, event, column){
+            this.uploadImageType=row.index
+        },
+        handleSuccess(response, file, fileList ) {
+            // debugger
             const self = this;
+            const aaa=self.uploadImageType
             if (response.length > 0) {
-                response.forEach(function(item) {
-                    self.formData.attachments.push(item);
+                response.forEach(function(item,index) {
+                    // self.formData.attachments.push(item);
+                //    filelist.forEach(function(val,index){
+                        self.formData.usingApproval[aaa].attachments.push(item);
+                    // })
                 });
             }
             this.$refs.upload.clearFiles();
@@ -390,20 +543,22 @@ export default {
         submitUpload() {
             this.$refs.upload.submit();
         },
+        
         handlePreview() {},
         handleRemove() {}
     },
-    mounted() {}
+    mounted() {
+        this.getUserList()
+    }
 };
 </script>
 <style lang="scss" scoped>
 #ApprovalForm {
     .uploadBtn {
-        margin-right: 10px;
-        width: 100px;
-        height: 130px;
+        margin: 0px auto;
+        width: 70px;
+        height: 70px;
         text-align: center;
-        float: left;
         border: 1px solid #c0c4cc;
         border-radius: 2px;
         cursor: pointer;
@@ -413,10 +568,15 @@ export default {
             height: 100%;
 
             i {
-                font-size: 50px;
-                margin-top: 35px;
+                font-size: 40px;
+                margin-top: 20px;
             }
         }
+    }
+    .opertes{
+        margin: 7px auto;
+        width: 100px;
+        height: 150px;
     }
     input[type=number]::-webkit-inner-spin-button,  
     input[type=number]::-webkit-outer-spin-button {  

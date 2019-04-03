@@ -250,8 +250,8 @@ export default {
         resetForm() {
             let formData = {
                 attachments: [],
-                submitter: "", //申请人
-                department: "", //所属部门
+                submitter: this.$store.getters.LoginData.uname || '', //申请人
+                department: this.$store.getters.LoginData.oname || '', //所属部门
                 id: "",
                 committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
                 // committed: "",
