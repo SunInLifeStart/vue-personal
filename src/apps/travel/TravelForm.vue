@@ -717,7 +717,7 @@ export default {
         async saveForm(params) {
             const $self = this;
             let response = await $self.saveFormData(
-                '/api/v1/trainingApplication/save',
+                '/api/v1/travel_forms/save',
                 $self.formData
             );
             if (response) {

@@ -107,7 +107,7 @@ export default {
                 submitter: "",
                 total: 0
             },
-            formName:"trainingApplication"
+            formName:"travel_forms"
         };
     },
     mounted(){

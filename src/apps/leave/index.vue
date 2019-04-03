@@ -17,10 +17,10 @@
                         <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="params.status" placeholder="请选择">
-                                    <el-option label="已保存" value="已保存"></el-option>
-                                    <el-option label="审核中" value="审核中"></el-option>
-                                    <el-option label="已驳回" value="已驳回"></el-option>
-                                    <el-option label="已完成" value="已完成"></el-option>
+                                    <el-option label="已保存" value="00"></el-option>
+                                    <el-option label="审核中" value="01"></el-option>
+                                    <el-option label="已驳回" value="02"></el-option>
+                                    <el-option label="已完成" value="04"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -49,15 +49,15 @@
                     </el-table-column>
                     <el-table-column prop="applyTime" label="提单时间" align="center">
                     </el-table-column>
-                    <!-- :formatter="fomatterStatus" -->
-                    <el-table-column prop="status" label="状态" align="center" >
+                   
+                    <el-table-column prop="status" label="状态" align="center"  :formatter="fomatterStatus">
                     </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '已保存'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -145,6 +145,7 @@ export default {
                     $self.$refs.LeaveDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.content.list;
+                console.log($self.tableData)
                 $self.params.total = response.data.content.total;
             } else {
                 $self.msgTips('获取列表失败', 'warning');
@@ -194,7 +195,11 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.uname = this.params.oname = this.params.status = '';
+            this.params= {}
+            this.params.total = 0;
+            this.params.department = this.params.submitter= '';
+            this.params.pageNum = 1;
+            this.params.pageSize = 5;
             this.getList();
         },
         fomatterStatus(row, column) {

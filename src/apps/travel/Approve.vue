@@ -1,6 +1,7 @@
 <template>
   <div id="APPROVE">
-    <TravelDetail :formId="formId" ref="TravelDetail"></TravelDetail>
+    <TravelDetail ref="TravelDetail"> </TravelDetail>
+     <!-- :formId="formId" -->
   </div>
 </template>
 <script>
@@ -13,10 +14,10 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.IncomingDetail.setTab();
+         this.$refs.TravelDetail.getFormDetails(this.formId);
     },
     components: {
-        TravelDetail
+       TravelDetail
     },
     watch: {},
 
@@ -26,7 +27,6 @@ export default {
 <style lang="scss" scope>
 #APPROVE {
     height: 100%;
-    overflow-y: auto;
     #TravelDetail {
         height: 100%;
         width: 100%;
