@@ -184,22 +184,26 @@ export const CONFIG = {
     'status': [{
         id: '1',
         name: '已保存',
-        value: '已保存'
+        value: '已保存',
+        code: '00'
     },
     {
         id: '2',
         name: '审核中',
-        value: '审核中'
+        value: '审核中',
+        code: '01'
     },
     {
         id: '3',
         name: '已驳回',
-        value: '已驳回'
+        value: '已驳回',
+        code: '02'
     },
     {
         id: '4',
         name: '已完成',
-        value: '已完成'
+        value: '已完成',
+        code: '04'
     },
     ],
     'comment': [

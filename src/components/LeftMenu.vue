@@ -96,7 +96,7 @@ export default {
                             id: "commonly_6",
                             name: '用印审批',
                             icon: 'el-icon-yongyin',
-                            to: 'approvals'
+                            to: 'approval'
                             // 没有
                         },
                          {

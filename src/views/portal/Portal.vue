@@ -50,7 +50,7 @@
                <countTo :startVal='0' :endVal='serviceFirm' :duration='1000'></countTo>
                 <label class="unit">亿</label>
             </span>
-              <p>年税收额</p>
+              <p>预计年税收额</p>
           </el-col>
           <el-col :span="6">
             <span class="number">

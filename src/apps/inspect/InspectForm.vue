@@ -294,10 +294,8 @@ export default {
                 if (params) {
                     $self.msgTips("提交成功", "success");
                     if (this.createForm_status) {
-                      console.log(333)
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
-                    } else {      
-                      console.log(444)                        
+                    } else {                            
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
                         actions.data.types = actions.data.types.filter(
                             function(item) {
@@ -311,10 +309,8 @@ export default {
                 } else {
                     $self.msgTips("保存成功", "success");
                     if (this.createForm_status) {
-                      console.log(111)
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
-                      console.log(222)
                         $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
                     }
                 }

@@ -210,7 +210,7 @@ export default {
         })
         .then(() => {
           $self.$axios
-            .delete("/api/v1/inspect_forms/delete/" + id)
+            .get("/api/v1/inspect_forms/delete/" + id)
             .then(res => {
               $self.msgTips(params ? "撤销成功" : "删除成功", "success");
               if (params) {
