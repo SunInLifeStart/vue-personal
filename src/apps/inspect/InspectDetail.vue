@@ -163,7 +163,7 @@ export default {
     methods: {
         handleSuccess(){},
         getFormDetails(formId) {
-          
+          console.log(11111)
             let $self = this;
             $self.formId = formId;
             $self.url= "/api/v1/"+$self.formName+"/" + $self.formId;
@@ -175,6 +175,7 @@ export default {
             if (response) {
                   console.log(1125,response)
                 $self.tabledata = response.data;
+                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }

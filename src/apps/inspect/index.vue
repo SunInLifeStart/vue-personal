@@ -109,7 +109,7 @@
     </el-card>
     <br>
     <el-card class="box-card">
-      <InspectDetail :formId="formId" ref="InspectDetail" @reloadList="reloadList"></InspectDetail>
+      <InspectDetail :formId="formId" ref="InspectDetail" @reloadList="reloadList" @resetStatus = "resetStatus"></InspectDetail>
       <!-- :formId="formId" -->
     </el-card>
     <InspectForm ref="InspectForm" @reloadList="reloadList" @saveok="saveok"></InspectForm>
@@ -156,6 +156,14 @@ export default {
     InspectDetail
   },
   methods: {
+    resetStatus(data){
+              let $self = this;
+            for(let item of $self.tableData){
+                if(data.id == item.id){
+                  item.status = data.status;
+                }
+            }
+        },
     stateFormatter(row, column) {
       let state;
       switch (row.status) {

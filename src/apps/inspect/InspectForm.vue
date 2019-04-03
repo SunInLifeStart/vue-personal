@@ -124,7 +124,7 @@ export default {
   name: "InspectForm",
   data() {
     return {
-      createForm_status :false,
+      // createForm_status :false,
       attType: "",
       // selectItem: {
       //   title: "",
@@ -275,7 +275,6 @@ export default {
       return selectItem;
     },
     saveFormValidate(type) {
-      console.log(1125,type)
       this.$refs["selectItem"].validate(valid => {
         if (valid) {
           this.saveForm(type);
@@ -284,41 +283,37 @@ export default {
     },
     // 提交保存
     async saveForm(params) {
-      
       const $self = this;
       let response = await $self.saveFormData(
         "/api/v1/inspect_forms/save",
         $self.selectItem
       );
       if (response) {
-        
-        $self.formId = response.data.id;
-
         $self.dialogFormVisible = false;
+        $self.formId = response.data.id;
         if (params) {
           $self.msgTips("提交成功", "success");
           if (this.createForm_status) {
             $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
           } else {
             let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-            console.log(555555,actions)
             actions.data.types = actions.data.types.filter(function(item) {
               return item.action == "COMMIT";
-              
             });
-            
+            actions.data.types[0]["comment"] = actions.data.types[0].name;
             await $self.startSignal(actions.data.types[0]);
             $self.emitMessage();
           }
         } else {
           $self.msgTips("保存成功", "success");
-           $self.$emit('saveok');
+
           if (this.createForm_status) {
-            $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
-          } else {
-            $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
-          }
+                        $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
+                    } else {
+                        $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
+                    }
         }
+        $self.$emit("saveok");
       } else {
         if (params) {
           $self.msgTips($self, "提交失败", "warning");
@@ -343,9 +338,7 @@ export default {
     handleRemove() {},
     getInspector() {
       const self = this;
-      
-       
-        
+
       axios
         .get("/api/v1/users/role/deptManager")
         .then(res => {
