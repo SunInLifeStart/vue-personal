@@ -305,7 +305,7 @@ export default {
                        actions.data.types[0]["comment"] =  actions.data.types[0].name;
                        await $self.startSignal(actions.data.types[0]);
                        $self.emitMessage();
-                       $self.$emit("subOk");
+                      //  $self.$emit("subOk");
                     }
                 } else {
                     $self.msgTips("保存成功", "success");
@@ -314,7 +314,7 @@ export default {
                     } else {
                         $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
                     }
-                    $self.$emit("saveOk");
+                    // $self.$emit("saveOk");
                 }
             } else {
                 if (params) {

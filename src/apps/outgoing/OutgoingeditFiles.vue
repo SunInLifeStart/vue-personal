@@ -92,7 +92,7 @@ export default {
     },
     mounted(){
         if(process.env.NODE_ENV === 'production'){
-            this.openUrl = "http://static.zgcgroup.vpn/edit.html?"
+             this.openUrl = "/static/edit.html?"
         }else{
             this.openUrl = "http://static1.yxpe.com.cn/edit.html?"
         }

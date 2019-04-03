@@ -57,7 +57,7 @@
         <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
       </div>
       <div id="InspectList">
-        <el-table :data="tableData" style="width: 100%; cursor:pointer" @row-click="showCurrentId">
+        <el-table :data="tableData" style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
           <el-table-column prop="title" label="标题" min-width="150px" align="center"></el-table-column>
           <el-table-column prop="definer" label="立项人" min-width="150px" align="center"></el-table-column>
           <el-table-column prop="inspector" label="被督办部门负责人" min-width="150px" align="center"></el-table-column>
@@ -113,7 +113,7 @@
       ></InspectDetail>
       <!-- :formId="formId" -->
     </el-card>
-    <InspectForm ref="InspectForm" @reloadList="reloadList" @saveOk="saveOk" @subOk="subOk"></InspectForm>
+    <InspectForm ref="InspectForm" @reloadList="reloadList" ></InspectForm>
     <!-- :formDataFromIndex="formDataFromIndex"  -->
   </div>
 </template>
@@ -241,9 +241,10 @@ export default {
       this.$refs.InspectForm.setDataFromParent(data);
     },
     reloadList(params) {
+      this.getList();
       if (params == "reload") {
         this.params.pageNum = 1;
-        this.getList();
+        
       } else {
         this.$refs.InspectDetail.getFormDetails(params.id);
       }

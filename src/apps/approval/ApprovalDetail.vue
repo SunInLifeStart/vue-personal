@@ -19,35 +19,7 @@
             <el-form :model='tableData' class="formList">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="印章种类：">{{tableData.useItems}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.creatorName}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="领用时间：">{{tableData.recipientsTime}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="使用事由：">{{tableData.useReason}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="用印文件名称：">{{tableData.fileName}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="陪同人：">{{tableData.accompanyingPerson}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="结束时间：">{{tableData.endTime}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -60,8 +32,47 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="24">
+                    <el-col :span="8">
+                        <el-form-item label="领用时间：">{{tableData.recipientsTime}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="结束时间：">{{tableData.endTime}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="时长：">{{tableData.timeLang}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+               
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="印章种类：">{{tableData.useItems}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="类型：">{{tableData.sealType}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="陪同人：">{{tableData.accompanyingPerson}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                 <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="用印文件名称：">{{tableData.fileName}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
                         <el-form-item label="用印份数：">{{tableData.fileNum}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="使用事由：">{{tableData.useReason}}
                         </el-form-item>
                     </el-col>
                 </el-row>
