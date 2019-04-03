@@ -40,7 +40,10 @@
                     </el-table-column>
                     <el-table-column prop="status" label="状态">
                         <template slot-scope="scope">
+                            {{scope.row.status | filterStatus}}
+                            <!--
                             {{scope.row.status == '00'? '已保存' :scope.row.status == '01' ? '审核中': scope.row.status == '02' ? '已驳回': scope.row.status == '03' ? '已撤销': scope.row.status == '04'? '已完成': ''}}
+                        -->
                         </template>
                     </el-table-column>
                     <el-table-column label="操作" width="100px">
@@ -63,7 +66,7 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <GoodsDetail :formId="formId" ref="GoodsDetail" @reloadList="reloadList"></GoodsDetail>
+            <GoodsDetail :formId="formId" ref="GoodsDetail" @reloadList="reloadList" @resetStatus="resetStatus"></GoodsDetail>
         </el-card>
         <GoodsForm ref="GoodsForm" @reloadList="reloadList"></GoodsForm>
     </div>
@@ -89,6 +92,18 @@ export default {
             },
             formName: 'motor-receive'
         };
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '03': '已撤销',
+                '04': '已完成'
+            };
+            return xmlJson[data];
+        }
     },
     components: {
         GoodsForm,
@@ -125,6 +140,14 @@ export default {
         //编辑
         editForm(data) {
             this.$refs.GoodsForm.setDataFromParent(data);
+        },
+        resetStatus(data) {
+            let $self = this;
+            for (let item of $self.tableData) {
+                if (data.id == item.id) {
+                    item.status = data.status;
+                }
+            }
         },
         reloadList(params) {
             // if (params == 'reload') {
