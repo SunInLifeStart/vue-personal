@@ -28,7 +28,7 @@
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                    <el-form-item label="培训时间" label-width="120px">
+                    <el-form-item label="培训时间" label-width="120px"  prop="trainingTime">
                             <el-date-picker v-model="formData.trainingTime" type="daterange" @change="time_change"
                             range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" 
                             style="width:100%" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
@@ -158,7 +158,7 @@ export default {
                 ],
                 trainingTime: [
                     {
-                        required: false, //是否必填
+                        required: true, //是否必填
                         trigger: "blur", //何事件触发
                         message: "培训时间"
                     }
