@@ -7,17 +7,17 @@
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="合同名称">
-                                <el-input placeholder="" v-model="params.contractName"></el-input>
+                                <el-input placeholder="" v-model="formInline.contractName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="合同对方">
-                                <el-input placeholder="" v-model="params.partyB"></el-input>
+                                <el-input placeholder="" v-model="formInline.partyB"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="单据状态">
-                                <el-select v-model="params.status" style="width:100%" filterable placeholder="全部">
+                                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
                                     <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
                                     </el-option>
                                 </el-select>
@@ -97,9 +97,15 @@ export default {
                 desc: true,
                 options: []
             },
+            searchOptions: [],
             formName: "contract_forms",
 
             statusAll: CONFIG['status'],//单据状态
+            formInline: {
+                contractName: '',
+                partyB: '',
+                status: ''
+            },
         };
     },
     components: {
@@ -110,6 +116,7 @@ export default {
         //获取列表
         async getList(pageNum) {
             let $self = this;
+            this.onSubmit();
             ///api/v1/contract_forms/query
             $self.url = "/api/v1/contract_forms/query";
             let response = await $self.getQueryList();
@@ -119,12 +126,36 @@ export default {
                     $self.$refs.ContractDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.forms;
-                $self.params.total = response.data.content.total;
+                $self.params.total = response.data.totalCount;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
         },
-
+        onSubmit() {
+            this.searchOptions = [];
+            if (this.formInline.contractName.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'contractName',
+                    filter: 'LIKE',
+                    value: this.formInline.contractName
+                });
+            }
+            if (this.formInline.partyB.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'partyB',
+                    filter: 'LIKE',
+                    value: this.formInline.partyB
+                });
+            }
+            if (this.formInline.status.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'status',
+                    filter: 'LIKE',
+                    value: this.formInline.status
+                });
+            }
+            this.params.options = this.searchOptions;
+        },
         //选择行
         showCurrentId(row) {
             this.$refs.ContractDetail.getFormDetails(row.id);
@@ -161,7 +192,10 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.submitter = this.params.department = "";
+            this.formInline.contractName = '';
+            this.formInline.partyB = '';
+            this.formInline.status = '';
+            this.getList();
         }
     },
     mounted() {
