@@ -156,7 +156,13 @@ export default {
                         message: "年度计划"
                     }
                 ],
-
+                trainingTime: [
+                    {
+                        required: false, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "培训时间"
+                    }
+                ],
                 committed: [
                     {
                         required: false, //是否必填
