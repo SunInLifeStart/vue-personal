@@ -37,7 +37,12 @@ export const publicMethods = {
         },
         async startSignalForSave(type) {
             let actions = await this.getActions();
-            this.hasRequired(actions.data.types[0]);
+            if(actions.data.types.length > 0){
+                this.hasRequired(actions.data.types[0]);
+            }else{
+                $self.msgTips("缺少action,流程启动失败", "error");
+                return false;
+            }
             let complete = await this.startSignal(actions.data.types[0]);
             if (!type) {
                 await this.emitMessage(self);
@@ -49,7 +54,13 @@ export const publicMethods = {
             actions2.data.types = actions2.data.types.filter(function (item) {
                 return item.action == "COMMIT";
             });
-            this.hasRequired(actions2.data.types[0]);
+            if(actions2.data.types.length > 0){
+                this.hasRequired(actions2.data.types[0]);
+            }else{
+                $self.msgTips("缺少action,流程启动失败", "error");
+                return false;
+            }
+         
             actions2.data.types[0]["comment"] = actions2.data.types[0].name;
            // let complete2 = await this.action(actions2.data.types[0]);
            let complete2 = await this.startSignal(actions2.data.types[0]);
