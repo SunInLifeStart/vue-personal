@@ -218,7 +218,8 @@ export default {
         //选择资产类型
         typeChange(val) {
             if (val == '租赁资产') {
-                this.formData.supplyCode = 'lease';
+                // this.formData.supplyCode = 'lease';
+                this.formData.supplyCode = 'fixed';
             } else if (val == '固定资产') {
                 this.formData.supplyCode = 'fixed';
             } else if (val == '低值易耗品') {

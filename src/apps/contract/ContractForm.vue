@@ -58,19 +58,19 @@
                             提单人
                         </td>
                         <td>
-                            <el-input v-model="formData.manager" disabled></el-input>
+                            <el-input v-model="formData.applyName" disabled></el-input>
                         </td>
                         <td>
                             所属部门
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.organ" disabled></el-input>
+                            <el-input v-model="formData.dept" disabled></el-input>
                         </td>
                         <td>
                             发起时间
                         </td>
                         <td colspan="2">
-                            <el-date-picker v-model="formData.applicantTime" type="datetime" placeholder="选择日期" style="width:100%">
+                            <el-date-picker v-model="formData.initiateTime" type="datetime" placeholder="选择日期" style="width:100%">
                             </el-date-picker>
                         </td>
                     </tr>
@@ -87,10 +87,18 @@
                             <el-input v-model="formData.contractName"></el-input>
                         </td>
                         <td>
-                            所属项目
+                            合同编号
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.contractName"></el-input>
+                            <el-input v-model="formData.contractNum"></el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            所属项目
+                        </td>
+                        <td colspan="6">
+                            <el-input v-model="formData.project"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -138,16 +146,16 @@
                         <td colspan="6">
                             <el-row>
                                 <el-col :span="14">
-                                    <el-radio v-model="radio" label="1">
-                                        <el-input v-model="formData.contractAmount" style="width: 110px"></el-input>
+                                    <el-radio v-model="formData.sum" label="1">
+                                        <el-input v-model="formData.contractAmount" style="width: 110px" :disabled="formData.sum!='1'"></el-input>
                                         元</el-radio>
-                                    <el-radio v-model="radio" label="2">其他 成本上线总额
-                                        <el-input v-model="formData.contractAmount" style="width: 110px"></el-input>
+                                    <el-radio v-model="formData.sum" label="2">其他 成本上线总额
+                                        <el-input v-model="formData.contractAmount" style="width: 110px" :disabled="formData.sum!='2'"></el-input>
                                         元</el-radio>
                                 </el-col>
                                 <el-col :span="10" style="margin-top:8px">
-                                    <el-radio v-model="radio" label="1">预算内</el-radio>
-                                    <el-radio v-model="radio" label="2">预算外</el-radio>
+                                    <el-radio v-model="formData.budget" label="1">预算内</el-radio>
+                                    <el-radio v-model="formData.budget" label="2">预算外</el-radio>
                                 </el-col>
                             </el-row>
                         </td>
@@ -163,12 +171,14 @@
                             合同期限
                         </td>
                         <td colspan="3">
-                            <el-radio v-model="radio" label="1">自
-                                <el-input v-model="formData.applicantTime" style="width: 110px"></el-input>
+                            <el-radio v-model="formData.deadline" label="1">自
+                                <el-date-picker v-model="formData.deadStartTime" type="daterange" range-separator="至" style="width:300px" :disabled="formData.deadline!='1'">
+                                </el-date-picker>
+                                <!-- <el-input v-model="formData.deadStartTime" style="width: 110px" :disabled="formData.deadline!='1'"></el-input>
                                 至
-                                <el-input v-model="formData.applicantTime" style="width: 110px"></el-input>
+                                <el-input v-model="formData.deadEndTime" style="width: 110px" :disabled="formData.deadline!='1'"></el-input> -->
                             </el-radio>
-                            <el-radio v-model="radio" label="2">其他</el-radio>
+                            <el-radio v-model="formData.deadline" label="2">其他</el-radio>
                         </td>
                     </tr>
                     <tr>
@@ -179,11 +189,11 @@
                             合同所涉经济行为批准文件
                         </td>
                         <td colspan="4">
-                            <el-radio v-model="radio" label="1">股东大会</el-radio>
-                            <el-radio v-model="radio" label="2">董事会决议</el-radio>
-                            <el-radio v-model="radio" label="3">会议纪要</el-radio>
-                            <el-radio v-model="radio" label="4">请示批件</el-radio>
-                            <el-radio v-model="radio" label="5">其他</el-radio>
+                            <el-radio v-model="formData.paper" label="1">股东大会</el-radio>
+                            <el-radio v-model="formData.paper" label="2">董事会决议</el-radio>
+                            <el-radio v-model="formData.paper" label="3">会议纪要</el-radio>
+                            <el-radio v-model="formData.paper" label="4">请示批件</el-radio>
+                            <el-radio v-model="formData.paper" label="5">其他</el-radio>
                         </td>
                     </tr>
                     <tr>
@@ -191,9 +201,9 @@
                             合同相对方资质证照复印件
                         </td>
                         <td colspan="4">
-                            <el-radio v-model="radio" label="1">有</el-radio>
-                            <el-radio v-model="radio" label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
-                            <el-radio v-model="radio" label="3">其他</el-radio>
+                            <el-radio v-model="formData.copy" label="1">有</el-radio>
+                            <el-radio v-model="formData.copy" label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
+                            <el-radio v-model="formData.copy" label="3">其他</el-radio>
                         </td>
                     </tr>
                     <tr>
@@ -201,9 +211,9 @@
                             合同价格形势
                         </td>
                         <td colspan="6">
-                            <el-radio v-model="radio" label="1">固定总价</el-radio>
-                            <el-radio v-model="radio" label="2">固定总和单价</el-radio>
-                            <el-radio v-model="radio" label="3">其他</el-radio>
+                            <el-radio v-model="formData.shape" label="1">固定总价</el-radio>
+                            <el-radio v-model="formData.shape" label="2">固定总和单价</el-radio>
+                            <el-radio v-model="formData.shape" label="3">其他</el-radio>
                         </td>
                     </tr>
                     <tr>
@@ -211,7 +221,7 @@
                             合同付款安排
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.contentAbstract"></el-input>
+                            <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.arrange"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -220,6 +230,9 @@
                         </td>
                         <td colspan="6">
                             <el-row>
+                                <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.arrange"></el-input>
+                            </el-row>
+                            <el-row style="padding:5px">
                                 <el-col :span="14">
                                     <div style="float:left">
                                         谈判小组成员（不同部门2人或以上）签字：
@@ -413,19 +426,24 @@ export default {
         },
         resetForm() {
             let formData = {
-                applicantTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
+                initiateTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
                 manager: cookies.get('uname'),
-                creatorId: cookies.get('uid'),
                 creatorName: cookies.get('uname'),
+                creatorId: cookies.get('uid'),
+                applyName: cookies.get('uname'),
                 organId: cookies.get('oid'),
                 organ: cookies.get('oname'),
+                dept: cookies.get('oname'),
                 contractNum: '',
                 historyContract: '',
                 effectiveStart: '',
                 effectiveEnd: '',
                 attachments: [],
                 type: 1,
-                gid: cookies.get('oid')
+                gid: cookies.get('oid'),
+                sum: '',//合同金额
+                budget: '',//预算内外
+                deadline: '',//合同期限
             };
             return formData;
         },

@@ -38,9 +38,9 @@ export const publicMethods = {
         async startSignalForSave(type) {
             let actions = await this.getActions();
             if(actions.data.types.length > 0){
-                actions.data.types = actions.data.types.filter(function (item) {
-                    return item.action == "COMMIT";
-                });
+                // actions.data.types = actions.data.types.filter(function (item) {
+                //     return item.action == "COMMIT";
+                // });
                 this.hasRequired(actions.data.types[0]);
             }else{
                 this.msgTips("缺少action,流程启动失败", "warning");
