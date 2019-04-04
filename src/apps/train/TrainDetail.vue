@@ -47,11 +47,11 @@
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="是否资金计划内：">{{tableData.type}}
+                        <el-form-item label="是否资金计划内：">{{typeJuder}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="是否纳入年度计划：">{{tableData.isAnnualPlan}}
+                        <el-form-item label="是否纳入年度计划：">{{isAnnualPlanone}}
                         </el-form-item>
                     </el-col>
                     
@@ -148,7 +148,9 @@ export default {
             comments:[],
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
-        };
+            typeJuder:"",
+            isAnnualPlanone:""
+                    };
     },
     components: {
         Comment,
@@ -167,18 +169,18 @@ export default {
             if (response) {
                 $self.tableData = response.data.content;
                    if($self.tableData.type=="true"){
-                        $self.tableData.type='是'
+                        $self.typeJuder='是'
                         
                     }
                     if($self.tableData.isAnnualPlan=="true"){
-                        $self.tableData.isAnnualPlan='是'
+                        $self.isAnnualPlanone='是'
                     }
                     if($self.tableData.type=="false"){
-                        $self.tableData.type='否'
+                        $self.typeJuder='否'
                     }
                     if($self.tableData.isAnnualPlan=="false"){
                         
-                        $self.tableData.isAnnualPlan='否'
+                        $self.isAnnualPlanone='否'
                     }
                
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
