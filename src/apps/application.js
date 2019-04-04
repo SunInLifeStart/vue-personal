@@ -40,7 +40,7 @@ export const publicMethods = {
             if(actions.data.types.length > 0){
                 this.hasRequired(actions.data.types[0]);
             }else{
-                $self.msgTips("缺少action,流程启动失败", "error");
+                this.msgTips("缺少action,流程启动失败", "error");
                 return false;
             }
             let complete = await this.startSignal(actions.data.types[0]);
@@ -57,7 +57,7 @@ export const publicMethods = {
             if(actions2.data.types.length > 0){
                 this.hasRequired(actions2.data.types[0]);
             }else{
-                $self.msgTips("缺少action,流程启动失败", "error");
+                this.msgTips("缺少action,流程启动失败", "error");
                 return false;
             }
          
