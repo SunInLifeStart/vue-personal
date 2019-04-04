@@ -131,7 +131,7 @@
                                          {{tableData.contractAmount}}
                                         元</el-radio>
                                 </el-col>
-                                <el-col :span="10" style="margin-top:8px">
+                                <el-col :span="10">
                                     <el-radio v-model="tableData.budget" label="1" disabled>预算内</el-radio>
                                     <el-radio v-model="tableData.budget" label="2" disabled>预算外</el-radio>
                                 </el-col>
@@ -207,14 +207,17 @@
                             合同内容摘要
                         </td>
                         <td colspan="6">
-                            <el-row>
+                            <el-row style="padding:5px; min-height:100px">
+                                {{tableData.digest}}
+                            </el-row>
+                            <el-row style="padding:5px;">
                                 <el-col :span="14">
                                     <div style="float:left">
-                                        谈判小组成员（不同部门2人或以上）签字：
+                                        谈判小组成员（不同部门2人或以上）签字：{{tableData.tpxzName}}
                                     </div>
                                 </el-col>
                                 <el-col :span="10">
-                                    年 月 日
+                                    年 月 日： {{tableData.digestTime}}
                                 </el-col>
                             </el-row>
                         </td>
