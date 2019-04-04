@@ -18,7 +18,7 @@
                             <el-col :span="8">
                                  <el-form-item label="培训时间" >
                                         <el-date-picker v-model="params.trainingTime" type="daterange" range-separator="至" start-placeholder="开始日期" 
-                                        end-placeholder="结束日期"  value-format="yyyy-MM-dd" @change="time_change"></el-date-picker>
+                                        end-placeholder="结束日期"  value-format="yyyy-MM-dd HH:mm:ss" @change="time_change"></el-date-picker>
                                 </el-form-item>
                             </el-col>
                          </el-row>
@@ -26,18 +26,21 @@
                             <el-col :span="8">
                                 <el-form-item label="单据状态">
                                     <el-select v-model="params.status" placeholder="请选择">
-                                        <el-option v-for="item in s_status" :key="item" :label="item" :value="item">
+                                        <el-option v-for="item in s_status" 
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
                                         </el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">
                                <el-form-item label="提单时间">
-                                    <el-date-picker v-model="params.committed" type="date" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                                    <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd 00-00-00" type="date" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8" >
-                                <el-form-item class="">
+                            <el-col :span="8" class="searchBtn">
+                                <el-form-item class="positionBtn">
                                     <el-button type="primary" @click="searchList">查询</el-button>
                                     <el-button  @click="resetInput">重置</el-button>
                                 </el-form-item>
@@ -103,12 +106,28 @@ export default {
             tableData: [],
             formDetails: {},
             formId: "",
-            s_status:[
-                "已保存",
-                "已驳回",
-                "审核中",
-                "已完成",
-            ],
+            s_status: [
+                    {
+                        value: '00',
+                        label: '已保存'
+                    },
+                    {
+                        value: '01',
+                        label: '审核中'
+                    },
+                    {
+                        value: '02',
+                        label: '已驳回'
+                    },
+                    {
+                        value: '03',
+                        label: '已撤销'
+                    },
+                    {
+                        value: '04',
+                        label: '已完成'
+                    }
+                ],
             params: {
                 pageNum: 1,
                 pageSize: 5,
@@ -239,9 +258,16 @@ export default {
       #TrainFilter  .el-form-item--small.el-form-item{
             width: 100%;
         }
-        
+         #TrainFilter {
+             .searchBtn {
+            padding-right: 10px;
+            .positionBtn{
+                text-align: right;
+            }
+        }}
 </style>
 <style scoped>
+
 #TrainFilter .filterForm >>> .el-form-item__content{
         width: calc(100% - 80px);
     }

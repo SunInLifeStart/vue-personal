@@ -200,7 +200,7 @@ export default {
                 drafter: '',
                 phone: '',
                 draftTime: moment(new Date()).format('YYYY-MM-DD'),
-                distribute: ['集团领导'],
+                distribute: [],
                 text: { name: '' }
             },
             users: [],

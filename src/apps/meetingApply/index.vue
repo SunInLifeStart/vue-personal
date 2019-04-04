@@ -100,10 +100,10 @@
                 params: {
                     pageNum: 1,
                     pageSize: 5,
-                    conferenceTitle: '',
-                    creatorName: '',
-                    committed: '',
-                    status: '',
+                    // conferenceTitle: '',
+                    // creatorName: '',
+                    // committed: '',
+                    // status: '',
                     total: 0
                 },
                 dialogFormVisibleApplyMeeting: false,

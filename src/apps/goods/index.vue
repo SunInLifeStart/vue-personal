@@ -119,6 +119,8 @@ export default {
                 if (response.data.content.list.length > 0) {
                     let formId = response.data.content.list[0].id;
                     $self.$refs.GoodsDetail.getFormDetails(formId);
+                } else {
+                    $self.$refs.GoodsDetail.clearForm();
                 }
                 $self.tableData = response.data.content.list;
                 $self.params.total = response.data.content.total;

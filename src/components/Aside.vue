@@ -3,7 +3,7 @@
         <div class="aside-top">
             <i class="icon iconfont el-icon-liaotian" size="18"  v-if="msg" />
             <router-link to="/publicforum">
-                <i class="icon iconfont el-icon-youjian" />
+                <!-- <i class="icon iconfont el-icon-youjian" /> -->
             </router-link>
             <router-link to="/webim">
                 <i class="icon iconfont el-icon-qunzu" />

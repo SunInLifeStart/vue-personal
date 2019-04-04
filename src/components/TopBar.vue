@@ -28,8 +28,6 @@
             <div class="info">Hello，{{$store.getters.LoginData.uname}}&nbsp;&nbsp;&nbsp;在线：{{uc}}</div>
             <div class="tools">
                 <Link />
-                <!--Notice /-->
-                <!--Settings /-->
                 <User />
             </div>
         </div>

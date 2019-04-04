@@ -28,14 +28,16 @@
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
-                    <el-form-item label="培训时间" label-width="120px">
-                            <el-date-picker v-model="formData.trainingTime" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" style="width:100%" value-format="yyyy-MM-dd"></el-date-picker>
+                    <el-form-item label="培训时间" label-width="120px"  prop="trainingTime">
+                            <el-date-picker v-model="formData.trainingTime" type="daterange" @change="time_change"
+                            range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" 
+                            style="width:100%" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="是否资金计划内">
+                    <el-form-item label="是否资金计划内"  prop="type">
                         <span style="float:left">
                              <el-radio v-model="formData.type" label="true">是</el-radio>
                              <el-radio v-model="formData.type" label="false">否</el-radio>
@@ -43,7 +45,7 @@
                     </el-form-item>
                 </el-col>
                <el-col :span="12">
-                    <el-form-item label="是否纳入年度计划">
+                    <el-form-item label="是否纳入年度计划" prop="isAnnualPlan">
                         <span style="float:left">
                              <el-radio v-model="formData.isAnnualPlan" label="true">是</el-radio>
                              <el-radio v-model="formData.isAnnualPlan" label="false">否</el-radio>
@@ -149,15 +151,21 @@ export default {
                 ],
                 isAnnualPlan: [
                     {
-                        required: false, //是否必填
+                        required: true, //是否必填
                         trigger: "blur", //何事件触发
-                        message: "年度计划"
+                        message: "是否纳入年度计划"
                     }
                 ],
-
+                trainingTime: [
+                    {
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "培训时间"
+                    }
+                ],
                 committed: [
                     {
-                        required: false, //是否必填
+                        required: true, //是否必填
                         message: "请选择提单时间",
                         trigger: "blur"
                     }
@@ -197,9 +205,9 @@ export default {
                         message: "请输入费用预算"
                     }
                 ],
-                processId: [
+                type: [
                     {
-                        required: false, //是否必填
+                        required: true, //是否必填
                         trigger: "blur", //何事件触发
                         message: "请输入是否资金计划内"
                     }
@@ -211,20 +219,7 @@ export default {
                         message: "请输入审批意见"
                     }
                 ],
-                draftTime: [
-                    {
-                        required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请选择培训时间"
-                    }
-                ],
-                writer: [
-                    {
-                        required: true, //是否必填
-                        trigger: "change", //何事件触发
-                        message: "请选择记录人"
-                    }
-                ]
+                
             }
         };
     },
@@ -237,6 +232,19 @@ export default {
         FilesOperate
     },
     methods: {
+        time_change(time) {
+            // 改变时间获取数据
+            if (time === null) {
+               this.formData.startTime = "";
+                this.formData.endTime = "";
+            } else {
+                let time0 = time[0];
+                let time1 = time[1];
+                this.formData.startTime = time0;
+                this.formData.endTime = time1;
+            }
+           
+        },
         setDataFromParent(data) {
             this.formData = data;
             this.formId = data.id;
@@ -253,7 +261,7 @@ export default {
                 submitter: this.$store.getters.LoginData.uname || '', //申请人
                 department: this.$store.getters.LoginData.oname || '', //所属部门
                 id: "",
-                committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
+                committed: moment(new Date()).format("YYYY-MM-DD 00-00-00"), //提单时间
                 // committed: "",
                 isAnnualPlan: "true",
                 draftUnit: "",

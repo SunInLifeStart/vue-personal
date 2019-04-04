@@ -342,8 +342,12 @@
                                         if (item.person) {
                                             item.people = item.person.split(',')
                                         }
-                                        for (let i = 0; i<item.people.length; i++) {
-                                            item.people[i] = parseInt(item.people[i])
+                                        if (item.people) {
+                                            for (let i = 0; i<item.people.length; i++) {
+                                                item.people[i] = parseInt(item.people[i])
+                                            }
+                                        } else {
+                                            item.people = []
                                         }
                                     })
                                 }
@@ -364,7 +368,11 @@
             saveFormValidate(type) {
                 this.$refs['formData'].validate(valid => {
                     if (valid) {
-                        this.saveForm(type);
+                        if (this.formData.attendingDepartment[0].people && this.formData.attendingDepartment[0].people.length > 0) {
+                            this.saveForm(type);
+                        } else {
+                            this.msgTips("请添加参会人员", "error");
+                        }
                     }
                 });
             },
@@ -384,6 +392,9 @@
                     }
                 })
                 this.formData.sendMessage = this.formData.sendMessage.join(',')
+                if (this.formData.sendMessage &&this.formData.sendMessage.length <= 0) {
+                    delete this.formData.sendMessage
+                }
                 let business = this.discussionOption.filter((item) => { return item.value === this.formData.branchlineTo})
                 if (business.length > 0)
                 this.formData.businessType = business[0].value + '_' +  business[0].label

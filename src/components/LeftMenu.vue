@@ -259,7 +259,7 @@ export default {
                             id: "contract_2",
                             name: '合同台账',
                             icon: 'el-icon-hetongxiazaixin-',
-                            to: 'ledger'
+                            to: 'abc'
                             // 没有
                         },
                     ]
@@ -272,7 +272,7 @@ export default {
                             id: "recruitment_1",
                             name: '采购方案',
                             icon: 'el-icon-icon-cart',
-                            to: 'programme'
+                            to: 'abc'
                             // 没有
                         },
                         

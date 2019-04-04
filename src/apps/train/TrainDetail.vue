@@ -11,7 +11,7 @@
         </div>
         <br />
         <div class="formContent">
-            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
             <br />
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
@@ -47,11 +47,11 @@
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="是否资金计划内：">{{tableData.type}}
+                        <el-form-item label="是否资金计划内：">{{typeJuder}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="是否纳入年度计划：">{{tableData.isAnnualPlan}}
+                        <el-form-item label="是否纳入年度计划：">{{isAnnualPlanone}}
                         </el-form-item>
                     </el-col>
                     
@@ -148,7 +148,9 @@ export default {
             comments:[],
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
-        };
+            typeJuder:"",
+            isAnnualPlanone:""
+                    };
     },
     components: {
         Comment,
@@ -167,18 +169,18 @@ export default {
             if (response) {
                 $self.tableData = response.data.content;
                    if($self.tableData.type=="true"){
-                        $self.tableData.type='是'
+                        $self.typeJuder='是'
                         
                     }
                     if($self.tableData.isAnnualPlan=="true"){
-                        $self.tableData.isAnnualPlan='是'
+                        $self.isAnnualPlanone='是'
                     }
                     if($self.tableData.type=="false"){
-                        $self.tableData.type='否'
+                        $self.typeJuder='否'
                     }
                     if($self.tableData.isAnnualPlan=="false"){
                         
-                        $self.tableData.isAnnualPlan='否'
+                        $self.isAnnualPlanone='否'
                     }
                
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
