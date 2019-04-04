@@ -21,7 +21,7 @@
             <el-form :model="tableData" class="formList">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="合同编号：">{{tableData.proposer}}</el-form-item>
+                        <el-form-item label="合同编号：">{{tableData.contractNum}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="合同名称：">{{tableData.applyDept}}</el-form-item>
@@ -132,27 +132,10 @@ export default {
             users: [],
             actionsDialogArr: [],
             appFlowName: 'asset-form_asset',//固定资产流程 asset-form_fixedAsset  低值易耗办公品  asset-form_lowAsset 
-            formName: 'asset_forms',
+            formName: 'contract_forms',
             comments: [],
             dialogVisibleCrumb: false,
             flowNodeUrl: "",
-
-            crumb: { items: [] },
-            tabledata: {
-                detail: []
-            },
-            pageType: 'show',
-            actions_status: false,
-            rejectTarget: '',
-            rejectList: [],
-            reject_status: false,
-            presign_status: false,
-            seleteUsers: [],
-            seleteUserLabel: '',
-            currentAction: '',
-            submitData: {},
-            fullScreen: false,
-            crumbNodeName: ''
         };
     },
     components: {
@@ -163,10 +146,9 @@ export default {
     },
     methods: {
         getFormDetails(formId) {
-
             let $self = this;
             $self.formId = formId;
-            $self.url = "/api/v1/asset_forms/" + $self.formId;
+            $self.url = "/api/v1/contract_forms/" + $self.formId;
             console.log('DetailUrl', $self.url)
             $self.getFormDetailsData();
         },
@@ -177,6 +159,7 @@ export default {
             //     console.log(res);
             // });
             let response = await $self.getDetails();
+            console.log(response)
             if (response) {
                 $self.tableData = response.data;
             } else {
@@ -286,13 +269,5 @@ export default {
 }
 body .el-table th.gutter {
   display: table-cell !important;
-}
-.fullScreen {
-  position: fixed;
-  top: 0px;
-  z-index: 10;
-  background: #fff;
-  left: 0px;
-  right: 0px;
 }
 </style>

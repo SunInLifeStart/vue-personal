@@ -7,22 +7,22 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="提单人：">
-                                <el-input v-model="formInline.proposer" placeholder="" style="width:100%"></el-input>
+                                <el-input v-model="formInline.applyName" placeholder="" style="width:100%"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="归属项目：">
-                                <el-input v-model="formInline.applyDept" placeholder=""></el-input>
+                            <el-form-item label="所属项目：">
+                                <el-input v-model="formInline.project" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="申请部门：">
-                                <el-input v-model="formInline.applyDept" placeholder=""></el-input>
+                                <el-input v-model="formInline.dept" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="合同价格形式：" prop="status">
-                                <el-input v-model="formInline.applyDept" placeholder=""></el-input>
+                                <el-input v-model="formInline.shape" placeholder=""></el-input>
                                 <!-- <el-select v-model="formInline.status" filterable placeholder="全部">
                                     <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
                                     </el-option>
@@ -47,32 +47,27 @@
                     </el-row>
                 </el-form>
             </div>
-
-            <!-- 新建 -->
-            <div class="toolbar">
-                <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
-            </div>
             <div id="LedgerList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
-                    <el-table-column prop="proposer" label="合同编号">
+                    <el-table-column prop="contractNum" label="合同编号">
                     </el-table-column>
-                    <el-table-column prop="applyDept" label="合同名称" min-width='150px'>
+                    <el-table-column prop="contractName" label="合同名称" min-width='150px'>
                     </el-table-column>
-                    <el-table-column prop="assetsType" label="合同价格形式" min-width='120px'>
+                    <el-table-column prop="shape" label="合同价格形式" min-width='120px'>
                     </el-table-column>
-                    <el-table-column prop="assetsType" label="合同金额（万元）" min-width='120px'>
+                    <el-table-column prop="contractAmount" label="合同金额（万元）" min-width='120px'>
                     </el-table-column>
-                    <el-table-column prop="applyDate" label="生效日期" sortable min-width='120px'>
+                    <el-table-column prop="deadStartTime" label="生效日期" sortable min-width='120px'>
                         <template slot-scope="scope">
-                            {{scope.row.applyDate | dateformat('YYYY-MM-DD')}}
+                            {{scope.row.deadStartTime | dateformat('YYYY-MM-DD')}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="applyDate" label="终止日期" sortable min-width='120px'>
+                    <el-table-column prop="deadEndTime" label="终止日期" sortable min-width='120px'>
                         <template slot-scope="scope">
-                            {{scope.row.applyDate | dateformat('YYYY-MM-DD')}}
+                            {{scope.row.deadEndTime | dateformat('YYYY-MM-DD')}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="status" label="已收（支）金额" min-width='100px' :formatter="fomatterStatus">
+                    <el-table-column prop="payAmount" label="已收（支）金额" min-width='100px' :formatter="fomatterStatus">
                     </el-table-column>
                     <el-table-column prop="status" label="合同执行进度" min-width='100px' :formatter="fomatterStatus">
                     </el-table-column>
@@ -85,7 +80,7 @@
         <el-card class="box-card">
             <LedgerDetail :formId="formId" ref="LedgerDetail"></LedgerDetail>
         </el-card>
-        <LedgerForm ref="LedgerForm" @reloadList="reloadList"></LedgerForm>
+        <!-- <LedgerForm ref="LedgerForm" @reloadList="reloadList"></LedgerForm> -->
     </div>
 </template>
 <script>
@@ -116,10 +111,12 @@ export default {
                 options: []
             },
             searchOptions: [],
-            formName: "asset_forms",
+            formName: "contract_forms",
             formInline: {
-                proposer: '',
-                applyDept: '',
+                applyName: '',
+                project: '',
+                dept: '',//申请部门
+                shape: '',//合同价格形式
                 applyDate: [],
                 status: ''
             },
@@ -130,34 +127,11 @@ export default {
         LedgerDetail
     },
     methods: {
-        deleteItem(row) {
-            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                this.deleteAffirm(row);
-            });
-        },
-        deleteAffirm(row) {
-            const self = this;
-            axios
-                .delete('/api/v1/asset_forms/delete/' + row)
-                .then(res => {
-                    self.$message({
-                        message: '删除成功?',
-                        type: 'success'
-                    });
-                    self.getList();
-                })
-                .catch(function () {
-                    self.$message({
-                        message: '操作失败',
-                        type: 'error'
-                    });
-                });
-        },
         //获取列表
         async getList(pageNum) {
             this.onSubmit();
             let $self = this;
-            $self.url = "/api/v1/asset_forms/query";
+            $self.url = "/api/v1/contract_forms/query";
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.forms.length > 0) {
@@ -173,18 +147,32 @@ export default {
         },
         onSubmit() {
             this.searchOptions = [];
-            if (this.formInline.proposer.trim() !== '') {
+            if (this.formInline.applyName.trim() !== '') {
                 this.searchOptions.push({
-                    field: 'proposer',
+                    field: 'applyName',
                     filter: 'LIKE',
-                    value: this.formInline.proposer
+                    value: this.formInline.applyName
                 });
             }
-            if (this.formInline.applyDept.trim() !== '') {
+            if (this.formInline.project.trim() !== '') {
                 this.searchOptions.push({
-                    field: 'applyDept',
+                    field: 'project',
                     filter: 'LIKE',
-                    value: this.formInline.applyDept
+                    value: this.formInline.project
+                });
+            }
+            if (this.formInline.dept.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'dept',
+                    filter: 'LIKE',
+                    value: this.formInline.dept
+                });
+            }
+            if (this.formInline.shape.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'shape',
+                    filter: 'LIKE',
+                    value: this.formInline.shape
                 });
             }
             if (
@@ -225,14 +213,14 @@ export default {
         editForm(data) {
             this.$refs.LedgerForm.setDataFromParent(data);
         },
-        reloadList(params) {
-            if (params == "reload") {
-                this.params.page = 1;
-                this.getList();
-            } else {
-                this.$refs.LedgerDetail.getFormDetails(params.id);
-            }
-        },
+        // reloadList(params) {
+        //     if (params == "reload") {
+        //         this.params.page = 1;
+        //         this.getList();
+        //     } else {
+        //         this.$refs.LedgerDetail.getFormDetails(params.id);
+        //     }
+        // },
 
         //分页
         currentChange(pageNum) {
@@ -247,8 +235,10 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.formInline.proposer = '';
-            this.formInline.applyDept = '';
+            this.formInline.applyName = '';
+            this.formInline.project = '';
+            this.formInline.dept = '';
+            this.formInline.shape = '';
             this.formInline.applyDate = [];
             this.formInline.status = '';
             this.getList();

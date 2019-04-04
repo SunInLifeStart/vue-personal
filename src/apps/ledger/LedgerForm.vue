@@ -219,7 +219,7 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
-            let response = await $self.saveFormData("/api/v1/asset_forms/save", $self.formData);
+            let response = await $self.saveFormData("/api/v1/contract_forms/save", $self.formData);
             if (response) {
                 $self.formId = response.data.id;
                 $self.dialogFormVisible = false;
@@ -340,7 +340,7 @@ export default {
                             } else {
                                 axios
                                     .delete(
-                                        '/api/v1/asset_forms/deleteDetail/' +
+                                        '/api/v1/contract_forms/deleteDetail/' +
                                         oData.id,
                                         '',
                                         {
@@ -387,7 +387,7 @@ export default {
                         };
                         axios
                             .get(
-                                '/api/v1/asset_forms/deleteAttachment/' + id,
+                                '/api/v1/contract_forms/deleteAttachment/' + id,
                                 '',
                                 {
                                     headers: {

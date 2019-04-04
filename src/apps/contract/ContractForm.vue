@@ -67,10 +67,11 @@
                             <el-input v-model="formData.dept" disabled></el-input>
                         </td>
                         <td>
+                            <span class="span">*</span>
                             发起时间
                         </td>
                         <td colspan="2">
-                            <el-date-picker v-model="formData.initiateTime" type="datetime" placeholder="选择日期" style="width:100%">
+                            <el-date-picker v-model="formData.initiateTime" type="datetime" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
                             </el-date-picker>
                         </td>
                     </tr>
@@ -81,6 +82,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            <span class="span">*</span>
                             合同名称
                         </td>
                         <td colspan="3">
@@ -95,6 +97,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            <span class="span">*</span>
                             所属项目
                         </td>
                         <td colspan="6">
@@ -103,6 +106,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            <span class="span">*</span>
                             甲方
                         </td>
                         <td colspan="6">
@@ -111,6 +115,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            <span class="span">*</span>
                             乙方
                         </td>
                         <td colspan="6">
@@ -141,6 +146,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            <span class="span">*</span>
                             合同金额
                         </td>
                         <td colspan="6">
@@ -168,15 +174,16 @@
                             <el-input v-model="formData.manager"></el-input>
                         </td>
                         <td>
+                            <span class="span">*</span>
                             合同期限
                         </td>
                         <td colspan="3">
                             <el-radio v-model="formData.deadline" label="1">自
-                                <el-date-picker v-model="formData.deadStartTime" type="daterange" range-separator="至" style="width:300px" :disabled="formData.deadline!='1'">
-                                </el-date-picker>
-                                <!-- <el-input v-model="formData.deadStartTime" style="width: 110px" :disabled="formData.deadline!='1'"></el-input>
+                                <!-- <el-date-picker v-model="formData.deadStartTime" type="daterange" range-separator="至" style="width:300px" :disabled="formData.deadline!='1'">
+                                </el-date-picker> -->
+                                <el-input v-model="formData.deadStartTime" style="width: 110px" :disabled="formData.deadline!='1'"></el-input>
                                 至
-                                <el-input v-model="formData.deadEndTime" style="width: 110px" :disabled="formData.deadline!='1'"></el-input> -->
+                                <el-input v-model="formData.deadEndTime" style="width: 110px" :disabled="formData.deadline!='1'"></el-input>
                             </el-radio>
                             <el-radio v-model="formData.deadline" label="2">其他</el-radio>
                         </td>
@@ -208,7 +215,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            合同价格形势
+                            合同价格形式
                         </td>
                         <td colspan="6">
                             <el-radio v-model="formData.shape" label="1">固定总价</el-radio>
@@ -226,20 +233,27 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            <span class="span">*</span>
                             合同内容摘要
                         </td>
                         <td colspan="6">
                             <el-row>
-                                <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.arrange"></el-input>
+                                <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.digest"></el-input>
                             </el-row>
                             <el-row style="padding:5px">
                                 <el-col :span="14">
                                     <div style="float:left">
                                         谈判小组成员（不同部门2人或以上）签字：
+                                        <el-select v-model="formData.tpxzNameId" filterable placeholder="请选择" @change="getTpxz">
+                                            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+                                            </el-option>
+                                        </el-select>
                                     </div>
                                 </el-col>
                                 <el-col :span="10">
                                     年 月 日
+                                    <el-date-picker v-model="formData.digestTime" type="date" placeholder="" value-format="yyyy-MM-dd">
+                                    </el-date-picker>
                                 </el-col>
                             </el-row>
                         </td>
@@ -257,6 +271,7 @@
 <script>
 /* eslint-disable */
 import moment from "moment";
+import axios from 'axios';
 import FilesOperate from "../FilesOperate";
 import { application } from "../application.js";
 import { publicMethods } from "../application.js";
@@ -266,116 +281,56 @@ export default {
     name: "ContractForm",
     data() {
         return {
+            options: [],//谈判小组成员选择列表
             radio: '',
             dialogFormVisible: false,
             formData: this.resetForm(),
             users: [],
             appFlowName: "motor-trainingapplication_train",
             rules: {
-                submitter: [
+                contractName: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
                         message: "请输入申请人"
                     }
                 ],
-                department: [
-                    {
-                        required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入所属部门"
-                    }
-                ],
-                isAnnualPlan: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "年度计划"
-                    }
-                ],
 
-                committed: [
-                    {
-                        required: false, //是否必填
-                        message: "请选择提单时间",
-                        trigger: "blur"
-                    }
-                ],
-                trainingPrograms: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入培训/学习(项目)"
-                    }
-                ],
-                trainingContent: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入培训/学习(目的内容)"
-                    }
-                ],
-                participant: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入培训/学习(参加人员)"
-                    }
-                ],
-                schedule: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入日程安排"
-                    }
-                ],
-                consts: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入费用预算"
-                    }
-                ],
-                processId: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入是否资金计划内"
-                    }
-                ],
-                suggestion: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入审批意见"
-                    }
-                ],
-                draftTime: [
-                    {
-                        required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请选择培训时间"
-                    }
-                ],
-                writer: [
-                    {
-                        required: true, //是否必填
-                        trigger: "change", //何事件触发
-                        message: "请选择记录人"
-                    }
-                ]
             }
         };
     },
     watch: {
-        'formData.lowercase'(val) {
-            this.formData.upper = val ? this.convertCurrency(val) : "";
-        }
+        // 'formData.lowercase'(val) {
+        //     this.formData.upper = val ? this.convertCurrency(val) : "";
+        // }
     },
     components: {
         FilesOperate
     },
     methods: {
+        //获得谈判小组信息
+        getTpxz(val) {
+            console.log(val)
+            for (let item of this.options) {
+                if (item.id == val) {
+                    this.formData.tpxzName = item.name;
+                }
+            }
+        },
+        //获得谈判小组成员
+        getUser() {
+            const self = this;
+            axios.get('/api/v1/users')
+                .then(res => {
+                    self.options = res.data;
+                })
+                .catch(function () {
+                    self.$message({
+                        message: '操作失败',
+                        type: 'error'
+                    });
+                });
+        },
         //删除附件
         deleteAttachment(id) {
             const self = this;
@@ -442,17 +397,26 @@ export default {
                 type: 1,
                 gid: cookies.get('oid'),
                 sum: '',//合同金额
+                contractAmount: '',
                 budget: '',//预算内外
                 deadline: '',//合同期限
+                deadStartTime: '',
+                deadEndTime: '',
+                digest: '',//合同内容摘要
+                digestTime: '',	//合同摘要日期
+                tpxzName: '',	//谈判小组成员
+                tpxzNameId: '',	//id
+                contractName: '',// 合同名称
+                project: '',//  所属项目
+                partyA: '',// 甲方
+                partyB: '',//  乙方
             };
             return formData;
         },
         saveFormValidate(type) {
-            this.$refs["formupdate"].validate(valid => {
-                if (valid) {
-                    this.saveForm(type);
-                }
-            });
+            if (this.ruleHint() == true) {
+                this.saveForm(type);
+            }
         },
         // 提交保存
         async saveForm(params) {
@@ -492,6 +456,95 @@ export default {
                 }
             }
         },
+        //输入项警告检查
+        ruleHint() {
+            let ruleHint = true;
+            if (
+                this.formData.initiateTime == '' ||
+                this.formData.initiateTime == null
+            ) {
+                ruleHint = false;
+                this.$message({
+                    message: '发起时间为必输项，请输入',
+                    type: 'error'
+                });
+            } else if (
+                this.formData.contractName == '' ||
+                this.formData.contractName == null
+            ) {
+                ruleHint = false;
+                this.$message({
+                    message: '合同名称为必输项，请输入',
+                    type: 'error'
+                });
+            } else if (
+                this.formData.project == '' ||
+                this.formData.project == null
+            ) {
+                ruleHint = false;
+                this.$message({
+                    message: '所属项目为必输项，请输入',
+                    type: 'error'
+                });
+            } else if (
+                this.formData.partyA == '' ||
+                this.formData.partyA == null
+            ) {
+                ruleHint = false;
+                this.$message({
+                    message: '甲方为必输项，请输入',
+                    type: 'error'
+                });
+            } else if (
+                this.formData.partyB == '' ||
+                this.formData.partyB == null
+            ) {
+                ruleHint = false;
+                this.$message({
+                    message: '乙方为必输项，请输入',
+                    type: 'error'
+                });
+            } else if (
+                (this.formData.sum == '' || this.formData.sum == null) ||
+                (this.formData.contractAmount == '' || this.formData.contractAmount == null)
+            ) {
+                ruleHint = false;
+                this.$message({
+                    message: '合同金额为必输项，请输入',
+                    type: 'error'
+                });
+            } else if (
+                (this.formData.deadline == '' || this.formData.deadline == null)
+            ) {
+                ruleHint = false;
+                this.$message({
+                    message: '合同期限为必输项，请输入',
+                    type: 'error'
+                });
+            } else if (
+                (this.formData.deadline == '1')
+                && (this.formData.deadStartTime == '' || this.formData.deadStartTime == null ||
+                    this.formData.deadEndTime == '' || this.formData.deadEndTime == null)
+            ) {
+                ruleHint = false;
+                this.$message({
+                    message: '合同期限为必输项，请输入',
+                    type: 'error'
+                });
+            } else if (
+                this.formData.digest == '' ||
+                this.formData.digest == null
+            ) {
+                ruleHint = false;
+                this.$message({
+                    message: '合同内容摘要为必输项，请输入',
+                    type: 'error'
+                });
+            } else {
+                ruleHint = true;
+            }
+            return ruleHint;
+        },
         handleSuccess(response, file) {
             const self = this;
             if (response.length > 0) {
@@ -507,11 +560,16 @@ export default {
         handlePreview() { },
         handleRemove() { }
     },
-    mounted() { }
+    mounted() {
+        this.getUser();
+    }
 };
 </script>
 <style lang="scss" scoped>
 #ContractForm {
+  .span {
+    color: red;
+  }
   .uploadBtn {
     margin-right: 10px;
     width: 100px;
