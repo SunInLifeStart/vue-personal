@@ -19,6 +19,7 @@
             </el-steps> -->
             <el-form :model='tableData' class="formList">
                 <el-row>
+                    
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.submitter}}
                     </el-form-item>
