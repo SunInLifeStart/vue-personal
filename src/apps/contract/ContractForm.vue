@@ -215,7 +215,7 @@
                     </tr>
                     <tr>
                         <td colspan="2">
-                            合同价格形势
+                            合同价格形式
                         </td>
                         <td colspan="6">
                             <el-radio v-model="formData.shape" label="1">固定总价</el-radio>
