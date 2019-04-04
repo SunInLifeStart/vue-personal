@@ -37,37 +37,32 @@ export const publicMethods = {
         },
         async startSignalForSave(type) {
             let actions = await this.getActions();
-            if(actions.data.types.length > 0){
-                // actions.data.types = actions.data.types.filter(function (item) {
-                //     return item.action == "COMMIT";
-                // });
+            if (actions.data.types.length > 0) {
                 this.hasRequired(actions.data.types[0]);
-            }else{
+            } else {
                 this.msgTips("缺少action,流程启动失败", "warning");
                 return false;
             }
             let complete = await this.startSignal(actions.data.types[0]);
             if (!type) {
-                await this.emitMessage(self);
+                await this.emitMessage();
             }
         },
         async startSignalForStart() {
             await this.startSignalForSave("forStart");
             let actions2 = await this.getActions();
-            if(actions2.data.types.length > 0){
+            if (actions2.data.types.length > 0) {
                 actions2.data.types = actions2.data.types.filter(function (item) {
                     return item.action == "COMMIT";
                 });
                 this.hasRequired(actions2.data.types[0]);
-            }else{
+            } else {
                 this.msgTips("缺少action,流程启动失败", "warning");
                 return false;
             }
-         
             actions2.data.types[0]["comment"] = actions2.data.types[0].name;
-           // let complete2 = await this.action(actions2.data.types[0]);
-           let complete2 = await this.startSignal(actions2.data.types[0]);
-            await this.emitMessage(self);
+            let complete2 = await this.startSignal(actions2.data.types[0]);
+            await this.emitMessage();
         },
         hasRequired(data) {
             let $self = this;
@@ -77,9 +72,9 @@ export const publicMethods = {
                 for (let item of data.required) {
                     let key = item.split(":")[0];
                     if (detailsData[key]) {
-                        if(item.split(":")[1] == "arrays" && typeof(detailsData[key]) == "string"){
+                        if (item.split(":")[1] == "arrays" && typeof (detailsData[key]) == "string") {
                             options.push(key + "=" + '[' + detailsData[key] + ']');
-                        }else{
+                        } else {
                             options.push(key + "=" + detailsData[key]);
                         }
                     } else {
@@ -134,10 +129,10 @@ export const publicMethods = {
                 await $self.startSignal();
                 $self.msgTips($self.currentAction.name + "成功", "success");
                 $self.getFormDetailsData();
-            } else if($self.currentAction.action == 'CANCEL') {
+            } else if ($self.currentAction.action == 'CANCEL') {
                 await $self.startSignal();
-                $self.deleteCurrentLine($self.tableData.id,"CANCEL");
-            }else{
+                $self.deleteCurrentLine($self.tableData.id, "CANCEL");
+            } else {
                 $self.dialogVisible = true;
             }
         },
@@ -155,20 +150,20 @@ export const publicMethods = {
                 $self.dialogVisible = false;
                 $self.msgTips($self.currentAction.name + "成功", "success");
             } else {
-                if($self.currentAction.assigneeList && $self.currentAction.assigneeList.length > 0){
+                if ($self.currentAction.assigneeList && $self.currentAction.assigneeList.length > 0) {
                     $self.msgTips($self.currentAction.assigneeListLabel, "warning");
                     return false;
-                }else if($self.currentAction.addAssigneeList && $self.currentAction.addAssigneeList.length > 0){
+                } else if ($self.currentAction.addAssigneeList && $self.currentAction.addAssigneeList.length > 0) {
                     $self.msgTips($self.currentAction.addAssigneeListLabel, "warning");
                     return false;
-                }else{
+                } else {
                     await $self.startSignal();
                     $self.getFormDetailsData();
                     $self.dialogVisible = false;
                     $self.msgTips($self.currentAction.name + "成功", "success");
                 }
             }
-            
+
         },
         async getCrumbs() {
             let url = `/workflow/${this.appFlowName}/${
@@ -191,14 +186,14 @@ export const publicMethods = {
         async getUsers(url) {
             return await this.$axios.get(url);
         },
-        deleteCurrentLine(id,params) {
+        deleteCurrentLine(id, params) {
             let $self = this;
-            $self.$confirm( params ? "是否撤销?" : "是否删除?", "提示", { type: "warning" }).then(() => {
+            $self.$confirm(params ? "是否撤销?" : "是否删除?", "提示", { type: "warning" }).then(() => {
                 $self.$axios.get("/api/v1/" + $self.formName + "/delete/" + id).then(res => {
-                    $self.msgTips( params ? "撤销成功" : "删除成功", "success");
-                    if(params){
+                    $self.msgTips(params ? "撤销成功" : "删除成功", "success");
+                    if (params) {
                         $self.$emit("reloadList", "reload");
-                    }else{
+                    } else {
                         $self.getList();
                     }
                 });
@@ -208,9 +203,9 @@ export const publicMethods = {
             let $self = this;
             let url = `/workflow/${$self.appFlowName}/processContent`;
             let currentNodeUrl = `/workflow/${$self.appFlowName}/${$self.formId}/curActions`;
-            let bpmnData =  await this.$axios.get(url);
+            let bpmnData = await this.$axios.get(url);
             let bpmnDataCurrent = await this.$axios.get(currentNodeUrl);
-            $self.flowNodeUrl =  `/bpmn-viewer/view.html?url=${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0].taskDefinitionKey}`; 
+            $self.flowNodeUrl = `/bpmn-viewer/view.html?url=${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0].taskDefinitionKey}`;
             $self.dialogVisibleCrumb = true;
             console.log($self.flowNodeUrl);
         },
@@ -224,19 +219,19 @@ export const publicMethods = {
             alert(id);
             let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
-                $self.formData.attachments.forEach(function(value, index) {
+                $self.formData.attachments.forEach(function (value, index) {
                     $self.formData.attachments.splice(index, 1);
                     // if (value.id == id) {
                     //     axios
                     //         .get("/api/v1/incoming_forms/deleteAtt/" + id)
                     //         .then(res => {
-                               
+
                     //         });
                     // }
                 });
             });
         },
-       
+
 
 
         //金额阿拉伯数字转大写金额
