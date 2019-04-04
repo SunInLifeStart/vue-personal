@@ -38,6 +38,9 @@ export const publicMethods = {
         async startSignalForSave(type) {
             let actions = await this.getActions();
             if(actions.data.types.length > 0){
+                actions.data.types = actions.data.types.filter(function (item) {
+                    return item.action == "COMMIT";
+                });
                 this.hasRequired(actions.data.types[0]);
             }else{
                 this.msgTips("缺少action,流程启动失败", "warning");
@@ -51,10 +54,10 @@ export const publicMethods = {
         async startSignalForStart() {
             await this.startSignalForSave("forStart");
             let actions2 = await this.getActions();
-            actions2.data.types = actions2.data.types.filter(function (item) {
-                return item.action == "COMMIT";
-            });
             if(actions2.data.types.length > 0){
+                actions2.data.types = actions2.data.types.filter(function (item) {
+                    return item.action == "COMMIT";
+                });
                 this.hasRequired(actions2.data.types[0]);
             }else{
                 this.msgTips("缺少action,流程启动失败", "warning");
