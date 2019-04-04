@@ -37,7 +37,7 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="是否资金计划内">
+                    <el-form-item label="是否资金计划内"  prop="type">
                         <span style="float:left">
                              <el-radio v-model="formData.type" label="true">是</el-radio>
                              <el-radio v-model="formData.type" label="false">否</el-radio>
@@ -45,7 +45,7 @@
                     </el-form-item>
                 </el-col>
                <el-col :span="12">
-                    <el-form-item label="是否纳入年度计划">
+                    <el-form-item label="是否纳入年度计划" prop="isAnnualPlan">
                         <span style="float:left">
                              <el-radio v-model="formData.isAnnualPlan" label="true">是</el-radio>
                              <el-radio v-model="formData.isAnnualPlan" label="false">否</el-radio>
@@ -151,9 +151,9 @@ export default {
                 ],
                 isAnnualPlan: [
                     {
-                        required: false, //是否必填
+                        required: true, //是否必填
                         trigger: "blur", //何事件触发
-                        message: "年度计划"
+                        message: "是否纳入年度计划"
                     }
                 ],
                 trainingTime: [
@@ -165,7 +165,7 @@ export default {
                 ],
                 committed: [
                     {
-                        required: false, //是否必填
+                        required: true, //是否必填
                         message: "请选择提单时间",
                         trigger: "blur"
                     }
@@ -205,9 +205,9 @@ export default {
                         message: "请输入费用预算"
                     }
                 ],
-                processId: [
+                type: [
                     {
-                        required: false, //是否必填
+                        required: true, //是否必填
                         trigger: "blur", //何事件触发
                         message: "请输入是否资金计划内"
                     }
@@ -219,20 +219,7 @@ export default {
                         message: "请输入审批意见"
                     }
                 ],
-                draftTime: [
-                    {
-                        required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请选择培训时间"
-                    }
-                ],
-                writer: [
-                    {
-                        required: true, //是否必填
-                        trigger: "change", //何事件触发
-                        message: "请选择记录人"
-                    }
-                ]
+                
             }
         };
     },
