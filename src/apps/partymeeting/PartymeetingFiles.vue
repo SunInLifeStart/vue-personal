@@ -91,10 +91,10 @@ export default {
         },
     },
     mounted(){
-        if(process.env.NODE_ENV === 'production'){
-            this.openUrl = "http://static.zgcgroup.vpn/edit.html?"
+       if(process.env.NODE_ENV === 'production'){
+          this.openUrl =  "http://124.205.31.66:2097/static/edit.html?"
         }else{
-            this.openUrl = "http://static.yxpe.com.cn/edit.html?"
+            this.openUrl = "http://static1.yxpe.com.cn/edit.html?"
         }
     }
 };
