@@ -10,7 +10,7 @@
                 <div class="parent" :key="index" v-for="(items,index) in apps" v-show="searchKey.length==0">
                     <div class="type">{{items.type}}</div>
                     <div class="children">
-                        <router-link :target="item.id" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
+                        <router-link :target="item.id" v-if="!item.target && !item.click" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
                             <i outside=true class="iconfont" :class="item.icon" size="24" />
                             <div outside=true class="name">{{item.name}}</div>
                         </router-link>
@@ -118,6 +118,12 @@ export default {
                             icon: 'el-icon-publish',
                             to: 'publish'
                         },
+                         {
+                            id: "commonly_11",
+                            name: '督办',
+                            icon: 'el-icon-inspect',
+                            to: 'inspect'
+                        }
                         
                     ]
                 },
@@ -137,7 +143,6 @@ export default {
                             name: '议题上会',
                             icon: 'el-icon-duorenhuiyi',
                             to: 'discussion'
-                            
                         },
                         
                         // {
@@ -161,13 +166,14 @@ export default {
                             to: 'specmeeting'
                             //没有
                         },
+                        
                         {
                             id: "metting_5",
                             name: '党委会纪要',
                             icon: 'el-icon-ziyuan',
                             to: 'partymeeting'
                             //没有
-                        },
+                        }
                     ]
                 },
                 {
@@ -367,6 +373,7 @@ export default {
                     for (let sub_app of app.children) {
                         if (this.isVist(sub_app.to)) {
                             this.items.push(sub_app);
+                            console.log(sub_app);
                             sub_app.isVist = true;
                         }
                     }
