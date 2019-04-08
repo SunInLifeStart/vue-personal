@@ -29,7 +29,10 @@ export const publicMethods = {
                 this.$emit("reloadList", this.formData); //如果是 "编辑" 表单刷新 "详情页"
             }
         },
-        async startSignal(actions) {
+        async startSignal(actions,status) {
+            if(status){
+                this.hasRequired(actions ? actions : this.currentAction);
+            }
             let url = `/workflow/${this.appFlowName}/${
                 this.formId
                 }/${this.$store.getters.LoginData.uid}/signal`;
