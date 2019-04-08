@@ -316,7 +316,7 @@ export default {
                             }
                         );
                        actions.data.types[0]["comment"] =  actions.data.types[0].name;
-                       await $self.startSignal(actions.data.types[0]);
+                       await $self.startSignal(actions.data.types[0],"fromeEdit");
                        $self.emitMessage();
                     }
                 } else {

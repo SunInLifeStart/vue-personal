@@ -502,7 +502,8 @@ export default {
                                 return item.action == "COMMIT";
                             }
                         );
-                       await $self.startSignal(actions.data.types[0]);
+                        actions.data.types[0]["comment"] =  actions.data.types[0].name;
+                       await $self.startSignal(actions.data.types[0],"fromeEdit");
                        $self.emitMessage();
                     }
                 } else {
