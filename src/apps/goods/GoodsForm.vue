@@ -1,9 +1,9 @@
 <template>
-    <el-dialog title="物品信息表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+    <el-dialog title="物品领用申请" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
         <div id="GoodsForm">
             <el-form :model="formData" label-width="100px" :rules="rules" ref="formupdate">
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="物品类型" prop="supplyType">
                             <el-select v-model="formData.supplyType" placeholder="请选择" @change="typeChange">
                                 <el-option v-for="(item,index) in operations" :key="index" :label="item" :value="item">
@@ -431,6 +431,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 #GoodsForm {
+    .el-select {
+        width: 100%;
+    }
     .uploadBtn {
         margin-right: 10px;
         width: 100px;

@@ -16,15 +16,6 @@
                     <el-form-item label="来文机关" prop="organ" v-show="commonInput">
                         <el-input v-model="rows.organ" placeholder="请填写来文机关"></el-input>
                     </el-form-item>
-                    <!-- <el-form-item label="来文机关" prop="organ" v-show="childOptions_status">
-                         <el-input v-model="rows.organ"></el-input>
-                    </el-form-item>
-                    <el-form-item label="来文机关" prop="organ" v-show="lastCopy_status">
-                        <el-select v-model="rows.organ" placeholder="选择上级阅知，抄送待阅" allow-create filterable>
-                            <el-option v-for="item in lastCopyOptions" :key="item.id" :label="item.name" :value="item.name">
-                            </el-option>
-                        </el-select>
-                    </el-form-item> -->
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="来文字号" prop="wordNo">
@@ -51,7 +42,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="紧急程度">
-                        <el-select v-model="rows.emergencyLevel" placeholder="请选择">
+                        <el-select v-model="rows.emergencyLevel" placeholder="请选择" style="width:100%">
                             <el-option v-for="item in options_harry" :key="item.value_harryy" :label="item.label_xwfx" :value="item.value_harryy">
                             </el-option>
                         </el-select>

@@ -3,7 +3,7 @@
         <el-card class="box-card">
             <div id="GoodsFilter">
                 <el-form :inline="true" label-width="70px" label-position="left" class="demo-form-inline">
-                    <el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="申请人">
                                 <el-input placeholder="请输入申请人" v-model="params.applyUser"></el-input>
@@ -14,6 +14,16 @@
                                 <el-input placeholder="请输入所属部门" v-model="params.dept"></el-input>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="单据状态">
+                                <el-select v-model="params.status" placeholder="请选择">
+                                    <el-option v-for="item in statusOpertions" :key="item.value" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
                         <el-col :span="8">
                             <el-form-item class="">
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -83,11 +93,34 @@ export default {
             tableData: [],
             formDetails: {},
             formId: '',
+            statusOpertions: [
+                {
+                    value: '00',
+                    label: '已保存'
+                },
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '03',
+                    label: '已撤销'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ],
             params: {
                 pageNum: 1,
                 pageSize: 5,
                 applyUser: '',
                 dept: '',
+                status: '',
                 total: 0
             },
             formName: 'motor-receive'
@@ -173,7 +206,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.applyUser = this.params.dept = '';
+            this.params.applyUser = this.params.dept = this.params.status = '';
             this.params.pageNum = 1;
             this.getList();
         }
@@ -184,7 +217,26 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#GoodsFilter .el-form-item--small.el-form-item {
-    width: 100%;
+#Goods {
+    .searchBtn {
+        padding-right: 10px;
+        .positionBtn {
+            text-align: right;
+        }
+    }
+    .el-select {
+        width: 100%;
+    }
+    .card_margin_10 {
+        margin-top: 10px;
+    }
+    .el-form-item--small.el-form-item {
+        width: 100%;
+    }
+}
+</style>
+<style scoped>
+#Goods .filterForm >>> .el-form-item__content {
+    width: calc(100% - 80px);
 }
 </style>
