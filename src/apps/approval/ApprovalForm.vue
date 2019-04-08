@@ -174,6 +174,7 @@ export default {
     data() {
         return {
             users:[],
+            counts: 0,
             dialogFormVisible: false,
             formData: this.resetForm(),
             uploadImageType:'',
@@ -369,11 +370,14 @@ export default {
         },
         addItem() {
              this.formData.usingApproval.push({
+                 id: '',
                 fileName: '',
                 useReason: '',
                 fileNum: '',
                 attachments: [],
+                count: ++this.counts
             });
+            this.formData.count = this.formData.count + 1;
         },
         deleteItem() {
             const self = this;
@@ -383,20 +387,19 @@ export default {
                     .then(() => {
                         //  debugger
                         self.selectionItems.forEach(function (oData) {
-                            // if (oData.id == '') {
-                            //     self.formData.usingApproval.forEach(function (
-                            //         item,
-                            //         index
-                            //     ) {
-                            //         if (item.count == oData.count) {
-                            //             self.formData.usingApproval.splice(index, 1);
-                            //         }
-                            //     });
-                            // } else {
+                            if (oData.id == '') {
+                                self.formData.usingApproval.forEach(function (
+                                    item,
+                                    index
+                                ) {
+                                    if (item.count == oData.count) {
+                                        self.formData.usingApproval.splice(index, 1);
+                                    }
+                                });
+                            } else {
                                 axios
                                     .delete(
-                                        '/api/v1/asset_forms/deleteusingApproval/' +
-                                        oData.index, '',
+                                        '/api/v1/singApproval/' + oData.id, '',
                                         {
                                             headers: {
                                                 'Content-type':
@@ -406,7 +409,7 @@ export default {
                                     )
                                     .then(res => {
                                         self.formData.usingApproval.forEach(function (item,index) {
-                                            if (item.index == oData.index) {
+                                            if (item.id == oData.id) {
                                                 self.formData.usingApproval.splice(index, 1);
                                             }
                                         });
@@ -417,7 +420,7 @@ export default {
                                             type: 'error'
                                         });
                                     });
-                            // }
+                            }
                         });
                     });
             }
@@ -441,6 +444,8 @@ export default {
             let formData = {
                 usingApproval: [
                     {
+                         id: '',
+                        count: 0,
                         fileName: '',
                         useReason: '',
                         fileNum: '',
@@ -544,6 +549,12 @@ export default {
     }
 };
 </script>
+<style scoped>
+#ApprovalForm  >>> .el-date-editor{
+        width: calc(100% - 0px);
+    }
+</style>
+
 <style lang="scss" scoped>
 #ApprovalForm {
     .uploadBtn {

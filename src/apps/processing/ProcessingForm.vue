@@ -9,7 +9,7 @@
                         </el-form-item>
                     </el-col> -->
                    <el-col :span="8">
-                        <el-form-item label="填表日期时间" prop="committed">
+                        <el-form-item label="填表日期时间" prop="">
                             <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
                             </el-date-picker>
                         </el-form-item>
@@ -17,7 +17,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="姓名" prop="creatorName">
+                        <el-form-item label="姓名" prop="">
                             <el-input v-model="formData.creatorNames" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -34,28 +34,28 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="民族" prop="meetingPlace">
+                        <el-form-item label="民族" prop="">
                             <el-input v-model="formData.meetingPlaces" placeholder="请输入民族"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                         <el-form-item label="籍贯/出生地" prop="conferenceTitle">
+                         <el-form-item label="籍贯/出生地" prop="">
                             <el-input v-model="formData.conferenceTitles"></el-input>
                         </el-form-item>
-                        <!-- <el-form-item label="开会时间" prop="meetingTime">
+                        <!-- <el-form-item label="开会时间" prop="">
                             <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="datetime">
                             </el-date-picker>
                         </el-form-item> -->
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="户口所在地" prop="conferenceTitle">
+                        <el-form-item label="户口所在地" prop="">
                             <el-input v-model="formData.conferenceTitles"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                  <el-row>
                     <el-col :span="8">
-                        <el-form-item label="身高" prop="creatorName">
+                        <el-form-item label="身高" prop="">
                             <el-input v-model="formData.creatorNames" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -75,7 +75,7 @@
                 </el-row>
                  <el-row>
                     <el-col :span="8">
-                        <el-form-item label="外语水平" prop="creatorName">
+                        <el-form-item label="外语水平" prop="">
                             <el-input v-model="formData.creatorNames" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -92,7 +92,7 @@
                 </el-row>
                  <el-row>
                     <el-col :span="8">
-                        <el-form-item label="最高学历" prop="creatorName">
+                        <el-form-item label="最高学历" prop="">
                             <el-input v-model="formData.creatorNames" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -112,7 +112,7 @@
                 </el-row>
                  <el-row>
                     <el-col :span="12">
-                        <el-form-item label="身份证号码/护照号ID" prop="creatorName">
+                        <el-form-item label="身份证号码/护照号ID" prop="">
                             <el-input v-model="formData.creatorNames" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -124,7 +124,7 @@
                 </el-row>
                  <el-row>
                     <el-col :span="12">
-                        <el-form-item label="目前住址" prop="creatorName">
+                        <el-form-item label="目前住址" prop="">
                             <el-input v-model="formData.creatorNames" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -137,38 +137,38 @@
                 <table class="tableNoBorder">
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="学习及培训经历" prop="content">
+                            <el-form-item label="学习及培训经历" prop="">
                                 <div style="float: right;">
                                     <span @click="addItem('personal')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
                                  </div>
                                 <el-table :data="formData.requestedItems" border style="width: 100%; margin-top: 5px;" >
-                                    <el-table-column prop="content" label="起止时间(年月)">
+                                    <el-table-column prop="" label="起止时间(年月)">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.content"></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="content" label="毕业院校/培训机构">
+                                    <el-table-column prop="" label="毕业院校/培训机构">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.content"></el-input>
                                         </template>
                                     </el-table-column>
                                 
-                                    <el-table-column prop="fileNum" label="所学专业/培训项目">
+                                    <el-table-column prop="" label="所学专业/培训项目">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.fileNum" ></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="fileNum" label="所得学历">
+                                    <el-table-column prop="" label="所得学历">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.fileNum" ></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="fileNum" label="所得学位">
+                                    <el-table-column prop="" label="所得学位">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.fileNum" ></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="fileNum" label="就读方式">
+                                    <el-table-column prop="" label="就读方式">
                                         <template slot-scope="scope">
                                             <!-- <el-input v-model="scope.row.fileNum" ></el-input> -->
                                             <el-radio v-model="scope.row.lendOutType" label="true">统招</el-radio>
@@ -182,40 +182,40 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="工作经历" prop="phone">
+                            <el-form-item label="工作经历" prop="">
                                 <!-- <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
                                 </tr> -->
                                <div style="float: right;">
                                     <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
                                  </div>
                                 <el-table :data="formData.attendingDepartment" border style="width: 100%; margin-top: 5px;" >
-                                    <el-table-column prop="department" label="起止时间">
+                                    <el-table-column prop="" label="起止时间">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.department"></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="department" label="公司名称">
+                                    <el-table-column prop="" label="公司名称">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.department"></el-input>
                                         </template>
                                     </el-table-column>
                                 
-                                    <el-table-column prop="department" label="职位名称">
+                                    <el-table-column prop="" label="职位名称">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.department" ></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="department" label="离职原因">
+                                    <el-table-column prop="" label="离职原因">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.department" ></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="department" label="证明人及联系电话">
+                                    <el-table-column prop="" label="证明人及联系电话">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.department" ></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="department" label="职责简述">
+                                    <el-table-column prop="" label="职责简述">
                                         <template slot-scope="scope">
                                            <el-input v-model="scope.row.department" ></el-input>
                                         </template>
@@ -233,7 +233,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="家庭关系" prop="phone">
+                            <el-form-item label="家庭关系" prop="">
                                 <!-- <tr v-for="(item,index) in formData.sitIn" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
                                    
                                 </tr> -->
@@ -241,33 +241,33 @@
                                     <span @click="addItem('sitIn')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
                                  </div>
                                 <el-table :data="formData.sitIn" border style="width: 100%; margin-top: 5px;" >
-                                    <el-table-column prop="people" label="姓名">
+                                    <el-table-column prop="" label="姓名">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.people"></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="people" label="出生年月">
+                                    <el-table-column prop="" label="出生年月">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.people"></el-input>
                                         </template>
                                     </el-table-column>
                                 
-                                    <el-table-column prop="people" label="居住地">
+                                    <el-table-column prop="" label="居住地">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.people" ></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="people" label="工作单位">
+                                    <el-table-column prop="" label="工作单位">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.people" ></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="people" label="联系电话">
+                                    <el-table-column prop="" label="联系电话">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.people" ></el-input>
                                         </template>
                                     </el-table-column>
-                                    <el-table-column prop="people" label="备注">
+                                    <el-table-column prop="" label="备注">
                                         <template slot-scope="scope">
                                            <el-input v-model="scope.row.people" placeholder=""></el-input>
                                         </template>
@@ -396,8 +396,8 @@
                 let formData =  {
                     attachments: [],
                     attendingDepartment: [{
-                        people: [],
-                        department: ''
+                        // people: [],
+                        // department: ''
                     }],
                     requestedItems: [{}],
                     sitIn: [{
@@ -410,7 +410,7 @@
                     created: '',
                     sendMessage: [],
                     idea: '',
-                    committed: moment(new Date()).format('YYYY-MM-DD 00:00:00'),
+                    committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                     meetingPlace: '',
                     meetingTime: '',
                     conferenceTitle: '',

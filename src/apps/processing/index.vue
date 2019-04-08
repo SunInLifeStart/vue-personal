@@ -174,8 +174,7 @@
                     this.params.pageNum = 1;
                     this.getList();
                 } else {
-                    this.$refs.Processing
-                    Detail.getFormDetails(params.id);
+                    this.$refs.ProcessingDetail.getFormDetails(params.id);
                 }
             },
             searchList() {
@@ -188,8 +187,7 @@
                 if (response) {
                     if (response.data.content.list.length > 0) {
                         let formId = response.data.content.list[0].id;
-                        $self.$refs.Processing
-                        Detail.getFormDetails(formId);
+                        $self.$refs.ProcessingDetail.getFormDetails(formId);
                     }
                     $self.tableData = response.data.content.list;
                     $self.params.total = response.data.content.total;
@@ -198,12 +196,10 @@
                 }
             },
             clickTableRow(row) {
-                this.$refs.Processing
-                Detail.getFormDetails(row.id);
+                this.$refs.ProcessingDetail.getFormDetails(row.id);
             },
             editForm(data) {
-                this.$refs.Processing
-                Form.setDataFromParent(data);
+                this.$refs.ProcessingForm.setDataFromParent(data);
             },
             currentChange(pageNum) {
                 this.params.pageNum = pageNum;
