@@ -9,65 +9,65 @@
                         </el-form-item>
                     </el-col> -->
                    <el-col :span="8">
-                        <el-form-item label="填表日期时间" prop="">
-                            <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
-                            </el-date-picker>
+                        <el-form-item label="填表日期" prop="">
+                            <!-- <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                            </el-date-picker> -->
+                            <el-input v-model="formData.committed" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="姓名" prop="">
-                            <el-input v-model="formData.creatorNames" ></el-input>
+                        <el-form-item label="姓名" prop="creatorNamesone">
+                            <el-input v-model="formData.creatorNamesone" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="性别">
-                            <el-input v-model="formData.organNames" ></el-input>
+                        <el-form-item label="性别" prop="sex">
+                            <el-input v-model="formData.sex" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                       <el-form-item label="出生日期">
-                            <el-input v-model="formData.organNames" ></el-input>
+                       <el-form-item label="出生日期" prop="chusheng">
+                            <el-date-picker v-model="formData.chusheng" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                            </el-date-picker>
+                            <!-- <el-input v-model="formData.chusheng" ></el-input> -->
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="民族" prop="">
-                            <el-input v-model="formData.meetingPlaces" placeholder="请输入民族"></el-input>
+                        <el-form-item label="民族" prop="minzu">
+                            <el-input v-model="formData.minzu" placeholder="请输入民族"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                         <el-form-item label="籍贯/出生地" prop="">
-                            <el-input v-model="formData.conferenceTitles"></el-input>
+                         <el-form-item label="籍贯/出生地" prop="jiguan">
+                            <el-input v-model="formData.jiguan"></el-input>
                         </el-form-item>
-                        <!-- <el-form-item label="开会时间" prop="">
-                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="datetime">
-                            </el-date-picker>
-                        </el-form-item> -->
+                       
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="户口所在地" prop="">
-                            <el-input v-model="formData.conferenceTitles"></el-input>
+                        <el-form-item label="户口所在地" prop="hukou">
+                            <el-input v-model="formData.hukou"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                  <el-row>
                     <el-col :span="8">
-                        <el-form-item label="身高" prop="">
-                            <el-input v-model="formData.creatorNames" ></el-input>
+                        <el-form-item label="身高" >
+                            <el-input v-model="formData.shengao" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="血型">
-                            <el-input v-model="formData.organNames" ></el-input>
+                            <el-input v-model="formData.xuexing" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                        <el-form-item label="婚姻状况">
                             <!-- <el-input v-model="formData.organNames" ></el-input> -->
-                             <el-checkbox-group v-model="formData.checkList">
+                             <el-checkbox-group v-model="formData.hunyin">
                                 <el-checkbox v-for="city in checkListsone" :label="city" :key="city">{{city}}</el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
@@ -75,36 +75,36 @@
                 </el-row>
                  <el-row>
                     <el-col :span="8">
-                        <el-form-item label="外语水平" prop="">
-                            <el-input v-model="formData.creatorNames" ></el-input>
+                        <el-form-item label="外语水平" >
+                            <el-input v-model="formData.waiyu" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="职称/职业资格">
-                            <el-input v-model="formData.organNames" ></el-input>
+                            <el-input v-model="formData.zhicheng" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                        <el-form-item label="政治面貌">
-                            <el-input v-model="formData.organNames" ></el-input>
+                            <el-input v-model="formData.zhengzhi" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                  <el-row>
                     <el-col :span="8">
                         <el-form-item label="最高学历" prop="">
-                            <el-input v-model="formData.creatorNames" ></el-input>
+                            <el-input v-model="formData.xueli" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="电子邮箱">
-                            <el-input v-model="formData.organNames" ></el-input>
+                            <el-input v-model="formData.youxiang" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                        <el-form-item label="日常交通方式">
                             <!-- <el-input v-model="formData.organNames" ></el-input> -->
-                            <el-checkbox-group v-model="formData.checkList">
+                            <el-checkbox-group v-model="formData.jiaotong">
                                 <el-checkbox v-for="city in checkListstwo" :label="city" :key="city">{{city}}</el-checkbox>
                             </el-checkbox-group>
                         </el-form-item>
@@ -113,24 +113,24 @@
                  <el-row>
                     <el-col :span="12">
                         <el-form-item label="身份证号码/护照号ID" prop="">
-                            <el-input v-model="formData.creatorNames" ></el-input>
+                            <el-input v-model="formData.shenfen" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                        <el-form-item label="紧急联系人及电话">
-                            <el-input v-model="formData.organNames" ></el-input>
+                            <el-input v-model="formData.dianhua" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                  <el-row>
                     <el-col :span="12">
                         <el-form-item label="目前住址" prop="">
-                            <el-input v-model="formData.creatorNames" ></el-input>
+                            <el-input v-model="formData.zhuzhi" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                          <el-form-item label="手机/家庭电话">
-                            <el-input v-model="formData.organNames" ></el-input>
+                            <el-input v-model="formData.shouji" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -144,7 +144,9 @@
                                 <el-table :data="formData.requestedItems" border style="width: 100%; margin-top: 5px;" >
                                     <el-table-column prop="" label="起止时间(年月)">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.content"></el-input>
+                                            <!-- <el-input v-model="scope.row.content"></el-input> -->
+                                            <el-date-picker v-model="scope.row.qizhi" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                            </el-date-picker>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="毕业院校/培训机构">
@@ -191,7 +193,9 @@
                                 <el-table :data="formData.attendingDepartment" border style="width: 100%; margin-top: 5px;" >
                                     <el-table-column prop="" label="起止时间">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.department"></el-input>
+                                            <!-- <el-input v-model="scope.row.department"></el-input> -->
+                                            <el-date-picker v-model="scope.row.departmentime" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                            </el-date-picker>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="公司名称">
@@ -243,7 +247,15 @@
                                 <el-table :data="formData.sitIn" border style="width: 100%; margin-top: 5px;" >
                                     <el-table-column prop="" label="姓名">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.people"></el-input>
+                                            <!-- <el-input v-model="scope.row.people"></el-input> -->
+                                             <el-select style="width:100%;" clearable v-model="scope.row.useItems" placeholder="请选择">
+                                                <el-option
+                                                    v-for="item in onOption"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                                </el-option>
+                                            </el-select>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="出生年月">
@@ -277,9 +289,9 @@
                         </el-col>
                     </el-row>
                 </table>
-                <!-- <el-row>
+                <el-row>
                     <el-col :span="24">
-                        <el-form-item label="会议材料及附件">
+                        <el-form-item label="照片及附件">
                             <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
@@ -288,7 +300,7 @@
                             </div>
                         </el-form-item>
                     </el-col>
-                </el-row> -->
+                </el-row>
             </el-form>
         </div>
         <div slot="footer" class="dialog-footer">
@@ -313,6 +325,30 @@
                 checkListsone:['未婚','已婚','离异'],
                 checkListstwo:['自驾','公共交通'],
                 rules: {
+                    creatorNamesone: [
+                        { required: true, message: '请输入姓名', trigger: 'blur' }
+                    ],
+                     sex: [
+                        { required: true, message: '请输入性别', trigger: 'blur' }
+                    ],
+                     chusheng: [
+                        { required: true, message: '请输入出生日期', trigger: 'blur' }
+                    ],
+                     minzu: [
+                        { required: true, message: '请输入民族', trigger: 'blur' }
+                    ],
+                     jiguan: [
+                        { required: true, message: '请输入籍贯', trigger: 'blur' }
+                    ],
+                     hukou: [
+                        { required: true, message: '请输入户口', trigger: 'blur' }
+                    ],
+                     creatorNamesone: [
+                        { required: true, message: '请输入姓名', trigger: 'blur' }
+                    ],
+                     creatorNamesone: [
+                        { required: true, message: '请输入姓名', trigger: 'blur' }
+                    ],
                     number: [
                         { required: true, message: '请输入流水号', trigger: 'blur' }
                     ],
@@ -326,6 +362,33 @@
                         { required: true, message: '请输入开会时间', trigger: 'blur' }
                     ]
                 },
+                // 父亲、母亲、配偶、儿子、女儿
+                onOption: [
+                    {
+                        value: '父亲',
+                        label: '父亲'
+                    },
+                    {
+                        value: '母亲',
+                        label: '母亲'
+                    },
+                    {
+                        value: '配偶',
+                        label: '配偶'
+                    },
+                    {
+                        value: '工会章',
+                        label: '工会章'
+                    },
+                    {
+                        value: '儿子',
+                        label: '儿子'
+                    },
+                    {
+                        value: '女儿',
+                        label: '女儿'
+                    },
+                ],
                 personOptions: [],
                 formData: this.resetForm(),
                 users: [],
@@ -394,15 +457,36 @@
             },
             resetForm() {
                 let formData =  {
+                    creatorNamesone:"",
+                    sex:"",
+                    chusheng:"",
+                    minzu:"",
+                    jiguan:"",
+                    hukou:"",
+                    shengao:"",
+                    xuexing:"",
+                    hunyin:"",
+                    waiyu:"",
+                    zhicheng:"",
+                    zhengzhi:"",
+                    xueli:"",
+                    youxiang:"",
+                    jiaotong:"",
+                    shenfen:"",
+                    zhuzhi:"",
+                    dianhua:"",
+                    shouji:"",
                     attachments: [],
                     attendingDepartment: [{
                         // people: [],
-                        // department: ''
-                    }],
-                    requestedItems: [{}],
-                    sitIn: [{
-                        people: [],
                         department: ''
+                    }],
+                    requestedItems: [{
+                        qizhi:"",
+                    }],
+                    sitIn: [{
+                        // people: "",
+                        // department: ''
                     }],
                     numbers: '',
                     branchlineTo: '',
@@ -410,7 +494,7 @@
                     created: '',
                     sendMessage: [],
                     idea: '',
-                    committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                    committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
                     meetingPlace: '',
                     meetingTime: '',
                     conferenceTitle: '',
