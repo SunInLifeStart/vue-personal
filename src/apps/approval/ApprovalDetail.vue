@@ -60,37 +60,57 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                 <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="用印文件名称：">{{tableData.fileName}}
+                 <!-- <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="用印文件名称：">{{tableData.usingApproval.fileName}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="用印份数：">{{tableData.fileNum}}
+                    <el-col :span="8">
+                        <el-form-item label="用印份数：">{{tableData.usingApprovalfileNum}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="使用事由：">{{tableData.usingApproval.useReason}}
                         </el-form-item>
                     </el-col>
                 </el-row>
+               
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="使用事由：">{{tableData.useReason}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <!-- <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="日程安排：">{{tableData.fileNum}}
-                        </el-form-item>
-                    </el-col>
-                </el-row> -->
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                        <el-form-item label="附件：" v-if="tableData.usingApproval.attachments && tableData.usingApproval.attachments.length > 0">
+                            <div v-for="item in tableData.usingApproval.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
-                </el-row>
+                </el-row> -->
+                <el-table :data="tableData.usingApproval" border style="width: 90%; margin-top: 5px;" >
+                           <el-table-column prop="fileName" label="用印文件名称">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.fileName" disabled></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column prop="useReason" label="使用事由">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.useReason" disabled></el-input>
+                                </template>
+                            </el-table-column>
+                        
+                            <el-table-column prop="fileNum" label="用印份数">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.fileNum" disabled></el-input>
+                                </template>
+                            </el-table-column>
+                             <el-table-column  label="附件" align="center">
+                                <template slot-scope="scope" >
+                                    <el-form-item label="" v-if="scope.row.attachments && scope.row.attachments.length > 0" disabled>
+                                        <div v-for="item in scope.row.attachments" :key="item.id">
+                                            <FilesOperate :item="item" :options="{preview:true,download:true}" ></FilesOperate>
+                                        </div>
+                                    </el-form-item>
+                                </template>
+                            </el-table-column>
+                        </el-table>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
@@ -174,6 +194,13 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
+                //  if($self.tableData.sealType=="true"){
+                //         $self.typeJuder='是'
+                        
+                // }
+                // if($self.tableData.sealType=="false"){
+                //     $self.typeJuder='是'
+                // }
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }

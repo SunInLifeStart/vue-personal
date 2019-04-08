@@ -113,7 +113,7 @@
                             <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                         </div>
                         <el-table :data="formData.usingApproval" border style="width: 100%; margin-top: 5px;"
-                         @selection-change="handleSelectionChange()" 
+                         @selection-change="handleSelectionChange" 
                           :row-class-name="tableRowClassName"
                           @row-click='show'
                           >
@@ -359,11 +359,12 @@ export default {
                 this.formData.timeLang=''
             }
             else{
-                this.formData.timeLang=days*12+new Number(hours)
+                this.formData.timeLang=days*24+new Number(hours)
             }
             return hours
         },
-         handleSelectionChange(selection,index) {
+         handleSelectionChange(selection) {
+            //  debugger
              this.selectionItems = selection;
         },
         addItem() {
@@ -380,22 +381,22 @@ export default {
                 self
                     .$confirm('是否删除?', '提示', { type: 'warning' })
                     .then(() => {
+                        //  debugger
                         self.selectionItems.forEach(function (oData) {
-                            if (oData.id == '') {
-                                self.formData.usingApproval.forEach(function (
-                                    item,
-                                    index
-                                ) {
-                                    if (item.count == oData.count) {
-                                        self.formData.usingApproval.splice(index, 1);
-                                    }
-                                });
-                            } else {
+                            // if (oData.id == '') {
+                            //     self.formData.usingApproval.forEach(function (
+                            //         item,
+                            //         index
+                            //     ) {
+                            //         if (item.count == oData.count) {
+                            //             self.formData.usingApproval.splice(index, 1);
+                            //         }
+                            //     });
+                            // } else {
                                 axios
                                     .delete(
                                         '/api/v1/asset_forms/deleteusingApproval/' +
-                                        oData.id,
-                                        '',
+                                        oData.index, '',
                                         {
                                             headers: {
                                                 'Content-type':
@@ -404,15 +405,9 @@ export default {
                                         }
                                     )
                                     .then(res => {
-                                        self.formData.usingApproval.forEach(function (
-                                            item,
-                                            index
-                                        ) {
-                                            if (item.id == oData.id) {
-                                                self.formData.usingApproval.splice(
-                                                    index,
-                                                    1
-                                                );
+                                        self.formData.usingApproval.forEach(function (item,index) {
+                                            if (item.index == oData.index) {
+                                                self.formData.usingApproval.splice(index, 1);
                                             }
                                         });
                                     })
@@ -422,7 +417,7 @@ export default {
                                             type: 'error'
                                         });
                                     });
-                            }
+                            // }
                         });
                     });
             }
@@ -463,10 +458,7 @@ export default {
                 recipientsTime: "",
                 accompanyingPerson: "",
                 // number: "",
-                useReason: "",
-                fileName: "",
-                participant: "",
-                fileNum: "",
+               participant: "",
                 remarks: "",
                 endTime: ""
             };
@@ -538,7 +530,7 @@ export default {
                     // })
                 });
             }
-            this.$refs.upload.clearFiles();
+            // this.$refs.upload.clearFiles();
         },
         submitUpload() {
             this.$refs.upload.submit();

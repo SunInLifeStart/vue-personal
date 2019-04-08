@@ -9,7 +9,7 @@
                             <el-col :span="8">
                                 <el-form-item label="印章种类">
                                     <!-- <el-input placeholder="请输入印章种类" v-model="params.useItems"></el-input> -->
-                                <el-select style="width:100%;" clearable v-model="params.sealType" placeholder="请选择印章种类">
+                                <el-select style="width:100%;" clearable v-model="params.useItems" placeholder="请选择印章种类">
                                     <el-option
                                         v-for="item in onOption"
                                         :key="item.value"
@@ -27,7 +27,7 @@
                             <el-col :span="8">
                                 <el-form-item label="申请时间">
                                     <!-- <el-input placeholder="请输入申请时间" v-model="params.created"></el-input> -->
-                                    <el-date-picker v-model="params.created" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                    <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" style="width:100%" type="date" >
                                   </el-date-picker>
                                 </el-form-item>
                             </el-col>
@@ -38,8 +38,16 @@
                                     <el-input placeholder="请输入申请部门" v-model="params.organName"></el-input>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8">
-                               
+                           <el-col :span="8">
+                                <el-form-item label="单据状态">
+                                    <el-select v-model="params.status" clearable placeholder="请选择">
+                                        <el-option v-for="item in s_status" 
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
                             </el-col>
                             <el-col :span="8" class="searchBtn">
                                 <el-form-item class="positionBtn">
@@ -59,23 +67,31 @@
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
                     <el-table-column prop="useItems" label="印章种类">
                     </el-table-column>
+                    <el-table-column prop="created" label="申请时间">
+                    </el-table-column>
                     <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
                     <el-table-column prop="organName" label="申请部门">
                     </el-table-column>
                     <el-table-column prop="recipientsTime" label="领用时间">
                     </el-table-column>
-                    <el-table-column prop="fileName" label="用印文件名称">
+                     <el-table-column prop="accompanyingPerson" label="陪同人">
                     </el-table-column>
-                    <el-table-column prop="fileNum" width="250" label="用印份数"></el-table-column>
-                     <!-- <el-table-column prop="status" width="250" label="状态"></el-table-column> -->
+                    <!-- <el-table-column prop="fileName" label="用印文件名称">
+                    </el-table-column>
+                    <el-table-column prop="fileNum" width="250" label="用印份数"></el-table-column> -->
+                     <el-table-column  label="状态">
+                         <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
+                     </el-table-column>
                     
                      <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" >
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" 
+                            v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" 
+                            v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -132,14 +148,37 @@ export default {
                 },
             ],
             formId: "",
+            s_status: [
+                    {
+                        value: '00',
+                        label: '已保存'
+                    },
+                    {
+                        value: '01',
+                        label: '审核中'
+                    },
+                    {
+                        value: '02',
+                        label: '已驳回'
+                    },
+                    {
+                        value: '03',
+                        label: '已撤销'
+                    },
+                    {
+                        value: '04',
+                        label: '已完成'
+                    }
+            ],
             params: {
                 pageNum: 1,
                 pageSize: 5,
                 creatorName: "",
-                sealType: "",
+                useItems: "",
                 total: 0,
                 created:"",
                 organName:"",
+                status:""
             },
             formName:"singApproval"
         };
@@ -147,6 +186,18 @@ export default {
     components: {
         ApprovalForm,
         ApprovalDetail
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+               "00":"已保存", 
+               "01":"审核中",
+               "02" :"已驳回",
+               "03" :"已撤销",
+               "04" :"已完成"
+            };
+            return xmlJson[data];
+        }
     },
     methods: {
         //获取列表
@@ -202,7 +253,14 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.sealType = this.params.creatorName = "";
+            // this.params.sealType = this.params.creatorName = "";
+            this.params={
+                creatorName: "",
+                useItems: "",
+                created:"",
+                organName:"",
+                status:""
+            }
         }
     },
     mounted() {
@@ -217,6 +275,13 @@ export default {
         }
      #ApprovalFilter .filterForm >>> .el-form-item__content{
         width: calc(100% - 80px);
+    }
+   
+    #ApprovalFilter .filterForm >>> .el-select {
+        width: calc(100% - 15px);
+    }
+    #ApprovalFilter .filterForm >>> .el-date-editor{
+        width: calc(100% - 0px);
     }
 </style>
 <style lang="scss" scoped>
