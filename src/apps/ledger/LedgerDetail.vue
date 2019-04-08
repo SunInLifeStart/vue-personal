@@ -24,37 +24,42 @@
                         <el-form-item label="合同编号：">{{tableData.contractNum}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同名称：">{{tableData.applyDept}}</el-form-item>
+                        <el-form-item label="合同名称：">{{tableData.contractName}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同价格形式：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="合同价格形式：">{{tableData.shape}}</el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="合同主要内容：">{{tableData.assetsType}}</el-form-item>
+                        <el-form-item label="合同主要内容：">{{tableData.digest}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同金额（万元）：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="合同金额（万元）：">{{tableData.contractAmount}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同约定生效日期：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="合同约定生效日期：">{{tableData.deadStartTime}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同约定终止日期：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="合同约定终止日期：">{{tableData.deadEndTime}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同付款安排：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="合同付款安排：">{{tableData.shape}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同相对方名称：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="合同相对方名称：">{{tableData.partyB}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同相对方经办人及联系方式：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="合同相对方经办人及联系方式：">{{tableData.manager}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="合同执行进度：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="合同执行进度：">
+                            <!-- {{tableData.manager}} -->
+                            100%
+                        </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="已收（支）金额：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="已收（支）金额：">
+                            已收（支）金额
+                        </el-form-item>
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="备注：">{{tableData.remark}}</el-form-item>

@@ -174,6 +174,7 @@ export default {
     data() {
         return {
             users:[],
+            listId:"",
             counts: 0,
             dialogFormVisible: false,
             formData: this.resetForm(),
@@ -365,12 +366,12 @@ export default {
             return hours
         },
          handleSelectionChange(selection) {
-            //  debugger
-             this.selectionItems = selection;
-        },
+            this.selectionItems = selection;
+            // debugger
+         },
         addItem() {
              this.formData.usingApproval.push({
-                 id: '',
+                id: '',
                 fileName: '',
                 useReason: '',
                 fileNum: '',
@@ -385,21 +386,21 @@ export default {
                 self
                     .$confirm('是否删除?', '提示', { type: 'warning' })
                     .then(() => {
-                        //  debugger
-                        self.selectionItems.forEach(function (oData) {
-                            if (oData.id == '') {
-                                self.formData.usingApproval.forEach(function (
-                                    item,
-                                    index
-                                ) {
-                                    if (item.count == oData.count) {
-                                        self.formData.usingApproval.splice(index, 1);
-                                    }
-                                });
-                            } else {
+                       self.selectionItems.forEach(function (oData) {
+                        //    debugger
+                            // if (oData.id == '') {
+                            //     self.formData.usingApproval.forEach(function (
+                            //         item,
+                            //         index
+                            //     ) {
+                            //         if (item.count == oData.count) {
+                            //             self.formData.usingApproval.splice(index, 1);
+                            //         }
+                            //     });
+                            // } else {
                                 axios
-                                    .delete(
-                                        '/api/v1/singApproval/' + oData.id, '',
+                                    .get(
+                                        '/api/v1/singApproval/delete/' + self.formData.id+'/'+oData.index, '',
                                         {
                                             headers: {
                                                 'Content-type':
@@ -409,9 +410,13 @@ export default {
                                     )
                                     .then(res => {
                                         self.formData.usingApproval.forEach(function (item,index) {
-                                            if (item.id == oData.id) {
+                                            if (item.index == oData.index) {
                                                 self.formData.usingApproval.splice(index, 1);
                                             }
+                                        });
+                                        self.$message({
+                                            message: '删除成功',
+                                            type: 'success'
                                         });
                                     })
                                     .catch(function () {
@@ -420,7 +425,7 @@ export default {
                                             type: 'error'
                                         });
                                     });
-                            }
+                        //     }
                         });
                     });
             }
