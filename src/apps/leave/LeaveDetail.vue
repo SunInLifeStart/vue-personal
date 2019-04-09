@@ -11,13 +11,19 @@
         </div>
         <div class="formContent">
             <br>
-            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
+            </div>
+            <br />
+            <!--
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList">
                 <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
+            
             <div style="text-align:right">
                 <el-button type="primary" @click="cope()">打 印</el-button>
             </div>
+            -->
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
                 <el-row style="margin-top: 25px;">
                     <el-col :span="8">
@@ -91,28 +97,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
-                        <td colspan="2">
-                            审批意见
-                        </td>
-                        <td colspan="6" style="text-align: left;">
-                            <div class="audit" v-for="item in this.array" :key="item.id" v-show="item.action=='APPROVE'">
-                                <!-- <div class="avatar">
-                                    <img src="../../assets/avatar.png" alt="">
-                                </div> -->
-                                <div class="info">
-                                    <div class="creator">
-                                        <a href="#">{{item.creatorName}}</a> {{item.created | dateformat}}
-                                    </div>
-                                    <span>【同意】</span>
-                                    <span class="content">{{item.content}}</span>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-
                 </table>
-
             </el-form>
             <el-row v-if="comments && comments.length > 0">
                 <el-col :span="24">
@@ -153,7 +138,7 @@
                 <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
             </el-form>
         </el-dialog>
-    </div> 
+    </div>
 </template>
 <script>
 import axios from 'axios';
@@ -166,8 +151,6 @@ export default {
     data() {
         return {
             actions: [],
-            crumbs: [],
-            crumb: [],
             formId: '',
             users: [],
             actionsDialogArr: [],
@@ -177,26 +160,7 @@ export default {
             // qqq
             subStatus: false,
             activeName: 'first',
-            tableData: {
-                no: '',
-                submitter: '',
-                subOrganName: '',
-                reason: '',
-                evections: [],
-                estimate: [],
-                attachments: []
-            },
-            fileleng: 'show',
-            actions: [],
-            rejectTarget: '',
-            rejectList: [],
-            attachments: [],
-            array: [],
-            users: [],
-            reject_status: false,
-            presign_status: false,
-            seleteUsers: [],
-            seleteUserLabel: '',
+            tableData: {},
             textarea: '',
             dialogVisible: false,
             appFlowName: 'motor-holiday_leave',
@@ -220,42 +184,44 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
-                if($self.tableData.type == 1){
-                    $self.tableData.type = '事假'
-                }else if($self.tableData.type == 2){
-                     $self.tableData.type = '病假'
-                }else if($self.tableData.type == 3){
-                     $self.tableData.type = '婚假'
-                }else if($self.tableData.type == 4){
-                     $self.tableData.type = '产假'
-                }else if($self.tableData.type == 5){
-                     $self.tableData.type = '丧假'
+                if ($self.tableData.type == 1) {
+                    $self.tableData.type = '事假';
+                } else if ($self.tableData.type == 2) {
+                    $self.tableData.type = '病假';
+                } else if ($self.tableData.type == 3) {
+                    $self.tableData.type = '婚假';
+                } else if ($self.tableData.type == 4) {
+                    $self.tableData.type = '产假';
+                } else if ($self.tableData.type == 5) {
+                    $self.tableData.type = '丧假';
+                } else if ($self.tableData.type == 6) {
+                    $self.tableData.type = '工伤假';
+                } else if ($self.tableData.type == 7) {
+                    $self.tableData.type = '年休假';
+                } else if ($self.tableData.type == 8) {
+                    $self.tableData.type = '其他';
                 }
-                else if($self.tableData.type == 6){
-                     $self.tableData.type = '工伤假'
-                }
-                else if($self.tableData.type == 7){
-                     $self.tableData.type = '年休假'
-                }
-                else if($self.tableData.type == 8){
-                     $self.tableData.type = '其他'
-                }
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             } else {
                 $self.msgTips('获取表单失败', 'warning');
             }
-            
+
             let actions = await $self.getActions();
-            let crumbs = await $self.getCrumbs();
+            // let crumbs = await $self.getCrumbs();
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
-            $self.crumbs = { items: crumbs.data, index: -1 };
+            // $self.crumbs = { items: crumbs.data, index: -1 };
             $self.comments = comments.data;
+            /** 
             for (var i = 0; i < $self.crumbs.items.length; i++) {
                 if ($self.crumbs.items[i].active) {
                     $self.crumbs.index = i;
                 }
             }
+            */
         }
     }
 };

@@ -120,8 +120,6 @@ export default {
     data() {
         return {
             dialogFormVisible: false,
-            submissionSelections: [],
-            getoid: '',
             options: [
                 {
                     value: '1',
@@ -156,67 +154,11 @@ export default {
                     label: '其他'
                 }
             ],
-            formData: {
-                no: '',
-                uname: '',
-                oname: '',
-                reason: '',
-                type: '',
-                startTime: '',
-                endTime: '',
-                attachments: [],
-                applyTime: moment()
-                    // .utc()
-                    .format('YYYY-MM-DD HH:mm:ss')
-            },
-            users: [],
-            // currentFormId: this.operationType == 'create' ? '' : this.formId,
-            pickerOptions1: {
-                shortcuts: [
-                    {
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    },
-                    {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    },
-                    {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }
-                ]
-            },
-            bigtype: '',
-            getclass: [],
-            dataaa: [],
-            cookie_uid: cookies.get('uid'),
-            vacancy: [],
+            formData: this.resetForm(),
             appFlowName: 'motor-holiday_leave'
         };
     },
-    mounted() {
-        const self = this;
-        if (this.operationType == 'edit') {
-            this.getForm();
-        }
-        self.getNum();
-    },
-    watch: {
-        'formData.lowercase'(val) {
-            this.formData.upper = val ? this.convertCurrency(val) : '';
-        }
-    },
+    mounted() {},
     components: {
         FilesOperate
     },
@@ -253,32 +195,20 @@ export default {
         createForm() {
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
+            this.getNum();
         },
         resetForm() {
             let formData = {
                 attachments: [],
                 uname: cookies.get('uname'), //申请人
                 oname: cookies.get('oname'), //所属部门
-                no: this.formData.no,
+                no: '',
                 id: '',
                 applyTime: moment().format('YYYY-MM-DD HH:mm:ss'), //提单时间
                 isAnnualPlan: 'true',
-                draftUnit: '',
-                draftTime: [],
                 startTime: '',
                 endTime: '',
-                participant: '',
-                processId: '',
-                type: '事假',
-                suggestion: '',
-                consts: '',
-                upper: '',
-                lowercase: '',
-                schedule: '',
-                remarks: '',
-                writer: '',
-                trainingTime: []
-                //  created: moment(new Date()).format("YYYY-MM-DD")
+                type: '事假'
             };
             return formData;
         },
@@ -297,19 +227,13 @@ export default {
                     $self.formData.type = item.value;
                 }
             }
-            this.formData.role = cookies.get('Role')
-            let response;
-            if ($self.formData.id) {
-                response = await $self.saveFormData(
-                    '/api/v1/motor-holiday/update',
-                    $self.formData
-                );
-            } else {
-                response = await $self.saveFormData(
-                    '/api/v1/motor-holiday/save',
-                    $self.formData
-                );
-            }
+            this.formData.role = cookies.get('Role');
+            let response = await $self.saveFormData(
+                this.createForm_status
+                    ? '/api/v1/motor-holiday/save'
+                    : '/api/v1/motor-holiday/update',
+                $self.formData
+            );
             if (response) {
                 $self.formId = response.data.content;
                 $self.dialogFormVisible = false;
@@ -324,8 +248,12 @@ export default {
                         ) {
                             return item.action == 'COMMIT';
                         });
-                        actions.data.types[0]["comment"] = actions.data.types[0].name;
-                        await $self.startSignal(actions.data.types[0]);
+                        actions.data.types[0]['comment'] =
+                            actions.data.types[0].name;
+                        await $self.startSignal(
+                            actions.data.types[0],
+                            'fromeEdit'
+                        );
                         $self.emitMessage();
                     }
                 } else {
@@ -338,9 +266,9 @@ export default {
                 }
             } else {
                 if (params) {
-                    $self.msgTips( '提交失败', 'warning');
+                    $self.msgTips('提交失败', 'warning');
                 } else {
-                    $self.msgTips( '保存失败', 'warning');
+                    $self.msgTips('保存失败', 'warning');
                 }
             }
         },
@@ -388,7 +316,7 @@ export default {
     }
     table td,
     table th {
-        border: 1px solid #000;
+        border: 1px solid #ebeef5;
         color: #000;
         height: 40px;
         vertical-align: middle;

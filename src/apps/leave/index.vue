@@ -27,8 +27,8 @@
 
                     </el-row>
                     <el-row class="filterForm">
-                        <el-col :span="24" class="">
-                            <el-form-item class="" style=" text-align: right">
+                        <el-col :span="8" class="">
+                            <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
                                 <el-button @click="resetInput">重置</el-button>
                             </el-form-item>
@@ -49,8 +49,8 @@
                     </el-table-column>
                     <el-table-column prop="applyTime" label="提单时间" align="center">
                     </el-table-column>
-                   
-                    <el-table-column prop="status" label="状态" align="center"  :formatter="fomatterStatus">
+
+                    <el-table-column prop="status" label="状态" align="center" :formatter="fomatterStatus">
                     </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
@@ -69,7 +69,7 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <LeaveDetail :formId="formId" ref="LeaveDetail" @reloadList="reloadList" @resetStatus = "resetStatus"></LeaveDetail>
+            <LeaveDetail :formId="formId" ref="LeaveDetail" @reloadList="reloadList" @resetStatus="resetStatus"></LeaveDetail>
         </el-card>
         <LeaveForm ref="LeaveForm" @reloadList="reloadList"></LeaveForm>
         <!-- <el-dialog title="请休假申请" :close-on-click-modal="false" :visible.sync="dialogFormVisible" width="1240px">
@@ -104,33 +104,7 @@ export default {
                 submitter: '',
                 total: 0
             },
-            formName: 'motor-holiday',
-            pickerOptions1: {
-                shortcuts: [
-                    {
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    },
-                    {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    },
-                    {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }
-                ]
-            }
+            formName: 'motor-holiday'
         };
     },
 
@@ -145,7 +119,7 @@ export default {
                     $self.$refs.LeaveDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.content.list;
-                console.log($self.tableData)
+                console.log($self.tableData);
                 $self.params.total = response.data.content.total;
             } else {
                 $self.msgTips('获取列表失败', 'warning');
@@ -155,11 +129,11 @@ export default {
         showCurrentId(row) {
             this.$refs.LeaveDetail.getFormDetails(row.id);
         },
-        resetStatus(data){
-              let $self = this;
-            for(let item of $self.tableData){
-                if(data.id == item.id){
-                  item.status = data.status;
+        resetStatus(data) {
+            let $self = this;
+            for (let item of $self.tableData) {
+                if (data.id == item.id) {
+                    item.status = data.status;
                 }
             }
         },
@@ -195,9 +169,9 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params= {}
+            this.params = {};
             this.params.total = 0;
-            this.params.department = this.params.submitter= '';
+            this.params.department = this.params.submitter = '';
             this.params.pageNum = 1;
             this.params.pageSize = 5;
             this.getList();
@@ -207,23 +181,23 @@ export default {
             //0已保存1审核中2驳回3撤销4完成
             switch (row.status) {
                 case '00':
-                  state = "已保存";
-                  break;
+                    state = '已保存';
+                    break;
                 case '01':
-                    state = "审核中";
+                    state = '审核中';
                     break;
                 case '02':
-                    state = "驳回";
+                    state = '驳回';
                     break;
                 case '03':
-                    state = "撤销";
+                    state = '撤销';
                     break;
                 case '04':
-                  state = "已完成";
-                  break;
+                    state = '已完成';
+                    break;
             }
             return state;
-        },
+        }
     },
     mounted() {
         this.getList();
@@ -238,6 +212,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 #LeaveFilter .el-form-item--small.el-form-item {
+    width: 100%;
+}
+#LeaveFilter .el-select {
     width: 100%;
 }
 </style>
