@@ -32,7 +32,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="行文方向">
+                    <el-form-item label="行文方向" prop="direction">
                         <el-select v-model="rows.direction" style="width: 100%;">
                             <el-option v-for="item in direction" :key="item" :label="item" :value="item"></el-option>
                         </el-select>
@@ -174,6 +174,9 @@ export default {
                 ],
                 title: [
                     { required: true, message: "请输入标题", trigger: "blur" }
+                ],
+                direction:[
+                    { required: true, message: "请选择行文方向", trigger: "blur" }
                 ]
                 // content: [
                 //     { required: true, message: '请输入正文', trigger: 'blur' }
@@ -189,6 +192,15 @@ export default {
     },
     props: ["formId", "operationType"],
     mounted() {
+
+           axios
+                .post("/api/v1/issuesReported/queryList")
+                .then(res => {
+                  
+                })
+                .catch(function() {
+                 
+                });
         const self = this;
         self.getSedOrgan();
         //self.getWordNo();

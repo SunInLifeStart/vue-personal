@@ -1,6 +1,6 @@
 <template>
-    <el-dialog title="文件印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
-        <div id="FilesForm">
+    <el-dialog title="名片印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+        <div id="BusinessCardForm">
             <el-form ref="formupdate" :model="formData" :rules="rules" label-width="90px">
                 <el-row>
                     <el-col :span="8">
@@ -23,11 +23,12 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="申请日期" prop="applyDate">
-                            <el-input v-model="formData.applyDate" placeholder="请输入申请时间" :disabled="true"></el-input>
+                            <!-- <el-date-picker v-model="formData.applyDate" type="date"></el-date-picker> -->
+                             <el-input v-model="formData.applyDate" placeholder="请输入申请时间" :disabled="true"></el-input>
                          </el-form-item>
                     </el-col>
-                     <el-col :span="12">
-                        <el-form-item label="是否属于年度预算内" style="float:left"  label-width="166px">
+                    <el-col :span="12">
+                        <el-form-item label="是否属于年度预算内" style="float:left" label-width="166px">
                             <el-radio v-model="formData.type" label="true">是</el-radio>
                              <el-radio v-model="formData.type" label="false">否</el-radio>
                         </el-form-item>
@@ -44,69 +45,87 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                  <el-col :span="24">
-                        <el-form-item label="文件印刷明细" >
+                    <el-col :span="24">
+                        <el-form-item label="名片印刷明细" >
                             <div style="float: right;">
                                 <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
                                 <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                             </div>
-                            <el-table :data="formData.detail" border style="width: 100%; margin-top: 5px;"
-                               @selection-change="handleSelectionChange"
-                               :row-class-name="tableRowClassName"
-                               @row-click='show'>
-                              <el-table-column type="selection" width="70px"></el-table-column>
-                                <el-table-column prop="name" label="文件姓名">
+                            <el-table :data="formData.detail" border style="width: 100%; margin-top: 5px;" @selection-change="handleSelectionChange">
+                               <el-table-column type="selection" width="60px"></el-table-column>
+                                <el-table-column prop="name" label="姓名">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.name"></el-input>
+                                        <!-- <el-input v-model="scope.row.name"></el-input> -->
+                                         <el-select v-model="scope.row.name" placeholder="请选择" @change="payeeChange" filterable>
+                                            <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
+                                            </el-option>
+                                        </el-select>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="specification" label="印刷幅面">
+                                <el-table-column prop="specification" label="部门">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.specification"></el-input>
+                                        <!-- <el-input v-model="scope.row.specification"></el-input> -->
+                                        <el-select v-model="scope.row.specification" placeholder="请选择" filterable>
+                                            <el-option v-for="item in payeeOrgan" :key="item.id" :label="item.name" :value="item.name">
+                                            </el-option>
+                                        </el-select>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="price" label="印刷数量（套）">
+                                <el-table-column prop="number" label="职务">
                                     <template slot-scope="scope">
-                                        <el-input v-model.number="scope.row.price" @change="totleCurrency" placeholder=""></el-input>
+                                        <el-input v-model.number="scope.row.number"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="totalPrice" label="印刷色彩">
+                                <el-table-column prop="price" label="数量（盒）">
                                     <template slot-scope="scope">
-                                        <!-- <el-input v-model="scope.row.totalPrice" ></el-input> -->
-                                        <el-radio v-model="formData.lendOutType" label="1">彩色</el-radio>
-                                       <el-radio v-model="formData.lendOutType" label="0">白色</el-radio>
+                                        <el-input v-model.number="scope.row.price" @change="totleCurrency" placeholder="至少2盒"></el-input>
                                     </template>
                                 </el-table-column>
-                               <el-table-column prop="specification" label="其他需求">
+                                <el-table-column prop="totalPrice" label="电话">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.qita"></el-input>
+                                        <el-input v-model="scope.row.totalPrice" ></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="specification" label="附件">
+                                <el-table-column prop="inventorys" label="座机号">
                                     <template slot-scope="scope">
-                                        <el-upload  name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" 
-                                        :on-success="handleSuccess"
-                                        :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
-                                            <i class="el-icon-plus"></i>
-                                        </el-upload>
-                                        <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
-                                            <!-- @getId="getId" -->
-                                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}"></FilesOperate>
-                                        </div>
+                                         <!-- @mousewheel.native.prevent -->
+                                        <el-input v-model.number="scope.row.inventorys" type="number"></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="email" label="邮箱" >
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.email" ></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="reason" label="公司名称">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.reason"></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="inventory" label="通讯地址">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.inventory" ></el-input>
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="ubian" label="邮编">
+                                    <template slot-scope="scope">
+                                        <el-input v-model="scope.row.ubian"></el-input>
                                     </template>
                                 </el-table-column>
                             </el-table>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <!-- 总印刷数量（标签展示出来）、是否属于年度预算内、资金计划所属月份 -->
+                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="总印刷数量（套）" >
+                        <el-form-item label="总印刷数量" >
                             <el-input v-model="formData.numbers" :disabled="true"  placeholder="印刷数量"></el-input>
                         </el-form-item>
                     </el-col>
-               </el-row>
-               <!-- <el-row>
+                   
+                </el-row>
+                <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件">
                             <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
@@ -117,9 +136,19 @@
                             </div>
                         </el-form-item>
                     </el-col>
-                </el-row> -->
+                </el-row>
             </el-form>
-            
+            <!-- <el-dialog title="用途及申购原因" :append-to-body="true" :visible.sync="purposeDialog" max-width="1000px" width="40%">
+                <el-form ref="purposedate" label-width="0px">
+                    <el-form-item label="" prop="title">
+                        <el-input type="textarea" v-model="inputreason" :autosize="{minRows: 5}"></el-input>
+                    </el-form-item>
+                </el-form>
+                <div slot="footer" class="dialog-footer">
+                    <el-button type="default" @click="purposeDialog= false">取消</el-button>
+                    <el-button type="primary" @click="submitReason">确定</el-button>
+                </div>
+            </el-dialog> -->
         </div>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
@@ -138,10 +167,9 @@ import axios from 'axios';
 import cookies from 'js-cookie';
 export default {
     mixins: [publicMethods],
-    name: 'FilesForm',
+    name: 'BusinessCardForm',
     data() {
         return {
-            uploadImageType:'',
             appFlowName: "files-form_files",
             counts: 0,
             dialogFormVisible: false,
@@ -290,7 +318,6 @@ export default {
                         price: '',
                         totalPrice: '',
                         email: '',
-                        attachments: [],
                         reason: cookies.get('uname'),//公司
                         inventory:cookies.get('uname'),//通讯地址
                         ubian:cookies.get('uname'),//邮编
@@ -299,6 +326,7 @@ export default {
                 ],
                 numbers:"",
                 type:'true',
+                attachments: [],
                 applyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 proposerId: '',
                 applyDeptId: '',
@@ -379,26 +407,14 @@ export default {
                 }
             }
         },
-         tableRowClassName ({row, rowIndex}) {
-            //把每一行的索引放进row
-            row.index = rowIndex;
-        },
-         show(row, event, column){
-            //  debugger
-            this.uploadImageType=row.index
-        },
-        handleSuccess(response, file,fileList) {
-            // debugger
+        handleSuccess(response, file) {
             const self = this;
-            const aaa=self.uploadImageType
-            const bbb=self.formData.detail[aaa]
             if (response.length > 0) {
-                response.forEach(function (item,index) {
-                    // self.formData.attachments.push(item);
-                    self.formData.detail[aaa].attachments.push(item);
+                response.forEach(function (item) {
+                    self.formData.attachments.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            this.$refs.upload.clearBusinessCard();
         },
         submitUpload() {
             this.$refs.upload.submit();
@@ -453,7 +469,6 @@ export default {
                 totalPrice: '',
                 email: '',
                 reason: '',
-                attachments: [],
                 count: ++this.counts
             });
             this.formData.count = this.formData.count + 1;
@@ -564,19 +579,19 @@ export default {
 };
 </script>
 <style scoped>
-#FilesForm  >>> .el-select{
+#BusinessCardForm  >>> .el-select{
         width: calc(100% - 0px);
     }
-     #FilesForm >>> .el-form-item__content{
+     #BusinessCardForm >>> .el-form-item__content{
         width: calc(100% - 80px);
     }
-     #FilesForm >>> .el-checkbox{
+     #BusinessCardForm >>> .el-checkbox{
          width: 30px;
     }
 </style>
 
 <style lang="scss" scoped>
-#FilesForm {
+#BusinessCardForm {
   .uploadBtn {
     margin-right: 10px;
     width: 100px;

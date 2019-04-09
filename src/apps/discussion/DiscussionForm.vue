@@ -172,9 +172,9 @@ export default {
                 branchlineTo: [
                     { required: true, message: '请输入会议类型', trigger: 'blur' }
                 ],
-                // committed: [
-                //     { required: true, message: '请输入提单时间', trigger: 'blur' }
-                // ],
+                timeApplication: [
+                    { required: true, message: '请输入提请时间', trigger: 'blur' }
+                ],
                 // creatorName: [
                 //     { required: true, message: '请输入活动名称', trigger: 'blur' }
                 // ],

@@ -23,6 +23,7 @@ export default {
                 incoming: "收文阅办",
                 submission: "部门呈报",
                 files: "文件印刷",
+                businessCard: "名片印刷",
                 approval: "用印审批",
                 goods: "物品领用",
                 asset: "资产采购",

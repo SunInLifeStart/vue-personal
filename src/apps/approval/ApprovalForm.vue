@@ -18,8 +18,7 @@
                  <el-col :span="8">
                     <el-form-item label="申请时间" prop="created">
                         <el-input  v-model="formData.created" :disabled="true" placeholder="请输入申请时间"></el-input>
-                        <!-- <el-date-picker v-model="formData.created" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">
-                        </el-date-picker> -->
+                       
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -31,9 +30,6 @@
              <el-row>
                 <el-col :span="8">
                     <el-form-item label="领用时间"  prop="recipientsTime">
-                        <!-- <el-date-picker @change="getHour(formData.recipientsTime,formData.endTime)" 
-                         value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.recipientsTime" style="width:100%" type="date">
-                        </el-date-picker> -->
                          <el-date-picker v-model="formData.recipientsTime"  @change="getHour(formData.recipientsTime,formData.endTime)"
                          value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="领用时间">
                         </el-date-picker>
@@ -41,10 +37,7 @@
                 </el-col>
                  <el-col :span="8">
                     <el-form-item label="结束时间" prop="endTime">
-                        <!-- <el-date-picker  @change="getHour(formData.recipientsTime,formData.endTime)" 
-                        value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.endTime" style="width:100%" type="date">
-                        </el-date-picker> -->
-                        <el-date-picker v-model="formData.endTime"  @change="getHour(formData.recipientsTime,formData.endTime)"
+                       <el-date-picker v-model="formData.endTime"  @change="getHour(formData.recipientsTime,formData.endTime)"
                         value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间">
                         </el-date-picker>
                     </el-form-item>
@@ -73,8 +66,7 @@
                     <el-form-item label="类型" :prop="formData.useItems=='公章'?'sealType':''">
                        <el-select style="width:100%;" clearable v-model="formData.sealType" placeholder="请选择类型" 
                        :disabled="formData.useItems=='公章'?false:true">
-                       
-                            <el-option
+                           <el-option
                                 v-for="item in typeOption"
                                 :key="item.value"
                                 :label="item.label"
@@ -457,6 +449,7 @@ export default {
                         attachments: [],
                     }
                 ],
+                lendOutType:"1",
                 useItems: "", //印章种类
                 sealType:"",//类型
                 creatorName: this.$store.getters.LoginData.uname || '', //申请人

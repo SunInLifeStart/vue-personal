@@ -62,17 +62,20 @@ export default {
     watch: {},
     methods: {
         showPreview(url){          
-            // if(!url.includes('/api/v1/files')){
-            //     url = url.replace('/files/','/oldfiles/');
-            // }
             this.common.preview(url);
         },
         windowPreview(url){
-            this.openUrl = "http://static1.yxpe.com.cn/edit.html?";
-                ntkoBrowser.openWindow(
-                     this.openUrl +"removeBar=true" + "&&url=" + url
+             console.log(process.env.NODE_ENV);
+             if (process.env.NODE_ENV === 'production') {
+                        url = "http://124.205.31.66:2097/static/edit.html?removeBar=true&&url="+ url;
+                }else{
+                        // url = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url="+ url;
+                         url= "http://static1.yxpe.com.cn/edit.html?removeBar=true&&url="+ url;
+                }
+            ntkoBrowser.openWindow(
+                   url
             );
-              console.log( this.openUrl + "&url=" + url);
+            console.log(url);
         }
     },
     filters: {
@@ -121,14 +124,22 @@ export default {
                     
          
                 }
+                console.log(process.env.NODE_ENV);
                 if(data.text && JSON.parse(data.text).name){
-                      //  this.pdfUrl =  "/op/view.aspx?src=http://work.zgcgroup.vpn" + JSON.parse(data.text).url;
-                        this.pdfUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&&url="+ JSON.parse(data.text).url;
+                         if (process.env.NODE_ENV === 'production') {
+                                    this.pdfUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url="+ JSON.parse(data.text).url;
+                            }else{
+                                    this.pdfUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&url="+ JSON.parse(data.text).url;
+                            }
                         data.url.push(JSON.parse(data.text));
                 }else if(data.url.length>0){
                     if ('PDF,DOCX,PPTX,XLSX,DOC,XLS'.includes(data.url[0].type.toUpperCase())) {
-                       // this.pdfUrl = "/op/view.aspx?src=http://work.zgcgroup.vpn" + data.url[0].url;
-                        this.pdfUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&&url=" + data.url[0].url;
+                         if (process.env.NODE_ENV === 'production') {
+                              this.pdfUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url=" + data.url[0].url;
+                         }else{
+                             this.pdfUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&url=" + data.url[0].url;
+                         }
+                        
                     }
                     // else if (''.includes(data.url[0].type)) {
                     //     // axios.get('/onlinePreview?url='+data.url[0].url).then(res => {

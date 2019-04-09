@@ -12,7 +12,7 @@
         <br />
         <div class="formContent">
             <div>
-                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
+                <el-button type="primary" v-if="tableData.status!='04'" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
@@ -203,7 +203,6 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            // debugger;
             let actions = await $self.getActions();
             let crumbs = await $self.getCrumbs();
             let comments = await $self.getComments();

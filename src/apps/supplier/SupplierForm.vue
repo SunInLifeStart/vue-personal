@@ -43,8 +43,8 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="24">
-                    <el-form-item label="供应商来源" prop="creatorName">
+                <el-col :span="20">
+                    <el-form-item label="经营模式" prop="creatorName">
                         <el-checkbox>承包商</el-checkbox>
                         <el-checkbox>制造商</el-checkbox>
                         <el-checkbox>代理商</el-checkbox>
@@ -52,6 +52,9 @@
                         <el-checkbox>服务商</el-checkbox>
                         <el-checkbox>其他</el-checkbox>
                     </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                    <el-input v-model="formData.organName"></el-input>
                 </el-col>
             </el-row>
             <el-row>

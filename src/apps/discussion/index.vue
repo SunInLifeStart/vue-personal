@@ -199,7 +199,11 @@ export default {
             this.getList();
         },
         onReset() {
-            this.params.topicName = '';
+            this.params = {
+                pageNum: 1,
+                pageSize: 5,
+                total: 0
+            }
             this.onSubmit();
         },
         onSubmit() {

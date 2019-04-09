@@ -247,7 +247,6 @@ export default {
                 this.$refs.ApprovalDetail.getFormDetails(params.id);
             }
         },
-
         //分页
         currentChange(pageNum) {
             this.params.pageNum = pageNum;

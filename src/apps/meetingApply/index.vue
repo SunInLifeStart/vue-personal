@@ -98,10 +98,6 @@
                 params: {
                     pageNum: 1,
                     pageSize: 5,
-                    // conferenceTitle: '',
-                    // creatorName: '',
-                    // committed: '',
-                    // status: '',
                     total: 0
                 },
                 dialogFormVisibleApplyMeeting: false,
@@ -204,7 +200,11 @@
                 this.getList();
             },
             onReset() {
-                this.params.conferenceTitle = '';
+                this.params = {
+                    pageNum: 1,
+                    pageSize: 5,
+                    total: 0
+                }
                 this.onSubmit();
             },
             onSubmit() {

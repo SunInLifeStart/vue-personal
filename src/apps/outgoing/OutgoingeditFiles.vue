@@ -63,6 +63,7 @@ export default {
                        this.openUrl + "token="+res.data+"&url=" + url
                     );
                 } else {
+                    console.log(this.openUrl);
                     ntkoBrowser.openWindow(
                            this.openUrl + "token=" + res.data
                     );

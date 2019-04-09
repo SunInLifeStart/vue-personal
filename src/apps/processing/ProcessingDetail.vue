@@ -215,6 +215,7 @@
                 let response = await $self.getDetails();
                 if (response) {
                     $self.tableData = response.data.content;
+                    $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
                 } else {
                     $self.msgTips("获取表单失败", "warning");
                 }
@@ -222,29 +223,29 @@
                 let actions = await $self.getActions();
                 let crumbs = await $self.getCrumbs();
                 let comments =  await $self.getComments();
-                for(let i = 0; i < actions.data.types.length; i++){
-                   if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
-                       for(let j = 0; j<actions.data.types[i].required.length; j++){
-                           if(actions.data.types[i].required[j].indexOf("filterButton") > -1){
-                              if(actions.data.types[i].required[j].indexOf("==") > -1){
-                                 let a = actions.data.types[i].required[j];
-                                 let key_a = a.split("==")[0].split(":")[1];
-                                 let value = a.split("==")[1];
-                                 if('"'+$self.tableData[key_a]+'"' !=  value){
-                                   actions.data.types[i].hideCurrent = true;
-                                 }
-                              }else{
-                                  let a = actions.data.types[i].required[j];
-                                  let key_a = a.split("!=")[0].split(":")[1];
-                                  let value = a.split("!=")[1];
-                                    if('"'+$self.tableData[key_a]+'"' ==  value){
-                                        actions.data.types[i].hideCurrent = true;
-                                    }
-                              }
-                           }
-                       }
-                   }
-                };
+                // for(let i = 0; i < actions.data.types.length; i++){
+                //    if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
+                //        for(let j = 0; j<actions.data.types[i].required.length; j++){
+                //            if(actions.data.types[i].required[j].indexOf("filterButton") > -1){
+                //               if(actions.data.types[i].required[j].indexOf("==") > -1){
+                //                  let a = actions.data.types[i].required[j];
+                //                  let key_a = a.split("==")[0].split(":")[1];
+                //                  let value = a.split("==")[1];
+                //                  if('"'+$self.tableData[key_a]+'"' !=  value){
+                //                    actions.data.types[i].hideCurrent = true;
+                //                  }
+                //               }else{
+                //                   let a = actions.data.types[i].required[j];
+                //                   let key_a = a.split("!=")[0].split(":")[1];
+                //                   let value = a.split("!=")[1];
+                //                     if('"'+$self.tableData[key_a]+'"' ==  value){
+                //                         actions.data.types[i].hideCurrent = true;
+                //                     }
+                //               }
+                //            }
+                //        }
+                //    }
+                // };
                 $self.actions = actions.data.types;
                 $self.crumbs =  {items: crumbs.data, index: -1};
                 $self.comments = comments.data;
