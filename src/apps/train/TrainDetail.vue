@@ -39,7 +39,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="培训时间：">{{tableData.draftTime}}
+                        <el-form-item label="培训时间：">{{tableData.startTime}}至{{tableData.endTime}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -48,15 +48,18 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="12">
+                    <el-col :span="8">
                         <el-form-item label="是否资金计划内：">{{typeJuder}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="8">
                         <el-form-item label="是否纳入年度计划：">{{isAnnualPlanone}}
                         </el-form-item>
                     </el-col>
-                    
+                    <el-col :span="8">
+                        <el-form-item label="预算费用：">{{tableData.upper}}
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
