@@ -275,12 +275,13 @@ export default {
             }
             let compare = true;
             for (let data of this.formData.detail) {
+                console.log(JSON.stringify(data.number) == '');
                 if (
                     data.name == '' ||
-                    data.number == '' ||
+                    JSON.stringify(data.number) == '' ||
                     data.reason == '' ||
-                    data.price == '' || 
-                    data.inventory == ''
+                   JSON.stringify(data.price) == '' || 
+                     JSON.stringify(data.inventory)== ''
                 ) {
                     compare = false;
                 }
@@ -290,7 +291,7 @@ export default {
                     if (compare) {
                         this.saveForm(type);
                     } else {
-                        alert('请输入采购明细');
+                        this.msgTips("采购明细不完整，请填写完整！", "warning");
                     }
                 }
             });
