@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="出差申请" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+    <el-dialog title="出差申请" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="90%" style="text-align: center;">
         <div id="travelForm">
             <div class="notice">
                 <h2>注意</h2>
@@ -18,19 +18,22 @@
                     <el-col :span="8">
                         <el-form-item label="出差类型：">
                             <el-select v-model="formData.travelType" placeholder="选择出差类型" @change="SubmissionChange">
-                                <el-option v-for="item in typeoption" :key="item.id" :label="item.label" :value="item.label">
+                                <el-option v-for="item in typeoption" :key="item.index" :label="item" :value="item">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="呈报件：" label-width="30px;">
-                            <el-select v-model="formData.submission2" value-key="id" placeholder="选择呈报件" @change="SubmissionChange">
-                                <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item">
+                            <el-select v-model="submission" clearable filterable placeholder="选择呈报件" allow-create @change="SubmissionChange">
+                                <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
                             </el-select>
-                            <el-tooltip class="item" effect="dark" content="查看" placement="right">
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.subView">
                                 <el-button type="text" style="margin-left: 10px;" icon="el-icon-view" @click="submissionDetail"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.subView == false">
+                                <el-button type="text" style="margin-left: 10px;color:gray;" icon="el-icon-view"></el-button>
                             </el-tooltip>
                         </el-form-item>
                     </el-col>
@@ -60,7 +63,7 @@
                             <span class="span1">*</span> 费用承担部门
                         </td>
                         <td colspan="2">
-                            <el-select style="width:100%" v-model="formData.subOrganName" value-key="id" @change="changeOrgans()" placeholder="">
+                            <el-select style="width:100%" v-model="formData.subOrganName" placeholder="">
                                 <el-option v-for="item in organs" :key="item.id" :label="item.name" :value="item.name">
                                 </el-option>
                             </el-select>
@@ -96,7 +99,7 @@
                             <span class="span1">*</span>出差时间</td>
                         <td colspan="1">出差天数（天）</td>
                     </tr>
-                    <tr v-for="(item,index) in this.formData.evections" :key="item.index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                    <tr v-for="(item,index) in formData.evections" :key="item.index" @contextmenu.prevent="deleteItem(item,index,'message')">
                         <td colspan="1">
                             <span>{{index +1}}</span>
                             <span style="display: inline-block; width: 85%;">
@@ -111,7 +114,7 @@
                         </td>
                         <td colspan="1">
                             <el-select v-model="item.ranks">
-                                <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                <el-option v-for="item in options" :key="item.index" :label="item" :value="item">
                                 </el-option>
                             </el-select>
                         </td>
@@ -157,22 +160,18 @@
                         <td colspan="1">原币金额合计</td>
                         <td colspan="1">预估本币金额</td>
                     </tr>
-                    <tr v-for="(item,index) in this.formData.estimate" :key="index" @contextmenu.prevent="deleteItem(item,index,'cost')">
+                    <tr v-for="(item,index) in formData.estimate" :key="index" @contextmenu.prevent="deleteItem(item,index,'cost')">
                         <td colspan="2">
-                            <el-cascader :options="getclass" change-on-select filterable="" v-model="item.bsType" :props="{value:'name',label:'name'}">
+                            <el-cascader :options="getclass" change-on-select filterable v-model="item.bsType" :props="{value:'name',label:'name'}">
                             </el-cascader>
                         </td>
-                        <!-- <td colspan="1">
-                        <el-input v-model="item.smallType"></el-input>
-                    </td> -->
                         <td colspan="1">
-                            <el-input v-model="item.price" @input="getAmount(item)"></el-input>
+                            <el-input @mousewheel.native.prevent v-model.number="item.price" @input="getAmount(item)"></el-input>
                         </td>
                         <td colspan="1">
-                            <el-input v-model="item.number" @input="getAmount(item)"></el-input>
+                            <el-input @mousewheel.native.prevent v-model.number="item.number" @input="getAmount(item)"></el-input>
                         </td>
                         <td colspan="1">
-                            <!-- @focus="currencyChange" -->
                             <el-select v-model="item.currency" placeholder="" @change="currencyChange2(item,index)">
                                 <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="{value:item.value, label: item.label}">
                                 </el-option>
@@ -196,8 +195,7 @@
                     <tr>
                         <td colspan="2">合计金额</td>
                         <td colspan="6">
-                            <!-- {{this.formData.estimate.length ==0 ? '￥': this.formData.estimate[0].currency.value}} -->
-                            <!-- <el-input style="width:150px" v-model="formData.total" disabled></el-input>（金额大写:({{this.formData.estimate.length ==0 ? '人民币': this.formData.estimate[0].currency.label}} ): {{this.formData.upper}}) -->
+                            {{this.formData.estimate.length ==0 ? '￥': this.formData.estimate[0].currency.value}} {{this.formData.total}} （金额大写:({{this.formData.estimate.length ==0 ? '人民币': this.formData.estimate[0].currency.label}} ): {{this.formData.upper}})
                         </td>
                     </tr>
                     <tr>
@@ -216,13 +214,6 @@
 
                 </table>
             </el-form>
-            <el-dialog title="提示" append-to-body :visible.sync="dialogVisible" width="30%">
-                <span v-for="item in this.vacancy" :key="item">"{{item}}",</span>未填写，是否继续
-                <span slot="footer" class="dialog-footer">
-                    <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="dialogVisibleab">确 定</el-button>
-                </span>
-            </el-dialog>
         </div>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
@@ -244,249 +235,220 @@ export default {
         return {
             dialogFormVisible: false,
             formData: this.resetForm(),
-            users: [],
             appFlowName: 'motor-trainingapplication_train',
-            //
-            dialogVisible: false,
+            submission: '',
             submissionSelections: [],
-            getoid: '',
-            typeoption: [
-                {
-                    label: '市内',
-                    value: '市内'
-                },
-                {
-                    label: '市外',
-                    value: '市外'
-                }
-            ],
+            typeoption: ['市内', '市外'],
             options2: [
                 {
                     value: 'C$',
-                    label: '加元',
-                    disabled: false
+                    label: '加元'
                 },
                 {
                     value: 'SFr',
-                    label: '瑞士法郎',
-                    disabled: false
+                    label: '瑞士法郎'
                 },
                 {
                     value: '￥',
-                    label: '人民币',
-                    disabled: false
+                    label: '人民币'
                 },
                 {
                     value: '€',
-                    label: '欧元',
-                    disabled: false
+                    label: '欧元'
                 },
                 {
                     value: '￡',
-                    label: '英镑',
-                    disabled: false
+                    label: '英镑'
                 },
                 {
                     value: 'HK$',
-                    label: '港币',
-                    disabled: false
+                    label: '港币'
                 },
                 {
                     value: 'JPY￥',
-                    label: '日元',
-                    disabled: false
+                    label: '日元'
                 },
                 {
                     value: '$',
-                    label: '美元',
-                    disabled: false
+                    label: '美元'
                 },
                 {
                     value: 'MOP$',
-                    label: '澳门币',
-                    disabled: false
+                    label: '澳门币'
                 },
                 {
                     value: 'NT$',
-                    label: '新台币',
-                    disabled: false
+                    label: '新台币'
                 }
             ],
             options: [
+                '员工',
+                '部长/副部长',
+                '总经理助理/董事会秘书',
+                '副总经理',
+                '总经理',
+                '董事长',
+                '总经理和董事长'
+            ],
+            formData: this.resetForm(),
+            users: [],
+            getclass: [
                 {
-                    value: '员工',
-                    label: '员工'
+                    id: 1,
+                    name: '筹资',
+                    code: '011',
+                    children: [
+                        {
+                            id: 2,
+                            name: '股权筹资',
+                            code: '011001',
+                            children: [
+                                {
+                                    id: 3,
+                                    name: '入资款',
+                                    code: '011001001',
+                                    children: null
+                                },
+                                {
+                                    id: 4,
+                                    name: '股票筹资',
+                                    code: '011001002',
+                                    children: null
+                                }
+                            ]
+                        },
+                        {
+                            id: 6,
+                            name: '债务筹资',
+                            code: '011002',
+                            children: [
+                                {
+                                    id: 7,
+                                    name: '流动负债',
+                                    code: '011002001',
+                                    children: null
+                                },
+                                {
+                                    id: 4,
+                                    name: '股票筹资',
+                                    code: '011001002',
+                                    children: null
+                                }
+                            ]
+                        }
+                    ]
                 },
                 {
-                    value: '部长/副部长',
-                    label: '部长/副部长'
-                },
-                {
-                    value: '总经理助理/董事会秘书',
-                    label: '总经理助理/董事会秘书'
-                },
-                {
-                    value: '副总经理',
-                    label: '副总经理'
-                },
-                {
-                    value: '总经理',
-                    label: '总经理'
-                },
-                {
-                    value: '董事长',
-                    label: '董事长'
+                    id: 232,
+                    name: '计提类',
+                    code: '027',
+                    children: [
+                        {
+                            id: 233,
+                            name: '计提折旧',
+                            code: '027001',
+                            children: null
+                        },
+                        {
+                            id: 234,
+                            name: '无形资产摊销',
+                            code: '027002',
+                            children: null
+                        }
+                    ]
                 }
             ],
-            formData: {
-                submission2: {},
-                submissionName: '',
-                submissionId: '',
+            loadData: {
+                attachments: [
+                    {
+                        created: '2019-04-09 16:10:44',
+                        iconUrl: '/thumb/131/196/2936.doc',
+                        id: 2936,
+                        name:
+                            '进出口公司综合业务系统深化应用项目周报（20180604-20180608）.doc',
+                        organId: 426,
+                        organName: '综合管理部',
+                        personal: false,
+                        size: 50176,
+                        type: 'DOC',
+                        uid: 513,
+                        uname: '董文宇',
+                        url: '/api/v1/files/131/196/2936.doc'
+                    }
+                ],
                 number: '',
-                submitter: '',
-                subOrganName: '',
-                total: '0.00',
-                reason: '',
-                type: '出差申请单',
+                travelType: '市内',
+                submitter: '123',
+                subOrganName: '123',
+                submitted: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                reason: '222',
+                total: 778,
+                upper: '这是大写',
                 evections: [
                     {
-                        bname: '',
-                        bid: '',
-                        bname1: '',
-                        borganName: '',
-                        ranks: '',
-                        departure: '',
-                        destination: '',
-                        dateNumber: '',
-                        startTime: '',
-                        endTime: '',
-                        reason: ''
+                        bname1: {
+                            attr1: '0000001',
+                            avatar: '',
+                            id: 497,
+                            name: '高中成',
+                            organ: { id: 425, name: '公司领导', parentId: 0 },
+                            organs: [
+                                { id: 425, name: '公司领导', parentId: 0 }
+                            ],
+                            roles: [
+                                {
+                                    id: 433,
+                                    name: '协同发展董事长',
+                                    en: 'xtfz_chairman'
+                                }
+                            ],
+                            type: 2,
+                            username: 'gaozc'
+                        },
+                        borganName: '公司领导',
+                        ranks: '333',
+                        departure: '333',
+                        destination: '333',
+                        endTime: '2019-04-30',
+                        startTime: '2019-04-28',
+                        dateNumber: 3,
+                        id: ''
                     }
                 ],
                 estimate: [
                     {
-                        bigType: '',
                         bsType: [],
-                        price: '',
-                        smallType: '',
-                        number: '',
+                        price: 2,
+                        number: 33,
                         currency: {
-                            value: '￥',
-                            label: '人民币'
+                            value: '€',
+                            label: '欧元'
                         },
                         rate: 1,
-                        principal: 0,
-                        subtotal: ''
-                    }
-                ],
-                attachments: [],
-                upper: '零元整',
-                submitted: moment(new Date()).format('YYYY-MM-DD HH:mm:ss')
-                // .format('YYYY-MM-DD hh:mm:ss')
-            },
-            users: [],
-            currentFormId: this.operationType == 'create' ? '' : this.formId,
-            pickerOptions2: {
-                shortcuts: [
-                    {
-                        text: '最近一周',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(
-                                start.getTime() - 3600 * 1000 * 24 * 7
-                            );
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: '最近一个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(
-                                start.getTime() - 3600 * 1000 * 24 * 30
-                            );
-                            picker.$emit('pick', [start, end]);
-                        }
-                    },
-                    {
-                        text: '最近三个月',
-                        onClick(picker) {
-                            const end = new Date();
-                            const start = new Date();
-                            start.setTime(
-                                start.getTime() - 3600 * 1000 * 24 * 90
-                            );
-                            picker.$emit('pick', [start, end]);
-                        }
+                        subtotal: '198.00',
+                        principal: '66.00',
+                        id: ''
                     }
                 ]
-            },
-            pickerOptions1: {
-                shortcuts: [
-                    {
-                        text: '今天',
-                        onClick(picker) {
-                            picker.$emit('pick', new Date());
-                        }
-                    },
-                    {
-                        text: '昨天',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24);
-                            picker.$emit('pick', date);
-                        }
-                    },
-                    {
-                        text: '一周前',
-                        onClick(picker) {
-                            const date = new Date();
-                            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
-                            picker.$emit('pick', date);
-                        }
-                    }
-                ]
-            },
-            bigtype: '',
-            getclass: [],
-            dataaa: [],
-            cookie_uid: cookies.get('uid'),
-            // rules: {
-            //     nasubOrganNameme: [
-            //         { required: true, message: '请选择费用承担部门', trigger: 'change' },
-            //     ],
-            //     ranks: [
-            //         { required: true, message: '请选择活动区域', trigger: 'change' }
-            //     ],
-            // },
-            vacancy: []
+            }
         };
-    },
-    watch: {
-        'formData.lowercase'(val) {
-            this.formData.upper = val ? this.convertCurrency(val) : '';
-        }
     },
     components: {
         FilesOperate
     },
     mounted() {
-        // this.getNum();
-        // this.remoteMethod();
-        // this.getClass();
-        // this.organs();
-        // this.getSubmissionlList();
+        this.getUsers();
+        this.organs();
     },
     methods: {
         //根据uid获取部门呈报件
         getSubmissionlList() {
             const self = this;
-            if (self.cookie_uid != '') {
+            if (cookies.get('uid') != '') {
                 axios
                     .post(
-                        '/api/v1/submission_forms/queryDone/' + this.cookie_uid
+                        '/api/v1/submission_forms/queryDone/' +
+                            cookies.get('uid')
                     )
                     .then(res => {
                         self.submissionSelections = res.data;
@@ -500,39 +462,26 @@ export default {
             }
         },
         //部门呈报件改变
-        SubmissionChange() {
-            this.formData.submissionId = this.formData.submission2.id;
+        SubmissionChange(val) {
+            console.log(val);
+            this.formData.subView = true;
+            let boolean = false;
+            for (let data of this.submissionSelections) {
+                if (data.id == val) {
+                    boolean = true;
+                }
+            }
+            this.formData.subView = boolean;
         },
         submissionDetail() {
-            if (
-                this.formData.submission2 &&
-                this.formData.submission2 != null
-            ) {
-                this.common.open(
-                    '#/apps/submission/' + this.formData.submissionId
-                );
+            if (this.submission && this.submission != null) {
+                this.common.open('#/apps/submission/' + this.submission);
             }
         },
         currencyChange2(item, index) {
             for (let data of this.formData.estimate) {
                 data.currency = item.currency;
-                data.rate = item.rate;
-            }
-        },
-        currencyChange() {
-            if (
-                this.formData.estimate.length > 1 &&
-                this.formData.estimate[0].currency
-            ) {
-                for (let data of this.options2) {
-                    if (data != this.formData.estimate[0].currency) {
-                        data.disabled = true;
-                    }
-                }
-            } else {
-                for (let data of this.options2) {
-                    data.disabled = false;
-                }
+                // data.rate = item.rate;
             }
         },
         getTime() {
@@ -559,20 +508,31 @@ export default {
             }
         },
         organs() {
-            axios.get('/api/v1/users/get/allOrgans').then(res => {
+            axios.get('/api/v1/organs').then(res => {
                 this.organs = res.data;
             });
         },
         addItem(type) {
             if (type == 'message') {
-                this.formData.evections.push({});
+                this.formData.evections.push({
+                    bname1: {},
+                    borganName: '',
+                    ranks: '',
+                    departure: '',
+                    destination: '',
+                    endTime: '',
+                    startTime: '',
+                    dateNumber: '',
+                    id: ''
+                });
             }
             if (type == 'fenDetaill') {
                 this.formData.estimate.push({
+                    id: '',
                     bsType: [],
                     price: '',
-                    smallType: '',
                     number: '',
+                    smallType: '',
                     currency:
                         this.formData.estimate.length == 0
                             ? {
@@ -588,6 +548,44 @@ export default {
                     subtotal: 0
                 });
             }
+        },
+        deleteItem(item, index, type) {
+            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                if (type == 'message') {
+                    if (item.id && item.id != '') {
+                        axios
+                            .get('/api/v1/travel_forms/delEvection/' + item.id)
+                            .then(res => {
+                                this.formData.evections.splice(index, 1);
+                            })
+                            .catch(function() {
+                                self.$message({
+                                    message: '操作失败',
+                                    type: 'error'
+                                });
+                            });
+                    } else {
+                        this.formData.evections.splice(index, 1);
+                    }
+                }
+                if (type == 'cost') {
+                    if (item.id && item.id != '') {
+                        axios
+                            .get('/api/v1/travel_forms/delEstimate/' + item.id)
+                            .then(res => {
+                                this.formData.estimate.splice(index, 1);
+                            })
+                            .catch(function() {
+                                self.$message({
+                                    message: '操作失败',
+                                    type: 'error'
+                                });
+                            });
+                    } else {
+                        this.formData.estimate.splice(index, 1);
+                    }
+                }
+            });
         },
         /**
         getClass() {
@@ -610,9 +608,11 @@ export default {
                 });
             });
         },
+        */
         changeUser(item, index) {
             for (let data of this.users) {
                 if (item.bname1.id == data.id) {
+                    item.bname = data.name;
                     if (data.organ) {
                         item.borganName = data.organ.name;
                     } else {
@@ -621,13 +621,11 @@ export default {
                 }
             }
         },
-        changeOrgans() {},
-        remoteMethod() {
+        getUsers() {
             axios.get('/api/v1/users').then(res => {
                 this.users = res.data;
             });
         },
-        
         getNum() {
             const self = this;
             axios
@@ -646,50 +644,88 @@ export default {
                     });
                 });
         },
-        money() {
-            if (this.formData.total) {
-                this.formData.upper = this.common.DX(this.formData.total);
-            } else {
-                this.formData.upper = '零元整';
+        getAmount(item) {
+            for (let data of this.formData.estimate) {
+                data.rate = item.rate;
+                if (data.price != '' && data.number != '' && data.rate != '') {
+                    data.principal = this.common.toDecimal2(
+                        data.price * data.rate * data.number
+                    );
+                } else {
+                    data.principal = 0;
+                }
+                if (data.number != '' && data.price != 0) {
+                    item.subtotal = this.common.toDecimal2(
+                        item.price * item.number
+                    );
+                } else {
+                    data.subtotal = 0;
+                }
             }
-        },
-        */
-        dialogVisibleab() {
-            this.dialogVisible = false;
-            this.saveForm();
-            this.$emit('saveStatus', false);
-        },
 
+            this.getAmounta();
+        },
+        getAmounta() {
+            let sum = 0;
+            for (let data of this.formData.estimate) {
+                sum += parseFloat(data.subtotal);
+            }
+            this.formData.total = sum;
+            this.formData.upper = this.common.DX(this.formData.total);
+        },
         setDataFromParent(data) {
+            if (data.estimate.length > 0) {
+                for (let item of data.estimate) {
+                    item.currency = {
+                        value: data.currency.curValue,
+                        label: data.currency.label
+                    };
+                }
+            }
+            if (data.submissionId && data.submissionId != null) {
+                if (data.subView) {
+                    this.submission = parseInt(data.submissionId);
+                } else {
+                    this.submission = data.submissionId;
+                }
+            }
             this.formData = data;
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
         },
         createForm() {
+            this.submission = '';
             this.formData = this.resetForm();
+            this.getNum();
             this.dialogFormVisible = this.createForm_status = true;
         },
         resetForm() {
             let formData = {
                 attachments: [],
-                // number:this.formData.number,
+                number: '',
+                subView: true,
                 travelType: '',
-                submission2: '',
-                submitter: '',
-                subOrganName: '',
+                submissionId: '',
+                submissionName: '',
+                submitter: cookies.get('uname'),
+                subOrganName: cookies.get('oname'),
                 submitted: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 reason: '',
+                total: '',
+                upper: '',
                 evections: [
                     {
-                        bname1: '',
+                        bname1: {},
+                        bname: '',
                         borganName: '',
                         ranks: '',
                         departure: '',
                         destination: '',
                         endTime: '',
                         startTime: '',
-                        dateNumber: ''
+                        dateNumber: '',
+                        id: ''
                     }
                 ],
                 estimate: [
@@ -697,10 +733,14 @@ export default {
                         bsType: [],
                         price: '',
                         number: '',
-                        currency: '人民币',
-                        rate: '',
-                        subtotal: '',
-                        principal: ''
+                        currency: {
+                            value: '￥',
+                            label: '人民币'
+                        },
+                        rate: 1,
+                        subtotal: 0,
+                        principal: 0,
+                        id: ''
                     }
                 ]
             };
@@ -716,12 +756,48 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
+            if ($self.formData.submitted) {
+                $self.formData.submitted = moment(
+                    $self.formData.submitted
+                ).format('YYYY-MM-DD HH:mm:ss');
+            } else {
+                $self.formData.submitted = '';
+            }
+            /**
+            for (let data of this.rows.evections) {
+                if (data.bname1.name) {
+                    data.bname = data.bname1.name;
+                } else {
+                    data.bname = data.bname1;
+                }
+                data.bid = data.bname1.id;
+            }
+            */
+            if (this.formData.estimate.length > 0) {
+                for (let data of this.formData.estimate) {
+                    data.currency = {
+                        curValue: data.currency.value,
+                        label: data.currency.label
+                    };
+                }
+            }
+            if (this.submission != '') {
+                this.formData.submissionId = this.submission;
+                for (let data of this.submissionSelections) {
+                    if (data.id == this.submission) {
+                        this.formData.submissionName = data.submissionNo;
+                    }
+                }
+                if (this.formData.subView == false) {
+                    this.formData.submissionName = this.formData.submissionId;
+                }
+            }
             let response = await $self.saveFormData(
                 '/api/v1/travel_forms/save',
                 $self.formData
             );
             if (response) {
-                $self.formId = response.data.content.id;
+                $self.formId = response.data.id;
                 $self.dialogFormVisible = false;
                 if (params) {
                     $self.msgTips('提交成功', 'success');
@@ -736,7 +812,10 @@ export default {
                         });
                         actions.data.types[0]['comment'] =
                             actions.data.types[0].name;
-                        await $self.startSignal(actions.data.types[0]);
+                        await $self.startSignal(
+                            actions.data.types[0],
+                            'fromeEdit'
+                        );
                         $self.emitMessage();
                     }
                 } else {
@@ -764,6 +843,50 @@ export default {
             }
             this.$refs.upload.clearFiles();
         },
+        downloadFile(url) {
+            window.open(url, '_blank');
+        },
+        deleteAttachment(id) {
+            const self = this;
+            if (this.formData.attachments.length > 0) {
+                this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
+                    () => {
+                        const params = {
+                            id: id
+                        };
+                        axios
+                            .get(
+                                '/api/v1/travel_forms/delAttachment/' + id,
+                                '',
+                                {
+                                    headers: {
+                                        'Content-type': 'application/json'
+                                    }
+                                }
+                            )
+                            .then(res => {
+                                self.formData.attachments.forEach(function(
+                                    item,
+                                    index
+                                ) {
+                                    if (item.id == id) {
+                                        self.formData.attachments.splice(
+                                            index,
+                                            1
+                                        );
+                                    }
+                                });
+                            })
+                            .catch(function() {
+                                self.$message({
+                                    message: '操作失败',
+                                    type: 'error'
+                                });
+                            });
+                    }
+                );
+            }
+        },
         submitUpload() {
             this.$refs.upload.submit();
         },
@@ -789,6 +912,14 @@ export default {
         .span1 {
             color: red;
             margin-right: 5px;
+        }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0;
+        }
+        input[type='number'] {
+            -moz-appearance: textfield;
         }
     }
     table thead th {

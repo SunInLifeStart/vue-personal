@@ -10,46 +10,24 @@
                         {{action.name}}
                     </span>
                 </div>
-                
+
             </el-row>
         </div>
         <div class="formContent">
-            <el-steps :active="crumb.index" finish-status="success" class="crumbList">
-                <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>
-            </el-steps>
-            <div style="text-align:right">
-                <el-button type="primary" @click="cope()">打 印</el-button>
+            <div>
+                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
             </div>
+            <br />
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
-                <!-- <el-row>
+                <el-row style="margin-top: 25px;">
                     <el-col :span="8">
                         <el-form-item label="流水单号：">{{tableData.number}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="呈报件：" label-width="30px;">
-                            <el-input v-model="tableData.submissionName"></el-input>
-                           
-                            <el-tooltip class="item" effect="dark" content="查看" placement="right">
-                                <el-button type="text" style="margin-left: 10px;" icon="el-icon-view" @click="submissionDetail"></el-button>
-                            </el-tooltip>
-                        </el-form-item>
-                    </el-col>
-                </el-row> -->
-                <el-row style="margin-top: 25px;">
-                    <el-col :span="8">
-                         <el-form-item label="流水单号：">{{tableData.number}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
                         <el-form-item label="呈报件：">
-                            {{tableData.submissionName}}
+                            <span style="font-size:10px" @click="ViewDetail()" :class="{'titlename':this.tableData.subView}"> {{tableData.submissionName}}</span>
                         </el-form-item>
-                    </el-col>
-                    <el-col :span="1">
-                        <el-tooltip class="item" effect="dark" content="查看" placement="right">
-                            <el-button type="text" icon="el-icon-view" @click="ViewDetail('chengbao')"></el-button>
-                        </el-tooltip>
                     </el-col>
                 </el-row>
                 <table class="tablePrint" style=" width: 100%;">
@@ -142,8 +120,8 @@
                         <td colspan="1">预估本币金额</td>
 
                     </tr>
-                    <tr v-for="(item,index) in this.tableData.estimate" :key="item.index" @contextmenu.prevent="deleteItem(index,'cost')">
-                        <td colspan="2">{{item.smallType !=null ? item.bigType+'/'+item.smallType : item.bigType}}</td>
+                    <tr v-for="(item) in this.tableData.estimate" :key="item.index">
+                        <td colspan="2">{{item.bsType.join(',')}}</td>
                         <!-- <td colspan="2"> {{item.smallType}}</td> -->
                         <td colspan="1">
                             {{item.price}}
@@ -185,15 +163,13 @@
                             </div>
                         </td>
                     </tr>
+                    <!--
                     <tr>
                         <td colspan="2">
                             审批意见
                         </td>
                         <td colspan="6" style="text-align: left;">
                             <div class="audit" v-for="item in this.array" :key="item.id" v-show="item.action=='APPROVE'">
-                                <!-- <div class="avatar">
-                                    <img src="../../assets/avatar.png" alt="">
-                                </div> -->
                                 <div class="info">
                                     <div class="creator">
                                         <a href="#">{{item.creatorName}}</a> {{item.created | dateformat}}
@@ -204,23 +180,21 @@
                             </div>
                         </td>
                     </tr>
-
+-->
                 </table>
 
             </el-form>
-            <el-row v-if="tableData.comments && tableData.comments.length > 0">
+            <el-row v-if="comments && comments.length > 0">
                 <el-col :span="24">
                     <h3>审批意见</h3>
                     <div class="items">
-                        <div class="item" v-for="item in tableData.comments" :key="item.id">
+                        <div class="item" v-for="item in comments" :key="item.id">
                             <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
                             <div class="info">
                                 <div class="creator">
-                                    <span href="#">{{item.creatorName}}</span> &nbsp; ({{item.created | dateformat}})
-                                    <span v-show="item.action == 'APPROVE'">【同意】</span>
-                                    <span v-if="item.action == 'REJECT'">【驳回】</span>
+                                    <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
                                 </div>
-                                <div class="content">{{item.content}}</div>
+                                <div class="content">{{item.fullMessage}}</div>
                             </div>
                         </div>
                     </div>
@@ -229,19 +203,13 @@
         </div>
         <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
             <el-form>
-                <el-form-item label="请选择驳回节点" v-show="reject_status">
-                    <el-select v-model="rejectTarget" style="width:100%;">
-                        <el-option v-for="user in rejectList" :key="user" :label="user" :value="user">
-                        </el-option>
-                    </el-select>
-                </el-form-item>
-                <el-form-item :label="seleteUserLabel" v-show="presign_status">
-                    <el-select v-model="seleteUsers" filterable multiple style="width:100%;">
-                        <el-option v-for="user in users" :key="user.id" :label="user.name" :value="user.id"></el-option>
+                <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
+                    <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
+                        <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                     </el-select>
                 </el-form-item>
                 <el-form-item label="审批意见">
-                    <el-input type="textarea" :rows="2" placeholder="请输入审批意见" v-model="textarea">
+                    <el-input type="textarea" placeholder="请输入审批意见" v-model="textarea" :autosize="{ minRows: 10, maxRows: 30}">
                     </el-input>
                 </el-form-item>
             </el-form>
@@ -250,31 +218,49 @@
                 <el-button type="primary" @click="submitForm()">确 定</el-button>
             </span>
         </el-dialog>
+        <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
+            <el-form>
+                <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
+            </el-form>
+        </el-dialog>
     </div>
 </template>
 <script>
 import axios from 'axios';
 import Comment from '../Comment';
+import { publicMethods } from '../application.js';
 export default {
+    mixins: [publicMethods],
     name: 'TravelDetail',
     data() {
         return {
-            tableData: {},
+            tableData: {
+                attachments: [],
+                number: '',
+                travelType: '',
+                submission2: '',
+                submitter: '',
+                subOrganName: '',
+                submitted: '',
+                reason: '',
+                total: '',
+                upper: '',
+                evections: [],
+                estimate: []
+            },
             actions: [],
-            crumbs:[],
-            formId: "",
-            textarea: "",
+            formId: '',
+            textarea: '',
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'appFlowName',
-            formName:'travel_forms',
-            comments:[],
-            dialogVisibleCrumb:false,
-            flowNodeUrl:"",
+            appFlowName: 'appFlowName',
+            formName: 'travel_forms',
+            comments: [],
+            dialogVisibleCrumb: false,
+            flowNodeUrl: ''
         };
     },
-    props: ['formId'],
     components: {
         Comment
     },
@@ -287,53 +273,36 @@ export default {
     //     }
     // },
     methods: {
-       /**
-        ViewDetail(view) {
-            if (view == 'borrow') {
-                if (
-                    this.tableData.borrow.borrowId &&
-                    this.tableData.borrow.borrowId != ''
-                ) {
-                    this.common.open(
-                        '#/apps/loan/' + this.tableData.borrow.borrowId
-                    );
-                }
-            } else if (view == 'chengbao') {
-                if (this.tableData.submissionId && this.tableData.submissionId != '') {
-                    this.common.open(
-                        '#/apps/submission/' + this.tableData.submissionId
-                    );
-                }
+        ViewDetail() {
+            if (
+                this.tableData.submissionId &&
+                this.tableData.submissionId != '' &&
+                this.tableData.subView
+            ) {
+                this.common.open(
+                    '#/apps/submission/' + this.tableData.submissionId
+                );
             }
-        },
-        cope() {
-            this.$print(this.$refs.formupdate.$el);
-        },
-        getAllUsers() {
-            let self = this;
-            axios.get(`/api/v1/users`).then(res => {
-                self.users = res.data;
-            });
         },
         getAgree() {
             this.array = [];
             let j = -1;
-            let p ;
+            let p;
             for (var i = 0; i < this.tableData.comments.length; i++) {
                 if (this.tableData.comments[i].action == 'REJECT') {
                     j = i;
-                }else if(this.tableData.comments[i].action == 'PULL'){
-                    p= i;
+                } else if (this.tableData.comments[i].action == 'PULL') {
+                    p = i;
                     j = 2;
                 }
             }
             if (j == -1) {
                 this.array = this.tableData.comments;
-            }else if(j = 2){
+            } else if ((j = 2)) {
                 for (var a = 0; a < this.tableData.comments.length; a++) {
-                    if(a == p || a == p - 1){
-                         this.array =  this.array
-                    }else{
+                    if (a == p || a == p - 1) {
+                        this.array = this.array;
+                    } else {
                         this.array.push(this.tableData.comments[a]);
                     }
                 }
@@ -342,33 +311,11 @@ export default {
                     this.array.push(this.tableData.comments[k]);
                 }
             }
-            
         },
-        getForm() {
-            const self = this;
-            if (this.formId != '') {
-                axios
-                    .get('/api/v1/travel_forms/' + this.formId)
-                    .then(res => {
-                        self.tableData = res.data;
-                        this.getAgree();
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
-            }
-        },
-        downloadFile(url) {
-            this.common.preview(url);
-        },
-        */
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/"+$self.formName+"/detail/" + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/detail/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -376,21 +323,22 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
-
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             } else {
-                $self.msgTips("获取表单失败", "warning");
+                $self.msgTips('获取表单失败', 'warning');
             }
-            // debugger;
             let actions = await $self.getActions();
             // let crumbs = await $self.getCrumbs();
-            let comments =  await $self.getComments();
+            let comments = await $self.getComments();
             $self.actions = actions.data.types;
             $self.comments = comments.data;
             // $self.crumbs =  {items: crumbs.data, index: -1};
             // for(var i= 0; i<$self.crumbs.items.length; i++){
             //     if($self.crumbs.items[i].active){
-            //         $self.crumbs.index = i;    
+            //         $self.crumbs.index = i;
             //     }
             // }
         }
@@ -399,6 +347,10 @@ export default {
 </script>
 <style lang="scss" scope>
 #TravelDetail {
+    .titlename {
+        color: #1c47f3;
+        text-decoration: underline;
+    }
     .attachments {
         margin-left: 10px;
         width: 170px;
