@@ -157,6 +157,7 @@
                 let response = await $self.getDetails();
                 if (response) {
                     $self.tableData = response.data.content;
+                    $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
                 } else {
                     $self.msgTips("获取表单失败", "warning");
                 }

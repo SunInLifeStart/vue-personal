@@ -1,5 +1,5 @@
 <template>
-    <div id="Programme">
+    <div id="Tendering">
         <el-card class="box-card">
             <el-form :inline="true" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
@@ -49,19 +49,19 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <ProgrammeDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ProgrammeDetail"></ProgrammeDetail>
+            <TenderingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="TenderingDetail"></TenderingDetail>
         </el-card>
-        <ProgrammeForm  ref="ProgrammeForm" @reloadList = "reloadList"></ProgrammeForm>
+        <TenderingForm  ref="TenderingForm" @reloadList = "reloadList"></TenderingForm>
     </div>
 </template>
 <script>
-    import ProgrammeForm from './ProgrammeForm';
-    import ProgrammeDetail from './ProgrammeDetail';
+    import TenderingForm from './TenderingForm';
+    import TenderingDetail from './TenderingDetail';
     import {publicMethods} from "../application.js";
     import axios from 'axios';
     export default {
         mixins:[publicMethods],
-        name: 'Programme',
+        name: 'Tendering',
         data() {
             return {
                 tableData: [],
@@ -71,18 +71,18 @@
                     conferenceTitle: '',
                     total: 0
                 },
-                dialogFormVisibleProgramme: false,
+                dialogFormVisibleTendering: false,
                 searchBoardOptions: [],
                 formBoardId: '',
                 dialogBoardFormId: '',
                 operationBoardType: 'create',
-                formName:"meetingApply/zd",
+                formName:"meetingApply/zc",
                 statusNews: ''
             };
         },
         components: {
-            ProgrammeForm,
-            ProgrammeDetail
+            TenderingForm,
+            TenderingDetail
         },
         mounted() {
             this.getList();
@@ -93,7 +93,7 @@
                     this.params.pageNum = 1;
                     this.getList();
                 } else {
-                    this.$refs.ProgrammeDetail.getFormDetails(params.id);
+                    this.$refs.TenderingDetail.getFormDetails(params.id);
                 }
             },
             searchList() {
@@ -101,12 +101,12 @@
             },
             async getList() {
                 const $self = this;
-                $self.url = "/api/v1/meetingApply/zd/queryList";
+                $self.url = "/api/v1/meetingApply/zc/queryList";
                 let response = await $self.getQueryList();
                 if (response) {
                     if (response.data.content.list.length > 0) {
                         let formId = response.data.content.list[0].id;
-                        $self.$refs.ProgrammeDetail.getFormDetails(formId);
+                        $self.$refs.TenderingDetail.getFormDetails(formId);
                     }
                     $self.tableData = response.data.content.list;
                     $self.params.total = response.data.content.total;
@@ -115,10 +115,10 @@
                 }
             },
             clickTableRow(row) {
-                this.$refs.ProgrammeDetail.getFormDetails(row.id);
+                this.$refs.TenderingDetail.getFormDetails(row.id);
             },
             editForm(data) {
-                this.$refs.ProgrammeForm.setDataFromParent(data);
+                this.$refs.TenderingForm.setDataFromParent(data);
             },
             currentChange(pageNum) {
                 this.params.pageNum = pageNum;
@@ -136,7 +136,7 @@
                 this.getList();
             },
             cleanform() {
-                this.$refs.ProgrammeForm.createForm();
+                this.$refs.TenderingForm.createForm();
             },
             refreshBoardData() {
                 this.getList();
@@ -145,7 +145,7 @@
     };
 </script>
 <style lang="scss" scoped>
-    #Programme {
+    #Tendering {
         .card_margin_10 {
             margin-top: 10px;
         }
@@ -155,7 +155,7 @@
     }
 </style>
 <style scoped>
-    #Programme .filterForm >>> .el-form-item__content{
+    #Tendering .filterForm >>> .el-form-item__content{
         width: calc(100% - 80px);
     }
 </style>

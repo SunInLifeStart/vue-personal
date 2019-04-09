@@ -33,10 +33,8 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8"> &nbsp;
-                    </el-col>
-                    <el-col :span="8" class="searchBtn">
-                        <el-form-item class="positionBtn">
+                    <el-col :span="8">
+                        <el-form-item>
                             <el-button type="primary" @click="onSubmit">查询</el-button>
                             <el-button @click="onReset">重置</el-button>
                         </el-form-item>
@@ -81,7 +79,7 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <ApplyMeetingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ApplyMeetingDetail"></ApplyMeetingDetail>
+            <ApplyMeetingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ApplyMeetingDetail" @resetStatus = "resetStatus"></ApplyMeetingDetail>
         </el-card>
         <ApplyMeetingForm  ref="ApplyMeetingForm" @reloadList = "reloadList"></ApplyMeetingForm>
     </div>
@@ -165,6 +163,14 @@
                     this.$refs.ApplyMeetingDetail.getFormDetails(params.id);
                 }
             },
+            resetStatus(data){
+                let $self = this;
+                for(let item of $self.tableData){
+                    if(data.id == item.id){
+                        item.status = data.status;
+                    }
+                }
+            },
             searchList() {
                 this.getList();
             },
@@ -215,12 +221,6 @@
 </script>
 <style lang="scss" scoped>
     #ApplyMeeting {
-        .searchBtn {
-            padding-right: 10px;
-            .positionBtn{
-                text-align: right;
-            }
-        }
         .el-select {
             width: 100%;
         }

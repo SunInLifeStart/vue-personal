@@ -1,5 +1,5 @@
 <template>
-    <div id="ProgrammeDetail">
+    <div id="TenderingDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -24,36 +24,36 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购项目名称：">{{tableData.organName}}
+                        <el-form-item label="招标项目名称：">{{tableData.organName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="采购标的简述：">{{tableData.committed}}
+                        <el-form-item label="招标人：">{{tableData.committed}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购发起时间：">{{tableData.meetingPlace}}
+                        <el-form-item label="预计金额：">{{tableData.meetingPlace}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购主责部门：">{{tableData.meetingTime}}
+                        <el-form-item label="标的简述：">{{tableData.meetingTime}}
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="采购预估金额(元)：">{{tableData.conferenceTitle}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="目标成本/预算金融(元)：">{{tableData.idea}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
+                <!--<el-row>-->
+                    <!--<el-col :span="24">-->
+                        <!--<el-form-item label="会议名称：">{{tableData.conferenceTitle}}-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                <!--</el-row>-->
+                <!--<el-row>-->
+                    <!--<el-col :span="24">-->
+                        <!--<el-form-item label="各级领导意见及审批：">{{tableData.idea}}-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                <!--</el-row>-->
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
@@ -79,7 +79,6 @@
                         </div>
                     </el-col>
                 </el-row>
-
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
@@ -109,19 +108,19 @@
     import { publicMethods } from "../application.js";
     export default {
         mixins:[publicMethods],
-        name: 'ProgrammeDetail',
+        name: 'TenderingDetail',
         data() {
             return {
                 tableData: {},
                 actions: [],
                 actionsDialogArr: [],
                 users: [],
-                crumbs:[],
-                formId: "",
                 comments: [],
+                formId: "",
+                crumbs:[],
                 textarea: '',
                 dialogVisible: false,
-                appFlowName:'motor-issuesReported'
+                appFlowName:'motor-issuesReported',
             };
         },
         components: {
@@ -132,7 +131,7 @@
             getFormDetails(formId) {
                 let $self = this;
                 $self.formId = formId;
-                $self.url= "/api/v1/meetingApply/zd/detail/" + $self.formId;
+                $self.url= "/api/v1/meetingApply/zc/detail/" + $self.formId;
                 $self.getFormDetailsData();
             },
             async getFormDetailsData() {
@@ -161,7 +160,7 @@
     };
 </script>
 <style lang="scss">
-    #ProgrammeDetail {
+    #TenderingDetail {
         .el-step__main {
             margin-top: 10px;
         }

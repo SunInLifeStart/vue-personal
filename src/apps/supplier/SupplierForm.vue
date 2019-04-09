@@ -1,117 +1,125 @@
 <template>
-    <el-dialog title="议题呈报" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
-        <div id="DiscussionForm">
+    <el-dialog title="供应商引入审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+        <div id="SupplierForm">
         <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="流水号:" prop="number">
+                    <el-form-item label="推荐部门/个人" prop="number">
+                        <el-input v-model="formData.number"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="供应商名称" prop="branchlineTo">
                         <el-input v-model="formData.number"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="8">
-                    <el-form-item label="提单人" prop="creatorName">
-                        <el-input v-model="formData.creatorName" :disabled="true"></el-input>
+                <el-col :span="16">
+                    <el-form-item label="供应商来源" prop="creatorName">
+                        <el-radio-group v-model="formData.radio">
+                            <el-radio key="1" value="1" label="采购主责部门推荐/股东方供应商库项目引入模式"></el-radio>
+                            <el-radio key="2" value="2" label="常规引入"></el-radio>
+                            <el-radio key="3" value="3" label="批量引入股东方供应商资源或/“战略合作”关系（级别）股东方供应商资源"></el-radio>
+                        </el-radio-group>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                    <el-form-item label="所属部门">
-                        <el-input v-model="formData.organName" :disabled="true"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="会议类型" prop="branchlineTo">
-                        <el-select v-model="formData.branchlineTo" placeholder="请选择会议类型">
-                            <el-option
-                                    v-for="item in discussionOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <!--<el-col :span="8">-->
-                    <!--<el-form-item label="提单时间" prop="committed">-->
-                        <!--<el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">-->
-                        <!--</el-date-picker>-->
-                    <!--</el-form-item>-->
-                <!--</el-col>-->
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="提请部门" prop="applyDepartment">
+                    <el-form-item label="推荐参与项目" prop="applyDepartment">
                         <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="提请时间" prop="timeApplication">
-                        <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.timeApplication" style="width:100%" type="date">
-                        </el-date-picker>
+                    <el-form-item label="推荐参与采购项目" prop="timeApplication">
+                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="议题名称" prop="topicName">
+                    <el-form-item label="供应商所在地" prop="topicName">
                         <el-input v-model="formData.topicName"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
-            <table class="tableNoBorder">
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="参会部门" prop="phone">
-                            <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
-                                <td colspan="4" style="width: 21%;">
-                                    <el-select v-model="item.department" placeholder="请输入参会部门" @change="">
-                                        <el-option v-for="i in options"
-                                                   :key="i.value"
-                                                   :label="i.label"
-                                                   :value="i.value">
-                                                   <!--:value="{value:i.value, label: i.label}">-->
-                                        </el-option>
-                                    </el-select>
-                                </td>
-                                <td colspan="4">
-                                    <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
-                                        <el-option
-                                                v-for="i in personOptions"
-                                                :key="i.id"
-                                                :label="i.name"
-                                                :value="i.id">
-                                                <!--:value="{value:i.value, label: i.label}">-->
-                                        </el-option>
-                                    </el-select>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="8" style="height: 30px;">
-                                    <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
-                                </td>
-                            </tr>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="提请事项" prop="content">
-                            <tr v-for="(item,index) in formData.requestedItems" :key="index" @contextmenu.prevent="deleteItem(item,index,'personal')">
-                                <td colspan="8" style="width: 20%;">
-                                    <el-input v-model="item.content" placeholder="请输入提请事项"></el-input>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="8" style="height: 30px;">
-                                    <span @click="addItem('personal')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
-                                </td>
-                            </tr>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-            </table>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="会议材料及附件">
+                    <el-form-item label="供应商来源" prop="creatorName">
+                        <el-checkbox>承包商</el-checkbox>
+                        <el-checkbox>制造商</el-checkbox>
+                        <el-checkbox>代理商</el-checkbox>
+                        <el-checkbox>经销商</el-checkbox>
+                        <el-checkbox>服务商</el-checkbox>
+                        <el-checkbox>其他</el-checkbox>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="联系人" prop="applyDepartment">
+                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="是否有授权" prop="timeApplication">
+                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="联系方式" prop="topicName">
+                        <el-input v-model="formData.topicName"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="主营行业" prop="applyDepartment">
+                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="主力产品/业务" prop="timeApplication">
+                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="主营品牌" prop="topicName">
+                        <el-input v-model="formData.topicName"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="8">
+                    <el-form-item label="供应商基本情况" prop="applyDepartment">
+                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="考察评估情况" prop="timeApplication">
+                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="推荐意见" prop="topicName">
+                        <el-input v-model="formData.topicName"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="供应商入库申请表附件">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <i class="el-icon-plus"></i>
+                        </el-upload>
+                        <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                        </div>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="考察报告附件">
                         <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
@@ -138,7 +146,7 @@ import { application } from "../application.js";
 import { publicMethods } from "../application.js";
 export default {
     mixins: [publicMethods],
-    name: 'DiscussionForm',
+    name: 'SupplierForm',
     data() {
         return {
             dialogFormVisible: false,
@@ -152,7 +160,7 @@ export default {
                     label: '部门'
                 }
             ],
-            discussionOption: [
+            SupplierOption: [
                 {
                     value: 'general',
                     label: '总办会'
@@ -172,9 +180,9 @@ export default {
                 branchlineTo: [
                     { required: true, message: '请输入会议类型', trigger: 'blur' }
                 ],
-                // committed: [
-                //     { required: true, message: '请输入提单时间', trigger: 'blur' }
-                // ],
+                committed: [
+                    { required: true, message: '请输入提单时间', trigger: 'blur' }
+                ],
                 // creatorName: [
                 //     { required: true, message: '请输入活动名称', trigger: 'blur' }
                 // ],
@@ -199,7 +207,7 @@ export default {
         FilesOperate
     },
     mounted() {
-        this.getDiscussionUser()
+        this.getSupplierUser()
     },
     watch: {
         'formData.lowercase'(val) {
@@ -208,7 +216,7 @@ export default {
         }
     },
     methods: {
-        async getDiscussionUser() {
+        async getSupplierUser() {
             let user = await this.getUsers("/api/v1/users")
             if (user) this.personOptions = user.data
         },
@@ -255,18 +263,11 @@ export default {
             let formData =  {
                 attachments: [],
                 sendMessage: [],
-                attendingDepartment: [{
-                    people: [],
-                    department: ''
-                }],
                 branchlineTo: "",
-                requestedItems: [{}],
                 numbers: '',
                 created: '',
-                // comments: [],
-                idea: '',
                 business: '',
-                // committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
                 applyDepartment: this.$store.getters.LoginData.oname || '',
                 timeApplication: '',
                 topicName: '',
@@ -342,10 +343,8 @@ export default {
                                 return item.action == "COMMIT";
                             }
                         );
-                        actions.data.types[0]["comment"] =  actions.data.types[0].name;
-                        await $self.startSignal(actions.data.types[0],"fromeEdit");
+                        await $self.startSignal(actions.data.types[0]);
                         $self.emitMessage();
-                        // $self.getQueryList();
                     }
                 } else {
                     $self.msgTips("保存成功", "success");
@@ -381,10 +380,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#DiscussionForm {
-    .el-select {
-        width: 100%;
-    }
+#SupplierForm {
     .tableNoBorder {
         width: 100%;
         table-layout: fixed;
@@ -437,7 +433,7 @@ export default {
     .tableNoBorder >>> .el-input--small .el-input__inner{
         border: none;
     }
-    #DiscussionForm >>> .el-form-item__content{
+    #SupplierForm >>> .el-form-item__content{
         width: calc(100% - 140px);
     }
 </style>

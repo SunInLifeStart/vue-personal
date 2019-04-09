@@ -1,36 +1,11 @@
 <template>
-    <div id="Discussion">
+    <div id="Results">
         <el-card class="box-card">
-            <el-form :inline="true" label-width="70px"  label-position="left" :model="params" class="demo-form-inline">
+            <el-form :inline="true" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="议题名称">
                             <el-input v-model="params.topicName" placeholder="请输入议题名称"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="提单人">
-                            <el-input v-model="params.creatorName" placeholder="请输入提单人"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="提请时间">
-                            <el-date-picker v-model="params.timeApplication" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请输入提请时间" style="width:100%" type="date">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row class="filterForm">
-                    <el-col :span="8">
-                        <el-form-item label="单据状态">
-                            <el-select v-model="params.status" placeholder="请输入单据状态">
-                                <el-option
-                                        v-for="item in statusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -48,18 +23,17 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-                <el-table-column prop="topicName" label="议题名称">
+                <el-table-column prop="topicName" label="项目名称">
                 </el-table-column>
-                <el-table-column prop="creatorName" label="提单人">
+                <el-table-column prop="creatorName" label="采购项目名称">
                 </el-table-column>
-                <el-table-column prop="organName" label="所属部门">
+                <el-table-column prop="organName" label="目标成本/预算完成情况">
                 </el-table-column>
-                <el-table-column prop="applyDepartment" label="提请部门">
+                <el-table-column prop="committed" label="采购起止时间">
                 </el-table-column>
-                <el-table-column prop="timeApplication" label="提请时间">
+                <el-table-column prop="applyDepartment" label="采购内容摘要">
                 </el-table-column>
-                <el-table-column label="单据状态">
-                    <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
+                <el-table-column prop="timeApplication" label="采购过程简述">
                 </el-table-column>
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
@@ -77,50 +51,29 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <DiscussionDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="DiscussionDetail" @resetStatus = "resetStatus"></DiscussionDetail>
+            <ResultsDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ResultsDetail"></ResultsDetail>
         </el-card>
-        <DiscussionForm  ref="DiscussionForm" @reloadList = "reloadList"></DiscussionForm>
+        <ResultsForm  ref="ResultsForm" @reloadList = "reloadList"></ResultsForm>
     </div>
 </template>
 <script>
-import DiscussionForm from './DiscussionForm';
-import DiscussionDetail from './DiscussionDetail';
+import ResultsForm from './ResultsForm';
+import ResultsDetail from './ResultsDetail';
 import {publicMethods} from "../application.js";
 import axios from 'axios';
 export default {
     mixins:[publicMethods],
-    name: 'Discussion',
+    name: 'Results',
     data() {
         return {
             tableData: [],
             params: {
                 pageNum: 1,
                 pageSize: 5,
+                topicName: '',
                 total: 0
             },
-            statusOption: [
-                {
-                    value: '00',
-                    label: '已保存'
-                },
-                {
-                    value: '01',
-                    label: '审核中'
-                },
-                {
-                    value: '02',
-                    label: '已驳回'
-                },
-                {
-                    value: '03',
-                    label: '已撤销'
-                },
-                {
-                    value: '04',
-                    label: '已完成'
-                }
-            ],
-            dialogFormVisibleDiscussion: false,
+            dialogFormVisibleResults: false,
             searchBoardOptions: [],
             formBoardId: '',
             dialogBoardFormId: '',
@@ -131,23 +84,11 @@ export default {
         };
     },
     components: {
-        DiscussionForm,
-        DiscussionDetail
+        ResultsForm,
+        ResultsDetail
     },
     mounted() {
         this.getList();
-    },
-    filters: {
-        filterStatus: function(data) {
-            let xmlJson = {
-                "00":"已保存",
-                "01":"审核中",
-                "02" :"已驳回",
-                "03" :"已撤销",
-                "04" :"已完成"
-            };
-            return xmlJson[data];
-        }
     },
     methods: {
         reloadList(params) {
@@ -155,15 +96,7 @@ export default {
                 this.params.pageNum = 1;
                 this.getList();
             } else {
-                this.$refs.DiscussionDetail.getFormDetails(params.id);
-            }
-        },
-        resetStatus(data){
-            let $self = this;
-            for(let item of $self.tableData){
-                if(data.id == item.id){
-                    item.status = data.status;
-                }
+                this.$refs.ResultsDetail.getFormDetails(params.id);
             }
         },
         searchList() {
@@ -176,19 +109,19 @@ export default {
             if (response) {
                 if (response.data.content.list.length > 0) {
                     let formId = response.data.content.list[0].id;
-                    $self.$refs.DiscussionDetail.getFormDetails(formId);
+                    // $self.$refs.ResultsDetail.getFormDetails(formId);
                 }
-                $self.tableData = response.data.content.list;
-                $self.params.total = response.data.content.total;
+                // $self.tableData = response.data.content.list;
+                // $self.params.total = response.data.content.total;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
         },
         clickTableRow(row) {
-            this.$refs.DiscussionDetail.getFormDetails(row.id);
+            this.$refs.ResultsDetail.getFormDetails(row.id);
         },
         editForm(data) {
-            this.$refs.DiscussionForm.setDataFromParent(data);
+            this.$refs.ResultsForm.setDataFromParent(data);
         },
         currentChange(pageNum) {
             this.params.pageNum = pageNum;
@@ -206,7 +139,7 @@ export default {
             this.getList();
         },
         cleanform() {
-            this.$refs.DiscussionForm.createForm();
+            this.$refs.ResultsForm.createForm();
         },
         refreshBoardData() {
             this.getList();
@@ -215,10 +148,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-    #Discussion {
-        .el-select {
-            width: 100%;
-        }
+    #Results {
         .card_margin_10 {
             margin-top: 10px;
         }
@@ -228,7 +158,7 @@ export default {
     }
 </style>
 <style scoped>
-    #Discussion .filterForm >>> .el-form-item__content{
+    #Results .filterForm >>> .el-form-item__content{
         width: calc(100% - 80px);
     }
 </style>

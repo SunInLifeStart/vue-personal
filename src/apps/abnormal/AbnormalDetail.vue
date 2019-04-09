@@ -1,5 +1,5 @@
 <template>
-    <div id="DiscussionDetail">
+    <div id="AbnormalDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -11,7 +11,7 @@
         </div>
         <div class="formContent">
             <br />
-            <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
+            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
             <br />
             <el-form :model='tableData' class="formList">
                 <!--<el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">-->
@@ -23,39 +23,39 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提单人：">{{tableData.creatorName}}
+                        <el-form-item label="招标人：">{{tableData.creatorName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属部门：">{{tableData.organName}}
+                        <el-form-item label="联系人及电话：">{{tableData.organName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="项目名称：">{{tableData.committed}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="招标情况说明：">{{tableData.applyDepartment}}
+                        </el-form-item>
+                    </el-col>
                     <!--<el-col :span="8">-->
-                        <!--<el-form-item label="提单时间：">{{tableData.committed}}-->
+                        <!--<el-form-item label="提请时间：">{{tableData.timeApplication}}-->
                         <!--</el-form-item>-->
                     <!--</el-col>-->
-                    <el-col :span="8">
-                        <el-form-item label="会议类型：">
-                            <span  v-html="discussionOption[tableData.branchlineTo]" ></span>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="提请部门：">{{tableData.applyDepartment}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="提请时间：">{{tableData.timeApplication}}
-                        </el-form-item>
-                    </el-col>
                 </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="议题名称：">{{tableData.topicName}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
+                <!--<el-row>-->
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="会议类型：">-->
+                            <!--<span  v-html="AbnormalOption[tableData.branchlineTo]" ></span>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="议题名称：">{{tableData.topicName}}-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
+                <!--</el-row>-->
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
@@ -116,7 +116,7 @@ import FilesOperate from '../FilesOperate';
 import { publicMethods } from "../application.js";
 export default {
     mixins:[publicMethods],
-    name: 'DiscussionDetail',
+    name: 'AbnormalDetail',
     data() {
         return {
             tableData: {},
@@ -128,7 +128,7 @@ export default {
             textarea: '',
             dialogVisible: false,
             appFlowName:'motor-issuesreported_party-agendasheet',
-            discussionOption: {
+            AbnormalOption: {
                 general: '总办会',
                 chairman: '党支委会'
             },
@@ -153,7 +153,6 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
@@ -198,7 +197,7 @@ export default {
 };
 </script>
 <style lang="scss">
-#DiscussionDetail {
+#AbnormalDetail {
     .el-step__main {
         margin-top: 10px;
     }

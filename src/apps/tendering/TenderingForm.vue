@@ -1,6 +1,6 @@
 <template>
-    <el-dialog title="采购方案审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
-        <div id="ProgrammeForm">
+    <el-dialog title="招标文件审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+        <div id="TenderingForm">
             <el-form :model="formData" label-width="140px" ref="formupdate">
                 <el-row>
                     <el-col :span="8">
@@ -16,13 +16,25 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购项目名称" prop="filetitle">
+                        <el-form-item label="招标项目名称" prop="filetitle">
                             <el-input v-model="formData.organName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购标的简述">
-                            <el-input v-model="formData.committed"></el-input>
+                        <el-form-item label="招标人">
+                            <el-input v-model="formData.organName"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="招标方式">
+                            <el-radio-group v-model="formData.radio">
+                                <el-radio key="1" value="1" label="公开招标(有形市场)"></el-radio>
+                                <el-radio key="1" value="1" label="公开招标(法定媒体)"></el-radio>
+                                <el-radio key="1" value="1" label="公开招标(其他媒体)"></el-radio>
+                                <el-radio key="1" value="1" label="邀请招标"></el-radio>
+                            </el-radio-group>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -42,140 +54,37 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="采购方案是否是规定情形">
-                            <el-radio-group v-model="formData.radio">
-                                <el-radio key="1" value="1" label="是"></el-radio>
-                                <el-radio key="2" value="2" label="否"></el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="采购发起时间">
-                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.organName" style="width:100%" type="date">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="采购主责部门">
-                            <el-input v-model="formData.organName"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="采购预估金额(元)">
-                            <el-input v-model="formData.organName"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="目标成本/预算金融(元)">
-                            <el-input v-model="formData.organName"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <!--<el-col :span="8">-->
-                        <!--<el-form-item label="采购主责部门">-->
-                            <!--<el-input v-model="formData.organName"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                </el-row>
-                <table class="tableNoBorder">
-                    <el-row>
-                        <el-col :span="24">
-                            <el-form-item label="供应商入围情况" prop="phone">
-                                <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
-                                    <td colspan="2" style="width: 50px;">
-                                        {{index + 1}}
-                                    </td>
-                                    <td colspan="2">
-                                        <el-input v-model="formData.organName" placeholder="请输入名称"></el-input>
-                                    </td>
-                                    <td colspan="2">
-                                        <el-input v-model="formData.organName" placeholder="请输入企业性质"></el-input>
-                                    </td>
-                                    <td colspan="2">
-                                        <el-input v-model="formData.organName" placeholder="请输入注册资金(元)"></el-input>
-                                    </td>
-                                    <td colspan="2">
-                                        <el-input v-model="formData.organName" placeholder="请输入考察结论"></el-input>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td colspan="10" style="height: 30px;">
-                                        <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
-                                    </td>
-                                </tr>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </table>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="采购方式">
-                            <el-radio-group v-model="formData.radio">
-                                <el-radio key="1" value="1" label="公开招标"></el-radio>
-                                <el-radio key="2" value="2" label="邀请招标"></el-radio>
-                                <el-radio key="3" value="3" label="竞价谈判"></el-radio>
-                                <el-radio key="4" value="4" label="直接委托"></el-radio>
-                                <el-radio key="5" value="5" label="其他"></el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="16">
-                        <el-form-item label="实施主体">
+                        <el-form-item label="采购标的类别">
                             <el-radio-group v-model="formData.radio">
-                                <el-radio key="1" value="1" label="自主实施"></el-radio>
-                                <el-radio key="2" value="2" label="代理机构实施"></el-radio>
+                                <el-radio key="1" value="1" label="工程类"></el-radio>
+                                <el-radio key="2" value="2" label="货物类"></el-radio>
+                                <el-radio key="3" value="3" label="服务类"></el-radio>
                             </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="标的简述">
+                            <el-input v-model="formData.meetingPlace"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="签章需求">
+                            <el-radio-group v-model="formData.radio">
+                                <el-radio key="1" value="1" label="公司公章"></el-radio>
+                                <el-radio key="2" value="2" label="法定代表签字或法人章"></el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="预计金额(元)">
+                            <el-input v-model="formData.meetingPlace"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="评审/谈判机构">
-                            <el-radio-group v-model="formData.radio">
-                                <el-radio key="1" value="1" label="评标委员会"></el-radio>
-                                <el-radio key="2" value="2" label="评审谈判小组"></el-radio>
-                                <el-radio key="3" value="3" label="招标采购管理委员会"></el-radio>
-                                <el-radio key="4" value="4" label="其他"></el-radio>
-                            </el-radio-group>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="评审/谈判名单">
-                            <el-select
-                                    v-model="formData.value"
-                                    multiple
-                                    filterable
-                                    allow-create
-                                    default-first-option>
-                                <el-option
-                                        v-for="item in []"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="评判办法">
-                            <el-input v-model="formData.organName"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="其他情况说明">
-                            <el-input v-model="formData.organName"></el-input>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="征集公告附件">
+                        <el-form-item label="招标文件(评审版)附件">
                             <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
@@ -187,7 +96,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="考察报告附件">
+                        <el-form-item label="经审批的采购方案附件">
                             <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
@@ -226,7 +135,7 @@
     import { publicMethods } from "../application.js";
     export default {
         mixins: [publicMethods],
-        name: 'ProgrammeForm',
+        name: 'TenderingForm',
         data() {
             return {
                 dialogFormVisible: false,
@@ -236,24 +145,12 @@
                         label: '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)'
                     },
                     {
-                        value: '2',
-                        label: '开发建设类采购(竞价谈判方式：100万>工程类>=20万、50万>货物类>=10万、30万>服务类>=10万)'
-                    },
-                    {
                         value: '3',
                         label: '非开发建设类采购(招标方式：估算金额>=30万)'
                     },
                     {
-                        value: '4',
-                        label: '非开发建设类采购(竞价谈判方式：30万>估算金额>=10万)'
-                    },
-                    {
                         value: '5',
                         label: '行政非业务类采购(招标方式：估算金额>=30万)'
-                    },
-                    {
-                        value: '6',
-                        label: '行政非业务类采购(竞价谈判方式：30万>估算金额>=1万)'
                     }
                 ],
                 options: [
@@ -339,24 +236,14 @@
             resetForm() {
                 let formData =  {
                     attachments: [],
-                    attendingDepartment: [{
-                        people: [],
-                        department: ''
-                    }],
-                    requestedItems: [{}],
-                    sitIn: [{
-                        people: [],
-                        department: ''
-                    }],
                     numbers: '',
                     created: '',
-                    idea: '',
                     committed: '',
                     meetingPlace: '',
                     meetingTime: '',
                     conferenceTitle: '',
                     organName: '',
-                    creatorName:'',
+                    creatorName: '',
                     creatorId: '',
                     organId: ''
                 }
@@ -366,7 +253,7 @@
                 const self = this;
                 if (this.formId != '') {
                     axios
-                        .get('/api/v1/meetingApply/zd/detail/' + this.formId)
+                        .get('/api/v1/meetingApply/zc/detail/' + this.formId)
                         .then(res => {
                             self.formData = res.data.content;
                             if (self.formData.attendingDepartment) {
@@ -420,7 +307,7 @@
                     }
                 })
                 let response = await $self.saveFormData(
-                    "/api/v1/meetingApply/zd/save",
+                    "/api/v1/meetingApply/zc/save",
                     $self.formData
                 );
                 if (response) {
@@ -474,7 +361,7 @@
     };
 </script>
 <style lang="scss" scoped>
-    #ProgrammeForm {
+    #TenderingForm {
         .tableNoBorder {
             width: 100%;
             table-layout: fixed;
@@ -527,7 +414,7 @@
     .tableNoBorder >>> .el-input--small .el-input__inner{
         border: none;
     }
-    #ProgrammeForm >>> .el-form-item__content{
+    #TenderingForm >>> .el-form-item__content{
         width: calc(100% - 140px);
     }
 </style>
