@@ -118,9 +118,9 @@ export default {
             params: {
                 pageNum: 1,
                 pageSize: 5,
-                applyUser: '',
-                dept: '',
-                status: '',
+                //  applyUser: '',
+                // dept: '',
+                // status: '',
                 total: 0
             },
             formName: 'motor-receive'
@@ -128,6 +128,7 @@ export default {
     },
     filters: {
         filterStatus: function(data) {
+            console.log(data);
             let xmlJson = {
                 '00': '已保存',
                 '01': '审核中',
@@ -206,7 +207,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.applyUser = this.params.dept = this.params.status = '';
+            //  this.params.applyUser = this.params.dept = this.params.status = '';
             this.params.pageNum = 1;
             this.getList();
         }
