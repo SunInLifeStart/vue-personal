@@ -285,7 +285,7 @@ export default {
                             id: "recruitment_1",
                             name: '采购方案',
                             icon: 'el-icon-icon-cart',
-                            to: 'abc'
+                            to: 'programme'
                             // 没有
                         },
                         

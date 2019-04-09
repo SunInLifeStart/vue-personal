@@ -20,7 +20,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="24">
+                <el-col :span="22">
                     <el-form-item label="采购方式" prop="committed">
                         <el-radio-group v-model="formData.radio">
                             <el-radio key="1" value="1" label="公开招标"></el-radio>
@@ -31,6 +31,9 @@
                             <el-radio key="6" value="6" label="其他"></el-radio>
                         </el-radio-group>
                     </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                    <el-input v-model="formData.organName"></el-input>
                 </el-col>
             </el-row>
             <el-row>
@@ -91,7 +94,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="24">
+                <el-col :span="20">
                     <el-form-item label="签章需求" prop="creatorName">
                         <el-radio-group v-model="formData.radio">
                             <el-radio key="1" value="1" label="无"></el-radio>
@@ -100,6 +103,9 @@
                             <el-radio key="4" value="4" label="其他"></el-radio>
                         </el-radio-group>
                     </el-form-item>
+                </el-col>
+                <el-col :span="2">
+                    <el-input v-model="formData.organName"></el-input>
                 </el-col>
             </el-row>
             <el-row>
