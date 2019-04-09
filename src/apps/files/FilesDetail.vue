@@ -200,6 +200,7 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data;
+                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }

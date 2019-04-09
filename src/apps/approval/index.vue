@@ -103,7 +103,7 @@
           </el-card>
         <br>
         <el-card class="box-card">
-            <ApprovalDetail :formId="formId" ref="ApprovalDetail" @reloadList = "reloadList"></ApprovalDetail>
+            <ApprovalDetail @resetStatus = "resetStatus" :formId="formId" ref="ApprovalDetail" @reloadList = "reloadList"></ApprovalDetail>
              <!-- :formId="formId" -->
         </el-card>
          <ApprovalForm  ref="ApprovalForm" @reloadList = "reloadList"></ApprovalForm>
@@ -200,6 +200,14 @@ export default {
         }
     },
     methods: {
+        resetStatus(data){
+                let $self = this;
+                for(let item of $self.tableData){
+                if(data.id == item.id){
+                item.status = data.status;
+                }
+                }
+            },
         //获取列表
          async getList(pageNum) {
             let $self = this;

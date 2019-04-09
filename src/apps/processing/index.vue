@@ -93,7 +93,7 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <ProcessingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ProcessingDetail"></ProcessingDetail>
+            <ProcessingDetail @resetStatus = "resetStatus" :formId="formBoardId" @refreshData="refreshBoardData" ref="ProcessingDetail"></ProcessingDetail>
         </el-card>
         <ProcessingForm  ref="ProcessingForm" @reloadList = "reloadList"></ProcessingForm>
     </div>
@@ -169,6 +169,14 @@
             }
         },
         methods: {
+            resetStatus(data){
+                let $self = this;
+                for(let item of $self.tableData){
+                if(data.id == item.id){
+                item.status = data.status;
+                }
+                }
+            },
             reloadList(params) {
                 if (params == "reload") {
                     this.params.pageNum = 1;

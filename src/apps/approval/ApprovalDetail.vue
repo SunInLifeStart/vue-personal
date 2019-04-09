@@ -201,6 +201,7 @@ export default {
                 // if($self.tableData.sealType=="false"){
                 //     $self.typeJuder='是'
                 // }
+                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
