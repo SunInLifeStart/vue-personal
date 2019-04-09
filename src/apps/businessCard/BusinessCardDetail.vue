@@ -1,5 +1,5 @@
 <template>
-    <div id="FilesDetail">
+    <div id="BusinessCardDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -36,38 +36,56 @@
                         <el-form-item label="是否属于年度预算内：">{{tableData.remark}}</el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="文件印刷明细：">
+                        <el-form-item label="印刷明细：">
                             <el-table :data="tableData.detail" border style="width: 100%; margin-top: 5px;">
-                                <el-table-column prop="name" label="文件姓名">
+                                <el-table-column prop="name" label="姓名">
                                     <template slot-scope="scope">
                                         {{scope.row.name}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="specification" label="印刷幅面">
+                                <el-table-column prop="specification" label="部门">
                                     <template slot-scope="scope">
                                         {{scope.row.specification}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="number" label="印刷数量（套）">
+                                <el-table-column prop="number" label="职务">
                                     <template slot-scope="scope">
                                         {{scope.row.number}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="price" label="印刷色彩">
+                                <el-table-column prop="price" label="数量（盒）">
                                     <template slot-scope="scope">
                                         {{scope.row.price |numFilter}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="totalPrice" label="其他需求">
+                                <el-table-column prop="totalPrice" label="电话">
                                     <template slot-scope="scope">
                                         {{scope.row.totalPrice}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="buyTime" label="附件" >
+                                <el-table-column prop="inventory" label="座机号">
                                     <template slot-scope="scope">
-                                        <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
-                                           <FilesOperate :item="item" :options="{preview:true,del:true,download:true}"></FilesOperate>
-                                        </div>
+                                        {{scope.row.inventory}}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="buyTime" label="邮箱" >
+                                    <template slot-scope="scope">
+                                        {{scope.row.buyTime}}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="reason" label="公司名称" show-overflow-tooltip>
+                                    <template slot-scope="scope">
+                                        {{scope.row.reason}}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="inventory" label="通讯地址">
+                                    <template slot-scope="scope">
+                                        {{scope.row.inventory}}
+                                    </template>
+                                </el-table-column>
+                                <el-table-column prop="buyTime" label="邮编" >
+                                    <template slot-scope="scope">
+                                        {{scope.row.buyTime}}
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -133,7 +151,7 @@ import FilesOperate from "../FilesOperate";
 import { publicMethods } from "../application.js";
 export default {
     mixins: [publicMethods],
-    name: "FilesDetail",
+    name: "BusinessCardDetail",
     data() {
         return {
             tableData: {},
@@ -144,7 +162,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'files-form_files',//固定资产流程 Files-form_fixedFiles  低值易耗办公品  Files-form_lowFiles 
+            appFlowName: 'files-form_files',//固定资产流程 BusinessCard-form_fixedBusinessCard  低值易耗办公品  BusinessCard-form_lowBusinessCard 
             formName: 'files_forms',
             comments: [],
             dialogVisibleCrumb: false,
@@ -213,7 +231,7 @@ export default {
 };
 </script>
 <style lang="scss">
-#FilesDetail {
+#BusinessCardDetail {
   .el-step__main {
     margin-top: 10px;
   }

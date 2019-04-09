@@ -1,25 +1,25 @@
 <template>
-    <div id="Files">
+    <div id="BusinessCard">
         <el-card class="box-card">
             <!-- 查询 -->
-            <div id="FilesFilter">
+            <div id="BusinessCardFilter">
                 <el-form :inline="true" label-width="100px" label-position="left" class="demo-form-inline">
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="姓名：">
-                                <el-input v-model="formInline.proposer" placeholder="" style="width:100%"></el-input>
+                                <el-input v-model="formInline.proposer" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="申请时间：">
                                 <!-- <el-input v-model="formInline.applyDept" placeholder=""></el-input> -->
-                                 <el-date-picker v-model="formInline.created" value-format="yyyy-MM-dd" style="width:100%" type="date" >
+                                 <el-date-picker v-model="formInline.created" value-format="yyyy-MM-dd" type="date" >
                                   </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="所属月份：" prop="status">
-                                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
+                                <el-select v-model="formInline.status" filterable placeholder="全部">
                                     <el-option v-for="item in onOption"
                                      :key="item.value"
                                     :label="item.label"
@@ -30,13 +30,8 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="印刷文件名称：">
-                                <el-input v-model="formInline.proposername" placeholder="" style="width:100%"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="是否属于年度预算内:" >
+                        <el-col :span="16">
+                            <el-form-item label="是否属于年度预算内:" label-width="110px">
                                 <el-radio v-model="formInline.type" label="true">是</el-radio>
                                 <el-radio v-model="formInline.type" label="false">否</el-radio>
                             </el-form-item>
@@ -55,7 +50,7 @@
             <div class="toolbar">
                 <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
             </div>
-            <div id="FilesList">
+            <div id="BusinessCardList">
                 <el-table :data="tableData" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
                     <el-table-column prop="proposer" label="申请人">
                     </el-table-column>
@@ -91,21 +86,21 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <FilesDetail :formId="formId" ref="FilesDetail" @reloadList="reloadList" @resetStatus="resetStatus"></FilesDetail>
+            <BusinessCardDetail :formId="formId" ref="BusinessCardDetail" @reloadList="reloadList" @resetStatus="resetStatus"></BusinessCardDetail>
         </el-card>
-        <FilesForm ref="FilesForm" @reloadList="reloadList"></FilesForm>
+        <BusinessCardForm ref="BusinessCardForm" @reloadList="reloadList"></BusinessCardForm>
     </div>
 </template>
 <script>
 import moment from 'moment';
 import axios from 'axios';
-import FilesForm from "./FilesForm";
-import FilesDetail from "./FilesDetail";
+import BusinessCardForm from "./BusinessCardForm";
+import BusinessCardDetail from "./BusinessCardDetail";
 import { CONFIG } from '../data.js';
 import { publicMethods } from "../application.js";
 export default {
     mixins: [publicMethods],
-    name: "Files",
+    name: "BusinessCard",
     data() {
         return {
             onOption: [
@@ -181,13 +176,12 @@ export default {
                 applyDate: [],
                 status: '',
                 type:"",
-                proposername:'',
             },
         };
     },
     components: {
-        FilesForm,
-        FilesDetail
+        BusinessCardForm,
+        BusinessCardDetail
     },
     methods: {
         
@@ -200,7 +194,7 @@ export default {
             if (response) {
                 if (response.data.forms.length > 0) {
                     let formId = response.data.forms[0].id;
-                    $self.$refs.FilesDetail.getFormDetails(formId);
+                    $self.$refs.BusinessCardDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
@@ -245,24 +239,24 @@ export default {
         },
         //选择行
         showCurrentId(row) {
-            this.$refs.FilesDetail.getFormDetails(row.id);
+            this.$refs.BusinessCardDetail.getFormDetails(row.id);
         },
 
         //新建
         createNewForm() {
-            this.$refs.FilesForm.createForm();
+            this.$refs.BusinessCardForm.createForm();
         },
 
         //编辑
         editForm(data) {
-            this.$refs.FilesForm.setDataFromParent(data);
+            this.$refs.BusinessCardForm.setDataFromParent(data);
         },
         reloadList(params) {
             if (params == "reload") {
                 this.params.page = 1;
                 this.getList();
             } else {
-                this.$refs.FilesDetail.getFormDetails(params.id);
+                this.$refs.BusinessCardDetail.getFormDetails(params.id);
             }
         },
         resetStatus(data) {
@@ -323,22 +317,23 @@ export default {
 };
 </script>
 <style scoped>
-#FilesFilter  >>> .el-select{
+ 
+#BusinessCardFilter  >>> .el-select{
         width: calc(100% - 0px);
     }
-     #FilesFilter >>> .el-form-item__content{
+     #BusinessCardFilter >>> .el-form-item__content{
         width: calc(100% - 110px);
     }
-     #FilesFilter >>> .el-checkbox{
+     #BusinessCardFilter >>> .el-checkbox{
          width: 30px;
     }
 </style>
 
 <style lang="scss" scoped>
-#FilesFilter .el-form-item--small.el-form-item {
+#BusinessCardFilter .el-form-item--small.el-form-item {
   width: 100%;
 }
-#FilesFilter {
+#BusinessCardFilter {
              .searchBtn {
             padding-right: 10px;
             .positionBtn{

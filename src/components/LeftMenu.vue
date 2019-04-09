@@ -80,6 +80,13 @@ export default {
                             to: 'submission'
                         },
                         {
+                            id: "commonly_13",
+                            name: '名片印刷',
+                            icon: 'el-icon-mingpian',
+                            to: 'businessCard'
+                            // 没有
+                        },
+                         {
                             id: "commonly_4",
                             name: '文件印刷',
                             icon: 'el-icon-mingpian',
