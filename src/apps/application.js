@@ -74,7 +74,7 @@ export const publicMethods = {
             if (data.required && data.required.length > 0) {
                 for (let item of data.required) {
                     let key = item.split(":")[0];
-                    if (detailsData[key]) {
+                    if (detailsData[key] || detailsData[key] == false) {
                         if (item.split(":")[1] == "arrays" && typeof (detailsData[key]) == "string") {
                             options.push(key + "=" + '[' + detailsData[key] + ']');
                         } else {
