@@ -45,7 +45,6 @@
                     </el-row>
                 </el-form>
             </div>
-
             <!-- 新建 -->
             <div class="toolbar">
                 <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
