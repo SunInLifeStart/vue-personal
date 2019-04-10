@@ -629,14 +629,13 @@ export default {
         },
         getNum() {
             const self = this;
+            let params = {
+                code: 'travel_forms'
+            };
             axios
-                .get('/api/v1/travel_forms/no', {
-                    headers: {
-                        'Content-type': 'application/json'
-                    }
-                })
+                .post('/serialNumber/getByTableCode', params)
                 .then(res => {
-                    this.formData.number = res.data;
+                    this.formData.number = res.data.content.serialNumber;
                 })
                 .catch(function() {
                     self.$message({
