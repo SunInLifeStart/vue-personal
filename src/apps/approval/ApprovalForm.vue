@@ -246,13 +246,7 @@ export default {
                         message: "请输入用印文件名称"
                     }
                 ],
-                participant: [
-                    {
-                        required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入用印文件"
-                    }
-                ],
+               
                 fileNum: [
                     {
                         required: true, //是否必填
@@ -453,16 +447,14 @@ export default {
                 useItems: "", //印章种类
                 sealType:"",//类型
                 creatorName: this.$store.getters.LoginData.uname || '', //申请人
-                 created: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                organName: this.$store.getters.LoginData.oname || '',
+                creatorId: this.$store.getters.LoginData.uid || '',
+                organId:this.$store.getters.LoginData.oid || '',
+                created: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
                 timeLang:'',//时长
                 id: "",
-                organName: this.$store.getters.LoginData.oname || '',
-                // recipientsTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //领用时间
                 recipientsTime: "",
                 accompanyingPerson: "",
-                // number: "",
-               participant: "",
-                remarks: "",
                 endTime: ""
             };
             return formData;

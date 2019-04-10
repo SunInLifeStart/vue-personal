@@ -358,9 +358,7 @@
                     committed: [
                         { required: true, message: '请输入提单时间', trigger: 'blur' }
                     ],
-                    meetingTime: [
-                        { required: true, message: '请输入开会时间', trigger: 'blur' }
-                    ]
+                   
                 },
                 // 父亲、母亲、配偶、儿子、女儿
                 onOption: [
@@ -488,16 +486,11 @@
                         // people: "",
                         // department: ''
                     }],
-                    numbers: '',
                     branchlineTo: '',
                     businessType: '',
                     created: '',
                     sendMessage: [],
-                    idea: '',
                     committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-                    meetingPlace: '',
-                    meetingTime: '',
-                    conferenceTitle: '',
                     organName: this.$store.getters.LoginData.oname || '',
                     creatorName: this.$store.getters.LoginData.uname || '',
                     creatorId: this.$store.getters.LoginData.uid || '',

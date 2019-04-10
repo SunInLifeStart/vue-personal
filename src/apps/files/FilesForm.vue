@@ -26,22 +26,22 @@
                             <el-input v-model="formData.applyDate" placeholder="请输入申请时间" :disabled="true"></el-input>
                          </el-form-item>
                     </el-col>
-                     <el-col :span="12">
-                        <el-form-item label="是否属于年度预算内" style="float:left"  label-width="166px">
-                            <el-radio v-model="formData.type" label="true">是</el-radio>
-                             <el-radio v-model="formData.type" label="false">否</el-radio>
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="12">
                         <el-form-item label="资金计划所属月份" label-width="70px">
                             <!-- <el-input v-model="formData.apply" placeholder="资金计划所属月份"></el-input> -->
-                            <el-select v-model="formData.yuefen" placeholder="请选择月份" @change="payeeChange" filterable>
+                            <el-select v-model="formData.yuefen" placeholder="请选择月份" @change="payeeChange" clearable filterable>
                                 <el-option v-for="item in onOption"
                                     :key="item.value"
                                     :label="item.label"
                                     :value="item.value">
                                 </el-option>
                             </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="是否属于年度预算内" style="float:left"  label-width="166px">
+                            <el-radio v-model="formData.type" label="true">是</el-radio>
+                             <el-radio v-model="formData.type" label="false">否</el-radio>
                         </el-form-item>
                     </el-col>
                   <el-col :span="24">
@@ -299,6 +299,10 @@ export default {
                 ],
                 numbers:"",
                 type:'true',
+                creatorName: this.$store.getters.LoginData.uname || '', //申请人
+                organName: this.$store.getters.LoginData.oname || '',
+                creatorId: this.$store.getters.LoginData.uid || '',
+                organId:this.$store.getters.LoginData.oid || '',
                 applyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 proposerId: '',
                 applyDeptId: '',

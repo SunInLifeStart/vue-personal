@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="名片印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+    <el-dialog title="名片印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="95%" style="text-align: center;">
         <div id="BusinessCardForm">
             <el-form ref="formupdate" :model="formData" :rules="rules" label-width="90px">
                 <el-row>
@@ -27,16 +27,12 @@
                              <el-input v-model="formData.applyDate" placeholder="请输入申请时间" :disabled="true"></el-input>
                          </el-form-item>
                     </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="是否属于年度预算内" style="float:left" label-width="166px">
-                            <el-radio v-model="formData.type" label="true">是</el-radio>
-                             <el-radio v-model="formData.type" label="false">否</el-radio>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="资金计划所属月份" label-width="70px">
+                </el-row>
+                <el-row>
+                    <el-col :span="16">
+                        <el-form-item label="资金计划所属月份" >
                             <!-- <el-input v-model="formData.apply" placeholder="资金计划所属月份"></el-input> -->
-                            <el-select v-model="formData.yuefen" placeholder="请选择月份" @change="payeeChange" filterable>
+                            <el-select v-model="formData.yuefen" placeholder="请选择月份" @change="payeeChange" clearable filterable>
                                 <el-option v-for="item in onOption"
                                     :key="item.value"
                                     :label="item.label"
@@ -45,27 +41,40 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="是否属于年度预算内" >
+                            <el-radio v-model="formData.type" label="true">是</el-radio>
+                             <el-radio v-model="formData.type" label="false">否</el-radio>
+                        </el-form-item>
+                    </el-col>
+                 </el-row>
+                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="名片印刷明细" >
+                        <el-form-item label="名片印刷明细" :rules="rulesform" :model="formData">
                             <div style="float: right;">
                                 <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
                                 <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                             </div>
                             <el-table :data="formData.detail" border style="width: 100%; margin-top: 5px;" @selection-change="handleSelectionChange">
                                <el-table-column type="selection" width="60px"></el-table-column>
-                                <el-table-column prop="name" label="姓名">
+                                <el-table-column label="姓名">
                                     <template slot-scope="scope">
-                                        <!-- <el-input v-model="scope.row.name"></el-input> -->
-                                         <el-select v-model="scope.row.name" placeholder="请选择" @change="payeeChange" filterable>
-                                            <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
-                                            </el-option>
-                                        </el-select>
+                                         <el-select v-model="scope.row.name" placeholder="请选择" @change="payeeChange" clearable filterable>
+                                                <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
+                                                </el-option>
+                                            </el-select>
+                                       <!-- <el-form-item :prop="'detail.' + scope.$index + '.name'" :rules="rulesform.name">
+                                           <el-select v-model="scope.row.name" placeholder="请选择" @change="payeeChange" clearable filterable>
+                                                <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
+                                                </el-option>
+                                            </el-select>
+                                        </el-form-item> -->
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="specification" label="部门">
                                     <template slot-scope="scope">
                                         <!-- <el-input v-model="scope.row.specification"></el-input> -->
-                                        <el-select v-model="scope.row.specification" placeholder="请选择" filterable>
+                                        <el-select v-model="scope.row.specification" placeholder="请选择" clearable filterable>
                                             <el-option v-for="item in payeeOrgan" :key="item.id" :label="item.name" :value="item.name">
                                             </el-option>
                                         </el-select>
@@ -123,7 +132,6 @@
                             <el-input v-model="formData.numbers" :disabled="true"  placeholder="印刷数量"></el-input>
                         </el-form-item>
                     </el-col>
-                   
                 </el-row>
                 <el-row>
                     <el-col :span="24">
@@ -234,6 +242,15 @@ export default {
             selectionItems: [],
             currentFormId: this.operationType == 'create' ? '' : this.formId,
             // createForm_status: false,
+            rulesform:{
+                name: [
+                    {
+                        required: true, //是否必填
+                        trigger: "blur", //何事件触发
+                        message: "请输入姓名"
+                    }
+                ],
+            },
             rules: {
                 proposer: [
                     {
@@ -327,6 +344,10 @@ export default {
                 numbers:"",
                 type:'true',
                 attachments: [],
+                creatorName: this.$store.getters.LoginData.uname || '', //申请人
+                organName: this.$store.getters.LoginData.oname || '',
+                creatorId: this.$store.getters.LoginData.uid || '',
+                organId:this.$store.getters.LoginData.oid || '',
                 applyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 proposerId: '',
                 applyDeptId: '',

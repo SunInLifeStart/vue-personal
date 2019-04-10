@@ -91,13 +91,6 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-             <el-row>
-                <el-col :span="24">
-                    <el-form-item label="审批意见">
-                        <el-input type="textarea" v-model="formData.remarks" placeholder="请输入审批意见"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="附件">
@@ -198,13 +191,6 @@ export default {
                         message: "请输入日程安排"
                     }
                 ],
-                consts: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入费用预算"
-                    }
-                ],
                 type: [
                     {
                         required: true, //是否必填
@@ -212,14 +198,7 @@ export default {
                         message: "请输入是否资金计划内"
                     }
                 ],
-                suggestion: [
-                    {
-                        required: false, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入审批意见"
-                    }
-                ],
-                
+               
             }
         };
     },
@@ -261,29 +240,23 @@ export default {
                 submitter: this.$store.getters.LoginData.uname || '', //申请人
                 department: this.$store.getters.LoginData.oname || '', //所属部门
                 id: "",
-                committed: moment(new Date()).format("YYYY-MM-DD 00-00-00"), //提单时间
-                // committed: "",
+                committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
+                creatorId: this.$store.getters.LoginData.uid || '',
+                creatorName:this.$store.getters.LoginData.uname || '',
+                organId:this.$store.getters.LoginData.oid || '',
+                organName:this.$store.getters.LoginData.oname || '',
                 isAnnualPlan: "true",
-                draftUnit: "",
-                draftTime: [],
                 startTime: "",
                 endTime: "",
                 number: "",
-                phone: "",
                 trainingPrograms: "",
                 trainingContent: "",
                 participant: "",
-                processId: "",
                 type: "true",
-                suggestion: "",
-                consts: "",
                 upper: "",
                 lowercase: "",
                 schedule: "",
-                remarks: "",
-                writer: "",
                 trainingTime: []
-                //  created: moment(new Date()).format("YYYY-MM-DD")
             };
             return formData;
         },
