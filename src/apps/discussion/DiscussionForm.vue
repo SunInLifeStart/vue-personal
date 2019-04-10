@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="议题呈报" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+    <el-dialog title="议题呈报" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="80%" style="text-align: center;">
         <div id="DiscussionForm">
         <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
             <el-row>
@@ -47,7 +47,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="提请时间" prop="timeApplication">
-                        <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.timeApplication" style="width:100%" type="date">
+                        <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.timeApplication" style="width:100%" type="datetime">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -63,11 +63,11 @@
                         <el-form-item label="参会部门" prop="phone">
                             <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
                                 <td colspan="4" style="width: 21%;">
-                                    <el-select v-model="item.department" placeholder="请输入参会部门" @change="">
+                                    <el-select v-model="item.department" placeholder="请输入参会部门" @change="changeDepartment(item, index)">
                                         <el-option v-for="i in options"
-                                                   :key="i.value"
-                                                   :label="i.label"
-                                                   :value="i.value">
+                                                   :key="i.id"
+                                                   :label="i.name"
+                                                   :value="i.id">
                                                    <!--:value="{value:i.value, label: i.label}">-->
                                         </el-option>
                                     </el-select>
@@ -75,7 +75,7 @@
                                 <td colspan="4">
                                     <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
                                         <el-option
-                                                v-for="i in personOptions"
+                                                v-for="i in item.personOptions"
                                                 :key="i.id"
                                                 :label="i.name"
                                                 :value="i.id">
@@ -142,16 +142,7 @@ export default {
     data() {
         return {
             dialogFormVisible: false,
-            options: [
-                {
-                    value: '1',
-                    label: '主管部门'
-                },
-                {
-                    value: '2',
-                    label: '部门'
-                }
-            ],
+            options: [],
             discussionOption: [
                 {
                     value: 'general',
@@ -209,8 +200,13 @@ export default {
     },
     methods: {
         async getDiscussionUser() {
-            let user = await this.getUsers("/api/v1/users")
-            if (user) this.personOptions = user.data
+            let user = await this.getUsers("/api/v1/users/list/organs")
+            if (user) this.options = user.data
+        },
+        changeDepartment(i, index) {
+            i.people = []
+            let users = this.options.filter(item => { return item.id == i.department})
+            if (users.length > 0) this.formData.attendingDepartment[index].personOptions = users[0].users
         },
         changePeople() {
             this.$forceUpdate()
@@ -285,7 +281,12 @@ export default {
                     .then(res => {
                         self.formData = res.data.content;
                         if (self.formData.attendingDepartment) {
-                            self.formData.attendingDepartment.forEach(item => {
+                            self.formData.attendingDepartment.forEach((item,index) => {
+                                // 处理部门
+                                item.department = parseInt(item.department)
+                                let users = self.options.filter(i => { return i.id == item.department})
+                                item.personOptions =  users[0].users
+                                // 处理人员
                                 if (item.person) {
                                     item.people = item.person.split(',')
                                 }

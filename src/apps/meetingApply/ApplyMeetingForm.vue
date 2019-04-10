@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="会议申请" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+    <el-dialog title="会议申请" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="80%" style="text-align: center;">
         <div id="ApplyMeetingForm">
             <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
                 <el-row>
@@ -310,7 +310,7 @@
                     created: '',
                     sendMessage: [],
                     idea: '',
-                    committed: moment(new Date()).format('YYYY-MM-DD 00:00:00'),
+                    committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                     meetingPlace: '',
                     meetingTime: '',
                     conferenceTitle: '',
@@ -455,6 +455,9 @@
 </script>
 <style lang="scss" scoped>
     #ApplyMeetingForm {
+        .el-select {
+            width: 100%;
+        }
         .tableNoBorder {
             width: 100%;
             table-layout: fixed;
