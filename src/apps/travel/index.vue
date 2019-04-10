@@ -69,11 +69,13 @@
                     </el-button>
                     <el-button type="danger" @click="deleteItem(scope.row)" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">删除
                     </el-button> -->
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
+                            <!--v-if="scope.row.status == '00' || scope.row.status == '02'"-->
+                            <!--v-if="scope.row.status == '00'"-->
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00'">
-                                <el-button type="text" icon="el-icon-delete" @click="deleteItem(scope.row)"></el-button>
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                                <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
                     </el-table-column>
@@ -109,7 +111,8 @@ export default {
                 page: 1,
                 pageSize: 5,
                 options: [],
-                desc: false,
+                orderBy: 'id',
+                desc: true,
                 total: 0
             },
             formName: 'travel_forms'
@@ -162,12 +165,12 @@ export default {
             $self.url = '/api/v1/travel_forms/query';
             let response = await $self.getQueryList();
             if (response) {
-                if (response.data.content.list.length > 0) {
-                    let formId = response.data.content.list[0].id;
+                if (response.data.forms.length > 0) {
+                    let formId = response.data.forms[0].id;
                     $self.$refs.TrainDetail.getFormDetails(formId);
                 }
-                $self.tableData = response.data.content.list;
-                $self.params.total = response.data.content.total;
+                $self.tableData = response.data.forms;
+                $self.params.total = response.data.totalCount;
             } else {
                 $self.msgTips('获取列表失败', 'warning');
             }

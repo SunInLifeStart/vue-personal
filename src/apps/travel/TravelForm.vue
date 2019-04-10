@@ -29,10 +29,10 @@
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
                             </el-select>
-                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.subView">
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.travelView">
                                 <el-button type="text" style="margin-left: 10px;" icon="el-icon-view" @click="submissionDetail"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.subView == false">
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.travelView == false">
                                 <el-button type="text" style="margin-left: 10px;color:gray;" icon="el-icon-view"></el-button>
                             </el-tooltip>
                         </el-form-item>
@@ -464,14 +464,14 @@ export default {
         //部门呈报件改变
         SubmissionChange(val) {
             console.log(val);
-            this.formData.subView = true;
+            this.formData.tra = true;
             let boolean = false;
             for (let data of this.submissionSelections) {
                 if (data.id == val) {
                     boolean = true;
                 }
             }
-            this.formData.subView = boolean;
+            this.formData.travelView = boolean;
         },
         submissionDetail() {
             if (this.submission && this.submission != null) {
@@ -584,6 +584,7 @@ export default {
                     } else {
                         this.formData.estimate.splice(index, 1);
                     }
+                    this.getAmounta();
                 }
             });
         },
@@ -676,14 +677,18 @@ export default {
         setDataFromParent(data) {
             if (data.estimate.length > 0) {
                 for (let item of data.estimate) {
+                    item.bsType = item.bigType.split(',');
                     item.currency = {
-                        value: data.currency.curValue,
-                        label: data.currency.label
+                        value: item.currency.curValue,
+                        label: item.currency.label
                     };
                 }
             }
+            for (let item of data.evections) {
+                item.bname1 = item.bname;
+            }
             if (data.submissionId && data.submissionId != null) {
-                if (data.subView) {
+                if (data.travelView) {
                     this.submission = parseInt(data.submissionId);
                 } else {
                     this.submission = data.submissionId;
@@ -704,7 +709,7 @@ export default {
             let formData = {
                 attachments: [],
                 number: '',
-                subView: true,
+                travelView: true,
                 travelType: '',
                 submissionId: '',
                 submissionName: '',
@@ -775,6 +780,7 @@ export default {
             */
             if (this.formData.estimate.length > 0) {
                 for (let data of this.formData.estimate) {
+                    data.bigType = data.bsType.join(',');
                     data.currency = {
                         curValue: data.currency.value,
                         label: data.currency.label
@@ -788,7 +794,7 @@ export default {
                         this.formData.submissionName = data.submissionNo;
                     }
                 }
-                if (this.formData.subView == false) {
+                if (this.formData.travelView == false) {
                     this.formData.submissionName = this.formData.submissionId;
                 }
             }
