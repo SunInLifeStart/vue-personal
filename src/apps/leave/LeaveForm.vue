@@ -34,7 +34,7 @@
                             <!-- <span class="span1">*</span>  -->
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.oname"></el-input>
+                            <el-input v-model="formData.oname" disabled></el-input>
                         </td>
                         <td colspan="1">申请时间</td>
                         <td colspan="2">
