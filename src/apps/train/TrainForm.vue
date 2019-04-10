@@ -24,7 +24,9 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="提单时间" prop="committed">
-                        <el-input v-model="formData.committed" placeholder="提单时间"></el-input>
+                        <!-- <el-input v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" type="date" placeholder="提单时间"></el-input> -->
+                         <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="提单时间">
+                        </el-date-picker>
                     </el-form-item>
                 </el-col>
                  <el-col :span="12">
@@ -240,7 +242,8 @@ export default {
                 submitter: this.$store.getters.LoginData.uname || '', //申请人
                 department: this.$store.getters.LoginData.oname || '', //所属部门
                 id: "",
-                committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
+                // committed: moment(new Date()).format("YYYY-MM-DD"), //提单时间
+                committed:'',
                 creatorId: this.$store.getters.LoginData.uid || '',
                 creatorName:this.$store.getters.LoginData.uname || '',
                 organId:this.$store.getters.LoginData.oid || '',
@@ -353,4 +356,16 @@ export default {
     -webkit-appearance: none;
 }
 }
+</style>
+<style scoped>
+
+#TrainForm  >>> .el-form-item__content{
+        width: calc(100% - 80px);
+    }
+    #TrainForm  >>> .el-select {
+        width: calc(100% - 15px);
+    }
+    #TrainForm  >>> .el-date-editor{
+        width: calc(100% - 0px);
+    }
 </style>

@@ -7,19 +7,19 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="姓名：">
-                                <el-input v-model="formInline.proposer" placeholder=""></el-input>
+                                <el-input v-model="params.creatorName" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="申请时间：">
-                                <!-- <el-input v-model="formInline.applyDept" placeholder=""></el-input> -->
-                                 <el-date-picker v-model="formInline.created" value-format="yyyy-MM-dd" type="date" >
+                                <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
+                                 <el-date-picker v-model="params.created" clearable value-format="yyyy-MM-dd 00:00:00" type="date" >
                                   </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="所属月份：" prop="status">
-                                <el-select v-model="formInline.status" filterable placeholder="全部">
+                                <el-select v-model="params.umonth" clearable filterable placeholder="全部">
                                     <el-option v-for="item in onOption"
                                      :key="item.value"
                                     :label="item.label"
@@ -32,8 +32,8 @@
                     <el-row>
                         <el-col :span="16">
                             <el-form-item label="是否属于年度预算内:" label-width="110px">
-                                <el-radio v-model="formInline.type" label="true">是</el-radio>
-                                <el-radio v-model="formInline.type" label="false">否</el-radio>
+                                <el-radio v-model="params.utype" label="1">是</el-radio>
+                                <el-radio v-model="params.utype" label="0">否</el-radio>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="searchBtn">
@@ -50,21 +50,21 @@
                 <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
             </div>
             <div id="BusinessCardList">
-                <el-table :data="tableData" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
-                    <el-table-column prop="proposer" label="申请人">
+                <el-table :data="tableData" align="center" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
+                    <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
-                    <el-table-column prop="applyDept" label="申请部门">
+                    <el-table-column prop="organName" label="申请部门">
                     </el-table-column>
-                    <el-table-column prop="applyDate" label="申请日期" sortable >
+                    <el-table-column prop="committed" label="申请日期" sortable >
                         <template slot-scope="scope">
-                            {{scope.row.applyDate | dateformat('YYYY-MM-DD')}}
+                            {{scope.row.committed | dateformat('YYYY-MM-DD')}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="applyDept" label="是否属于年度预算内">
+                    <el-table-column prop="utypes" label="是否属于年度预算内">
                     </el-table-column>
-                    <el-table-column prop="applyDept" label="资金计划所属月份">
+                    <el-table-column prop="umonth" label="资金计划所属月份">
                     </el-table-column>
-                    <el-table-column prop="applyDept" label="总印刷数量">
+                    <el-table-column prop="totlenumbers" label="总印刷数量">
                     </el-table-column>
                     <el-table-column prop="status" label="单据状态"  :formatter="fomatterStatus">
                     </el-table-column>
@@ -157,24 +157,24 @@ export default {
             formDetails: {},
             formId: "",
             params: {
-                desc: true,
+                umonth: '',
                 page: 1,
                 pageSize: 5,
-                department: "",
-                submitter: "",
+                creatorName: "",
+                created: "",
                 total: 0,
-                orderBy: 'created',
-                desc: true,
-                options: []
+                utype: '',
+                // desc: true,
+                // options: []
             },
             searchOptions: [],
-            formName: "files_forms",
+            formName: "cardPrinting",
             formInline: {
-                proposer: '',
-                created: '',
-                applyDate: [],
-                status: '',
-                type:"",
+                umonth: '',
+                creatorName: "",
+                created: "",
+                utype: '',
+                status:'',
             },
         };
     },
@@ -186,17 +186,25 @@ export default {
         
         //获取列表
         async getList(pageNum) {
-            this.onSubmit();
+            // this.onSubmit();
             let $self = this;
-            $self.url = "/api/v1/files_forms/query";
+            $self.url = "/api/v1/cardPrinting/queryList";
             let response = await $self.getQueryList();
             if (response) {
-                if (response.data.forms.length > 0) {
-                    let formId = response.data.forms[0].id;
+                if (response.data.content.list && response.data.content.list.length > 0) {
+                    let formId = response.data.content.list[0].id;
                     $self.$refs.BusinessCardDetail.getFormDetails(formId);
                 }
-                $self.tableData = response.data.forms;
-                $self.params.total = response.data.totalCount;
+                $self.tableData = response.data.content.list;
+                $self.tableData.forEach(item=>{
+                    if(item.utype=='1'){
+                        item.utypes='是'
+                    }
+                    else{
+                        item.utypes='否'
+                    }
+                })
+                $self.params.total = response.data.content.total;
 
             } else {
                 $self.msgTips("获取列表失败", "warning");
@@ -204,27 +212,34 @@ export default {
         },
         onSubmit() {
             this.searchOptions = [];
-            if (this.formInline.proposer.trim() !== '') {
+            if (this.formInline.umonth.trim() !== '') {
                 this.searchOptions.push({
-                    field: 'proposer',
+                    field: 'umonth',
                     filter: 'LIKE',
-                    value: this.formInline.proposer
+                    value: this.formInline.umonth
                 });
             }
            
-            if (
-                this.formInline.applyDate &&
-                this.formInline.applyDate.length > 0
-            ) {
+            if (this.formInline.creatorName  ) {
                 this.searchOptions.push({
-                    field: 'applyDate',
-                    filter: 'BETWEEN',
-                    value: moment(this.formInline.applyDate[0]).format(
-                        'YYYY-MM-DD'
-                    ),
-                    value2: moment(this.formInline.applyDate[1]).format(
-                        'YYYY-MM-DD'
-                    )
+                    field: 'creatorName',
+                    filter: 'LIKE',
+                    value:this.formInline.creatorName
+                });
+            }
+             if (this.formInline.created.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'created',
+                    filter: 'LIKE',
+                    value: this.formInline.created
+                });
+            }
+           
+            if (this.formInline.utype  ) {
+                this.searchOptions.push({
+                    field: 'utype',
+                    filter: 'LIKE',
+                    value:this.formInline.utype
                 });
             }
             if (this.formInline.status.trim() !== '') {
@@ -280,10 +295,11 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.formInline.proposer = '';
-            // this.formInline.applyDept = '';
-            this.formInline.applyDate = [];
-            this.formInline.status = '';
+            this.params.umonth = '';
+            this.params.creatorName = '';
+            this.params.created = '';
+            this.params.utype = '';
+            this.params.status= '';
             this.getList();
         },
         fomatterStatus(row, column) {
