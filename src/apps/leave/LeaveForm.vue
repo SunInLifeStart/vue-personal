@@ -165,14 +165,13 @@ export default {
     methods: {
         getNum() {
             const self = this;
+            let params = {
+                code: 'motor-holiday'
+            };
             axios
-                .get('/api/v1/motor-holiday/getNo', {
-                    headers: {
-                        'Content-type': 'application/json'
-                    }
-                })
+                .post('/serialNumber/getByTableCode', params)
                 .then(res => {
-                    this.formData.no = res.data;
+                    this.formData.no = res.data.content.serialNumber;
                 })
                 .catch(function() {
                     self.$message({

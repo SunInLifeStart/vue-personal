@@ -232,14 +232,17 @@ export default {
     methods: {
         getNo() {
             const self = this;
+            let params = {
+                code: 'motor-receive'
+            };
             axios
-                .get('/api/v1/motor-receive/getNo')
+                .post('/serialNumber/getByTableCode', params)
                 .then(res => {
-                    this.formData.no = res.data;
+                    this.formData.no = res.data.content.serialNumber;
                 })
                 .catch(function() {
                     self.$message({
-                        message: '获取物品流水号失败',
+                        message: '流水号获取失败',
                         type: 'error'
                     });
                 });
