@@ -121,7 +121,7 @@
 
                     </tr>
                     <tr v-for="(item) in this.tableData.estimate" :key="item.index">
-                        <td colspan="2">{{item.bsType.join(',')}}</td>
+                        <td colspan="2">{{item.bigType}}</td>
                         <!-- <td colspan="2"> {{item.smallType}}</td> -->
                         <td colspan="1">
                             {{item.price}}
@@ -315,14 +315,14 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url = '/api/v1/' + $self.formName + '/detail/' + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
-                $self.tableData = response.data.content;
+                $self.tableData = response.data;
                 $self.$emit('resetStatus', {
                     id: $self.tableData.id,
                     status: $self.tableData.status
