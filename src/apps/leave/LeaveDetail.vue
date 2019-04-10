@@ -9,7 +9,7 @@
                 </div>
             </el-row>
         </div>
-        <div class="formContent">
+        <div class="formContent" style="padding:10px;">
             <br>
             <div>
                 <el-button type="primary" @click="getFlowNode">查看流程</el-button>
@@ -228,6 +228,20 @@ export default {
 </script>
 <style lang="scss">
 #leaveDetail {
+    .tablePrint td,
+    .tablePrint th {
+        padding: 0px;
+        margin: 0px;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-size: 13px;
+        height: 33px;
+        text-align: center;
+    }
+    .el-input--small .el-input__inner {
+        height: 33px;
+        line-height: 33px;
+    }
     .attachments {
         margin-left: 10px;
         width: 170px;
@@ -291,6 +305,7 @@ export default {
     #actionList {
         background: #f4f4f4;
         border-bottom: 1px solid #eaeaea;
+        padding-left: 5px;
         height: 40px;
         width: 100%;
         z-index: 10;
