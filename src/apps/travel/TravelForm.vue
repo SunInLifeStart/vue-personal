@@ -655,15 +655,14 @@ export default {
                 } else {
                     data.principal = 0;
                 }
-                if (data.number != '' && data.price != 0) {
-                    item.subtotal = this.common.toDecimal2(
-                        item.price * item.number
-                    );
-                } else {
-                    data.subtotal = 0;
-                }
             }
-
+            if (item.number != '' && item.price != 0) {
+                item.subtotal = this.common.toDecimal2(
+                    item.price * item.number
+                );
+            } else {
+                item.subtotal = 0;
+            }
             this.getAmounta();
         },
         getAmounta() {
