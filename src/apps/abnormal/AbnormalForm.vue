@@ -51,7 +51,7 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="22">
+                <el-col :span="24">
                     <el-form-item label="异常情况" prop="topicName">
                         <el-checkbox>投标报价均超上限的；</el-checkbox>
                         <el-checkbox>投标有效单位不足的；</el-checkbox>
@@ -60,10 +60,8 @@
                         <el-checkbox>排序第一的投标人弃标；</el-checkbox>
                         <el-checkbox>排序第一的投标人实施有重大风险的，且对方不承诺弃标将其废标的。</el-checkbox>
                         <el-checkbox>其他</el-checkbox>
+                        <el-input v-model="formData.organName"></el-input>
                     </el-form-item>
-                </el-col>
-                <el-col :span="2">
-                    <el-input v-model="formData.organName"></el-input>
                 </el-col>
             </el-row>
             <!--<el-row>-->
