@@ -392,12 +392,11 @@ export default {
 }
 </style>
 <style scoped>
-
-#ExpensesForm >>> .el-form-item__content{
+    #ExpensesForm >>> .el-form-item__content{
         width: calc(100% - 120px);
     }
     #ExpensesForm >>> .el-select {
-        width: calc(100% - 15px);
+        width: calc(100% - 0px);
     }
     #ExpensesForm >>> .el-date-editor{
         width: calc(100% - 14px);

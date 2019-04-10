@@ -21,71 +21,75 @@
             <el-form :model="tableData" class="formList">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="申请人：">{{tableData.proposer}}</el-form-item>
+                        <el-form-item label="申请人：">{{tableData.creatorName}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="申请部门：">{{tableData.applyDept}}</el-form-item>
+                        <el-form-item label="申请部门：">{{tableData.organName}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="申请日期：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="申请日期：">{{tableData.committed | dateformat('YYYY-MM-DD')}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属月份：">{{tableData.assetsType}}</el-form-item>
+                        <el-form-item label="所属月份：">{{tableData.umonth}}</el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="是否属于年度预算内：">{{tableData.remark}}</el-form-item>
+                        <el-form-item label="是否属于年度预算内：">{{utypeone}}</el-form-item>
+                    </el-col>
+                    <el-col :span="24">
+                        <el-form-item label="总印刷数量：">{{tableData.totlenumbers}}</el-form-item>
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="印刷明细：">
-                            <el-table :data="tableData.detail" border style="width: 100%; margin-top: 5px;">
-                                <el-table-column prop="name" label="姓名">
+                            <el-table :data="tableData.cardPrinting" border style="width: 100%; margin-top: 5px;">
+                                <el-table-column prop="uname" label="姓名">
                                     <template slot-scope="scope">
-                                        {{scope.row.name}}
+                                        {{scope.row.uname}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="specification" label="部门">
+                                <el-table-column prop="organ" label="部门">
                                     <template slot-scope="scope">
-                                        {{scope.row.specification}}
+                                        {{scope.row.organ}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="number" label="职务">
+                                <el-table-column prop="duty" label="职务">
                                     <template slot-scope="scope">
-                                        {{scope.row.number}}
+                                        {{scope.row.duty}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="price" label="数量（盒）">
+                                <el-table-column prop="quantity" label="数量（盒）">
                                     <template slot-scope="scope">
-                                        {{scope.row.price |numFilter}}
+                                        {{scope.row.quantity}}
+                                        <!-- |numFilter -->
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="totalPrice" label="电话">
+                                <el-table-column prop="phone" label="电话">
                                     <template slot-scope="scope">
-                                        {{scope.row.totalPrice}}
+                                        {{scope.row.phone}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="inventory" label="座机号">
+                                <el-table-column prop="telephone" label="座机号">
                                     <template slot-scope="scope">
-                                        {{scope.row.inventory}}
+                                        {{scope.row.telephone}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="buyTime" label="邮箱" >
+                                <el-table-column prop="mailbox" label="邮箱" >
                                     <template slot-scope="scope">
-                                        {{scope.row.buyTime}}
+                                        {{scope.row.mailbox}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="reason" label="公司名称" show-overflow-tooltip>
+                                <el-table-column prop="company" label="公司名称" show-overflow-tooltip>
                                     <template slot-scope="scope">
-                                        {{scope.row.reason}}
+                                        {{scope.row.company}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="inventory" label="通讯地址">
+                                <el-table-column prop="mailingAddress" label="通讯地址">
                                     <template slot-scope="scope">
-                                        {{scope.row.inventory}}
+                                        {{scope.row.mailingAddress}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="buyTime" label="邮编" >
+                                <el-table-column prop="postcode" label="邮编" >
                                     <template slot-scope="scope">
-                                        {{scope.row.buyTime}}
+                                        {{scope.row.postcode}}
                                     </template>
                                 </el-table-column>
                             </el-table>
@@ -155,6 +159,7 @@ export default {
     data() {
         return {
             tableData: {},
+            utypeone:'',
             actions: [],
             crumbs: [],
             formId: "",
@@ -162,8 +167,8 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'files-form_files',//固定资产流程 BusinessCard-form_fixedBusinessCard  低值易耗办公品  BusinessCard-form_lowBusinessCard 
-            formName: 'files_forms',
+            appFlowName: 'motor-trainingapplication_train',//固定资产流程 BusinessCard-form_fixedBusinessCard  低值易耗办公品  BusinessCard-form_lowBusinessCard 
+            formName: 'cardPrinting',
             comments: [],
             dialogVisibleCrumb: false,
             flowNodeUrl: "",
@@ -194,10 +199,9 @@ export default {
     },
     methods: {
         getFormDetails(formId) {
-
             let $self = this;
             $self.formId = formId;
-            $self.url = "/api/v1/files_forms/" + $self.formId;
+            $self.url = "/api/v1/cardPrinting/detail/" + $self.formId;
             console.log('DetailUrl', $self.url)
             $self.getFormDetailsData();
         },
@@ -208,8 +212,17 @@ export default {
             //     console.log(res);
             // });
             let response = await $self.getDetails();
-            if (response) {
-                $self.tableData = response.data;
+            if (response.data.content) {
+                $self.tableData = response.data.content;
+                // debugger
+                // $self.tableData.forEach(item=>{
+                    if($self.tableData.utype=='1'){
+                        this.utypeone='是'
+                    }
+                    else{
+                        this.utypeone='否'
+                    }
+                // })
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
