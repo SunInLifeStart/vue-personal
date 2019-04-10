@@ -442,8 +442,6 @@ export default {
         },
         handlePreview() { },
         handleRemove() { },
-
-
         //获取申请人列表
         getUsers() {
             axios.get('/api/v1/users').then(res => {

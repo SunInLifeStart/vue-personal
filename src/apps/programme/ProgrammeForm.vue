@@ -164,38 +164,26 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="评审/谈判名单">
-                            <el-col :span="3">
-                                <el-input v-model="formData.organName"></el-input>
-                            </el-col>
-                            <el-col :span="2">(组长)</el-col>
-                            <el-col :span="3">
-                                <el-input v-model="formData.organName"></el-input>
-                            </el-col>
-                            <el-col :span="3" :offset="1">
-                                <el-input v-model="formData.organName"></el-input>
-                            </el-col>
-                            <el-col :span="3" :offset="1">
-                                <el-input v-model="formData.organName"></el-input>
-                            </el-col>
-                            <el-col :span="3" :offset="1">
-                                <el-input v-model="formData.organName"></el-input>
-                            </el-col>
-                            <el-col :span="3" :offset="1">
-                                <el-input v-model="formData.organName"></el-input>
-                            </el-col>
-                            <!--<el-select-->
-                                    <!--v-model="formData.value"-->
-                                    <!--multiple-->
-                                    <!--filterable-->
-                                    <!--allow-create-->
-                                    <!--default-first-option>-->
-                                <!--<el-option-->
-                                        <!--v-for="item in []"-->
-                                        <!--:key="item.value"-->
-                                        <!--:label="item.label"-->
-                                        <!--:value="item.value">-->
-                                <!--</el-option>-->
-                            <!--</el-select>-->
+                            <!--<el-col :span="3">-->
+                                <!--<el-input v-model="formData.organName"></el-input>-->
+                            <!--</el-col>-->
+                            <!--<el-col :span="2">(组长)</el-col>-->
+                            <!--<el-col :span="3">-->
+                                <!--<el-input v-model="formData.organName"></el-input>-->
+                            <!--</el-col>-->
+                            <el-select
+                                    v-model="formData.value"
+                                    multiple
+                                    filterable
+                                    allow-create
+                                    default-first-option>
+                                <el-option
+                                        v-for="item in []"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -513,6 +501,9 @@
 </script>
 <style lang="scss" scoped>
     #ProgrammeForm {
+        .el-select {
+            width: 100%;
+        }
         .tableNoBorder {
             width: 100%;
             table-layout: fixed;

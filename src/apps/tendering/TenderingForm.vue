@@ -31,9 +31,9 @@
                         <el-form-item label="招标方式">
                             <el-radio-group v-model="formData.radio">
                                 <el-radio key="1" value="1" label="公开招标(有形市场)"></el-radio>
-                                <el-radio key="1" value="1" label="公开招标(法定媒体)"></el-radio>
-                                <el-radio key="1" value="1" label="公开招标(其他媒体)"></el-radio>
-                                <el-radio key="1" value="1" label="邀请招标"></el-radio>
+                                <el-radio key="2" value="2" label="公开招标(法定媒体)"></el-radio>
+                                <el-radio key="3" value="3" label="公开招标(其他媒体)"></el-radio>
+                                <el-radio key="4" value="4" label="邀请招标"></el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
