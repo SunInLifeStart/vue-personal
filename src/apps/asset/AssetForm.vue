@@ -1,9 +1,9 @@
 <template>
-    <el-dialog title="资产管理" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+    <el-dialog title="资产采购" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">
         <div id="AssetForm">
-            <el-form ref="formupdate" :model="formData" :rules="rules" label-width="110px">
-                <el-row>
-                    <el-col :span="8">
+            <el-form ref="formupdate" :model="formData" :rules="rules" label-width="100px">
+                <el-row class="filterForm">
+                    <el-col :span="12">
                         <el-form-item label="申请人" prop="proposer">
                             <el-select v-model="formData.proposer" placeholder="请选择" @change="payeeChange" filterable>
                                 <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
@@ -11,7 +11,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="12">
                         <el-form-item label="申请部门" prop="applyDept">
                             <el-select v-model="formData.applyDept" placeholder="请选择" filterable>
                                 <el-option v-for="item in payeeOrgan" :key="item.id" :label="item.name" :value="item.name">
@@ -19,13 +19,14 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                   </el-row>
+                   <el-row class="filterForm">
+                       <el-col :span="12">
                         <el-form-item label="申请日期" prop="applyDate">
                             <el-date-picker v-model="formData.applyDate" type="date"></el-date-picker>
                         </el-form-item>
                     </el-col>
-                    <!-- <el-row></el-row> -->
-                    <el-col :span="8">
+                       <el-col :span="12">
                         <el-form-item label="资产类型" prop="assetsType">
                             <el-select v-model="formData.assetsType" placeholder="请选择" filterable @change="typeChange">
                                 <el-option v-for="item in assetTypes" :key="item.id" :label="item.name" :value="item.name">
@@ -33,23 +34,30 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="是否月度资金计划内" prop="plan" label-width="140px">
-                            <el-radio v-model="formData.plan" :label="true">是</el-radio>
-                            <el-radio v-model="formData.plan" :label="false">否</el-radio>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="是否年度预算内" prop="budget">
+                   </el-row>
+                    <el-row class="filterForm">
+                   
+                    <el-col :span="12">
+                        <el-form-item label="是否年度预算内" prop="budget" label-width="140px" style="margin-left: 3px;">
                             <el-radio v-model="formData.budget" :label="true">是</el-radio>
                             <el-radio v-model="formData.budget" :label="false">否</el-radio>
                         </el-form-item>
                     </el-col>
+                     <el-col :span="12">
+                        <el-form-item label="是否月度资金计划内" prop="plan" label-width="140px" style="margin-left: 3px;">
+                            <el-radio v-model="formData.plan" :label="true">是</el-radio>
+                            <el-radio v-model="formData.plan" :label="false">否</el-radio>
+                        </el-form-item>
+                    </el-col>
+                 </el-row>
+                <el-row>
                     <el-col :span="24">
                         <el-form-item label="备注" prop="remark">
                             <el-input v-model="formData.remark"></el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row class="filterForm">
                     <el-col :span="24">
                         <el-form-item label="采购明细">
                             <div style="float: right;">
@@ -532,4 +540,16 @@ export default {
     -webkit-appearance: none;
   }
 }
+</style>
+<style scoped>
+
+#AssetForm .filterForm >>> .el-form-item__content{
+        width: calc(100% - 120px);
+    }
+    #AssetForm .filterForm >>> .el-select {
+        width: calc(100% - 15px);
+    }
+    #AssetForm .filterForm >>> .el-date-editor{
+        width: calc(100% - 14px);
+    }
 </style>

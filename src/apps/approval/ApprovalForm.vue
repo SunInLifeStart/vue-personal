@@ -464,6 +464,9 @@ export default {
                 if (valid) {
                     this.saveForm(type);
                 }
+                else {
+                        this.msgTips("用印明细不完整，请填写完整！", "warning");
+                    }
             });
         },
         // 提交保存
