@@ -19,14 +19,14 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                   </el-row>
-                   <el-row class="filterForm">
-                       <el-col :span="12">
+                </el-row>
+                <el-row class="filterForm">
+                    <el-col :span="12">
                         <el-form-item label="申请日期" prop="applyDate">
                             <el-date-picker v-model="formData.applyDate" type="date"></el-date-picker>
                         </el-form-item>
                     </el-col>
-                       <el-col :span="12">
+                    <el-col :span="12">
                         <el-form-item label="资产类型" prop="assetsType">
                             <el-select v-model="formData.assetsType" placeholder="请选择" filterable @change="typeChange">
                                 <el-option v-for="item in assetTypes" :key="item.id" :label="item.name" :value="item.name">
@@ -34,22 +34,22 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                   </el-row>
-                    <el-row class="filterForm">
-                   
+                </el-row>
+                <el-row class="filterForm">
+
                     <el-col :span="12">
                         <el-form-item label="是否年度预算内" prop="budget" label-width="140px" style="margin-left: 3px;">
                             <el-radio v-model="formData.budget" :label="true">是</el-radio>
                             <el-radio v-model="formData.budget" :label="false">否</el-radio>
                         </el-form-item>
                     </el-col>
-                     <el-col :span="12">
+                    <el-col :span="12">
                         <el-form-item label="是否月度资金计划内" prop="plan" label-width="140px" style="margin-left: 3px;">
                             <el-radio v-model="formData.plan" :label="true">是</el-radio>
                             <el-radio v-model="formData.plan" :label="false">否</el-radio>
                         </el-form-item>
                     </el-col>
-                 </el-row>
+                </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="备注" prop="remark">
@@ -144,10 +144,10 @@
 </template>
 <script>
 /* eslint-disable */
-import moment from "moment";
-import FilesOperate from "../FilesOperate";
-import { application } from "../application.js";
-import { publicMethods } from "../application.js";
+import moment from 'moment';
+import FilesOperate from '../FilesOperate';
+import { application } from '../application.js';
+import { publicMethods } from '../application.js';
 import axios from 'axios';
 import cookies from 'js-cookie';
 export default {
@@ -155,7 +155,7 @@ export default {
     name: 'AssetForm',
     data() {
         return {
-            appFlowName: "asset-form_asset",
+            appFlowName: 'asset-form_asset',
             counts: 0,
             dialogFormVisible: false,
             purposeDialog: false,
@@ -167,16 +167,16 @@ export default {
             assetTypes: [
                 {
                     id: '01',
-                    name: '租赁资产',
+                    name: '租赁资产'
                 },
                 {
                     id: '02',
-                    name: '固定资产',
+                    name: '固定资产'
                 },
                 {
                     id: '03',
-                    name: '低值易耗品',
-                },
+                    name: '低值易耗品'
+                }
             ],
             cookie_uname: '',
             cookie_oname: '',
@@ -187,38 +187,37 @@ export default {
                 proposer: [
                     {
                         required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入申请人"
+                        trigger: 'blur', //何事件触发
+                        message: '请输入申请人'
                     }
                 ],
                 applyDept: [
                     {
                         required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入申请部门"
+                        trigger: 'blur', //何事件触发
+                        message: '请输入申请部门'
                     }
                 ],
                 applyDate: [
                     {
                         required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入申请日期"
+                        trigger: 'blur', //何事件触发
+                        message: '请输入申请日期'
                     }
                 ],
                 assetsType: [
                     {
                         required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入资产类型"
+                        trigger: 'blur', //何事件触发
+                        message: '请输入资产类型'
                     }
-                ],
+                ]
             }
         };
     },
     components: {
         FilesOperate
     },
-    props: ['formId', 'operationType'],
     mounted() {
         this.getUsers();
     },
@@ -265,11 +264,11 @@ export default {
                 applyDeptId: '',
                 proposer: cookies.get('uname'),
                 applyDept: cookies.get('oname'),
-                assetsType: '',//资产类型
-                supplyCode: '',//资产类型-流程判断
+                assetsType: '', //资产类型
+                supplyCode: '', //资产类型-流程判断
                 plan: true,
                 budget: true,
-                inbuget: true,
+                inbuget: true
             };
             return formData;
         },
@@ -287,18 +286,18 @@ export default {
                     data.name == '' ||
                     JSON.stringify(data.number) == '' ||
                     data.reason == '' ||
-                   JSON.stringify(data.price) == '' || 
-                     JSON.stringify(data.inventory)== ''
+                    JSON.stringify(data.price) == '' ||
+                    JSON.stringify(data.inventory) == ''
                 ) {
                     compare = false;
                 }
             }
-            this.$refs["formupdate"].validate(valid => {
+            this.$refs['formupdate'].validate(valid => {
                 if (valid) {
                     if (compare) {
                         this.saveForm(type);
                     } else {
-                        this.msgTips("采购明细不完整，请填写完整！", "warning");
+                        this.msgTips('采购明细不完整，请填写完整！', 'warning');
                     }
                 }
             });
@@ -306,28 +305,35 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
-            let response = await $self.saveFormData("/api/v1/asset_forms/save", $self.formData);
+            let response = await $self.saveFormData(
+                '/api/v1/asset_forms/save',
+                $self.formData
+            );
             if (response) {
                 $self.formId = response.data.id;
                 $self.dialogFormVisible = false;
                 if (params) {
-                    $self.msgTips("提交成功", "success");
-                    console.log(this.createForm_status)
+                    $self.msgTips('提交成功', 'success');
+                    console.log(this.createForm_status);
                     if (this.createForm_status) {
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-                        console.log('actions', actions.data)
-                        actions.data.types = actions.data.types.filter(
-                            function (item) {
-                                return item.action == "COMMIT";
-                            }
+                        actions.data.types = actions.data.types.filter(function(
+                            item
+                        ) {
+                            return item.action == 'COMMIT';
+                        });
+                        actions.data.types[0]['comment'] =
+                            actions.data.types[0].name;
+                        await $self.startSignal(
+                            actions.data.types[0],
+                            'fromeEdit'
                         );
-                        await $self.startSignal(actions.data.types[0]);
                         $self.emitMessage();
                     }
                 } else {
-                    $self.msgTips("保存成功", "success");
+                    $self.msgTips('保存成功', 'success');
                     if (this.createForm_status) {
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
@@ -336,16 +342,16 @@ export default {
                 }
             } else {
                 if (params) {
-                    $self.msgTips("提交失败", "warning");
+                    $self.msgTips('提交失败', 'warning');
                 } else {
-                    $self.msgTips("保存失败", "warning");
+                    $self.msgTips('保存失败', 'warning');
                 }
             }
         },
         handleSuccess(response, file) {
             const self = this;
             if (response.length > 0) {
-                response.forEach(function (item) {
+                response.forEach(function(item) {
                     self.formData.attachments.push(item);
                 });
             }
@@ -354,9 +360,8 @@ export default {
         submitUpload() {
             this.$refs.upload.submit();
         },
-        handlePreview() { },
-        handleRemove() { },
-
+        handlePreview() {},
+        handleRemove() {},
 
         //获取申请人列表
         getUsers() {
@@ -414,9 +419,9 @@ export default {
                 self
                     .$confirm('是否删除?', '提示', { type: 'warning' })
                     .then(() => {
-                        self.selectionItems.forEach(function (oData) {
+                        self.selectionItems.forEach(function(oData) {
                             if (oData.id == '') {
-                                self.formData.detail.forEach(function (
+                                self.formData.detail.forEach(function(
                                     item,
                                     index
                                 ) {
@@ -428,7 +433,7 @@ export default {
                                 axios
                                     .delete(
                                         '/api/v1/asset_forms/deleteDetail/' +
-                                        oData.id,
+                                            oData.id,
                                         '',
                                         {
                                             headers: {
@@ -438,7 +443,7 @@ export default {
                                         }
                                     )
                                     .then(res => {
-                                        self.formData.detail.forEach(function (
+                                        self.formData.detail.forEach(function(
                                             item,
                                             index
                                         ) {
@@ -450,7 +455,7 @@ export default {
                                             }
                                         });
                                     })
-                                    .catch(function () {
+                                    .catch(function() {
                                         self.$message({
                                             message: '操作失败',
                                             type: 'error'
@@ -483,7 +488,7 @@ export default {
                                 }
                             )
                             .then(res => {
-                                self.formData.attachments.forEach(function (
+                                self.formData.attachments.forEach(function(
                                     item,
                                     index
                                 ) {
@@ -495,7 +500,7 @@ export default {
                                     }
                                 });
                             })
-                            .catch(function () {
+                            .catch(function() {
                                 self.$message({
                                     message: '操作失败',
                                     type: 'error'
@@ -504,52 +509,51 @@ export default {
                     }
                 );
             }
-        },
+        }
     },
     watch: {
         'formData.lowercase'(val) {
-            this.formData.upper = val ? this.convertCurrency(val) : "";
+            this.formData.upper = val ? this.convertCurrency(val) : '';
         }
     }
 };
 </script>
 <style lang="scss" scoped>
 #AssetForm {
-  .uploadBtn {
-    margin-right: 10px;
-    width: 100px;
-    height: 130px;
-    text-align: center;
-    float: left;
-    border: 1px solid #c0c4cc;
-    border-radius: 2px;
-    cursor: pointer;
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
 
-    .el-upload {
-      width: 100%;
-      height: 100%;
+        .el-upload {
+            width: 100%;
+            height: 100%;
 
-      i {
-        font-size: 50px;
-        margin-top: 35px;
-      }
+            i {
+                font-size: 50px;
+                margin-top: 35px;
+            }
+        }
     }
-  }
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-  }
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+    }
 }
 </style>
 <style scoped>
-
-#AssetForm .filterForm >>> .el-form-item__content{
-        width: calc(100% - 120px);
-    }
-    #AssetForm .filterForm >>> .el-select {
-        width: calc(100% - 15px);
-    }
-    #AssetForm .filterForm >>> .el-date-editor{
-        width: calc(100% - 14px);
-    }
+#AssetForm .filterForm >>> .el-form-item__content {
+    width: calc(100% - 120px);
+}
+#AssetForm .filterForm >>> .el-select {
+    width: calc(100% - 15px);
+}
+#AssetForm .filterForm >>> .el-date-editor {
+    width: calc(100% - 14px);
+}
 </style>

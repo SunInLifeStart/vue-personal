@@ -135,28 +135,28 @@
 </template>
 <script>
 import axios from 'axios';
-import moment from "moment";
-import Comment from "../Comment";
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 export default {
     mixins: [publicMethods],
-    name: "AssetDetail",
+    name: 'AssetDetail',
     data() {
         return {
             tableData: {},
             actions: [],
             crumbs: [],
-            formId: "",
-            textarea: "",
+            formId: '',
+            textarea: '',
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'asset-form_asset',//固定资产流程 asset-form_fixedAsset  低值易耗办公品  asset-form_lowAsset 
+            appFlowName: 'asset-form_asset', //固定资产流程 asset-form_fixedAsset  低值易耗办公品  asset-form_lowAsset
             formName: 'asset_forms',
             comments: [],
             dialogVisibleCrumb: false,
-            flowNodeUrl: "",
+            flowNodeUrl: '',
 
             crumb: { items: [] },
             tabledata: {
@@ -180,15 +180,13 @@ export default {
         Comment,
         FilesOperate
     },
-    mounted() {
-    },
+    mounted() {},
     methods: {
         getFormDetails(formId) {
-
             let $self = this;
             $self.formId = formId;
-            $self.url = "/api/v1/asset_forms/" + $self.formId;
-            console.log('DetailUrl', $self.url)
+            $self.url = '/api/v1/asset_forms/' + $self.formId;
+            console.log('DetailUrl', $self.url);
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -200,119 +198,125 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data;
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             } else {
-                $self.msgTips("获取表单失败", "warning");
+                $self.msgTips('获取表单失败', 'warning');
             }
             let actions = await $self.getActions();
-            let crumbs = await $self.getCrumbs();
+            // let crumbs = await $self.getCrumbs();
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
-            $self.crumbs = { items: crumbs.data, index: -1 };
+            //  $self.crumbs = { items: crumbs.data, index: -1 };
             $self.comments = comments.data;
+            /** 
             for (var i = 0; i < $self.crumbs.items.length; i++) {
                 if ($self.crumbs.items[i].active) {
                     $self.crumbs.index = i;
                 }
             }
+            */
         }
     }
 };
 </script>
 <style lang="scss">
 #AssetDetail {
-  .el-step__main {
-    margin-top: 10px;
-  }
-  .audit {
-    position: relative;
-    margin-bottom: 10px;
-    font-size: 14px;
-    box-shadow: none;
-    border: 0;
-    font-weight: bold;
-    .avatar {
-      position: absolute;
-      left: 5px;
-      top: 5px;
-      width: 36px;
-      height: 36px;
-      img {
-        width: 36px;
-        height: 36px;
-        border: 1px solid #dddddd;
-        border-radius: 50%;
-      }
+    .el-step__main {
+        margin-top: 10px;
     }
-    .info {
-      margin-left: 60px;
-      display: inline-block;
-      width: calc(100% - 60px);
-      .creator {
-        height: 32px;
-        line-height: 32px;
-        a {
-          color: #4a6495;
-          text-decoration-line: none;
+    .audit {
+        position: relative;
+        margin-bottom: 10px;
+        font-size: 14px;
+        box-shadow: none;
+        border: 0;
+        font-weight: bold;
+        .avatar {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 36px;
+            height: 36px;
+            img {
+                width: 36px;
+                height: 36px;
+                border: 1px solid #dddddd;
+                border-radius: 50%;
+            }
         }
-      }
-      .content {
-        min-height: 32px;
-      }
+        .info {
+            margin-left: 60px;
+            display: inline-block;
+            width: calc(100% - 60px);
+            .creator {
+                height: 32px;
+                line-height: 32px;
+                a {
+                    color: #4a6495;
+                    text-decoration-line: none;
+                }
+            }
+            .content {
+                min-height: 32px;
+            }
+        }
     }
-  }
-  .input-with-select {
-    width: 0px;
-    margin-right: 10px;
-    .el-input-group__prepend {
-      background-color: #409eff;
-      border-color: #409eff;
-      color: #ffffff;
-      border-radius: 4px;
+    .input-with-select {
+        width: 0px;
+        margin-right: 10px;
+        .el-input-group__prepend {
+            background-color: #409eff;
+            border-color: #409eff;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+        &.reject .el-input-group__prepend {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .el-input__inner {
+            width: 0;
+            padding: 0;
+            border: 0;
+        }
+        .el-input__suffix {
+            left: 8px;
+        }
     }
-    &.reject .el-input-group__prepend {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+    #actionList {
+        background: #f4f4f4;
+        border-bottom: 1px solid #eaeaea;
+        height: 40px;
+        width: 100%;
+        z-index: 10;
+        .btnList {
+            line-height: 40px;
+            padding: 12px 10px;
+            cursor: pointer;
+        }
+        .btnList:hover {
+            background: #c7e0f4;
+        }
     }
-    .el-input__inner {
-      width: 0;
-      padding: 0;
-      border: 0;
+    .btnhide {
+        display: none;
     }
-    .el-input__suffix {
-      left: 8px;
+    .crumbList {
+        margin: 15px 0px;
     }
-  }
-  #actionList {
-    background: #f4f4f4;
-    border-bottom: 1px solid #eaeaea;
-    height: 40px;
-    width: 100%;
-    z-index: 10;
-    .btnList {
-      line-height: 40px;
-      padding: 12px 10px;
-      cursor: pointer;
-    }
-    .btnList:hover {
-      background: #c7e0f4;
-    }
-  }
-  .btnhide {
-    display: none;
-  }
-  .crumbList {
-    margin: 15px 0px;
-  }
 }
 body .el-table th.gutter {
-  display: table-cell !important;
+    display: table-cell !important;
 }
 .fullScreen {
-  position: fixed;
-  top: 0px;
-  z-index: 10;
-  background: #fff;
-  left: 0px;
-  right: 0px;
+    position: fixed;
+    top: 0px;
+    z-index: 10;
+    background: #fff;
+    left: 0px;
+    right: 0px;
 }
 </style>
