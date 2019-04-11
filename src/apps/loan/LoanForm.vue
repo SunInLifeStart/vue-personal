@@ -490,14 +490,13 @@ export default {
         },
         getNum() {
             const self = this;
+            let params = {
+                code: 'loan_forms'
+            };
             axios
-                .get('/api/v1/loan_forms/getNo', {
-                    headers: {
-                        'Content-type': 'application/json'
-                    }
-                })
+                .post('/synergy-common/serialNumber/getByTableCode', params)
                 .then(res => {
-                    this.formData.number = res.data;
+                    this.formData.number = res.data.content.serialNumber;
                 })
                 .catch(function() {
                     self.$message({

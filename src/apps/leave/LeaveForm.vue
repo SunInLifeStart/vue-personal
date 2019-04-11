@@ -169,7 +169,7 @@ export default {
                 code: 'motor-holiday'
             };
             axios
-                .post('/serialNumber/getByTableCode', params)
+                .post('/synergy-common/serialNumber/getByTableCode', params)
                 .then(res => {
                     this.formData.no = res.data.content.serialNumber;
                 })

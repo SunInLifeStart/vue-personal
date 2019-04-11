@@ -633,7 +633,7 @@ export default {
                 code: 'travel_forms'
             };
             axios
-                .post('/serialNumber/getByTableCode', params)
+                .post('/synergy-common/serialNumber/getByTableCode', params)
                 .then(res => {
                     this.formData.number = res.data.content.serialNumber;
                 })
