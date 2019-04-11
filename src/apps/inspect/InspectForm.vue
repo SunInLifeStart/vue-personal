@@ -48,7 +48,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="截至日期:">
-              <el-date-picker style="width:100%" type="date" v-model="formData.deadline" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-date-picker style="width:100%" type="date" v-model="formData.deadline" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
