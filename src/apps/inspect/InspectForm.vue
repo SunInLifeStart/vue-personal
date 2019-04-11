@@ -79,31 +79,12 @@
         </el-row>
         <el-row>
           <el-col :span="24">
-            <el-form-item label="附件">
-              <el-upload
-                name="files"
-                class="upload-demo uploadBtn"
-                ref="upload"
-                @click.native="attType='attType1'"
-                action="/api/v1/files/upload"
-                :on-success="handleSuccess"
-                :auto-upload="true"
-                :with-credentials="true"
-                :show-file-list="false"
-              >
+            <el-form-item label="会议材料及附件">
+              <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                 <i class="el-icon-plus"></i>
               </el-upload>
-              <div
-                v-for="item in formData.attachments"
-                :key="item.id"
-                style="float:left"
-                v-show="item.attType == 'attType1'"
-              >
-                <FilesOperate
-                  :item="item"
-                  :options="{preview:true,download:true,del:true}"
-                  @getId="getId"
-                ></FilesOperate>
+              <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
               </div>
             </el-form-item>
           </el-col>
