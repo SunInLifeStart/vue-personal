@@ -1,14 +1,14 @@
 <template>
-<el-dialog title="外部培训申请表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">  
+<el-dialog title="外部培训申请表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">  
     <div id="TrainForm">
         <el-form :model="formData" label-width="100px" :rules="rules" ref="formupdate">
-            <!-- <el-row >
+            <el-row >
                 <el-col  :span="8" :offset="16" > 
-                     <el-form-item label="流水号：" prop="suggestion">
+                     <el-form-item label="流水号：" >
                         <span >{{formData.number}}</span>
                     </el-form-item>
                 </el-col>
-            </el-row> -->
+            </el-row>
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="申请人" prop="submitter">
@@ -117,6 +117,7 @@
 <script>
 /* eslint-disable */
 import moment from "moment";
+import axios from 'axios';
 import FilesOperate from "../FilesOperate";
 import { application } from "../application.js";
 import { publicMethods } from "../application.js";
@@ -213,6 +214,28 @@ export default {
         FilesOperate
     },
     methods: {
+        floaes(){
+            const self = this;
+            let codes={ code: 'trainingApplication'}
+            axios.post( '/synergy-common/serialNumber/getByTableCode',codes,
+                
+                {
+                    headers: {
+                        'Content-type':
+                            'application/json'
+                    }
+                }
+            )
+            .then(res => {
+               this.formData.number=res.data.content.serialNumber
+            })
+            .catch(function () {
+                self.$message({
+                    message: '流水号失败',
+                    type: 'error'
+                });
+            });
+        },
         time_change(time) {
             // 改变时间获取数据
             if (time === null) {
@@ -237,6 +260,7 @@ export default {
             this.dialogFormVisible = this.createForm_status = true;
         },
         resetForm() {
+            this.floaes()
             let formData = {
                 attachments: [],
                 submitter: this.$store.getters.LoginData.uname || '', //申请人
@@ -326,7 +350,9 @@ export default {
         handlePreview() {},
         handleRemove() {}
     },
-    mounted() {}
+    mounted() {
+        this.floaes()
+    }
 };
 </script>
 <style lang="scss" scoped>
@@ -360,7 +386,7 @@ export default {
 <style scoped>
 
 #TrainForm  >>> .el-form-item__content{
-        width: calc(100% - 80px);
+        width: calc(100% - 112px);
     }
     #TrainForm  >>> .el-select {
         width: calc(100% - 15px);

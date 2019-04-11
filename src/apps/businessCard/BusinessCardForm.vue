@@ -23,7 +23,8 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="资金计划所属月份" >
-                            <el-select v-model="formData.umonth" placeholder="请选择月份" @change="payeeChange" clearable filterable>
+                             <!-- @change="payeeChange" -->
+                            <el-select v-model="formData.umonth" placeholder="请选择月份" clearable filterable>
                                 <el-option v-for="item in onOption"
                                     :key="item.value"
                                     :label="item.label"
@@ -41,31 +42,26 @@
                  </el-row>
                  <el-row>
                     <el-col :span="24">
-                        <el-form-item label="名片印刷明细" :rules="rulesform" :model="formData">
+                        <el-form-item label="名片印刷明细" label-width="100px" :rules="rulesform" :model="formData">
                             <div style="float: right;">
                                 <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
                                 <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                             </div>
                             <el-table :data="formData.cardPrinting" border style="width: 100%; margin-top: 5px;" @selection-change="handleSelectionChange">
-                               <el-table-column type="selection" width="60px"></el-table-column>
+                               <el-table-column type="selection" width="40px"></el-table-column>
                                 <el-table-column label="姓名">
                                     <template slot-scope="scope">
-                                         <el-select v-model="scope.row.uname" placeholder="请选择" @change="payeeChange" clearable filterable>
+                                         <el-select v-model="scope.row.uname" placeholder="请选择" @change="payeeChange" clearable filterable
+                                          allow-create default-first-option>
                                                 <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
                                                 </el-option>
                                             </el-select>
-                                       <!-- <el-form-item :prop="'cardPrinting.' + scope.$index + '.name'" :rules="rulesform.name">
-                                           <el-select v-model="scope.row.name" placeholder="请选择" @change="payeeChange" clearable filterable>
-                                                <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
-                                                </el-option>
-                                            </el-select>
-                                        </el-form-item> -->
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="organ" label="部门">
                                     <template slot-scope="scope">
-                                        <!-- <el-input v-model="scope.row.organ"></el-input> -->
-                                        <el-select v-model="scope.row.organ" placeholder="请选择" clearable filterable>
+                                       <el-select v-model="scope.row.organ" placeholder="请选择" clearable filterable
+                                       allow-create default-first-option>
                                             <el-option v-for="item in payeeOrgan" :key="item.id" :label="item.name" :value="item.name">
                                             </el-option>
                                         </el-select>
@@ -320,10 +316,10 @@ export default {
                     {
                         id: '',
                         count: 0,
-                        uname: '',//姓名
-                        organ: '',
+                        uname: this.$store.getters.LoginData.uname || '',//姓名
+                        organ: this.$store.getters.LoginData.oname || '',
                         duty:'',//职务
-                        quantity:'',//数量
+                        quantity:null,//数量
                         phone: '',
                         telephone:'',
                         mailbox: '',
@@ -445,14 +441,21 @@ export default {
         
         //选择的人变化
         payeeChange(val) {
-            this.formData.organName = '';
+            // debugger
+            // this.formData.organName = '';
+            this.formData.cardPrinting.forEach(item=>{
+                item.organ=''
+            })
             for (let data of this.payeePeople) {
                 if (data.name == val) {
                     this.payeeOrgan = data.organs;
                 }
             }
             if (this.payeeOrgan.length == 1) {
-                this.formData.organName = this.payeeOrgan[0].name;
+                // this.formData.organName = this.payeeOrgan[0].name;
+                this.formData.cardPrinting.forEach(item=>{
+                item.organ=this.payeeOrgan[0].name;
+            })
             }
         },
         

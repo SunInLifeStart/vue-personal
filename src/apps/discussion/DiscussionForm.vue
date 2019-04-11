@@ -4,8 +4,8 @@
         <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="流水号:" prop="number">
-                        <el-input v-model="formData.number"></el-input>
+                    <el-form-item label="流水号:">
+                        {{formData.number}}
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -47,7 +47,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="提请时间" prop="timeApplication">
-                        <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.timeApplication" style="width:100%" type="datetime">
+                        <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" :clearable="false" v-model="formData.timeApplication" style="width:100%" type="datetime">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -157,15 +157,12 @@ export default {
             formData: this.resetForm(),
             users: [],
             rules: {
-                number: [
-                    { required: true, message: '请输入流水单号', trigger: 'blur' }
-                ],
                 branchlineTo: [
                     { required: true, message: '请输入会议类型', trigger: 'blur' }
                 ],
-                timeApplication: [
-                    { required: true, message: '请输入提请时间', trigger: 'blur' }
-                ],
+                // timeApplication: [
+                //     { required: true, message: '请输入提请时间', trigger: 'blur' }
+                // ],
                 // creatorName: [
                 //     { required: true, message: '请输入活动名称', trigger: 'blur' }
                 // ],
@@ -199,6 +196,11 @@ export default {
         }
     },
     methods: {
+        async getTableCode() {
+            let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'issuesReported' })
+            if (user) this.formData.number = user.data.content.serialNumber
+            this.changePeople()
+        },
         async getDiscussionUser() {
             let user = await this.getUsers("/api/v1/users/list/organs")
             if (user) this.options = user.data
@@ -264,7 +266,7 @@ export default {
                 business: '',
                 // committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 applyDepartment: this.$store.getters.LoginData.oname || '',
-                timeApplication: '',
+                timeApplication: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 topicName: '',
                 organName: this.$store.getters.LoginData.oname || '',
                 creatorName: this.$store.getters.LoginData.uname || '',

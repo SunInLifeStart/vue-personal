@@ -171,7 +171,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'motor-trainingapplication_train',
+            appFlowName:'motor-usingapproval_seal',
             formName:'singApproval',
             comments:[],
             dialogVisibleCrumb:false,

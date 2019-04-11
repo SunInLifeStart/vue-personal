@@ -161,7 +161,6 @@ export default {
         FilesOperate
     },
     methods: {
-        handleSuccess(){},
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;

@@ -33,7 +33,6 @@
             <el-form-item label="被督办部门负责人:">
               <el-select
                 v-model="formData.inspector"
-                @change="getInspectorsId()"
                 filterable
                 placeholder="请选择"
                 style="width:100%"
@@ -49,14 +48,20 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="截至日期:">
-              <el-date-picker style="width:100%" type="date" v-model="formData.deadline" format="yyyy 年 MM 月 dd 日" value-format="yyyy-MM-dd"></el-date-picker>
+              <el-date-picker style="width:100%" type="date" v-model="formData.deadline" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="24">
+          <el-col :span="12">
             <el-form-item label="备注:">
               <el-input v-model="formData.remark"></el-input>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="督办类型:">
+              <el-radio v-model="formData.radio" label="1">红灯</el-radio>
+              <el-radio v-model="formData.radio" label="2">黄灯</el-radio>
             </el-form-item>
           </el-col>
         </el-row>
@@ -342,9 +347,9 @@ export default {
       const self = this;
 
       axios
-        .get("/api/v1/users/role/deptManager")
+        .get("/api/v1/users/role/xtfz_deptManager")
         .then(res => {
-          // self.inspectors = res.data;
+          self.inspectors = res.data;
         })
         .catch(function() {
           self.$message({
