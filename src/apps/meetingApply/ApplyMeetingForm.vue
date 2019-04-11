@@ -5,7 +5,7 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号:" prop="number">
-                            <el-input v-model="formData.number"></el-input>
+                            {{formData.number}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -236,6 +236,11 @@
             this.getDiscussionUser()
         },
         methods: {
+            async getTableCode() {
+                let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'meetingApply' })
+                if (user) this.formData.number = user.data.content.serialNumber
+                this.changePeople()
+            },
             async getDiscussionUser() {
                 let user = await this.getUsers("/api/v1/users/list/organs")
                 if (user) this.options = user.data

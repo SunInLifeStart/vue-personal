@@ -212,6 +212,7 @@
             },
             cleanform() {
                 this.$refs.ApplyMeetingForm.createForm();
+                this.$refs.ApplyMeetingForm.getTableCode();
             },
             refreshBoardData() {
                 this.getList();

@@ -211,6 +211,7 @@ export default {
         },
         cleanform() {
             this.$refs.DiscussionForm.createForm();
+            this.$refs.DiscussionForm.getTableCode();
         },
         refreshBoardData() {
             this.getList();

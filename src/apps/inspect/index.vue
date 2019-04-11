@@ -3,7 +3,7 @@
     <el-card class="box-card">
       <!-- 查询 -->
       <div id="InspectFilter">
-        <el-form :inline="true" class="demo-form-inline" :model="formInline">
+        <el-form :inline="true" class="demo-form-inline" label-width="90px"  label-position="left" :model="formInline">
           <el-row>
             <el-col :span="8">
               <el-form-item label="标题：" prop="title">
@@ -17,7 +17,19 @@
             </el-col>
             <el-col :span="8">
               <el-form-item label="被督办部门负责人：" prop="inspector">
-                <el-input v-model="formInline.inspector"></el-input>
+                <el-select
+                        v-model="formInline.inspector"
+                        filterable
+                        placeholder="请选择"
+                        style="width:100%"
+                >
+                  <el-option
+                          v-for="item in inspectors"
+                          :key="item.id"
+                          :label="item.name"
+                          :value="item.name"
+                  ></el-option>
+                </el-select>
               </el-form-item>
             </el-col>
           </el-row>
@@ -34,7 +46,7 @@
                     v-for="item in statusAll"
                     :key="item.id"
                     :label="item.name"
-                    :value="item.value"
+                    :value="item.code"
                   ></el-option>
                 </el-select>
               </el-form-item>
@@ -44,7 +56,7 @@
                 <!-- <el-button type="primary" @click="onSubmit">查询</el-button>
                 <el-button type="primary" @click="onReset">重置</el-button>-->
                 <el-button type="primary" @click="searchList">查询</el-button>
-                <el-button type="primary" @click="resetInput">重置</el-button>
+                <el-button @click="resetInput">重置</el-button>
               </el-form-item>
             </el-col>
           </el-row>
@@ -139,6 +151,7 @@ export default {
       },
       statusAll: CONFIG["status"],
       tableData: [],
+      inspectors: [],
       formDetails: {},
       formId: "",
       params: {
@@ -157,6 +170,20 @@ export default {
     InspectDetail
   },
   methods: {
+    getInspector() {
+          const self = this;
+          axios
+              .get("/api/v1/users/role/xtfz_deptManager")
+              .then(res => {
+                  self.inspectors = res.data;
+              })
+              .catch(function() {
+                  self.$message({
+                      message: "操作失败",
+                      type: "error"
+                  });
+              });
+      },
     resetStatus(data) {
       let $self = this;
       for (let item of $self.tableData) {
@@ -195,9 +222,11 @@ export default {
         // if (response.data.content.list.length > 0) {
         //   // let formId = response.data.content.list[0].id;
         //   $self.$refs.InspectDetail.getFormDetails(formId);
-        // }
-        $self.tableData = response.data.forms;
-        $self.params.total = response.data.totalCount;
+          $self.tableData = response.data.forms;
+          // }
+          if ($self.tableData.length > 0)
+          this.$refs.InspectDetail.getFormDetails($self.tableData[0].id);
+          $self.params.total = response.data.totalCount;
       } else {
         $self.msgTips("获取列表失败", "warning");
       }
@@ -308,17 +337,23 @@ export default {
   },
   mounted() {
     this.getList();
+    this.getInspector();
   }
 };
 </script>
+
 <style lang="scss" scoped>
-#InspectFilter .el-form-item--small.el-form-item {
-  width: 100%;
-}
+  #InspectFilter {
+    .el-select {
+      width: 100%;
+    }
+    .el-form-item--small.el-form-item{
+      width: 100%;
+    }
+  }
 </style>
 <style scoped>
-#InspectFilter .filterForm >>> .el-form-item__content {
-  width: calc(100% - 80px);
-}
+  #InspectFilter >>> .el-form-item__content{
+    width: calc(100% - 100px);
+  }
 </style>
-
