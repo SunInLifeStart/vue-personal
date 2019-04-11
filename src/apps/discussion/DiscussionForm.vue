@@ -4,8 +4,7 @@
         <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="流水号:" prop="number">
-                        <!--<el-input v-model="formData.number"></el-input>-->
+                    <el-form-item label="流水号:">
                         {{formData.number}}
                     </el-form-item>
                 </el-col>
@@ -158,9 +157,6 @@ export default {
             formData: this.resetForm(),
             users: [],
             rules: {
-                number: [
-                    { required: true, message: '请输入流水单号', trigger: 'blur' }
-                ],
                 branchlineTo: [
                     { required: true, message: '请输入会议类型', trigger: 'blur' }
                 ],
