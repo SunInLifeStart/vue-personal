@@ -5,17 +5,17 @@
             <div id="ContractFilter">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-row class="filterForm">
-                        <el-col :span="8">
+                        <el-col :span="6">
                             <el-form-item label="合同名称">
                                 <el-input placeholder="" v-model="formInline.contractName"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="6">
                             <el-form-item label="合同对方">
                                 <el-input placeholder="" v-model="formInline.partyB"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                        <el-col :span="6">
                             <el-form-item label="单据状态">
                                 <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
                                     <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
@@ -23,16 +23,9 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
-                            <div>
-                                &nbsp;
-                            </div>
-                        </el-col>
-                        <el-col :span="16" class="">
-                            <el-form-item class="">
-                                <el-button type="primary" @click="searchList">查询</el-button>
-                                <el-button @click="resetInput">重置</el-button>
-                            </el-form-item>
+                         <el-col :span="6">
+                            <el-button type="primary" @click="searchList">查询</el-button>
+                            <el-button @click="resetInput">重置</el-button>
                         </el-col>
                     </el-row>
                 </el-form>
@@ -66,7 +59,7 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <ContractDetail :formId="formId" ref="ContractDetail" @reloadList="reloadList"></ContractDetail>
+            <ContractDetail :formId="formId" ref="ContractDetail" @reloadList="reloadList"  @resetStatus = "resetStatus"></ContractDetail>
             <!-- :formId="formId" -->
         </el-card>
         <ContractForm ref="ContractForm" @reloadList="reloadList"></ContractForm>
@@ -196,7 +189,15 @@ export default {
             this.formInline.partyB = '';
             this.formInline.status = '';
             this.getList();
-        }
+        },
+        resetStatus(data){
+              let $self = this;
+            for(let item of $self.tableData){
+                if(data.id == item.id){
+                  item.status = data.status;
+                }
+            }
+        },
     },
     mounted() {
         this.getList();

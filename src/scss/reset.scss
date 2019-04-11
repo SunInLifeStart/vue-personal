@@ -52,6 +52,22 @@ input[type=number]::-webkit-outer-spin-button {
     }
 }
 
+#ContractForm{
+    table{
+        td{
+            input{
+                border: none;
+                height: 38px;
+                text-align: left
+            }
+            text{
+                border: none;
+                text-align: left
+            }
+        }
+    }
+}
+
 .emoji ul {
     list-style-type: none;
     padding: 0px;

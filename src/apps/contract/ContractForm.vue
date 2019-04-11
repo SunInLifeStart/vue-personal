@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="签订审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+    <el-dialog title="合同审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
         <div id="ContractForm">
             <el-form :model="formData" label-width="100px" :rules="rules" ref="formupdate">
                 <!-- <el-row style="margin-bottom:10px">
@@ -437,7 +437,8 @@ export default {
                                 return item.action == "COMMIT";
                             }
                         );
-                        await $self.startSignal(actions.data.types[0]);
+                        actions.data.types[0]["comment"] =  actions.data.types[0].name;
+                        await $self.startSignal(actions.data.types[0],"fromeEdit");
                         $self.emitMessage();
                     }
                 } else {
@@ -598,7 +599,7 @@ export default {
   }
   table td,
   table th {
-    border: 1px solid #000;
+    border: 1px solid #ddd;
     color: #666;
     height: 40px;
     vertical-align: middle;

@@ -8,34 +8,34 @@
                  <el-tab-pane label="新闻中心" name="second">
                     <PortalApp :type="'新闻中心'"></PortalApp>
                 </el-tab-pane>
-                <el-tab-pane label="工作简报" name="third">
+                <!-- <el-tab-pane label="工作简报" name="third">
                     <PortalApp :type="'工作简报'"></PortalApp>
-                </el-tab-pane>
+                </el-tab-pane> -->
                  <el-tab-pane label="规章制度" name="third_2">
                     <PortalApp :type="'规章制度'"></PortalApp>
                 </el-tab-pane>
                   <el-tab-pane label="通知公告" name="fourth">
                     <PortalApp :type="'通知公告'"></PortalApp>
                 </el-tab-pane>
-                <el-tab-pane label="通讯录" name="fifth">
+                <el-tab-pane label="通讯录/会表" name="fifth">
                     <PortalApp :type="'通讯录'"></PortalApp>
                 </el-tab-pane>
-                 <el-tab-pane label="工会活动" name="sixth">
+                 <!-- <el-tab-pane label="工会活动" name="sixth">
                     <PortalApp :type="'工会活动'"></PortalApp>
                 </el-tab-pane>
-             
-                <el-tab-pane label="集团发文" name="eighth">
+              -->
+                <el-tab-pane label="公司发文" name="eighth">
                     <PortalApp :type="'集团发文'"></PortalApp>
                 </el-tab-pane>
-                <el-tab-pane label="领导讲话" name="ninth">
+                <!-- <el-tab-pane label="领导讲话" name="ninth">
                     <PortalApp :type="'领导讲话'"></PortalApp>
-                </el-tab-pane>
-                 <el-tab-pane label="集团党建" name="ten">
+                </el-tab-pane> -->
+                 <!-- <el-tab-pane label="集团党建" name="ten">
                     <PortalApp :type="'partyBuilding'"></PortalApp>
-                </el-tab-pane> 
-                <el-tab-pane label="会表管理" name="eleven">
+                </el-tab-pane>  -->
+                <!-- <el-tab-pane label="会表管理" name="eleven">
                     <PortalApp :type="'集团会表'"></PortalApp>
-                </el-tab-pane>
+                </el-tab-pane> -->
                 <el-tab-pane label="app版本管理" name="seventh">
                      <PortalMobile></PortalMobile>
                 </el-tab-pane>

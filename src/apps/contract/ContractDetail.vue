@@ -15,9 +15,6 @@
                 <el-button type="primary" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
-            <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-            </el-steps> -->
             <el-form :model='tableData' class="formList">
                 <table style="width: 99%; height: 100%;margin-top: 5px; table-layout: fixed; word-break: break-all;">
                     <col style="width: 9%" />
@@ -50,8 +47,6 @@
                             发起时间
                         </td>
                         <td colspan="2">
-                            <!-- <el-date-picker v-model="tableData.initiateTime" type="datetime" placeholder="选择日期" style="width:100%">
-                            </el-date-picker> -->
                             {{tableData.initiateTime}}
                         </td>
                     </tr>
@@ -113,7 +108,6 @@
                         <td colspan="6">
                             <div class="attachments" v-for="item in tableData.attachments" :key="item.id" @click="downloadFile(item)">
                                 <p :title="item.name">{{item.name}}</p>
-                                <!-- <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i> -->
                             </div>
                         </td>
                     </tr>
@@ -150,11 +144,9 @@
                         </td>
                         <td colspan="3">
                             <el-radio v-model="tableData.deadline" label="1" disabled>自
-                                <!-- <el-input v-model="tableData.deadStartTime" style="width: 110px"></el-input> -->
                                 {{tableData.deadStartTime}}
                                 至
                                 {{tableData.deadEndTime}}
-                                <!-- <el-input v-model="tableData.deadEndTime" style="width: 110px"></el-input> -->
                             </el-radio>
                             <el-radio v-model="tableData.deadline" label="2" disabled>其他</el-radio>
                         </td>
@@ -317,19 +309,6 @@ export default {
             console.log(response)
             if (response) {
                 $self.tableData = response.data;
-                // if ($self.tableData.type == "true") {
-                //     $self.tableData.type = '是'
-                // }
-                // if ($self.tableData.isAnnualPlan == "true") {
-                //     $self.tableData.isAnnualPlan = '是'
-                // }
-                // if ($self.tableData.type == "false") {
-                //     $self.tableData.type = '否'
-                // }
-                // if ($self.tableData.isAnnualPlan == "false") {
-                //     $self.tableData.isAnnualPlan = '否'
-                // }
-
                 $self.$emit("resetStatus", { id: $self.tableData.id, status: $self.tableData.status });
 
             } else {
@@ -360,7 +339,7 @@ export default {
   }
   table td,
   table th {
-    border: 1px solid #000;
+    border: 1px solid #ddd;
     color: #666;
     height: 40px;
     vertical-align: middle;
