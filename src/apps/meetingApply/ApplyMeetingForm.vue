@@ -34,7 +34,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="提单时间" prop="committed">
-                            <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" :disabled="true">
+                            <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="datetime" :disabled="true">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
