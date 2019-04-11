@@ -76,8 +76,9 @@ export const publicMethods = {
                     let key = item.split(":")[0];
                     if (detailsData[key] || detailsData[key] == false) {
                         if (item.split(":")[1] == "arrays" && typeof (detailsData[key]) == "string") {
-                            options.push(key + "=" + '[' + detailsData[key] + ']');
+                            options.push(key + "=" + '[' + detailsData[key] + ']'); //如果是数组类型的拼成数组
                         } else {
+                            detailsData[key] = detailsData[key] === "" ? 0 : detailsData[key];
                             options.push(key + "=" + detailsData[key]);
                         }
                     } else {
