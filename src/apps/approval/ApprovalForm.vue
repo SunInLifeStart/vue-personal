@@ -279,42 +279,46 @@ export default {
    
             },
             onOption: [
+                 {
+                    value: 'farenzhang',
+                    label: '法人章'
+                },
                 {
-                    value: '党支部章',
+                    value: 'dangzhibuzhang',
                     label: '党支部章'
                 },
                 {
-                    value: '公章',
+                    value: 'gongzhang',
                     label: '公章'
                 },
                 {
-                    value: '合同章',
+                    value: 'hetongzhang',
                     label: '合同章'
                 },
                 {
-                    value: '工会章',
+                    value: 'gonghuizhang',
                     label: '工会章'
                 },
                 {
-                    value: '营业执照',
+                    value: 'yingyezhizhao',
                     label: '营业执照'
                 },
                 {
-                    value: '经审委印章',
+                    value: 'jingshenweizhang',
                     label: '经审委印章'
                 },
             ],
             typeOption: [
                 {
-                    value: '拜访函(企业)',
+                    value: 'baifanghan',
                     label: '拜访函(企业)'
                 },
                 {
-                    value: '人力资源模板文件',
+                    value: 'renliziyuan',
                     label: '人力资源模板文件'
                 },
                 {
-                    value: '日常行政管理',
+                    value: 'richangxingzheng',
                     label: '日常行政管理'
                 },
                 // {
@@ -322,7 +326,7 @@ export default {
                 //     label: '工会章'
                 // },
                 {
-                    value: '其它',
+                    value: 'others',
                     label: '其它'
                 }
             ],
