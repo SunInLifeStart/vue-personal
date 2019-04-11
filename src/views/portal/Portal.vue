@@ -295,6 +295,7 @@ export default {
                                 }
                                 this.newsListRight = res.data.data;
                                 this.newsList = arr_5.slice(0,5);
+                                console.log(this.newsListRight);
                                 break;
                             case "领导讲话":
                                 this.leaderSpeech = res.data.data;

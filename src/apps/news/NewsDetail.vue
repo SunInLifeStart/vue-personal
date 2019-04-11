@@ -57,17 +57,17 @@
                 <el-row>
                     <el-form-item label="发布到：">
                         <el-col :span="5">
-                            <el-checkbox label="集团网站" v-model="tableData.toSite" disabled="disabled"></el-checkbox>
+                            <el-checkbox label="公司网站" v-model="tableData.toSite" disabled="disabled"></el-checkbox>
                         </el-col>
                         <el-col :span="5">
-                            <el-checkbox label="集团门户" v-model="tableData.toPortal" disabled="disabled"></el-checkbox>
+                            <el-checkbox label="公司门户" v-model="tableData.toPortal" disabled="disabled"></el-checkbox>
                         </el-col>
-                        <el-col :span="5">
+                        <!-- <el-col :span="5">
                             <el-checkbox label="微信" v-model="tableData.toWechat" disabled="disabled"></el-checkbox>
                         </el-col>
                         <el-col :span="5">
                             <el-checkbox label="微博" v-model="tableData.toWeibo" disabled="disabled"></el-checkbox>
-                        </el-col>
+                        </el-col> -->
                     </el-form-item>
                 </el-row>
                 <el-row>

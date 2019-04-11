@@ -58,12 +58,12 @@
                     <el-col :span="6">
                         <el-checkbox label="公司门户" v-model="rows.toPortal"></el-checkbox>
                     </el-col>
-                    <el-col :span="6">
+                    <!-- <el-col :span="6">
                         <el-checkbox label="微信" v-model="rows.toWechat"></el-checkbox>
                     </el-col>
                     <el-col :span="6">
                         <el-checkbox label="微博" v-model="rows.toWeibo"></el-checkbox>
-                    </el-col>
+                    </el-col> -->
                 </el-form-item>
             </el-row>
             <el-row>

@@ -69,8 +69,7 @@ export default {
              if (process.env.NODE_ENV === 'production') {
                         url = "http://124.205.31.66:2097/static/edit.html?removeBar=true&&url="+ url;
                 }else{
-                        // url = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url="+ url;
-                         url= "http://static1.yxpe.com.cn/edit.html?removeBar=true&&url="+ url;
+                        url= "http://static1.yxpe.com.cn/edit.html?removeBar=true&&url="+ url;
                 }
             ntkoBrowser.openWindow(
                    url
@@ -86,7 +85,6 @@ export default {
     mounted() {
         let xml = {
             newsList: "新闻中心",
-            leaderSpeech: "领导讲话",
             anno: "通知公告",
             outgoing: "集团发文",
             nstitution: "nstitution",
@@ -94,7 +92,6 @@ export default {
             meetingTable: "集团会表",
             addressList: "集团通讯录",
             nstitution: "规章制度",
-            sociatyList:"工会活动",
             partyActive:"partyBuilding"
         };
 
@@ -109,22 +106,6 @@ export default {
             })
             .then(res => {
                 let data = res.data.data;
-                for (let i in data.url) {
-                    if(typeof data.url[i] == 'string'){
-                        let url = '',name = '',type = '';
-                        if(!data.url[i].includes('/api/v1/files')){
-                            url = data.url[i].replace('/files/','/oldfiles/');                           
-                        }else{
-                            url = data.url[i];
-                        }
-                        name = data.url[i].substring(data.url[i].lastIndexOf('/')+1,data.url[i].length);
-                        type = data.url[i].substring(data.url[i].lastIndexOf('.')+1,data.url[i].length).toUpperCase();
-                        data.url[i] = {url:url,name:name,type:type};
-                    }
-                    
-         
-                }
-                console.log(process.env.NODE_ENV);
                 if(data.text && JSON.parse(data.text).name){
                          if (process.env.NODE_ENV === 'production') {
                                     this.pdfUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url="+ JSON.parse(data.text).url;
@@ -136,17 +117,12 @@ export default {
                     if ('PDF,DOCX,PPTX,XLSX,DOC,XLS'.includes(data.url[0].type.toUpperCase())) {
                          if (process.env.NODE_ENV === 'production') {
                               this.pdfUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url=" + data.url[0].url;
+                              data.url.splice(0,1);
                          }else{
                              this.pdfUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&url=" + data.url[0].url;
-                         }
-                        
+                             data.url.splice(0,1);
+                         } 
                     }
-                    // else if (''.includes(data.url[0].type)) {
-                    //     // axios.get('/onlinePreview?url='+data.url[0].url).then(res => {
-                    //     //     this.pdfUrl = res.data.match(/http.*\.pdf/)[0].replace('http://thumb1.zgcgroup.vpn:8012','/pdfproxy');
-                    //     // });
-                    //      this.pdfUrl = data.url[0];
-                    // }
                 }
                 this.data = data;
             });
