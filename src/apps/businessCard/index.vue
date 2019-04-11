@@ -13,7 +13,7 @@
                         <el-col :span="8">
                             <el-form-item label="申请时间：">
                                 <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
-                                 <el-date-picker v-model="params.created" clearable value-format="yyyy-MM-dd 00:00:00" type="date" >
+                                 <el-date-picker v-model="params.created" clearable style="width:100%" value-format="yyyy-MM-dd 00:00:00" type="date" >
                                   </el-date-picker>
                             </el-form-item>
                         </el-col>
