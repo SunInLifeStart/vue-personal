@@ -173,7 +173,7 @@ export default {
             uploadImageType:'',
             users: [],
             selectionItems:[],
-            appFlowName: "motor-trainingapplication_train",
+            appFlowName: "motor-usingapproval_seal",
             rules: {
                 useItems: [
                     {
@@ -337,6 +337,7 @@ export default {
     methods: {
         // 时长
         getHour(a1,a2) {
+             const $self = this;
            var date3 = new Date(a2).getTime() - new Date(a1).getTime();   //时间差的毫秒数   
             //计算出相差天数  
             var days=Math.floor(date3/(24*3600*1000))  
@@ -347,7 +348,14 @@ export default {
                 this.formData.timeLang=''
             }
             else{
-                this.formData.timeLang=days*24+new Number(hours)
+                if(days*24+new Number(hours)<0){
+                    $self.msgTips("结束时间不能在开始时间之前", "error");
+                    this.formData.timeLang=''
+                    this.formData.endTime=''
+                }
+                else{
+                    this.formData.timeLang=days*24+new Number(hours)
+                }
             }
             return hours
         },
