@@ -130,8 +130,8 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'motor-Submissioningapplication_Submission',
-            formName:'SubmissioningApplication',
+            appFlowName:'submission-form_submission',
+            formName:'submission_forms',
             comments:[],
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
@@ -147,29 +147,14 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/"+$self.formName+"/detail/" + $self.formId;
+            $self.url= "/api/v1/"+$self.formName+"/" + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
-                $self.tableData = response.data.content;
-                   if($self.tableData.type=="true"){
-                        $self.typeJuder='是'
-                        
-                    }
-                    if($self.tableData.isAnnualPlan=="true"){
-                        $self.isAnnualPlanone='是'
-                    }
-                    if($self.tableData.type=="false"){
-                        $self.typeJuder='否'
-                    }
-                    if($self.tableData.isAnnualPlan=="false"){
-                        
-                        $self.isAnnualPlanone='否'
-                    }
-               
+                $self.tableData = response.data;
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
 
             } else {
@@ -177,16 +162,9 @@ export default {
             }
             // debugger;
             let actions = await $self.getActions();
-            // let crumbs = await $self.getCrumbs();
-            let comments =  await $self.getComments();
             $self.actions = actions.data.types;
+            let comments =  await $self.getComments();
             $self.comments = comments.data;
-            // $self.crumbs =  {items: crumbs.data, index: -1};
-            // for(var i= 0; i<$self.crumbs.items.length; i++){
-            //     if($self.crumbs.items[i].active){
-            //         $self.crumbs.index = i;    
-            //     }
-            // }
         }
     }
 };
