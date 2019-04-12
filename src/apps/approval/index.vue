@@ -65,7 +65,8 @@
                 </div>
                 <div id="ApprovalList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
-                    <el-table-column prop="useItems" label="印章种类">
+                    <el-table-column  label="印章种类">
+                         <template slot-scope="scope">{{scope.row.useItems | useItemsfilter}}</template>
                     </el-table-column>
                     <el-table-column prop="created" label="申请时间">
                     </el-table-column>
@@ -188,6 +189,18 @@ export default {
         ApprovalDetail
     },
     filters: {
+        useItemsfilter: function(data) {
+            let xmlJson = {
+               "farenzhang":"法人章", 
+               "dangzhibuzhang":"党支部章",
+               "gongzhang" :"公章",
+               "hetongzhang" :"合同章",
+               "gonghuizhang" :"工会章",
+               "yingyezhizhao" :"营业执照",
+               "jingshenweizhang" :"经审委印章"
+            };
+            return xmlJson[data];
+        },
         filterStatus: function(data) {
             let xmlJson = {
                "00":"已保存", 

@@ -11,7 +11,7 @@
         </div>
         <br />
         <div class="formContent">
-            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <div><el-button type="primary" v-if="tableData.status != '04'"   @click="getFlowNode" >查看流程</el-button></div>
             <br />
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
@@ -48,11 +48,11 @@
                
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="印章种类：">{{tableData.useItems}}
+                        <el-form-item label="印章种类：">{{tableData.useItems | useItemsfilter}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="类型：">{{tableData.sealType}}
+                        <el-form-item label="类型：">{{tableData.sealType | filterStatus}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -177,6 +177,29 @@ export default {
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
         };
+    },
+     filters: {
+        useItemsfilter: function(data) {
+            let xmlJson = {
+               "farenzhang":"法人章", 
+               "dangzhibuzhang":"党支部章",
+               "gongzhang" :"公章",
+               "hetongzhang" :"合同章",
+               "gonghuizhang" :"工会章",
+               "yingyezhizhao" :"营业执照",
+               "jingshenweizhang" :"经审委印章"
+            };
+            return xmlJson[data];
+        },
+        filterStatus: function(data) {
+            let xmlJsons = {
+               "baifanghan":"拜访函(企业)", 
+               "renliziyuan":"人力资源模板文件",
+               "richangxingzheng" :"日常行政管理",
+               "others" :"其它",
+            };
+            return xmlJsons[data];
+        }
     },
     components: {
         Comment,
