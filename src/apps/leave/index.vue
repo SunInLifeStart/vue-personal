@@ -100,9 +100,9 @@ export default {
             params: {
                 pageNum: 1,
                 pageSize: 5,
-                // uname: '',
-                // oname: '',
-                // status: '',
+                uname: '',
+                oname: '',
+                status: null,
                 total: 0
             },
             formName: 'motor-holiday'
@@ -172,7 +172,8 @@ export default {
         resetInput() {
             this.params = {};
             this.params.total = 0;
-            // this.params.uname = this.params.oname  = '';
+            this.params.uname = this.params.oname = '';
+            this.params.status = null;
             this.params.pageNum = 1;
             this.params.pageSize = 5;
             this.getList();
