@@ -55,6 +55,10 @@
                         <el-form-item label="会议名称：">{{tableData.conferenceTitle}}
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="结束时间：">{{tableData.endTime}}
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">

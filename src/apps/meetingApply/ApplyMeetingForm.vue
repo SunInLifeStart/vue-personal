@@ -20,6 +20,11 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="会议地点" prop="meetingPlace">
+                            <el-input v-model="formData.meetingPlace" placeholder="请输入会议地点"></el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
@@ -41,13 +46,14 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="会议地点" prop="meetingPlace">
-                            <el-input v-model="formData.meetingPlace" placeholder="请输入会议地点"></el-input>
+                        <el-form-item label="开会时间" prop="meetingTime">
+                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="datetime">
+                            </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="开会时间" prop="meetingTime">
-                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.meetingTime" style="width:100%" type="datetime">
+                        <el-form-item label="结束时间" prop="endTime">
+                            <el-date-picker v-model="formData.endTime" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="datetime">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -201,9 +207,9 @@
                 ],
                 options: [],
                 rules: {
-                    // number: [
-                    //     { required: true, message: '请输入流水号', trigger: 'blur' }
-                    // ],
+                    endTime: [
+                        { required: true, message: '请输入结束时间', trigger: 'blur' }
+                    ],
                     branchlineTo: [
                         { required: true, message: '请输入会议类型', trigger: 'blur' }
                     ],
@@ -320,6 +326,7 @@
                     meetingPlace: '',
                     meetingTime: '',
                     conferenceTitle: '',
+                    endTime: '',
                     organName: this.$store.getters.LoginData.oname || '',
                     creatorName: this.$store.getters.LoginData.uname || '',
                     creatorId: this.$store.getters.LoginData.uid || '',
