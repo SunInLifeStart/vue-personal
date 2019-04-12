@@ -1,6 +1,7 @@
 <template>
   <div id="APPROVE">
-    <SubmissionDetail :formId="formId" ref="SubmissionDetail"></SubmissionDetail>
+    <SubmissionDetail ref="SubmissionDetail"> </SubmissionDetail>
+     <!-- :formId="formId" -->
   </div>
 </template>
 <script>
@@ -13,10 +14,10 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.SubmissionDetail.setTab();
+         this.$refs.SubmissionDetail.getFormDetails(this.formId);
     },
     components: {
-        SubmissionDetail
+       SubmissionDetail
     },
     watch: {},
 
@@ -43,10 +44,6 @@ export default {
             overflow-x: hidden;
             overflow-y: auto;
             padding: 15px 30px;
-        }
-        .tabmsg {
-            display: block;
-            margin: 15px 0px;
         }
         
     }
