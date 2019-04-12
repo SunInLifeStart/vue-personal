@@ -203,34 +203,6 @@ export default {
                     $self.msgTips($self, "保存失败", "warning");
                 }
             }
-            axios
-                .post(
-                    '/api/v1/submission_forms/save',
-                    JSON.stringify(this.formData),
-                    {
-                        headers: {
-                            'Content-type': 'application/json'
-                        }
-                    }
-                )
-                .then(res => {
-                    self.currentFormId = res.data.id;
-                    self.formData.text = JSON.parse(res.data.text);
-                    self.$message({
-                        message: '操作成功',
-                        type: 'success'
-                    });
-                    this.info = 'success';
-                    this.$emit('info', this.info);
-                    if (action == 'save') {
-                        self.submitformData();
-                    } else {
-                        self.$emit('refreshData');
-                    }
-                    if(this.operationType == 'create'){
-                        self.clearformData();
-                    }
-                })
         },
         createformData() {
             this.formData = this.resetForm();

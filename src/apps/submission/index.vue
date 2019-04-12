@@ -3,22 +3,21 @@
         <el-card class="box-card">
                <!-- 查询 -->
                 <div id="SubmissionFilter">
-                    <el-form :inline="true"  class="demo-form-inline">
+                    <el-form :inline="true"  label-width="90px"  label-position="left" class="demo-form-inline">
                         <el-row class="filterForm">
                             <el-col :span="8">
-                                <el-form-item label="申请人">
-                                    <el-input placeholder="请输入申请人" v-model="params.submitter"></el-input>
+                                <el-form-item label="呈报件编号">
+                                    <el-input placeholder="请输入呈报件编号" v-model="params.submissionNo"></el-input>
                                 </el-form-item>
                             </el-col>
                            <el-col :span="8">
-                                <el-form-item label="所属部门">
-                                    <el-input placeholder="请输入所属部门" v-model="params.department"></el-input>
+                                <el-form-item label="文件标题">
+                                    <el-input placeholder="请输入文件标题" v-model="params.title"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">
-                                 <el-form-item label="培训时间" >
-                                        <el-date-picker v-model="params.SubmissioningTime" type="daterange" range-separator="至" start-placeholder="开始日期" 
-                                        end-placeholder="结束日期"  value-format="yyyy-MM-dd HH:mm:ss" @change="time_change"></el-date-picker>
+                                 <el-form-item label="拟稿时间" >
+                                        <el-date-picker v-model="params.draftTime" type="date" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                                 </el-form-item>
                             </el-col>
                          </el-row>
@@ -32,11 +31,6 @@
                                         :value="item.value">
                                         </el-option>
                                     </el-select>
-                                </el-form-item>
-                            </el-col>
-                            <el-col :span="8">
-                               <el-form-item label="提单时间">
-                                    <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd 00:00:00" type="date" ></el-date-picker>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8" class="searchBtn">
@@ -69,13 +63,12 @@
                      </el-table-column>
                      <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                             
+                            <!--v-if="scope.row.status == '00' || scope.row.status == '02'"-->
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left"
-                             v-if="scope.row.status == '00' || scope.row.status == '02'" >
+                             >
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left"
-                             v-if="scope.row.status == '00' || scope.row.status == '02'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -263,13 +256,13 @@ export default {
 <style scoped>
 
 #SubmissionFilter .filterForm >>> .el-form-item__content{
-        width: calc(100% - 80px);
+        width: calc(100% - 100px);
     }
     #SubmissionFilter .filterForm >>> .el-select {
-        width: calc(100% - 15px);
+        width: 100%;
     }
     #SubmissionFilter .filterForm >>> .el-date-editor{
-        width: calc(100% - 0px);
+        width: 100%;
     }
 </style>
 
