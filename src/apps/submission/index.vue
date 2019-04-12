@@ -55,15 +55,15 @@
                 </div>
                 <div id="SubmissionList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
-                    <el-table-column prop="submitter" label="申请人">
+                    <el-table-column prop="submissionNo" label="呈报件编号">
                     </el-table-column>
-                    <el-table-column prop="department" label="所属部门">
+                    <el-table-column prop="title" label="文件标题">
                     </el-table-column>
-                    <el-table-column prop="committed" label="提单时间">
+                    <el-table-column prop="draftUnit" label="拟稿单位">
                     </el-table-column>
-                    <el-table-column prop="participant" label="培训/学习(参加人员)">
+                    <el-table-column prop="draftTime" label="拟稿时间">
                     </el-table-column>
-                    <el-table-column prop="schedule" width="250" label="日程安排"></el-table-column>
+                    <el-table-column prop="draftUser" width="250" label="拟稿人"></el-table-column>
                      <el-table-column  width="100" label="单据状态">
                          <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                      </el-table-column>
@@ -82,7 +82,7 @@
                     </el-table-column>
                 </el-table>
                    <br />
-                 <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+                 <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.page" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
             </div>
           </el-card>
         <br>
@@ -129,17 +129,11 @@ export default {
                     }
                 ],
             params: {
-                pageNum: 1,
+                page: 1,
                 pageSize: 5,
-                department: "",
-                submitter: "",
-                total: 0,
-                committed:"",
-                status:"",
-                SubmissioningTime:[],
-                startTime:"",
-                endTime:"",
-               
+                desc: true,
+                options: [],
+                orderBy: "created"
             },
             formName:"SubmissioningApplication"
         };
@@ -175,17 +169,17 @@ export default {
            
         },
         //获取列表
-         async getList(pageNum) {
+         async getList(page) {
             let $self = this;
-            $self.url = "/api/v1/SubmissioningApplication/queryList";
+            $self.url = "/api/v1/submission_forms/query";
             let response = await $self.getQueryList();
             if (response) {
-                if (response.data.content.list.length > 0) {
-                   let formId = response.data.content.list[0].id;
+                if (response.data.forms.length > 0) {
+                   let formId = response.data.forms[0].id;
                    $self.$refs.SubmissionDetail.getFormDetails(formId);
                 }
-                $self.tableData = response.data.content.list;
-                $self.params.total = response.data.content.total;
+                $self.tableData = response.data.forms;
+                $self.params.total = response.data.totalCount;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
@@ -207,7 +201,7 @@ export default {
         },
         reloadList(params) {
             if (params == "reload") {
-                this.params.pageNum = 1;
+                this.params.page = 1;
                 this.getList();
             } else {
                 this.$refs.SubmissionDetail.getFormDetails(params.id);
@@ -223,9 +217,9 @@ export default {
         },
 
         //分页
-        currentChange(pageNum) {
-            this.params.pageNum = pageNum;
-            this.getList(pageNum);
+        currentChange(page) {
+            this.params.page = page;
+            this.getList(page);
         },
         sizeChange(pageSize) {
             this.params.pageSize = pageSize;

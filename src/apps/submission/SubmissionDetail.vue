@@ -21,63 +21,45 @@
                 <el-row>
                     
                     <el-col :span="8">
-                        <el-form-item label="申请人：">{{tableData.submitter}}
+                        <el-form-item label="呈报件编号：">{{tableData.submissionNo}}
                     </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属部门：">{{tableData.department}}
+                        <el-form-item label="文件标题：">{{tableData.title}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提单时间：">{{tableData.committed}}
+                        <el-form-item label="拟稿单位：">{{tableData.draftUnit}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="培训/学习(项目)：">{{tableData.SubmissioningPrograms}}
+                        <el-form-item label="拟稿时间：">{{tableData.draftTime}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="培训时间：">{{tableData.startTime}}至{{tableData.endTime}}
+                        <el-form-item label="拟稿人：">{{tableData.draftUser}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="电话：">{{tableData.phone}}
+                        <el-form-item label="电话：">{{tableData.telephone}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="是否资金计划内：">{{typeJuder}}
+                        <el-form-item label="共同发起人：">{{tableData.commonUser}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="是否纳入年度计划：">{{isAnnualPlanone}}
+                        <el-form-item label="备注：">{{tableData.remarks}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="预算费用：">{{tableData.upper}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="培训/学习(目的内容)：">{{tableData.SubmissioningContent}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="培训/学习(参加人员)：">{{tableData.participant}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="日程安排：">{{tableData.schedule}}
-                        </el-form-item>
-                    </el-col>
+                    <!--<el-col :span="8">-->
+                        <!--<el-form-item label="预算费用：">{{tableData.upper}}-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
                 </el-row>
                 <el-row>
                     <el-col :span="24">
