@@ -12,7 +12,7 @@
         <br />
         <div class="formContent">
             <div>
-                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
+                <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
@@ -32,10 +32,10 @@
                     <el-col :span="8">
                         <el-form-item label="所属月份：">{{tableData.umonth}}</el-form-item>
                     </el-col>
-                    <el-col :span="24">
+                    <el-col :span="8">
                         <el-form-item label="是否属于年度预算内：">{{utypeone}}</el-form-item>
                     </el-col>
-                    <el-col :span="24">
+                    <el-col :span="8">
                         <el-form-item label="总印刷数量：">{{tableData.totlenumbers}}</el-form-item>
                     </el-col>
                     <el-col :span="24">

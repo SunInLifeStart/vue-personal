@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="文件印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+    <el-dialog title="文件印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">
         <div id="FilesForm">
             <el-form ref="formupdate" :model="formData" :rules="rules" label-width="90px">
                 <el-row>
@@ -27,7 +27,7 @@
                          </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="资金计划所属月份" label-width="70px">
+                        <el-form-item label="资金计划所属月份" label-width="89px">
                             <!-- <el-input v-model="formData.apply" placeholder="资金计划所属月份"></el-input> -->
                             <el-select v-model="formData.yuefen" placeholder="请选择月份" @change="payeeChange" clearable filterable>
                                 <el-option v-for="item in onOption"
@@ -45,7 +45,7 @@
                         </el-form-item>
                     </el-col>
                   <el-col :span="24">
-                        <el-form-item label="文件印刷明细" >
+                        <el-form-item label="文件印刷明细" label-width="104px">
                             <div style="float: right;">
                                 <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
                                 <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
@@ -153,51 +153,51 @@ export default {
             payeeOrgan: [],
             onOption: [
                 {
-                    value: '一月',
+                    value: 'yiyue',
                     label: '一月'
                 },
                 {
-                    value: '二月',
+                    value: 'eryue',
                     label: '二月'
                 },
                 {
-                    value: '三月',
+                    value: 'sanyue',
                     label: '三月'
                 },
                 {
-                    value: '四月',
+                    value: 'siyue',
                     label: '四月'
                 },
                 {
-                    value: '五月',
+                    value: 'wuyue',
                     label: '五月'
                 },
                 {
-                    value: '六月',
+                    value: 'liuyue',
                     label: '六月'
                 },
                 {
-                    value: '七月',
+                    value: 'qiyue',
                     label: '七月'
                 },
                 {
-                    value: '八月',
+                    value: 'bayue',
                     label: '八月'
                 },
                 {
-                    value: '九月',
+                    value: 'jiuyue',
                     label: '九月'
                 },
                 {
-                    value: '十月',
+                    value: 'shiyue',
                     label: '十月'
                 },
                 {
-                    value: '十一月',
+                    value: 'shiyiyue',
                     label: '十一月'
                 },
                 {
-                    value: '十二月',
+                    value: 'shieryue',
                     label: '十二月'
                 },
             ],
@@ -569,7 +569,7 @@ export default {
 </script>
 <style scoped>
 #FilesForm  >>> .el-select{
-        width: calc(100% - 0px);
+        width: calc(100% - 8px);
     }
      #FilesForm >>> .el-form-item__content{
         width: calc(100% - 80px);
