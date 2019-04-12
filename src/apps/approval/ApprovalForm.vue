@@ -49,6 +49,7 @@
                 </el-col>
             </el-row>
             <el-row>
+                 <!-- {{formData.useItems}} -->
                 <el-col :span="12">
                     <el-form-item label="印章种类" prop="useItems">
                          <el-select style="width:100%;" clearable v-model="formData.useItems" placeholder="请选择印章种类">
@@ -61,11 +62,11 @@
                         </el-select>
                     </el-form-item>
                 </el-col>
-                <!-- :style="{display:(formData.useItems=='公章'?'black':'none')}"  -->
+               <!-- :style="{display:(formData.useItems=='公章'?'black':'none')}"  -->
                 <el-col :span="12" >
-                    <el-form-item label="类型" :prop="formData.useItems=='公章'?'sealType':''">
+                    <el-form-item label="类型" :prop="formData.useItems=='gongzhang'?'sealType':''">
                        <el-select style="width:100%;" clearable v-model="formData.sealType" placeholder="请选择类型" 
-                       :disabled="formData.useItems=='公章'?false:true">
+                       :disabled="formData.useItems=='gongzhang'?false:true">
                            <el-option
                                 v-for="item in typeOption"
                                 :key="item.value"

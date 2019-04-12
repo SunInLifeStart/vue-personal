@@ -123,28 +123,32 @@ export default {
             tableData: [],
             formDetails: {},
             onOption: [
+                 {
+                    value: 'farenzhang',
+                    label: '法人章'
+                },
                 {
-                    value: '党支部章',
+                    value: 'dangzhibuzhang',
                     label: '党支部章'
                 },
                 {
-                    value: '公章',
+                    value: 'gongzhang',
                     label: '公章'
                 },
                 {
-                    value: '合同章',
+                    value: 'hetongzhang',
                     label: '合同章'
                 },
                 {
-                    value: '工会章',
+                    value: 'gonghuizhang',
                     label: '工会章'
                 },
                 {
-                    value: '营业执照',
+                    value: 'yingyezhizhao',
                     label: '营业执照'
                 },
                 {
-                    value: '经审委印章',
+                    value: 'jingshenweizhang',
                     label: '经审委印章'
                 },
             ],
