@@ -5,17 +5,17 @@
             <div id="ContractFilter">
                 <el-form :inline="true" class="demo-form-inline">
                     <el-row class="filterForm">
-                        <el-col :span="6">
+                        <el-col :span="8">
                             <el-form-item label="合同名称">
                                 <el-input placeholder="" v-model="formInline.contractName"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :span="8">
                             <el-form-item label="合同对方">
                                 <el-input placeholder="" v-model="formInline.partyB"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="6">
+                        <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
                                     <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
@@ -23,25 +23,33 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                         <el-col :span="6">
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
                             <el-button type="primary" @click="searchList">查询</el-button>
                             <el-button @click="resetInput">重置</el-button>
                         </el-col>
                     </el-row>
                 </el-form>
             </div>
-
             <!-- 新建 -->
-            <div class="toolbar">
+            <div class="toolbar" style="margin-top:5px;">
                 <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
             </div>
             <div id="ContractList">
-                <el-table :data="tableData" style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
+                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
                     <el-table-column prop="contractName" label="合同名称" min-width="260"></el-table-column>
                     <el-table-column prop="partyB" label="合同对方" min-width="260"></el-table-column>
                     <el-table-column prop="contractNum" label="合同编号" min-width="200"></el-table-column>
                     <el-table-column prop="creatorName" label="制单人" min-width="120"></el-table-column>
-                    <el-table-column prop="status" label="单据状态" min-width="110"></el-table-column>
+                    <el-table-column prop="status" label="状态">
+                        <template slot-scope="scope">
+                            {{scope.row.status | filterStatus}}
+                            <!--
+                            {{scope.row.status == '00'? '已保存' :scope.row.status == '01' ? '审核中': scope.row.status == '02' ? '已驳回': scope.row.status == '03' ? '已撤销': scope.row.status == '04'? '已完成': ''}}
+                        -->
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left">
@@ -59,7 +67,7 @@
         </el-card>
         <br>
         <el-card class="box-card">
-            <ContractDetail :formId="formId" ref="ContractDetail" @reloadList="reloadList"  @resetStatus = "resetStatus"></ContractDetail>
+            <ContractDetail :formId="formId" ref="ContractDetail" @reloadList="reloadList" @resetStatus="resetStatus"></ContractDetail>
             <!-- :formId="formId" -->
         </el-card>
         <ContractForm ref="ContractForm" @reloadList="reloadList"></ContractForm>
@@ -67,39 +75,68 @@
     </div>
 </template>
 <script>
-import ContractForm from "./ContractForm";
-import ContractDetail from "./ContractDetail";
-import { publicMethods } from "../application.js";
+import ContractForm from './ContractForm';
+import ContractDetail from './ContractDetail';
+import { publicMethods } from '../application.js';
 import { CONFIG } from '../data.js';
 export default {
     mixins: [publicMethods],
-    name: "Contract",
+    name: 'Contract',
     data() {
         return {
             tableData: [],
             formDetails: {},
-            formId: "",
+            formId: '',
             params: {
                 desc: true,
                 page: 1,
                 pageSize: 5,
-                department: "",
-                submitter: "",
-                total: 0,
-                orderBy: 'created',
-                desc: true,
+                orderBy: 'id',
                 options: []
             },
             searchOptions: [],
-            formName: "contract_forms",
-
-            statusAll: CONFIG['status'],//单据状态
+            formName: 'contract_forms',
+            statusAll: [
+                {
+                    value: '00',
+                    label: '已保存'
+                },
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '03',
+                    label: '已撤销'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ], //单据状态
             formInline: {
                 contractName: '',
                 partyB: '',
                 status: ''
-            },
+            }
         };
+    },
+    filters: {
+        filterStatus: function(data) {
+            console.log(data);
+            let xmlJson = {
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '03': '已撤销',
+                '04': '已完成'
+            };
+            return xmlJson[data];
+        }
     },
     components: {
         ContractForm,
@@ -110,8 +147,7 @@ export default {
         async getList(pageNum) {
             let $self = this;
             this.onSubmit();
-            ///api/v1/contract_forms/query
-            $self.url = "/api/v1/contract_forms/query";
+            $self.url = '/api/v1/contract_forms/query';
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.forms.length > 0) {
@@ -121,7 +157,7 @@ export default {
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
             } else {
-                $self.msgTips("获取列表失败", "warning");
+                $self.msgTips('获取列表失败', 'warning');
             }
         },
         onSubmit() {
@@ -164,7 +200,7 @@ export default {
             this.$refs.ContractForm.setDataFromParent(data);
         },
         reloadList(params) {
-            if (params == "reload") {
+            if (params == 'reload') {
                 this.params.page = 1;
                 this.getList();
             } else {
@@ -190,14 +226,14 @@ export default {
             this.formInline.status = '';
             this.getList();
         },
-        resetStatus(data){
-              let $self = this;
-            for(let item of $self.tableData){
-                if(data.id == item.id){
-                  item.status = data.status;
+        resetStatus(data) {
+            let $self = this;
+            for (let item of $self.tableData) {
+                if (data.id == item.id) {
+                    item.status = data.status;
                 }
             }
-        },
+        }
     },
     mounted() {
         this.getList();
@@ -206,20 +242,20 @@ export default {
 </script>
 <style lang="scss" scoped>
 #ContractFilter .el-form-item--small.el-form-item {
-  width: 100%;
+    width: 100%;
 }
 #Contract {
-  .searchBtn {
-    padding-right: 10px;
-    .positionBtn {
-      text-align: right;
+    .searchBtn {
+        padding-right: 10px;
+        .positionBtn {
+            text-align: right;
+        }
     }
-  }
 }
 </style>
 <style scoped>
 #ContractFilter .filterForm >>> .el-form-item__content {
-  width: calc(100% - 80px);
+    width: calc(100% - 80px);
 }
 </style>
 

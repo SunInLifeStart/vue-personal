@@ -15,6 +15,13 @@
                 <el-button type="primary" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
+            <el-row style="margin-bottom:10px">
+                <el-col :span="8">
+                    <el-form-item label="流水号：">
+                        {{tableData.number}}
+                    </el-form-item>
+                </el-col>
+            </el-row>
             <el-form :model='tableData' class="formList">
                 <table style="width: 99%; height: 100%;margin-top: 5px; table-layout: fixed; word-break: break-all;">
                     <col style="width: 9%" />
@@ -35,19 +42,19 @@
                             提单人
                         </td>
                         <td>
-                            {{tableData.applyName}}
+                            {{tableData.applyname}}
                         </td>
                         <td>
                             所属部门
                         </td>
                         <td colspan="2">
-                            {{tableData.dept}}
+                            {{tableData.applydept}}
                         </td>
                         <td>
                             发起时间
                         </td>
                         <td colspan="2">
-                            {{tableData.initiateTime}}
+                            {{tableData.startTime}}
                         </td>
                     </tr>
                     <tr>
@@ -71,9 +78,15 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            合同类型
+                        </td>
+                        <td colspan="2">
+                            {{tableData.contractType}}
+                        </td>
+                        <td colspan="2">
                             所属项目
                         </td>
-                        <td colspan="6">
+                        <td colspan="2">
                             {{tableData.project}}
                         </td>
                     </tr>
@@ -117,38 +130,53 @@
                         </td>
                         <td colspan="6">
                             <el-row>
-                                <el-col :span="14">
-                                    <el-radio v-model="tableData.sum" label="1" disabled>
-                                         {{tableData.contractAmount}}
-                                        元</el-radio>
-                                    <el-radio v-model="tableData.sum" label="2" disabled>其他 成本上线总额
-                                         {{tableData.contractAmount}}
-                                        元</el-radio>
-                                </el-col>
-                                <el-col :span="10">
-                                    <el-radio v-model="tableData.budget" label="1" disabled>预算内</el-radio>
-                                    <el-radio v-model="tableData.budget" label="2" disabled>预算外</el-radio>
+                                <el-col :span="24">
+                                    <el-radio-group v-model="tableData.moneyRadio">
+                                        <el-radio label="1">
+                                            {{tableData.contractAmount}} 元
+                                        </el-radio>
+                                        <el-radio label="2">其他 成本上线总额 {{tableData.uptotal}} 元
+                                        </el-radio>
+                                    </el-radio-group>
                                 </el-col>
                             </el-row>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
+                            是否预算内
+                        </td>
+                        <td colspan="6">
+                            <el-radio-group v-model="tableData.est">
+                                <el-radio label="1">预算内</el-radio>
+                                <el-radio label="2">预算外</el-radio>
+                            </el-radio-group>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
                             经办人
                         </td>
-                        <td colspan="2">
-                             {{tableData.manager}}
+                        <td colspan="1">
+                            {{tableData.manager}}
                         </td>
                         <td>
                             合同期限
                         </td>
-                        <td colspan="3">
-                            <el-radio v-model="tableData.deadline" label="1" disabled>自
-                                {{tableData.deadStartTime}}
-                                至
-                                {{tableData.deadEndTime}}
-                            </el-radio>
-                            <el-radio v-model="tableData.deadline" label="2" disabled>其他</el-radio>
+                        <td colspan="4">
+                            <el-radio-group v-model="formData.dateRadio" @change="typeandradioChange('dateRadio')">
+                                <el-row>
+                                    <el-col :span="24">
+                                        <el-radio label="1">自{{tableData.effectiveStart}} 至{{tableData.effectiveEnd}}
+                                        </el-radio>
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="2">
+                                        <el-radio label="2" style="text-align: left;">其他</el-radio>
+                                    </el-col>
+                                </el-row>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr>
@@ -159,11 +187,13 @@
                             合同所涉经济行为批准文件
                         </td>
                         <td colspan="4">
-                            <el-radio v-model="tableData.paper" disabled label="1" >股东大会</el-radio>
-                            <el-radio v-model="tableData.paper" disabled label="2">董事会决议</el-radio>
-                            <el-radio v-model="tableData.paper" disabled label="3">会议纪要</el-radio>
-                            <el-radio v-model="tableData.paper" disabled label="4">请示批件</el-radio>
-                            <el-radio v-model="tableData.paper" disabled label="5">其他</el-radio>
+                            <el-radio-group v-model="tableData.contractallow">
+                                <el-radio label="1">股东大会</el-radio>
+                                <el-radio label="2">董事会决议</el-radio>
+                                <el-radio label="3">会议纪要</el-radio>
+                                <el-radio label="4">请示批件</el-radio>
+                                <el-radio label="5">其他</el-radio>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr>
@@ -171,9 +201,11 @@
                             合同相对方资质证照复印件
                         </td>
                         <td colspan="4">
-                            <el-radio v-model="tableData.copy" disabled label="1">有</el-radio>
-                            <el-radio v-model="tableData.copy" disabled label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
-                            <el-radio v-model="tableData.copy" disabled label="3">其他</el-radio>
+                            <el-radio-group v-model="tableData.contractphoto">
+                                <el-radio label="1">有</el-radio>
+                                <el-radio label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
+                                <el-radio label="3">其他</el-radio>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr>
@@ -181,9 +213,11 @@
                             合同价格形势
                         </td>
                         <td colspan="6">
-                            <el-radio v-model="tableData.shape" disabled label="1">固定总价</el-radio>
-                            <el-radio v-model="tableData.shape" disabled label="2">固定总和单价</el-radio>
-                            <el-radio v-model="tableData.shape" disabled label="3">其他</el-radio>
+                            <el-radio-group v-model="tableData.contractprice">
+                                <el-radio label="1">固定总价</el-radio>
+                                <el-radio label="2">固定总和单价</el-radio>
+                                <el-radio label="3">其他</el-radio>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr>
@@ -191,7 +225,7 @@
                             合同付款安排
                         </td>
                         <td colspan="6">
-                             {{tableData.arrange}}
+                            {{tableData.contractArrange}}
                         </td>
                     </tr>
                     <tr>
@@ -209,22 +243,12 @@
                                     </div>
                                 </el-col>
                                 <el-col :span="10">
-                                    年 月 日： {{tableData.digestTime}}
+                                    年 月 日： {{tableData.datecontractTime}}
                                 </el-col>
                             </el-row>
                         </td>
                     </tr>
                 </table>
-
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
-                            </div>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
@@ -268,28 +292,28 @@
     </div>
 </template>
 <script>
-import moment from "moment";
-import Comment from "../Comment";
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 export default {
     mixins: [publicMethods],
-    name: "ContractDetail",
+    name: 'ContractDetail',
     data() {
         return {
             tableData: {},
             actions: [],
             crumbs: [],
-            formId: "",
-            textarea: "",
+            formId: '',
+            textarea: '',
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'motor-trainingapplication_train',
+            appFlowName: 'contractforms',
             formName: 'contract_forms',
             comments: [],
             dialogVisibleCrumb: false,
-            flowNodeUrl: "",
+            flowNodeUrl: ''
         };
     },
     components: {
@@ -300,19 +324,21 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url = "/api/v1/" + $self.formName + "/" + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
-            console.log(response)
+            console.log(response);
             if (response) {
                 $self.tableData = response.data;
-                $self.$emit("resetStatus", { id: $self.tableData.id, status: $self.tableData.status });
-
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             } else {
-                $self.msgTips("获取表单失败", "warning");
+                $self.msgTips('获取表单失败', 'warning');
             }
             let actions = await $self.getActions();
             // let crumbs = await $self.getCrumbs();
@@ -322,7 +348,7 @@ export default {
             // $self.crumbs =  {items: crumbs.data, index: -1};
             // for(var i= 0; i<$self.crumbs.items.length; i++){
             //     if($self.crumbs.items[i].active){
-            //         $self.crumbs.index = i;    
+            //         $self.crumbs.index = i;
             //     }
             // }
         }
@@ -331,112 +357,112 @@ export default {
 </script>
 <style lang="scss">
 #ContractDetail {
-  table {
-    border-collapse: collapse;
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
-  }
-  table td,
-  table th {
-    border: 1px solid #ddd;
-    color: #666;
-    height: 40px;
-    vertical-align: middle;
-  }
-  table thead th {
-    background-color: #cce8eb;
-  }
-  .el-step__main {
-    margin-top: 10px;
-  }
-  .audit {
-    position: relative;
-    margin-bottom: 10px;
-    font-size: 14px;
-    box-shadow: none;
-    border: 0;
-    font-weight: bold;
-    .avatar {
-      position: absolute;
-      left: 5px;
-      top: 5px;
-      width: 36px;
-      height: 36px;
-      img {
-        width: 36px;
-        height: 36px;
-        border: 1px solid #dddddd;
-        border-radius: 50%;
-      }
+    table {
+        border-collapse: collapse;
+        margin: 0 auto;
+        text-align: center;
+        width: 100%;
     }
-    .info {
-      margin-left: 60px;
-      display: inline-block;
-      width: calc(100% - 60px);
-      .creator {
-        height: 32px;
-        line-height: 32px;
-        a {
-          color: #4a6495;
-          text-decoration-line: none;
+    table td,
+    table th {
+        border: 1px solid #ddd;
+        color: #666;
+        height: 40px;
+        vertical-align: middle;
+    }
+    table thead th {
+        background-color: #cce8eb;
+    }
+    .el-step__main {
+        margin-top: 10px;
+    }
+    .audit {
+        position: relative;
+        margin-bottom: 10px;
+        font-size: 14px;
+        box-shadow: none;
+        border: 0;
+        font-weight: bold;
+        .avatar {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 36px;
+            height: 36px;
+            img {
+                width: 36px;
+                height: 36px;
+                border: 1px solid #dddddd;
+                border-radius: 50%;
+            }
         }
-      }
-      .content {
-        min-height: 32px;
-      }
+        .info {
+            margin-left: 60px;
+            display: inline-block;
+            width: calc(100% - 60px);
+            .creator {
+                height: 32px;
+                line-height: 32px;
+                a {
+                    color: #4a6495;
+                    text-decoration-line: none;
+                }
+            }
+            .content {
+                min-height: 32px;
+            }
+        }
     }
-  }
-  .input-with-select {
-    width: 0px;
-    margin-right: 10px;
-    .el-input-group__prepend {
-      background-color: #409eff;
-      border-color: #409eff;
-      color: #ffffff;
-      border-radius: 4px;
+    .input-with-select {
+        width: 0px;
+        margin-right: 10px;
+        .el-input-group__prepend {
+            background-color: #409eff;
+            border-color: #409eff;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+        &.reject .el-input-group__prepend {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .el-input__inner {
+            width: 0;
+            padding: 0;
+            border: 0;
+        }
+        .el-input__suffix {
+            left: 8px;
+        }
     }
-    &.reject .el-input-group__prepend {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+    #actionList {
+        background: #f4f4f4;
+        border-bottom: 1px solid #eaeaea;
+        height: 40px;
+        width: 100%;
+        z-index: 10;
+        .btnList {
+            line-height: 40px;
+            padding: 12px 10px;
+            cursor: pointer;
+        }
+        .btnList:hover {
+            background: #c7e0f4;
+        }
     }
-    .el-input__inner {
-      width: 0;
-      padding: 0;
-      border: 0;
+    .btnhide {
+        display: none;
     }
-    .el-input__suffix {
-      left: 8px;
+    .crumbList {
+        margin: 15px 0px;
     }
-  }
-  #actionList {
-    background: #f4f4f4;
-    border-bottom: 1px solid #eaeaea;
-    height: 40px;
-    width: 100%;
-    z-index: 10;
-    .btnList {
-      line-height: 40px;
-      padding: 12px 10px;
-      cursor: pointer;
-    }
-    .btnList:hover {
-      background: #c7e0f4;
-    }
-  }
-  .btnhide {
-    display: none;
-  }
-  .crumbList {
-    margin: 15px 0px;
-  }
 }
 .fullScreen {
-  position: fixed;
-  top: 0px;
-  z-index: 10;
-  background: #fff;
-  left: 0px;
-  right: 0px;
+    position: fixed;
+    top: 0px;
+    z-index: 10;
+    background: #fff;
+    left: 0px;
+    right: 0px;
 }
 </style>

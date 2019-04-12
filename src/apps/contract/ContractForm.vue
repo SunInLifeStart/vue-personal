@@ -2,12 +2,14 @@
     <el-dialog title="合同审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
         <div id="ContractForm">
             <el-form :model="formData" label-width="100px" :rules="rules" ref="formupdate">
-                <!-- <el-row style="margin-bottom:10px">
-                    <el-col :span="7">
+                <el-row style="margin-bottom:10px">
+                    <el-col :span="8">
                         <el-form-item label="流水号：">
-                            {{formData.numericalOrder}}
+                            {{formData.number}}
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <!--
                     <el-col :span="8">
                         <el-form-item label='会议结果：' :required="true" label-width="110px" v-show="this.formData.type == '国内差旅报销(对公)'">
                             <el-select v-model="formData.travelId" filterable placeholder="选择出差申请单" allow-create @change="travelChange" v-show="this.formData.type == '国内差旅报销(对公)'">
@@ -58,20 +60,20 @@
                             提单人
                         </td>
                         <td>
-                            <el-input v-model="formData.applyName" disabled></el-input>
+                            <el-input v-model="formData.applyname" disabled></el-input>
                         </td>
                         <td>
                             所属部门
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.dept" disabled></el-input>
+                            <el-input v-model="formData.applydept" disabled></el-input>
                         </td>
                         <td>
                             <span class="span">*</span>
                             发起时间
                         </td>
                         <td colspan="2">
-                            <el-date-picker v-model="formData.initiateTime" type="datetime" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
+                            <el-date-picker v-model="formData.startTime" type="datetime" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
                             </el-date-picker>
                         </td>
                     </tr>
@@ -98,9 +100,21 @@
                     <tr>
                         <td colspan="2">
                             <span class="span">*</span>
+                            合同类型
+                        </td>
+                        <td colspan="2">
+                            <el-select v-model="formData.contractType" placeholder="请选择" @change="typeandradioChange('contractType')">
+                                <el-option label="土地出让合同签订" value="土地出让合同签订"></el-option>
+                                <el-option label="合同签订（土地出让合同外）" value="合同签订(土地出让合同外)"></el-option>
+                                <el-option label="超出招采委审批条款的合同审批(合同调整审批)" value="超出招采委审批条款的合同审批(合同调整审批)"></el-option>
+                                <el-option label="符合招采委审批条款的合同审批" value="符合招采委审批条款的合同审批"></el-option>
+                            </el-select>
+                        </td>
+                        <td colspan="2">
+                            <span class="span">*</span>
                             所属项目
                         </td>
-                        <td colspan="6">
+                        <td colspan="2">
                             <el-input v-model="formData.project"></el-input>
                         </td>
                     </tr>
@@ -140,7 +154,7 @@
                         <td colspan="6">
                             <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
                                 <p :title="item.name">{{item.name}}</p>
-                                <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i>
+                                <i class="el-icon-delete" @click.stop="deleteAttachments"></i>
                             </div>
                         </td>
                     </tr>
@@ -151,41 +165,63 @@
                         </td>
                         <td colspan="6">
                             <el-row>
-                                <el-col :span="14">
-                                    <el-radio v-model="formData.sum" label="1">
-                                        <el-input v-model="formData.contractAmount" style="width: 110px" :disabled="formData.sum!='1'"></el-input>
-                                        元</el-radio>
-                                    <el-radio v-model="formData.sum" label="2">其他 成本上线总额
-                                        <el-input v-model="formData.contractAmount" style="width: 110px" :disabled="formData.sum!='2'"></el-input>
-                                        元</el-radio>
-                                </el-col>
-                                <el-col :span="10" style="margin-top:8px">
-                                    <el-radio v-model="formData.budget" label="1">预算内</el-radio>
-                                    <el-radio v-model="formData.budget" label="2">预算外</el-radio>
+                                <el-col :span="24">
+                                    <el-radio-group v-model="formData.moneyRadio" @change="typeandradioChange('moneyRadio')">
+                                        <el-radio label="1">
+                                            <el-input v-model="formData.contractAmount" style="width: 110px" :disabled="formData.moneyRadio!='1'"></el-input>
+                                            元</el-radio>
+                                        <el-radio label="2">其他 成本上线总额
+                                            <el-input v-model="formData.uptotal" style="width: 110px" :disabled="formData.moneyRadio!='2'"></el-input>
+                                            元</el-radio>
+                                    </el-radio-group>
                                 </el-col>
                             </el-row>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
+                            是否预算内
+                        </td>
+                        <td colspan="6">
+                            <el-radio-group v-model="formData.est">
+                                <el-radio label="1">预算内</el-radio>
+                                <el-radio label="2">预算外</el-radio>
+                            </el-radio-group>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
                             经办人
                         </td>
-                        <td colspan="2">
-                            <el-input v-model="formData.manager"></el-input>
+                        <td colspan="1">
+                            <el-input v-model="formData.manager" disabled></el-input>
                         </td>
                         <td>
                             <span class="span">*</span>
                             合同期限
                         </td>
-                        <td colspan="3">
-                            <el-radio v-model="formData.deadline" label="1">自
-                                <!-- <el-date-picker v-model="formData.deadStartTime" type="daterange" range-separator="至" style="width:300px" :disabled="formData.deadline!='1'">
-                                </el-date-picker> -->
-                                <el-input v-model="formData.deadStartTime" style="width: 110px" :disabled="formData.deadline!='1'"></el-input>
-                                至
-                                <el-input v-model="formData.deadEndTime" style="width: 110px" :disabled="formData.deadline!='1'"></el-input>
-                            </el-radio>
-                            <el-radio v-model="formData.deadline" label="2">其他</el-radio>
+                        <td colspan="4">
+                            <el-radio-group v-model="formData.dateRadio" @change="typeandradioChange('dateRadio')">
+                                <el-row>
+                                    <el-col :span="24">
+                                        <el-radio label="1">自
+                                            <!--
+                                 <el-date-picker v-model="formData.deadStartTime" type="daterange" range-separator="至" style="width:300px" :disabled="formData.deadline!='1'">
+                                </el-date-picker>
+                                -->
+                                            <el-date-picker v-model="formData.effectiveStart" type="date" placeholder="开始日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.dateRadio!='1'">
+                                            </el-date-picker>至
+                                            <el-date-picker v-model="formData.effectiveEnd" type="date" placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.dateRadio!='1'">
+                                            </el-date-picker>
+                                        </el-radio>
+                                    </el-col>
+                                </el-row>
+                                <el-row>
+                                    <el-col :span="2">
+                                        <el-radio label="2" style="text-align: left;">其他</el-radio>
+                                    </el-col>
+                                </el-row>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr>
@@ -196,11 +232,13 @@
                             合同所涉经济行为批准文件
                         </td>
                         <td colspan="4">
-                            <el-radio v-model="formData.paper" label="1">股东大会</el-radio>
-                            <el-radio v-model="formData.paper" label="2">董事会决议</el-radio>
-                            <el-radio v-model="formData.paper" label="3">会议纪要</el-radio>
-                            <el-radio v-model="formData.paper" label="4">请示批件</el-radio>
-                            <el-radio v-model="formData.paper" label="5">其他</el-radio>
+                            <el-radio-group v-model="formData.contractallow">
+                                <el-radio label="1">股东大会</el-radio>
+                                <el-radio label="2">董事会决议</el-radio>
+                                <el-radio label="3">会议纪要</el-radio>
+                                <el-radio label="4">请示批件</el-radio>
+                                <el-radio label="5">其他</el-radio>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr>
@@ -208,9 +246,11 @@
                             合同相对方资质证照复印件
                         </td>
                         <td colspan="4">
-                            <el-radio v-model="formData.copy" label="1">有</el-radio>
-                            <el-radio v-model="formData.copy" label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
-                            <el-radio v-model="formData.copy" label="3">其他</el-radio>
+                            <el-radio-group v-model="formData.contractphoto">
+                                <el-radio label="1">有</el-radio>
+                                <el-radio label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
+                                <el-radio label="3">其他</el-radio>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr>
@@ -218,9 +258,11 @@
                             合同价格形式
                         </td>
                         <td colspan="6">
-                            <el-radio v-model="formData.shape" label="1">固定总价</el-radio>
-                            <el-radio v-model="formData.shape" label="2">固定总和单价</el-radio>
-                            <el-radio v-model="formData.shape" label="3">其他</el-radio>
+                            <el-radio-group v-model="formData.contractprice">
+                                <el-radio label="1">固定总价</el-radio>
+                                <el-radio label="2">固定总和单价</el-radio>
+                                <el-radio label="3">其他</el-radio>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr>
@@ -228,7 +270,7 @@
                             合同付款安排
                         </td>
                         <td colspan="6">
-                            <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.arrange"></el-input>
+                            <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.contractArrange"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -244,15 +286,15 @@
                                 <el-col :span="14">
                                     <div style="float:left">
                                         谈判小组成员（不同部门2人或以上）签字：
-                                        <el-select v-model="formData.tpxzNameId" filterable placeholder="请选择" @change="getTpxz">
-                                            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.id">
+                                        <el-select v-model="formData.tpxzId" multiple filterable placeholder="请选择">
+                                            <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
                                             </el-option>
                                         </el-select>
                                     </div>
                                 </el-col>
                                 <el-col :span="10">
-                                    年 月 日
-                                    <el-date-picker v-model="formData.digestTime" type="date" placeholder="" value-format="yyyy-MM-dd">
+                                    年 月 日:
+                                    <el-date-picker v-model="formData.datecontractTime" type="date" placeholder="" value-format="yyyy-MM-dd">
                                     </el-date-picker>
                                 </el-col>
                             </el-row>
@@ -270,32 +312,31 @@
 </template>
 <script>
 /* eslint-disable */
-import moment from "moment";
+import moment from 'moment';
 import axios from 'axios';
-import FilesOperate from "../FilesOperate";
-import { application } from "../application.js";
-import { publicMethods } from "../application.js";
+import FilesOperate from '../FilesOperate';
+import { application } from '../application.js';
+import { publicMethods } from '../application.js';
 import cookies from 'js-cookie';
 export default {
     mixins: [publicMethods],
-    name: "ContractForm",
+    name: 'ContractForm',
     data() {
         return {
-            options: [],//谈判小组成员选择列表
+            options: [], //谈判小组成员选择列表
             radio: '',
             dialogFormVisible: false,
             formData: this.resetForm(),
             users: [],
-            appFlowName: "motor-trainingapplication_train",
+            appFlowName: 'contractforms',
             rules: {
                 contractName: [
                     {
                         required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入申请人"
+                        trigger: 'blur', //何事件触发
+                        message: '请输入申请人'
                     }
-                ],
-
+                ]
             }
         };
     },
@@ -308,23 +349,65 @@ export default {
         FilesOperate
     },
     methods: {
-        //获得谈判小组信息
-        getTpxz(val) {
-            console.log(val)
-            for (let item of this.options) {
-                if (item.id == val) {
-                    this.formData.tpxzName = item.name;
+        typeandradioChange(type) {
+            if (type == 'contractType') {
+            } else if (type == 'moneyRadio') {
+                if (this.formData.moneyRadio == '1') {
+                    this.formData.uptotal = '0';
+                } else {
+                    this.formData.contractAmount = '0';
                 }
+            } else if (type == 'dateRadio') {
+                if (this.formData.dateRadio == '2') {
+                    this.formData.effectiveStart = '';
+                    this.formData.effectiveEnd = '';
+                }
+            } else {
             }
+        },
+        getNo() {
+            const self = this;
+            let params = {
+                code: 'contract_forms'
+            };
+            axios
+                .post('/synergy-common/serialNumber/getByTableCode', params)
+                .then(res => {
+                    this.formData.number = res.data.content.serialNumber;
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '流水号获取失败',
+                        type: 'error'
+                    });
+                });
+        },
+        getContractNum() {
+            const self = this;
+            const year = moment()
+                .utc()
+                .format('YYYY');
+            axios
+                .get('/api/v1/contract_forms/contractNum/' + year)
+                .then(res => {
+                    self.formData.contractNum = res.data;
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '合同编号获取失败',
+                        type: 'error'
+                    });
+                });
         },
         //获得谈判小组成员
         getUser() {
             const self = this;
-            axios.get('/api/v1/users')
+            axios
+                .get('/api/v1/users')
                 .then(res => {
                     self.options = res.data;
                 })
-                .catch(function () {
+                .catch(function() {
                     self.$message({
                         message: '操作失败',
                         type: 'error'
@@ -332,6 +415,7 @@ export default {
                 });
         },
         //删除附件
+        /** 
         deleteAttachment(id) {
             const self = this;
             if (this.formData.attachments.length > 0) {
@@ -347,7 +431,7 @@ export default {
                                 }
                             })
                             .then(res => {
-                                self.formData.attachments.forEach(function (
+                                self.formData.attachments.forEach(function(
                                     item,
                                     index
                                 ) {
@@ -359,7 +443,7 @@ export default {
                                     }
                                 });
                             })
-                            .catch(function () {
+                            .catch(function() {
                                 self.$message({
                                     message: '操作失败',
                                     type: 'error'
@@ -369,47 +453,50 @@ export default {
                 );
             }
         },
+        */
         setDataFromParent(data) {
             this.formData = data;
+            this.formData.tpxzId = this.formData.tpxzName.split(',');
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
         },
         createForm() {
+            this.getNo();
+            this.getContractNum();
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
         },
         resetForm() {
             let formData = {
-                initiateTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"), //提单时间
+                number: '',
+                applyname: cookies.get('uname'),
+                applydept: cookies.get('oname'),
+                startTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), //提单时间
                 manager: cookies.get('uname'),
-                creatorName: cookies.get('uname'),
-                creatorId: cookies.get('uid'),
-                applyName: cookies.get('uname'),
-                organId: cookies.get('oid'),
-                organ: cookies.get('oname'),
-                dept: cookies.get('oname'),
+                contractName: '', // 合同名称
                 contractNum: '',
-                historyContract: '',
+                project: '',
+                contractType: '',
+                moneyRadio: '1',
+                contractAmount: '0',
+                uptotal: '',
+                est: '1',
+                dateRadio: '1',
                 effectiveStart: '',
                 effectiveEnd: '',
                 attachments: [],
-                type: 1,
-                gid: cookies.get('oid'),
-                sum: '',//合同金额
-                contractAmount: '',
-                budget: '',//预算内外
-                deadline: '',//合同期限
-                deadStartTime: '',
-                deadEndTime: '',
-                digest: '',//合同内容摘要
-                digestTime: '',	//合同摘要日期
-                tpxzName: '',	//谈判小组成员
-                tpxzNameId: '',	//id
-                contractName: '',// 合同名称
-                project: '',//  所属项目
-                partyA: '',// 甲方
-                partyB: '',//  乙方
+                contractallow: '1',
+                contractphoto: '1',
+                contractprice: '1',
+                contractArrange: '',
+                digest: '', //合同内容摘要
+                tpxzName: '',
+                tpxzId: [], //谈判小组成员
+                partyA: '', // 甲方
+                partyB: '', //  乙方
+                otherParty: '',
+                datecontractTime: ''
             };
             return formData;
         },
@@ -421,28 +508,36 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
-            let response = await $self.saveFormData("/api/v1/contract_forms/save", $self.formData);
+            $self.formData.tpxzName = $self.formData.tpxzId.join(',');
+            let response = await $self.saveFormData(
+                '/api/v1/contract_forms/save',
+                $self.formData
+            );
             console.log(response.data);
             if (response) {
                 $self.formId = response.data.id;
                 $self.dialogFormVisible = false;
                 if (params) {
-                    $self.msgTips("提交成功", "success");
+                    $self.msgTips('提交成功', 'success');
                     if (this.createForm_status) {
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-                        actions.data.types = actions.data.types.filter(
-                            function (item) {
-                                return item.action == "COMMIT";
-                            }
+                        actions.data.types = actions.data.types.filter(function(
+                            item
+                        ) {
+                            return item.action == 'COMMIT';
+                        });
+                        actions.data.types[0]['comment'] =
+                            actions.data.types[0].name;
+                        await $self.startSignal(
+                            actions.data.types[0],
+                            'fromeEdit'
                         );
-                        actions.data.types[0]["comment"] =  actions.data.types[0].name;
-                        await $self.startSignal(actions.data.types[0],"fromeEdit");
                         $self.emitMessage();
                     }
                 } else {
-                    $self.msgTips("保存成功", "success");
+                    $self.msgTips('保存成功', 'success');
                     if (this.createForm_status) {
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
@@ -451,9 +546,9 @@ export default {
                 }
             } else {
                 if (params) {
-                    $self.msgTips($self, "提交失败", "warning");
+                    $self.msgTips('提交失败', 'warning');
                 } else {
-                    $self.msgTips($self, "保存失败", "warning");
+                    $self.msgTips('保存失败', 'warning');
                 }
             }
         },
@@ -461,8 +556,8 @@ export default {
         ruleHint() {
             let ruleHint = true;
             if (
-                this.formData.initiateTime == '' ||
-                this.formData.initiateTime == null
+                this.formData.startTime == '' ||
+                this.formData.startTime == null
             ) {
                 ruleHint = false;
                 this.$message({
@@ -506,30 +601,12 @@ export default {
                     type: 'error'
                 });
             } else if (
-                (this.formData.sum == '' || this.formData.sum == null) ||
-                (this.formData.contractAmount == '' || this.formData.contractAmount == null)
+                !this.formData.contractAmount ||
+                this.formData.contractAmount == ''
             ) {
                 ruleHint = false;
                 this.$message({
                     message: '合同金额为必输项，请输入',
-                    type: 'error'
-                });
-            } else if (
-                (this.formData.deadline == '' || this.formData.deadline == null)
-            ) {
-                ruleHint = false;
-                this.$message({
-                    message: '合同期限为必输项，请输入',
-                    type: 'error'
-                });
-            } else if (
-                (this.formData.deadline == '1')
-                && (this.formData.deadStartTime == '' || this.formData.deadStartTime == null ||
-                    this.formData.deadEndTime == '' || this.formData.deadEndTime == null)
-            ) {
-                ruleHint = false;
-                this.$message({
-                    message: '合同期限为必输项，请输入',
                     type: 'error'
                 });
             } else if (
@@ -549,7 +626,7 @@ export default {
         handleSuccess(response, file) {
             const self = this;
             if (response.length > 0) {
-                response.forEach(function (item) {
+                response.forEach(function(item) {
                     self.formData.attachments.push(item);
                 });
             }
@@ -558,8 +635,8 @@ export default {
         submitUpload() {
             this.$refs.upload.submit();
         },
-        handlePreview() { },
-        handleRemove() { }
+        handlePreview() {},
+        handleRemove() {}
     },
     mounted() {
         this.getUser();
@@ -568,91 +645,94 @@ export default {
 </script>
 <style lang="scss" scoped>
 #ContractForm {
-  .span {
-    color: red;
-  }
-  .uploadBtn {
-    margin-right: 10px;
-    width: 100px;
-    height: 130px;
-    text-align: center;
-    float: left;
-    border: 1px solid #c0c4cc;
-    border-radius: 2px;
-    cursor: pointer;
-
-    .el-upload {
-      width: 100%;
-      height: 100%;
-
-      i {
-        font-size: 50px;
-        margin-top: 35px;
-      }
-    }
-  }
-  table {
-    border-collapse: collapse;
-    margin: 0 auto;
-    text-align: center;
-    width: 100%;
-  }
-  table td,
-  table th {
-    border: 1px solid #ddd;
-    color: #666;
-    height: 40px;
-    vertical-align: middle;
-  }
-  table thead th {
-    background-color: #cce8eb;
-  }
-
-  .upload {
-    position: relative;
-    margin-right: 30px;
-    // width: 100px;
-    display: inline-block;
-    cursor: pointer;
-  }
-  .attachments {
-    position: relative;
-    // margin-bottom: 40px;
-    margin-right: 30px;
-    width: 200px;
-    // height: 120px;
-    display: inline-block;
-    cursor: pointer;
-    p {
-      margin: 0;
-      line-height: 20px;
-      color: #606266;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      margin-right: 20px;
-    }
-
-    i {
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 5px;
-      &:hover {
+    .span {
         color: red;
-      }
     }
-  }
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
 
-  table tr:nth-child(odd) {
-    background: #fff;
-  }
-  table tr:nth-child(even) {
-    background: #fff;
-  }
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-  }
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
+            }
+        }
+    }
+    table {
+        border-collapse: collapse;
+        margin: 0 auto;
+        text-align: center;
+        width: 100%;
+    }
+    table td,
+    table th {
+        border: 1px solid #ddd;
+        color: #666;
+        height: 40px;
+        vertical-align: middle;
+    }
+    table thead th {
+        background-color: #cce8eb;
+    }
+    .el-date-editor.el-input,
+    .el-date-editor.el-input__inner {
+        width: 160px;
+    }
+    .upload {
+        position: relative;
+        margin-right: 30px;
+        // width: 100px;
+        display: inline-block;
+        cursor: pointer;
+    }
+    .attachments {
+        position: relative;
+        // margin-bottom: 40px;
+        margin-right: 30px;
+        width: 200px;
+        // height: 120px;
+        display: inline-block;
+        cursor: pointer;
+        p {
+            margin: 0;
+            line-height: 20px;
+            color: #606266;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-right: 20px;
+        }
+
+        i {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 5px;
+            &:hover {
+                color: red;
+            }
+        }
+    }
+
+    table tr:nth-child(odd) {
+        background: #fff;
+    }
+    table tr:nth-child(even) {
+        background: #fff;
+    }
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+    }
 }
 </style>
