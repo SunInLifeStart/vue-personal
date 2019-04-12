@@ -119,20 +119,9 @@ export default {
     },
     methods: {
         previewFile(item) {
-        
-        //   if(item.size && item.size < 20480000 && (item.type != "AVI" && item.type != "MP4")){
-        //       this.common.preview(item);
-        //   }else{
-        //       if(!item.size){
-        //           this.common.preview(item);
-        //       }else{
-        //           this.$message({
-        //                     message: '很抱歉，您预览的文件过大，请下载后预览！',
-        //                     type: 'error'
-        //             });
-        //       }
-        //   }
-       // item.url = encodeURI "http://59.110.172.228/api/v1/files/124/183/11089.pdf"
+        if(item.file_name){
+            item.type = "DOC";
+        }
         if ('DOCX,PPTX,XLSX,DOC,XLS'.includes(item.type.toUpperCase())) {
                 let url = "";
                 if (process.env.NODE_ENV === 'production') {
