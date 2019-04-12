@@ -168,10 +168,10 @@
                                 <el-col :span="24">
                                     <el-radio-group v-model="formData.moneyRadio" @change="typeandradioChange('moneyRadio')">
                                         <el-radio label="1">
-                                            <el-input v-model="formData.contractAmount" style="width: 110px" :disabled="formData.moneyRadio!='1'"></el-input>
+                                            <el-input v-model.number="formData.contractAmount" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='1'"></el-input>
                                             元</el-radio>
                                         <el-radio label="2">其他 成本上线总额
-                                            <el-input v-model="formData.uptotal" style="width: 110px" :disabled="formData.moneyRadio!='2'"></el-input>
+                                            <el-input v-model.number="formData.uptotal" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='2'"></el-input>
                                             元</el-radio>
                                     </el-radio-group>
                                 </el-col>
@@ -480,7 +480,7 @@ export default {
                 contractType: '',
                 moneyRadio: '1',
                 contractAmount: '0',
-                uptotal: '',
+                uptotal: '0',
                 est: '1',
                 dateRadio: '1',
                 effectiveStart: '',
@@ -680,6 +680,14 @@ export default {
         color: #666;
         height: 40px;
         vertical-align: middle;
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0;
+        }
+        input[type='number'] {
+            -moz-appearance: textfield;
+        }
     }
     table thead th {
         background-color: #cce8eb;
@@ -729,10 +737,6 @@ export default {
     }
     table tr:nth-child(even) {
         background: #fff;
-    }
-    input[type='number']::-webkit-inner-spin-button,
-    input[type='number']::-webkit-outer-spin-button {
-        -webkit-appearance: none;
     }
 }
 </style>
