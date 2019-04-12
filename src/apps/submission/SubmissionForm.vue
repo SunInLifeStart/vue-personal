@@ -64,7 +64,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="正文">
-                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}" @getId="getId"  @editText="editText"></FilesOperate>
+                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}"  @editText="editText"></FilesOperate>
                         <!--<el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>-->
                         <!--<Submission @editWordData="editWordData" ref="submissioneditfiles"></Submission>-->
                     </el-form-item>
@@ -73,11 +73,11 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                            <FilesOperate  :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                            <FilesOperate  :item="item" :options="{preview:true,del:true,download:true}"></FilesOperate>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -210,10 +210,6 @@ export default {
             this.dialogFormVisible = true;
             this.createForm_status = false;
         },
-        createformData() {
-            this.formData = this.resetForm();
-            this.dialogFormVisible = this.createForm_status = true;
-        },
         createForm() {
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
@@ -243,17 +239,12 @@ export default {
                 this.selectNumber = 'handNumber';
             }
         },
-        handlePreview() {},
-        handleRemove() {},
         resetForm() {
-            const time = moment()
-                .utc()
-                .format('YYYY-MM-DD');
             let formData = {
                 title: '',
                 submissionNo: '',
                 draftUnit: this.$store.getters.LoginData.oname,
-                draftTime: time,
+                draftTime: moment().utc().format('YYYY-MM-DD'),
                 draftUser: this.$store.getters.LoginData.uname,
                 telephone: '',
                 commonUser: '',

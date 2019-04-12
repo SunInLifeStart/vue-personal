@@ -135,8 +135,6 @@ export default {
             comments:[],
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
-            typeJuder:"",
-            isAnnualPlanone:""
                     };
     },
     components: {

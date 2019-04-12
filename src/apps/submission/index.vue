@@ -17,14 +17,14 @@
                             </el-col>
                             <el-col :span="8">
                                  <el-form-item label="拟稿时间" >
-                                        <el-date-picker v-model="params.draftTime" type="date" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                                        <el-date-picker placeholder="请输入拟稿时间" v-model="params.draftTime" type="date" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                                 </el-form-item>
                             </el-col>
                          </el-row>
                          <el-row class="filterForm">
                             <el-col :span="8">
                                 <el-form-item label="单据状态">
-                                    <el-select v-model="params.status" placeholder="请选择">
+                                    <el-select v-model="params.status" placeholder="请选择单据状态">
                                         <el-option v-for="item in s_status" 
                                         :key="item.value"
                                         :label="item.label"

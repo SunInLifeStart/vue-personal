@@ -96,7 +96,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -346,9 +346,7 @@ export default {
         },
         submitUpload() {
             this.$refs.upload.submit();
-        },
-        handlePreview() {},
-        handleRemove() {}
+        }
     },
     mounted() {
         this.floaes()
