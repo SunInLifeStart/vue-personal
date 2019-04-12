@@ -63,10 +63,9 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="正文">
-                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}"  @editText="editText"></FilesOperate>
-                        <!--<el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>-->
-                        <!--<Submission @editWordData="editWordData" ref="submissioneditfiles"></Submission>-->
+                    <el-form-item label="正文" style="float:left">
+                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}"  @editText="openData(formData.text.url)"></FilesOperate>
+                        <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -98,7 +97,6 @@ import moment from 'moment';
 import FilesOperate from "../FilesOperate";
 import { application } from "../application.js";
 import { publicMethods } from "../application.js";
-// import Submission from "./SubmissioneditFiles.vue";
 export default {
     mixins: [publicMethods],
     name: 'SubmissionForm',
@@ -254,7 +252,11 @@ export default {
                 text:{name:""},
             };
             return formData;
-        }
+        },
+            createTextBody() {
+            // this.$refs.outgoingeditfiles.dialogForm = true;
+            this.openData();
+        },
     }
 };
 </script>

@@ -176,51 +176,51 @@ export default {
             payeeOrgan: [],
             onOption: [
                 {
-                    value: '一月',
+                    value: 'yiyue',
                     label: '一月'
                 },
                 {
-                    value: '二月',
+                    value: 'eryue',
                     label: '二月'
                 },
                 {
-                    value: '三月',
+                    value: 'sanyue',
                     label: '三月'
                 },
                 {
-                    value: '四月',
+                    value: 'siyue',
                     label: '四月'
                 },
                 {
-                    value: '五月',
+                    value: 'wuyue',
                     label: '五月'
                 },
                 {
-                    value: '六月',
+                    value: 'liuyue',
                     label: '六月'
                 },
                 {
-                    value: '七月',
+                    value: 'qiyue',
                     label: '七月'
                 },
                 {
-                    value: '八月',
+                    value: 'bayue',
                     label: '八月'
                 },
                 {
-                    value: '九月',
+                    value: 'jiuyue',
                     label: '九月'
                 },
                 {
-                    value: '十月',
+                    value: 'shiyue',
                     label: '十月'
                 },
                 {
-                    value: '十一月',
+                    value: 'shiyiyue',
                     label: '十一月'
                 },
                 {
-                    value: '十二月',
+                    value: 'shieryue',
                     label: '十二月'
                 },
             ],

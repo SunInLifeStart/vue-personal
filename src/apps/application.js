@@ -29,8 +29,8 @@ export const publicMethods = {
                 this.$emit("reloadList", this.formData); //如果是 "编辑" 表单刷新 "详情页"
             }
         },
-        async startSignal(actions,status) {
-            if(status){
+        async startSignal(actions, status) {
+            if (status) {
                 this.hasRequired(actions ? actions : this.currentAction);
             }
             let url = `/workflow/${this.appFlowName}/${
@@ -128,7 +128,7 @@ export const publicMethods = {
                     labelName: "assigneeList"
                 });
             }
-            if ($self.currentAction.action == 'PULL' || $self.currentAction.action == 'REJECT') {
+            if ($self.currentAction.action == 'PULL') {
                 $self.currentAction["comment"] = $self.currentAction.name;
                 await $self.startSignal();
                 $self.msgTips($self.currentAction.name + "成功", "success");
@@ -234,6 +234,73 @@ export const publicMethods = {
                     // }
                 });
             });
+        },
+
+
+
+        //以下方法关于ntko创建,以及编辑文件文件
+        openData(url) {
+            let $self = this;
+            if (process.env.NODE_ENV === 'production') {
+                $self.openUrl = "http://124.205.31.66:2097/static/edit.html?"
+            } else {
+                $self.openUrl = "http://static1.yxpe.com.cn/edit.html?"
+            }
+
+            if ($self.timer) {
+                $self.clearTime();
+            }
+            $self.$axios.get(`/api/v1/gid`).then(res => {
+                if (res.data) {
+                    $self.$axios
+                        .get("/api/v1/ntko/session/create?token=" + res.data)
+                        .then(res => {
+                        });
+                }
+                if (url) {
+                    alert(123);
+                    ntkoBrowser.openWindow(
+                        $self.openUrl + "token=" + res.data + "&url=" + url
+                    );
+                } else {
+                    ntkoBrowser.openWindow(
+                        $self.openUrl + "token=" + res.data
+                    );
+                }
+                $self.timer = setInterval(function () {
+                    $self.$axios
+                        .get("/api/v1/ntko/session/finish?token=" + res.data)
+                        .then(res => {
+                            if(res.data.file_name){
+                                $self.formData.text = {
+                                    iconUrl: res.data.icon_url,
+                                    name: res.data.originalFilename,
+                                    url: res.data.url,
+                                    path: res.data.path,
+                                    file_name:res.data.file_name,
+                                    pdfUrl:
+                                        res.data.url.split("files")[0] +
+                                        "pdf" +
+                                        res.data.url.split("files")[1]
+                                };
+                                $self.clearTime();
+                            }
+                        });
+                }, 2000);
+            });
+
+        },
+        openPrinter() {
+            let $self = this;
+            ntkoBrowser.openWindow(
+                $self.openUrl + "token=print&url=" + url
+            );
+        },
+        clearTime() {
+            let $self = this;
+            if ($self.timer) {
+                clearInterval($self.timer);
+            }
         },
 
 

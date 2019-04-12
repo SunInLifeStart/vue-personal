@@ -207,7 +207,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            //  this.params.applyUser = this.params.dept = this.params.status = '';
+             this.params.applyUser = this.params.dept = this.params.status = '';
             this.params.pageNum = 1;
             this.getList();
         }

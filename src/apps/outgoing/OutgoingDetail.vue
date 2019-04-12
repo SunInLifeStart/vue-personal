@@ -462,7 +462,6 @@ export default {
                   if(action.required[0].split(":")[0] == "leadership"){
                     this.seleteUserLabel_approve = '请领导签批';
                     this.approve_users = [
-                        {id:497,name:"高中成"},
                         {id:498,name:"隋明军"},
                     ];
                    }
