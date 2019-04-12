@@ -33,8 +33,8 @@
                                     </el-select>
                                 </el-form-item>
                             </el-col>
-                            <el-col :span="8" class="searchBtn">
-                                <el-form-item class="positionBtn">
+                            <el-col :span="8">
+                                <el-form-item>
                                     <el-button type="primary" @click="searchList">查询</el-button>
                                     <el-button  @click="resetInput">重置</el-button>
                                 </el-form-item>
@@ -245,13 +245,6 @@ export default {
       #SubmissionFilter  .el-form-item--small.el-form-item{
             width: 100%;
         }
-         #SubmissionFilter {
-             .searchBtn {
-            padding-right: 10px;
-            .positionBtn{
-                text-align: right;
-            }
-        }}
 </style>
 <style scoped>
 

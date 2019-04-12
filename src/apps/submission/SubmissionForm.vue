@@ -204,6 +204,12 @@ export default {
                 }
             }
         },
+        setDataFromParent(data) {
+            this.formData = data;
+            this.formId = data.id;
+            this.dialogFormVisible = true;
+            this.createForm_status = false;
+        },
         createformData() {
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
