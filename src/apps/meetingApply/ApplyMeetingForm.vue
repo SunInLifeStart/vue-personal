@@ -319,6 +319,7 @@
                     numbers: '',
                     branchlineTo: '',
                     businessType: '',
+                    generalManagement: false,
                     created: '',
                     sendMessage: [],
                     idea: '',
@@ -421,6 +422,9 @@
                 let business = this.discussionOption.filter((item) => { return item.value === this.formData.branchlineTo})
                 if (business.length > 0)
                 this.formData.businessType = business[0].value + '_' +  business[0].label
+                if ($self.formData.organName === '综合管理部') {
+                    $self.formData.generalManagement = true
+                }
                 let response = await $self.saveFormData(
                     "/api/v1/meetingApply/save",
                     $self.formData
