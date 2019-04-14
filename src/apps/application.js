@@ -84,7 +84,9 @@ export const publicMethods = {
                     } else {
                         if (key == "oid") {
                             options.push(key + "=" + this.$store.getters.LoginData.oid);
-                        } else {
+                        }else if(key == "code"){
+                             options.push(key + "="  + this.$store.getters.LoginData.code.split('_')[0]);
+                        }else {
                             if (key.indexOf("filterButton") > -1) {
                             } else {
                                 $self.msgTips('依赖的' + key + '表单中找不到', "warning");
