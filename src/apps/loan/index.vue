@@ -110,8 +110,7 @@ export default {
                 pageSize: 5,
                 options: [],
                 orderBy: 'id',
-                desc: true,
-                total: 0
+                desc: true
             },
             formName: 'loan_forms'
         };

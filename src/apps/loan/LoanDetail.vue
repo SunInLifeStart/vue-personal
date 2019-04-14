@@ -92,7 +92,7 @@
                     </tr>
                     <tr v-for="(Item) in this.tableData.borrows" :key="Item.index">
                         <td>
-                            {{Item.bigType.join(',')}}
+                            {{Item.bigType}}
                         </td>
                         <td>
                             {{Item.loanAmount}}
@@ -124,7 +124,7 @@
                             金额大写
                         </td>
                         <td colspan="2">
-                            （{{this.dollarName}}：&nbsp;&nbsp;{{tableData.dx}}&nbsp;&nbsp;)
+                            （{{this.tableData.borrows.length ==0 ? '人民币': this.tableData.borrows[0].currency}}：&nbsp;&nbsp;{{tableData.type}}&nbsp;&nbsp;)
                         </td>
                     </tr>
                     <tr>
