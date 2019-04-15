@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="借款单" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="90%" style="text-align: center;">
+    <el-dialog title="借款申请单" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="90%" style="text-align: center;">
         <div id="LoanForm">
             <el-form :model='formData' class="demo-form-inline" ref="formupdate">
                 <!-- <el-row style="margin-bottom:10px">
@@ -25,7 +25,7 @@
                     <el-col :span="9" style="position: relative;">
                         <span class="span2">*</span>
                         <el-form-item label="出差审批单：" label-width="110px">
-                            <el-select clearable v-model="formData.travelPeople" filterable value-key="id" allow-create placeholder="" @change="travelChange">
+                            <el-select v-model="formData.travelPeople" filterable value-key="id" allow-create placeholder="" @change="travelChange">
                                 <el-option v-for="item in travelSelections" :key="item.id" :label="item.number" :value="item">
                                 </el-option>
                             </el-select>
@@ -40,7 +40,7 @@
                     <el-col :span="7" style="position: relative;">
                         <span class="span3">*</span>
                         <el-form-item label="呈报件：" label-width="30px;">
-                            <el-select clearable v-model="formData.submission" filterable allow-create value-key="id" placeholder="选择呈报件" @change="SubmissionChange">
+                            <el-select v-model="formData.submission" filterable allow-create value-key="id" placeholder="选择呈报件" @change="SubmissionChange">
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item">
                                 </el-option>
                             </el-select>
@@ -447,22 +447,43 @@ export default {
                 this.organ = res.data;
             });
         },
+        checkLoanMessage() {
+            let loanmessage = true;
+            for (let data of this.formData.borrows) {
+                if (
+                    !data.purpose1[0] ||
+                    data.loanAmount == '' ||
+                    data.estimateRate == ''
+                ) {
+                    loanmessage = false;
+                }
+            }
+            return loanmessage;
+        },
         addItem() {
-            this.formData.borrows.push({
-                currency:
-                    this.formData.borrows.length == 0
-                        ? '人民币'
-                        : this.formData.borrows[0].currency,
-                estimateRate:
-                    this.formData.borrows.length == 0
-                        ? 1
-                        : this.formData.borrows[0].estimateRate,
-                purpose1: [],
-                purpose: '',
-                loanAmount: '',
-                estimateDomestic: '',
-                id: ''
-            });
+            const self = this;
+            if (this.checkLoanMessage()) {
+                this.formData.borrows.push({
+                    currency:
+                        this.formData.borrows.length == 0
+                            ? '人民币'
+                            : this.formData.borrows[0].currency,
+                    estimateRate:
+                        this.formData.borrows.length == 0
+                            ? 1
+                            : this.formData.borrows[0].estimateRate,
+                    purpose1: [],
+                    purpose: '',
+                    loanAmount: '',
+                    estimateDomestic: '',
+                    id: ''
+                });
+            } else {
+                self.$message({
+                    message: '请输入借款明细',
+                    type: 'error'
+                });
+            }
         },
         deleteItem(item, index) {
             this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
@@ -607,11 +628,30 @@ export default {
             return formData;
         },
         saveFormValidate(type) {
-            this.$refs['formupdate'].validate(valid => {
-                if (valid) {
-                    this.saveForm(type);
-                }
-            });
+            if (this.formData.borrowDept == '集团领导') {
+                this.$message({
+                    message: '费用承担部门选择错误，请重新选择',
+                    type: 'error'
+                });
+            } else if (
+                this.formData.submission == '' ||
+                this.formData.submission == {} ||
+                this.formData.travelPeople == {} ||
+                this.formData.travelPeople == '' ||
+                this.formData.borrower == '' ||
+                this.formData.borrowDept == '' ||
+                this.formData.bank == '' ||
+                this.formData.cardNum == '' ||
+                this.formData.settlement == '' ||
+                this.checkLoanMessage() == false
+            ) {
+                this.$message({
+                    message: '请输入必填项',
+                    type: 'error'
+                });
+            } else {
+                this.saveForm(type);
+            }
         },
         // 提交保存
         async saveForm(params) {
