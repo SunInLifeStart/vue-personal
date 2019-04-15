@@ -138,7 +138,22 @@ export const publicMethods = {
             } else if ($self.currentAction.action == 'CANCEL') {
                 await $self.startSignal();
                 $self.deleteCurrentLine($self.tableData.id, "CANCEL");
-            } else {
+            } else if($self.currentAction.name == "编辑"){
+                $self.msgTips("开发中", "warning");
+            } else if($self.currentAction.name == "打印"){
+                $self.$axios
+                .get("/api/v1/submission_forms/" + $self.tableData.id +"/getForm")
+                .then(res => {
+                    if (process.env.NODE_ENV === 'production') {
+                        $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
+                    } else {
+                        $self.openUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&"
+                    }
+                    ntkoBrowser.openWindow(
+                        $self.openUrl + "url=" + res.data
+                    );
+                });
+            }else {
                 $self.dialogVisible = true;
             }
         },
@@ -222,7 +237,6 @@ export const publicMethods = {
             });
         },
         deleteAttachments(id) {
-            alert(id);
             let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
                 $self.formData.attachments.forEach(function (value, index) {
@@ -260,7 +274,6 @@ export const publicMethods = {
                         });
                 }
                 if (url) {
-                    alert(123);
                     ntkoBrowser.openWindow(
                         $self.openUrl + "token=" + res.data + "&url=" + url
                     );

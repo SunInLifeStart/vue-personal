@@ -248,6 +248,7 @@ export default {
                 draftTime: moment().utc().format('YYYY-MM-DD'),
                 draftUser: this.$store.getters.LoginData.uname,
                 telephone: '',
+                generalManagement: false,
                 commonUser: '',
                 generalManagement: false,
                 remarks: '',
