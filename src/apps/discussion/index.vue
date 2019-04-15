@@ -77,7 +77,7 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <DiscussionDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="DiscussionDetail" @resetStatus = "resetStatus"></DiscussionDetail>
+            <DiscussionDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="DiscussionDetail" @resetStatus = "resetStatus" @reloadList = "reloadList"></DiscussionDetail>
         </el-card>
         <DiscussionForm  ref="DiscussionForm" @reloadList = "reloadList"></DiscussionForm>
     </div>

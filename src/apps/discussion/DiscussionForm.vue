@@ -202,7 +202,7 @@ export default {
             this.changePeople()
         },
         async getDiscussionUser() {
-            let user = await this.getUsers("/api/v1/users/list/organs")
+            let user = await this.getUsers("/api/v1/users/list/organss")
             if (user) this.options = user.data
         },
         changeDepartment(i, index) {

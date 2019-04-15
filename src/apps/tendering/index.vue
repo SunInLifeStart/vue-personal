@@ -49,7 +49,7 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <TenderingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="TenderingDetail"></TenderingDetail>
+            <TenderingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="TenderingDetail" @reloadList = "reloadList"></TenderingDetail>
         </el-card>
         <TenderingForm  ref="TenderingForm" @reloadList = "reloadList"></TenderingForm>
     </div>

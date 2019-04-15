@@ -268,7 +268,11 @@ export default {
                 supplyCode: '', //资产类型-流程判断
                 plan: true,
                 budget: true,
-                inbuget: true
+                inbuget: true,
+                generalManagement:
+                    this.$store.getters.LoginData.oname == '综合管理部'
+                        ? true
+                        : false
             };
             return formData;
         },

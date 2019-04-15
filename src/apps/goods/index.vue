@@ -118,10 +118,9 @@ export default {
             params: {
                 pageNum: 1,
                 pageSize: 5,
-                //  applyUser: '',
-                // dept: '',
-                // status: '',
-                total: 0
+                applyUser: '',
+                dept: '',
+                status: null
             },
             formName: 'motor-receive'
         };
@@ -207,7 +206,8 @@ export default {
             this.getList();
         },
         resetInput() {
-             this.params.applyUser = this.params.dept = this.params.status = '';
+            this.params.applyUser = this.params.dept = '';
+            this.params.status = null;
             this.params.pageNum = 1;
             this.getList();
         }

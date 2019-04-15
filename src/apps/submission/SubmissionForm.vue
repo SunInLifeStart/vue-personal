@@ -250,6 +250,7 @@ export default {
                 telephone: '',
                 generalManagement: false,
                 commonUser: '',
+                generalManagement: false,
                 remarks: '',
                 content: '',
                 attachments: [],

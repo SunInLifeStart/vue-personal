@@ -51,7 +51,7 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <ResultsDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ResultsDetail"></ResultsDetail>
+            <ResultsDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ResultsDetail" @reloadList = "reloadList"></ResultsDetail>
         </el-card>
         <ResultsForm  ref="ResultsForm" @reloadList = "reloadList"></ResultsForm>
     </div>
