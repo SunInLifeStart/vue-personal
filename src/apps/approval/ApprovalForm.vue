@@ -136,7 +136,7 @@
                                     </el-upload>
                                     <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
                                          <!-- @getId="getId" -->
-                                        <FilesOperate :item="item" :options="{preview:true,del:true,download:true}"></FilesOperate>
+                                        <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachmentsone(scope.$index)"></FilesOperate>
                                     </div>
                                 </template>
                             </el-table-column>

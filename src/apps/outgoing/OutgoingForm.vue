@@ -1,39 +1,48 @@
 <template>
+<el-dialog title="文件签发申请表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">  
     <div id="OutgoingForm">
-        <el-form ref="formupdate" :model="rows" :rules="rules" label-width="80px" style="margin-top:10px;">
+        
+        <el-form ref="formupdate" :model="formData" :rules="rules" label-width="80px" style="margin-top:10px;">
+            <!-- <el-row >
+                <el-col  :span="8" :offset="16" > 
+                     <el-form-item label="流水号：" >
+                        <span >{{formData.number}}</span>
+                    </el-form-item>
+                </el-col>
+            </el-row> -->
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="发文字号">
-                        <el-select v-model="rows.wordNo" @change="getWordyear" style="width: 100%;">
+                        <el-select v-model="formData.wordNo" @change="getWordyear" style="width: 100%;">
                             <el-option v-for="item in wordNoList" :key="item" :label="item" :value="item"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="发文文号">
-                        <el-input v-model="rows.docNo" style="width: 100%;"></el-input>
-                        <!-- <el-input v-model="rows.docNo" style="width: 100%;" :disabled="isTemplate != true"></el-input> -->
+                        <el-input v-model="formData.docNo" style="width: 100%;"></el-input>
+                        <!-- <el-input v-model="formData.docNo" style="width: 100%;" :disabled="isTemplate != true"></el-input> -->
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="发文类型">
-                        <el-select v-model="rows.type" style="width: 100%;">
+                        <el-select v-model="formData.type" style="width: 100%;">
                             <el-option v-for="item in type" :key="item" :label="item" :value="item"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="紧急程度">
-                        <el-select v-model="rows.urgency" style="width: 100%;">
+                        <el-select v-model="formData.urgency" style="width: 100%;">
                             <el-option v-for="item in urgency" :key="item" :label="item" :value="item"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="行文方向" prop="direction">
-                        <el-select v-model="rows.direction" style="width: 100%;">
+                        <el-select v-model="formData.direction" style="width: 100%;">
                             <el-option v-for="item in direction" :key="item" :label="item" :value="item"></el-option>
                         </el-select>
                     </el-form-item>
@@ -42,91 +51,90 @@
             <el-row>
                 <el-col :span="12">
                     <el-form-item label="主送" prop="mainTo_1">
-                        <el-select v-model="rows.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
+                        <el-select v-model="formData.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
                             <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
-                        <!-- <el-cascader :options="options" :show-all-levels="false"  filterable style="width:100%" v-model="rows.mainTo_1"></el-cascader> -->
+                        <!-- <el-cascader :options="options" :show-all-levels="false"  filterable style="width:100%" v-model="formData.mainTo_1"></el-cascader> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="抄送">
-                        <el-select v-model="rows.copyto_1" multiple filterable allow-create default-first-option placeholder="请选择抄送部门" style="width:100%">
+                        <el-select v-model="formData.copyto_1" multiple filterable allow-create default-first-option placeholder="请选择抄送部门" style="width:100%">
                             <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
-                        <!-- <el-cascader :options="options" :show-all-levels="false" filterable style="width:100%" v-model="rows.copyto_1"></el-cascader> -->
+                        <!-- <el-cascader :options="options" :show-all-levels="false" filterable style="width:100%" v-model="formData.copyto_1"></el-cascader> -->
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="拟稿单位">
-                        <el-input v-model="rows.organName" disabled="disabled"></el-input>
+                        <el-input v-model="formData.organName" disabled="disabled"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="拟稿人">
-                        <el-input v-model="rows.creatorName" disabled="disabled"></el-input>
+                        <el-input v-model="formData.creatorName" disabled="disabled"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="核稿">
-                        <el-input v-model="rows.checkorName" disabled="disabled"></el-input>
+                        <el-input v-model="formData.checkorName" disabled="disabled"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="8">
+                
+                <el-col :span="12">
+                    <el-form-item label="核对">
+                        <el-input v-model="formData.verify"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="印发份数">
+                        <el-input v-model="formData.parts"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
                     <!-- <el-form-item label="印制">
-                        <el-select v-model="rows.printer" style="width: 100%;">
+                        <el-select v-model="formData.printer" style="width: 100%;">
                             <el-option label="中关村发展集团办公室" value="中关村发展集团办公室"></el-option>
                         </el-select>
                     </el-form-item> -->
                     <el-form-item label="印制">
-                        <el-input v-model="rows.printer"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="核对">
-                        <el-input v-model="rows.verify"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="印发份数">
-                        <el-input v-model="rows.parts"></el-input>
+                        <el-input v-model="formData.printer"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="标题" prop="title">
-                        <el-input v-model="rows.title"></el-input>
+                        <el-input v-model="formData.title"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="正文" prop="content">
-                        <FilesOperate v-if="rows.text.name" :item="rows.text" :options="{preview:true,download:true,edit:true}" @getId="getId"  @editText="editText" @getReviseData="getReviseData"></FilesOperate>
-                        <el-button type="primary" size="small" @click="createTextBody" v-if="!rows.text.name">创建文件</el-button>
+                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}" @getId="getId"  @editText="editText" @getReviseData="getReviseData"></FilesOperate>
+                        <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>
                         <OutgoingeditFiles @editWordData="editWordData" ref="outgoingeditfiles"></OutgoingeditFiles>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="24">
-                    <el-form-item label="备注">
-                        <el-input type="textarea" :autosize="{minRows: 3}" v-model="rows.remark"></el-input>
-                    </el-form-item>
-                </el-col>
+                
             </el-row>
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <!-- <FilesOperate :options="{uploadCommpoent:true,attachmentsList:rows.attachments}"></FilesOperate> -->
-                        <div v-for="item in rows.attachments" :key="item.id" style="float:left">
+                        <div v-for="item in formData.attachments" :key="item.id" style="float:left">
                             <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId" @getReviseData="getReviseData"></FilesOperate>
                         </div>
                     </el-form-item>
@@ -134,16 +142,30 @@
             </el-row>
         </el-form>
     </div>
+    <div slot="footer" class="dialog-footer">
+        <el-button type="default" @click="saveFormValidate()">保存</el-button>
+        <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+    </div>
+</el-dialog>
+  
 </template>
 <script>
-import axios from "axios";
+/* eslint-disable */
+import moment from "moment";
+import axios from 'axios';
 import FilesOperate from "../FilesOperate";
+import { application } from "../application.js";
+import { publicMethods } from "../application.js";
 import OutgoingeditFiles from "./OutgoingeditFiles.vue";
-import moment from 'moment';
 export default {
+    mixins: [publicMethods],
     name: "OutgoingForm",
     data() {
         return {
+            dialogFormVisible: false,
+            formData: this.resetForm(),
+            users: [],
+            appFlowName: "motor-outgoingingapplication_outgoing",
             dialogFormVisible: false,
             percentage: 0,
             rows: {
@@ -186,118 +208,22 @@ export default {
             actionsList: []
         };
     },
+     watch: {
+      'formData.lowercase'(val) {
+          this.formData.upper = val ? this.convertCurrency(val) : "";
+      }
+    },
     components: {
         FilesOperate,
         OutgoingeditFiles
     },
-    props: ["formId", "operationType"],
-    mounted() {
-
-           axios
-                .post("/api/v1/issuesReported/queryList")
-                .then(res => {
-                  
-                })
-                .catch(function() {
-                 
-                });
-        const self = this;
-        self.getSedOrgan();
-        //self.getWordNo();
-        if (self.operationType == "edit") {
-            self.getForm();
-            // this.getActions();
-        }
-        const cookieItems = document.cookie.split(";");
-        cookieItems.forEach(function(item) {
-            if (item.indexOf("uname") > -1) {
-                self.rows.creatorName = decodeURIComponent(item.split("=")[1]);
-                self.cookie_uname = decodeURIComponent(item.split("=")[1]);
-            }
-            if (item.indexOf("oname") > -1) {
-                self.rows.organName = decodeURIComponent(item.split("=")[1]);
-                self.cookie_oname = decodeURIComponent(item.split("=")[1]);
-            }
-            if (item.indexOf("uid") > -1 && !self.rows.checkorName) {
-                axios
-                    .get(
-                        "/api/v1/users/" +
-                            decodeURIComponent(item.split("=")[1]) +
-                            "/organ/role/xtfz_deptManager"
-                    )
-                    .then(res => {
-                        self.rows.checkorName = self.checkorName =
-                            res.data.name;
-                    });
-            }
-        });
-
-        this.rows.printer = this.$store.getters.LoginData.oname;
-    },
-    watch: {
-        formId: function() {
-            this.getForm();
-            // this.getActions();
-        },
-        operationType: function() {
-            if (this.operationType == "create") {
-                this.clearForm();
-            } else {
-                this.getForm();
-            }
-        }
-    },
-    computed: {
-        isTemplate: function() {
-            let tmp = false;
-            if (this.actionsList) {
-                this.actionsList.forEach(function(action) {
-                    if (action.type == "TEMPLATE") {
-                        tmp = true;
-                    }
-                });
-            }
-
-            return tmp;
-        }
-    },
     methods: {
-        getProgress(event, file, fileList) {
-            this.percentage = parseInt(file.percentage);
-        },
-        getSedOrgan() {
-            const self = this;
-            axios
-                .get("/api/v1/users/sub/organ/list")
-                .then(res => {
-                    for(let item of res.data){
-                        item.label = item.value = item.name;
-                    }
-                    // res.data.unshift({value:"集团各部（室）",id:"01",label:"集团各部（室）"});
-                    self.options = res.data; 
-                })
-                .catch(function() {
-                    self.$message({
-                        message: "操作失败",
-                        type: "error"
-                    });
-                });
-        },
-        editText() {
-            // this.$refs.outgoingeditfiles.dialogForm = true;
-            this.$refs.outgoingeditfiles.openData(this.rows.text.url);
-        },
-
-        createTextBody() {
-            // this.$refs.outgoingeditfiles.dialogForm = true;
-            this.$refs.outgoingeditfiles.openData();
-        },
-        editWordData(data) {
+          editWordData(data) {
             // console.log(data);
             if (!data.url) {
                 return false;
             }
-            this.rows.text = {
+            this.formData.text = {
                 iconUrl: data.icon_url,
                 name: data.originalFilename,
                 url: data.url,
@@ -309,44 +235,11 @@ export default {
                     data.url.split("files")[1]
             };
         },
-        getReviseData(repelaceData) {
-            let self = this;
-            self.$confirm("确定要替换吗，替换后原文件将被删除?", "提示", {
-                type: "warning"
-            }).then(() => {
-                self.rows.attachments.forEach(function(value, index) {
-                    if (value.id == repelaceData.id) {
-                        axios
-                            .delete(
-                                "/api/v1/outgoing_forms/deleteAtt?id=" +
-                                    repelaceData.id
-                            )
-                            .then(res => {
-                                self.rows.attachments.splice(index, 1);
-                                self.rows.attachments.push(repelaceData.data);
-                            });
-                    }
-                });
-            });
+         createTextBody() {
+            this.$refs.outgoingeditfiles.dialogForm = true;
+            this.$refs.outgoingeditfiles.openData();
         },
-        getId(id) {
-            let self = this;
-            self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
-                self.rows.attachments.forEach(function(value, index) {
-                    if (value.id == id) {
-                        axios
-                            .delete("/api/v1/outgoing_forms/deleteAtt?id=" + id)
-                            .then(res => {
-                                self.rows.attachments.splice(index, 1);
-                            });
-                    }
-                });
-            });
-        },
-        // downloadFile(item) {
-        //     this.common.preview(item);
-        // },
-        getWordyear() {
+         getWordyear() {
             const self = this;
             const date = moment().format('YYYY');
             axios
@@ -364,280 +257,55 @@ export default {
                     });
                 });
         },
-        getWordNo() {
+        floaes(){
             const self = this;
-            axios
-                .get("/api/v1/doc/wordNo/list")
-                .then(res => {
-                    self.wordNoList = res.data;
-                })
-                .catch(function() {
-                    self.$message({
-                        message: "操作失败",
-                        type: "error"
-                    });
-                });
-        },
-        getForm(id) {
-            const self = this;
-            if (this.formId != "") {
-                axios.get("/api/v1/outgoing_forms/" + this.formId).then(res => {
-                    res.data.text =
-                        res.data.text == null
-                            ? { name: "" }
-                            : JSON.parse(res.data.text);
-
-                    //return false;
-                    if (res.data.mainTo) {
-                        res.data.mainTo_1 = res.data.mainTo.split(",");
-                    } else {
-                        res.data.mainTo_1 = [];
+            let codes={ code: 'outgoingingApplication'}
+            axios.post( '/synergy-common/serialNumber/getByTableCode',codes,
+                
+                {
+                    headers: {
+                        'Content-type':
+                            'application/json'
                     }
-                    if (res.data.copyto) {
-                        res.data.copyto_1 = res.data.copyto.split(",");
-                    } else {
-                        res.data.copyto_1 = [];
-                    }
-                    self.rows = res.data;
-                });
-            }
-        },
-        saveFormValidate(save) {
-            this.$refs["formupdate"].validate(valid => {
-                if (valid) {
-                    this.saveForm(save);
-                    this.$emit("saveStatus", false);
                 }
+            )
+            .then(res => {
+               this.formData.number=res.data.content.serialNumber
+            })
+            .catch(function () {
+                self.$message({
+                    message: '流水号失败',
+                    type: 'error'
+                });
             });
         },
-        saveForm(action = "") {
-            const self = this;
-            self.rows.text = JSON.stringify(self.rows.text);
-
-            if (self.rows.mainTo_1.length > 0) {
-                let mainTo = self.rows.mainTo_1.slice(0);
-                self.rows.mainTo = mainTo.join(",");
-            }
-
-            if (self.rows.copyto_1.length > 0) {
-                let copyto = self.rows.copyto_1.slice(0);
-                self.rows.copyto = copyto.join(",");
-            }
-            self.clearTime();
-            axios
-                .post("/api/v1/outgoing_forms/save", self.rows)
-                .then(res => {
-                    self.rows.text = JSON.parse(res.data.text);
-                    if (res.data.mainTo) {
-                        self.rows.mainTo_1 = res.data.mainTo.split(",");
-                    }
-
-                    if (res.data.copyto) {
-                        self.rows.copyto_1 = res.data.copyto.split(",");
-                    }
-
-                    self.currentFormId = res.data.id;
-                    self.$emit("saveStatus", false);
-                    if (action == "save") {
-                        self.submitForm();
-                    } else if (action == "fromEdit") {
-                        self.$emit("refreshForm");
-                    } else {
-                        if (this.operationType == "create") {
-                            this.clearForm();
-                        }
-                        self.$emit("refreshData");
-                    }
-                })
-                .catch(function() {
-                    self.$message({
-                        message: "操作失败",
-                        type: "error"
-                    });
-                });
-        },
-        clearTime() {
-            this.$refs.outgoingeditfiles.clearTime();
-        },
-        submitCheck() {
-            if (this.operationType == "create") {
-                this.saveForm("save");
+        time_change(time) {
+            // 改变时间获取数据
+            if (time === null) {
+               this.formData.startTime = "";
+                this.formData.endTime = "";
             } else {
-                this.submitForm();
+                let time0 = time[0];
+                let time1 = time[1];
+                this.formData.startTime = time0;
+                this.formData.endTime = time1;
             }
+           
         },
-        submitForm() {
-            const self = this;
-            axios
-                .post(
-                    "/api/v1/outgoings/" + this.currentFormId + "/create",
-                    "",
-                    {
-                        headers: {
-                            "Content-type": "application/json"
-                        }
-                    }
-                )
-                .then(res => {
-                    if (res.data.id != "") {
-                        self.commitForm(res.data.id);
-                    }
-                })
-                .catch(function() {
-                    self.$message({
-                        message: "操作失败",
-                        type: "error"
-                    });
-                });
+        setDataFromParent(data) {
+            this.formData = data;
+            this.formId = data.id;
+            this.dialogFormVisible = true;
+            this.createForm_status = false;
         },
-        comment(comment) {
-            let self = this;
-            axios
-                .put(`/api/v1/outgoing_forms/${self.currentFormId}/comment`, {
-                    content: "提交",
-                    node:'提交',
-                    action: 'COMMIT'
-
-                })
-                .then(res => {});
+        createForm() {
+            this.formData = this.resetForm();
+            this.dialogFormVisible = this.createForm_status = true;
         },
-        commitForm(processId) {
-            const self = this;
-            axios
-                .put(
-                    "/api/v1/outgoing_forms/" +
-                        this.currentFormId +
-                        "/commit/" +
-                        processId,
-                    "",
-                    {
-                        headers: {
-                            "Content-type": "application/json"
-                        }
-                    }
-                )
-                .then(res => {
-                    self.comment();
-                    self.startProcess();
-                })
-                .catch(function() {
-                    self.$message({
-                        message: "操作失败",
-                        type: "error"
-                    });
-                });
-        },
-        startProcess() {
-            const self = this;
-            const params = {
-                action: "COMMIT"
-            };
-            axios
-                .put(
-                    "/api/v1/outgoings/" + this.currentFormId + "/signal",
-                    JSON.stringify(params),
-                    {
-                        headers: {
-                            "Content-type": "application/json"
-                        }
-                    }
-                )
-                .then(res => {
-                    self.$emit("refreshData");
-                })
-                .catch(function() {
-                    self.$message({
-                        message: "操作失败",
-                        type: "error"
-                    });
-                });
-        },
-        deleteItem(index) {
-            this.$confirm("是否删除?", "提示", {
-                type: "warning"
-            }).then(() => {
-                this.tableData.splice(index, 1);
-            });
-        },
-        handleSuccess(response, file) {
-            const self = this;
-            if (response.length > 0) {
-                response.forEach(function(item) {
-                    self.rows.attachments.push(item);
-                });
-            }
-            this.$refs.upload.clearFiles();
-        },
-        handleRemove() {},
-        handlePreview() {},
-        getFormData() {
-            return this.rows;
-        },
-        openDialog(type) {
-            this.toType = type;
-            if (this.$refs["orgTree"]) {
-                this.$refs["orgTree"].setCheckedNodes([]);
-            }
-            this.dialogDisabled = true;
-        },
-        getCheckedNodes(type) {
-            const checkNodes = this.$refs["orgTree"].getCheckedNodes();
-            let tmpArray = [];
-            checkNodes.forEach(function(node) {
-                // if (
-                //     !node.children ||
-                //     (node.children && node.children.length == 0)
-                // ) {
-                tmpArray.push(node.label);
-                // }
-            });
-            if (this.toType == "mainTo") {
-                this.rows.mainTo = tmpArray.join(",");
-            } else {
-                this.rows.copyto = tmpArray.join(",");
-            }
-        },
-        deleteAttachment(id) {
-            const self = this;
-            if (this.rows.attachments.length > 0) {
-                this.$confirm("是否删除?", "提示", { type: "warning" }).then(
-                    () => {
-                        const params = {
-                            id: id
-                        };
-                        axios
-                            .delete(
-                                "/api/v1/outgoing_forms/deleteAtt?id=" + id,
-                                "",
-                                {
-                                    headers: {
-                                        "Content-type": "application/json"
-                                    }
-                                }
-                            )
-                            .then(res => {
-                                self.rows.attachments.forEach(function(
-                                    item,
-                                    index
-                                ) {
-                                    if (item.id == id) {
-                                        self.rows.attachments.splice(index, 1);
-                                    }
-                                });
-                            })
-                            .catch(function() {
-                                self.$message({
-                                    message: "操作失败",
-                                    type: "error"
-                                });
-                            });
-                    }
-                );
-            }
-        },
-        clearForm() {
-            this.rows = {
-                wordNo: "",
+        resetForm() {
+            // this.floaes()
+            let formData = {
+                 wordNo: "",
                 docNo: "",
                 // secrecyTerm: '',
                 type: "",
@@ -650,7 +318,7 @@ export default {
                 organName: this.cookie_oname,
                 creatorName: this.cookie_uname,
                 checkorName: this.checkorName,
-                printer: this.$store.getters.LoginData.oname,
+                printer: decodeURI(this.$store.getters.LoginData.companyName) +'('+this.$store.getters.LoginData.oname+')',
                 verify: "",
                 parts: "",
                 attachments: [],
@@ -659,22 +327,105 @@ export default {
                 text: { name: "" },
                 remark: ""
             };
-            // this.mainTo = [];
-            // this.copyto = [];
+            return formData;
+        },
+        saveFormValidate(type) {
+            this.$refs["formupdate"].validate(valid => {
+                if (valid) {
+                    this.saveForm(type);
+                }
+            });
+        },
+        // 提交保存
+        async saveForm(params) {
+            const $self = this;
+            let response = await $self.saveFormData(
+                "/api/v1/trainingApplication/save",
+                $self.formData
+            );
+            if (response) {
+                $self.formId = response.data.content.id;
+                $self.dialogFormVisible = false;
+                if (params) {
+                    $self.msgTips("提交成功", "success");
+                    if (this.createForm_status) {
+                        $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
+                    } else {                              
+                        let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
+                        actions.data.types = actions.data.types.filter(
+                            function(item) {
+                                return item.action == "COMMIT";
+                            }
+                        );
+                       actions.data.types[0]["comment"] =  actions.data.types[0].name;
+                       await $self.startSignal(actions.data.types[0],"fromeEdit");
+                       $self.emitMessage();
+                    }
+                } else {
+                    $self.msgTips("保存成功", "success");
+                    if (this.createForm_status) {
+                        $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
+                    } else {
+                        $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
+                    }
+                }
+            } else {
+                if (params) {
+                    $self.msgTips("提交失败", "warning");
+                } else {
+                    $self.msgTips("保存失败", "warning");
+                }
+            }
+        },
+        handleSuccess(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.formData.attachments.push(item);
+                });
+            }
+            this.$refs.upload.clearFiles();
+        },
+        submitUpload() {
+            this.$refs.upload.submit();
         }
-        // getActions() {
-        //     const self = this;
-        //     axios
-        //         .get("/api/v1/outgoings/" + this.formId + "/actions")
-        //         .then(res => {
-        //             self.actionsList = res.data.types;
-        //         });
-        // }
-    }
+    },
+    mounted() {
+        // this.floaes();
+        const self = this;
+        const cookieItems = document.cookie.split(";");
+        cookieItems.forEach(function(item) {
+            if (item.indexOf("uname") > -1) {
+                self.formData.creatorName = decodeURIComponent(item.split("=")[1]);
+                self.cookie_uname = decodeURIComponent(item.split("=")[1]);
+            }
+            if (item.indexOf("oname") > -1) {
+                self.formData.organName = decodeURIComponent(item.split("=")[1]);
+                self.cookie_oname = decodeURIComponent(item.split("=")[1]);
+            }
+            if (item.indexOf("uid") > -1 && !self.formData.checkorName) {
+                axios
+                    .get(
+                        "/api/v1/users/" +
+                            decodeURIComponent(item.split("=")[1]) +
+                            "/organ/role/xtfz_deptManager"
+                    )
+                    .then(res => {
+                        self.formData.checkorName = self.checkorName =
+                            res.data.name;
+                    });
+            }
+        });
+
+        this.formData.printer =decodeURI(this.$store.getters.LoginData.companyName) +'('+this.$store.getters.LoginData.oname+')';
+        // debugger
+  }
 };
 </script>
-<style lang="scss">
+
+<style lang="scss" scoped>
 #OutgoingForm {
+    
     .uploadBtn {
         margin-right: 10px;
         width: 100px;
@@ -684,28 +435,32 @@ export default {
         border: 1px solid #c0c4cc;
         border-radius: 2px;
         cursor: pointer;
+
         .el-upload {
             width: 100%;
             height: 100%;
+
             i {
                 font-size: 50px;
                 margin-top: 35px;
             }
         }
     }
-    .textcreate {
-        font-size: 16px;
-        color: #327dca;
-        padding: 0px 20px;
-        line-height: 20px;
-    }
-    .textcreate:hover {
-        text-decoration: underline;
-        cursor: pointer;
-
-        i {
-            display: inline-block !important;
-        }
-    }
+    input[type=number]::-webkit-inner-spin-button,  
+    input[type=number]::-webkit-outer-spin-button {  
+    -webkit-appearance: none;
 }
+}
+</style>
+<style scoped>
+
+#OutgoingForm  >>> .el-form-item__content{
+        width: calc(100% - 112px);
+    }
+    #OutgoingForm  >>> .el-select {
+        width: calc(100% - 15px);
+    }
+    #OutgoingForm  >>> .el-date-editor{
+        width: calc(100% - 0px);
+    }
 </style>

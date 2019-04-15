@@ -1,105 +1,268 @@
 <template>
-    <div id="Outgoing" class="main-container">
-        <div class="content-container">
-            <el-card class="box-card">
-                <OutgoingFilter @searchList="getSearchOptions"></OutgoingFilter>
-            </el-card>
-            <el-card class="box-card card_margin_10">
-                <div class="toolbar">
-                    <el-button type="primary" icon="el-icon-plus" @click="createForm">新建</el-button>
+    <div id="Outgoing">
+        <el-card class="box-card">
+               <!-- 查询 -->
+                <div id="OutgoingFilter">
+                    <el-form :inline="true"  class="demo-form-inline">
+                        <el-row class="filterForm">
+                            <el-col :span="8">
+                                <el-form-item label="标题" label-width="50px">
+                                    <el-input v-model="params.title" placeholder="请输入申请人"></el-input>
+                                </el-form-item>
+
+                            </el-col>
+                            <el-col :span="8">
+                                <el-form-item label="单据状态">
+                                    <el-select v-model="params.status" placeholder="请选择">
+                                        <el-option v-for="item in s_status" 
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                        </el-option>
+                                    </el-select>
+                                </el-form-item>
+                               
+                            </el-col>
+                            <el-col :span="8" class="searchBtn">
+                                <el-form-item class="positionBtn">
+                                    <el-button type="primary" @click="searchList">查询</el-button>
+                                    <el-button  @click="resetInput">重置</el-button>
+                                </el-form-item>
+                            </el-col>
+                    </el-row>
+                    </el-form>
                 </div>
-                <OutgoingList ref="outgoinglist" @showStatus="showStatus" @formId="getFormId" @editForm="editForm" :searchOptions="searchOptions"></OutgoingList>
-            </el-card>
-            <el-card class="box-card card_margin_10">
-                <OutgoingDetail ref="outgoingdetail" @refreshData="refreshData" :formId="formId"></OutgoingDetail>
-                <!-- <index :formId="formId"></index> -->
-            </el-card>
-        </div>
-        <el-dialog title="发文拟稿" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" @close='closeDialog'>
-            <OutgoingForm ref="outgoingform" @refreshData="refreshData" @saveStatus="saveStatus" :formId="dialogFormId" :operationType="operationType"></OutgoingForm>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="default" @click="saveForm" v-if="this.status == '' || this.status == '已驳回' ">保存</el-button>
-                <el-button type="primary" @click="submitForm">提交</el-button>
+
+                  <!-- 新建 -->
+                <div class="toolbar">
+                    <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
+                </div>
+                <div id="OutgoingList">
+               
+                 <el-table :data="tableData" stripe style="margin-bottom: 10px;" @row-click="showCurrentId">
+                    <el-table-column prop="title" label="标题"></el-table-column>
+                    <el-table-column prop="creatorName" label="拟稿人" width="200"></el-table-column>
+                    <el-table-column prop="organName" label="拟稿单位" width="200"></el-table-column>
+                    <el-table-column prop="status" label="单据状态" width="100">
+                        <template slot-scope="scope">
+                            {{scope.row.status | filterStatus }}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="created" label="创建时间" width="150" sortable>
+                        <template slot-scope="scope">
+                            {{scope.row.created | dateformat}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="操作" width="150" align="center">
+                        <template slot-scope="scope">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'">
+                                <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'">
+                                <el-button type="text" icon="el-icon-delete" @click="deleteForm(scope.row)"></el-button>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                   <br />
+                 <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
             </div>
-        </el-dialog>
+          </el-card>
+        <br>
+        <el-card class="box-card">
+            <OutgoingDetail :formId="formId" ref="OutgoingDetail" @reloadList = "reloadList" @resetStatus = "resetStatus"></OutgoingDetail>
+             <!-- :formId="formId" -->
+        </el-card>
+         <OutgoingForm  ref="OutgoingForm" @reloadList = "reloadList"></OutgoingForm>
+         <!-- :formDataFromIndex="formDataFromIndex"  -->
     </div>
 </template>
 <script>
-import OutgoingForm from './OutgoingForm';
-import OutgoingFilter from './OutgoingFilter';
-import OutgoingList from './OutgoingList';
-import OutgoingDetail from './OutgoingDetail';
-// import index from './index.vue';
+import OutgoingForm from "./OutgoingForm";
+import OutgoingDetail from "./OutgoingDetail";
+import {publicMethods} from "../application.js";
 export default {
-    name: 'Outgoing',
-    mounted() {},
+    mixins:[publicMethods],
+    name: "Outgoing",
     data() {
         return {
-            dialogFormVisible: false,
-            searchOptions: [],
-            formId: '',
-            dialogFormId: '',
-            operationType: 'create',
-            status: ''
+            tableData: [],
+            formDetails: {},
+            formId: "",
+            s_status: [
+                    {
+                        value: '00',
+                        label: '已保存'
+                    },
+                    {
+                        value: '01',
+                        label: '审核中'
+                    },
+                    {
+                        value: '02',
+                        label: '已驳回'
+                    },
+                    {
+                        value: '03',
+                        label: '已撤销'
+                    },
+                    {
+                        value: '04',
+                        label: '已完成'
+                    }
+                ],
+            params: {
+                pageNum: 1,
+                pageSize: 5,
+                department: "",
+                title: "",
+                total: 0,
+                committed:"",
+                status:"",
+                // outgoingingTime:[],
+                // startTime:"",
+                // endTime:"",
+                orderBy: "created",
+                desc: true,
+                options: []
+               
+            },
+            formName:"outgoingingApplication"
         };
     },
     components: {
         OutgoingForm,
-        OutgoingFilter,
-        OutgoingList,
         OutgoingDetail
-        // index
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+               "00":"已保存", 
+               "01":"审核中",
+               "02" :"已驳回",
+               "03" :"已撤销",
+               "04" :"已完成"
+            };
+            return xmlJson[data];
+        }
     },
     methods: {
-        getSearchOptions(searchOptions) {
-            this.searchOptions = searchOptions;
-        },
-        getFormId(id) {
-            this.formId = id;
-        },
-        showStatus(status) {
-            if (status == '已保存') {
-                this.status = '';
+         time_change(time) {
+            // 改变时间获取数据
+            if (time === null) {
+               this.params.startTime = "";
+                this.params.endTime = "";
             } else {
-                this.status = '已驳回';
+                let time0 = time[0];
+                let time1 = time[1];
+                this.params.startTime = time0;
+                this.params.endTime = time1;
+            }
+           
+        },
+        //获取列表
+         async getList(pageNum) {
+            let $self = this;
+            $self.url = "/api/v1/outgoing_forms/query";
+            let response = await $self.getQueryList();
+            if (response) {
+                if (response.data.forms.length > 0) {
+                   let formId = response.data.forms[0].id;
+                   $self.$refs.OutgoingDetail.getFormDetails(formId);
+                }
+               $self.tableData = response.data.forms;
+                $self.params.total = response.data.totalCount;
+                
+            } else {
+                $self.msgTips("获取列表失败", "warning");
             }
         },
-        createForm() {
-            this.status = '';
-            this.dialogFormVisible = true;
-            this.operationType = 'create';
-            if (this.$refs.outgoingform) {
-                this.$refs.outgoingform.clearForm();
+
+        //选择行
+        showCurrentId(row) {
+            this.$refs.OutgoingDetail.getFormDetails(row.id);
+        },
+
+        //新建
+        createNewForm() {
+             this.$refs.OutgoingForm.createForm();
+            
+        },
+
+        //编辑
+        editForm(data) {
+            this.$refs.OutgoingForm.setDataFromParent(data);
+        },
+        reloadList(params) {
+            if (params == "reload") {
+                this.params.pageNum = 1;
+                this.getList();
+            } else {
+                this.$refs.OutgoingDetail.getFormDetails(params.id);
             }
         },
-        editForm(id) {
-            this.dialogFormId = id;
-            this.dialogFormVisible = true;
-            this.operationType = 'edit';
+        resetStatus(data){
+              let $self = this;
+            for(let item of $self.tableData){
+                if(data.id == item.id){
+                  item.status = data.status;
+                }
+            }
         },
-        refreshData() {
-            this.$refs.outgoinglist.getList();
-            this.$refs.outgoingdetail.getForm();
+
+        //分页
+        currentChange(pageNum) {
+            this.params.pageNum = pageNum;
+            this.getList(pageNum);
         },
-        saveForm() {
-            this.$refs.outgoingform.saveFormValidate();
+        sizeChange(pageSize) {
+            this.params.pageSize = pageSize;
+            this.getList();
         },
-        saveStatus(status) {
-            this.dialogFormVisible = status;
+        searchList() {
+            this.getList();
         },
-        submitForm() {
-            this.$refs.outgoingform.saveFormValidate('save');
-        },
-        closeDialog() {
-            this.$refs.outgoingform.clearTime();
+        resetInput() {
+           this.params={
+               department: "",
+                title: "",
+                committed:"",
+                status:"",
+                outgoingingTime:[],
+                 startTime:"",
+                endTime:"",
+               
+            }
+            this.s_status=[]
         }
+    },
+    mounted() {
+        this.getList();
     }
 };
 </script>
 <style lang="scss" scoped>
-    #Outgoing {
-        .card_margin_10 {
-            margin-top: 10px;
+      #OutgoingFilter  .el-form-item--small.el-form-item{
+            width: 100%;
         }
+         #OutgoingFilter {
+             .searchBtn {
+            padding-right: 10px;
+            .positionBtn{
+                text-align: right;
+            }
+        }}
+</style>
+<style scoped>
+
+#OutgoingFilter .filterForm >>> .el-form-item__content{
+        width: calc(100% - 80px);
+    }
+    #OutgoingFilter .filterForm >>> .el-select {
+        width: calc(100% - 15px);
+    }
+    #OutgoingFilter .filterForm >>> .el-date-editor{
+        width: calc(100% - 0px);
     }
 </style>
+

@@ -251,7 +251,13 @@ export const publicMethods = {
                 });
             });
         },
-
+        deleteAttachmentsone(index) {
+            let $self = this;
+            $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+                 $self.formData.usingApproval[index].attachments.splice(0, 1);
+                
+            });
+        },
 
 
         //以下方法关于ntko创建,以及编辑文件文件

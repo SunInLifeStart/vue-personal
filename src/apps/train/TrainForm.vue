@@ -249,16 +249,7 @@ export default {
             }
            
         },
-        setDataFromParent(data) {
-            this.formData = data;
-            this.formId = data.id;
-            this.dialogFormVisible = true;
-            this.createForm_status = false;
-        },
-        createForm() {
-            this.formData = this.resetForm();
-            this.dialogFormVisible = this.createForm_status = true;
-        },
+      
         resetForm() {
             this.floaes()
             let formData = {
@@ -344,9 +335,7 @@ export default {
             }
             this.$refs.upload.clearFiles();
         },
-        submitUpload() {
-            this.$refs.upload.submit();
-        }
+       
     },
     mounted() {
         this.floaes()
