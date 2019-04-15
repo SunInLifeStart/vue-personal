@@ -17,14 +17,14 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="出差类型：">
-                            <el-select v-model="formData.travelType" placeholder="选择出差类型" @change="SubmissionChange">
+                            <el-select v-model="formData.travelType" :required="true" placeholder="选择出差类型" @change="SubmissionChange">
                                 <el-option v-for="item in typeoption" :key="item.index" :label="item" :value="item">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="呈报件：" label-width="30px;">
+                        <el-form-item label="呈报件：" :required="true" label-width="30px;">
                             <el-select v-model="submission" clearable filterable placeholder="选择呈报件" allow-create @change="SubmissionChange">
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
@@ -512,41 +512,86 @@ export default {
                 this.organs = res.data;
             });
         },
+        checkTravelMessage() {
+            let travelMessage = true;
+            for (let data of this.formData.evections) {
+                if (
+                    data.bname == '' ||
+                    data.ranks == '' ||
+                    data.departure == '' ||
+                    data.destination == '' ||
+                    data.startTime == '' ||
+                    data.endTime == ''
+                ) {
+                    travelMessage = false;
+                }
+            }
+            return travelMessage;
+        },
+        checkTravelType() {
+            let travelType = true;
+            for (let data of this.formData.estimate) {
+                if (
+                    !data.bsType[0] ||
+                    data.price == '' ||
+                    data.number == '' ||
+                    data.rate == ''
+                ) {
+                    travelType = false;
+                }
+            }
+            return travelType;
+        },
         addItem(type) {
             if (type == 'message') {
-                this.formData.evections.push({
-                    bname1: {},
-                    borganName: '',
-                    ranks: '',
-                    departure: '',
-                    destination: '',
-                    endTime: '',
-                    startTime: '',
-                    dateNumber: '',
-                    id: ''
-                });
+                if (this.travelMessage()) {
+                    this.formData.evections.push({
+                        bname1: {},
+                        bname: '',
+                        borganName: '',
+                        ranks: '',
+                        departure: '',
+                        destination: '',
+                        endTime: '',
+                        startTime: '',
+                        dateNumber: '',
+                        id: ''
+                    });
+                } else {
+                    this.$message({
+                        message: '请输入出差明细必填项',
+                        type: 'error'
+                    });
+                }
             }
             if (type == 'fenDetaill') {
-                this.formData.estimate.push({
-                    id: '',
-                    bsType: [],
-                    price: '',
-                    number: '',
-                    smallType: '',
-                    currency:
-                        this.formData.estimate.length == 0
-                            ? {
-                                  value: '￥',
-                                  label: '人民币'
-                              }
-                            : this.formData.estimate[0].currency,
-                    rate:
-                        this.formData.estimate.length == 0
-                            ? '1'
-                            : this.formData.estimate[0].rate,
-                    principal: 0,
-                    subtotal: 0
-                });
+                if (this.checkTravelType()) {
+                    this.formData.estimate.push({
+                        id: '',
+                        bsType: [],
+                        price: '',
+                        number: '',
+                        smallType: '',
+                        currency:
+                            this.formData.estimate.length == 0
+                                ? {
+                                      value: '￥',
+                                      label: '人民币'
+                                  }
+                                : this.formData.estimate[0].currency,
+                        rate:
+                            this.formData.estimate.length == 0
+                                ? '1'
+                                : this.formData.estimate[0].rate,
+                        principal: 0,
+                        subtotal: 0
+                    });
+                } else {
+                    this.$message({
+                        message: '请输入预估费用必输项',
+                        type: 'error'
+                    });
+                }
             }
         },
         deleteItem(item, index, type) {
@@ -750,11 +795,31 @@ export default {
             return formData;
         },
         saveFormValidate(type) {
-            this.$refs['formupdate'].validate(valid => {
-                if (valid) {
-                    this.saveForm(type);
-                }
-            });
+            if (this.formData.subOrganName == '集团领导') {
+                this.$message({
+                    message: '费用承担部门选择错误，请重新选择',
+                    type: 'error'
+                });
+            } else if (
+                this.formData.submission == '' ||
+                this.formData.travelType == '' ||
+                this.formData.subOrganName == '' ||
+                this.formData.reason == '' ||
+                this.checkTravelMessage() == false ||
+                this.checkTravelType() == false
+            ) {
+                this.$message({
+                    message: '请输入必填项',
+                    type: 'error'
+                });
+            } else {
+                this.saveForm(type);
+            }
+            // this.$refs['formupdate'].validate(valid => {
+            //   if (valid) {
+            //      this.saveForm(type);
+            // }
+            // });
         },
         // 提交保存
         async saveForm(params) {
