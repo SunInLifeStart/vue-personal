@@ -47,8 +47,10 @@
                 <el-button type="primary" icon="el-icon-plus" @click="cleanform">新建</el-button>
             </div>
 
-            <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
+            <el-table :data="tableData.filter(data => data.topicName.indexOf(search) > -1)" stripe style="width: 100%" @row-click="clickTableRow">
                 <el-table-column prop="topicName" label="议题名称">
+                </el-table-column>
+                <el-table-column prop="creatorName" label="提单人" type="index">
                 </el-table-column>
                 <el-table-column prop="creatorName" label="提单人">
                 </el-table-column>
@@ -62,6 +64,13 @@
                     <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="200">
+                    <template slot="header" slot-scope="scope">
+                        <el-input
+                                v-model="search"
+                                size="mini"
+                                placeholder="输入关键字搜索">
+                        </el-input>
+                    </template>
                     <template slot-scope="scope">
                         <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status === '00' || scope.row.status === '02'">
                             <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
@@ -123,6 +132,7 @@ export default {
             dialogFormVisibleDiscussion: false,
             searchBoardOptions: [],
             formBoardId: '',
+            search: '',
             dialogBoardFormId: '',
             operationBoardType: 'create',
             formName:"issuesReported",
@@ -179,7 +189,10 @@ export default {
                     $self.$refs.DiscussionDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.content.list;
-                $self.params.total = response.data.content.total;
+                for (let i = 0; i< 10; i++) {
+                    $self.tableData = $self.tableData.concat($self.tableData)
+                }
+                $self.params.total = $self.tableData.length;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
