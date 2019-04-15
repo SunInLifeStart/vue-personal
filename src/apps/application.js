@@ -237,7 +237,6 @@ export const publicMethods = {
             });
         },
         deleteAttachments(id) {
-            alert(id);
             let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
                 $self.formData.attachments.forEach(function (value, index) {
