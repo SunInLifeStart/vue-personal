@@ -78,6 +78,7 @@
     </div>
 </template>
 <script>
+import axios from "axios";
 import OutgoingForm from "./OutgoingForm";
 import OutgoingDetail from "./OutgoingDetail";
 import {publicMethods} from "../application.js";
@@ -127,6 +128,7 @@ export default {
                 options: []
                
             },
+            searchOptions: [],
             formName:"outgoingingApplication"
         };
     },
@@ -147,21 +149,30 @@ export default {
         }
     },
     methods: {
-         time_change(time) {
-            // 改变时间获取数据
-            if (time === null) {
-               this.params.startTime = "";
-                this.params.endTime = "";
-            } else {
-                let time0 = time[0];
-                let time1 = time[1];
-                this.params.startTime = time0;
-                this.params.endTime = time1;
-            }
-           
+        deleteForm(row) {
+            this.$confirm('此操作将永久删除该表单, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                console.log(row.id);
+                axios
+                    .delete('/api/v1/outgoing_forms/deleteForm', {
+                        data: [row.id]
+                    })
+                    .then(res => {
+                        this.getList();
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    });
+            });
         },
+        
         //获取列表
          async getList(pageNum) {
+            //  debugger
             let $self = this;
             $self.url = "/api/v1/outgoing_forms/query";
             let response = await $self.getQueryList();
@@ -220,18 +231,28 @@ export default {
             this.getList();
         },
         searchList() {
+            this.searchOptions = [];
+            if (this.params.title.trim() !== '') {
+                this.searchOptions.push({
+                    'field': 'title',
+                    'filter': 'LIKE',
+                    'value': this.params.title
+                });
+            }
+            if (this.params.status.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'status',
+                    filter: 'EQUAL',
+                    value: this.params.status
+                });
+            }
+            this.params.options=this.searchOptions
             this.getList();
         },
         resetInput() {
            this.params={
-               department: "",
-                title: "",
-                committed:"",
-                status:"",
-                outgoingingTime:[],
-                 startTime:"",
-                endTime:"",
-               
+               title: "",
+               status:'',
             }
             this.s_status=[]
         }

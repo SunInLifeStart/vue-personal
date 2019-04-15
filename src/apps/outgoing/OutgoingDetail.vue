@@ -177,7 +177,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'motor-outgoingingapplication_outgoing',
+            appFlowName:'outgoing-form_outgoing',
             formName:'outgoingingApplication',
             comments:[],
             dialogVisibleCrumb:false,

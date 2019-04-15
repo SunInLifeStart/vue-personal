@@ -143,7 +143,8 @@
         </el-form>
     </div>
     <div slot="footer" class="dialog-footer">
-        <el-button type="default" @click="saveFormValidate()">保存</el-button>
+        <!-- v-if="this.status == '' || this.status == '已驳回' " -->
+        <el-button type="default" @click="saveFormValidate()" >保存</el-button>
         <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
     </div>
 </el-dialog>
@@ -165,10 +166,10 @@ export default {
             dialogFormVisible: false,
             formData: this.resetForm(),
             users: [],
-            appFlowName: "motor-outgoingingapplication_outgoing",
+            appFlowName: "outgoing-form_outgoing",
             dialogFormVisible: false,
             percentage: 0,
-            rows: {
+            formData: {
                 wordNo: "",
                 docNo: "",
                 creatorName: "",
@@ -208,16 +209,86 @@ export default {
             actionsList: []
         };
     },
-     watch: {
-      'formData.lowercase'(val) {
-          this.formData.upper = val ? this.convertCurrency(val) : "";
-      }
+    watch: {
+        formId: function() {
+            this.getForm();
+            // this.getActions();
+        },
+        operationType: function() {
+            if (this.operationType == "create") {
+                this.clearForm();
+            } else {
+                this.getForm();
+            }
+        }
     },
     components: {
         FilesOperate,
         OutgoingeditFiles
     },
     methods: {
+        getForm(id) {
+            const self = this;
+            if (this.formId != "") {
+                axios.get("/api/v1/outgoing_forms/" + this.formId).then(res => {
+                    res.data.text =
+                        res.data.text == null
+                            ? { name: "" }
+                            : JSON.parse(res.data.text);
+
+                    //return false;
+                    if (res.data.mainTo) {
+                        res.data.mainTo_1 = res.data.mainTo.split(",");
+                    } else {
+                        res.data.mainTo_1 = [];
+                    }
+                    if (res.data.copyto) {
+                        res.data.copyto_1 = res.data.copyto.split(",");
+                    } else {
+                        res.data.copyto_1 = [];
+                    }
+                    self.formData = res.data;
+                });
+            }
+        },
+        getReviseData(repelaceData) {
+            let self = this;
+            self.$confirm("确定要替换吗，替换后原文件将被删除?", "提示", {
+                type: "warning"
+            }).then(() => {
+                self.formData.attachments.forEach(function(value, index) {
+                    if (value.id == repelaceData.id) {
+                        axios
+                            .delete(
+                                "/api/v1/outgoing_forms/deleteAtt?id=" +
+                                    repelaceData.id
+                            )
+                            .then(res => {
+                                self.formData.attachments.splice(index, 1);
+                                self.formData.attachments.push(repelaceData.data);
+                            });
+                    }
+                });
+            });
+        },
+         getSedOrgan() {
+            const self = this;
+            axios
+                .get("/api/v1/users/sub/organ/list")
+                .then(res => {
+                    for(let item of res.data){
+                        item.label = item.value = item.name;
+                    }
+                    // res.data.unshift({value:"集团各部（室）",id:"01",label:"集团各部（室）"});
+                    self.options = res.data; 
+                })
+                .catch(function() {
+                    self.$message({
+                        message: "操作失败",
+                        type: "error"
+                    });
+                });
+        },
           editWordData(data) {
             // console.log(data);
             if (!data.url) {
@@ -245,10 +316,10 @@ export default {
             axios
                 .get(
                     "/api/v1/doc/docNo/year/" + date +"?wordNo=" +
-                        encodeURI(this.rows.wordNo)
+                        encodeURI(this.formData.wordNo)
                 )
                 .then(res => {
-                    self.rows.docNo = res.data;
+                    self.formData.docNo = res.data;
                 })
                 .catch(function() {
                     self.$message({
@@ -315,6 +386,7 @@ export default {
                 according: "",
                 mainTo_1: [],
                 copyto_1: [],
+                 generalManagement: false,
                 organName: this.cookie_oname,
                 creatorName: this.cookie_uname,
                 checkorName: this.checkorName,
@@ -338,13 +410,36 @@ export default {
         },
         // 提交保存
         async saveForm(params) {
+            
             const $self = this;
+            $self.formData.text = JSON.stringify($self.formData.text);
+
+            if ($self.formData.mainTo_1.length > 0) {
+                let mainTo = $self.formData.mainTo_1.slice(0);
+                $self.formData.mainTo = mainTo.join(",");
+            }
+
+            if ($self.formData.copyto_1.length > 0) {
+                let copyto = $self.formData.copyto_1.slice(0);
+                $self.formData.copyto = copyto.join(",");
+            }
+            if ($self.formData.organName === '综合管理部') {
+                    $self.formData.generalManagement = true
+                }
             let response = await $self.saveFormData(
-                "/api/v1/trainingApplication/save",
+                "/api/v1/outgoing_forms/save",
                 $self.formData
             );
             if (response) {
-                $self.formId = response.data.content.id;
+                $self.formData.text = JSON.parse(response.data.text);
+                    if (response.data.mainTo) {
+                        $self.formData.mainTo_1 = response.data.mainTo.split(",");
+                    }
+
+                    if (response.data.copyto) {
+                        $self.formData.copyto_1 = response.data.copyto.split(",");
+                    }
+                $self.formId = response.data.id;
                 $self.dialogFormVisible = false;
                 if (params) {
                     $self.msgTips("提交成功", "success");
@@ -386,13 +481,44 @@ export default {
             }
             this.$refs.upload.clearFiles();
         },
+        clearForm() {
+            this.formData = {
+                wordNo: "",
+                docNo: "",
+                // secrecyTerm: '',
+                type: "",
+                secrecyGrade: "",
+                direction: "",
+                urgency: "",
+                according: "",
+                mainTo_1: [],
+                copyto_1: [],
+                organName: this.cookie_oname,
+                creatorName: this.cookie_uname,
+                checkorName: this.checkorName,
+                printer: this.$store.getters.LoginData.oname,
+                verify: "",
+                parts: "",
+                attachments: [],
+                title: "",
+                content: "",
+                text: { name: "" },
+                remark: ""
+            };
+            // this.mainTo = [];
+            // this.copyto = [];
+        },
         submitUpload() {
             this.$refs.upload.submit();
         }
     },
     mounted() {
+         const self = this;
         // this.floaes();
-        const self = this;
+         self.getForm();
+
+       
+        self.getSedOrgan();
         const cookieItems = document.cookie.split(";");
         cookieItems.forEach(function(item) {
             if (item.indexOf("uname") > -1) {

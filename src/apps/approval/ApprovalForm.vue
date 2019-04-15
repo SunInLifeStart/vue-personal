@@ -341,6 +341,14 @@ export default {
         FilesOperate
     },
     methods: {
+         deleteAttachmentsone(index) {
+            //  debugger
+            let $self = this;
+            $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+                 $self.formData.usingApproval[index].attachments.splice(0, 1);
+                
+            });
+        },
         // 时长
         getHour(a1,a2) {
              const $self = this;
