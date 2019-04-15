@@ -1,6 +1,6 @@
 <template>
   <div id="APPROVE">
-    <IncomingDetail :formId="formId" ref="IncomingDetail"></IncomingDetail>
+    <IncomingDetail ref="IncomingDetail"> </IncomingDetail>
   </div>
 </template>
 <script>
@@ -13,10 +13,10 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.IncomingDetail.setTab();
+         this.$refs.IncomingDetail.getFormDetails(this.formId);
     },
     components: {
-        IncomingDetail
+       IncomingDetail
     },
     watch: {},
 
