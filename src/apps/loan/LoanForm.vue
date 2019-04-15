@@ -148,7 +148,7 @@
                         <td colspan="2">
 
                             <!-- （{{this.selectItem.borrows.length > 0 ? this.selectItem.borrows[0].currency : '人民币'}}：&nbsp;&nbsp;{{selectItem.dx}}&nbsp;&nbsp;) -->
-                            {{formData.type}}
+                            {{formData.moneyUpper}}
                         </td>
                     </tr>
                     <tr>
@@ -175,7 +175,7 @@
                         <td colspan="6">
                             <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
                                 <p class="titlename" :title="item.name">{{item.name}}</p>
-                                <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i>
+                                <i class="el-icon-delete" @click.stop="deleteAttachments"></i>
                             </div>
                         </td>
                     </tr>
@@ -204,8 +204,34 @@ export default {
             formData: this.resetForm(),
             appFlowName: 'loans',
             organ: [],
-            submissionSelections: [],
-            travelSelections: [],
+            submissionSelections: [
+                {
+                    id: 1111,
+                    submissionNo: '部门城堡1'
+                },
+                {
+                    id: 22222,
+                    submissionNo: '部门城堡2'
+                },
+                {
+                    id: 33333,
+                    submissionNo: '部门城堡3'
+                }
+            ],
+            travelSelections: [
+                {
+                    id: 77777,
+                    number: '出差审批单1'
+                },
+                {
+                    id: 88888,
+                    number: '出差审批单2'
+                },
+                {
+                    id: 99999,
+                    number: '出差审批单3'
+                }
+            ],
             options2: [
                 {
                     value: 'C$',
@@ -324,8 +350,8 @@ export default {
     mounted() {
         this.getUsers();
         this.organs();
-        this.getTravelList();
-        this.getSubmissionlList();
+        // this.getTravelList();
+        // this.getSubmissionlList();
     },
     methods: {
         travelChange(val) {
@@ -525,7 +551,7 @@ export default {
                 sum += parseFloat(data.loanAmount);
             }
             this.formData.total = this.common.toDecimal2(sum);
-            this.formData.type = this.common.DX(this.formData.total);
+            this.formData.moneyUpper = this.common.DX(this.formData.total);
         },
         setDataFromParent(data) {
             this.formData.travelPeople = '';
@@ -541,8 +567,9 @@ export default {
             this.createForm_status = false;
         },
         createForm() {
-            this.submission = '';
             this.formData = this.resetForm();
+            this.formData.travelPeople = '';
+            this.formData.submission = '';
             this.getNum();
             this.dialogFormVisible = this.createForm_status = true;
         },
@@ -575,7 +602,7 @@ export default {
                 borrowTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 attachments: [],
                 symbol: '￥',
-                type: ''
+                moneyUpper: ''
             };
             return formData;
         },

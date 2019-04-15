@@ -124,7 +124,7 @@
                             金额大写
                         </td>
                         <td colspan="2">
-                            （{{this.tableData.borrows.length ==0 ? '人民币': this.tableData.borrows[0].currency}}：&nbsp;&nbsp;{{tableData.type}}&nbsp;&nbsp;)
+                            （{{this.tableData.borrows.length ==0 ? '人民币': this.tableData.borrows[0].currency}}：&nbsp;&nbsp;{{tableData.moneyUpper}}&nbsp;&nbsp;)
                         </td>
                     </tr>
                     <tr>
@@ -223,7 +223,7 @@ export default {
                 borrowTime: '',
                 attachments: [],
                 symbol: '',
-                type: ''
+                moneyUpper: ''
             },
             actions: [],
             formId: '',
