@@ -18,7 +18,7 @@
                         <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
-                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
+                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -221,6 +221,7 @@ export default {
             this.getList();
         },
         resetInput() {
+            this.params.page = 1;
             this.formInline.contractName = '';
             this.formInline.partyB = '';
             this.formInline.status = '';

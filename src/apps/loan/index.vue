@@ -5,22 +5,22 @@
                 <el-form :inline="true" class="demo-form-inline" label-width="60px;">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="提单人">
-                                <el-input v-model="formInline.organName" placeholder="提单人"></el-input>
+                            <el-form-item label="借款人">
+                                <el-input v-model="formInline.borrower" placeholder="借款人"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="费用承担部门">
-                                <el-input v-model="formInline.creatorName" placeholder="费用承担部门"></el-input>
+                                <el-input v-model="formInline.borrowDept" placeholder="费用承担部门"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="状态">
                                 <el-select v-model="formInline.status" placeholder="请选择">
-                                    <el-option label="已保存" value="已保存"></el-option>
-                                    <el-option label="审核中" value="审核中"></el-option>
-                                    <el-option label="已驳回" value="已驳回"></el-option>
-                                    <el-option label="已完成" value="已完成"></el-option>
+                                    <el-option label="已保存" value="00"></el-option>
+                                    <el-option label="审核中" value="01"></el-option>
+                                    <el-option label="已驳回" value="02"></el-option>
+                                    <el-option label="已完成" value="04"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
@@ -59,6 +59,9 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="currency" label="币种" align="left">
+                        <template slot-scope="scope">
+                            {{scope.row.borrows[0].currency}}
+                        </template>
                     </el-table-column>
                     <el-table-column prop="status" label="单据状态" align="left">
                     </el-table-column>
@@ -69,10 +72,12 @@
                     </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
+                            <!--v-if="scope.row.status == '00' || scope.row.status == '02'"-->
+                            <!--v-if="scope.row.status == '00'"-->
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -101,8 +106,8 @@ export default {
             searchOptions: [],
             formId: '',
             formInline: {
-                organName: '',
-                creatorName: '',
+                borrower: '',
+                borrowDept: '',
                 status: ''
             },
             params: {
@@ -133,18 +138,18 @@ export default {
     methods: {
         getFilter() {
             this.searchOptions = [];
-            if (this.formInline.creatorName.trim() !== '') {
+            if (this.formInline.borrower.trim() !== '') {
                 this.searchOptions.push({
-                    field: 'creatorName',
+                    field: 'borrower',
                     filter: 'LIKE',
-                    value: this.formInline.creatorName
+                    value: this.formInline.borrower
                 });
             }
-            if (this.formInline.organName.trim() !== '') {
+            if (this.formInline.borrowDept.trim() !== '') {
                 this.searchOptions.push({
-                    field: 'organName',
+                    field: 'borrowDept',
                     filter: 'LIKE',
-                    value: this.formInline.organName
+                    value: this.formInline.borrowDept
                 });
             }
             if (this.formInline.status.trim() !== '') {
@@ -216,7 +221,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.formInline.organName = this.formInline.creatorName = this.formInline.status =
+            this.formInline.borrower = this.formInline.borrowDept = this.formInline.status =
                 '';
             this.params.page = 1;
             this.getList();
