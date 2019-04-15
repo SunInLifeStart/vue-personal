@@ -163,6 +163,9 @@ export default {
             const $self = this;
             // self.clearTime();
             $self.formData.text = JSON.stringify($self.formData.text);
+            if ($self.formData.draftUnit === '综合管理部') {
+                $self.formData.generalManagement = true
+            }
             let response = await $self.saveFormData(
                 "/api/v1/submission_forms/save",
                 $self.formData
@@ -245,6 +248,7 @@ export default {
                 draftTime: moment().utc().format('YYYY-MM-DD'),
                 draftUser: this.$store.getters.LoginData.uname,
                 telephone: '',
+                generalManagement: false,
                 commonUser: '',
                 remarks: '',
                 content: '',
