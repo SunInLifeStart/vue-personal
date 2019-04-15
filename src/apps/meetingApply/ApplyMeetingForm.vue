@@ -84,27 +84,33 @@
                         <el-col :span="24">
                             <el-form-item label="参会人员" prop="phone">
                                 <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
-                                    <td colspan="4" style="width: 21%;">
-                                        <el-select v-model="item.department" placeholder="请输入参会部门" @change="changeDepartment(item, index)">
-                                            <el-option v-for="i in options"
-                                                       :key="i.id"
-                                                       :label="i.name"
-                                                       :value="i.id">
-                                                <!--:value="{value:i.value, label: i.label}">-->
-                                            </el-option>
-                                        </el-select>
+                                    <td colspan="8" style="width: 21%;">
+                                        <!--<el-select v-model="item.department" placeholder="请输入参会部门" @change="changeDepartment(item, index)">-->
+                                            <!--<el-option v-for="i in options"-->
+                                                       <!--:key="i.id"-->
+                                                       <!--:label="i.name"-->
+                                                       <!--:value="i.id">-->
+                                                <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
+                                            <!--</el-option>-->
+                                        <!--</el-select>-->
+                                        <el-cascader
+                                                :show-all-levels="false"
+                                                :props="props"
+                                                :options="options"
+                                                v-model="item.department"
+                                        ></el-cascader>
                                     </td>
-                                    <td colspan="4">
-                                        <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
-                                            <el-option
-                                                    v-for="i in item.personOptions"
-                                                    :key="i.id"
-                                                    :label="i.name"
-                                                    :value="i.id">
-                                                <!--:value="{value:i.value, label: i.label}">-->
-                                            </el-option>
-                                        </el-select>
-                                    </td>
+                                    <!--<td colspan="4">-->
+                                        <!--<el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">-->
+                                            <!--<el-option-->
+                                                    <!--v-for="i in item.personOptions"-->
+                                                    <!--:key="i.id"-->
+                                                    <!--:label="i.name"-->
+                                                    <!--:value="i.id">-->
+                                                <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
+                                            <!--</el-option>-->
+                                        <!--</el-select>-->
+                                    <!--</td>-->
                                 </tr>
                                 <tr>
                                     <td colspan="8" style="height: 30px;">
@@ -118,28 +124,34 @@
                         <el-col :span="24">
                             <el-form-item label="列席人员" prop="phone">
                                 <tr v-for="(item,index) in formData.sitIn" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
-                                    <td colspan="4" style="width: 21%;">
-                                        <el-select v-model="item.department" placeholder="请输入列席部门" @change="changeSitIn(item, index)">
-                                            <el-option v-for="i in options"
-                                                       :key="i.id"
-                                                       :label="i.name"
-                                                       :value="i.id">
-                                                <!--:value="{value:i.value, label: i.label}">-->
-                                            </el-option>
-                                        </el-select>
+                                    <td colspan="8" style="width: 21%;">
+                                        <!--<el-select v-model="item.department" placeholder="请输入列席部门" @change="changeSitIn(item, index)">-->
+                                            <!--<el-option v-for="i in options"-->
+                                                       <!--:key="i.id"-->
+                                                       <!--:label="i.name"-->
+                                                       <!--:value="i.id">-->
+                                                <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
+                                            <!--</el-option>-->
+                                        <!--</el-select>-->
+                                        <el-cascader
+                                                :show-all-levels="false"
+                                                :props="props"
+                                                :options="options"
+                                                v-model="item.department"
+                                        ></el-cascader>
                                     </td>
-                                    <td colspan="4">
-                                        <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
-                                            <el-option
-                                                    v-for="i in item.personOptions"
-                                                    :key="i.id"
-                                                    :label="i.name"
-                                                    :value="i.id">
-                                                {{i.name}}
-                                                <!--:value="{value:i.value, label: i.label}">-->
-                                            </el-option>
-                                        </el-select>
-                                    </td>
+                                    <!--<td colspan="4">-->
+                                        <!--<el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">-->
+                                            <!--<el-option-->
+                                                    <!--v-for="i in item.personOptions"-->
+                                                    <!--:key="i.id"-->
+                                                    <!--:label="i.name"-->
+                                                    <!--:value="i.id">-->
+                                                <!--{{i.name}}-->
+                                                <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
+                                            <!--</el-option>-->
+                                        <!--</el-select>-->
+                                    <!--</td>-->
                                 </tr>
                                 <tr>
                                     <td colspan="8" style="height: 30px;">
@@ -183,6 +195,11 @@
         data() {
             return {
                 dialogFormVisible: false,
+                props: {
+                    value: 'id',
+                    label: 'name',
+                    children: 'children'
+                },
                 discussionOption: [
                     {
                         value: 'specMeeting',
@@ -232,12 +249,6 @@
         components: {
             FilesOperate
         },
-        watch: {
-            'formData.lowercase'(val) {
-
-                this.formData.upper = val ? this.convertCurrency(val) : "";
-            }
-        },
         mounted() {
             this.getDiscussionUser()
         },
@@ -248,19 +259,33 @@
                 this.changePeople()
             },
             async getDiscussionUser() {
-                let user = await this.getUsers("/api/v1/users/list/organss")
+                let user = await this.getUsers("/api/v1/users/list/organs")
                 if (user) this.options = user.data
+                this.deleteChildren(this.options)
             },
-            changeSitIn(i, index) {
-                i.people = []
-                let users = this.options.filter(item => { return item.id == i.department})
-                if (users.length > 0) this.formData.sitIn[index].personOptions = users[0].users
+            deleteChildren(array) {
+                array.forEach(item => {
+                    if (!item.type && item.children.length === 0) {
+                        delete item.children
+                    }
+                    if (item.type && item.children.length === 0) {
+                        item.disabled = true
+                    }
+                    if (item.children && item.children.length > 0) {
+                        this.deleteChildren(item.children)
+                    }
+                })
             },
-            changeDepartment(i, index) {
-                i.people = []
-                let users = this.options.filter(item => { return item.id == i.department})
-                if (users.length > 0) this.formData.attendingDepartment[index].personOptions = users[0].users
-            },
+            // changeSitIn(i, index) {
+            //     i.people = []
+            //     let users = this.options.filter(item => { return item.id == i.department})
+            //     if (users.length > 0) this.formData.sitIn[index].personOptions = users[0].users
+            // },
+            // changeDepartment(i, index) {
+            //     i.people = []
+            //     let users = this.options.filter(item => { return item.id == i.department})
+            //     if (users.length > 0) this.formData.attendingDepartment[index].personOptions = users[0].users
+            // },
             changePeople() {
                 this.$forceUpdate()
             },
@@ -309,12 +334,12 @@
                     attachments: [],
                     attendingDepartment: [{
                         people: [],
-                        department: ''
+                        department: []
                     }],
                     requestedItems: [{}],
                     sitIn: [{
                         people: [],
-                        department: ''
+                        department: []
                     }],
                     numbers: '',
                     branchlineTo: '',
@@ -346,33 +371,33 @@
                                 if (self.formData.attendingDepartment) {
                                     self.formData.attendingDepartment.forEach(item => {
                                         // 处理部门
-                                        item.department = parseInt(item.department)
-                                        let users = self.options.filter(i => { return i.id == item.department})
-                                        item.personOptions =  users[0].users
+                                        // item.department = parseInt(item.department)
+                                        // let users = self.options.filter(i => { return i.id == item.department})
+                                        // item.personOptions =  users[0].users
                                         // 处理人员
-                                        if (item.person) {
-                                            item.people = item.person.split(',')
+                                        if (item.department) {
+                                            item.department = item.department.split(',')
                                         }
-                                        for (let i = 0; i<item.people.length; i++) {
-                                            item.people[i] = parseInt(item.people[i])
-                                        }
+                                        // for (let i = 0; i<item.people.length; i++) {
+                                        //     item.people[i] = parseInt(item.people[i])
+                                        // }
                                     })
                                     self.formData.sitIn.forEach(item => {
                                         // 处理部门
-                                        item.department = parseInt(item.department)
-                                        let users = self.options.filter(i => { return i.id == item.department})
-                                        item.personOptions =  users[0].users
+                                        // item.department = parseInt(item.department)
+                                        // let users = self.options.filter(i => { return i.id == item.department})
+                                        // item.personOptions =  users[0].users
                                         // 处理人员
-                                        if (item.person) {
-                                            item.people = item.person.split(',')
+                                        if (item.department) {
+                                            item.department = item.department.split(',')
                                         }
-                                        if (item.people) {
-                                            for (let i = 0; i<item.people.length; i++) {
-                                                item.people[i] = parseInt(item.people[i])
-                                            }
-                                        } else {
-                                            item.people = []
-                                        }
+                                        // if (item.people) {
+                                        //     for (let i = 0; i<item.people.length; i++) {
+                                        //         item.people[i] = parseInt(item.people[i])
+                                        //     }
+                                        // } else {
+                                        //     item.people = []
+                                        // }
                                     })
                                 }
                             // })
@@ -485,6 +510,9 @@
         .el-select {
             width: 100%;
         }
+        .el-cascader {
+             width: 100%;
+         }
         .tableNoBorder {
             width: 100%;
             table-layout: fixed;
