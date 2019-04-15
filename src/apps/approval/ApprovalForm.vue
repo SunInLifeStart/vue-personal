@@ -57,7 +57,7 @@
                                 v-for="item in onOption"
                                 :key="item.value"
                                 :label="item.label"
-                                :value="item.value">
+                                :value="item.value" :disabled=" item.label == '党支部章' && formData.organName !='综合管理部' ">
                             </el-option>
                         </el-select>
                     </el-form-item>
