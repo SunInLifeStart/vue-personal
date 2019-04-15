@@ -1,6 +1,7 @@
 <template>
   <div id="APPROVE">
-    <OutgoingDetail :formId="formId" ref="OutgoingDetail"></OutgoingDetail>
+    <OutgoingDetail ref="OutgoingDetail"> </OutgoingDetail>
+     <!-- :formId="formId" -->
   </div>
 </template>
 <script>
@@ -13,30 +14,28 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.OutgoingDetail.setTab();
+         this.$refs.OutgoingDetail.getFormDetails(this.formId);
     },
     components: {
-        OutgoingDetail
+       OutgoingDetail
     },
     watch: {},
+
     methods: {}
 };
 </script>
 <style lang="scss" scope>
-
 #APPROVE {
     height: 100%;
     #OutgoingDetail {
         height: 100%;
-         display: flex;
         width: 100%;
-         flex-direction: column;
+        display: flex;
+        flex-direction: column;
         #actionList {
-            height: 40px;
             padding-left: 20px;
-            margin-bottom: 0px;
         }
-         .btnhide{
+        .btnhide{
              display: block;
          }
         .formContent {
@@ -46,13 +45,7 @@ export default {
             overflow-y: auto;
             padding: 15px 30px;
         }
-        .crumbList {
-            margin: 15px 0px;
-        }
-        .tabmsg {
-            display: block;
-            margin: 15px 0px;
-        }
+        
     }
 }
 </style>
