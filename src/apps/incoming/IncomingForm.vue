@@ -47,13 +47,13 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="便签">
-                        <el-input v-model="formData.memo"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+            <!--<el-row>-->
+                <!--<el-col :span="24">-->
+                    <!--<el-form-item label="便签">-->
+                        <!--<el-input v-model="formData.memo"></el-input>-->
+                    <!--</el-form-item>-->
+                <!--</el-col>-->
+            <!--</el-row>-->
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="附件">
