@@ -32,6 +32,16 @@
                     <el-col :span="24">
                         <el-form-item label="资产类型：">{{tableData.assetsType}}</el-form-item>
                     </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="是否年度预算内:">
+                            {{this.tableData.budget ? '是': '否'}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="是否月度资金计划内:">
+                            {{this.tableData.plan ? '是': '否'}}
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="24">
                         <el-form-item label="备注：">{{tableData.remark}}</el-form-item>
                     </el-col>
