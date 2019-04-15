@@ -15,11 +15,9 @@
                 <el-button type="primary" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
-            <el-row style="margin-bottom:10px">
-                <el-col :span="8">
-                    <el-form-item label="流水号：">
-                        {{tableData.number}}
-                    </el-form-item>
+            <el-row style="margin-bottom:10px;margin-left: 5px;">
+                <el-col :span="8" style="margin-bottom:10px;margin-left: 5px;">
+                    流水号： {{tableData.number}}
                 </el-col>
             </el-row>
             <el-form :model='tableData' class="formList">
@@ -42,19 +40,19 @@
                             提单人
                         </td>
                         <td>
-                            {{tableData.applyname}}
+                            {{tableData.applyName}}
                         </td>
                         <td>
                             所属部门
                         </td>
                         <td colspan="2">
-                            {{tableData.applydept}}
+                            {{tableData.dept}}
                         </td>
                         <td>
                             发起时间
                         </td>
                         <td colspan="2">
-                            {{tableData.startTime}}
+                            {{tableData.initiateTime}}
                         </td>
                     </tr>
                     <tr>
@@ -147,7 +145,7 @@
                             是否预算内
                         </td>
                         <td colspan="6">
-                            <el-radio-group v-model="tableData.est">
+                            <el-radio-group v-model="tableData.budget">
                                 <el-radio label="1">预算内</el-radio>
                                 <el-radio label="2">预算外</el-radio>
                             </el-radio-group>
@@ -164,7 +162,7 @@
                             合同期限
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="formData.dateRadio" @change="typeandradioChange('dateRadio')">
+                            <el-radio-group v-model="tableData.terminationPeople">
                                 <el-row>
                                     <el-col :span="24">
                                         <el-radio label="1">自{{tableData.effectiveStart}} 至{{tableData.effectiveEnd}}
@@ -187,7 +185,7 @@
                             合同所涉经济行为批准文件
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="tableData.contractallow">
+                            <el-radio-group v-model="tableData.paper">
                                 <el-radio label="1">股东大会</el-radio>
                                 <el-radio label="2">董事会决议</el-radio>
                                 <el-radio label="3">会议纪要</el-radio>
@@ -201,7 +199,7 @@
                             合同相对方资质证照复印件
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="tableData.contractphoto">
+                            <el-radio-group v-model="tableData.copy">
                                 <el-radio label="1">有</el-radio>
                                 <el-radio label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
                                 <el-radio label="3">其他</el-radio>
@@ -213,7 +211,7 @@
                             合同价格形势
                         </td>
                         <td colspan="6">
-                            <el-radio-group v-model="tableData.contractprice">
+                            <el-radio-group v-model="tableData.shape">
                                 <el-radio label="1">固定总价</el-radio>
                                 <el-radio label="2">固定总和单价</el-radio>
                                 <el-radio label="3">其他</el-radio>
@@ -225,7 +223,7 @@
                             合同付款安排
                         </td>
                         <td colspan="6">
-                            {{tableData.contractArrange}}
+                            {{tableData.arrange}}
                         </td>
                     </tr>
                     <tr>
@@ -234,7 +232,7 @@
                         </td>
                         <td colspan="6">
                             <el-row style="padding:5px; min-height:100px">
-                                {{tableData.digest}}
+                                {{tableData.sponsor}}
                             </el-row>
                             <el-row style="padding:5px;">
                                 <el-col :span="14">
