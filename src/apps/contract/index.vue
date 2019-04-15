@@ -236,6 +236,8 @@ export default {
         }
     },
     mounted() {
+        console.log(this.$store.getters.LoginData.oname);
+        console.log(decodeURI(this.$store.getters.LoginData.companyName));
         this.getList();
     }
 };

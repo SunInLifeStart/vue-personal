@@ -60,20 +60,20 @@
                             提单人
                         </td>
                         <td>
-                            <el-input v-model="formData.applyname" disabled></el-input>
+                            <el-input v-model="formData.applyName" disabled></el-input>
                         </td>
                         <td>
                             所属部门
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.applydept" disabled></el-input>
+                            <el-input v-model="formData.dept" disabled></el-input>
                         </td>
                         <td>
                             <span class="span">*</span>
                             发起时间
                         </td>
                         <td colspan="2">
-                            <el-date-picker v-model="formData.startTime" type="datetime" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
+                            <el-date-picker v-model="formData.initiateTime" type="datetime" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
                             </el-date-picker>
                         </td>
                     </tr>
@@ -103,11 +103,11 @@
                             合同类型
                         </td>
                         <td colspan="2">
-                            <el-select v-model="formData.contractType" placeholder="请选择" @change="typeandradioChange('contractType')">
-                                <el-option label="土地出让合同签订" value="土地出让合同签订"></el-option>
-                                <el-option label="合同签订（土地出让合同外）" value="合同签订(土地出让合同外)"></el-option>
-                                <el-option label="超出招采委审批条款的合同审批(合同调整审批)" value="超出招采委审批条款的合同审批(合同调整审批)"></el-option>
-                                <el-option label="符合招采委审批条款的合同审批" value="符合招采委审批条款的合同审批"></el-option>
+                            <el-select v-model="formData.contractType" placeholder="请选择" @change="typeandradioChange('contractType')" :disabled="decodeURI(this.$store.getters.LoginData.companyName) == '中关村协同发展投资有限公司'">
+                                <el-option label="土地出让合同签订" value="土地出让合同签订" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村科技城发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津中科城乐居房地产开发有限公司'"></el-option>
+                                <el-option label="合同签订（土地出让合同外）" value="合同签订(土地出让合同外)" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村科技城发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津中科城乐居房地产开发有限公司'"></el-option>
+                                <el-option label="超出招采委审批条款的合同审批(合同调整审批)" value="超出招采委审批条款的合同审批(合同调整审批)" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '合肥中关村协同产业发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '石家庄中关村协同发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村孵化器有限公司'"></el-option>
+                                <el-option label="符合招采委审批条款的合同审批" value="符合招采委审批条款的合同审批" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '合肥中关村协同产业发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '石家庄中关村协同发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村孵化器有限公司'"></el-option>
                             </el-select>
                         </td>
                         <td colspan="2">
@@ -183,7 +183,7 @@
                             是否预算内
                         </td>
                         <td colspan="6">
-                            <el-radio-group v-model="formData.est">
+                            <el-radio-group v-model="formData.budget">
                                 <el-radio label="1">预算内</el-radio>
                                 <el-radio label="2">预算外</el-radio>
                             </el-radio-group>
@@ -201,7 +201,7 @@
                             合同期限
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="formData.dateRadio" @change="typeandradioChange('dateRadio')">
+                            <el-radio-group v-model="formData.terminationPeople" @change="typeandradioChange('dateRadio')">
                                 <el-row>
                                     <el-col :span="24">
                                         <el-radio label="1">自
@@ -209,9 +209,9 @@
                                  <el-date-picker v-model="formData.deadStartTime" type="daterange" range-separator="至" style="width:300px" :disabled="formData.deadline!='1'">
                                 </el-date-picker>
                                 -->
-                                            <el-date-picker v-model="formData.effectiveStart" type="date" placeholder="开始日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.dateRadio!='1'">
+                                            <el-date-picker v-model="formData.effectiveStart" type="date" placeholder="开始日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1'">
                                             </el-date-picker>至
-                                            <el-date-picker v-model="formData.effectiveEnd" type="date" placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.dateRadio!='1'">
+                                            <el-date-picker v-model="formData.effectiveEnd" type="date" placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1'">
                                             </el-date-picker>
                                         </el-radio>
                                     </el-col>
@@ -232,7 +232,7 @@
                             合同所涉经济行为批准文件
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="formData.contractallow">
+                            <el-radio-group v-model="formData.paper">
                                 <el-radio label="1">股东大会</el-radio>
                                 <el-radio label="2">董事会决议</el-radio>
                                 <el-radio label="3">会议纪要</el-radio>
@@ -246,7 +246,7 @@
                             合同相对方资质证照复印件
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="formData.contractphoto">
+                            <el-radio-group v-model="formData.copy">
                                 <el-radio label="1">有</el-radio>
                                 <el-radio label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
                                 <el-radio label="3">其他</el-radio>
@@ -258,7 +258,7 @@
                             合同价格形式
                         </td>
                         <td colspan="6">
-                            <el-radio-group v-model="formData.contractprice">
+                            <el-radio-group v-model="formData.shape">
                                 <el-radio label="1">固定总价</el-radio>
                                 <el-radio label="2">固定总和单价</el-radio>
                                 <el-radio label="3">其他</el-radio>
@@ -270,7 +270,7 @@
                             合同付款安排
                         </td>
                         <td colspan="6">
-                            <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.contractArrange"></el-input>
+                            <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.arrange"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -280,7 +280,7 @@
                         </td>
                         <td colspan="6">
                             <el-row>
-                                <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.digest"></el-input>
+                                <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.sponsor"></el-input>
                             </el-row>
                             <el-row style="padding:5px">
                                 <el-col :span="14">
@@ -358,7 +358,7 @@ export default {
                     this.formData.contractAmount = '0';
                 }
             } else if (type == 'dateRadio') {
-                if (this.formData.dateRadio == '2') {
+                if (this.formData.terminationPeople == '2') {
                     this.formData.effectiveStart = '';
                     this.formData.effectiveEnd = '';
                 }
@@ -470,9 +470,9 @@ export default {
         resetForm() {
             let formData = {
                 number: '',
-                applyname: cookies.get('uname'),
-                applydept: cookies.get('oname'),
-                startTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), //提单时间
+                applyName: cookies.get('uname'),
+                dept: cookies.get('oname'),
+                initiateTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'), //提单时间
                 manager: cookies.get('uname'),
                 contractName: '', // 合同名称
                 contractNum: '',
@@ -481,16 +481,16 @@ export default {
                 moneyRadio: '1',
                 contractAmount: '0',
                 uptotal: '0',
-                est: '1',
-                dateRadio: '1',
+                budget: '1',
+                terminationPeople: '1',
                 effectiveStart: '',
                 effectiveEnd: '',
                 attachments: [],
-                contractallow: '1',
-                contractphoto: '1',
-                contractprice: '1',
-                contractArrange: '',
-                digest: '', //合同内容摘要
+                paper: '1',
+                copy: '1',
+                shape: '1',
+                arrange: '',
+                sponsor: '', //合同内容摘要
                 tpxzName: '',
                 tpxzId: [], //谈判小组成员
                 partyA: '', // 甲方
@@ -556,8 +556,8 @@ export default {
         ruleHint() {
             let ruleHint = true;
             if (
-                this.formData.startTime == '' ||
-                this.formData.startTime == null
+                this.formData.initiateTime == '' ||
+                this.formData.initiateTime == null
             ) {
                 ruleHint = false;
                 this.$message({
@@ -610,8 +610,8 @@ export default {
                     type: 'error'
                 });
             } else if (
-                this.formData.digest == '' ||
-                this.formData.digest == null
+                this.formData.sponsor == '' ||
+                this.formData.sponsor == null
             ) {
                 ruleHint = false;
                 this.$message({
