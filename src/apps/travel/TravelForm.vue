@@ -16,7 +16,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="出差类型：">
+                        <el-form-item label="出差类型：" :required="true">
                             <el-select v-model="formData.travelType" :required="true" placeholder="选择出差类型" @change="SubmissionChange">
                                 <el-option v-for="item in typeoption" :key="item.index" :label="item" :value="item">
                                 </el-option>
@@ -544,7 +544,7 @@ export default {
         },
         addItem(type) {
             if (type == 'message') {
-                if (this.travelMessage()) {
+                if (this.checkTravelMessage()) {
                     this.formData.evections.push({
                         bname1: {},
                         bname: '',
