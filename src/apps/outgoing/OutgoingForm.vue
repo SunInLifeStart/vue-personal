@@ -50,6 +50,7 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
+                    {{formData.mainTo_1}}
                     <el-form-item label="主送" prop="mainTo_1">
                         <el-select v-model="formData.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
                             <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
@@ -405,11 +406,10 @@ export default {
            
         },
         setDataFromParent(data) {
-        //     this.formData.mainTo_1=data.mainTo
-        //     this.formData.copyto_1=data.copyto
-        //    debugger
+            this.formData.mainTo_1=data.mainTo
+            this.formData.copyto_1=data.copyto
+            debugger
             this.formData = data;
-             
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
@@ -459,15 +459,17 @@ export default {
             
             const $self = this;
             $self.formData.text = JSON.stringify($self.formData.text);
-
+            // debugger
             if ($self.formData.mainTo_1.length > 0) {
                 let mainTo = $self.formData.mainTo_1.slice(0);
                 $self.formData.mainTo = mainTo.join(",");
+                $self.formData.mainTo_1=mainTo.join(",");
             }
 
             if ($self.formData.copyto_1.length > 0) {
                 let copyto = $self.formData.copyto_1.slice(0);
                 $self.formData.copyto = copyto.join(",");
+                $self.formData.copyto_1 = copyto.join(",");
             }
             if ($self.formData.organName === '综合管理部') {
                     $self.formData.generalManagement = true
@@ -478,6 +480,7 @@ export default {
                 $self.formData
             );
             if (response) {
+                debugger
                 $self.formData.text = JSON.parse(response.data.text);
                     if (response.data.mainTo) {
                         $self.formData.mainTo_1 = response.data.mainTo.split(",");
@@ -563,9 +566,7 @@ export default {
          const self = this;
         // this.floaes();
          self.getForm();
-
-       
-        self.getSedOrgan();
+         self.getSedOrgan();
         const cookieItems = document.cookie.split(";");
         cookieItems.forEach(function(item) {
             if (item.indexOf("uname") > -1) {
