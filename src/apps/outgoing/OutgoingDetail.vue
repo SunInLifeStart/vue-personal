@@ -92,15 +92,11 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="正文：">
-                         <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true,upload:replaceButton,uploadUrl:replaceButton,edit:true}"   @getId="getId"></FilesOperate>
+                         <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true,upload:replaceButton,uploadUrl:replaceButton}"   @getId="getId"></FilesOperate>
                     </el-form-item>
                 </el-col>
             </el-row>
-             <el-row>
-                <el-col :span="24" style="word-break:break-all">
-                    <el-form-item label="备注：">{{tableData.remark}}</el-form-item>
-                </el-col>
-            </el-row>
+            
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="附件：">
@@ -250,7 +246,6 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            // debugger;
             let actions = await $self.getActions();
             // let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();

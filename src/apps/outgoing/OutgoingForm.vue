@@ -42,8 +42,7 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    {{formData.mainTo_1}}
-                    <el-form-item label="主送" prop="mainTo_1">
+                  <el-form-item label="主送" prop="mainTo_1">
                         <el-select v-model="formData.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
                             <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
@@ -166,7 +165,7 @@ export default {
                 organName: "",
                 attachments: [],
                 content: "",
-                mainTo_1: [],
+                mainTo_1:[],
                 copyto_1: [],
                 text: { name: "" }
             },
@@ -226,14 +225,14 @@ export default {
     },
     watch: {
         formId: function() {
-            this.getForm();
+            // this.getForm();
             // this.getActions();
         },
         operationType: function() {
             if (this.operationType == "create") {
                 this.clearForm();
             } else {
-                this.getForm();
+                // this.getForm();
             }
         }
     },
@@ -255,31 +254,7 @@ export default {
                 });
             });
         },
-        getForm(id) {
-            const self = this;
-            // debugger
-            if (this.formId != "") {
-                axios.get("/api/v1/outgoing_forms/" + this.formId).then(res => {
-                    res.data.text =
-                        res.data.text == null
-                            ? { name: "" }
-                            : JSON.parse(res.data.text);
-
-                    //return false;
-                    if (res.data.mainTo) {
-                        res.data.mainTo_1 = res.data.mainTo.split(",");
-                    } else {
-                        res.data.mainTo_1 = [];
-                    }
-                    if (res.data.copyto) {
-                        res.data.copyto_1 = res.data.copyto.split(",");
-                    } else {
-                        res.data.copyto_1 = [];
-                    }
-                    self.formData = res.data;
-                });
-            }
-        },
+        
         // getReviseData(repelaceData) {
         //     let self = this;
         //     self.$confirm("确定要替换吗，替换后原文件将被删除?", "提示", {
@@ -361,22 +336,16 @@ export default {
                 });
             });
         },
-        time_change(time) {
-            // 改变时间获取数据
-            if (time === null) {
-               this.formData.startTime = "";
-                this.formData.endTime = "";
-            } else {
-                let time0 = time[0];
-                let time1 = time[1];
-                this.formData.startTime = time0;
-                this.formData.endTime = time1;
-            }
-           
-        },
+       
         setDataFromParent(data) {
             this.formData = data;
-            this.formId = data.id;
+            if(this.formData.mainTo!="" || this.formData.mainTo!=null){
+               this.formData.mainTo_1 = data.mainTo.split(",");
+            }
+            if(this.formData.copyto!="" || this.formData.copyto!=null){
+             this.formData.copyto_1 = data.copyto.split(",");
+            }
+             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
         },
@@ -425,17 +394,14 @@ export default {
             
             const $self = this;
             $self.formData.text = JSON.stringify($self.formData.text);
-            // debugger
             if ($self.formData.mainTo_1.length > 0) {
                 let mainTo = $self.formData.mainTo_1.slice(0);
                 $self.formData.mainTo = mainTo.join(",");
-                $self.formData.mainTo_1=mainTo.join(",");
             }
 
             if ($self.formData.copyto_1.length > 0) {
                 let copyto = $self.formData.copyto_1.slice(0);
                 $self.formData.copyto = copyto.join(",");
-                $self.formData.copyto_1 = copyto.join(",");
             }
             if ($self.formData.organName === '综合管理部') {
                     $self.formData.generalManagement = true
@@ -446,7 +412,6 @@ export default {
                 $self.formData
             );
             if (response) {
-                debugger
                 $self.formData.text = JSON.parse(response.data.text);
                     if (response.data.mainTo) {
                         $self.formData.mainTo_1 = response.data.mainTo.split(",");
@@ -531,7 +496,7 @@ export default {
     mounted() {
          const self = this;
         // this.floaes();
-         self.getForm();
+        //  self.getForm();
          self.getSedOrgan();
         const cookieItems = document.cookie.split(";");
         cookieItems.forEach(function(item) {
@@ -558,7 +523,7 @@ export default {
         });
 
         this.formData.printer =decodeURI(this.$store.getters.LoginData.companyName) +'('+this.$store.getters.LoginData.oname+')';
-        // debugger
+       
   }
 };
 </script>
