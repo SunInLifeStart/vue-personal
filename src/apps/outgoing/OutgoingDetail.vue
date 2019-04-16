@@ -104,7 +104,23 @@
 
                 </el-col>
             </el-row>
-            <el-row v-if="tableData.comments && tableData.comments.length > 0">
+            <el-row v-if="comments && comments.length > 0">
+                    <el-col :span="24">
+                        <h3>审批意见</h3>
+                        <div class="items">
+                            <div class="item" v-for="item in comments" :key="item.id">
+                                <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
+                                <div class="info">
+                                    <div class="creator">
+                                        <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
+                                    </div>
+                                    <div class="content">{{item.fullMessage}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </el-col>
+                </el-row>
+            <!-- <el-row v-if="tableData.comments && tableData.comments.length > 0">
                 <el-col :span="24">
                     <h3>审批意见</h3>
                     <div class="items">
@@ -119,7 +135,7 @@
                         </div>
                     </div>
                 </el-col>
-            </el-row>
+            </el-row> -->
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
