@@ -92,7 +92,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="正文：">
-                         <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true,upload:replaceButton,uploadUrl:replaceButton,edit:true}"  @editText="editText" @getId="getId" @getReviseData="getReviseData"></FilesOperate>
+                         <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true,upload:replaceButton,uploadUrl:replaceButton,edit:true}"   @getId="getId"></FilesOperate>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -167,7 +167,6 @@ import axios from "axios";
 import Comment from "../Comment";
 import OutgoingForm from "./OutgoingForm";
 import FilesOperate from "../FilesOperate";
-import OutgoingeditFiles from "./OutgoingeditFiles.vue";
 import PdfJs from "../PdfJs";
 import moment from "moment";
 export default {
@@ -226,7 +225,6 @@ export default {
         FilesOperate,
         PdfJs,
         OutgoingForm,
-        OutgoingeditFiles
     },
     methods: {
         getId(id) {},

@@ -124,8 +124,8 @@
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <!-- <FilesOperate :options="{uploadCommpoent:true,attachmentsList:rows.attachments}"></FilesOperate> -->
-                        <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId" @getReviseData="getReviseData"></FilesOperate>
+                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -280,26 +280,26 @@ export default {
                 });
             }
         },
-        getReviseData(repelaceData) {
-            let self = this;
-            self.$confirm("确定要替换吗，替换后原文件将被删除?", "提示", {
-                type: "warning"
-            }).then(() => {
-                self.formData.attachments.forEach(function(value, index) {
-                    if (value.id == repelaceData.id) {
-                        axios
-                            .delete(
-                                "/api/v1/outgoing_forms/deleteAtt?id=" +
-                                    repelaceData.id
-                            )
-                            .then(res => {
-                                self.formData.attachments.splice(index, 1);
-                                self.formData.attachments.push(repelaceData.data);
-                            });
-                    }
-                });
-            });
-        },
+        // getReviseData(repelaceData) {
+        //     let self = this;
+        //     self.$confirm("确定要替换吗，替换后原文件将被删除?", "提示", {
+        //         type: "warning"
+        //     }).then(() => {
+        //         self.formData.attachments.forEach(function(value, index) {
+        //             if (value.id == repelaceData.id) {
+        //                 axios
+        //                     .delete(
+        //                         "/api/v1/outgoing_forms/deleteAtt?id=" +
+        //                             repelaceData.id
+        //                     )
+        //                     .then(res => {
+        //                         self.formData.attachments.splice(index, 1);
+        //                         self.formData.attachments.push(repelaceData.data);
+        //                     });
+        //             }
+        //         });
+        //     });
+        // },
          getSedOrgan() {
             const self = this;
             axios
