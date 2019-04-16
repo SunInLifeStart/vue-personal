@@ -167,7 +167,6 @@ import axios from "axios";
 import Comment from "../Comment";
 import OutgoingForm from "./OutgoingForm";
 import FilesOperate from "../FilesOperate";
-import OutgoingeditFiles from "./OutgoingeditFiles.vue";
 import PdfJs from "../PdfJs";
 import moment from "moment";
 export default {
@@ -226,7 +225,6 @@ export default {
         FilesOperate,
         PdfJs,
         OutgoingForm,
-        OutgoingeditFiles
     },
     methods: {
         getId(id) {},

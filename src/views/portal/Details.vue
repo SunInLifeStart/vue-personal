@@ -4,7 +4,7 @@
     <div class="portal">
         <div class="portalList">
             <div style="padding:15px 10px" v-if="type == 'newsList' || type =='newsListToList'"><router-link :to="{path:'/portal'}">首页</router-link> > <router-link :to="'/portal/list/newsListToList'+'/'+page">新闻中心</router-link></div>
-             <div style="padding:15px 10px" v-if="type != 'newsList' && type !='newsListToList'"><router-link :to="{path:'/portal'}">首页</router-link> > <router-link :to="'/portal/list/'+type+'/'+ page">{{name}}</router-link></div>
+             <div style="padding:15px 10px" v-if="type != 'newsList' && type !='newsListToList'"><router-link :to="{path:'/portal'}">首页</router-link> > <router-link :to="'/portal/list/'+type+'/'+ page">{{name | filterPartName}}</router-link></div>
             <div class="content">
                 <!-- {{data.url[0]}} -->
                   <div class="title">
@@ -80,6 +80,12 @@ export default {
     filters: {
         formatTxt: function(txt) {
             return txt.split("/files/")[1];
+        },
+        filterPartName:function(data){
+           if(data == "集团通讯录"){
+               data = "通讯录"
+           }
+           return data;
         }
     },
     mounted() {
@@ -117,10 +123,10 @@ export default {
                     if ('PDF,DOCX,PPTX,XLSX,DOC,XLS'.includes(data.url[0].type.toUpperCase())) {
                          if (process.env.NODE_ENV === 'production') {
                               this.pdfUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url=" + data.url[0].url;
-                              data.url.splice(0,1);
+                              //data.url.splice(0,1);
                          }else{
                              this.pdfUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&url=" + data.url[0].url;
-                             data.url.splice(0,1);
+                            // data.url.splice(0,1);
                          } 
                     }
                 }

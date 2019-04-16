@@ -271,7 +271,6 @@ export const publicMethods = {
             } else {
                 $self.openUrl = "http://static1.yxpe.com.cn/edit.html?"
             }
-
             if ($self.timer) {
                 $self.clearTime();
             }
