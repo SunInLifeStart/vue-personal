@@ -106,6 +106,7 @@ export default {
                     label_xwfx: '特急'
                 }
             ],
+            appFlowName:'incoming-form_incoming',
             rules: {
                 title: [
                     { required: true, message: '请输入标题', trigger: 'blur' }
