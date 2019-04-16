@@ -1,15 +1,7 @@
 <template>
 <el-dialog title="文件签发申请表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">  
     <div id="OutgoingForm">
-        
         <el-form ref="formupdate" :model="formData" :rules="rules" label-width="80px" style="margin-top:10px;">
-            <!-- <el-row >
-                <el-col  :span="8" :offset="16" > 
-                     <el-form-item label="流水号：" >
-                        <span >{{formData.number}}</span>
-                    </el-form-item>
-                </el-col>
-            </el-row> -->
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="发文字号">
@@ -55,7 +47,6 @@
                         <el-select v-model="formData.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
                             <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
-                        <!-- <el-cascader :options="options" :show-all-levels="false"  filterable style="width:100%" v-model="formData.mainTo_1"></el-cascader> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -63,7 +54,6 @@
                         <el-select v-model="formData.copyto_1" multiple filterable allow-create default-first-option placeholder="请选择抄送部门" style="width:100%">
                             <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
-                        <!-- <el-cascader :options="options" :show-all-levels="false" filterable style="width:100%" v-model="formData.copyto_1"></el-cascader> -->
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -118,10 +108,9 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="正文" prop="content">
-                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}" @getId="getId"  @editText="editText" @getReviseData="getReviseData"></FilesOperate>
-                        <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name" style="float:left">创建文件</el-button>
-                        <OutgoingeditFiles @editWordData="editWordData" ref="outgoingeditfiles"></OutgoingeditFiles>
+                     <el-form-item label="正文" style="float:left">
+                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}"  @editText="openData(formData.text.url)"></FilesOperate>
+                        <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -158,7 +147,6 @@ import axios from 'axios';
 import FilesOperate from "../FilesOperate";
 import { application } from "../application.js";
 import { publicMethods } from "../application.js";
-import OutgoingeditFiles from "./OutgoingeditFiles.vue";
 export default {
     mixins: [publicMethods],
     name: "OutgoingForm",
@@ -251,7 +239,6 @@ export default {
     },
     components: {
         FilesOperate,
-        OutgoingeditFiles
     },
     methods: {
         getId(id) {
@@ -331,26 +318,8 @@ export default {
                     });
                 });
         },
-          editWordData(data) {
-            // console.log(data);
-            if (!data.url) {
-                return false;
-            }
-            this.formData.text = {
-                iconUrl: data.icon_url,
-                name: data.originalFilename,
-                url: data.url,
-                path: data.path,
-                file_name: data.file_name,
-                pdfUrl:
-                    data.url.split("files")[0] +
-                    "pdf" +
-                    data.url.split("files")[1]
-            };
-        },
-         createTextBody() {
-            this.$refs.outgoingeditfiles.dialogForm = true;
-            this.$refs.outgoingeditfiles.openData();
+        createTextBody() {
+            this.openData();
         },
          getWordyear() {
             const self = this;
@@ -406,9 +375,6 @@ export default {
            
         },
         setDataFromParent(data) {
-            this.formData.mainTo_1=data.mainTo
-            this.formData.copyto_1=data.copyto
-            debugger
             this.formData = data;
             this.formId = data.id;
             this.dialogFormVisible = true;
