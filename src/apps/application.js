@@ -75,12 +75,12 @@ export const publicMethods = {
                 for (let item of data.required) {
                     let key = item.split(":")[0];
                     if (detailsData[key] || detailsData[key] == false) {
-                        if (item.split(":")[1] == "arrays" && typeof (detailsData[key]) == "string") {
-                            options.push(key + "=" + '[' + detailsData[key] + ']'); //如果是数组类型的拼成数组
-                        } else {
-                            detailsData[key] = detailsData[key] === "" ? 0 : detailsData[key];
-                            options.push(key + "=" + detailsData[key]);
-                        }
+                            if (item.split(":")[1] == "arrays" && typeof (detailsData[key]) == "string") {
+                                options.push(key + "=" + '[' + detailsData[key] + ']'); //如果是数组类型的拼成数组
+                            } else {
+                                detailsData[key] = detailsData[key] === "" ? 0 : detailsData[key];
+                                options.push(key + "=" + detailsData[key]);
+                            }
                     } else {
                         if (key == "oid") {
                             options.push(key + "=" + this.$store.getters.LoginData.oid);
@@ -110,6 +110,9 @@ export const publicMethods = {
         async doAction(action) {
             let $self = this;
             $self.actionsDialogArr = [];
+            if($self.tableData && $self.appFlowName == "outgoing-form_outgoing" && JSON.stringify(action.required).indexOf("branchlineTo") > -1){ //特殊处理写死了
+                $self.showCheckBox = true;
+            }
             $self.currentAction = action;
             if (action.addAssigneeList && action.addAssigneeList.length > 0) {
                 $self.actionsDialogArr.push({

@@ -135,6 +135,13 @@
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="" v-if="showCheckBox">
+                         <div style="color:#941d1d;">*注意：选择经过董事长签批时,也会经过总经理</div>
+                          <el-radio-group v-model="tableData.branchlineTo">
+                            <el-radio :label="2">需要经过总经理签批</el-radio>
+                            <el-radio :label="3">需要经过董事长签批</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
                     <el-form-item label="审批意见">
                         <el-input type="textarea" placeholder="请输入审批意见" v-model="textarea" :autosize="{ minRows: 10, maxRows: 30}">
                         </el-input>
@@ -168,6 +175,7 @@ export default {
     name: "OutgoingDetail",
     data() {
         return {
+            showCheckBox:false,
             tableData: { text: { name: "" }},
             activeName: "second",
             actions: [],
@@ -209,8 +217,7 @@ export default {
             seleteUserLabel_approve:'',
             seleteUsers_approve:"",
             approve_status: false,
-            approve_users:[]
-          
+            approve_users:[],
          };
     },
     components: {
