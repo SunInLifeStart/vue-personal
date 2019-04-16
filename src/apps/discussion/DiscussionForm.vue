@@ -62,7 +62,7 @@
                     <el-col :span="24">
                         <el-form-item label="参会部门" prop="phone">
                             <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
-                                <td colspan="8" style="width: 21%;">
+                                <td colspan="4" style="width: 21%;">
                                     <!--<el-select v-model="item.department" placeholder="请输入参会部门" @change="changeDepartment(item, index)">-->
                                         <!--<el-option v-for="i in options"-->
                                                    <!--:key="i.id"-->
@@ -72,23 +72,24 @@
                                         <!--</el-option>-->
                                     <!--</el-select>-->
                                     <el-cascader
+                                            @change="changePersonOptions(item)"
                                             :show-all-levels="false"
                                             :props="props"
                                             :options="options"
                                             v-model="item.department"
                                     ></el-cascader>
                                 </td>
-                                <!--<td colspan="4">-->
-                                    <!--<el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">-->
-                                        <!--<el-option-->
-                                                <!--v-for="i in item.personOptions"-->
-                                                <!--:key="i.id"-->
-                                                <!--:label="i.name"-->
-                                                <!--:value="i.id">-->
-                                                <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
-                                        <!--</el-option>-->
-                                    <!--</el-select>-->
-                                <!--</td>-->
+                                <td colspan="4">
+                                    <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
+                                        <el-option
+                                                v-for="i in item.personOptions"
+                                                :key="i.id"
+                                                :label="i.name"
+                                                :value="i.id">
+                                                <!--:value="{value:i.value, label: i.label}">-->
+                                        </el-option>
+                                    </el-select>
+                                </td>
                             </tr>
                             <tr>
                                 <td colspan="8" style="height: 30px;">
@@ -149,8 +150,10 @@ export default {
         return {
             dialogFormVisible: false,
             options: [],
+            dataOptions: [],
             props: {
-                value: 'label',
+                value: 'id',
+                label: 'name',
                 children: 'children'
             },
             discussionOption: [
@@ -190,6 +193,7 @@ export default {
                 // ]
             },
             uploadId: 0,
+            person: [],
             appFlowName:'motor-issuesreported_party-agendasheet'
         };
     },
@@ -205,26 +209,44 @@ export default {
             if (user) this.formData.number = user.data.content.serialNumber
             this.changePeople()
         },
+        changePersonOptions(item) {
+            item.people = []
+            this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
+            item.personOptions = this.person
+        },
         async getDiscussionUser() {
             axios.get("/api/v1/users/list/organs").then(res => {
-                if (res) this.options = res.data || []
+                if (res) this.dataOptions = res.data || []
+                this.options = JSON.parse(JSON.stringify(this.dataOptions))
                 this.deleteChildren(this.options)
             });
-            // let user = await this.getUsers("/api/v1/users/list/organs")
-            // debugger
         },
         deleteChildren(array) {
             array.forEach(item => {
-                if (!item.type && item.children.length === 0) {
+                if (item.children.length === 0) {
                     delete item.children
                 }
-                if (item.type && item.children.length === 0) {
-                    item.disabled = true
+                if (item.children) {
+                    if (item.children[0]) {
+                        if (!item.children[0].type) {
+                            delete item.children
+                        }
+                    }
                 }
                 if (item.children && item.children.length > 0) {
                     this.deleteChildren(item.children)
                 }
             })
+        },
+        searchPersonOptions(array, value) {
+                array.forEach(item => {
+                    if (item.id === value) {
+                        this.person = item.children;
+                    }
+                    if (item.children && item.children.length > 0) {
+                        this.searchPersonOptions(item.children, value)
+                    }
+                });
         },
         // changeDepartment(i, index) {
         //     i.people = []
@@ -306,16 +328,19 @@ export default {
                         if (self.formData.attendingDepartment) {
                             self.formData.attendingDepartment.forEach((item,index) => {
                                 // 处理部门
-                                // item.department = parseInt(item.department)
-                                // let users = self.options.filter(i => { return i.id == item.department})
-                                // item.personOptions =  users[0].users
-                                // 处理人员
-                                if (item.department) {
-                                    item.department = item.person.split(',')
+                                if (item.person) {
+                                    item.people = item.person.split(',')
+                                    item.department = item.department.split(',')
                                 }
-                                // for (let i = 0; i<item.people.length; i++) {
-                                //     item.people[i] = parseInt(item.people[i])
-                                // }
+                                for (let i = 0; i<item.department.length; i++) {
+                                    item.department[i] = parseInt(item.department[i])
+                                }
+                                this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
+                                item.personOptions = this.person
+                                // 处理人员
+                                for (let i = 0; i<item.people.length; i++) {
+                                    item.people[i] = parseInt(item.people[i])
+                                }
                             })
                         }
                     })
@@ -342,8 +367,9 @@ export default {
             const $self = this;
             this.formData.sendMessage = []
             $self.formData.attendingDepartment.forEach(item => {
-                if (item.department) {
+                if (item.people) {
                     item.department = item.department.join(',')
+                    item.person = item.people.join(',')
                 }
                 this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
             })
