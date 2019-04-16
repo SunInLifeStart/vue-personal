@@ -82,7 +82,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="参会人员" prop="phone">
+                            <el-form-item label="参会人员" prop="attendingDepartment">
                                 <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
                                     <td colspan="4" style="width: 21%;">
                                         <!--<el-select v-model="item.department" placeholder="请输入参会部门" @change="changeDepartment(item, index)">-->
@@ -235,6 +235,9 @@
                     ],
                     meetingTime: [
                         { required: true, message: '请输入开会时间', trigger: 'blur' }
+                    ],
+                    attendingDepartment: [
+                        { required: true, message: '请选择参会人员', trigger: 'blur' }
                     ]
                 },
                 personOptions: [],
