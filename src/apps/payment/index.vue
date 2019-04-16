@@ -45,28 +45,23 @@
             </div>
             <div id="PaymentList">
                 <el-table :data="tableData" stripe @row-click="showCurrentId">
-                    <el-table-column prop="submitter" label="提单人" align="center">
+                    <el-table-column prop="applicantName" label="提单人" min-width="80px"></el-table-column>
+                    <el-table-column prop="costUnit" label="费用承担部门" min-width="140px"></el-table-column>
+                    <el-table-column prop="numericalOrder" label="单据编号" min-width="115px"></el-table-column>
+                    <el-table-column prop="currency" label="币种" min-width="90px" align='center'>
+                        <template slot-scope="scope">
+                            {{scope.row.details[0].currency}}
+                        </template>
                     </el-table-column>
-                    <el-table-column prop="subOrganName" label="费用承担部门" align="center">
-                    </el-table-column>
-                    <el-table-column prop="number" label="流水号" align="center">
-                    </el-table-column>
-                    <el-table-column prop="submitted" label="提单时间" align="center">
+                    <el-table-column prop="applicantTime" label="提单时间" sortable min-width="120px">
                     </el-table-column>
                     <el-table-column prop="status" label="状态" align="center">
                         <template slot-scope="scope">
                             {{scope.row.status | filterStatus}}
-                            <!--
-                            {{scope.row.status == '00'? '已保存' :scope.row.status == '01' ? '审核中': scope.row.status == '02' ? '已驳回': scope.row.status == '03' ? '已撤销': scope.row.status == '04'? '已完成': ''}}
-                        -->
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">
                         <template slot-scope="scope">
-                            <!-- <el-button @click="editForm(scope.row)" type="primary" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">编辑
-                    </el-button>
-                    <el-button type="danger" @click="deleteItem(scope.row)" v-if="scope.row.status == '已保存' || scope.row.status == '已驳回'">删除
-                    </el-button> -->
                             <!--v-if="scope.row.status == '00' || scope.row.status == '02'"-->
                             <!--v-if="scope.row.status == '00'"-->
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left">
@@ -111,8 +106,7 @@ export default {
                 pageSize: 5,
                 options: [],
                 orderBy: 'id',
-                desc: true,
-                total: 0
+                desc: true
             },
             formName: 'payment_forms'
         };
@@ -168,7 +162,7 @@ export default {
         async getList(page) {
             let $self = this;
             this.getFilter();
-            $self.url = '/api/v1/travel_forms/query';
+            $self.url = '/api/v1/payment_forms/query';
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.forms.length > 0) {
@@ -225,7 +219,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.formInline.submitter = this.formInline.subOrganName = this.formInline.status =
+            this.formInline.applicantName = this.formInline.organ = this.formInline.status = this.formInline.numericalOrder =
                 '';
             this.params.page = 1;
             this.getList();

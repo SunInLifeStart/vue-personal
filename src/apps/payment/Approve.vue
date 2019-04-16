@@ -1,19 +1,20 @@
 <template>
-  <div id="APPROVE">
-    <PaymentDetail :formId="formId" ref="PaymentDetail"></PaymentDetail>
-  </div>
+    <div id="APPROVE">
+        <PaymentDetail ref="PaymentDetail"> </PaymentDetail>
+        <!-- :formId="formId" -->
+    </div>
 </template>
 <script>
-import axios from "axios";
-import PaymentDetail from "./PaymentDetail";
+import axios from 'axios';
+import PaymentDetail from './PaymentDetail';
 export default {
-    name: "APPROVE",
+    name: 'APPROVE',
     data() {
         return {};
     },
-    props: ["formId"],
+    props: ['formId'],
     mounted() {
-        // this.$refs.PaymentDetail.setTab();
+        this.$refs.PaymentDetail.getFormDetails(this.formId);
     },
     components: {
         PaymentDetail
@@ -34,9 +35,9 @@ export default {
         #actionList {
             padding-left: 20px;
         }
-        .btnhide{
-             display: block;
-         }
+        .btnhide {
+            display: block;
+        }
         .formContent {
             flex: 1;
             height: 100%;
@@ -44,7 +45,6 @@ export default {
             overflow-y: auto;
             padding: 15px 30px;
         }
-        
     }
 }
 </style>
