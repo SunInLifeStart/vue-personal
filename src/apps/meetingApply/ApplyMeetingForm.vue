@@ -82,17 +82,24 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="参会人员" prop="phone">
+                            <el-form-item label="参会人员" prop="attendingDepartment">
                                 <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
                                     <td colspan="4" style="width: 21%;">
-                                        <el-select v-model="item.department" placeholder="请输入参会部门" @change="changeDepartment(item, index)">
-                                            <el-option v-for="i in options"
-                                                       :key="i.id"
-                                                       :label="i.name"
-                                                       :value="i.id">
-                                                <!--:value="{value:i.value, label: i.label}">-->
-                                            </el-option>
-                                        </el-select>
+                                        <!--<el-select v-model="item.department" placeholder="请输入参会部门" @change="changeDepartment(item, index)">-->
+                                            <!--<el-option v-for="i in options"-->
+                                                       <!--:key="i.id"-->
+                                                       <!--:label="i.name"-->
+                                                       <!--:value="i.id">-->
+                                                <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
+                                            <!--</el-option>-->
+                                        <!--</el-select>-->
+                                        <el-cascader
+                                                @change="changePersonOptions(item)"
+                                                :show-all-levels="false"
+                                                :props="props"
+                                                :options="options"
+                                                v-model="item.department"
+                                        ></el-cascader>
                                     </td>
                                     <td colspan="4">
                                         <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
@@ -101,7 +108,6 @@
                                                     :key="i.id"
                                                     :label="i.name"
                                                     :value="i.id">
-                                                <!--:value="{value:i.value, label: i.label}">-->
                                             </el-option>
                                         </el-select>
                                     </td>
@@ -119,14 +125,21 @@
                             <el-form-item label="列席人员" prop="phone">
                                 <tr v-for="(item,index) in formData.sitIn" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
                                     <td colspan="4" style="width: 21%;">
-                                        <el-select v-model="item.department" placeholder="请输入列席部门" @change="changeSitIn(item, index)">
-                                            <el-option v-for="i in options"
-                                                       :key="i.id"
-                                                       :label="i.name"
-                                                       :value="i.id">
-                                                <!--:value="{value:i.value, label: i.label}">-->
-                                            </el-option>
-                                        </el-select>
+                                        <!--<el-select v-model="item.department" placeholder="请输入列席部门" @change="changeSitIn(item, index)">-->
+                                            <!--<el-option v-for="i in options"-->
+                                                       <!--:key="i.id"-->
+                                                       <!--:label="i.name"-->
+                                                       <!--:value="i.id">-->
+                                                <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
+                                            <!--</el-option>-->
+                                        <!--</el-select>-->
+                                        <el-cascader
+                                                @change="changePersonOptions(item)"
+                                                :show-all-levels="false"
+                                                :props="props"
+                                                :options="options"
+                                                v-model="item.department"
+                                        ></el-cascader>
                                     </td>
                                     <td colspan="4">
                                         <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
@@ -136,7 +149,6 @@
                                                     :label="i.name"
                                                     :value="i.id">
                                                 {{i.name}}
-                                                <!--:value="{value:i.value, label: i.label}">-->
                                             </el-option>
                                         </el-select>
                                     </td>
@@ -183,6 +195,11 @@
         data() {
             return {
                 dialogFormVisible: false,
+                props: {
+                    value: 'id',
+                    label: 'name',
+                    children: 'children'
+                },
                 discussionOption: [
                     {
                         value: 'specMeeting',
@@ -218,12 +235,17 @@
                     ],
                     meetingTime: [
                         { required: true, message: '请输入开会时间', trigger: 'blur' }
+                    ],
+                    attendingDepartment: [
+                        { required: true, message: '请选择参会人员', trigger: 'blur' }
                     ]
                 },
                 personOptions: [],
+                dataOptions: [],
                 formData: this.resetForm(),
                 users: [],
                 uploadId: 0,
+                person: [],
                 formLabelWidth: '120px',
                 appFlowName: "motor-meetingApply_application-meeting",
                 currentFormId: this.operationType == 'create' ? '' : this.formId
@@ -232,34 +254,53 @@
         components: {
             FilesOperate
         },
-        watch: {
-            'formData.lowercase'(val) {
-
-                this.formData.upper = val ? this.convertCurrency(val) : "";
-            }
-        },
         mounted() {
             this.getDiscussionUser()
         },
         methods: {
+            changePersonOptions(item) {
+                item.people = []
+                this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
+                item.personOptions = this.person
+            },
+            searchPersonOptions(array, value) {
+                array.forEach(item => {
+                    if (item.id === value) {
+                        this.person = item.children;
+                    }
+                    if (item.children && item.children.length > 0) {
+                        this.searchPersonOptions(item.children, value)
+                    }
+                });
+            },
             async getTableCode() {
                 let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'meetingApply' })
                 if (user) this.formData.number = user.data.content.serialNumber
                 this.changePeople()
             },
             async getDiscussionUser() {
-                let user = await this.getUsers("/api/v1/users/list/organss")
-                if (user) this.options = user.data
+                axios.get("/api/v1/users/list/organs").then(res => {
+                    if (res) this.dataOptions = res.data || []
+                    this.options = JSON.parse(JSON.stringify(this.dataOptions))
+                    this.deleteChildren(this.options)
+                });
             },
-            changeSitIn(i, index) {
-                i.people = []
-                let users = this.options.filter(item => { return item.id == i.department})
-                if (users.length > 0) this.formData.sitIn[index].personOptions = users[0].users
-            },
-            changeDepartment(i, index) {
-                i.people = []
-                let users = this.options.filter(item => { return item.id == i.department})
-                if (users.length > 0) this.formData.attendingDepartment[index].personOptions = users[0].users
+            deleteChildren(array) {
+                array.forEach(item => {
+                    if (item.children.length === 0) {
+                        delete item.children
+                    }
+                    if (item.children) {
+                        if (item.children[0]) {
+                            if (!item.children[0].type) {
+                                delete item.children
+                            }
+                        }
+                    }
+                    if (item.children && item.children.length > 0) {
+                        this.deleteChildren(item.children)
+                    }
+                })
             },
             changePeople() {
                 this.$forceUpdate()
@@ -309,12 +350,12 @@
                     attachments: [],
                     attendingDepartment: [{
                         people: [],
-                        department: ''
+                        department: []
                     }],
                     requestedItems: [{}],
                     sitIn: [{
                         people: [],
-                        department: ''
+                        department: []
                     }],
                     numbers: '',
                     branchlineTo: '',
@@ -342,40 +383,42 @@
                         .get('/api/v1/meetingApply/detail/' + this.formId)
                         .then(res => {
                             self.formData = res.data.content;
-                            // self.$nextTick(() => {
-                                if (self.formData.attendingDepartment) {
-                                    self.formData.attendingDepartment.forEach(item => {
-                                        // 处理部门
-                                        item.department = parseInt(item.department)
-                                        let users = self.options.filter(i => { return i.id == item.department})
-                                        item.personOptions =  users[0].users
-                                        // 处理人员
-                                        if (item.person) {
-                                            item.people = item.person.split(',')
-                                        }
-                                        for (let i = 0; i<item.people.length; i++) {
-                                            item.people[i] = parseInt(item.people[i])
-                                        }
-                                    })
-                                    self.formData.sitIn.forEach(item => {
-                                        // 处理部门
-                                        item.department = parseInt(item.department)
-                                        let users = self.options.filter(i => { return i.id == item.department})
-                                        item.personOptions =  users[0].users
-                                        // 处理人员
-                                        if (item.person) {
-                                            item.people = item.person.split(',')
-                                        }
-                                        if (item.people) {
-                                            for (let i = 0; i<item.people.length; i++) {
-                                                item.people[i] = parseInt(item.people[i])
-                                            }
-                                        } else {
-                                            item.people = []
-                                        }
-                                    })
-                                }
-                            // })
+                            if (self.formData.sitIn) {
+                                self.formData.sitIn.forEach((item,index) => {
+                                    // 处理部门
+                                    if (item.person) {
+                                        item.people = item.person.split(',')
+                                        item.department = item.department.split(',')
+                                    }
+                                    for (let i = 0; i<item.department.length; i++) {
+                                        item.department[i] = parseInt(item.department[i])
+                                    }
+                                    this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
+                                    item.personOptions = this.person
+                                    // 处理人员
+                                    for (let i = 0; i<item.people.length; i++) {
+                                        item.people[i] = parseInt(item.people[i])
+                                    }
+                                })
+                            }
+                            if (self.formData.attendingDepartment) {
+                                self.formData.attendingDepartment.forEach((item,index) => {
+                                    // 处理部门
+                                    if (item.person) {
+                                        item.people = item.person.split(',')
+                                        item.department = item.department.split(',')
+                                    }
+                                    for (let i = 0; i<item.department.length; i++) {
+                                        item.department[i] = parseInt(item.department[i])
+                                    }
+                                    this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
+                                    item.personOptions = this.person
+                                    // 处理人员
+                                    for (let i = 0; i<item.people.length; i++) {
+                                        item.people[i] = parseInt(item.people[i])
+                                    }
+                                })
+                            }
                         })
                 }
             },
@@ -405,12 +448,14 @@
                 this.formData.sendMessage = []
                 $self.formData.attendingDepartment.forEach(item => {
                     if (item.people) {
+                        item.department = item.department.join(',')
                         item.person = item.people.join(',')
                         this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
                     }
                 })
                 $self.formData.sitIn.forEach(item => {
                     if (item.people) {
+                        item.department = item.department.join(',')
                         item.person = item.people.join(',')
                         this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
                     }
@@ -485,6 +530,9 @@
         .el-select {
             width: 100%;
         }
+        .el-cascader {
+             width: 100%;
+         }
         .tableNoBorder {
             width: 100%;
             table-layout: fixed;

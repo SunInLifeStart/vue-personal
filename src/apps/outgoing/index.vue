@@ -43,22 +43,23 @@
                     <el-table-column prop="title" label="标题"></el-table-column>
                     <el-table-column prop="creatorName" label="拟稿人" width="200"></el-table-column>
                     <el-table-column prop="organName" label="拟稿单位" width="200"></el-table-column>
-                    <el-table-column prop="status" label="单据状态" width="100">
-                        <template slot-scope="scope">
-                            {{scope.row.status | filterStatus }}
-                        </template>
-                    </el-table-column>
                     <el-table-column prop="created" label="创建时间" width="150" sortable>
                         <template slot-scope="scope">
                             {{scope.row.created | dateformat}}
                         </template>
                     </el-table-column>
+                    <el-table-column prop="status" label="单据状态" width="100">
+                        <template slot-scope="scope">
+                            {{scope.row.status | filterStatus }}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作" width="150" align="center">
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'">
+                            <!-- v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'" -->
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left"  v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-delete" @click="deleteForm(scope.row)"></el-button>
                             </el-tooltip>
                         </template>
@@ -78,6 +79,7 @@
     </div>
 </template>
 <script>
+import axios from "axios";
 import OutgoingForm from "./OutgoingForm";
 import OutgoingDetail from "./OutgoingDetail";
 import {publicMethods} from "../application.js";
@@ -127,6 +129,7 @@ export default {
                 options: []
                
             },
+            searchOptions: [],
             formName:"outgoingingApplication"
         };
     },
@@ -147,19 +150,27 @@ export default {
         }
     },
     methods: {
-         time_change(time) {
-            // 改变时间获取数据
-            if (time === null) {
-               this.params.startTime = "";
-                this.params.endTime = "";
-            } else {
-                let time0 = time[0];
-                let time1 = time[1];
-                this.params.startTime = time0;
-                this.params.endTime = time1;
-            }
-           
+        deleteForm(row) {
+            this.$confirm('此操作将永久删除该表单, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                console.log(row.id);
+                axios
+                    .delete('/api/v1/outgoing_forms/deleteForm', {
+                        data: [row.id]
+                    })
+                    .then(res => {
+                        this.getList();
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    });
+            });
         },
+        
         //获取列表
          async getList(pageNum) {
             let $self = this;
@@ -220,19 +231,41 @@ export default {
             this.getList();
         },
         searchList() {
+            this.searchOptions = [];
+            if (this.params.title.trim() !== '') {
+                this.searchOptions.push({
+                    'field': 'title',
+                    'filter': 'LIKE',
+                    'value': this.params.title
+                });
+            }
+            if (this.params.status.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'status',
+                    filter: 'EQUAL',
+                    value: this.params.status
+                });
+            }
+            this.params.options=this.searchOptions
             this.getList();
         },
         resetInput() {
            this.params={
-               department: "",
+                pageNum: 1,
+                pageSize: 5,
+                department: "",
                 title: "",
+                total: 0,
                 committed:"",
                 status:"",
-                outgoingingTime:[],
-                 startTime:"",
-                endTime:"",
+                // outgoingingTime:[],
+                // startTime:"",
+                // endTime:"",
+                orderBy: "created",
+                desc: true,
+                options: []
                
-            }
+            },
             this.s_status=[]
         }
     },

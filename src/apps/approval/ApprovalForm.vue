@@ -341,10 +341,18 @@ export default {
         FilesOperate
     },
     methods: {
+         deleteAttachmentsone(index) {
+            //  debugger
+            let $self = this;
+            $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+                 $self.formData.usingApproval[index].attachments.splice(0, 1);
+                
+            });
+        },
         // 时长
         getHour(a1,a2) {
-             const $self = this;
-           var date3 = new Date(a2).getTime() - new Date(a1).getTime();   //时间差的毫秒数   
+            const $self = this;
+           var date3 = new Date(a2.replace(/-/g, '/')).getTime() - new Date(a1.replace(/-/g, '/')).getTime();   //时间差的毫秒数   
             //计算出相差天数  
             var days=Math.floor(date3/(24*3600*1000))  
            //计算出小时数  

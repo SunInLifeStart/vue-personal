@@ -157,7 +157,6 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            // debugger;
             let actions = await $self.getActions();
             let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();

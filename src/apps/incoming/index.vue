@@ -35,7 +35,7 @@
                             </el-col>
                             <el-col :span="8">
                                <el-form-item label="收文日期">
-                                    <el-date-picker v-model="params.created" value-format="yyyy-MM-dd 00:00:00" type="date" ></el-date-picker>
+                                    <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" type="date" ></el-date-picker>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">
@@ -123,6 +123,7 @@ export default {
                     }
                 ],
             total: 0,
+            searchOptions: [],
             params: {
                 page: 1,
                 pageSize: 5,
@@ -153,6 +154,45 @@ export default {
         //获取列表
          async getList(pageNum) {
             let $self = this;
+             this.searchOptions = [];
+             if (this.params.title && this.params.title.trim() !== "") {
+                 this.searchOptions.push({
+                     field: "title",
+                     filter: "LIKE",
+                     value: this.params.title
+                 });
+             }
+             if (this.params.organ && this.params.organ.trim() !== "") {
+                 this.searchOptions.push({
+                     field: "organ",
+                     filter: "LIKE",
+                     value: this.params.organ
+                 });
+             }
+             if (this.params.wordNo && this.params.wordNo.trim() !== "") {
+                 this.searchOptions.push({
+                     field: "wordNo",
+                     filter: "LIKE",
+                     value: this.params.wordNo
+                 });
+             }
+             if (this.params.status && this.params.status.trim() !== "") {
+                 this.searchOptions.push({
+                     field: "status",
+                     filter: "EQUAL",
+                     value: this.params.status
+                 });
+             }
+             if (this.params.created) {
+                 this.searchOptions.push({
+                     field: 'created',
+                     filter: 'BETWEEN',
+                     value: this.params.created,
+                     value2: this.params.created
+                     // value2: moment(this.params.created).format('YYYY-MM-DD')
+                 });
+             }
+            this.params.options = this.searchOptions
             $self.url = "/api/v1/incoming_forms/query";
             let response = await $self.getQueryList();
             if (response) {

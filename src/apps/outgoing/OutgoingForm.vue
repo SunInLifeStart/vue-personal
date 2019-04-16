@@ -1,15 +1,7 @@
 <template>
 <el-dialog title="文件签发申请表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">  
     <div id="OutgoingForm">
-        
         <el-form ref="formupdate" :model="formData" :rules="rules" label-width="80px" style="margin-top:10px;">
-            <!-- <el-row >
-                <el-col  :span="8" :offset="16" > 
-                     <el-form-item label="流水号：" >
-                        <span >{{formData.number}}</span>
-                    </el-form-item>
-                </el-col>
-            </el-row> -->
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="发文字号">
@@ -50,19 +42,17 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="主送" prop="mainTo_1">
+                  <el-form-item label="主送" prop="mainTo_1">
                         <el-select v-model="formData.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
-                            <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                            <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
-                        <!-- <el-cascader :options="options" :show-all-levels="false"  filterable style="width:100%" v-model="formData.mainTo_1"></el-cascader> -->
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
                     <el-form-item label="抄送">
                         <el-select v-model="formData.copyto_1" multiple filterable allow-create default-first-option placeholder="请选择抄送部门" style="width:100%">
-                            <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                            <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
-                        <!-- <el-cascader :options="options" :show-all-levels="false" filterable style="width:100%" v-model="formData.copyto_1"></el-cascader> -->
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -117,10 +107,9 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="正文" prop="content">
-                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}" @getId="getId"  @editText="editText" @getReviseData="getReviseData"></FilesOperate>
+                     <el-form-item label="正文" style="float:left">
+                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}"  @editText="openData(formData.text.url)"></FilesOperate>
                         <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>
-                        <OutgoingeditFiles @editWordData="editWordData" ref="outgoingeditfiles"></OutgoingeditFiles>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -134,8 +123,8 @@
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <!-- <FilesOperate :options="{uploadCommpoent:true,attachmentsList:rows.attachments}"></FilesOperate> -->
-                        <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId" @getReviseData="getReviseData"></FilesOperate>
+                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -143,7 +132,8 @@
         </el-form>
     </div>
     <div slot="footer" class="dialog-footer">
-        <el-button type="default" @click="saveFormValidate()">保存</el-button>
+        <!-- v-if="this.status == '' || this.status == '已驳回' " -->
+        <el-button type="default" @click="saveFormValidate()" >保存</el-button>
         <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
     </div>
 </el-dialog>
@@ -156,7 +146,6 @@ import axios from 'axios';
 import FilesOperate from "../FilesOperate";
 import { application } from "../application.js";
 import { publicMethods } from "../application.js";
-import OutgoingeditFiles from "./OutgoingeditFiles.vue";
 export default {
     mixins: [publicMethods],
     name: "OutgoingForm",
@@ -165,10 +154,10 @@ export default {
             dialogFormVisible: false,
             formData: this.resetForm(),
             users: [],
-            appFlowName: "motor-outgoingingapplication_outgoing",
+            appFlowName: "outgoing-form_outgoing",
             dialogFormVisible: false,
             percentage: 0,
-            rows: {
+            formData: {
                 wordNo: "",
                 docNo: "",
                 creatorName: "",
@@ -176,10 +165,36 @@ export default {
                 organName: "",
                 attachments: [],
                 content: "",
-                mainTo_1: [],
+                mainTo_1:[],
                 copyto_1: [],
                 text: { name: "" }
             },
+            optionsone:[
+                {
+                    value: '中关村协同发展投资有限公司',
+                    label: '中关村协同发展投资有限公司'
+                },
+                {
+                    value: '天津京津中关村科技城发展有限公司',
+                    label: '天津京津中关村科技城发展有限公司'
+                },
+                {
+                    value: '石家庄中关村协同发展有限公司',
+                    label: '石家庄中关村协同发展有限公司'
+                },
+                {
+                    value: '合肥中关村协同产业发展有限公司',
+                    label: '合肥中关村协同产业发展有限公司'
+                },
+                {
+                    value: '天津京津中关村孵化器有限公司',
+                    label: '天津京津中关村孵化器有限公司'
+                },
+                {
+                    value: '天津中科城乐居房地产开发有限公司',
+                    label: '天津中科城乐居房地产开发有限公司'
+                }
+            ],
             options:[],
             cookie_uname: "",
             checkorName: "",
@@ -208,36 +223,78 @@ export default {
             actionsList: []
         };
     },
-     watch: {
-      'formData.lowercase'(val) {
-          this.formData.upper = val ? this.convertCurrency(val) : "";
-      }
+    watch: {
+        formId: function() {
+            // this.getForm();
+            // this.getActions();
+        },
+        operationType: function() {
+            if (this.operationType == "create") {
+                this.clearForm();
+            } else {
+                // this.getForm();
+            }
+        }
     },
     components: {
         FilesOperate,
-        OutgoingeditFiles
     },
     methods: {
-          editWordData(data) {
-            // console.log(data);
-            if (!data.url) {
-                return false;
-            }
-            this.formData.text = {
-                iconUrl: data.icon_url,
-                name: data.originalFilename,
-                url: data.url,
-                path: data.path,
-                file_name: data.file_name,
-                pdfUrl:
-                    data.url.split("files")[0] +
-                    "pdf" +
-                    data.url.split("files")[1]
-            };
+        getId(id) {
+            let self = this;
+            self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+                self.rows.attachments.forEach(function(value, index) {
+                    if (value.id == id) {
+                        axios
+                            .delete("/api/v1/outgoing_forms/deleteAtt?id=" + id)
+                            .then(res => {
+                                self.rows.attachments.splice(index, 1);
+                            });
+                    }
+                });
+            });
         },
-         createTextBody() {
-            this.$refs.outgoingeditfiles.dialogForm = true;
-            this.$refs.outgoingeditfiles.openData();
+        
+        // getReviseData(repelaceData) {
+        //     let self = this;
+        //     self.$confirm("确定要替换吗，替换后原文件将被删除?", "提示", {
+        //         type: "warning"
+        //     }).then(() => {
+        //         self.formData.attachments.forEach(function(value, index) {
+        //             if (value.id == repelaceData.id) {
+        //                 axios
+        //                     .delete(
+        //                         "/api/v1/outgoing_forms/deleteAtt?id=" +
+        //                             repelaceData.id
+        //                     )
+        //                     .then(res => {
+        //                         self.formData.attachments.splice(index, 1);
+        //                         self.formData.attachments.push(repelaceData.data);
+        //                     });
+        //             }
+        //         });
+        //     });
+        // },
+         getSedOrgan() {
+            const self = this;
+            axios
+                .get("/api/v1/users/sub/organ/list")
+                .then(res => {
+                    for(let item of res.data){
+                        item.label = item.value = item.name;
+                    }
+                    // res.data.unshift({value:"集团各部（室）",id:"01",label:"集团各部（室）"});
+                    self.options = res.data; 
+                })
+                .catch(function() {
+                    self.$message({
+                        message: "操作失败",
+                        type: "error"
+                    });
+                });
+        },
+        createTextBody() {
+            this.openData();
         },
          getWordyear() {
             const self = this;
@@ -245,10 +302,10 @@ export default {
             axios
                 .get(
                     "/api/v1/doc/docNo/year/" + date +"?wordNo=" +
-                        encodeURI(this.rows.wordNo)
+                        encodeURI(this.formData.wordNo)
                 )
                 .then(res => {
-                    self.rows.docNo = res.data;
+                    self.formData.docNo = res.data;
                 })
                 .catch(function() {
                     self.$message({
@@ -279,22 +336,16 @@ export default {
                 });
             });
         },
-        time_change(time) {
-            // 改变时间获取数据
-            if (time === null) {
-               this.formData.startTime = "";
-                this.formData.endTime = "";
-            } else {
-                let time0 = time[0];
-                let time1 = time[1];
-                this.formData.startTime = time0;
-                this.formData.endTime = time1;
-            }
-           
-        },
+       
         setDataFromParent(data) {
             this.formData = data;
-            this.formId = data.id;
+            if(this.formData.mainTo!="" || this.formData.mainTo!=null){
+               this.formData.mainTo_1 = data.mainTo.split(",");
+            }
+            if(this.formData.copyto!="" || this.formData.copyto!=null){
+             this.formData.copyto_1 = data.copyto.split(",");
+            }
+             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
         },
@@ -315,6 +366,8 @@ export default {
                 according: "",
                 mainTo_1: [],
                 copyto_1: [],
+                 generalManagement: false,
+                 branchlineTo:'1',
                 organName: this.cookie_oname,
                 creatorName: this.cookie_uname,
                 checkorName: this.checkorName,
@@ -338,13 +391,36 @@ export default {
         },
         // 提交保存
         async saveForm(params) {
+            
             const $self = this;
+            $self.formData.text = JSON.stringify($self.formData.text);
+            if ($self.formData.mainTo_1.length > 0) {
+                let mainTo = $self.formData.mainTo_1.slice(0);
+                $self.formData.mainTo = mainTo.join(",");
+            }
+
+            if ($self.formData.copyto_1.length > 0) {
+                let copyto = $self.formData.copyto_1.slice(0);
+                $self.formData.copyto = copyto.join(",");
+            }
+            if ($self.formData.organName === '综合管理部') {
+                    $self.formData.generalManagement = true
+                    // $self.formData.branchlineTo
+                }
             let response = await $self.saveFormData(
-                "/api/v1/trainingApplication/save",
+                "/api/v1/outgoing_forms/save",
                 $self.formData
             );
             if (response) {
-                $self.formId = response.data.content.id;
+                $self.formData.text = JSON.parse(response.data.text);
+                    if (response.data.mainTo) {
+                        $self.formData.mainTo_1 = response.data.mainTo.split(",");
+                    }
+
+                    if (response.data.copyto) {
+                        $self.formData.copyto_1 = response.data.copyto.split(",");
+                    }
+                $self.formId = response.data.id;
                 $self.dialogFormVisible = false;
                 if (params) {
                     $self.msgTips("提交成功", "success");
@@ -386,13 +462,42 @@ export default {
             }
             this.$refs.upload.clearFiles();
         },
+        clearForm() {
+            this.formData = {
+                wordNo: "",
+                docNo: "",
+                // secrecyTerm: '',
+                type: "",
+                secrecyGrade: "",
+                direction: "",
+                urgency: "",
+                according: "",
+                mainTo_1: [],
+                copyto_1: [],
+                organName: this.cookie_oname,
+                creatorName: this.cookie_uname,
+                checkorName: this.checkorName,
+                printer: this.$store.getters.LoginData.oname,
+                verify: "",
+                parts: "",
+                attachments: [],
+                title: "",
+                content: "",
+                text: { name: "" },
+                remark: ""
+            };
+            // this.mainTo = [];
+            // this.copyto = [];
+        },
         submitUpload() {
             this.$refs.upload.submit();
         }
     },
     mounted() {
+         const self = this;
         // this.floaes();
-        const self = this;
+        //  self.getForm();
+         self.getSedOrgan();
         const cookieItems = document.cookie.split(";");
         cookieItems.forEach(function(item) {
             if (item.indexOf("uname") > -1) {
@@ -418,7 +523,7 @@ export default {
         });
 
         this.formData.printer =decodeURI(this.$store.getters.LoginData.companyName) +'('+this.$store.getters.LoginData.oname+')';
-        // debugger
+       
   }
 };
 </script>

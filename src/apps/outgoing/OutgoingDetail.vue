@@ -23,7 +23,8 @@
                     <el-tab-pane label="正文" name="first"></el-tab-pane>
                 </el-tabs>
             </div> -->
-            <el-form :model='tableData' class="formList">
+            <!-- class="formList" -->
+            <el-form :model='tableData' >
                 <el-row>
                 <el-col :span="8">
                     <el-form-item label="发文字号：">{{tableData.wordNo}}</el-form-item>
@@ -33,11 +34,7 @@
                 </el-col>
             </el-row>
             <!-- v-if="activeName == 'first' " -->
-            <el-row >
-                  <div style="border:0px solid #ccc;text-align:left;padding:20px 0 0">
-                      <!-- <PdfJs :pdfUrl="tableData.text.pdfUrl" /> -->
-                  </div>
-            </el-row>
+            
              <!-- v-if="activeName == 'second' " -->
             <el-row>
                 <el-col :span="8">
@@ -92,15 +89,11 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="正文：">
-                         <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true,upload:replaceButton,uploadUrl:replaceButton,edit:true}"  @editText="editText" @getId="getId" @getReviseData="getReviseData"></FilesOperate>
+                         <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true,upload:replaceButton,uploadUrl:replaceButton}"   @getId="getId"></FilesOperate>
                     </el-form-item>
                 </el-col>
             </el-row>
-             <el-row>
-                <el-col :span="24" style="word-break:break-all">
-                    <el-form-item label="备注：">{{tableData.remark}}</el-form-item>
-                </el-col>
-            </el-row>
+            
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="附件：">
@@ -135,6 +128,13 @@
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
+                    <el-form-item label="" v-if="showCheckBox">
+                         <div style="color:#941d1d;">*注意：选择经过董事长签批时,也会经过总经理</div>
+                          <el-radio-group v-model="tableData.branchlineTo">
+                            <el-radio :label="2">需要经过总经理签批</el-radio>
+                            <el-radio :label="3">需要经过董事长签批</el-radio>
+                        </el-radio-group>
+                    </el-form-item>
                     <el-form-item label="审批意见">
                         <el-input type="textarea" placeholder="请输入审批意见" v-model="textarea" :autosize="{ minRows: 10, maxRows: 30}">
                         </el-input>
@@ -160,7 +160,6 @@ import axios from "axios";
 import Comment from "../Comment";
 import OutgoingForm from "./OutgoingForm";
 import FilesOperate from "../FilesOperate";
-import OutgoingeditFiles from "./OutgoingeditFiles.vue";
 import PdfJs from "../PdfJs";
 import moment from "moment";
 export default {
@@ -168,6 +167,7 @@ export default {
     name: "OutgoingDetail",
     data() {
         return {
+            showCheckBox:false,
             tableData: { text: { name: "" }},
             activeName: "second",
             actions: [],
@@ -177,7 +177,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'motor-outgoingingapplication_outgoing',
+            appFlowName:'outgoing-form_outgoing',
             formName:'outgoingingApplication',
             comments:[],
             dialogVisibleCrumb:false,
@@ -209,8 +209,7 @@ export default {
             seleteUserLabel_approve:'',
             seleteUsers_approve:"",
             approve_status: false,
-            approve_users:[]
-          
+            approve_users:[],
          };
     },
     components: {
@@ -219,9 +218,9 @@ export default {
         FilesOperate,
         PdfJs,
         OutgoingForm,
-        OutgoingeditFiles
     },
     methods: {
+        getId(id) {},
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
@@ -244,7 +243,6 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            // debugger;
             let actions = await $self.getActions();
             // let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();
