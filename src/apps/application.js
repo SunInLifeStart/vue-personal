@@ -131,10 +131,8 @@ export const publicMethods = {
                 $self.actionsDialogArr.push({
                     seletList: action.selContents,
                     label: action.selContentsLabel,
-                    multiple:false,
-                    checkedValue:"",
-                  //  multiple: action.selContentsMul == "true" ? true : false,
-                  //  checkedValue: action.selContentsMul == "true" ? [] : "",
+                    multiple: action.selContentsMul == "true" ? true : false,
+                    checkedValue: action.selContentsMul == "true" ? [] : "",
                     labelName: "selContents"
                 });
             }
