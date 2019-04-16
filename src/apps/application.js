@@ -124,6 +124,20 @@ export const publicMethods = {
                 });
             }
 
+            if (action.selContents && action.selContents.length > 0) {
+                for(var i = 0; i<action.selContents.length; i++){
+                    action.selContents[i].id =  action.selContents[i].value;
+                };
+                $self.actionsDialogArr.push({
+                    seletList: action.selContents,
+                    label: action.selContentsLabel,
+                    multiple:false,
+                    checkedValue:"",
+                  //  multiple: action.selContentsMul == "true" ? true : false,
+                  //  checkedValue: action.selContentsMul == "true" ? [] : "",
+                    labelName: "selContents"
+                });
+            }
             if (action.assigneeList && action.assigneeList.length > 0) {
                 $self.actionsDialogArr.push({
                     seletList: action.assigneeList,
@@ -167,7 +181,22 @@ export const publicMethods = {
             $self.hasRequired($self.currentAction);
             if ($self.actionsDialogArr.length > 0 && ($self.actionsDialogArr[0].checkedValue != "" || $self.actionsDialogArr[0].checkedValue.length > 0)) {
                 for (let item of $self.actionsDialogArr) {
-                    $self.currentAction[item.labelName] = item.checkedValue;
+                    if(item.labelName == "selContents"){
+                        if($self.currentAction.options){                            
+                            for(var i= 0; i<$self.currentAction.options.length; i++){
+                                if($self.currentAction.options[i].indexOf($self.currentAction[item.labelName][0].code) > -1){
+                                    $self.currentAction.options.splice(i,1);
+                                }
+                            };
+                          $self.currentAction.options.push($self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value);
+                        }else{
+                            $self.currentAction.options = [$self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value];
+                        }
+
+
+                    }else{
+                        $self.currentAction[item.labelName] = item.checkedValue;
+                    }
                 }
                 await $self.startSignal();
                 $self.getFormDetailsData();
@@ -179,6 +208,9 @@ export const publicMethods = {
                     return false;
                 } else if ($self.currentAction.addAssigneeList && $self.currentAction.addAssigneeList.length > 0) {
                     $self.msgTips($self.currentAction.addAssigneeListLabel, "warning");
+                    return false;
+                } else if ($self.currentAction.selContents && $self.currentAction.selContents.length > 0) {
+                    $self.msgTips($self.currentAction.selContentsLabel, "warning");
                     return false;
                 } else {
                     await $self.startSignal();
