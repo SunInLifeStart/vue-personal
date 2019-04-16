@@ -23,7 +23,8 @@
                     <el-tab-pane label="正文" name="first"></el-tab-pane>
                 </el-tabs>
             </div> -->
-            <el-form :model='tableData' class="formList">
+            <!-- class="formList" -->
+            <el-form :model='tableData' >
                 <el-row>
                 <el-col :span="8">
                     <el-form-item label="发文字号：">{{tableData.wordNo}}</el-form-item>
@@ -33,11 +34,7 @@
                 </el-col>
             </el-row>
             <!-- v-if="activeName == 'first' " -->
-            <el-row >
-                  <div style="border:0px solid #ccc;text-align:left;padding:20px 0 0">
-                      <!-- <PdfJs :pdfUrl="tableData.text.pdfUrl" /> -->
-                  </div>
-            </el-row>
+            
              <!-- v-if="activeName == 'second' " -->
             <el-row>
                 <el-col :span="8">
