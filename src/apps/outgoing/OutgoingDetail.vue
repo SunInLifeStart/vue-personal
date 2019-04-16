@@ -222,6 +222,7 @@ export default {
         OutgoingeditFiles
     },
     methods: {
+        getId(id) {},
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;

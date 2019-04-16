@@ -52,7 +52,7 @@
                 <el-col :span="12">
                     <el-form-item label="主送" prop="mainTo_1">
                         <el-select v-model="formData.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
-                            <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                            <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                         <!-- <el-cascader :options="options" :show-all-levels="false"  filterable style="width:100%" v-model="formData.mainTo_1"></el-cascader> -->
                     </el-form-item>
@@ -60,7 +60,7 @@
                 <el-col :span="12">
                     <el-form-item label="抄送">
                         <el-select v-model="formData.copyto_1" multiple filterable allow-create default-first-option placeholder="请选择抄送部门" style="width:100%">
-                            <el-option v-for="item in options" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                            <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
                         </el-select>
                         <!-- <el-cascader :options="options" :show-all-levels="false" filterable style="width:100%" v-model="formData.copyto_1"></el-cascader> -->
                     </el-form-item>
@@ -119,7 +119,7 @@
                 <el-col :span="24">
                     <el-form-item label="正文" prop="content">
                         <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}" @getId="getId"  @editText="editText" @getReviseData="getReviseData"></FilesOperate>
-                        <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>
+                        <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name" style="float:left">创建文件</el-button>
                         <OutgoingeditFiles @editWordData="editWordData" ref="outgoingeditfiles"></OutgoingeditFiles>
                     </el-form-item>
                 </el-col>
@@ -181,6 +181,32 @@ export default {
                 copyto_1: [],
                 text: { name: "" }
             },
+            optionsone:[
+                {
+                    value: '中关村协同发展投资有限公司',
+                    label: '中关村协同发展投资有限公司'
+                },
+                {
+                    value: '天津京津中关村科技城发展有限公司',
+                    label: '天津京津中关村科技城发展有限公司'
+                },
+                {
+                    value: '石家庄中关村协同发展有限公司',
+                    label: '石家庄中关村协同发展有限公司'
+                },
+                {
+                    value: '合肥中关村协同产业发展有限公司',
+                    label: '合肥中关村协同产业发展有限公司'
+                },
+                {
+                    value: '天津京津中关村孵化器有限公司',
+                    label: '天津京津中关村孵化器有限公司'
+                },
+                {
+                    value: '天津中科城乐居房地产开发有限公司',
+                    label: '天津中科城乐居房地产开发有限公司'
+                }
+            ],
             options:[],
             cookie_uname: "",
             checkorName: "",
@@ -227,8 +253,23 @@ export default {
         OutgoingeditFiles
     },
     methods: {
+        getId(id) {
+            let self = this;
+            self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+                self.rows.attachments.forEach(function(value, index) {
+                    if (value.id == id) {
+                        axios
+                            .delete("/api/v1/outgoing_forms/deleteAtt?id=" + id)
+                            .then(res => {
+                                self.rows.attachments.splice(index, 1);
+                            });
+                    }
+                });
+            });
+        },
         getForm(id) {
             const self = this;
+            // debugger
             if (this.formId != "") {
                 axios.get("/api/v1/outgoing_forms/" + this.formId).then(res => {
                     res.data.text =
@@ -364,7 +405,11 @@ export default {
            
         },
         setDataFromParent(data) {
+        //     this.formData.mainTo_1=data.mainTo
+        //     this.formData.copyto_1=data.copyto
+        //    debugger
             this.formData = data;
+             
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
@@ -387,6 +432,7 @@ export default {
                 mainTo_1: [],
                 copyto_1: [],
                  generalManagement: false,
+                 branchlineTo:'1',
                 organName: this.cookie_oname,
                 creatorName: this.cookie_uname,
                 checkorName: this.checkorName,
@@ -425,6 +471,7 @@ export default {
             }
             if ($self.formData.organName === '综合管理部') {
                     $self.formData.generalManagement = true
+                    // $self.formData.branchlineTo
                 }
             let response = await $self.saveFormData(
                 "/api/v1/outgoing_forms/save",

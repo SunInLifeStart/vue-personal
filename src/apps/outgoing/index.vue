@@ -43,22 +43,23 @@
                     <el-table-column prop="title" label="标题"></el-table-column>
                     <el-table-column prop="creatorName" label="拟稿人" width="200"></el-table-column>
                     <el-table-column prop="organName" label="拟稿单位" width="200"></el-table-column>
-                    <el-table-column prop="status" label="单据状态" width="100">
-                        <template slot-scope="scope">
-                            {{scope.row.status | filterStatus }}
-                        </template>
-                    </el-table-column>
                     <el-table-column prop="created" label="创建时间" width="150" sortable>
                         <template slot-scope="scope">
                             {{scope.row.created | dateformat}}
                         </template>
                     </el-table-column>
+                    <el-table-column prop="status" label="单据状态" width="100">
+                        <template slot-scope="scope">
+                            {{scope.row.status | filterStatus }}
+                        </template>
+                    </el-table-column>
                     <el-table-column label="操作" width="150" align="center">
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'">
+                            <!-- v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'" -->
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" >
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" >
                                 <el-button type="text" icon="el-icon-delete" @click="deleteForm(scope.row)"></el-button>
                             </el-tooltip>
                         </template>
