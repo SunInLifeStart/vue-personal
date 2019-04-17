@@ -93,6 +93,17 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
+                        <el-form-item label="提请事项" prop="content">
+                            <tr v-for="(item,index) in tableData.requestedItems" :key="index" @contextmenu.prevent="deleteItem(item,index,'personal')">
+                                <td colspan="8" style="width: 20%;">
+                                    <el-input v-model="item.content" disabled></el-input>
+                                </td>
+                            </tr>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
                         <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
