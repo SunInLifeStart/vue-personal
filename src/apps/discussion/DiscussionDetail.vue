@@ -55,6 +55,41 @@
                         <el-form-item label="议题名称：">{{tableData.topicName}}
                         </el-form-item>
                     </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="参会部门" prop="phone">
+                            <tr v-for="(item,index) in tableData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                                <td colspan="4" style="width: 21%;">
+                                    <!--<el-select v-model="item.department" placeholder="请输入参会部门" @change="changeDepartment(item, index)">-->
+                                    <!--<el-option v-for="i in options"-->
+                                    <!--:key="i.id"-->
+                                    <!--:label="i.name"-->
+                                    <!--:value="i.id">-->
+                                    <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
+                                    <!--</el-option>-->
+                                    <!--</el-select>-->
+                                    <el-cascader
+                                            disabled
+                                            @change="changePersonOptions(item)"
+                                            :show-all-levels="false"
+                                            :props="props"
+                                            :options="options"
+                                            v-model="item.department"
+                                    ></el-cascader>
+                                </td>
+                                <td colspan="4">
+                                    <el-select style="width: 100%" disabled v-model="item.people" multiple @change="changePeople">
+                                        <el-option
+                                                v-for="i in item.personOptions"
+                                                :key="i.id"
+                                                :label="i.name"
+                                                :value="i.id">
+                                            <!--:value="{value:i.value, label: i.label}">-->
+                                        </el-option>
+                                    </el-select>
+                                </td>
+                            </tr>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
@@ -125,12 +160,20 @@ export default {
             users: [],
             crumbs: [],
             comments: [],
+            dataOptions: [],
+            options: [],
+            person: [],
             textarea: '',
             dialogVisible: false,
             appFlowName:'motor-issuesreported_party-agendasheet',
             discussionOption: {
                 general: '总办会',
                 chairman: '党支委会'
+            },
+            props: {
+                value: 'id',
+                label: 'name',
+                children: 'children'
             },
             formName:'issuesReported',
             dialogVisibleCrumb:false,
@@ -141,18 +184,82 @@ export default {
         Comment,
         FilesOperate
     },
+    mounted() {
+        this.getDiscussionUser()
+    },
     methods: {
+        async getDiscussionUser() {
+            axios.get("/api/v1/users/list/organs").then(res => {
+                if (res) this.dataOptions = res.data || []
+                this.options = JSON.parse(JSON.stringify(this.dataOptions))
+                this.deleteChildren(this.options)
+            });
+        },
+        deleteChildren(array) {
+            array.forEach(item => {
+                if (item.children.length === 0) {
+                    delete item.children
+                }
+                if (item.children) {
+                    if (item.children[0]) {
+                        if (!item.children[0].type) {
+                            delete item.children
+                        }
+                    }
+                }
+                if (item.children && item.children.length > 0) {
+                    this.deleteChildren(item.children)
+                }
+            })
+        },
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
             $self.url= "/api/v1/issuesReported/detail/" + $self.formId;
             $self.getFormDetailsData();
         },
+        changePersonOptions(item) {
+            item.people = []
+            this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
+            item.personOptions = this.person
+        },
+        changePeople() {
+            this.$forceUpdate()
+        },
+        searchPersonOptions(array, value) {
+            array.forEach(item => {
+                if (item.id === value) {
+                    this.person = item.children;
+                }
+                if (item.children && item.children.length > 0) {
+                    this.searchPersonOptions(item.children, value)
+                }
+            });
+        },
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
+                if ($self.tableData.attendingDepartment) {
+                    $self.tableData.attendingDepartment.forEach((item,index) => {
+                        // 处理部门
+                        if (item.person) {
+                            item.people = item.person.split(',')
+                            item.department = item.department.split(',')
+                        }
+                        for (let i = 0; i<item.department.length; i++) {
+                            item.department[i] = parseInt(item.department[i])
+                        }
+                        this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
+                        item.personOptions = this.person
+                        // 处理人员
+                        if (item.people)
+                        for (let i = 0; i<item.people.length; i++) {
+                            item.people[i] = parseInt(item.people[i])
+                        }
+                    })
+                }
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");

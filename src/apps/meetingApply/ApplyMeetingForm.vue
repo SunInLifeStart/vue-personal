@@ -10,7 +10,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="会议类型" prop="branchlineTo">
-                            <el-select v-model="formData.branchlineTo" placeholder="请选择会议类型">
+                            <el-select v-model="formData.branchlineTo" @change="meetingDisscuion" placeholder="请选择会议类型">
                                 <el-option
                                         v-for="item in discussionOption"
                                         :key="item.value"
@@ -23,6 +23,20 @@
                     <el-col :span="8">
                         <el-form-item label="会议地点" prop="meetingPlace">
                             <el-input v-model="formData.meetingPlace" placeholder="请输入会议地点"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row v-if="formData.branchlineTo === 'gmoMeeting' || formData.branchlineTo === 'partyMeeting'">
+                    <el-col :span="24">
+                        <el-form-item label="关联议题" prop="meetingPlace">
+                            <el-select v-model="formData.discussionContent" multiple value-key="discussionId" placeholder="请选择议题">
+                                <el-option
+                                        v-for="item in issueOption"
+                                        :key="item.id"
+                                        :label="item.topicName"
+                                        :value="{discussionId: item.id, discussionName: item.topicName}">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -223,6 +237,7 @@
                     }
                 ],
                 options: [],
+                issueOption: [],
                 rules: {
                     endTime: [
                         { required: true, message: '请输入结束时间', trigger: 'blur' }
@@ -241,6 +256,12 @@
                     ]
                 },
                 personOptions: [],
+                url: '',
+                params: {
+                    pageNum: 1,
+                    status: '04',
+                    pageSize: 10000
+                },
                 dataOptions: [],
                 formData: this.resetForm(),
                 users: [],
@@ -258,6 +279,16 @@
             this.getDiscussionUser()
         },
         methods: {
+            async getList() {
+                const $self = this;
+                $self.url = "/api/v1/issuesReported/queryList";
+                let response = await $self.getQueryList();
+                if (response) {
+                    $self.issueOption = response.data.content.list;
+                } else {
+                    $self.msgTips("获取列表失败", "warning");
+                }
+            },
             changePersonOptions(item) {
                 item.people = []
                 this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
@@ -321,6 +352,19 @@
                     }
                 });
             },
+            meetingDisscuion(value) {
+                if (value === 'gmoMeeting') {
+                    this.params.branchlineTo = 'general'
+                    this.getList()
+                    this.formData.discussionContent = []
+                } else if (value === 'partyMeeting') {
+                    this.params.branchlineTo = 'chairman'
+                    this.getList()
+                    this.formData.discussionContent = []
+                } else {
+                    this.formData.discussionContent = []
+                }
+            },
             addItem(type) {
                 if (type == 'message') {
                     this.formData.attendingDepartment.push({});
@@ -358,6 +402,7 @@
                         department: []
                     }],
                     numbers: '',
+                    discussionContent: [],
                     branchlineTo: '',
                     businessType: '',
                     generalManagement: false,
@@ -383,6 +428,15 @@
                         .get('/api/v1/meetingApply/detail/' + this.formId)
                         .then(res => {
                             self.formData = res.data.content;
+                            if (self.formData.branchlineTo === 'gmoMeeting') {
+                                this.params.branchlineTo = 'general'
+                                this.getList()
+                            } else if (self.formData.branchlineTo === 'partyMeeting') {
+                                this.params.branchlineTo = 'chairman'
+                                this.getList()
+                            } else {
+                                this.formData.discussionContent = []
+                            }
                             if (self.formData.sitIn) {
                                 self.formData.sitIn.forEach((item,index) => {
                                     // 处理部门
@@ -396,6 +450,7 @@
                                     this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
                                     item.personOptions = this.person
                                     // 处理人员
+                                    if (item.people)
                                     for (let i = 0; i<item.people.length; i++) {
                                         item.people[i] = parseInt(item.people[i])
                                     }
@@ -414,6 +469,7 @@
                                     this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
                                     item.personOptions = this.person
                                     // 处理人员
+                                    if (item.people)
                                     for (let i = 0; i<item.people.length; i++) {
                                         item.people[i] = parseInt(item.people[i])
                                     }
@@ -447,14 +503,14 @@
                 const $self = this;
                 this.formData.sendMessage = []
                 $self.formData.attendingDepartment.forEach(item => {
-                    if (item.people) {
+                    if (item.people && item.department) {
                         item.department = item.department.join(',')
                         item.person = item.people.join(',')
                         this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
                     }
                 })
                 $self.formData.sitIn.forEach(item => {
-                    if (item.people) {
+                    if (item.people && item.department) {
                         item.department = item.department.join(',')
                         item.person = item.people.join(',')
                         this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
