@@ -154,10 +154,11 @@ export const publicMethods = {
                 await $self.startSignal();
                 $self.deleteCurrentLine($self.tableData.id, "CANCEL");
             } else if($self.currentAction.name == "编辑"){
-                $self.msgTips("开发中", "warning");
+                $self.reEditForm();
+                // $self.msgTips("开发中", "warning");
             } else if($self.currentAction.name == "打印"){
                 $self.$axios
-                .get("/api/v1/submission_forms/" + $self.tableData.id +"/getForm")
+                .get("/api/v1/"+ $self.formName+"/" + $self.tableData.id +"/getForm")
                 .then(res => {
                     if (process.env.NODE_ENV === 'production') {
                         $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
