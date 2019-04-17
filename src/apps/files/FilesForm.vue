@@ -55,7 +55,7 @@
                                :row-class-name="tableRowClassName"
                                @row-click='show'>
                               <el-table-column type="selection" width="70px"></el-table-column>
-                                <el-table-column prop="name" label="文件姓名">
+                                <el-table-column prop="name" label="文件名称">
                                     <template slot-scope="scope">
                                         <el-input v-model="scope.row.name"></el-input>
                                     </template>

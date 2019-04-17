@@ -278,6 +278,10 @@ export default {
             };
             return formData;
         },
+        createForm() {
+            this.formData = this.resetForm();
+            this.dialogFormVisible = this.createForm_status = true;
+        },
         saveFormValidate(type) {
             this.$refs["formupdate"].validate(valid => {
                 if (valid) {
