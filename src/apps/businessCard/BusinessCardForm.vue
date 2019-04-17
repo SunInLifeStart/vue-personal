@@ -47,7 +47,10 @@
                                 <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
                                 <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                             </div>
-                            <el-table :data="formData.cardPrinting" border style="width: 100%; margin-top: 5px;" @selection-change="handleSelectionChange">
+                            <el-table :data="formData.cardPrinting" border style="width: 100%; margin-top: 5px;" 
+                            @selection-change="handleSelectionChange"
+                             :row-class-name="tableRowClassName"
+                            @row-click='show'>
                                <el-table-column type="selection" width="40px"></el-table-column>
                                 <el-table-column label="姓名">
                                     <template slot-scope="scope">
@@ -300,6 +303,13 @@ export default {
                 this.formData.supplyCode = 'low';
             }
         },
+        tableRowClassName ({row, rowIndex}) {
+            //把每一行的索引放进row
+            row.index = rowIndex;
+        },
+        show(row, event, column){
+            this.uploadImageType=row.index
+        },
         setDataFromParent(data) {
             this.formData = data;
             // this.formId = data.id;
@@ -330,6 +340,7 @@ export default {
                 ],
                 totlenumbers:"",// 流水号
                 processId:'',
+                id: "",
                 status:'',
                 umonth:'',//月份
                 utype:'1',
@@ -368,7 +379,7 @@ export default {
                     if (compare) {
                         this.saveForm(type);
                     } else {
-                        alert('请输入采购明细');
+                        this.msgTips('名片印刷明细不完整，请填写完整！', 'warning');
                     }
                 }
             });
@@ -462,8 +473,8 @@ export default {
         addItem() {
             this.formData.cardPrinting.push({
                 id: '',
-                uname: '',
-                organ: '',
+                uname: this.$store.getters.LoginData.uname || '',//姓名
+                organ: this.$store.getters.LoginData.oname || '',
                 duty:'',//职务
                 quantity:'',//数量
                 phone: '',
@@ -483,20 +494,20 @@ export default {
                     .$confirm('是否删除?', '提示', { type: 'warning' })
                     .then(() => {
                         self.selectionItems.forEach(function (oData) {
-                            if (oData.id == '') {
-                                self.formData.cardPrinting.forEach(function (
-                                    item,
-                                    index
-                                ) {
-                                    if (item.count == oData.count) {
-                                        self.formData.cardPrinting.splice(index, 1);
-                                    }
-                                });
-                            } else {
+                            // debugger
+                            // if (oData.id == '') {
+                            //     self.formData.cardPrinting.forEach(function (
+                            //         item,
+                            //         index
+                            //     ) {
+                            //         if (item.count == oData.count) {
+                            //             self.formData.cardPrinting.splice(index, 1);
+                            //         }
+                            //     });
+                            // } else {
                                 axios
-                                    .delete(
-                                        '/api/v1/files_forms/deleteDetail/' +
-                                        oData.id,
+                                    .get(
+                                        '/api/v1/cardPrinting/delete/' + self.formData.id+'/'+oData.index,
                                         '',
                                         {
                                             headers: {
@@ -510,13 +521,18 @@ export default {
                                             item,
                                             index
                                         ) {
-                                            if (item.id == oData.id) {
+                                            if (item.index == oData.index) {
                                                 self.formData.cardPrinting.splice(
                                                     index,
                                                     1
                                                 );
+                                                 self.$message({
+                                                    message: '删除成功',
+                                                    type: 'success'
+                                                });
                                             }
                                         });
+                                       
                                     })
                                     .catch(function () {
                                         self.$message({
@@ -524,7 +540,7 @@ export default {
                                             type: 'error'
                                         });
                                     });
-                            }
+                            // }
                         });
                     });
             }

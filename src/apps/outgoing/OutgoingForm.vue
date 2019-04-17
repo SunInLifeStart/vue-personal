@@ -199,7 +199,7 @@ export default {
             cookie_uname: "",
             checkorName: "",
             cookie_oname: "",
-            wordNoList: ["协同发展","协同发展党","协同发展综","协同发展人"],
+            // wordNoList: ["协同发展","协同发展党","协同发展综","协同发展人","天津科技城"],
             direction: ["上行文", "下行文", "平行文"],
             type: ["公司", "党委","公会"],
             urgency: ["一般", "特急"],
@@ -240,6 +240,28 @@ export default {
         FilesOperate,
     },
     methods: {
+        getwordNoList() {
+            const self = this;
+            let onames={ "oname": decodeURI(this.$store.getters.LoginData.companyName)}
+            axios
+                .post("api/v1/doc/wordNo/getByOid",onames,
+                {
+                    headers: {
+                        'Content-type':
+                            'application/json'
+                    }
+                })
+                .then(res => {
+                    self.wordNoList = res.data; 
+                    
+                })
+                .catch(function() {
+                    self.$message({
+                        message: "操作失败",
+                        type: "error"
+                    });
+                });
+        },
         getId(id) {
             let self = this;
             self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
@@ -255,26 +277,6 @@ export default {
             });
         },
         
-        // getReviseData(repelaceData) {
-        //     let self = this;
-        //     self.$confirm("确定要替换吗，替换后原文件将被删除?", "提示", {
-        //         type: "warning"
-        //     }).then(() => {
-        //         self.formData.attachments.forEach(function(value, index) {
-        //             if (value.id == repelaceData.id) {
-        //                 axios
-        //                     .delete(
-        //                         "/api/v1/outgoing_forms/deleteAtt?id=" +
-        //                             repelaceData.id
-        //                     )
-        //                     .then(res => {
-        //                         self.formData.attachments.splice(index, 1);
-        //                         self.formData.attachments.push(repelaceData.data);
-        //                     });
-        //             }
-        //         });
-        //     });
-        // },
          getSedOrgan() {
             const self = this;
             axios
@@ -336,13 +338,18 @@ export default {
                 });
             });
         },
-       
         setDataFromParent(data) {
+          this.getwordNoList();
+         if(typeof data.text == "string"){
+                    if(data.text && JSON.parse(data.text).name){
+                    data.text = JSON.parse(data.text);
+                 }
+            }
             this.formData = data;
-            if(this.formData.mainTo!="" || this.formData.mainTo!=null){
+            if(data.mainTo!="" && data.mainTo!==null){
                this.formData.mainTo_1 = data.mainTo.split(",");
             }
-            if(this.formData.copyto!="" || this.formData.copyto!=null){
+            if(data.copyto!="" && data.copyto!==null){
              this.formData.copyto_1 = data.copyto.split(",");
             }
              this.formId = data.id;
@@ -350,6 +357,7 @@ export default {
             this.createForm_status = false;
         },
         createForm() {
+            this.getwordNoList();
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
         },
@@ -391,8 +399,7 @@ export default {
         },
         // 提交保存
         async saveForm(params) {
-            
-            const $self = this;
+             const $self = this;
             $self.formData.text = JSON.stringify($self.formData.text);
             if ($self.formData.mainTo_1.length > 0) {
                 let mainTo = $self.formData.mainTo_1.slice(0);
@@ -496,7 +503,8 @@ export default {
     mounted() {
          const self = this;
         // this.floaes();
-        //  self.getForm();
+        this.getwordNoList()
+       //  self.getForm();
          self.getSedOrgan();
         const cookieItems = document.cookie.split(";");
         cookieItems.forEach(function(item) {

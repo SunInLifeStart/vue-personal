@@ -59,6 +59,8 @@
                     </el-table-column>
                     <el-table-column prop="wordNo" label="来文字号">
                     </el-table-column>
+                    <el-table-column prop="creatorName" label="拟稿人">
+                    </el-table-column>
                      <el-table-column  width="100" label="单据状态">
                          <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                      </el-table-column>

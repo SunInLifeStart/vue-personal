@@ -55,7 +55,7 @@
                                :row-class-name="tableRowClassName"
                                @row-click='show'>
                               <el-table-column type="selection" width="70px"></el-table-column>
-                                <el-table-column prop="name" label="文件姓名">
+                                <el-table-column prop="name" label="文件名称">
                                     <template slot-scope="scope">
                                         <el-input v-model="scope.row.name"></el-input>
                                     </template>
@@ -337,7 +337,7 @@ export default {
                     if (compare) {
                         this.saveForm(type);
                     } else {
-                        alert('请输入采购明细');
+                        this.msgTips('文件印刷明细不完整，请填写完整！', 'warning');
                     }
                 }
             });
@@ -469,20 +469,19 @@ export default {
                     .$confirm('是否删除?', '提示', { type: 'warning' })
                     .then(() => {
                         self.selectionItems.forEach(function (oData) {
-                            if (oData.id == '') {
-                                self.formData.detail.forEach(function (
-                                    item,
-                                    index
-                                ) {
-                                    if (item.count == oData.count) {
-                                        self.formData.detail.splice(index, 1);
-                                    }
-                                });
-                            } else {
+                            // if (oData.id == '') {
+                            //     self.formData.detail.forEach(function (
+                            //         item,
+                            //         index
+                            //     ) {
+                            //         if (item.count == oData.count) {
+                            //             self.formData.detail.splice(index, 1);
+                            //         }
+                            //     });
+                            // } else {
                                 axios
                                     .delete(
-                                        '/api/v1/files_forms/deleteDetail/' +
-                                        oData.id,
+                                        '/api/v1/cardPrinting/delete/' + self.formData.id+'/'+oData.index,
                                         '',
                                         {
                                             headers: {
@@ -496,11 +495,15 @@ export default {
                                             item,
                                             index
                                         ) {
-                                            if (item.id == oData.id) {
+                                            if (item.index == oData.index) {
                                                 self.formData.detail.splice(
                                                     index,
                                                     1
                                                 );
+                                                self.$message({
+                                                    message: '删除成功',
+                                                    type: 'success'
+                                                });
                                             }
                                         });
                                     })
@@ -510,7 +513,7 @@ export default {
                                             type: 'error'
                                         });
                                     });
-                            }
+                            // }
                         });
                     });
             }
