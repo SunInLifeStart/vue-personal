@@ -164,6 +164,9 @@ export const publicMethods = {
                 if($self.printerFormName == "submission_forms"){
                     url = "/api/v1/"+ $self.printerFormName+"/" + $self.tableData.id +"/getForm";
                 }
+                if($self.printerFormName == "incoming_forms"){
+                    url = "/api/v1/incoming_forms/print/" + $self.tableData.id
+                }
                 $self.$axios
                 .get(url)
                 .then(res => {
