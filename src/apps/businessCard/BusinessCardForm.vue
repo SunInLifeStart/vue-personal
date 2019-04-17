@@ -47,7 +47,10 @@
                                 <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
                                 <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                             </div>
-                            <el-table :data="formData.cardPrinting" border style="width: 100%; margin-top: 5px;" @selection-change="handleSelectionChange">
+                            <el-table :data="formData.cardPrinting" border style="width: 100%; margin-top: 5px;" 
+                            @selection-change="handleSelectionChange"
+                             :row-class-name="tableRowClassName"
+                            @row-click='show'>
                                <el-table-column type="selection" width="40px"></el-table-column>
                                 <el-table-column label="姓名">
                                     <template slot-scope="scope">
@@ -300,6 +303,13 @@ export default {
                 this.formData.supplyCode = 'low';
             }
         },
+        tableRowClassName ({row, rowIndex}) {
+            //把每一行的索引放进row
+            row.index = rowIndex;
+        },
+        show(row, event, column){
+            this.uploadImageType=row.index
+        },
         setDataFromParent(data) {
             this.formData = data;
             // this.formId = data.id;
@@ -484,7 +494,7 @@ export default {
                     .$confirm('是否删除?', '提示', { type: 'warning' })
                     .then(() => {
                         self.selectionItems.forEach(function (oData) {
-                            debugger
+                            // debugger
                             // if (oData.id == '') {
                             //     self.formData.cardPrinting.forEach(function (
                             //         item,
@@ -497,7 +507,7 @@ export default {
                             // } else {
                                 axios
                                     .get(
-                                        '/api/v1/cardPrinting/delete/' + self.formData.id+'/'+oData.count,
+                                        '/api/v1/cardPrinting/delete/' + self.formData.id+'/'+oData.index,
                                         '',
                                         {
                                             headers: {
@@ -511,17 +521,18 @@ export default {
                                             item,
                                             index
                                         ) {
-                                            if (item.index == oData.count) {
+                                            if (item.index == oData.index) {
                                                 self.formData.cardPrinting.splice(
                                                     index,
                                                     1
                                                 );
+                                                 self.$message({
+                                                    message: '删除成功',
+                                                    type: 'success'
+                                                });
                                             }
                                         });
-                                        self.$message({
-                                            message: '删除成功',
-                                            type: 'success'
-                                        });
+                                       
                                     })
                                     .catch(function () {
                                         self.$message({
