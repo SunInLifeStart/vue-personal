@@ -52,18 +52,21 @@
                         <el-form-item label="共同发起人：">{{tableData.commonUser}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="16">
                         <el-form-item label="备注：">{{tableData.remarks}}
                         </el-form-item>
                     </el-col>
-                    <!--<el-col :span="8">-->
-                        <!--<el-form-item label="预算费用：">{{tableData.upper}}-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
                 </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="正文：">
+                         <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true}"></FilesOperate>
+                    </el-form-item>
+                </el-col>
+            </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
+                        <el-form-item label="附件：">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
@@ -110,11 +113,13 @@
                 </el-form>
             </el-dialog>
         </div>
+         <SubmissionForm  ref="SubmissionForm"></SubmissionForm>
     </div>
 </template>
 <script>
 import moment from "moment";
 import Comment from "../Comment";
+import SubmissionForm from "./SubmissionForm";
 import FilesOperate from "../FilesOperate";
 import { publicMethods } from "../application.js";
 export default {
@@ -122,7 +127,7 @@ export default {
     name: "SubmissionDetail",
     data() {
         return {
-            tableData: {},
+            tableData: {text:{name:""}},
             actions: [],
             crumbs:[],
             formId: "",
@@ -132,6 +137,7 @@ export default {
             actionsDialogArr: [],
             appFlowName:'submission-form_submission',
             formName:'submission_forms',
+            printerFormName:'submission_forms',
             comments:[],
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
@@ -139,7 +145,8 @@ export default {
     },
     components: {
         Comment,
-        FilesOperate
+        FilesOperate,
+        SubmissionForm
     },
     methods: {
         getFormDetails(formId) {
@@ -152,9 +159,11 @@ export default {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
-                $self.tableData = response.data;
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
-
+            if(response.data.text && JSON.parse(response.data.text).name){
+                response.data.text = JSON.parse(response.data.text);
+             }
+            $self.tableData = response.data;
+            $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
@@ -163,7 +172,12 @@ export default {
             $self.actions = actions.data.types;
             let comments =  await $self.getComments();
             $self.comments = comments.data;
+        },
+        reEditForm(){
+            let $self = this;
+            $self.$refs.SubmissionForm.setDataFromParent(this.tableData,true);
         }
+        
     }
 };
 </script>

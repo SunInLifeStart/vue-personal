@@ -157,8 +157,15 @@ export const publicMethods = {
                 $self.reEditForm();
                 // $self.msgTips("开发中", "warning");
             } else if($self.currentAction.name == "打印"){
+                let url;
+                if($self.printerFormName == "outgoing_forms"){
+                    url = "/api/v1/"+ $self.printerFormName+"/getForm/" + $self.tableData.id; 
+                }
+                if($self.printerFormName == "submission_forms"){
+                    url = "/api/v1/"+ $self.printerFormName+"/" + $self.tableData.id +"/getForm";
+                }
                 $self.$axios
-                .get("/api/v1/"+ $self.formName+"/" + $self.tableData.id +"/getForm")
+                .get(url)
                 .then(res => {
                     if (process.env.NODE_ENV === 'production') {
                         $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"

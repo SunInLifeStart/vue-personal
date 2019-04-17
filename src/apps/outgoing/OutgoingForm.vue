@@ -338,6 +338,11 @@ export default {
         },
        
         setDataFromParent(data) {
+         if(typeof data.text == "string"){
+                    if(data.text && JSON.parse(data.text).name){
+                    data.text = JSON.parse(data.text);
+                 }
+            }
             this.formData = data;
             if(data.mainTo!="" && data.mainTo!==null){
                this.formData.mainTo_1 = data.mainTo.split(",");

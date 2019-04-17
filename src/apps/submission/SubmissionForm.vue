@@ -85,7 +85,7 @@
     </div>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
-            <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+            <el-button type="primary" @click="saveFormValidate(true)" v-if="!isFromDetailsEdit">提交</el-button>
         </div>
     </el-dialog>
 </template>
@@ -107,6 +107,7 @@ export default {
             formId: '',
             appFlowName: "submission-form_submission",
             dialogFormVisible: false,
+            isFromDetailsEdit:false,
             rules: {
                 submissionNo: [
                     {
@@ -154,8 +155,11 @@ export default {
         saveFormValidate(save) {
             this.$refs["formupdate"].validate(valid => {
                 if (valid) {
-                    this.saveForm(save);
-                    // this.$emit("saveStatus", false);
+                    if(this.isFromDetailsEdit){
+                        this.saveForm();
+                    }else{
+                        this.saveForm(save);
+                    }
                 }
             });
         },
@@ -187,7 +191,6 @@ export default {
                         actions.data.types[0]["comment"] =  actions.data.types[0].name;
                         await $self.startSignal(actions.data.types[0],"fromeEdit");
                         $self.emitMessage();
-                        // $self.getQueryList();
                     }
                 } else {
                     $self.msgTips("保存成功", "success");
@@ -205,11 +208,17 @@ export default {
                 }
             }
         },
-        setDataFromParent(data) {
+        setDataFromParent(data,status) {
+            if(typeof data.text == "string"){
+                    if(data.text && JSON.parse(data.text).name){
+                    data.text = JSON.parse(data.text);
+                 }
+            }
             this.formData = data;
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
+            this.isFromDetailsEdit = status;
         },
         createForm() {
             this.formData = this.resetForm();
@@ -258,8 +267,7 @@ export default {
             };
             return formData;
         },
-            createTextBody() {
-            // this.$refs.outgoingeditfiles.dialogForm = true;
+        createTextBody() {
             this.openData();
         },
     }

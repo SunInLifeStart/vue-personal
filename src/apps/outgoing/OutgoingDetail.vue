@@ -195,6 +195,7 @@ export default {
             actionsDialogArr: [],
             appFlowName:'outgoing-form_outgoing',
             formName:'outgoingingApplication',
+            printerFormName:'outgoing_forms',
             comments:[],
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
