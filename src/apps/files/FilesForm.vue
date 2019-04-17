@@ -337,7 +337,7 @@ export default {
                     if (compare) {
                         this.saveForm(type);
                     } else {
-                        alert('请输入采购明细');
+                        this.msgTips('文件印刷明细不完整，请填写完整！', 'warning');
                     }
                 }
             });

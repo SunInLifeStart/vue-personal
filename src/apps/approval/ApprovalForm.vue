@@ -482,13 +482,27 @@ export default {
             return formData;
         },
         saveFormValidate(type) {
+             let compare = true;
+            for (let data of this.formData.usingApproval) {
+                if (
+                    data.useReason == '' ||
+                    JSON.stringify(data.fileName) == '' ||
+                   JSON.stringify(data.useReason) == '' ||
+                    data.fileNum == ''
+                ) {
+                    compare = false;
+                }
+            }
             this.$refs["formupdate"].validate(valid => {
                 if (valid) {
-                    this.saveForm(type);
-                }
-                else {
+                    if(compare){
+                        this.saveForm(type);
+                    }
+                     else {
                         this.msgTips("用印明细不完整，请填写完整！", "warning");
                     }
+                }
+               
             });
         },
         // 提交保存
