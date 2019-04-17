@@ -132,28 +132,43 @@
                             付款明细
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <span class="span">*</span>
+                            支出说明
+                        </td>
+                        <td colspan="4">
+                            <el-input v-model="formData.depict"></el-input>
+                        </td>
+                        <td>
+                            <span class="span">*</span>
+                            费用归属项目
+                        </td>
+                        <td colspan="2">
+                            <el-input v-model="formData.costItem"></el-input>
+                        </td>
+                    </tr>
                     <tr class="fontBold">
                         <td colspan="2">
                             <span class="span">*</span>
                             支出类别|明细</td>
-                        <td>
-                            <span class="span">*</span>
-                            支出说明</td>
                         <td>币种</td>
                         <td>
                             <span class="span">*</span>
                             金额</td>
                         <td>预估汇率</td>
                         <td>预估本币金额</td>
-                        <td>费用归属项目</td>
+                        <td>
+                            不含税价格
+                        </td>
+                        <td>
+                            税金
+                        </td>
                     </tr>
                     <tr v-for="(payItem,index) in this.formData.details" :key="payItem.index" @contextmenu.prevent="deleteItem(payItem,index,'payDetail')">
                         <td colspan="2">
                             <el-cascader :options="getclass" change-on-select filterable v-model="payItem.type" :props="{value:'name',label:'name'}">
                             </el-cascader>
-                        </td>
-                        <td>
-                            <el-input v-model="payItem.statement"></el-input>
                         </td>
                         <td>
                             <el-select v-model="payItem.currency" filterable @change="getDollar(payItem)">
@@ -171,12 +186,38 @@
                             <el-input v-model="payItem.localAmount" disabled class="money"></el-input>
                         </td>
                         <td>
-                            <el-input v-model="payItem.costProject"></el-input>
+                            <el-input v-model.number="payItem.noTax" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'notax')"></el-input>
+                        </td>
+                        <td>
+                            <el-input v-model.number="payItem.tax" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'tax')"></el-input>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="8">
                             <el-button size="small" style="width:100%;" @click="addItem('payDetail')">插入</el-button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" style="font-weight:bold;">预算、资金计划信息</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            是否资金计划内
+                        </td>
+                        <td colspan="3">
+                            <el-radio-group v-model="formData.fundPlan">
+                                <el-radio :label="true">是</el-radio>
+                                <el-radio :label="false">否</el-radio>
+                            </el-radio-group>
+                        </td>
+                        <td>
+                            是否预算内
+                        </td>
+                        <td colspan="3">
+                            <el-radio-group v-model="formData.est">
+                                <el-radio :label="true">是</el-radio>
+                                <el-radio :label="false">否</el-radio>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -699,7 +740,7 @@ export default {
             }
         },
         //计算预估本币金额,未付款，累计付款比例,分摊比例,本次付款后累计支付比例
-        getAmount(type, Item) {
+        getAmount(type, Item, shui) {
             if (type == 'payDetail') {
                 for (let index of this.formData.details) {
                     index.rate = Item.rate;
@@ -709,6 +750,17 @@ export default {
                         );
                     } else {
                         index.localAmount = 0;
+                    }
+                    if (shui && shui == 'tax') {
+                        Item.noTax =
+                            parseFloat(Item.localAmount) - parseFloat(Item.tax);
+                    } else if (shui && shui == 'notax') {
+                        Item.tax =
+                            parseFloat(Item.localAmount) -
+                            parseFloat(Item.noTax);
+                    } else {
+                        Item.tax = this.common.toDecimal2(0);
+                        Item.noTax = this.common.toDecimal2(0);
                     }
                 }
                 this.totalPayment();
@@ -994,6 +1046,8 @@ export default {
                         localAmount: 0,
                         amount: 0,
                         type: [],
+                        noTax: 0,
+                        tax: 0,
                         bigType: ''
                     });
                 } else {
@@ -1078,6 +1132,8 @@ export default {
             let formData = {
                 travelId: '', //选择的出差申请单
                 type: '',
+                fundPlan: true,
+                est: true,
                 numericalOrder: '', //流水号
                 allocation: '否', //分摊
                 organ: cookies.get('oname'),
@@ -1094,7 +1150,9 @@ export default {
                         localAmount: 0,
                         currency: '人民币',
                         bigType: '',
-                        type: []
+                        type: [],
+                        noTax: 0,
+                        tax: 0
                     }
                 ],
                 contract: {

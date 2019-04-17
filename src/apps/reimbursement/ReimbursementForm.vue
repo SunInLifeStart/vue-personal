@@ -380,7 +380,7 @@
                         <td colspan="7">
                             <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
                                 <p :title="item.name">{{item.name}}</p>
-                                <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i>
+                                <i class="el-icon-delete" @click.stop="deleteAttachments(item.id)"></i>
                             </div>
                         </td>
                     </tr>
@@ -554,9 +554,6 @@ export default {
                 this.shareRadio();
             }
         }
-        //'formData.lowercase'(val) {
-        // this.formData.upper = val ? this.convertCurrency(val) : "";
-        // }
     },
     components: {
         FilesOperate
@@ -658,7 +655,7 @@ export default {
                 if (
                     type == 'baoxiao' &&
                     !this.createForm_status &&
-                    this.formData.repayItems[index].id != ''
+                    this.formData.repayItems[index].id
                 ) {
                     //调删除方法
                     axios
@@ -701,7 +698,7 @@ export default {
                 if (
                     type == 'fentan' &&
                     !this.createForm_status &&
-                    this.formData.shares[index].id != ''
+                    this.formData.shares[index].id
                 ) {
                     axios
                         .delete(
@@ -800,11 +797,17 @@ export default {
                 // }
             }
         },
+        //获取详情前清空数据方法，要调用，不然有缓存，影响借款相关数据
         getClearForm() {
+            this.submission = '';
+            this.travelPeople = '';
+            this.getOgans();
+            this.getUsers();
+            this.getTravelList();
+            this.getSubmissionlList();
             this.formData = {
                 no: '',
                 id: '',
-                type: '',
                 subView: true,
                 travelView: true,
                 travellerId: '',
@@ -812,18 +815,19 @@ export default {
                 budgetSure: false,
                 submissionId: '',
                 submissionName: '',
-                topPower: '',
                 creatorName: cookies.get('uname'),
                 organName: cookies.get('oname'),
                 created: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 payee: '',
                 payeeId: '',
-                expenseId: '',
+                expenseId: cookies.get('oid'),
                 bank: '',
                 cardNo: '',
                 clearing: '',
+                depict: '',
+                costItem: '',
                 upper: '',
-                expenseDep: cookies.get('oname'),
+                expenseDep: this.$store.getters.LoginData.oname,
                 share: false,
                 total: this.common.toDecimal2(0),
                 budget: {
@@ -835,8 +839,8 @@ export default {
                     bor: false,
                     borrowOdd: '',
                     noVerify: 0,
-                    borrowId: '',
                     total: 0,
+                    borrowId: '',
                     verify: 0,
                     sendDack: true,
                     payAble: this.common.toDecimal2(0),
@@ -850,7 +854,8 @@ export default {
                         payProject: '',
                         bearSum: this.common.toDecimal2(0),
                         upper: '',
-                        shareRatio: ''
+                        shareRatio: '',
+                        id: ''
                     }
                 ],
                 repayItems: []
@@ -858,47 +863,60 @@ export default {
         },
         //编辑表单
         async setDataFromParent(data) {
-            this.getClearForm();
-            this.submission = '';
-            this.travelPeople = '';
-            if (data.submissionId && data.submissionId != null) {
-                if (data.subView) {
-                    this.submission = parseInt(data.submissionId);
-                } else {
-                    this.submission = data.submissionId;
-                }
-            }
-            if (data.travellerId && data.travellerId != null) {
-                if (data.travelView) {
-                    this.travelPeople = parseInt(data.travellerId);
-                } else {
-                    this.travelPeople = data.travellerId;
-                }
-            }
-            //获取关联单号，显示关联单号
-            //是否借款赋值判断
-            if (data.borrow != null) {
-                this.getBorrowOdd(data.payeeId);
-            }
-            if (data.borrow == null) {
-                this.formData.borrow.payAble = res.data.total;
-                this.formData.borrow.upperSum = res.data.upper;
-            }
-            data.borrow =
-                data.borrow == null ? this.formData.borrow : data.borrow;
-            for (let item of data.repayItems) {
-                item.min = item.bigTypeName.split(',');
-                item.currency = {
-                    value: item.currency.curValue,
-                    label: item.currency.label
-                };
-            }
             let $self = this;
-            $self.formData = data;
-            $self.radioChange('bor');
-            $self.formId = $self.formData.id;
-            $self.dialogFormVisible = true;
-            $self.createForm_status = false;
+            $self.getClearForm();
+            // this.formData = data;
+            $self.url = '/api/v1/expense_forms/' + data.id;
+            let response = await $self.getDetails();
+            if (response) {
+                if (
+                    response.data.submissionId &&
+                    response.data.submissionId != null
+                ) {
+                    if (response.data.subView) {
+                        this.submission = parseInt(response.data.submissionId);
+                    } else {
+                        this.submission = response.data.submissionId;
+                    }
+                }
+                if (
+                    response.data.travellerId &&
+                    response.data.travellerId != null
+                ) {
+                    if (response.data.travelView) {
+                        this.travelPeople = parseInt(response.data.travellerId);
+                    } else {
+                        this.travelPeople = response.data.travellerId;
+                    }
+                }
+                //获取关联单号，显示关联单号
+                //是否借款赋值判断
+                if (response.data.borrow != null) {
+                    $self.getBorrowOdd(response.data.payeeId);
+                }
+                if (response.data.borrow == null) {
+                    $self.formData.borrow.payAble = response.data.total;
+                    $self.formData.borrow.upperSum = response.data.upper;
+                }
+                response.data.borrow =
+                    response.data.borrow == null
+                        ? this.formData.borrow
+                        : response.data.borrow;
+                for (let data of response.data.repayItems) {
+                    data.min = data.bigTypeName.split(',');
+                    data.currency = {
+                        value: data.currency.curValue,
+                        label: data.currency.label
+                    };
+                }
+                $self.formData = response.data;
+                $self.radioChange('bor');
+                $self.formId = $self.formData.id;
+                $self.dialogFormVisible = true;
+                $self.createForm_status = false;
+            } else {
+                $self.msgTips('获取表单失败', 'warning');
+            }
         },
         createForm() {
             this.formData = this.resetForm();
@@ -915,6 +933,8 @@ export default {
             for (let data of this.formData.repayItems) {
                 data.currency = item.currency;
                 data.estRate = item.estRate;
+                data.noTax = 0;
+                data.tax = 0;
             }
             if (type == 'currency') {
                 if (item.currency.label == '人民币') {
@@ -1277,6 +1297,8 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
+            console.log('这是打印的字符串');
+            console.log(this.formData);
             for (let data of this.formData.shares) {
                 data.bearSum = parseFloat(data.bearSum);
                 data.shareRatio = data.shareRatio;
@@ -1293,13 +1315,20 @@ export default {
             this.formData.borrow.shouldBack = parseFloat(
                 this.formData.borrow.shouldBack
             );
+            for (let data of this.formData.repayItems) {
+                data.currency = {
+                    curValue: data.currency.value,
+                    label: data.currency.label
+                };
+            }
             this.formData.total = parseFloat(this.formData.total);
-            if ($self.formData.created) {
-                $self.formData.created = moment($self.formData.created).format(
+            const self = this;
+            if (self.formData.created) {
+                self.formData.created = moment(self.formData.created).format(
                     'YYYY-MM-DD HH:mm:ss'
                 );
             } else {
-                $self.formData.created = moment(new Date()).format(
+                self.formData.created = moment(new Date()).format(
                     'YYYY-MM-DD HH:mm:ss'
                 );
             }
@@ -1330,7 +1359,7 @@ export default {
                 $self.formData
             );
             if (response) {
-                $self.formId = response.data.id;
+                $self.formId = response.data.content;
                 $self.dialogFormVisible = false;
                 if (params) {
                     $self.msgTips('提交成功', 'success');
@@ -1346,10 +1375,7 @@ export default {
                         });
                         actions.data.types[0]['comment'] =
                             actions.data.types[0].name;
-                        await $self.startSignal(
-                            actions.data.types[0],
-                            'fromeEdit'
-                        );
+                        await $self.startSignal(actions.data.types[0]);
                         $self.updateBorrow($self.formId);
                         $self.emitMessage();
                     }
@@ -1411,8 +1437,8 @@ export default {
     mounted() {
         this.getUsers();
         this.getOgans();
-        this.getTravelList();
-        this.getSubmissionlList();
+        // this.getTravelList();
+        // this.getSubmissionlList();
     }
 };
 </script>
