@@ -236,10 +236,15 @@ export default {
         //     this.common.preview(item);
         // },
         showDocs(item){
-              this.openUrl = "http://static1.yxpe.com.cn/edit.html?";
-              ntkoBrowser.openWindow(
-                    this.openUrl +"removeBar=true" + "&&url=" + item.url
-            );
+            if ('DOCX,PPTX,XLSX,DOC,XLS'.includes(item.type.toUpperCase())) {
+                this.openUrl = "http://static1.yxpe.com.cn/edit.html?";
+                ntkoBrowser.openWindow(
+                        this.openUrl +"removeBar=true" + "&&url=" + item.url
+                );      
+            }else{
+                 this.common.preview(item);
+            }
+        
         },
         getMsgList() {
             let self = this;
