@@ -1,5 +1,5 @@
 <template>
-    <div id="ReimbursementDetail">
+    <div id="ExpenseDetail">
         <!-- <el-steps :active="crumb.index" finish-status="success">
             <el-step :title="item.name" :key="item.id" v-for="item in crumb.items"></el-step>
         </el-steps> -->
@@ -19,9 +19,10 @@
             </div>
             <br />
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
+                <h2 style="text-align: center;">报销审批单</h2>
                 <el-row style="margin-top: 25px;">
                     <el-col :span="7">
-                        <el-form-item label="流水单号：">
+                        <el-form-item label="单据编号：">
                             <span style="font-size:10px">
                                 {{tableData.no}}
                             </span>
@@ -32,27 +33,11 @@
                             <span style="font-size:10px" @click="ViewDetail('travel')" :class="{'titlename':this.tableData.travelView}"> {{tableData.travelName}}</span>
                         </el-form-item>
                     </el-col>
-                    <!-- <el-col :span="1" v-if="this.rows.type=='国内差旅报销'">
-                        <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.rows.travelView">
-                            <el-button type="text" icon="el-icon-view" @click="ViewDetail('travel')"></el-button>
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.rows.travelView == false">
-                            <el-button type="text" icon="el-icon-view" style="color:gray;"></el-button>
-                        </el-tooltip>
-                    </el-col> -->
                     <el-col :span="8">
                         <el-form-item label="呈报件：">
                             <span style="font-size:10px" @click="ViewDetail('chengbao')" :class="{'titlename':this.tableData.subView}"> {{tableData.submissionName}}</span>
                         </el-form-item>
                     </el-col>
-                    <!-- <el-col :span="1">
-                        <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.rows.subView">
-                            <el-button type="text" icon="el-icon-view" @click="ViewDetail('chengbao')"></el-button>
-                        </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.rows.subView == false">
-                            <el-button type="text" icon="el-icon-view" style="color:gray;"></el-button>
-                        </el-tooltip>
-                    </el-col> -->
                 </el-row>
                 <table class="tablePrint" style="width: 99%; height: 100%; table-layout: fixed; word-break: break-all;margin-top:10px;">
                     <col style="width: 10%" />
@@ -69,19 +54,19 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="fontBold">
                             提单人
                         </td>
                         <td>
                             {{tableData.creatorName}}
                         </td>
-                        <td>
+                        <td class="fontBold">
                             所属部门
                         </td>
                         <td colspan="2">
                             {{tableData.organName}}
                         </td>
-                        <td>
+                        <td class="fontBold">
                             提单时间
                         </td>
                         <td colspan="2">
@@ -89,19 +74,19 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="fontBold">
                             收款人
                         </td>
                         <td>
                             {{tableData.payee}}
                         </td>
-                        <td>
+                        <td class="fontBold">
                             开户行
                         </td>
                         <td colspan="2">
                             {{tableData.bank}}
                         </td>
-                        <td>
+                        <td class="fontBold">
                             银行卡号
                         </td>
                         <td colspan="2">
@@ -109,19 +94,19 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="fontBold">
                             结算方式
                         </td>
                         <td>
                             {{tableData.clearing}}
                         </td>
-                        <td>
+                        <td class="fontBold">
                             费用承担部门
                         </td>
                         <td colspan="2">
                             {{tableData.expenseDep}}
                         </td>
-                        <td>
+                        <td class="fontBold">
                             分摊
                         </td>
                         <td colspan="2">
@@ -133,7 +118,7 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="8" style="font-weight:bold;">
+                        <td colspan="8" class="fontBold">
                             报销明细
                         </td>
                     </tr>
@@ -152,25 +137,25 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="2" class="fontBold">
                             费用类别
                         </td>
-                        <td>
+                        <td class="fontBold">
                             币种
                         </td>
-                        <td>
+                        <td class="fontBold">
                             金额
                         </td>
-                        <td>
+                        <td class="fontBold">
                             预估汇率
                         </td>
-                        <td>
+                        <td class="fontBold">
                             预估本币金额
                         </td>
-                        <td>
+                        <td class="fontBold">
                             不含税价格
                         </td>
-                        <td>
+                        <td class="fontBold">
                             税金
                         </td>
                     </tr>
@@ -191,9 +176,6 @@
                             {{item.estSum}}
                         </td>
                         <td>
-                            {{item.costItem}}
-                        </td>
-                        <td>
                             {{item.noTax}}
                         </td>
                         <td>
@@ -205,14 +187,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="2" class="fontBold">
                             金额合计
                         </td>
                         <td>
                             <span style="float:left;"> {{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}}</span>
                             <span style="float:right;">{{parseFloat(this.tableData.total).toLocaleString()}}</span>
                         </td>
-                        <td>
+                        <td class="fontBold">
                             金额大写
                         </td>
                         <td colspan="4">
@@ -227,32 +209,32 @@
                             是否资金计划内
                         </td>
                         <td colspan="3">
-                            {{tableData.budget.fundPlan == true ? '是' : '否'}}
+                            {{tableData.budget.fundPlan ? '是': '否'}}
                         </td>
                         <td>
                             是否预算内
                         </td>
                         <td colspan="3">
-                            {{tableData.budget.est == true ? '是' : '否'}}
+                            {{tableData.budget.est ? '是': '否'}}
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="8" style="font-weight:bold;">借款信息</td>
+                        <td colspan="8" class="fontBold">借款信息</td>
                     </tr>
                     <tr>
-                        <td>
+                        <td class="fontBold">
                             是否有借款
                         </td>
-                        <td colspan="2">
+                        <td colspan="2" class="fontBold">
                             关联借款单号
                         </td>
-                        <td>
+                        <td class="fontBold">
                             借款未核销金额
                         </td>
-                        <td colspan="2">
+                        <td colspan="2" class="fontBold">
                             借款已核销金额
                         </td>
-                        <td colspan="2">
+                        <td colspan="2" class="fontBold">
                             借款剩余金额是否退还
                         </td>
                     </tr>
@@ -261,10 +243,7 @@
                             {{tableData.borrow.bor ? '是': '否'}}
                         </td>
                         <td colspan="2">
-                            {{tableData.borrow.borrowOdd}}
-                            <el-tooltip class="item" effect="dark" content="查看" placement="left" v-show="this.tableData.borrow.borrowOdd">
-                                <el-button type="text" style="margin-left: 20px;" icon="el-icon-view" @click="ViewDetail('borrow')"></el-button>
-                            </el-tooltip>
+                            <span @click="ViewDetail('borrow')" class="titlename"> {{tableData.borrow.borrowOdd}}</span>
                         </td>
                         <td>
                             {{parseFloat(this.tableData.borrow.noVerify).toLocaleString()}}
@@ -277,17 +256,17 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>应付金额({{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}})</td>
+                        <td class="fontBold">应付金额({{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}})</td>
                         <td colspan="3">
                             {{parseFloat(this.tableData.borrow.payAble).toLocaleString()}}
                         </td>
-                        <td>应退金额({{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}})</td>
+                        <td class="fontBold">应退金额({{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}})</td>
                         <td colspan="3">
                             {{parseFloat(this.tableData.borrow.shouldBack).toLocaleString()}}
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
+                        <td colspan="2" class="fontBold">
                             金额大写
                         </td>
                         <td colspan="6">
@@ -295,24 +274,24 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="8" style="font-weight:bold;" v-show="tableData.share == true">
+                        <td colspan="8" style="font-weight:bold;" v-show="tableData.share == true" class="fontBold">
                             分摊明细
                         </td>
                     </tr>
                     <tr v-show="tableData.share == true">
-                        <td colspan="2">
+                        <td colspan="2" class="fontBold">
                             承担单位
                         </td>
-                        <td>
+                        <td class="fontBold">
                             承担部门
                         </td>
-                        <td>
+                        <td class="fontBold">
                             承担金额({{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}})
                         </td>
-                        <td colspan="3">
+                        <td colspan="3" class="fontBold">
                             金额大写【{{this.tableData.repayItems.length ==0 ? '人民币': this.tableData.repayItems[0].currency.label}}】
                         </td>
-                        <td>
+                        <td class="fontBold">
                             分摊比例(%)
                         </td>
                     </tr>
@@ -324,7 +303,7 @@
                             {{item.bearDep}}
                         </td>
                         <td>
-                            {{item.bearSum}}
+                            {{item.bearSum.toLocaleString()}}
                         </td>
                         <td colspan="3">
                             {{item.upper}}
@@ -341,10 +320,11 @@
                         <td colspan="8" style="font-weight:bold;">附件</td>
                     </tr>
                     <tr>
-                        <td>附件信息</td>
+                        <td class="fontBold">附件信息</td>
                         <td colspan="7">
                             <div class="attachments" v-for="item in tableData.attachments" :key="item.id" @click="downloadFile(item)">
                                 <p :title="item.name">{{item.name}}</p>
+                                <!-- <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate> -->
                             </div>
                         </td>
                     </tr>
@@ -365,37 +345,6 @@
                         </td>
                     </tr>
                 </table>
-                <!--
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="审核流程：">
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <div class="audit" v-for="item in rows.comments" :key="item.id">
-                            <div class="avatar">
-                                <img src="../../assets/avatar.png" alt="">
-                            </div>
-                            <div class="info">
-                                <div class="creator">
-                                    <a href="#">{{item.creatorName}}</a> {{item.created | dateformat}}
-                                    <span v-if="item.action == 'APPROVE'">【同意】</span>
-                                    <span v-if="item.action == 'REJECT'">【驳回】</span>
-                                </div>
-                                <div class="content">{{item.content}}</div>
-                            </div>
-                        </div>
-                    </el-col>
-                </el-row>
-                <el-row v-show="this.actions && this.actions.length > 0">
-                    <Comment ref="comment"></Comment>
-                    <div style="margin-top: 10px; height: 32px; position: relative;">
-                        <el-button type="primary" size="small" v-bind:class="{ active: action.type == 'REJECT' }" :key="action.type" v-for="action in actions" @click="doComment(action)">{{action.name}}</el-button>
-                    </div>
-                </el-row>
-                -->
             </el-form>
             <el-row v-if="comments && comments.length > 0">
                 <el-col :span="24">
@@ -441,10 +390,12 @@
 <script>
 import axios from 'axios';
 import Comment from '../Comment';
+import moment from 'moment';
+import cookies from 'js-cookie';
 import { publicMethods } from '../application.js';
 export default {
     mixins: [publicMethods],
-    name: 'ReimbursementDetail',
+    name: 'ExpenseDetail',
     data() {
         return {
             tableData: {
@@ -462,15 +413,15 @@ export default {
                 clearing: '',
                 upper: '',
                 expenseDep: '',
-                depict: '',
-                costItem: '',
                 repayItems: [],
                 share: false,
                 fullScreen: false,
                 total: '',
                 budget: {
-                    est: false,
-                    fundPlan: false
+                    estSum: '',
+                    surplusSum: '',
+                    fundPlan: '',
+                    surplusPlan: ''
                 },
                 attachments: [],
                 crumbNodeName: '',
@@ -488,8 +439,8 @@ export default {
                 },
                 shares: []
             },
-            array: [],
             actions: [],
+            array: [],
             formId: '',
             textarea: '',
             dialogVisible: false,
@@ -546,64 +497,6 @@ export default {
                 }
             }
         },
-        print() {
-            this.$print(this.$refs.formupdate.$el);
-        },
-        getAgree() {
-            this.array = [];
-            let j = -1;
-            for (var i = 0; i < this.comments.length; i++) {
-                if (this.comments[i].action == 'REJECT') {
-                    j = i;
-                }
-            }
-
-            if (j == -1) {
-                let arrayConst = [];
-                let boolean = false;
-                for (var i = 0; i < this.comments.length; i++) {
-                    if (
-                        this.comments[i + 1] &&
-                        this.comments[i + 1].action == 'PULL'
-                    ) {
-                    } else {
-                        arrayConst.push(this.comments[i]);
-                    }
-                    if (i == this.comments.length - 1) {
-                        boolean = true;
-                    }
-                }
-                if (boolean) {
-                    for (let data of arrayConst) {
-                        if (data.action != null && data.action == 'APPROVE') {
-                            this.array.push(data);
-                        }
-                    }
-                }
-            } else {
-                let arrayreject = [];
-                let boolean = false;
-                for (var a = j + 1; a < this.comments.length; a++) {
-                    if (
-                        this.comments[a + 1] &&
-                        this.comments[a + 1].action == 'PULL'
-                    ) {
-                    } else {
-                        arrayreject.push(this.comments[a]);
-                    }
-                    if (a == this.comments.length - 1) {
-                        boolean = true;
-                    }
-                }
-                if (boolean) {
-                    for (let data of arrayreject) {
-                        if (data.action != null && data.action == 'APPROVE') {
-                            this.array.push(data);
-                        }
-                    }
-                }
-            }
-        },
         clearForm() {
             this.tableData = {
                 no: '',
@@ -624,14 +517,14 @@ export default {
                 clearing: '',
                 upper: '',
                 expenseDep: '',
-                depict: '',
-                costItem: '',
                 repayItems: [],
                 share: false,
                 total: '',
                 budget: {
-                    est: false,
-                    fundPlan: false
+                    estSum: '',
+                    surplusSum: '',
+                    fundPlan: '',
+                    surplusPlan: ''
                 },
                 attachments: [],
                 borrow: {
@@ -647,6 +540,60 @@ export default {
                 },
                 shares: []
             };
+        },
+        getAgree() {
+            this.array = [];
+            let j = -1;
+            let p;
+            for (var i = 0; i < this.tableData.comments.length; i++) {
+                if (this.tableData.comments[i].action == 'REJECT') {
+                    j = i;
+                } else if (this.tableData.comments[i].action == 'PULL') {
+                    p = i;
+                    j = 2;
+                }
+            }
+            if (j == -1) {
+                this.array = this.tableData.comments;
+            } else if ((j = 2)) {
+                for (var a = 0; a < this.tableData.comments.length; a++) {
+                    if (a == p || a == p - 1) {
+                        this.array = this.array;
+                    } else {
+                        this.array.push(this.tableData.comments[a]);
+                    }
+                }
+            } else {
+                for (var k = j + 2; k < this.tableData.comments.length; k++) {
+                    this.array.push(this.tableData.comments[k]);
+                }
+            }
+        },
+        rejectPut() {
+            const self = this;
+            if (this.tableData.borrow.borrowId != '') {
+                axios
+                    .put(
+                        '/api/v1/expense_forms/' +
+                            this.formId +
+                            '/updateBorrow/' +
+                            this.tableData.borrow.borrowId,
+                        '',
+                        {
+                            headers: {
+                                'Content-type': 'application/json'
+                            }
+                        }
+                    )
+                    .then(res => {})
+                    .catch(function() {
+                        self.$message({
+                            message: '操作失败',
+                            type: 'error'
+                        });
+                    });
+            }
+            //});
         },
         getFormDetails(formId) {
             let $self = this;
@@ -691,71 +638,20 @@ export default {
             //         $self.crumbs.index = i;
             //     }
             // }
-        },
-        //驳回操作
-        rejectPut() {
-            if (this.tableData.borrow.borrowId != '') {
-                axios
-                    .put(
-                        '/api/v1/expense_forms/' +
-                            this.formId +
-                            '/updateBorrow/' +
-                            this.tableData.borrow.borrowId,
-                        '',
-                        {
-                            headers: {
-                                'Content-type': 'application/json'
-                            }
-                        }
-                    )
-                    .then(res => {})
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
-            }
-            //});
         }
     }
 };
 </script>
 <style lang="scss" scope>
-#ReimbursementDetail {
+#ExpenseDetail {
     .titlename {
         color: #1c47f3;
         text-decoration: underline;
     }
-    .el-step__main {
-        margin-top: 10px;
-    }
-    // table {
-    //     border-collapse: collapse;
-    //     margin: 0 auto;
-    //     text-align: center;
-    //     width: 100%;
-    // }
-    // table td,
-    // table th {
-    //     border: 1px solid #000;
-    //     color: #000;
-    //     height: 30px;
-    //     vertical-align: middle;
-    // }
-    // table thead th {
-    //     background-color: #cce8eb;
-    // }
-    // table tr:nth-child(odd) {
-    //     background: #fff;
-    // }
-    // table tr:nth-child(even) {
-    //     background: #fff;
-    // }
     .attachments {
         margin-left: 10px;
         width: 170px;
-        //height: 120px;
+        // height: 80px;
         display: inline-block;
         cursor: pointer;
         p {
@@ -804,6 +700,10 @@ export default {
             }
         }
     }
+    #moneyright {
+        text-align: right;
+        padding-right: 10px;
+    }
     .active {
         float: left;
         margin-right: 10px;
@@ -812,9 +712,9 @@ export default {
         background: #f4f4f4;
         border-bottom: 1px solid #eaeaea;
         height: 40px;
-        font-weight: bold;
         width: 100%;
         z-index: 10;
+        font-weight: bold;
         .btnList {
             line-height: 40px;
             padding: 12px 10px;
@@ -830,13 +730,8 @@ export default {
     .crumbList {
         margin: 15px 0px;
     }
-}
-.fullScreen {
-    position: fixed;
-    top: 0px;
-    z-index: 10;
-    background: #fff;
-    left: 0px;
-    right: 0px;
+    .el-step__main {
+        margin-top: 10px;
+    }
 }
 </style>

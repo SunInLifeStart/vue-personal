@@ -2,7 +2,7 @@
     <div id="Reimbursement">
         <el-card class="box-card">
             <div id="ReimbursementFilter">
-                <el-form :inline="true" label-width="70px" label-position="left" class="demo-form-inline">
+                <el-form :inline="true" label-width="60px" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="提单人">
@@ -17,20 +17,22 @@
                         <el-col :span="8">
                             <el-form-item label="状态">
                                 <el-select v-model="formInline.status" placeholder="请选择">
-                                    <el-option label="已保存" value="已保存"></el-option>
-                                    <el-option label="审核中" value="审核中"></el-option>
-                                    <el-option label="已驳回" value="已驳回"></el-option>
-                                    <el-option label="已完成" value="已完成"></el-option>
+                                    <el-option label="已保存" value="00"></el-option>
+                                    <el-option label="审核中" value="01"></el-option>
+                                    <el-option label="已驳回" value="02"></el-option>
+                                    <el-option label="已完成" value="04"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row class="filterForm">
+                        <!--
                         <el-col :span="8">
-                            <el-form-item label="日期" label-width="100px;">
+                            <el-form-item label="日期" label-width="60px;">
                                 <el-date-picker v-model="formInline.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
                             </el-form-item>
                         </el-col>
+                        -->
                         <el-col :span="16">
                             <el-form-item class="">
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -109,7 +111,7 @@ export default {
             },
             params: {
                 page: 1,
-                pageSize: 20,
+                pageSize: 5,
                 orderBy: 'id',
                 desc: true,
                 options: []
@@ -142,8 +144,8 @@ export default {
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.forms.length > 0) {
-                    //let formId = response.data.forms[0].id;
-                    // $self.$refs.ReimbursementDetail.getFormDetails(formId);
+                    let formId = response.data.forms[0].id;
+                    $self.$refs.ReimbursementDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
@@ -264,7 +266,10 @@ export default {
 }
 </style>
 <style scoped>
-#Reimbursement .filterForm >>> .el-form-item__content {
-    width: calc(100% - 80px);
+#ReimbursementFilter .filterForm >>> .el-form-item__content {
+    width: calc(100% - 100px);
 }
 </style>
+
+
+
