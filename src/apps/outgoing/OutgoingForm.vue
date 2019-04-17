@@ -199,7 +199,7 @@ export default {
             cookie_uname: "",
             checkorName: "",
             cookie_oname: "",
-            wordNoList: ["协同发展","协同发展党","协同发展综","协同发展人"],
+            wordNoList: ["协同发展","协同发展党","协同发展综","协同发展人","天津科技城"],
             direction: ["上行文", "下行文", "平行文"],
             type: ["公司", "党委","公会"],
             urgency: ["一般", "特急"],
@@ -339,10 +339,10 @@ export default {
        
         setDataFromParent(data) {
             this.formData = data;
-            if(this.formData.mainTo!="" || this.formData.mainTo!=null){
+            if(data.mainTo!="" && data.mainTo!==null){
                this.formData.mainTo_1 = data.mainTo.split(",");
             }
-            if(this.formData.copyto!="" || this.formData.copyto!=null){
+            if(data.copyto!="" && data.copyto!==null){
              this.formData.copyto_1 = data.copyto.split(",");
             }
              this.formId = data.id;
