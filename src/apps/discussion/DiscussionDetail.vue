@@ -55,7 +55,9 @@
                         <el-form-item label="议题名称：">{{tableData.topicName}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="16">
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
                         <el-form-item label="参会部门" prop="phone">
                             <tr v-for="(item,index) in tableData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
                                 <td colspan="4" style="width: 21%;">
@@ -77,7 +79,8 @@
                                     ></el-cascader>
                                 </td>
                                 <td colspan="4">
-                                    <el-select style="width: 100%" disabled v-model="item.people" multiple @change="changePeople">
+                                    <el-select style="width: 100%"
+                                               disabled v-model="item.people" multiple @change="changePeople">
                                         <el-option
                                                 v-for="i in item.personOptions"
                                                 :key="i.id"
@@ -195,16 +198,15 @@ export default {
         Comment,
         FilesOperate
     },
-    mounted() {
-        this.getDiscussionUser()
-    },
+    // mounted() {
+    //     this.getDiscussionUser()
+    // },
     methods: {
         async getDiscussionUser() {
-            axios.get("/api/v1/users/list/organs").then(res => {
-                if (res) this.dataOptions = res.data || []
-                this.options = JSON.parse(JSON.stringify(this.dataOptions))
-                this.deleteChildren(this.options)
-            });
+            let a = await axios.get("/api/v1/users/list/organs")
+            if (a) this.dataOptions = a.data || []
+            this.options = JSON.parse(JSON.stringify(this.dataOptions))
+            this.deleteChildren(this.options)
         },
         deleteChildren(array) {
             array.forEach(item => {
@@ -250,27 +252,31 @@ export default {
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
+            let a = await $self.getDiscussionUser();
             if (response) {
                 $self.tableData = response.data.content;
-                if ($self.tableData.attendingDepartment) {
-                    $self.tableData.attendingDepartment.forEach((item,index) => {
-                        // 处理部门
-                        if (item.person) {
-                            item.people = item.person.split(',')
-                            item.department = item.department.split(',')
-                        }
-                        for (let i = 0; i<item.department.length; i++) {
-                            item.department[i] = parseInt(item.department[i])
-                        }
-                        this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
-                        item.personOptions = this.person
-                        // 处理人员
-                        if (item.people)
-                        for (let i = 0; i<item.people.length; i++) {
-                            item.people[i] = parseInt(item.people[i])
-                        }
-                    })
-                }
+                // setTimeout(() => {
+                    if ($self.tableData.attendingDepartment) {
+                        $self.tableData.attendingDepartment.forEach((item,index) => {
+                            // 处理部门
+                            if (item.person) {
+                                item.people = item.person.split(',')
+                                item.department = item.department.split(',')
+                            }
+                            for (let i = 0; i<item.department.length; i++) {
+                                item.department[i] = parseInt(item.department[i])
+                            }
+                            let flag = item.department[item.department.length - 1]
+                            $self.searchPersonOptions($self.dataOptions, flag)
+                            item.personOptions = this.person
+                            // 处理人员
+                            if (item.people)
+                                for (let i = 0; i<item.people.length; i++) {
+                                    item.people[i] = parseInt(item.people[i])
+                                }
+                        })
+                    }
+                // },500)
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
