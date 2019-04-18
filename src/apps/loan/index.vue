@@ -60,7 +60,7 @@
                     </el-table-column>
                     <el-table-column prop="currency" label="币种" align="left">
                         <template slot-scope="scope">
-                            {{scope.row.borrows[0].currency}}
+                            {{scope.row.borrows.length > 0 ? scope.row.borrows[0].currency : '人民币'}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="status" label="单据状态" align="left">

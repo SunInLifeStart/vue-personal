@@ -58,7 +58,7 @@
                     </el-table-column>
                     <el-table-column prop="currency" label="币种">
                         <template slot-scope="scope">
-                            {{scope.row.repayItems[0].currency.label}}
+                            {{scope.row.repayItems.length > 0 ? scope.row.repayItems[0].currency.label : '人民币'}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="created" label="提单时间"></el-table-column>
