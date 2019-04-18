@@ -234,7 +234,7 @@
                     },
                     {
                         value: 'recruMeeting',
-                        disabled: false,
+                        disabled: true,
                         label: '招采委员会'
                     }
                 ],
@@ -285,9 +285,9 @@
             recruMeetingFlag() {
                 axios.get("/api/v1/users/isBoardFortune").then(res => {
                     if (res.data && res.data.zcwyh) {
-                        this.discussionOption[this.discussionOption.length - 1].disabled = true
-                    } else {
                         this.discussionOption[this.discussionOption.length - 1].disabled = false
+                    } else {
+                        this.discussionOption[this.discussionOption.length - 1].disabled = true
                     }
                 });
             },
