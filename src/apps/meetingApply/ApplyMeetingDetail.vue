@@ -64,7 +64,7 @@
                     <el-col :span="24">
                         <el-form-item label="关联议题：">
                             <tr v-for="item in tableData.discussionContent">
-                                <td>{{ item.discussionName }}</td>
+                                <td><a href="javacript:void(0);" @click="common.open('#/apps/discussion/' + item.discussionId);">{{ item.discussionName }}</a></td>
                             </tr>
                         </el-form-item>
                     </el-col>
@@ -252,16 +252,15 @@
             Comment,
             FilesOperate
         },
-        mounted() {
-            this.getDiscussionUser()
-        },
+        // mounted() {
+        //     this.getDiscussionUser()
+        // },
         methods: {
             async getDiscussionUser() {
-                axios.get("/api/v1/users/list/organs").then(res => {
-                    if (res) this.dataOptions = res.data || []
-                    this.options = JSON.parse(JSON.stringify(this.dataOptions))
-                    this.deleteChildren(this.options)
-                });
+                let a = await axios.get("/api/v1/users/list/organs")
+                if (a) this.dataOptions = a.data || []
+                this.options = JSON.parse(JSON.stringify(this.dataOptions))
+                this.deleteChildren(this.options)
             },
             deleteChildren(array) {
                 array.forEach(item => {
@@ -302,6 +301,7 @@
             async getFormDetailsData() {
                  let $self = this;
                 let response = await $self.getDetails();
+                let a = await $self.getDiscussionUser();
                 if (response) {
                     $self.tableData = response.data.content;
                     if (!$self.tableData.discussionContent) {
