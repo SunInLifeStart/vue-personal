@@ -14,6 +14,7 @@
                                 <el-option
                                         v-for="item in discussionOption"
                                         :key="item.value"
+                                        :disabled="item.disabled"
                                         :label="item.label"
                                         :value="item.value">
                                 </el-option>
@@ -233,6 +234,7 @@
                     },
                     {
                         value: 'recruMeeting',
+                        disabled: true,
                         label: '招采委员会'
                     }
                 ],
@@ -276,9 +278,19 @@
             FilesOperate
         },
         mounted() {
-            this.getDiscussionUser()
+            this.getDiscussionUser();
+            this.recruMeetingFlag();
         },
         methods: {
+            recruMeetingFlag() {
+                axios.get("/api/v1/users/isBoardFortune").then(res => {
+                    if (res.data && res.data.zcwyh) {
+                        this.discussionOption[this.discussionOption.length - 1].disabled = false
+                    } else {
+                        this.discussionOption[this.discussionOption.length - 1].disabled = true
+                    }
+                });
+            },
             async getList() {
                 const $self = this;
                 $self.url = "/api/v1/issuesReported/queryList";
