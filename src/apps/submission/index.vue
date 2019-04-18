@@ -129,7 +129,7 @@ export default {
                 options: [],
                 orderBy: "created"
             },
-            formName:"SubmissioningApplication"
+            formName:"submission_forms"
         };
     },
     components: {
