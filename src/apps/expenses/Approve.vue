@@ -1,23 +1,23 @@
 <template>
-  <div id="APPROVE">
-    <ExpensesDetail ref="ExpensesDetail"> </ExpensesDetail>
-     <!-- :formId="formId" -->
-  </div>
+    <div id="APPROVE">
+        <ExpensesDetail ref="ExpensesDetail"> </ExpensesDetail>
+        <!-- :formId="formId" -->
+    </div>
 </template>
 <script>
-import axios from "axios";
-import ExpensesDetail from "./ExpensesDetail";
+import axios from 'axios';
+import ExpensesDetail from './ExpensesDetail';
 export default {
-    name: "APPROVE",
+    name: 'APPROVE',
     data() {
         return {};
     },
-    props: ["formId"],
+    props: ['formId'],
     mounted() {
-         this.$refs.ExpensesDetail.getFormDetails(this.formId);
+        this.$refs.ExpensesDetail.getFormDetails(this.formId);
     },
     components: {
-       ExpensesDetail
+        ExpensesDetail
     },
     watch: {},
 
@@ -35,9 +35,9 @@ export default {
         #actionList {
             padding-left: 20px;
         }
-        .btnhide{
-             display: block;
-         }
+        .btnhide {
+            display: block;
+        }
         .formContent {
             flex: 1;
             height: 100%;
@@ -45,7 +45,6 @@ export default {
             overflow-y: auto;
             padding: 15px 30px;
         }
-        
     }
 }
 </style>
