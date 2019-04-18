@@ -265,8 +265,8 @@ export default {
                 desc: true,
                 options: []
                
-            },
-            this.s_status=[]
+            }
+            // this.s_status=[]
         }
     },
     mounted() {
