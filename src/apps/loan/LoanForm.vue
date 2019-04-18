@@ -146,7 +146,7 @@
                             金额大写
                         </td>
                         <td colspan="2">
-
+                            {{this.formData.borrows.length > 0 ? this.formData.borrows[0].currency : '人民币'}}:&nbsp;&nbsp;
                             <!-- （{{this.selectItem.borrows.length > 0 ? this.selectItem.borrows[0].currency : '人民币'}}：&nbsp;&nbsp;{{selectItem.dx}}&nbsp;&nbsp;) -->
                             {{formData.moneyUpper}}
                         </td>
@@ -492,6 +492,10 @@ export default {
                         .get('/api/v1/loan_forms/deleteBorrow/' + item.id)
                         .then(res => {
                             this.formData.borrows.splice(index, 1);
+                            this.totalPayment();
+                            if (this.formData.borrows.length == 0) {
+                                this.formData.symbol = '￥';
+                            }
                         })
                         .catch(function() {
                             self.$message({
@@ -501,10 +505,10 @@ export default {
                         });
                 } else {
                     this.formData.borrows.splice(index, 1);
-                }
-                this.totalPayment();
-                if (this.formData.borrows.length == 0) {
-                    this.formData.symbol = '￥';
+                    this.totalPayment();
+                    if (this.formData.borrows.length == 0) {
+                        this.formData.symbol = '￥';
+                    }
                 }
             });
         },

@@ -50,7 +50,7 @@
                     <el-table-column prop="numericalOrder" label="单据编号" min-width="115px"></el-table-column>
                     <el-table-column prop="currency" label="币种" min-width="90px" align='center'>
                         <template slot-scope="scope">
-                            {{scope.row.details[0].currency}}
+                            {{scope.row.details.length > 0 ? scope.row.details[0].currency: '人民币'}}
                         </template>
                     </el-table-column>
                     <el-table-column prop="applicantTime" label="提单时间" sortable min-width="120px">

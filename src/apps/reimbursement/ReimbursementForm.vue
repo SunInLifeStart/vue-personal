@@ -402,6 +402,7 @@ import FilesOperate from '../FilesOperate';
 import cookies from 'js-cookie';
 import { application } from '../application.js';
 import { publicMethods } from '../application.js';
+import { debug } from 'util';
 export default {
     mixins: [publicMethods],
     name: 'ReimbursementForm',
@@ -541,8 +542,34 @@ export default {
             borrowPerson: [],
             travelPeople: '',
             submission: '',
-            travelSelections: [],
-            submissionSelections: [],
+            submissionSelections: [
+                {
+                    id: 1111,
+                    submissionNo: '部门城堡1'
+                },
+                {
+                    id: 22222,
+                    submissionNo: '部门城堡2'
+                },
+                {
+                    id: 33333,
+                    submissionNo: '部门城堡3'
+                }
+            ],
+            travelSelections: [
+                {
+                    id: 77777,
+                    number: '出差审批单1'
+                },
+                {
+                    id: 88888,
+                    number: '出差审批单2'
+                },
+                {
+                    id: 99999,
+                    number: '出差审批单3'
+                }
+            ],
             changeTotal: 0,
             travelList: []
         };
@@ -652,75 +679,79 @@ export default {
         //报销明细和分摊明细鼠标右键删除方法
         youjian(index, type) {
             this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                if (
-                    type == 'baoxiao' &&
-                    !this.createForm_status &&
-                    this.formData.repayItems[index].id
-                ) {
-                    //调删除方法
-                    axios
-                        .delete(
-                            '/api/v1/expense_forms/deleteItem/' +
-                                this.formData.repayItems[index].id
-                        )
-                        .then(res => {
-                            this.$message({
-                                message: '删除成功',
-                                type: 'success'
+                if (type == 'baoxiao') {
+                    if (
+                        !this.createForm_status &&
+                        this.formData.repayItems[index].id
+                    ) {
+                        //调删除方法
+                        axios
+                            .get(
+                                '/api/v1/expense_forms/deleteItem/' +
+                                    this.formData.repayItems[index].id
+                            )
+                            .then(res => {
+                                this.$message({
+                                    message: '删除成功',
+                                    type: 'success'
+                                });
+                                //  this.$emit('deleteItem');
+                                this.formData.repayItems.splice(index, 1);
+                                if (this.formData.repayItems.length <= 0) {
+                                    this.formData.total = this.common.toDecimal2(
+                                        0
+                                    );
+                                    this.formData.upper = this.common.DX(
+                                        '0.00'
+                                    );
+                                    this.changeTotal = this.formData.total;
+                                } else {
+                                    this.totalSalary();
+                                }
+                            })
+                            .catch(function() {
+                                this.$message({
+                                    message: '操作失败',
+                                    type: 'error'
+                                });
                             });
-                            //  this.$emit('deleteItem');
-                            this.formData.repayItems.splice(index, 1);
-                            if (this.formData.repayItems.length <= 0) {
-                                this.formData.total = this.common.toDecimal2(0);
-                                this.formData.upper = this.common.DX('0.00');
-                                this.changeTotal = this.formData.total;
-                            } else {
-                                this.totalSalary();
-                            }
-                        })
-                        .catch(function() {
-                            this.$message({
-                                message: '操作失败',
-                                type: 'error'
-                            });
-                        });
-                } else {
-                    this.formData.repayItems.splice(index, 1);
-                    if (this.formData.repayItems.length <= 0) {
-                        this.formData.total = this.common.toDecimal2(0);
-                        this.formData.upper = this.common.DX('0.00');
-                        this.changeTotal = this.formData.total;
                     } else {
-                        this.totalSalary();
+                        this.formData.repayItems.splice(index, 1);
+                        if (this.formData.repayItems.length <= 0) {
+                            this.formData.total = this.common.toDecimal2(0);
+                            this.formData.upper = this.common.DX('0.00');
+                            this.changeTotal = this.formData.total;
+                        } else {
+                            this.totalSalary();
+                        }
                     }
-                }
-
-                if (
-                    type == 'fentan' &&
-                    !this.createForm_status &&
-                    this.formData.shares[index].id
-                ) {
-                    axios
-                        .delete(
-                            '/api/v1/expense_forms/deleteShare/' +
-                                this.formData.shares[index].id
-                        )
-                        .then(res => {
-                            this.$message({
-                                message: '删除成功',
-                                type: 'success'
+                } else if (type == 'fentan') {
+                    if (
+                        !this.createForm_status &&
+                        this.formData.shares[index].id
+                    ) {
+                        axios
+                            .get(
+                                '/api/v1/expense_forms/deleteShare/' +
+                                    this.formData.shares[index].id
+                            )
+                            .then(res => {
+                                this.$message({
+                                    message: '删除成功',
+                                    type: 'success'
+                                });
+                                //  this.$emit('deleteItem');
+                                this.formData.shares.splice(index, 1);
+                            })
+                            .catch(function() {
+                                this.$message({
+                                    message: '操作失败',
+                                    type: 'error'
+                                });
                             });
-                            //  this.$emit('deleteItem');
-                            this.formData.shares.splice(index, 1);
-                        })
-                        .catch(function() {
-                            this.$message({
-                                message: '操作失败',
-                                type: 'error'
-                            });
-                        });
-                } else {
-                    this.formData.shares.splice(index, 1);
+                    } else {
+                        this.formData.shares.splice(index, 1);
+                    }
                 }
             });
         },
@@ -728,73 +759,79 @@ export default {
             const self = this;
             self.event.returnValue = false;
         },
+        checkBaoDetail() {
+            let boolean = true;
+            for (let data of this.formData.repayItems) {
+                if (
+                    !data.min[0] ||
+                    data.currency == '' ||
+                    data.money == '' ||
+                    data.estRate == '' ||
+                    data.estSum == '' ||
+                    data.tax == '' ||
+                    data.noTax == ''
+                ) {
+                    boolean = false;
+                }
+            }
+            return boolean;
+        },
+        checkFenDetail() {
+            let boolean = true;
+            for (let data of this.formData.shares) {
+                if (data.bearDep == '' || parseInt(data.bearSum) <= 0) {
+                    boolean = false;
+                }
+            }
+            return boolean;
+        },
         //点击插入新增列表数据的方法
         insert(type) {
             if (type == 'baoDetail') {
-                let boolean = true;
-                for (let data of this.formData.repayItems) {
-                    if (
-                        !data.min[0] ||
-                        data.currency == '' ||
-                        data.money == '' ||
-                        data.estRate == '' ||
-                        data.estSum == '' ||
-                        data.tax == '' ||
-                        data.noTax == ''
-                    ) {
-                        boolean = false;
-                    }
+                if (this.checkBaoDetail()) {
+                    this.formData.repayItems.push({
+                        min: [],
+                        tax: '',
+                        noTax: '',
+                        bigTypeName: '',
+                        smallTypeName: '',
+                        currency:
+                            this.formData.repayItems.length == 0
+                                ? {
+                                      value: '￥',
+                                      label: '人民币'
+                                  }
+                                : this.formData.repayItems[0].currency,
+                        money: '',
+                        id: '',
+                        estRate:
+                            this.formData.repayItems.length == 0
+                                ? 1
+                                : this.formData.repayItems[0].estRate,
+                        estSum: this.common.toDecimal2(0)
+                    });
+                } else {
+                    this.$message({
+                        message: '请输入报销明细必填项',
+                        type: 'error'
+                    });
                 }
-                //  if (boolean) {
-                this.formData.repayItems.push({
-                    min: [],
-                    tax: '',
-                    noTax: '',
-                    bigTypeName: '',
-                    smallTypeName: '',
-                    currency:
-                        this.formData.repayItems.length == 0
-                            ? {
-                                  value: '￥',
-                                  label: '人民币'
-                              }
-                            : this.formData.repayItems[0].currency,
-                    money: '',
-                    id: '',
-                    estRate:
-                        this.formData.repayItems.length == 0
-                            ? 1
-                            : this.formData.repayItems[0].estRate,
-                    estSum: this.common.toDecimal2(0)
-                });
-                // } else {
-                //     this.$message({
-                //       message: '请输入报销明细必填项',
-                //      type: 'error'
-                //  });
-                // }
             } else if (type == 'fentan') {
-                let boolean = true;
-                for (let data of this.formData.shares) {
-                    if (data.bearDep == '' || parseInt(data.bearSum) <= 0) {
-                        boolean = false;
-                    }
+                if (this.checkFenDetail()) {
+                    this.formData.shares.push({
+                        bearUnit: '中关村发展集团',
+                        bearDep: '',
+                        payProject: '',
+                        bearSum: this.common.toDecimal2(0),
+                        upper: '',
+                        shareRatio: ''
+                    });
+                } else {
+                    this.$message({
+                        message: '请输入分摊明细选项',
+                        type: 'error'
+                    });
                 }
-                //if (boolean) {
-                this.formData.shares.push({
-                    bearUnit: '中关村发展集团',
-                    bearDep: '',
-                    payProject: '',
-                    bearSum: this.common.toDecimal2(0),
-                    upper: '',
-                    shareRatio: ''
-                });
-                //  } else {
-                //    this.$message({
-                //       message: '请输入分摊明细选项',
-                //       type: 'error'
-                //  });
-                // }
             }
         },
         //获取详情前清空数据方法，要调用，不然有缓存，影响借款相关数据
@@ -803,8 +840,8 @@ export default {
             this.travelPeople = '';
             this.getOgans();
             this.getUsers();
-            this.getTravelList();
-            this.getSubmissionlList();
+            // this.getTravelList();
+            // this.getSubmissionlList();
             this.formData = {
                 no: '',
                 id: '',
@@ -919,13 +956,15 @@ export default {
             }
         },
         createForm() {
+            this.getUsers();
+            this.getOgans();
             this.formData = this.resetForm();
             this.submission = '';
             this.travelPeople = '';
             this.dialogFormVisible = this.createForm_status = true;
             this.getNo();
-            this.getSubmissionlList();
-            this.getTravelList();
+            //  this.getSubmissionlList();
+            // this.getTravelList();
             // this.getSelectCascader();
         },
         //币种改变了都变
@@ -1054,7 +1093,7 @@ export default {
         },
         //查看选择的部门呈报件（点击小眼睛）
         submissionDetail() {
-            if (this.submission && this.submission != null) {
+            if (this.submission && this.submission != null && this.subView) {
                 this.common.open('#/apps/submission/' + this.submission);
             }
         },
@@ -1091,7 +1130,11 @@ export default {
         },
         //查看选择的出差审批单详情（点击出差审批单后的小眼睛可见）
         travelDetail() {
-            if (this.travelPeople && this.travelPeople != null) {
+            if (
+                this.travelPeople &&
+                this.travelPeople != null &&
+                this.travelView
+            ) {
                 this.common.open('#/apps/travel/' + this.travelPeople);
             }
         },
@@ -1292,7 +1335,43 @@ export default {
             return formData;
         },
         saveFormValidate(type) {
-            this.saveForm(type);
+            if (this.formData.expenseDep == '集团领导') {
+                this.$message({
+                    message: '费用承担部门选择错误，请重新选择',
+                    type: 'error'
+                });
+            } else {
+                if (
+                    this.travelPeople != '' &&
+                    this.submission != '' &&
+                    this.formData.payee != '' &&
+                    this.formData.bank != '' &&
+                    this.formData.cardNo != '' &&
+                    this.formData.expenseDep != '' &&
+                    this.formData.clearing != '' &&
+                    this.checkBaoDetail()
+                ) {
+                    if (this.formData.share) {
+                        if (this.checkFenDetail()) {
+                            this.saveForm(type);
+                        } else {
+                            this.$message({
+                                message: '请输入报销明细分摊必输项',
+                                type: 'error'
+                            });
+                        }
+                    } else {
+                        this.saveForm(type);
+                    }
+                } else {
+                    this.$message({
+                        message: '请输入必填项',
+                        type: 'error'
+                    });
+                }
+            }
+
+            // this.saveForm(type);
         },
         // 提交保存
         async saveForm(params) {
