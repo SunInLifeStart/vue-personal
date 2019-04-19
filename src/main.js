@@ -14,12 +14,11 @@ import './scss/element-variables.scss'
 import './assets/font/iconfont.css'
 import './scss/reset.scss'
 import './plugins/element.js'
-import './plugins/axios.js'
+import axios from './plugins/axios.js'
 import './plugins/print.js'
 import splitPane from 'vue-splitpane'
 import Cookies from 'js-cookie'
 // import VueSocketio from 'vue-socket.io'
-import axios from 'axios'
 Vue.component('split-pane', splitPane);
 Vue.use(Print);
 Vue.prototype.common = common;

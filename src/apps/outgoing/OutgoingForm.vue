@@ -134,7 +134,7 @@
     <div slot="footer" class="dialog-footer">
         <!-- v-if="this.status == '' || this.status == '已驳回' " -->
         <el-button type="default" @click="saveFormValidate()" >保存</el-button>
-        <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+        <el-button type="primary" @click="saveFormValidate(true)" v-if="!isFromDetailsEdit">提交</el-button>
     </div>
 </el-dialog>
   
@@ -157,6 +157,7 @@ export default {
             appFlowName: "outgoing-form_outgoing",
             dialogFormVisible: false,
             percentage: 0,
+            isFromDetailsEdit:false,
             formData: {
                 wordNo: "",
                 docNo: "",
@@ -201,7 +202,7 @@ export default {
             cookie_oname: "",
             // wordNoList: ["协同发展","协同发展党","协同发展综","协同发展人","天津科技城"],
             direction: ["上行文", "下行文", "平行文"],
-            type: ["公司", "党委","工会"],
+            type: ["公司", "党委","公会"],
             urgency: ["一般", "特急"],
             dialogDisabled: false,
             toType: "",
@@ -276,7 +277,6 @@ export default {
                 });
             });
         },
-        
          getSedOrgan() {
             const self = this;
             axios
@@ -338,7 +338,7 @@ export default {
                 });
             });
         },
-        setDataFromParent(data) {
+        setDataFromParent(data,status) {
           this.getwordNoList();
          if(typeof data.text == "string"){
                     if(data.text && JSON.parse(data.text).name){
@@ -352,9 +352,10 @@ export default {
             if(data.copyto!="" && data.copyto!==null){
              this.formData.copyto_1 = data.copyto.split(",");
             }
-             this.formId = data.id;
+            this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
+            this.isFromDetailsEdit = status;
         },
         createForm() {
             this.getwordNoList();
