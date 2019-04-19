@@ -305,7 +305,7 @@
         </div>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
-            <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+            <el-button type="primary" @click="saveFormValidate(true)" v-show="this.showSubmit">提交</el-button>
         </div>
     </el-dialog>
 
@@ -327,8 +327,9 @@ export default {
             radio: '',
             dialogFormVisible: false,
             formData: this.resetForm(),
+            showSubmit: true,
             users: [],
-            appFlowName: 'contractforms',
+            appFlowName: 'cantract-form_cantract',
             rules: {
                 contractName: [
                     {
@@ -454,12 +455,13 @@ export default {
             }
         },
         */
-        setDataFromParent(data) {
+        setDataFromParent(data, type) {
             this.formData = data;
             this.formData.tpxzId = this.formData.tpxzName.split(',');
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
+            this.showSubmit = type;
         },
         createForm() {
             this.getNo();
@@ -502,7 +504,11 @@ export default {
         },
         saveFormValidate(type) {
             if (this.ruleHint() == true) {
-                this.saveForm(type);
+                if (this.showSubmit) {
+                    this.saveForm(type);
+                } else {
+                    this.saveForm();
+                }
             }
         },
         // 提交保存
@@ -634,6 +640,9 @@ export default {
         },
         submitUpload() {
             this.$refs.upload.submit();
+        },
+        downloadFile(item) {
+            this.common.download(item.url, item.name);
         },
         handlePreview() {},
         handleRemove() {}

@@ -129,7 +129,7 @@
                         <td colspan="6">
                             <el-row>
                                 <el-col :span="24">
-                                    <el-radio-group v-model="tableData.moneyRadio">
+                                    <el-radio-group v-model="tableData.moneyRadio" disabled>
                                         <el-radio label="1">
                                             {{tableData.contractAmount}} 元
                                         </el-radio>
@@ -145,7 +145,7 @@
                             是否预算内
                         </td>
                         <td colspan="6">
-                            <el-radio-group v-model="tableData.budget">
+                            <el-radio-group v-model="tableData.budget" disabled>
                                 <el-radio label="1">预算内</el-radio>
                                 <el-radio label="2">预算外</el-radio>
                             </el-radio-group>
@@ -162,7 +162,7 @@
                             合同期限
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="tableData.terminationPeople">
+                            <el-radio-group v-model="tableData.terminationPeople" disabled>
                                 <el-row>
                                     <el-col :span="24">
                                         <el-radio label="1">自{{tableData.effectiveStart}} 至{{tableData.effectiveEnd}}
@@ -185,7 +185,7 @@
                             合同所涉经济行为批准文件
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="tableData.paper">
+                            <el-radio-group v-model="tableData.paper" disabled>
                                 <el-radio label="1">股东大会</el-radio>
                                 <el-radio label="2">董事会决议</el-radio>
                                 <el-radio label="3">会议纪要</el-radio>
@@ -199,7 +199,7 @@
                             合同相对方资质证照复印件
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="tableData.copy">
+                            <el-radio-group v-model="tableData.copy" disabled>
                                 <el-radio label="1">有</el-radio>
                                 <el-radio label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
                                 <el-radio label="3">其他</el-radio>
@@ -211,7 +211,7 @@
                             合同价格形势
                         </td>
                         <td colspan="6">
-                            <el-radio-group v-model="tableData.shape">
+                            <el-radio-group v-model="tableData.shape" disabled>
                                 <el-radio label="1">固定总价</el-radio>
                                 <el-radio label="2">固定总和单价</el-radio>
                                 <el-radio label="3">其他</el-radio>
@@ -286,11 +286,15 @@
                     <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
                 </el-form>
             </el-dialog>
+            <ContractForm ref="ContractForm"></ContractForm>
+
         </div>
     </div>
+
 </template>
 <script>
 import moment from 'moment';
+import ContractForm from './ContractForm';
 import Comment from '../Comment';
 import FilesOperate from '../FilesOperate';
 import { publicMethods } from '../application.js';
@@ -307,7 +311,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'contractforms',
+            appFlowName: 'cantract-form_cantract',
             formName: 'contract_forms',
             comments: [],
             dialogVisibleCrumb: false,
@@ -315,6 +319,7 @@ export default {
         };
     },
     components: {
+        ContractForm,
         Comment,
         FilesOperate
     },
@@ -342,6 +347,7 @@ export default {
             // let crumbs = await $self.getCrumbs();
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
+
             $self.comments = comments.data;
             // $self.crumbs =  {items: crumbs.data, index: -1};
             // for(var i= 0; i<$self.crumbs.items.length; i++){
@@ -349,6 +355,9 @@ export default {
             //         $self.crumbs.index = i;
             //     }
             // }
+        },
+        reEditForm() {
+            this.$refs.ContractForm.setDataFromParent(this.tableData, false);
         }
     }
 };
