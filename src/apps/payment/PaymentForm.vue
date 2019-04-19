@@ -14,8 +14,11 @@
                                 <el-option v-for="item in travelSelections" :key="item.id" :label="item.number" :value="item.id">
                                 </el-option>
                             </el-select>
-                            <el-tooltip class="item" effect="dark" content="查看" placement="right">
-                                <el-button type="text" style="margin-left: 5px;" icon="el-icon-view" @click="travelDetail" :disabled="this.formData.tra!='true'"></el-button>
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.tra == 'true'">
+                                <el-button type="text" style="margin-left: 20px;" icon="el-icon-view" @click="travelDetail"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.tra!='true'">
+                                <el-button type="text" style="margin-left: 10px;color:gray;" icon="el-icon-view"></el-button>
                             </el-tooltip>
                         </el-form-item>
                     </el-col>
@@ -25,8 +28,11 @@
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
                             </el-select>
-                            <el-tooltip class="item" effect="dark" content="查看" placement="right">
-                                <el-button type="text" style="margin-left: 20px;" icon="el-icon-view" @click="submissionDetail" :disabled="this.formData.sub!='true'"></el-button>
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.sub=='true'">
+                                <el-button type="text" style="margin-left: 10px;" icon="el-icon-view" @click="submissionDetail"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.sub!='true'">
+                                <el-button type="text" style="margin-left: 10px;color:gray;" icon="el-icon-view"></el-button>
                             </el-tooltip>
                         </el-form-item>
                     </el-col>
@@ -138,14 +144,14 @@
                             支出说明
                         </td>
                         <td colspan="4">
-                            <el-input v-model="formData.depict"></el-input>
+                            <el-input v-model="formData.paymentExplain"></el-input>
                         </td>
                         <td>
                             <span class="span">*</span>
                             费用归属项目
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.costItem"></el-input>
+                            <el-input v-model="formData.project"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -205,7 +211,7 @@
                             是否资金计划内
                         </td>
                         <td colspan="3">
-                            <el-radio-group v-model="formData.fundPlan">
+                            <el-radio-group v-model="formData.capitalYes">
                                 <el-radio :label="true">是</el-radio>
                                 <el-radio :label="false">否</el-radio>
                             </el-radio-group>
@@ -214,7 +220,7 @@
                             是否预算内
                         </td>
                         <td colspan="3">
-                            <el-radio-group v-model="formData.est">
+                            <el-radio-group v-model="formData.budgetYes">
                                 <el-radio :label="true">是</el-radio>
                                 <el-radio :label="false">否</el-radio>
                             </el-radio-group>
@@ -1132,8 +1138,12 @@ export default {
             let formData = {
                 travelId: '', //选择的出差申请单
                 type: '',
-                fundPlan: true,
-                est: true,
+                paymentExplain: '',
+                project: '',
+                tra: 'true',
+                sub: 'true',
+                capitalYes: true,
+                budgetYes: true,
                 numericalOrder: '', //流水号
                 allocation: '否', //分摊
                 organ: cookies.get('oname'),
