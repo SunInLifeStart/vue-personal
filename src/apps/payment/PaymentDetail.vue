@@ -118,22 +118,39 @@
                             付款明细
                         </td>
                     </tr>
+                    <tr>
+                        <td>
+                            <span class="span">*</span>
+                            支出说明
+                        </td>
+                        <td colspan="4">
+                            {{tableData.paymentExplain}}
+                        </td>
+                        <td>
+                            <span class="span">*</span>
+                            费用归属项目
+                        </td>
+                        <td colspan="2">
+                            {{tableData.project}}
+                        </td>
+                    </tr>
                     <tr class="fontBold">
                         <td colspan="2">支出类别|明细</td>
-                        <td>支出说明</td>
                         <td>币种</td>
                         <td>金额</td>
                         <td>预估汇率</td>
                         <td>预估本币金额</td>
-                        <td>费用归属项目</td>
+                        <td>
+                            不含税价格
+                        </td>
+                        <td>
+                            税金
+                        </td>
                     </tr>
                     <tr v-for="(payItem) in this.tableData.details" :key="payItem.index">
                         <td colspan="2">
                             {{payItem.bigType}}
                             <!-- /{{payItem.centreType}}/{{payItem.smallType}} -->
-                        </td>
-                        <td>
-                            {{payItem.statement}}
                         </td>
                         <td>
                             {{payItem.currency}}
@@ -149,12 +166,29 @@
                             {{payItem.localAmount|numFilter}}
                         </td>
                         <td>
-                            {{payItem.costProject}}
+                            {{payItem.noTax}}
+                        </td>
+                        <td>
+                            {{payItem.tax}}
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="8">
-
+                    </tr>
+                    <tr>
+                        <td colspan="8" style="font-weight:bold;">预算、资金计划信息</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            是否资金计划内
+                        </td>
+                        <td colspan="3">
+                            {{this.tableData.capitalYes ? '是': '否'}}
+                        </td>
+                        <td>
+                            是否预算内
+                        </td>
+                        <td colspan="3">
+                            {{this.tableData.budgetYes ? '是': '否'}}
                         </td>
                     </tr>
                     <tr>
