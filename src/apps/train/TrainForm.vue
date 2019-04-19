@@ -257,7 +257,7 @@ export default {
         },
       
         resetForm() {
-            this.floaes()
+            // this.floaes()
             let formData = {
                 submitter: this.$store.getters.LoginData.uname || '', //申请人
                 department: this.$store.getters.LoginData.oname || '', //所属部门
@@ -341,8 +341,6 @@ export default {
             const self = this;
             if (response.length > 0) {
                 response.forEach(function(item) {
-                    // let a= self.formData.attachments
-                    // debugger
                     self.formData.attachments.push(item);
                 });
             }

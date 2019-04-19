@@ -167,6 +167,7 @@
                 </el-form>
             </el-dialog>
         </div>
+         <OutgoingForm  ref="outgoingForm"></OutgoingForm>
     </div>
 </template>
 <script>
@@ -271,7 +272,13 @@ export default {
             //         $self.crumbs.index = i;    
             //     }
             // }
+        },
+        reEditForm(){
+            let $self = this;
+            console.log($self.$refs.OutgoingForm);
+            $self.$refs.outgoingForm.setDataFromParent(this.tableData,true);
         }
+        
     }
 };
 </script>

@@ -117,10 +117,10 @@ export default {
                     if ('PDF,DOCX,PPTX,XLSX,DOC,XLS'.includes(data.url[0].type.toUpperCase())) {
                          if (process.env.NODE_ENV === 'production') {
                               this.pdfUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url=" + data.url[0].url;
-                              data.url.splice(0,1);
+                             // data.url.splice(0,1);
                          }else{
                              this.pdfUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&url=" + data.url[0].url;
-                             data.url.splice(0,1);
+                            // data.url.splice(0,1);
                          } 
                     }
                 }

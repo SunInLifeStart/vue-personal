@@ -10,8 +10,8 @@
                 <div class="parent" :key="index" v-for="(items,index) in apps" v-show="searchKey.length==0">
                     <div class="type">{{items.type}}</div>
                     <div class="children">
-                        <!-- <router-link :target="item.id" v-if="!item.target && !item.click && item.isVist && !item.frombudget" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}"> -->
-                        <router-link :target="item.id" v-if="!item.target && !item.click" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
+                        <router-link :target="item.id" v-if="!item.target && !item.click && item.isVist && !item.frombudget" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
+                        <!-- <router-link :target="item.id" v-if="!item.target && !item.click" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}"> -->
                             <i outside=true class="iconfont" :class="item.icon" size="24" />
                             <div outside=true class="name">{{item.name}}</div>
                         </router-link>
