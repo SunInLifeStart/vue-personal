@@ -42,10 +42,7 @@
                         <el-form-item label="培训时间：">{{tableData.startTime}}至{{tableData.endTime}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="电话：">{{tableData.phone}}
-                        </el-form-item>
-                    </el-col>
+                    
                 </el-row>
                 <el-row>
                     <el-col :span="8">
