@@ -200,9 +200,10 @@ export default {
             cookie_uname: "",
             checkorName: "",
             cookie_oname: "",
+            wordNoList:[],
             // wordNoList: ["协同发展","协同发展党","协同发展综","协同发展人","天津科技城"],
             direction: ["上行文", "下行文", "平行文"],
-            type: ["公司", "党委","公会"],
+            type: ["公司", "党委","工会"],
             urgency: ["一般", "特急"],
             dialogDisabled: false,
             toType: "",
@@ -263,20 +264,7 @@ export default {
                     });
                 });
         },
-        getId(id) {
-            let self = this;
-            self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
-                self.rows.attachments.forEach(function(value, index) {
-                    if (value.id == id) {
-                        axios
-                            .delete("/api/v1/outgoing_forms/deleteAtt?id=" + id)
-                            .then(res => {
-                                self.rows.attachments.splice(index, 1);
-                            });
-                    }
-                });
-            });
-        },
+        
          getSedOrgan() {
             const self = this;
             axios
@@ -339,8 +327,8 @@ export default {
             });
         },
         setDataFromParent(data,status) {
-          this.getwordNoList();
-         if(typeof data.text == "string"){
+            this.getwordNoList()
+        if(typeof data.text == "string"){
                     if(data.text && JSON.parse(data.text).name){
                     data.text = JSON.parse(data.text);
                  }
@@ -358,8 +346,7 @@ export default {
             this.isFromDetailsEdit = status;
         },
         createForm() {
-            this.getwordNoList();
-            this.formData = this.resetForm();
+           this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
         },
         resetForm() {
