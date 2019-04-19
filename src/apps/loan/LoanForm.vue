@@ -303,7 +303,7 @@ export default {
                     for (let data of res.data.content[0].children) {
                         response.push(this.interatorData(data));
                     }
-                   this.getclass = response;
+                    this.getclass = response;
                 })
                 .catch(function() {
                     self.$message({
