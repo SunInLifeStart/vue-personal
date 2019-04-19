@@ -389,11 +389,10 @@ export default {
                     let response = [];
                     for (let data of res.data.content[0].children) {
                         if (data.id == '001013') {
-                            response.push(data);
+                            response.push(this.interatorData(data));
                         }
                     }
                     this.getclass = response;
-                    console.log(this.getclass);
                 })
                 .catch(function() {
                     self.$message({
@@ -401,6 +400,20 @@ export default {
                         type: 'error'
                     });
                 });
+        },
+        interatorData(data) {
+            if (data.children) {
+                for (let item of data.children) {
+                    if (item.children && item.children.length > 0) {
+                        this.interatorData(item.children);
+                    } else {
+                        item.children = null;
+                    }
+                }
+                return data;
+            } else {
+                return data;
+            }
         },
         //根据uid获取部门呈报件
         getSubmissionlList() {

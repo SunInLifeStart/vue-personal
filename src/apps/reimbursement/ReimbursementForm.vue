@@ -531,7 +531,11 @@ export default {
                     }
                 })
                 .then(res => {
-                    this.options_spec = res.data.content[0].children;
+                    let response = [];
+                    for (let data of res.data.content[0].children) {
+                        response.push(this.interatorData(data));
+                    }
+                    this.options_spec = response;
                 })
                 .catch(function() {
                     self.$message({
@@ -539,6 +543,25 @@ export default {
                         type: 'error'
                     });
                 });
+        },
+        interatorData(data) {
+            if (data.children) {
+                if (data.children && data.children.length > 0) {
+                    for (let item of data.children) {
+                        if (item.children && item.children.length > 0) {
+                            this.interatorData(item.children);
+                        } else {
+                            item.children = null;
+                        }
+                    }
+                    return data;
+                } else {
+                    data.children = null;
+                    return data;
+                }
+            } else {
+                return data;
+            }
         },
         //限制一张单子只能选择一种大类的方
         getSelectOptions() {
