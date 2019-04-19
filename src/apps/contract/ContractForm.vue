@@ -305,7 +305,7 @@
         </div>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
-            <el-button type="primary" @click="saveFormValidate(true)" v-show="this.showSubmit">提交</el-button>
+            <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
         </div>
     </el-dialog>
 
@@ -327,9 +327,9 @@ export default {
             radio: '',
             dialogFormVisible: false,
             formData: this.resetForm(),
-            showSubmit: true,
+            showSubmit: 'true',
             users: [],
-            appFlowName: 'cantract-form_cantract',
+            appFlowName: 'contract-form_contract',
             rules: {
                 contractName: [
                     {
@@ -504,7 +504,7 @@ export default {
         },
         saveFormValidate(type) {
             if (this.ruleHint() == true) {
-                if (this.showSubmit) {
+                if (this.showSubmit == 'true') {
                     this.saveForm(type);
                 } else {
                     this.saveForm();

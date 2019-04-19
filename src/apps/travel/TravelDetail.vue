@@ -277,7 +277,7 @@ export default {
             if (
                 this.tableData.submissionId &&
                 this.tableData.submissionId != '' &&
-                this.tableData.subView
+                this.tableData.travelView
             ) {
                 this.common.open(
                     '#/apps/submission/' + this.tableData.submissionId

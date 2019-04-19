@@ -311,7 +311,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'cantract-form_cantract',
+            appFlowName: 'contract-form_contract',
             formName: 'contract_forms',
             comments: [],
             dialogVisibleCrumb: false,
@@ -357,7 +357,7 @@ export default {
             // }
         },
         reEditForm() {
-            this.$refs.ContractForm.setDataFromParent(this.tableData, false);
+            this.$refs.ContractForm.setDataFromParent(this.tableData, 'false');
         }
     }
 };
