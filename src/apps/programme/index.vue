@@ -86,8 +86,13 @@
         },
         mounted() {
             this.getList();
+            this.getOrgans();
         },
         methods: {
+            getOrgans() {
+                axios.get("/api/admin/group/tree?groupType=2").then(res => {
+                });
+            },
             reloadList(params) {
                 if (params == "reload") {
                     this.params.pageNum = 1;
