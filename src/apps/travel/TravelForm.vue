@@ -292,72 +292,7 @@ export default {
             ],
             formData: this.resetForm(),
             users: [],
-            getclass: [
-                {
-                    id: 1,
-                    name: '筹资',
-                    code: '011',
-                    children: [
-                        {
-                            id: 2,
-                            name: '股权筹资',
-                            code: '011001',
-                            children: [
-                                {
-                                    id: 3,
-                                    name: '入资款',
-                                    code: '011001001',
-                                    children: null
-                                },
-                                {
-                                    id: 4,
-                                    name: '股票筹资',
-                                    code: '011001002',
-                                    children: null
-                                }
-                            ]
-                        },
-                        {
-                            id: 6,
-                            name: '债务筹资',
-                            code: '011002',
-                            children: [
-                                {
-                                    id: 7,
-                                    name: '流动负债',
-                                    code: '011002001',
-                                    children: null
-                                },
-                                {
-                                    id: 4,
-                                    name: '股票筹资',
-                                    code: '011001002',
-                                    children: null
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    id: 232,
-                    name: '计提类',
-                    code: '027',
-                    children: [
-                        {
-                            id: 233,
-                            name: '计提折旧',
-                            code: '027001',
-                            children: null
-                        },
-                        {
-                            id: 234,
-                            name: '无形资产摊销',
-                            code: '027002',
-                            children: null
-                        }
-                    ]
-                }
-            ],
+            getclass: [],
             loadData: {
                 attachments: [
                     {
@@ -441,6 +376,32 @@ export default {
         this.organs();
     },
     methods: {
+        getClass() {
+            const self = this;
+            const params = { type: 'category' };
+            axios
+                .post('/synergy-common/getAllTree', JSON.stringify(params), {
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                })
+                .then(res => {
+                    let response = [];
+                    for (let data of res.data.content[0].children) {
+                        if (data.id == '001013') {
+                            response.push(data);
+                        }
+                    }
+                    this.getclass = response;
+                    console.log(this.getclass);
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '获取费用类别失败',
+                        type: 'error'
+                    });
+                });
+        },
         //根据uid获取部门呈报件
         getSubmissionlList() {
             const self = this;
@@ -718,6 +679,8 @@ export default {
             this.formData.upper = this.common.DX(this.formData.total);
         },
         setDataFromParent(data) {
+            this.getClass();
+            this.getSubmissionlList();
             if (data.estimate.length > 0) {
                 for (let item of data.estimate) {
                     item.bsType = item.bigType.split(',');
@@ -746,6 +709,8 @@ export default {
             this.submission = '';
             this.formData = this.resetForm();
             this.getNum();
+            this.getClass();
+            this.getSubmissionlList();
             this.dialogFormVisible = this.createForm_status = true;
         },
         resetForm() {

@@ -474,72 +474,7 @@ export default {
             ],
             formData: this.resetForm(),
             users: [],
-            getclass: [
-                {
-                    id: 1,
-                    name: '筹资',
-                    code: '011',
-                    children: [
-                        {
-                            id: 2,
-                            name: '股权筹资',
-                            code: '011001',
-                            children: [
-                                {
-                                    id: 3,
-                                    name: '入资款',
-                                    code: '011001001',
-                                    children: null
-                                },
-                                {
-                                    id: 4,
-                                    name: '股票筹资',
-                                    code: '011001002',
-                                    children: null
-                                }
-                            ]
-                        },
-                        {
-                            id: 6,
-                            name: '债务筹资',
-                            code: '011002',
-                            children: [
-                                {
-                                    id: 7,
-                                    name: '流动负债',
-                                    code: '011002001',
-                                    children: null
-                                },
-                                {
-                                    id: 4,
-                                    name: '股票筹资',
-                                    code: '011001002',
-                                    children: null
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    id: 232,
-                    name: '计提类',
-                    code: '027',
-                    children: [
-                        {
-                            id: 233,
-                            name: '计提折旧',
-                            code: '027001',
-                            children: null
-                        },
-                        {
-                            id: 234,
-                            name: '无形资产摊销',
-                            code: '027002',
-                            children: null
-                        }
-                    ]
-                }
-            ]
+            getclass: []
         };
     },
     components: {
@@ -549,6 +484,25 @@ export default {
         this.getOrgan();
     },
     methods: {
+        getClass() {
+            const self = this;
+            const params = { type: 'category' };
+            axios
+                .post('/synergy-common/getAllTree', JSON.stringify(params), {
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                })
+                .then(res => {
+                    this.getclass = res.data.content[0].children;
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '获取费用类别失败',
+                        type: 'error'
+                    });
+                });
+        },
         getNum() {
             const self = this;
             let params = {
@@ -949,6 +903,8 @@ export default {
             this.formData.travelId = '';
             this.formData.tra = '';
             this.formData.sub = '';
+            this.loadAll();
+            this.getClass();
             this.getTravelList();
             this.getSubmissionlList();
             for (let data of data.details) {
@@ -1127,11 +1083,12 @@ export default {
         },
         createForm() {
             this.submission = '';
-            this.formData = this.resetForm();
-            this.getNum();
             this.loadAll();
+            this.getClass();
             this.getTravelList();
             this.getSubmissionlList();
+            this.formData = this.resetForm();
+            this.getNum();
             this.dialogFormVisible = this.createForm_status = true;
         },
         resetForm() {

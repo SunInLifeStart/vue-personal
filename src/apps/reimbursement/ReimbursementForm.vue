@@ -411,72 +411,7 @@ export default {
             dialogFormVisible: false,
             formData: this.resetForm(),
             users: [],
-            options_spec: [
-                {
-                    id: 1,
-                    name: '筹资',
-                    code: '011',
-                    children: [
-                        {
-                            id: 2,
-                            name: '股权筹资',
-                            code: '011001',
-                            children: [
-                                {
-                                    id: 3,
-                                    name: '入资款',
-                                    code: '011001001',
-                                    children: null
-                                },
-                                {
-                                    id: 4,
-                                    name: '股票筹资',
-                                    code: '011001002',
-                                    children: null
-                                }
-                            ]
-                        },
-                        {
-                            id: 6,
-                            name: '债务筹资',
-                            code: '011002',
-                            children: [
-                                {
-                                    id: 7,
-                                    name: '流动负债',
-                                    code: '011002001',
-                                    children: null
-                                },
-                                {
-                                    id: 4,
-                                    name: '股票筹资',
-                                    code: '011001002',
-                                    children: null
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    id: 232,
-                    name: '计提类',
-                    code: '027',
-                    children: [
-                        {
-                            id: 233,
-                            name: '计提折旧',
-                            code: '027001',
-                            children: null
-                        },
-                        {
-                            id: 234,
-                            name: '无形资产摊销',
-                            code: '027002',
-                            children: null
-                        }
-                    ]
-                }
-            ],
+            options_spec: [],
             selectOptions: [],
             appFlowName: 'motor-receive_articles',
             clearing_method: [
@@ -586,6 +521,25 @@ export default {
         FilesOperate
     },
     methods: {
+        getClass() {
+            const self = this;
+            const params = { type: 'category' };
+            axios
+                .post('/synergy-common/getAllTree', JSON.stringify(params), {
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                })
+                .then(res => {
+                    this.options_spec = res.data.content[0].children;
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '获取费用类别失败',
+                        type: 'error'
+                    });
+                });
+        },
         //限制一张单子只能选择一种大类的方
         getSelectOptions() {
             this.options_spec = [];
@@ -902,6 +856,9 @@ export default {
         async setDataFromParent(data) {
             let $self = this;
             $self.getClearForm();
+            $self.getClass();
+            $self.getSubmissionlList();
+            $self.getTravelList();
             // this.formData = data;
             $self.url = '/api/v1/expense_forms/' + data.id;
             let response = await $self.getDetails();
@@ -958,6 +915,9 @@ export default {
         createForm() {
             this.getUsers();
             this.getOgans();
+            this.getSubmissionlList();
+            this.getTravelList();
+            this.getClass();
             this.formData = this.resetForm();
             this.submission = '';
             this.travelPeople = '';
