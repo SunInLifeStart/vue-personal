@@ -16,7 +16,7 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="单据状态">
-                                <el-select v-model="params.status" placeholder="请选择">
+                                <el-select v-model="status" placeholder="请选择">
                                     <el-option label="已保存" value="00"></el-option>
                                     <el-option label="审核中" value="01"></el-option>
                                     <el-option label="已驳回" value="02"></el-option>
@@ -97,6 +97,7 @@ export default {
             tableData: [],
             formDetails: {},
             formId: '',
+            status: '',
             params: {
                 pageNum: 1,
                 pageSize: 5,
@@ -112,6 +113,7 @@ export default {
     methods: {
         async getList(pageNum) {
             let $self = this;
+            this.params.status = this.status == '' ? null : this.status;
             $self.url = '/api/v1/motor-holiday/query';
             let response = await $self.getQueryList();
             if (response) {
@@ -173,7 +175,7 @@ export default {
             this.params = {};
             this.params.total = 0;
             this.params.uname = this.params.oname = '';
-            this.params.status = null;
+            this.status = '';
             this.params.pageNum = 1;
             this.params.pageSize = 5;
             this.getList();
