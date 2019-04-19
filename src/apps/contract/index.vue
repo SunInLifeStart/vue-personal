@@ -41,7 +41,7 @@
                     <el-table-column prop="contractName" label="合同名称" min-width="260"></el-table-column>
                     <el-table-column prop="partyB" label="合同对方" min-width="260"></el-table-column>
                     <el-table-column prop="contractNum" label="合同编号" min-width="200"></el-table-column>
-                    <el-table-column prop="creatorName" label="制单人" min-width="120"></el-table-column>
+                    <el-table-column prop="applyName" label="制单人" min-width="120"></el-table-column>
                     <el-table-column prop="status" label="状态">
                         <template slot-scope="scope">
                             {{scope.row.status | filterStatus}}
@@ -52,10 +52,10 @@
                     </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="right">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="right" v-if="scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>

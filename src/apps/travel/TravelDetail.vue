@@ -26,7 +26,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="呈报件：">
-                            <span style="font-size:10px" @click="ViewDetail()" :class="{'titlename':this.tableData.subView}"> {{tableData.submissionName}}</span>
+                            <span style="font-size:10px" @click="ViewDetail()" :class="{'titlename':this.tableData.travelView}"> {{tableData.submissionName}}</span>
                         </el-form-item>
                     </el-col>
                 </el-row>
