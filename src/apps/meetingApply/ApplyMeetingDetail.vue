@@ -351,7 +351,7 @@
                     $self.msgTips("获取表单失败", "warning");
                 }
                 let actions = await $self.getActions();
-                let crumbs = await $self.getCrumbs();
+                // let crumbs = await $self.getCrumbs();
                 let comments =  await $self.getComments();
                 for(let i = 0; i < actions.data.types.length; i++){
                    if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
