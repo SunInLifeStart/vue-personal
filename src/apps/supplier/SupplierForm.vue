@@ -123,7 +123,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="考察报告附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -202,7 +202,6 @@ export default {
                 //     { required: true, message: '请输入活动名称', trigger: 'blur' }
                 // ]
             },
-            uploadId: 0,
             appFlowName:'motor-issuesreported_party-agendasheet'
         };
     },
@@ -212,12 +211,6 @@ export default {
     mounted() {
         this.getSupplierUser()
     },
-    watch: {
-        'formData.lowercase'(val) {
-
-            this.formData.upper = val ? this.convertCurrency(val) : "";
-        }
-    },
     methods: {
         async getSupplierUser() {
             let user = await this.getUsers("/api/v1/users")
@@ -225,42 +218,6 @@ export default {
         },
         changePeople() {
             this.$forceUpdate()
-        },
-        deleteItem(item, index, type) {
-            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                if (type == 'message' && this.formData.attendingDepartment.length > 1) {
-                    this.formData.attendingDepartment.splice(index, 1);
-                } else if (type == 'personal' && this.formData.requestedItems.length > 1) {
-                    this.formData.requestedItems.splice(index, 1);
-                } else {
-                    this.$message({
-                        message: '最后一组不能删除',
-                        type: 'error'
-                    });
-                }
-            });
-        },
-        addItem(type) {
-            if (type == 'message') {
-                this.formData.attendingDepartment.push({});
-            } else if (type == 'personal') {
-                this.formData.requestedItems.push({})
-            }
-        },
-        getId(id) {
-            let self = this;
-            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                self.formData.attachments.forEach(function(value, index) {
-                    if (value.id == id) {
-                        axios
-                            .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
-                            .then(res => {
-                                self.formData.attachments.splice(index, 1);
-                            });
-                        self.formData.attachments.splice(index, 1);
-                    }
-                });
-            });
         },
         resetForm() {
             let formData =  {
@@ -377,8 +334,21 @@ export default {
         submitUpload() {
             this.$refs.upload.submit();
         },
-        handlePreview() {},
-        handleRemove() {}
+        getId(id) {
+            let self = this;
+            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                self.formData.attachments.forEach(function(value, index) {
+                    if (value.id == id) {
+                        axios
+                            .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
+                            .then(res => {
+                                self.formData.attachments.splice(index, 1);
+                            });
+                        self.formData.attachments.splice(index, 1);
+                    }
+                });
+            });
+        }
     }
 };
 </script>

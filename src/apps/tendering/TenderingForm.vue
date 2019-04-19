@@ -109,7 +109,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="其他附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -175,22 +175,17 @@
                 ],
                 formData: this.resetForm(),
                 users: [],
-                uploadId: 0,
-                formLabelWidth: '120px',
                 appFlowName: "motor-trainingapplication_train",
-                currentFormId: this.operationType == 'create' ? '' : this.formId
             };
         },
         components: {
             FilesOperate
         },
-        watch: {
-            'formData.lowercase'(val) {
-
-                this.formData.upper = val ? this.convertCurrency(val) : "";
-            }
-        },
         methods: {
+            async getTableCode() {
+                let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'issuesReported' })
+                if (user) this.formData.number = user.data.content.serialNumber
+            },
             changePeople() {
                 this.$forceUpdate()
             },
@@ -354,9 +349,7 @@
             },
             submitUpload() {
                 this.$refs.upload.submit();
-            },
-            handlePreview() {},
-            handleRemove() {}
+            }
         }
     };
 </script>

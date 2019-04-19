@@ -2,13 +2,6 @@
     <el-dialog title="招标异常事项申报表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
         <div id="AbnormalForm">
         <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
-            <!--<el-row>-->
-                <!--<el-col :span="8">-->
-                    <!--<el-form-item label="流水号:" prop="number">-->
-                        <!--<el-input v-model="formData.number"></el-input>-->
-                    <!--</el-form-item>-->
-                <!--</el-col>-->
-            <!--</el-row>-->
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="招标人" prop="creatorName">
@@ -184,7 +177,6 @@ export default {
                 //     { required: true, message: '请输入活动名称', trigger: 'blur' }
                 // ]
             },
-            uploadId: 0,
             appFlowName:'motor-issuesreported_party-agendasheet'
         };
     },
@@ -193,12 +185,6 @@ export default {
     },
     mounted() {
         this.getAbnormalUser()
-    },
-    watch: {
-        'formData.lowercase'(val) {
-
-            this.formData.upper = val ? this.convertCurrency(val) : "";
-        }
     },
     methods: {
         async getAbnormalUser() {
@@ -228,21 +214,6 @@ export default {
             } else if (type == 'personal') {
                 this.formData.requestedItems.push({})
             }
-        },
-        getId(id) {
-            let self = this;
-            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                self.formData.attachments.forEach(function(value, index) {
-                    if (value.id == id) {
-                        axios
-                            .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
-                            .then(res => {
-                                self.formData.attachments.splice(index, 1);
-                            });
-                        self.formData.attachments.splice(index, 1);
-                    }
-                });
-            });
         },
         resetForm() {
             let formData =  {
@@ -359,8 +330,6 @@ export default {
         submitUpload() {
             this.$refs.upload.submit();
         },
-        handlePreview() {},
-        handleRemove() {}
     }
 };
 </script>
