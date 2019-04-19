@@ -47,7 +47,7 @@
                     </el-form-item>
                 </el-col>
                <el-col :span="12">
-                    <el-form-item label="是否纳入年度计划" prop="isAnnualPlan">
+                    <el-form-item label="是否纳入年度培训计划" prop="isAnnualPlan">
                         <span style="float:left">
                              <el-radio v-model="formData.isAnnualPlan" label="true">是</el-radio>
                              <el-radio v-model="formData.isAnnualPlan" label="false">否</el-radio>
@@ -214,6 +214,12 @@ export default {
         FilesOperate
     },
     methods: {
+         setDataFromParent(data) {
+            this.formData = data;
+            this.formId = data.id;
+            this.dialogFormVisible = true;
+            this.createForm_status = false;
+        },
         floaes(){
             const self = this;
             let codes={ code: 'trainingApplication'}
@@ -253,7 +259,6 @@ export default {
         resetForm() {
             this.floaes()
             let formData = {
-                attachments: [],
                 submitter: this.$store.getters.LoginData.uname || '', //申请人
                 department: this.$store.getters.LoginData.oname || '', //所属部门
                 id: "",
@@ -274,6 +279,7 @@ export default {
                 upper: "",
                 lowercase: "",
                 schedule: "",
+                attachments: [],
                 trainingTime: []
             };
             return formData;
@@ -331,9 +337,12 @@ export default {
             }
         },
         handleSuccess(response, file) {
+            // debugger
             const self = this;
             if (response.length > 0) {
                 response.forEach(function(item) {
+                    // let a= self.formData.attachments
+                    // debugger
                     self.formData.attachments.push(item);
                 });
             }

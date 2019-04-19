@@ -201,7 +201,7 @@ export default {
             cookie_oname: "",
             // wordNoList: ["协同发展","协同发展党","协同发展综","协同发展人","天津科技城"],
             direction: ["上行文", "下行文", "平行文"],
-            type: ["公司", "党委","公会"],
+            type: ["公司", "党委","工会"],
             urgency: ["一般", "特急"],
             dialogDisabled: false,
             toType: "",
