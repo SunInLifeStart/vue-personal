@@ -305,7 +305,7 @@
         </div>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
-            <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+            <el-button type="primary" @click="saveFormValidate(true)" v-show="this.showSubmit != 'false'">提交</el-button>
         </div>
     </el-dialog>
 
