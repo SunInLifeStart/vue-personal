@@ -135,7 +135,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="其他">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -252,7 +252,6 @@ export default {
                     label: '行政非业务类采购(零星采购；估算金额＜1万）'
                 }
             ],
-            uploadId: 0,
             appFlowName:'motor-issuesreported_party-agendasheet'
         };
     },
@@ -262,13 +261,11 @@ export default {
     mounted() {
         this.getResultsUser()
     },
-    watch: {
-        'formData.lowercase'(val) {
-
-            this.formData.upper = val ? this.convertCurrency(val) : "";
-        }
-    },
     methods: {
+        async getTableCode() {
+            let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'issuesReported' })
+            if (user) this.formData.number = user.data.content.serialNumber
+        },
         async getResultsUser() {
             let user = await this.getUsers("/api/v1/users")
             if (user) this.personOptions = user.data
@@ -426,9 +423,7 @@ export default {
         },
         submitUpload() {
             this.$refs.upload.submit();
-        },
-        handlePreview() {},
-        handleRemove() {}
+        }
     }
 };
 </script>
