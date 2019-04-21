@@ -190,10 +190,10 @@
                             <el-input v-model="payItem.localAmount" disabled class="money"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="payItem.noTax" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'notax')"></el-input>
+                            <el-input v-model.number="payItem.noTax" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'notax')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="payItem.tax" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'tax')"></el-input>
+                            <el-input v-model.number="payItem.tax" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'tax')"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -1283,6 +1283,9 @@ export default {
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
                         $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
+                    }
+                    if (!this.addxtnht) {
+                        this.saveContract();
                     }
                 }
             } else {
