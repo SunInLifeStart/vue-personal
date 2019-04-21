@@ -5,7 +5,7 @@
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="项目名称">
-                            <el-input v-model="params.conferenceTitle" placeholder="请输入项目名称"></el-input>
+                            <el-input v-model="params.projectName" placeholder="请输入项目名称"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -23,7 +23,7 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-                <el-table-column prop="conferenceTitle" label="项目名称">
+                <el-table-column prop="projectName" label="项目名称">
                 </el-table-column>
                 <el-table-column prop="creatorName" label="招标项目名称">
                 </el-table-column>
@@ -68,7 +68,6 @@
                 params: {
                     pageNum: 1,
                     pageSize: 5,
-                    conferenceTitle: '',
                     total: 0
                 },
                 dialogFormVisibleProgramme: false,
@@ -86,14 +85,9 @@
         },
         mounted() {
             this.getList();
-            this.getOrgans();
+            // this.getOrgans();
         },
         methods: {
-            getOrgans() {
-                axios.get("/api/v1/users/list/organs").then(res => {
-
-                });
-            },
             reloadList(params) {
                 if (params == "reload") {
                     this.params.pageNum = 1;
@@ -135,7 +129,7 @@
                 this.getList();
             },
             onReset() {
-                this.params.conferenceTitle = '';
+                this.params.projectName = '';
                 this.onSubmit();
             },
             onSubmit() {
@@ -143,6 +137,7 @@
             },
             cleanform() {
                 this.$refs.ProgrammeForm.createForm();
+                this.$refs.ProgrammeForm.getTableCode();
             },
             refreshBoardData() {
                 this.getList();
