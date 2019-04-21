@@ -284,11 +284,10 @@ export default {
             options: [
                 '员工',
                 '部长/副部长',
-                '总经理助理/董事会秘书',
+                '总经理助理',
                 '副总经理',
                 '总经理',
-                '董事长',
-                '总经理和董事长'
+                '董事长'
             ],
             formData: this.resetForm(),
             users: [],
@@ -387,7 +386,7 @@ export default {
                 case '部长/副部长':
                     return 2;
                     break;
-                case '总经理助理/董事会秘书':
+                case '总经理助理':
                     return 3;
                     break;
                 case '副总经理':
@@ -398,9 +397,6 @@ export default {
                     break;
                 case '董事长':
                     return 6;
-                    break;
-                case '总经理和董事长':
-                    return 7;
                     break;
                 default:
                     break;
@@ -879,6 +875,13 @@ export default {
                 }
                 if (parseInt(data.level) >= parseInt(ranks)) {
                     ranks = data.level;
+                }
+            }
+            if (parseInt(ranks) == 6) {
+                for (let data of this.formData.evections) {
+                    if (parseInt(data.level) == 5) {
+                        ranks = 7;
+                    }
                 }
             }
             this.formData.role = ranks;
