@@ -90,7 +90,8 @@
         },
         methods: {
             getOrgans() {
-                axios.get("/api/admin/group/tree?groupType=2").then(res => {
+                axios.get("/api/v1/users/list/organs").then(res => {
+
                 });
             },
             reloadList(params) {

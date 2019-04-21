@@ -65,7 +65,10 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="是否有授权" prop="timeApplication">
-                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                        <el-select v-model="formData.applyDepartment">
+                            <el-option key="1" label="是" value="1"></el-option>
+                            <el-option key="2" label="否" value="2"></el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
