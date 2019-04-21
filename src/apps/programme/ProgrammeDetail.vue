@@ -20,44 +20,92 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="项目名称：">{{tableData.creatorName}}
+                        <el-form-item label="项目名称：">{{tableData.projectName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购项目名称：">{{tableData.organName}}
+                        <el-form-item label="采购项目名称：">{{tableData.purchaseProjectName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="采购标的简述：">{{tableData.committed}}
+                        <el-form-item label="采购标的简述：">{{tableData.purchaseSignSketch}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购发起时间：">{{tableData.meetingPlace}}
+                        <el-form-item label="采购业务类别：">{{tableData.purchaseBusinessType}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购主责部门：">{{tableData.meetingTime}}
+                        <el-form-item label="采购方案是否是规定情形：">{{tableData.purchaseSchemeSign}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="采购发起时间：">{{tableData.purchaseStartTime}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购主责部门：">{{tableData.purchaseDeptName}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购预估金额(元)：">{{tableData.estimatedAmount}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="目标成本/预算金融(元)：">{{tableData.budgetAmount}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购方式：">{{tableData.purchaseWay}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="实施主体：">{{tableData.executor}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="评审/谈判机构：">{{tableData.negotiateAgent}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="其他情况说明：">{{tableData.otherCase}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="评判办法：">{{tableData.reviewWay}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="采购预估金额(元)：">{{tableData.conferenceTitle}}
+                        <el-form-item label="征集公告附件：" v-if="tableData.procschemeAttachmentsAnno && tableData.procschemeAttachmentsAnno.length > 0">
+                            <div v-for="item in tableData.procschemeAttachmentsAnno" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="目标成本/预算金融(元)：">{{tableData.idea}}
+                        <el-form-item label="考察报告附件：" v-if="tableData.procschemeAttachmentsIns && tableData.procschemeAttachmentsIns.length > 0">
+                            <div v-for="item in tableData.procschemeAttachmentsIns" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                        <el-form-item label="其他附件：" v-if="tableData.procschemeAttachmentsOth && tableData.procschemeAttachmentsOth.length > 0">
+                            <div v-for="item in tableData.procschemeAttachmentsOth" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>

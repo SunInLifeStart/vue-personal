@@ -5,38 +5,36 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号:">
-                            <el-input v-model="formData.number"></el-input>
+                            {{formData.number}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="项目名称" prop="numbers">
-                            <el-input v-model="formData.creatorName"></el-input>
+                        <el-form-item label="项目名称" prop="projectName">
+                            <el-input v-model="formData.projectName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购项目名称" prop="filetitle">
-                            <el-input v-model="formData.organName"></el-input>
+                        <el-form-item label="采购项目名称" prop="purchaseProjectName">
+                            <el-input v-model="formData.purchaseProjectName"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="采购标的简述">
-                            <el-input v-model="formData.committed"></el-input>
+                            <el-input v-model="formData.purchaseSignSketch"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="采购业务类别" style="text-align: left">
-                            <el-radio-group v-model="formData.radio">
-                                <div v-for="item in radioOption">
-                                    <el-radio
-                                            :key="item.value"
-                                            :value="item.value"
-                                            :label="item.label">
+                            <el-radio-group v-model="formData.purchaseBusinessType">
+                                    <el-radio   v-for="item in radioOption"
+                                                :key="item.value"
+                                                :value="item.value"
+                                                :label="item.label">
                                     </el-radio>
-                                </div>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
@@ -44,7 +42,7 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="采购方案是否是规定情形">
-                            <el-radio-group v-model="formData.radio">
+                            <el-radio-group v-model="formData.purchaseSchemeSign">
                                 <el-radio key="1" value="1" label="是"></el-radio>
                                 <el-radio key="2" value="2" label="否"></el-radio>
                             </el-radio-group>
@@ -52,32 +50,36 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="采购发起时间">
-                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.organName" style="width:100%" type="date">
+                            <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.purchaseStartTime" style="width:100%" type="datetime">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="采购主责部门">
-                            <el-input v-model="formData.organName"></el-input>
+                            <el-select
+                                    value-key="id"
+                                    v-model="formData.purchaseDeptName">
+                                <el-option
+                                        v-for="item in organsOptions"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="{id: item.id, name: item.name}">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="采购预估金额(元)">
-                            <el-input v-model="formData.organName"></el-input>
+                            <el-input v-model="formData.estimatedAmount"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="目标成本/预算金融(元)">
-                            <el-input v-model="formData.organName"></el-input>
+                            <el-input v-model="formData.budgetAmount"></el-input>
                         </el-form-item>
                     </el-col>
-                    <!--<el-col :span="8">-->
-                        <!--<el-form-item label="采购主责部门">-->
-                            <!--<el-input v-model="formData.organName"></el-input>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
                 </el-row>
                 <table class="tableNoBorder">
                     <el-row>
@@ -94,21 +96,21 @@
                                     <th colspan="2">注册资金</th>
                                     <th colspan="2">  </th>
                                 </tr>
-                                <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                                <tr v-for="(item,index) in formData.procschemeProvider" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
                                     <td colspan="2" style="width: 50px;">
                                         {{index + 1}}
                                     </td>
                                     <td colspan="2">
-                                        <el-input v-model="formData.organName" placeholder="请输入名称"></el-input>
+                                        <el-input v-model="item.providerName" placeholder="请输入名称"></el-input>
                                     </td>
                                     <td colspan="2">
-                                        <el-input v-model="formData.organName" placeholder="请输入企业性质"></el-input>
+                                        <el-input v-model="item.enterpriseNature" placeholder="请输入企业性质"></el-input>
                                     </td>
                                     <td colspan="2">
-                                        <el-input v-model="formData.organName" placeholder="请输入注册资金(元)"></el-input>
+                                        <el-input v-model="item.registeredFund" placeholder="请输入注册资金(元)"></el-input>
                                     </td>
                                     <td colspan="2">
-                                        <el-input v-model="formData.organName" placeholder="请输入考察结论"></el-input>
+                                        <el-input v-model="item.inspectConclusion" placeholder="请输入考察结论"></el-input>
                                     </td>
                                 </tr>
                                 <tr>
@@ -123,7 +125,7 @@
                 <el-row>
                     <el-col :span="18">
                         <el-form-item label="采购方式">
-                            <el-radio-group v-model="formData.radio">
+                            <el-radio-group v-model="formData.purchaseWay" @change="changePurchaseWay">
                                 <el-radio key="1" value="1" label="公开招标"></el-radio>
                                 <el-radio key="2" value="2" label="邀请招标"></el-radio>
                                 <el-radio key="3" value="3" label="竞价谈判"></el-radio>
@@ -133,13 +135,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="2">
-                        <el-input v-model="formData.organName"></el-input>
+                        <el-input v-model="formData.purchaseOther" :disabled="formData.purchaseWay != '其他'"></el-input>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="10">
                         <el-form-item label="实施主体">
-                            <el-radio-group v-model="formData.radio">
+                            <el-radio-group v-model="formData.executor">
                                 <el-radio key="1" value="1" label="自主实施"></el-radio>
                                 <el-radio key="2" value="2" label="代理机构实施"></el-radio>
                             </el-radio-group>
@@ -149,7 +151,7 @@
                 <el-row>
                     <el-col :span="18">
                         <el-form-item label="评审/谈判机构">
-                            <el-radio-group v-model="formData.radio">
+                            <el-radio-group v-model="formData.negotiateAgent" @change="changeNegotiateAgent">
                                 <el-radio key="1" value="1" label="评标委员会"></el-radio>
                                 <el-radio key="2" value="2" label="评审谈判小组"></el-radio>
                                 <el-radio key="3" value="3" label="招标采购管理委员会"></el-radio>
@@ -158,55 +160,65 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="2">
-                        <el-input v-model="formData.organName"></el-input>
+                        <el-input v-model="formData.negotiateAgentOther" :disabled="formData.negotiateAgent != '其他'"></el-input>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="评审/谈判名单">
-                            <!--<el-col :span="3">-->
-                                <!--<el-input v-model="formData.organName"></el-input>-->
-                            <!--</el-col>-->
-                            <!--<el-col :span="2">(组长)</el-col>-->
-                            <!--<el-col :span="3">-->
-                                <!--<el-input v-model="formData.organName"></el-input>-->
-                            <!--</el-col>-->
-                            <el-select
-                                    v-model="formData.value"
-                                    multiple
-                                    filterable
-                                    allow-create
-                                    default-first-option>
-                                <el-option
-                                        v-for="item in []"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
-                                </el-option>
-                            </el-select>
+                            <el-row>
+                                <el-col :span="8">
+                                    <el-select
+                                            value-key="id"
+                                            v-model="formData.negotiateLeader">
+                                        <el-option
+                                                v-for="item in userOptions"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="{id: item.id, name: item.name}">
+                                        </el-option>
+                                    </el-select>
+                                </el-col>
+                                <el-col :span="16">
+                                    <el-select
+                                            v-model="formData.negotiatePersonnel"
+                                            multiple
+                                            filterable
+                                            allow-create
+                                            value-key="id"
+                                            default-first-option>
+                                        <el-option
+                                                v-for="item in userOptions"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="{id: item.id, name: item.name}">
+                                        </el-option>
+                                    </el-select>
+                                </el-col>
+                            </el-row>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="评判办法">
-                            <el-input v-model="formData.organName"></el-input>
+                            <el-input v-model="formData.reviewWay"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                    <el-form-item label="其他情况说明">
-                        <el-input v-model="formData.organName"></el-input>
-                    </el-form-item>
-                </el-col>
+                        <el-form-item label="其他情况说明">
+                            <el-input v-model="formData.otherCase"></el-input>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="征集公告附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                            <div v-for="item in formData.procschemeAttachmentsAnno" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'procschemeAttachmentsAnno')"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -214,11 +226,11 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="考察报告附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                            <div v-for="item in formData.procschemeAttachmentsIns" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'procschemeAttachmentsIns')"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -226,11 +238,11 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="其他附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                            <div v-for="item in formData.procschemeAttachmentsOth" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'procschemeAttachmentsOth')"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -282,38 +294,40 @@
                         label: '行政非业务类采购(竞价谈判方式：30万>估算金额>=1万)'
                     }
                 ],
-                options: [
-                    {
-                        value: '1',
-                        label: '主管部门'
-                    },
-                    {
-                        value: '2',
-                        label: '部门'
-                    }
-                ],
-                personOptions: [
-                    {
-                        value: '1',
-                        label: '杨静'
-                    },
-                    {
-                        value: '2',
-                        label: '刘思雨'
-                    }
-                ],
                 formData: this.resetForm(),
                 users: [],
+                userOptions: [],
+                organsOptions: [],
                 appFlowName: "motor-trainingapplication_train",
             };
         },
         components: {
             FilesOperate
         },
+        mounted() {
+            this.getUser()
+            this.getOrgans()
+        },
         methods: {
+            changeNegotiateAgent() {
+                this.formData.negotiateAgentOther = ''
+            },
+            changePurchaseWay() {
+                this.formData.purchaseOther = ''
+            },
+            getOrgans() {
+                axios.get("/api/v1/users/list/organss").then(res => {
+                    this.organsOptions = res.data
+                });
+            },
+            async getUser() {
+                let user = await this.getUsers("/api/v1/users")
+                if (user) this.userOptions = user.data
+            },
             async getTableCode() {
-                let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'issuesReported' })
+                let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procscheme' })
                 if (user) this.formData.number = user.data.content.serialNumber
+                this.changePeople()
             },
             changePeople() {
                 this.$forceUpdate()
@@ -322,64 +336,57 @@
                 this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                     if (type == 'message') {
                         if (item.id) {
-                            this.formData.attendingDepartment.splice(index, 1);
+                            this.formData.procschemeProvider.splice(index, 1);
                         } else {
-                            this.formData.attendingDepartment.splice(index, 1);
+                            this.formData.procschemeProvider.splice(index, 1);
                         }
-                    } else if (type == 'personal') {
-                        this.formData.requestedItems.splice(index, 1);
-                    } else if (type == 'sitIn') {
-                        this.formData.sitIn.splice(index, 1);
                     }
                 });
             },
             addItem(type) {
                 if (type == 'message') {
-                    this.formData.attendingDepartment.push({});
-                } else if (type == 'personal') {
-                    this.formData.requestedItems.push({})
-                } else if (type == 'sitIn') {
-                    this.formData.sitIn.push({})
+                    this.formData.procschemeProvider.push({});
                 }
             },
-            getId(id) {
+            getId(id, type) {
                 let self = this;
                 self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                    self.formData.attachments.forEach(function(value, index) {
+                    self.formData[type].forEach(function(value, index) {
                         if (value.id == id) {
                             axios
                                 .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
                                 .then(res => {
-                                    self.formData.attachments.splice(index, 1);
+                                    self.formData[type].splice(index, 1);
                                 });
-                            self.formData.attachments.splice(index, 1);
+                            self.formData[type].splice(index, 1);
                         }
                     });
                 });
             },
             resetForm() {
                 let formData =  {
-                    attachments: [],
-                    attendingDepartment: [{
-                        people: [],
-                        department: ''
-                    }],
-                    requestedItems: [{}],
-                    sitIn: [{
-                        people: [],
-                        department: ''
-                    }],
-                    numbers: '',
-                    created: '',
-                    idea: '',
-                    committed: '',
-                    meetingPlace: '',
-                    meetingTime: '',
-                    conferenceTitle: '',
-                    organName: '',
-                    creatorName:'',
-                    creatorId: '',
-                    organId: ''
+                    projectName: '',
+                    purchaseProjectName: '',
+                    purchaseSignSketch: '',
+                    purchaseBusinessType: '',
+                    purchaseSchemeSign: '是',
+                    purchaseStartTime: '',
+                    purchaseDeptName: {},
+                    estimatedAmount: 0,
+                    budgetAmount: 0,
+                    procschemeProvider: [{}],
+                    purchaseWay: '公开招标',
+                    purchaseOther: '',
+                    executor: '自主实施',
+                    negotiateAgent: '评标委员会',
+                    negotiateAgentOther: '',
+                    negotiateLeader: {},
+                    negotiatePersonnel: [],
+                    reviewWay: '',
+                    otherCase: '',
+                    procschemeAttachmentsAnno: [],
+                    procschemeAttachmentsIns: [],
+                    procschemeAttachmentsOth: []
                 }
                 return formData
             },
@@ -390,18 +397,6 @@
                         .get('/api/v1/meetingApply/zd/detail/' + this.formId)
                         .then(res => {
                             self.formData = res.data.content;
-                            if (self.formData.attendingDepartment) {
-                                self.formData.attendingDepartment.forEach(item => {
-                                    if (item.person) {
-                                        item.people = item.person.split(',')
-                                    }
-                                })
-                                self.formData.sitIn.forEach(item => {
-                                    if (item.person) {
-                                        item.people = item.person.split(',')
-                                    }
-                                })
-                            }
                         })
                         .catch(function() {
                             self.$message({
@@ -430,16 +425,6 @@
             },
             async saveForm(params) {
                 const $self = this;
-                $self.formData.attendingDepartment.forEach(item => {
-                    if (item.people) {
-                        item.person = item.people.join(',')
-                    }
-                })
-                $self.formData.sitIn.forEach(item => {
-                    if (item.people) {
-                        item.person = item.people.join(',')
-                    }
-                })
                 let response = await $self.saveFormData(
                     "/api/v1/meetingApply/zd/save",
                     $self.formData
@@ -477,14 +462,32 @@
                     }
                 }
             },
-            handleSuccess(response, file) {
+            handleSuccessAnno(response, file) {
                 const self = this;
                 if (response.length > 0) {
                     response.forEach(function(item) {
-                        self.formData.attachments.push(item);
+                        self.formData.procschemeAttachmentsAnno.push(item);
                     });
                 }
-                this.$refs.upload.clearFiles();
+                this.$refs.uploadAnno.clearFiles();
+            },
+            handleSuccessIns(response, file) {
+                const self = this;
+                if (response.length > 0) {
+                    response.forEach(function(item) {
+                        self.formData.procschemeAttachmentsIns.push(item);
+                    });
+                }
+                this.$refs.uploadIns.clearFiles();
+            },
+            handleSuccessOth(response, file) {
+                const self = this;
+                if (response.length > 0) {
+                    response.forEach(function(item) {
+                        self.formData.procschemeAttachmentsOth.push(item);
+                    });
+                }
+                this.$refs.uploadOth.clearFiles();
             },
             submitUpload() {
                 this.$refs.upload.submit();
