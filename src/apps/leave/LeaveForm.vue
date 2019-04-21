@@ -70,15 +70,15 @@
                                 </el-date-picker>
                             </template>
                         </td>
-                        <td colspan="2">
+                        <td colspan="1">
                             <template>
-                                <el-date-picker v-model="formData.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间">
+                                <el-date-picker style="width:100%;" v-model="formData.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间">
                                 </el-date-picker>
                             </template>
                         </td>
-
-                        <td colspan="1">
-                            <el-input placeholder="休假时长" v-model="formData.day">
+                        <td colspan="2">
+                            <el-input placeholder="休假时长" @mousewheel.native.prevent type="number" v-model.number="formData.day">
+                                <template style="width:20px;" slot="append">天</template>
                             </el-input>
                         </td>
                     </tr>
@@ -89,9 +89,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
-                                <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i>
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -323,6 +322,14 @@ export default {
             color: red;
             margin-right: 5px;
         }
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+            -webkit-appearance: none !important;
+            margin: 0;
+        }
+        input[type='number'] {
+            -moz-appearance: textfield;
+        }
     }
     table thead th {
         background-color: #cce8eb;
@@ -333,31 +340,23 @@ export default {
     table tr:nth-child(even) {
         background: #fff;
     }
-    .attachments {
-        position: relative;
-        // margin-bottom: 40px;
-        margin-right: 30px;
-        width: 200px;
-        // height: 80px;
-        display: inline-block;
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
         cursor: pointer;
-        p {
-            margin: 0;
-            line-height: 20px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-right: 20px;
-        }
 
-        i {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 5px;
-            &:hover {
-                color: red;
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
             }
         }
     }

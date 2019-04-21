@@ -91,9 +91,8 @@
                             <span>附件上传</span>
                         </td>
                         <td colspan="6">
-                            <div class="attachments" v-for="item in tableData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
-                                <!-- <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i> -->
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </td>
                     </tr>
