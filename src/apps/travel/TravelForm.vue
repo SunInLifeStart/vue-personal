@@ -113,7 +113,7 @@
                             <el-input v-model="item.borganName" disabled="disabled"></el-input>
                         </td>
                         <td colspan="1">
-                            <el-select v-model="item.ranks">
+                            <el-select v-model="item.ranks" @change="ranksChange(item)">
                                 <el-option v-for="item in options" :key="item.index" :label="item" :value="item">
                                 </el-option>
                             </el-select>
@@ -376,6 +376,36 @@ export default {
         this.organs();
     },
     methods: {
+        ranksChange(item) {
+            item.level = this.getRanks(item.ranks);
+        },
+        getRanks(code) {
+            switch (code) {
+                case '员工':
+                    return 1;
+                    break;
+                case '部长/副部长':
+                    return 2;
+                    break;
+                case '总经理助理/董事会秘书':
+                    return 3;
+                    break;
+                case '副总经理':
+                    return 4;
+                    break;
+                case '总经理':
+                    return 5;
+                    break;
+                case '董事长':
+                    return 6;
+                    break;
+                case '总经理和董事长':
+                    return 7;
+                    break;
+                default:
+                    break;
+            }
+        },
         getClass() {
             const self = this;
             const params = { type: 'category' };
@@ -731,6 +761,7 @@ export default {
                 attachments: [],
                 number: '',
                 travelView: true,
+                day: '',
                 travelType: '',
                 submissionId: '',
                 submissionName: '',
@@ -839,6 +870,19 @@ export default {
                     this.formData.submissionName = this.formData.submissionId;
                 }
             }
+            let days = 0;
+            let ranks = 0;
+            let arrayranks = [];
+            for (let data of this.formData.evections) {
+                if (parseInt(data.dateNumber) >= parseInt(days)) {
+                    days = data.dateNumber;
+                }
+                if (parseInt(data.level) >= parseInt(ranks)) {
+                    ranks = data.level;
+                }
+            }
+            this.formData.role = ranks;
+            this.formData.day = days;
             let response = await $self.saveFormData(
                 '/api/v1/travel_forms/save',
                 $self.formData

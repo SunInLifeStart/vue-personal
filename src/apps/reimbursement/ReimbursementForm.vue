@@ -1272,6 +1272,8 @@ export default {
                     est: false,
                     fundPlan: false
                 },
+                est: false,
+                fundPlan: false,
                 attachments: [],
                 borrow: {
                     bor: false,
@@ -1384,6 +1386,8 @@ export default {
                 };
             }
             this.formData.total = parseFloat(this.formData.total);
+            this.formData.est = this.formData.budget.est;
+            this.formData.fundPlan = this.formData.budget.fundPlan;
             const self = this;
             if (self.formData.created) {
                 self.formData.created = moment(self.formData.created).format(
