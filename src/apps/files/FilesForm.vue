@@ -4,32 +4,26 @@
             <el-form ref="formupdate" :model="formData" :rules="rules" label-width="90px">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="申请人" prop="proposer">
-                            <!-- <el-select v-model="formData.proposer" placeholder="请选择" @change="payeeChange" filterable>
-                                <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
-                                </el-option>
-                            </el-select> -->
-                            <el-input v-model="formData.proposer" placeholder="请输入申请人" :disabled="true"></el-input>
+                        <el-form-item label="申请人" prop="creatorName">
+                           
+                            <el-input v-model="formData.creatorName" placeholder="请输入申请人" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="部门" prop="applyDept">
-                            <!-- <el-select v-model="formData.applyDept" placeholder="请选择" filterable>
-                                <el-option v-for="item in payeeOrgan" :key="item.id" :label="item.name" :value="item.name">
-                                </el-option>
-                            </el-select> -->
-                             <el-input v-model="formData.applyDept" placeholder="请输入部门" :disabled="true"></el-input>
+                        <el-form-item label="部门" prop="organName">
+                            
+                             <el-input v-model="formData.organName" placeholder="请输入部门" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="申请日期" prop="applyDate">
-                            <el-input v-model="formData.applyDate" placeholder="请输入申请时间" :disabled="true"></el-input>
+                        <el-form-item label="申请日期" prop="created">
+                            <el-input v-model="formData.created" placeholder="请输入申请时间" :disabled="true"></el-input>
                          </el-form-item>
                     </el-col>
-                    <el-col :span="12">
+                    <el-col :span="8">
                         <el-form-item label="资金计划所属月份" label-width="89px">
                             <!-- <el-input v-model="formData.apply" placeholder="资金计划所属月份"></el-input> -->
-                            <el-select v-model="formData.yuefen" placeholder="请选择月份" @change="payeeChange" clearable filterable>
+                            <el-select v-model="formData.umonth" placeholder="请选择月份"  clearable filterable>
                                 <el-option v-for="item in onOption"
                                     :key="item.value"
                                     :label="item.label"
@@ -40,8 +34,8 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="是否属于年度预算内" style="float:left"  label-width="166px">
-                            <el-radio v-model="formData.type" label="true">是</el-radio>
-                             <el-radio v-model="formData.type" label="false">否</el-radio>
+                            <el-radio v-model="formData.utype" label="true">是</el-radio>
+                             <el-radio v-model="formData.utype" label="false">否</el-radio>
                         </el-form-item>
                     </el-col>
                   <el-col :span="24">
@@ -50,39 +44,38 @@
                                 <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
                                 <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                             </div>
-                            <el-table :data="formData.detail" border style="width: 100%; margin-top: 5px;"
+                            <el-table :data="formData.cardPrinting" border style="width: 100%; margin-top: 5px;"
                                @selection-change="handleSelectionChange"
                                :row-class-name="tableRowClassName"
                                @row-click='show'>
                               <el-table-column type="selection" width="70px"></el-table-column>
-                                <el-table-column prop="name" label="文件名称">
+                                <el-table-column prop="fileName" label="文件名称">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.name"></el-input>
+                                        <el-input v-model="scope.row.fileName"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="specification" label="印刷幅面">
+                                <el-table-column prop="printingPicture" label="印刷幅面">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.specification"></el-input>
+                                        <el-input v-model="scope.row.printingPicture"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="price" label="印刷数量（套）">
+                                <el-table-column prop="printNumber" label="印刷数量（套）">
                                     <template slot-scope="scope">
-                                        <el-input v-model.number="scope.row.price" @change="totleCurrency" placeholder=""></el-input>
+                                        <el-input v-model.number="scope.row.printNumber" @change="totleCurrency" placeholder=""></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="totalPrice" label="印刷色彩">
+                                <el-table-column prop="" label="印刷色彩">
                                     <template slot-scope="scope">
-                                        <!-- <el-input v-model="scope.row.totalPrice" ></el-input> -->
-                                        <el-radio v-model="formData.lendOutType" label="1">彩色</el-radio>
-                                       <el-radio v-model="formData.lendOutType" label="0">白色</el-radio>
+                                       <el-radio v-model="formData.colourType" label="1">彩色</el-radio>
+                                       <el-radio v-model="formData.colourType" label="0">白色</el-radio>
                                     </template>
                                 </el-table-column>
-                               <el-table-column prop="specification" label="其他需求">
+                               <el-table-column prop="demand" label="其他需求">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.qita"></el-input>
+                                        <el-input v-model="scope.row.demand"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="specification" label="附件">
+                                <el-table-column prop="" label="附件">
                                     <template slot-scope="scope">
                                         <el-upload  name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" 
                                         :on-success="handleSuccess"
@@ -91,9 +84,10 @@
                                         </el-upload>
                                         <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
                                             <!-- @getId="getId" -->
-                                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}"></FilesOperate>
+                                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachmentsone(scope.$index)"></FilesOperate>
                                         </div>
                                     </template>
+                                     
                                 </el-table-column>
                             </el-table>
                         </el-form-item>
@@ -102,7 +96,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="总印刷数量（套）" >
-                            <el-input v-model="formData.numbers" :disabled="true"  placeholder="印刷数量"></el-input>
+                            <el-input v-model="formData.allPrintNumber" :disabled="true"  placeholder="印刷数量"></el-input>
                         </el-form-item>
                     </el-col>
                </el-row>
@@ -207,21 +201,21 @@ export default {
             currentFormId: this.operationType == 'create' ? '' : this.formId,
             // createForm_status: false,
             rules: {
-                proposer: [
+                creatorName: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
                         message: "请输入姓名"
                     }
                 ],
-                applyDept: [
+                organName: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
                         message: "请输入部门"
                     }
                 ],
-                applyDate: [
+                created: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
@@ -235,12 +229,7 @@ export default {
     components: {
         FilesOperate
     }, 
-    watch: {
-      'formData.lowercase'(val) {
-          this.formData.numbers = val ? this.totleCurrency(val) : "";
-      }
-    },
-
+   
     props: ['formId', 'operationType'],
     mounted() {
         this.getUsers();
@@ -248,26 +237,25 @@ export default {
     methods: {
         // 总数量
         totleCurrency(totle){
-            let totalCount=0;
-             for(let i=0;i<this.formData.detail.length;i++){
-                    if(this.formData.detail[i].price){
-                        totalCount += this.formData.detail[i].price;
+             let totalCount=0;
+             for(let i=0;i<this.formData.cardPrinting.length;i++){
+                    if(this.formData.cardPrinting[i].printNumber){
+                        totalCount += this.formData.cardPrinting[i].printNumber;
                     }
                 
                 }
-                this.formData.numbers=totalCount.toFixed(1)
-                return totalCount.toFixed(1)
+                this.formData.allPrintNumber=totalCount
+                return totalCount
         },
-        //选择资产类型
-        typeChange(val) {
-            if (val == '租赁资产') {
-                this.formData.supplyCode = 'lease';
-            } else if (val == '固定资产') {
-                this.formData.supplyCode = 'fixed';
-            } else if (val == '低值易耗品') {
-                this.formData.supplyCode = 'low';
-            }
+        deleteAttachmentsone(index) {
+            //  debugger
+            let $self = this;
+            $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+                 $self.formData.cardPrinting[index].attachments.splice(0, 1);
+                
+            });
         },
+        
         setDataFromParent(data) {
             this.formData = data;
             this.formId = data.id;
@@ -280,34 +268,31 @@ export default {
         },
         resetForm() {
             let formData = {
-                detail: [
+                cardPrinting: [
                     {
                         id: '',
                         count: 0,
-                        name: '',
-                        specification: '',
-                        number: '',
-                        price: '',
-                        totalPrice: '',
-                        email: '',
+                        fileName: '',
+                        demand: '',
+                        colourType:true,
+                        printNumber:"",
+                        printingPicture: '',
                         attachments: [],
-                        reason: cookies.get('uname'),//公司
-                        inventory:cookies.get('uname'),//通讯地址
-                        ubian:cookies.get('uname'),//邮编
-                        //  cookies.get('uname'),//座机
                     }
                 ],
-                numbers:"",
-                type:'true',
+                allPrintNumber: '',
+                umonth:"",
+                utype:'true',
+                status:"",
                 creatorName: this.$store.getters.LoginData.uname || '', //申请人
                 organName: this.$store.getters.LoginData.oname || '',
                 creatorId: this.$store.getters.LoginData.uid || '',
                 organId:this.$store.getters.LoginData.oid || '',
-                applyDate: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                created: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 proposerId: '',
                 applyDeptId: '',
-                proposer: cookies.get('uname'),
-                applyDept: cookies.get('oname'),
+                creatorName: cookies.get('uname'),
+                // organName: cookies.get('oname'),
                 supplyCode: '',//资产类型-流程判断
                 inbuget: true,
             };
@@ -321,13 +306,14 @@ export default {
             //     this.formData.inbuget = false;
             // }
             let compare = true;
-            for (let data of this.formData.detail) {
+            for (let data of this.formData.cardPrinting) {
                 if (
-                    data.name == '' ||
-                    data.number == '' ||
-                    data.reason == '' ||
-                    data.price == '' || 
-                    data.inventory == ''
+                    data.fileName == '' ||
+                    data.demand == '' ||
+                    data.colourType == '' ||
+                     data.printNumber == '' ||
+                    data.printingPicture == ''
+                   
                 ) {
                     compare = false;
                 }
@@ -345,7 +331,7 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
-            let response = await $self.saveFormData("/api/v1/files_forms/save", $self.formData);
+            let response = await $self.saveFormData("/api/v1/documentPrinting/save", $self.formData);
             this.totleCurrency()
             if (response) {
                 $self.formId = response.data.id;
@@ -395,11 +381,11 @@ export default {
             // debugger
             const self = this;
             const aaa=self.uploadImageType
-            const bbb=self.formData.detail[aaa]
+            const bbb=self.formData.cardPrinting[aaa]
             if (response.length > 0) {
                 response.forEach(function (item,index) {
                     // self.formData.attachments.push(item);
-                    self.formData.detail[aaa].attachments.push(item);
+                    self.formData.cardPrinting[aaa].attachments.push(item);
                 });
             }
             this.$refs.upload.clearFiles();
@@ -417,46 +403,28 @@ export default {
                 this.payeePeople = res.data;
             });
         },
-        submitReason() {
-            // this.purposeDialog = false;
-            this.formData.detail[this.resonindex].reason = this.inputreason;
-        },
-        inputReason(item, index) {
-            this.resonindex = -1;
-            this.inputreason = item.reason;
-            // this.purposeDialog = true;
-            this.resonindex = index;
-        },
+        
         //选择的人变化
         payeeChange(val) {
-            this.formData.applyDept = '';
+            this.formData.organName = '';
             for (let data of this.payeePeople) {
                 if (data.name == val) {
                     this.payeeOrgan = data.organs;
                 }
             }
             if (this.payeeOrgan.length == 1) {
-                this.formData.applyDept = this.payeeOrgan[0].name;
+                this.formData.organName = this.payeeOrgan[0].name;
             }
         },
-        //计算合计金额
-        getAmount(row) {
-            if (row.number != null && row.price != null) {
-                row.totalPrice = this.common.toDecimal2(row.number * row.price);
-            } else {
-                row.totalPrice = 0;
-            }
-        },
+      
         addItem() {
-            this.formData.detail.push({
+            this.formData.cardPrinting.push({
                 id: '',
-                name: '',
-                specification: '',
-                number: '',
-                price: '',
-                totalPrice: '',
-                email: '',
-                reason: '',
+                fileName: '',
+                demand: '',
+                colourType:true,
+                printNumber:"",
+                printingPicture: '',
                 attachments: [],
                 count: ++this.counts
             });
@@ -470,18 +438,18 @@ export default {
                     .then(() => {
                         self.selectionItems.forEach(function (oData) {
                             // if (oData.id == '') {
-                            //     self.formData.detail.forEach(function (
+                            //     self.formData.cardPrinting.forEach(function (
                             //         item,
                             //         index
                             //     ) {
                             //         if (item.count == oData.count) {
-                            //             self.formData.detail.splice(index, 1);
+                            //             self.formData.cardPrinting.splice(index, 1);
                             //         }
                             //     });
                             // } else {
                                 axios
-                                    .delete(
-                                        '/api/v1/cardPrinting/delete/' + self.formData.id+'/'+oData.index,
+                                    .get(
+                                        '/api/v1/documentPrinting/delete/' + self.formData.id+'/'+oData.index,
                                         '',
                                         {
                                             headers: {
@@ -491,12 +459,12 @@ export default {
                                         }
                                     )
                                     .then(res => {
-                                        self.formData.detail.forEach(function (
+                                        self.formData.cardPrinting.forEach(function (
                                             item,
                                             index
                                         ) {
                                             if (item.index == oData.index) {
-                                                self.formData.detail.splice(
+                                                self.formData.cardPrinting.splice(
                                                     index,
                                                     1
                                                 );
@@ -531,7 +499,7 @@ export default {
                         };
                         axios
                             .get(
-                                '/api/v1/files_forms/deleteAttachment/' + id,
+                                '/api/v1/documentPrinting/deleteAttachment/' + id,
                                 '',
                                 {
                                     headers: {

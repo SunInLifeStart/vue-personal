@@ -21,52 +21,55 @@
             <el-form :model="tableData" class="formList">
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="申请人：">{{tableData.proposer}}</el-form-item>
+                        <el-form-item label="申请人：">{{tableData.creatorName}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="申请部门：">{{tableData.applyDept}}</el-form-item>
+                        <el-form-item label="申请部门：">{{tableData.organName}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="申请日期：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="申请日期：" >{{tableData.created | dateformat('YYYY-MM-DD')}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属月份：">{{tableData.assetsType}}</el-form-item>
+                        <el-form-item label="所属月份：">{{tableData.umonth | fomumonth}}</el-form-item>
                     </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="是否属于年度预算内：">{{tableData.remark}}</el-form-item>
+                    <el-col :span="8">
+                        <el-form-item label="是否属于年度预算内：">{{utypeone}}</el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="总印刷数量(套)：">{{tableData.allPrintNumber}}</el-form-item>
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="文件印刷明细：">
-                            <el-table :data="tableData.detail" border style="width: 100%; margin-top: 5px;">
-                                <el-table-column prop="name" label="文件姓名">
+                            <el-table :data="tableData.cardPrinting" border style="width: 100%; margin-top: 5px;">
+                                <el-table-column prop="fileName" label="文件姓名">
                                     <template slot-scope="scope">
-                                        {{scope.row.name}}
+                                        {{scope.row.fileName}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="specification" label="印刷幅面">
+                                <el-table-column prop="printingPicture" label="印刷幅面">
                                     <template slot-scope="scope">
-                                        {{scope.row.specification}}
+                                        {{scope.row.printingPicture}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="number" label="印刷数量（套）">
+                                <el-table-column prop="printNumber" label="印刷数量（套）">
                                     <template slot-scope="scope">
-                                        {{scope.row.number}}
+                                        {{scope.row.printNumber}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="price" label="印刷色彩">
+                                <el-table-column prop="colourType" label="印刷色彩">
                                     <template slot-scope="scope">
-                                        {{scope.row.price |numFilter}}
+                                        {{scope.row.colourType |numFilter}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="totalPrice" label="其他需求">
+                                <el-table-column prop="demand" label="其他需求">
                                     <template slot-scope="scope">
-                                        {{scope.row.totalPrice}}
+                                        {{scope.row.demand}}
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="buyTime" label="附件" >
                                     <template slot-scope="scope">
                                         <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
-                                           <FilesOperate :item="item" :options="{preview:true,del:true,download:true}"></FilesOperate>
+                                           <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                                         </div>
                                     </template>
                                 </el-table-column>
@@ -74,7 +77,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <!-- <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
@@ -82,7 +85,7 @@
                             </div>
                         </el-form-item>
                     </el-col>
-                </el-row>
+                </el-row> -->
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
@@ -145,16 +148,17 @@ export default {
             users: [],
             actionsDialogArr: [],
             appFlowName: 'files-form_files',//固定资产流程 Files-form_fixedFiles  低值易耗办公品  Files-form_lowFiles 
-            formName: 'files_forms',
+            formName: 'documentPrinting',
             comments: [],
             dialogVisibleCrumb: false,
             flowNodeUrl: "",
 
             crumb: { items: [] },
             tabledata: {
-                detail: []
+                cardPrinting: []
             },
             pageType: 'show',
+            utypeone:'',
             actions_status: false,
             rejectTarget: '',
             rejectList: [],
@@ -174,12 +178,47 @@ export default {
     },
     mounted() {
     },
+     filters: {
+         fomumonth: function(data) {
+             let xmlJson = {
+                "yiyue":"一月",
+                "eryue":"二月",
+                "sanyue" :"三月",
+                "siyue" :"四月",
+                "wuyue" :"五月",
+                 "liuyue":"六月",
+                "qiyue":"七月",
+                "bayue" :"八月",
+                "jiuyue" :"九月",
+                "shiyue" :"十月",
+                "shiyiyue" :"十一月",
+                "shieryue" :"十二月",
+            };
+            return xmlJson[data];
+            
+        },
+        
+    },
     methods: {
+        fomutype(row, column) {
+            let state;
+            //0已保存1审核中2驳回3撤销4完成
+            switch (row.utype) {
+                case 'true':
+                    state = "是";
+                    break;
+                case 'false':
+                    state = "否";
+                    break;
+            }
+            return state;
+        },
+        
         getFormDetails(formId) {
 
             let $self = this;
             $self.formId = formId;
-            $self.url = "/api/v1/files_forms/" + $self.formId;
+            $self.url = "/api/v1/documentPrinting/detail/" + $self.formId;
             console.log('DetailUrl', $self.url)
             $self.getFormDetailsData();
         },
@@ -191,7 +230,16 @@ export default {
             // });
             let response = await $self.getDetails();
             if (response) {
-                $self.tableData = response.data;
+                $self.tableData = response.data.content;
+                if($self.tableData.utype=='true'){
+                        this.utypeone='是'
+                }
+                else{
+                    this.utypeone='否'
+                }
+                if($self.tableData.utype){
+
+                }
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");

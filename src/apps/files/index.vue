@@ -6,20 +6,20 @@
                 <el-form :inline="true" label-width="100px" label-position="left" class="demo-form-inline">
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="姓名：">
-                                <el-input v-model="formInline.proposer" placeholder="" style="width:100%"></el-input>
+                            <el-form-item label="申请人：">
+                                <el-input v-model="params.creatorName" placeholder="" style="width:100%"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="申请时间：">
-                                <!-- <el-input v-model="formInline.applyDept" placeholder=""></el-input> -->
-                                 <el-date-picker v-model="formInline.created" value-format="yyyy-MM-dd" style="width:100%" type="date" >
+                                <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
+                                 <el-date-picker v-model="params.created" value-format="yyyy-MM-dd 00:00:00" style="width:100%" type="date" >
                                   </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="所属月份：" prop="status">
-                                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
+                            <el-form-item label="所属月份：" >
+                                <el-select v-model="params.umonth" clearable style="width:100%" filterable placeholder="全部">
                                     <el-option v-for="item in onOption"
                                      :key="item.value"
                                     :label="item.label"
@@ -30,15 +30,15 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="8">
+                        <!-- <el-col :span="8">
                             <el-form-item label="印刷文件名称：">
-                                <el-input v-model="formInline.proposername" placeholder="" style="width:100%"></el-input>
+                                <el-input v-model="params.fileName" placeholder="" style="width:100%"></el-input>
                             </el-form-item>
-                        </el-col>
+                        </el-col> -->
                         <el-col :span="8">
                             <el-form-item label="是否属于年度预算内:" >
-                                <el-radio v-model="formInline.type" label="true">是</el-radio>
-                                <el-radio v-model="formInline.type" label="false">否</el-radio>
+                                <el-radio v-model="params.utype" label="true">是</el-radio>
+                                <el-radio v-model="params.utype" label="false">否</el-radio>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="searchBtn">
@@ -57,20 +57,20 @@
             </div>
             <div id="FilesList">
                 <el-table :data="tableData" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
-                    <el-table-column prop="proposer" label="申请人">
+                    <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
-                    <el-table-column prop="applyDept" label="申请部门">
+                    <el-table-column prop="organName" label="申请部门">
                     </el-table-column>
-                    <el-table-column prop="applyDate" label="申请日期" sortable >
+                    <el-table-column prop="created" label="申请日期" sortable >
                         <template slot-scope="scope">
-                            {{scope.row.applyDate | dateformat('YYYY-MM-DD')}}
+                            {{scope.row.created | dateformat('YYYY-MM-DD')}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="applyDept" label="是否属于年度预算内">
+                    <el-table-column prop="utype" label="是否属于年度预算内"  :formatter="fomutype">
                     </el-table-column>
-                    <el-table-column prop="applyDept" label="资金计划所属月份">
+                    <el-table-column prop="umonth" label="资金计划所属月份"  :formatter="fomumonth">
                     </el-table-column>
-                    <el-table-column prop="applyDept" label="总印刷数量">
+                    <el-table-column prop="allPrintNumber" label="总印刷数量">
                     </el-table-column>
                     <el-table-column prop="status" label="单据状态"  :formatter="fomatterStatus">
                     </el-table-column>
@@ -163,26 +163,17 @@ export default {
             formDetails: {},
             formId: "",
             params: {
-                desc: true,
-                page: 1,
+                pageNum: 1,
                 pageSize: 5,
-                department: "",
-                submitter: "",
-                total: 0,
-                orderBy: 'created',
-                desc: true,
-                options: []
+                created: "",
+                creatorName: "",
+                umonth: '',
+                utype:"",
+                fileName:'',
             },
             searchOptions: [],
-            formName: "files_forms",
-            formInline: {
-                proposer: '',
-                created: '',
-                applyDate: [],
-                status: '',
-                type:"",
-                proposername:'',
-            },
+            formName: "documentPrinting",
+            
         };
     },
     components: {
@@ -193,56 +184,23 @@ export default {
         
         //获取列表
         async getList(pageNum) {
-            this.onSubmit();
+            // this.onSubmit();
             let $self = this;
-            $self.url = "/api/v1/files_forms/query";
+            $self.url = "/api/v1/documentPrinting/queryList";
             let response = await $self.getQueryList();
             if (response) {
-                if (response.data.forms.length > 0) {
-                    let formId = response.data.forms[0].id;
+                if (response.data.content.list && response.data.content.list.length > 0) {
+                    let formId = response.data.content.list[0].id;
                     $self.$refs.FilesDetail.getFormDetails(formId);
                 }
-                $self.tableData = response.data.forms;
-                $self.params.total = response.data.totalCount;
+                $self.tableData = response.data.content.list;
+                // $self.params.total = response.data.content.total;
 
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
         },
-        onSubmit() {
-            this.searchOptions = [];
-            if (this.formInline.proposer.trim() !== '') {
-                this.searchOptions.push({
-                    field: 'proposer',
-                    filter: 'LIKE',
-                    value: this.formInline.proposer
-                });
-            }
-           
-            if (
-                this.formInline.applyDate &&
-                this.formInline.applyDate.length > 0
-            ) {
-                this.searchOptions.push({
-                    field: 'applyDate',
-                    filter: 'BETWEEN',
-                    value: moment(this.formInline.applyDate[0]).format(
-                        'YYYY-MM-DD'
-                    ),
-                    value2: moment(this.formInline.applyDate[1]).format(
-                        'YYYY-MM-DD'
-                    )
-                });
-            }
-            if (this.formInline.status.trim() !== '') {
-                this.searchOptions.push({
-                    field: 'status',
-                    filter: 'LIKE',
-                    value: this.formInline.status
-                });
-            }
-            this.params.options = this.searchOptions;
-        },
+      
         //选择行
         showCurrentId(row) {
             this.$refs.FilesDetail.getFormDetails(row.id);
@@ -259,7 +217,7 @@ export default {
         },
         reloadList(params) {
             if (params == "reload") {
-                this.params.page = 1;
+                this.params.pageNum = 1;
                 this.getList();
             } else {
                 this.$refs.FilesDetail.getFormDetails(params.id);
@@ -276,7 +234,7 @@ export default {
         
         //分页
         currentChange(pageNum) {
-            this.params.page = pageNum;
+            this.params.pageNum = pageNum;
             this.getList(pageNum);
         },
         sizeChange(pageSize) {
@@ -287,10 +245,16 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.formInline.proposer = '';
-            // this.formInline.applyDept = '';
-            this.formInline.applyDate = [];
-            this.formInline.status = '';
+           this.params={
+                pageNum: 1,
+                pageSize: 5,
+                created: "",
+                creatorName: "",
+                umonth: '',
+                utype:"",
+                fileName:'',
+               
+            }
             this.getList();
         },
         fomatterStatus(row, column) {
@@ -311,6 +275,62 @@ export default {
                     break;
                 case '04':
                     state = "已完成";
+                    break;
+            }
+            return state;
+        },
+        fomutype(row, column) {
+            let state;
+            //0已保存1审核中2驳回3撤销4完成
+            switch (row.utype) {
+                case 'true':
+                    state = "是";
+                    break;
+                case 'false':
+                    state = "否";
+                    break;
+            }
+            return state;
+        },
+        fomumonth(row, column) {
+            let state;
+            //0已保存1审核中2驳回3撤销4完成
+            switch (row.umonth) {
+                case 'yiyue':
+                    state = "一月";
+                    break;
+                case 'eryue':
+                    state = "二月";
+                    break;
+                case 'sanyue':
+                    state = "三月";
+                    break;
+                case 'siyue':
+                    state = "四月";
+                    break;
+                case 'wuyue':
+                    state = "五月";
+                    break;
+                case 'liuyue':
+                    state = "六月";
+                    break;
+                case 'qiyue':
+                    state = "七月";
+                    break;
+                case 'bayue':
+                    state = "八月";
+                    break;
+                case 'jiuyue':
+                    state = "九月";
+                    break;
+                case 'shiyue':
+                    state = "十月";
+                    break;
+                case 'shiyiyue':
+                    state = "十一月";
+                    break;
+                case 'shieryue':
+                    state = "十二月";
                     break;
             }
             return state;
