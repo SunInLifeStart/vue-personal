@@ -3,7 +3,7 @@
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
-                    <span v-for="(action,index) in actions" :key="index" class="btnList" @click="doAction(action)">
+                    <span v-for="(action,index) in actions" :key="index" class="btnList" @click="doAction1(action)">
                         {{action.name}}
                     </span>
                 </div>
@@ -117,8 +117,8 @@
                             合同附件
                         </td>
                         <td colspan="6">
-                            <div class="attachments" v-for="item in tableData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -204,6 +204,56 @@
                                 <el-radio label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
                                 <el-radio label="3">其他</el-radio>
                             </el-radio-group>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同所涉经济行为批准文件附件
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同相对方资质证照复印件附件
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType3'">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            其他附件
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType4'">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            上传合同及校审表
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType5'">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            上传签字盖章合同
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType6'">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
                         </td>
                     </tr>
                     <tr>
@@ -298,6 +348,7 @@ import ContractForm from './ContractForm';
 import Comment from '../Comment';
 import FilesOperate from '../FilesOperate';
 import { publicMethods } from '../application.js';
+import { type } from 'os';
 export default {
     mixins: [publicMethods],
     name: 'ContractDetail',
@@ -356,8 +407,23 @@ export default {
             //     }
             // }
         },
-        reEditForm() {
-            this.$refs.ContractForm.setDataFromParent(this.tableData, 'false');
+        doAction1(action) {
+            if (
+                action.name == '上传签字盖章合同' ||
+                action.name == '上传合同及校审表' ||
+                action.name == '上传修改后合同'
+            ) {
+                this.reEditForm(action.name);
+            } else {
+                this.doAction(action);
+            }
+        },
+        reEditForm(name) {
+            this.$refs.ContractForm.setDataFromParent(
+                this.tableData,
+                'false',
+                name
+            );
         }
     }
 };

@@ -73,7 +73,7 @@
                             发起时间
                         </td>
                         <td colspan="2">
-                            <el-date-picker v-model="formData.initiateTime" type="datetime" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
+                            <el-date-picker v-model="formData.initiateTime" :disabled="this.showSubmit == 'false'" type="datetime" placeholder="选择日期" style="width:100%" value-format="yyyy-MM-dd HH:mm:ss">
                             </el-date-picker>
                         </td>
                     </tr>
@@ -88,13 +88,13 @@
                             合同名称
                         </td>
                         <td colspan="3">
-                            <el-input v-model="formData.contractName"></el-input>
+                            <el-input v-model="formData.contractName" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                         <td>
                             合同编号
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.contractNum"></el-input>
+                            <el-input v-model="formData.contractNum" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -103,7 +103,7 @@
                             合同类型
                         </td>
                         <td colspan="2">
-                            <el-select v-model="formData.contractType" placeholder="请选择" @change="typeandradioChange('contractType')" :disabled="decodeURI(this.$store.getters.LoginData.companyName) == '中关村协同发展投资有限公司'">
+                            <el-select v-model="formData.contractType" placeholder="请选择" @change="typeandradioChange('contractType')" :disabled="decodeURI(this.$store.getters.LoginData.companyName) == '中关村协同发展投资有限公司' || this.showSubmit == 'false'">
                                 <el-option label="土地出让合同签订" value="土地出让合同签订" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村科技城发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津中科城乐居房地产开发有限公司'"></el-option>
                                 <el-option label="合同签订（土地出让合同外）" value="合同签订(土地出让合同外)" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村科技城发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津中科城乐居房地产开发有限公司'"></el-option>
                                 <el-option label="超出招采委审批条款的合同审批(合同调整审批)" value="超出招采委审批条款的合同审批(合同调整审批)" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '合肥中关村协同产业发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '石家庄中关村协同发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村孵化器有限公司'"></el-option>
@@ -115,7 +115,7 @@
                             所属项目
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.project"></el-input>
+                            <el-input v-model="formData.project" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -124,7 +124,7 @@
                             甲方
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.partyA"></el-input>
+                            <el-input v-model="formData.partyA" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -133,7 +133,7 @@
                             乙方
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.partyB"></el-input>
+                            <el-input v-model="formData.partyB" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -141,20 +141,19 @@
                             其他方
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.otherParty"></el-input>
+                            <el-input v-model="formData.otherParty" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="2">
                             合同附件
-                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType1')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
-                                <i class="el-icon-delete" @click.stop="deleteAttachments"></i>
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -166,12 +165,12 @@
                         <td colspan="6">
                             <el-row>
                                 <el-col :span="24">
-                                    <el-radio-group v-model="formData.moneyRadio" @change="typeandradioChange('moneyRadio')">
+                                    <el-radio-group v-model="formData.moneyRadio" @change="typeandradioChange('moneyRadio')" :disabled="this.showSubmit == 'false'">
                                         <el-radio label="1">
-                                            <el-input v-model.number="formData.contractAmount" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='1'"></el-input>
+                                            <el-input v-model.number="formData.contractAmount" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='1' ||this.showSubmit == 'false'"></el-input>
                                             元</el-radio>
                                         <el-radio label="2">其他 成本上线总额
-                                            <el-input v-model.number="formData.uptotal" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='2'"></el-input>
+                                            <el-input v-model.number="formData.uptotal" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='2' ||this.showSubmit == 'false'"></el-input>
                                             元</el-radio>
                                     </el-radio-group>
                                 </el-col>
@@ -183,7 +182,7 @@
                             是否预算内
                         </td>
                         <td colspan="6">
-                            <el-radio-group v-model="formData.budget">
+                            <el-radio-group v-model="formData.budget" :disabled="this.showSubmit == 'false'">
                                 <el-radio label="1">预算内</el-radio>
                                 <el-radio label="2">预算外</el-radio>
                             </el-radio-group>
@@ -201,7 +200,7 @@
                             合同期限
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="formData.terminationPeople" @change="typeandradioChange('dateRadio')">
+                            <el-radio-group v-model="formData.terminationPeople" @change="typeandradioChange('dateRadio')" :disabled="this.showSubmit == 'false'">
                                 <el-row>
                                     <el-col :span="24">
                                         <el-radio label="1">自
@@ -209,9 +208,9 @@
                                  <el-date-picker v-model="formData.deadStartTime" type="daterange" range-separator="至" style="width:300px" :disabled="formData.deadline!='1'">
                                 </el-date-picker>
                                 -->
-                                            <el-date-picker v-model="formData.effectiveStart" type="date" placeholder="开始日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1'">
+                                            <el-date-picker v-model="formData.effectiveStart" type="date" placeholder="开始日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
                                             </el-date-picker>至
-                                            <el-date-picker v-model="formData.effectiveEnd" type="date" placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1'">
+                                            <el-date-picker v-model="formData.effectiveEnd" type="date" placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
                                             </el-date-picker>
                                         </el-radio>
                                     </el-col>
@@ -232,7 +231,7 @@
                             合同所涉经济行为批准文件
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="formData.paper">
+                            <el-radio-group v-model="formData.paper" :disabled="this.showSubmit == 'false'">
                                 <el-radio label="1">股东大会</el-radio>
                                 <el-radio label="2">董事会决议</el-radio>
                                 <el-radio label="3">会议纪要</el-radio>
@@ -246,7 +245,7 @@
                             合同相对方资质证照复印件
                         </td>
                         <td colspan="4">
-                            <el-radio-group v-model="formData.copy">
+                            <el-radio-group v-model="formData.copy" :disabled="this.showSubmit == 'false'">
                                 <el-radio label="1">有</el-radio>
                                 <el-radio label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
                                 <el-radio label="3">其他</el-radio>
@@ -255,10 +254,75 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            合同所涉经济行为批准文件附件
+                            <el-upload name="files" :disabled="this.showSubmit == 'false'" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType2')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            合同相对方资质证照复印件附件
+                            <el-upload name="files" :disabled="this.showSubmit == 'false'" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType3')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType3'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            其他附件
+                            <el-upload name="files" :disabled="this.showSubmit == 'false'" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType4')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType4'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-show="this.actionName == '上传合同及校审表'">
+                        <td colspan="2">
+                            上传合同及校审表
+                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType5')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType5'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr v-show="this.actionName == '上传签字盖章合同'">
+                        <td colspan="2">
+                            上传签字盖章合同
+                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType6')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                        </td>
+                        <td colspan="6">
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType6'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
                             合同价格形式
                         </td>
                         <td colspan="6">
-                            <el-radio-group v-model="formData.shape">
+                            <el-radio-group v-model="formData.shape" :disabled="this.showSubmit == 'false'">
                                 <el-radio label="1">固定总价</el-radio>
                                 <el-radio label="2">固定总和单价</el-radio>
                                 <el-radio label="3">其他</el-radio>
@@ -270,7 +334,7 @@
                             合同付款安排
                         </td>
                         <td colspan="6">
-                            <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.arrange"></el-input>
+                            <el-input type="textarea" :disabled="this.showSubmit == 'false'" :autosize="{minRows: 2}" v-model="formData.arrange"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -280,13 +344,13 @@
                         </td>
                         <td colspan="6">
                             <el-row>
-                                <el-input type="textarea" :autosize="{minRows: 2}" v-model="formData.sponsor"></el-input>
+                                <el-input type="textarea" :autosize="{minRows: 2}" :disabled="this.showSubmit == 'false'" v-model="formData.sponsor"></el-input>
                             </el-row>
                             <el-row style="padding:5px">
                                 <el-col :span="14">
                                     <div style="float:left">
                                         谈判小组成员（不同部门2人或以上）签字：
-                                        <el-select v-model="formData.tpxzId" multiple filterable placeholder="请选择">
+                                        <el-select v-model="formData.tpxzId" multiple filterable placeholder="请选择" :disabled="this.showSubmit == 'false'">
                                             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
                                             </el-option>
                                         </el-select>
@@ -294,7 +358,7 @@
                                 </el-col>
                                 <el-col :span="10">
                                     年 月 日:
-                                    <el-date-picker v-model="formData.datecontractTime" type="date" placeholder="" value-format="yyyy-MM-dd">
+                                    <el-date-picker v-model="formData.datecontractTime" :disabled="this.showSubmit == 'false'" type="date" placeholder="" value-format="yyyy-MM-dd">
                                     </el-date-picker>
                                 </el-col>
                             </el-row>
@@ -324,11 +388,13 @@ export default {
     data() {
         return {
             options: [], //谈判小组成员选择列表
+            attType: '',
             radio: '',
             dialogFormVisible: false,
             formData: this.resetForm(),
             showSubmit: 'true',
             users: [],
+            actionName: '',
             appFlowName: 'contract-form_contract',
             rules: {
                 contractName: [
@@ -350,6 +416,9 @@ export default {
         FilesOperate
     },
     methods: {
+        clickAttach(type) {
+            this.attType = type;
+        },
         typeandradioChange(type) {
             if (type == 'contractType') {
             } else if (type == 'moneyRadio') {
@@ -455,13 +524,15 @@ export default {
             }
         },
         */
-        setDataFromParent(data, type) {
+        setDataFromParent(data, type, name) {
+            this.actionName = '';
             this.formData = data;
             this.formData.tpxzId = this.formData.tpxzName.split(',');
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
             this.showSubmit = type;
+            this.actionName = name;
         },
         createForm() {
             this.getNo();
@@ -502,12 +573,38 @@ export default {
             };
             return formData;
         },
+        checkAttachment() {
+            let boolean = false;
+            if (this.actionName == '上传合同及校审表') {
+                for (let data of this.formData.attachments) {
+                    if (data.attType == 'attType5') {
+                        boolean = true;
+                    }
+                }
+            }
+            if (this.actionName == '上传签字盖章合同') {
+                for (let data of this.formData.attachments) {
+                    if (data.attType == 'attType6') {
+                        boolean = true;
+                    }
+                }
+            }
+            if (this.actionName == '上传修改后合同') {
+                boolean = true;
+            }
+            return boolean;
+        },
         saveFormValidate(type) {
+            const self = this;
             if (this.ruleHint() == true) {
-                if (this.showSubmit == 'true') {
-                    this.saveForm(type);
+                if (this.showSubmit == 'false') {
+                    if (this.checkAttachment()) {
+                        this.saveForm();
+                    } else {
+                        self.msgTips('请输入' + this.actionName, 'error');
+                    }
                 } else {
-                    this.saveForm();
+                    this.saveForm(type);
                 }
             }
         },
@@ -633,9 +730,22 @@ export default {
             const self = this;
             if (response.length > 0) {
                 response.forEach(function(item) {
-                    self.formData.attachments.push(item);
+                    self.formData.attachments.push({
+                        iconUrl: item.iconUrl,
+                        id: item.id,
+                        name: item.name,
+                        organId: item.organId,
+                        organName: item.organName,
+                        size: item.size,
+                        type: item.type,
+                        uid: item.uid,
+                        uname: item.uname,
+                        url: item.url,
+                        attType: self.attType
+                    });
                 });
             }
+            console.log(this.formData.attachments);
             this.$refs.upload.clearFiles();
         },
         submitUpload() {
@@ -705,38 +815,23 @@ export default {
     .el-date-editor.el-input__inner {
         width: 160px;
     }
-    .upload {
-        position: relative;
-        margin-right: 30px;
-        // width: 100px;
-        display: inline-block;
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
         cursor: pointer;
-    }
-    .attachments {
-        position: relative;
-        // margin-bottom: 40px;
-        margin-right: 30px;
-        width: 200px;
-        // height: 120px;
-        display: inline-block;
-        cursor: pointer;
-        p {
-            margin: 0;
-            line-height: 20px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-right: 20px;
-        }
 
-        i {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 5px;
-            &:hover {
-                color: red;
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
             }
         }
     }
