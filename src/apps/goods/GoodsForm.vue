@@ -32,7 +32,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="申请时间">
-                            <el-date-picker v-model="formData.applyTime" type="date" placeholder="选择日期" style="width:100%">
+                            <el-date-picker v-model="formData.applyTime" type="datetime" placeholder="选择日期" style="width:100%">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
