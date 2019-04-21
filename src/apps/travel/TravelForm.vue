@@ -166,10 +166,10 @@
                             </el-cascader>
                         </td>
                         <td colspan="1">
-                            <el-input @mousewheel.native.prevent v-model.number="item.price" @input="getAmount(item)"></el-input>
+                            <el-input @mousewheel.native.prevent type="number" v-model.number="item.price" @input="getAmount(item)"></el-input>
                         </td>
                         <td colspan="1">
-                            <el-input @mousewheel.native.prevent v-model.number="item.number" @input="getAmount(item)"></el-input>
+                            <el-input @mousewheel.native.prevent type="number" v-model.number="item.number" @input="getAmount(item)"></el-input>
                         </td>
                         <td colspan="1">
                             <el-select v-model="item.currency" placeholder="" @change="currencyChange2(item,index)">
@@ -178,13 +178,13 @@
                             </el-select>
                         </td>
                         <td colspan="1">
-                            <el-input v-model="item.rate" @input="getAmount(item)"></el-input>
+                            <el-input v-model.number="item.rate" @mousewheel.native.prevent type="number" @input="getAmount(item)"></el-input>
                         </td>
                         <td colspan="1" id="moneyright">
-                            <el-input v-model="item.subtotal"></el-input>
+                            <el-input v-model.number="item.subtotal" @mousewheel.native.prevent type="number" disabled></el-input>
                         </td>
                         <td colspan="1" id="moneyright">
-                            <el-input v-model="item.principal"></el-input>
+                            <el-input v-model.number="item.principal" @mousewheel.native.prevent type="number" disabled></el-input>
                         </td>
                     </tr>
                     <tr>

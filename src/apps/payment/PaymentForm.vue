@@ -140,14 +140,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <span class="span">*</span>
                             支出说明
                         </td>
                         <td colspan="4">
                             <el-input v-model="formData.paymentExplain"></el-input>
                         </td>
                         <td>
-                            <span class="span">*</span>
                             费用归属项目
                         </td>
                         <td colspan="2">

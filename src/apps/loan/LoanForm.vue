@@ -122,10 +122,10 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model="Item.estimateRate" @input="getAmount(Item)"></el-input>
+                            <el-input v-model.number="Item.estimateRate" type="number" @mousewheel.native.prevent @input="getAmount(Item)"></el-input>
                         </td>
                         <td colspan="2">
-                            <el-input v-model="Item.estimateDomestic"></el-input>
+                            <el-input v-model="Item.estimateDomestic" disabled></el-input>
                         </td>
                     </tr>
                     <tr>
