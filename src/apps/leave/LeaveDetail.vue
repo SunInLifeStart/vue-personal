@@ -241,22 +241,6 @@ export default {
         height: 33px;
         line-height: 33px;
     }
-    .attachments {
-        margin-left: 10px;
-        width: 170px;
-        // height: 80px;
-        display: inline-block;
-        cursor: pointer;
-        p {
-            margin: 0;
-            line-height: 15px;
-            color: #606266;
-            overflow: hidden;
-            margin-right: 20px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-    }
     .audit {
         position: relative;
         margin-bottom: 10px;
