@@ -232,7 +232,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'appFlowName',
+            appFlowName: 'loan-form_loan',
             formName: 'loan_forms',
             comments: [],
             dialogVisibleCrumb: false,

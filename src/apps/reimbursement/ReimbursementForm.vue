@@ -745,9 +745,7 @@ export default {
                     data.currency == '' ||
                     data.money == '' ||
                     data.estRate == '' ||
-                    data.estSum == '' ||
-                    data.tax == '' ||
-                    data.noTax == ''
+                    data.estSum == ''
                 ) {
                     boolean = false;
                 }
@@ -769,8 +767,8 @@ export default {
                 if (this.checkBaoDetail()) {
                     this.formData.repayItems.push({
                         min: [],
-                        tax: '',
-                        noTax: '',
+                        tax: 0,
+                        noTax: 0,
                         bigTypeName: '',
                         smallTypeName: '',
                         currency:

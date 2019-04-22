@@ -204,36 +204,10 @@ export default {
         return {
             dialogFormVisible: false,
             formData: this.resetForm(),
-            appFlowName: 'loans',
+            appFlowName: 'loan-form_loan',
             organ: [],
-            submissionSelections: [
-                {
-                    id: 1111,
-                    submissionNo: '部门城堡1'
-                },
-                {
-                    id: 22222,
-                    submissionNo: '部门城堡2'
-                },
-                {
-                    id: 33333,
-                    submissionNo: '部门城堡3'
-                }
-            ],
-            travelSelections: [
-                {
-                    id: 77777,
-                    number: '出差审批单1'
-                },
-                {
-                    id: 88888,
-                    number: '出差审批单2'
-                },
-                {
-                    id: 99999,
-                    number: '出差审批单3'
-                }
-            ],
+            submissionSelections: [],
+            travelSelections: [],
             options2: [
                 {
                     value: 'C$',
