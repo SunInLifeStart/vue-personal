@@ -257,7 +257,7 @@ export default {
         },
       
         resetForm() {
-            // this.floaes()
+            this.floaes()
             let formData = {
                 submitter: this.$store.getters.LoginData.uname || '', //申请人
                 department: this.$store.getters.LoginData.oname || '', //所属部门
