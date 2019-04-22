@@ -74,17 +74,19 @@
                             {{tableData.contractNum}}
                         </td>
                     </tr>
-                    <tr>
+                    <tr v-show="decodeURI(this.$store.getters.LoginData.companyName) != '中关村协同发展投资有限公司'">
                         <td colspan="2">
                             合同类型
                         </td>
-                        <td colspan="2">
+                        <td colspan="6">
                             {{tableData.contractType}}
                         </td>
+                    </tr>
+                    <tr>
                         <td colspan="2">
                             所属项目
                         </td>
-                        <td colspan="2">
+                        <td colspan="6">
                             {{tableData.project}}
                         </td>
                     </tr>

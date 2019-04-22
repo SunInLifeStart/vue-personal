@@ -97,7 +97,7 @@
                             <el-input v-model="formData.contractNum" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                     </tr>
-                    <tr>
+                    <tr v-show="decodeURI(this.$store.getters.LoginData.companyName) != '中关村协同发展投资有限公司'">
                         <td colspan="2">
                             <span class="span">*</span>
                             合同类型
@@ -110,13 +110,18 @@
                                 <el-option label="符合招采委审批条款的合同审批" value="符合招采委审批条款的合同审批" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '合肥中关村协同产业发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '石家庄中关村协同发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村孵化器有限公司'"></el-option>
                             </el-select>
                         </td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="2">
                             <span class="span">*</span>
                             所属项目
                         </td>
-                        <td colspan="2">
+                        <td colspan="6">
                             <el-input v-model="formData.project" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
+
                     </tr>
                     <tr>
                         <td colspan="2">
