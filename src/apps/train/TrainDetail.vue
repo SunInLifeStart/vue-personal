@@ -34,6 +34,10 @@
                     </el-col>
                 </el-row>
                 <el-row>
+                     <el-col :span="8">
+                        <el-form-item label="流水号：">{{tableData.number}}
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="培训/学习(项目)：">{{tableData.trainingPrograms}}
                         </el-form-item>
