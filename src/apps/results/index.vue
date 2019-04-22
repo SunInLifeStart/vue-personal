@@ -4,8 +4,33 @@
             <el-form :inline="true" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="议题名称">
-                            <el-input v-model="params.topicName" placeholder="请输入议题名称"></el-input>
+                        <el-form-item label="项目名称">
+                            <el-input v-model="params.projectName" placeholder="请输入项目名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购项目名称">
+                            <el-input v-model="params.purchaseProjectName" placeholder="请输入采购项目名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购发起时间">
+                            <el-date-picker v-model="params.purchaseStartTime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请输入采购发起时间" style="width:100%" type="date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="单据状态">
+                            <el-select v-model="params.status" placeholder="请输入单据状态">
+                                <el-option
+                                        v-for="item in statusOption"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -132,7 +157,10 @@ export default {
             this.getList();
         },
         onReset() {
-            this.params.topicName = '';
+            this.params = {
+                pageNum: 1,
+                pageSize: 5
+            }
             this.onSubmit();
         },
         onSubmit() {
@@ -149,6 +177,9 @@ export default {
 </script>
 <style lang="scss" scoped>
     #Results {
+        .el-select {
+            width: 100%;
+        }
         .card_margin_10 {
             margin-top: 10px;
         }
@@ -159,6 +190,6 @@ export default {
 </style>
 <style scoped>
     #Results .filterForm >>> .el-form-item__content{
-        width: calc(100% - 80px);
+        width: calc(100% - 110px);
     }
 </style>

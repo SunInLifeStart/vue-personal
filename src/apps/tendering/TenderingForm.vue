@@ -9,6 +9,20 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row v-if="formData.branchlineTo === 'gmoMeeting' || formData.branchlineTo === 'partyMeeting'">
+                    <el-col :span="24">
+                        <el-form-item label="关联采购结果" prop="meetingPlace">
+                            <el-select v-model="formData.discussionContent" multiple value-key="discussionId" placeholder="请选择采购结果">
+                                <el-option
+                                        v-for="item in issueOption"
+                                        :key="item.id"
+                                        :label="item.topicName"
+                                        :value="{discussionId: item.id, discussionName: item.topicName}">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="项目名称" prop="numbers">
@@ -85,7 +99,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="招标文件(评审版)附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -97,7 +111,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="经审批的采购方案附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -173,6 +187,7 @@
                         label: '刘思雨'
                     }
                 ],
+                issueOption: [],
                 formData: this.resetForm(),
                 users: [],
                 appFlowName: "motor-trainingapplication_train",
@@ -181,10 +196,23 @@
         components: {
             FilesOperate
         },
+        mounted() {
+            this.getList();
+        },
         methods: {
             async getTableCode() {
                 let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'issuesReported' })
                 if (user) this.formData.number = user.data.content.serialNumber
+            },
+            async getList() {
+                const $self = this;
+                $self.url = "/api/v1/issuesReported/queryList";
+                let response = await $self.getQueryList();
+                if (response) {
+                    $self.issueOption = response.data.content.list;
+                } else {
+                    $self.msgTips("获取列表失败", "warning");
+                }
             },
             changePeople() {
                 this.$forceUpdate()
@@ -355,6 +383,9 @@
 </script>
 <style lang="scss" scoped>
     #TenderingForm {
+        .el-select {
+            width: 100%;
+        }
         .tableNoBorder {
             width: 100%;
             table-layout: fixed;

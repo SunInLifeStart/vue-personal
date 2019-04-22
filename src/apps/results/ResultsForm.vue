@@ -20,6 +20,34 @@
                 </el-col>
             </el-row>
             <el-row>
+                <el-col :span="24">
+                    <el-form-item label="关联采购方案" prop="meetingPlace">
+                        <el-select v-model="formData.discussionContent" multiple value-key="discussionId" placeholder="请选择采购方案">
+                            <el-option
+                                    v-for="item in issueOption"
+                                    :key="item.id"
+                                    :label="item.topicName"
+                                    :value="{discussionId: item.id, discussionName: item.topicName}">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
+                    <el-form-item label="关联招标文件" prop="meetingPlace">
+                        <el-select v-model="formData.discussionContent" multiple value-key="discussionId" placeholder="请选择招标文件">
+                            <el-option
+                                    v-for="item in issueOption"
+                                    :key="item.id"
+                                    :label="item.topicName"
+                                    :value="{discussionId: item.id, discussionName: item.topicName}">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
                 <el-col :span="22">
                     <el-form-item label="采购方式" prop="committed">
                         <el-radio-group v-model="formData.radio">
@@ -111,7 +139,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="经审批采购方案的附审资料">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -123,7 +151,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="采购报告(评标报告)的附审资料">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -214,6 +242,7 @@ export default {
                 //     { required: true, message: '请输入活动名称', trigger: 'blur' }
                 // ]
             },
+            issueOption: [],
             radioOption: [
                 {
                     value: '1',
@@ -260,6 +289,7 @@ export default {
     },
     mounted() {
         this.getResultsUser()
+        this.getList()
     },
     methods: {
         async getTableCode() {
@@ -269,6 +299,16 @@ export default {
         async getResultsUser() {
             let user = await this.getUsers("/api/v1/users")
             if (user) this.personOptions = user.data
+        },
+        async getList() {
+            const $self = this;
+            $self.url = "/api/v1/issuesReported/queryList";
+            let response = await $self.getQueryList();
+            if (response) {
+                $self.issueOption = response.data.content.list;
+            } else {
+                $self.msgTips("获取列表失败", "warning");
+            }
         },
         changePeople() {
             this.$forceUpdate()
@@ -429,6 +469,9 @@ export default {
 </script>
 <style lang="scss" scoped>
 #ResultsForm {
+    .el-select {
+        width: 100%;
+    }
     .tableNoBorder {
         width: 100%;
         table-layout: fixed;

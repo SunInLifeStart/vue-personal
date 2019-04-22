@@ -477,7 +477,7 @@
             async saveForm(params) {
                 const $self = this;
                 let response = await $self.saveFormData(
-                    "/api/v1/meetingApply/zd/save",
+                    "/api/v1/motor-procscheme/save",
                     $self.formData
                 );
                 if (response) {
