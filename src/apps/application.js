@@ -86,7 +86,24 @@ export const publicMethods = {
                             options.push(key + "=" + this.$store.getters.LoginData.oid);
                         }else if(key == "code"){
                              options.push(key + "="  + this.$store.getters.LoginData.code.split('_')[0]);
-                        }else {
+                        }else if(key == "characterLevel"){
+                            let type  = this.$store.getters.LoginData.code.split("_")[0];
+                            if(type){
+                                if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "chairman") > -1){  //董事长
+                                    options.push( "characterLevel=1");
+                                }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManager") > -1){ //总经理
+                                    options.push( "characterLevel=2");
+                                }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManagerAssistant") > -1){ //总经理助理
+                                    options.push( "characterLevel=3");
+                                }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "duptyGeneralManager") > -1){ //副总经理
+                                    options.push( "characterLevel=3");
+                                }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "deptManager") > -1){ //部门负责人
+                                    options.push( "characterLevel=4");
+                                }else{
+                                    options.push( "characterLevel=5");  
+                                }
+                            } 
+                       }else {
                             if (key.indexOf("filterButton") > -1) {
                             } else {
                                 $self.msgTips('依赖的' + key + '表单中找不到', "warning");
@@ -155,7 +172,6 @@ export const publicMethods = {
                 $self.deleteCurrentLine($self.tableData.id, "CANCEL");
             } else if($self.currentAction.name == "编辑"){
                 $self.reEditForm();
-                // $self.msgTips("开发中", "warning");
             } else if($self.currentAction.name == "打印"){
                 let url;
                 if($self.printerFormName == "outgoing_forms"){
@@ -270,7 +286,6 @@ export const publicMethods = {
             let bpmnDataCurrent = await this.$axios.get(currentNodeUrl);
             $self.flowNodeUrl = `/bpmn-viewer/view.html?url=${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0].taskDefinitionKey}`;
             $self.dialogVisibleCrumb = true;
-            console.log($self.flowNodeUrl);
         },
         msgTips(message, type) {
             this.$message({
