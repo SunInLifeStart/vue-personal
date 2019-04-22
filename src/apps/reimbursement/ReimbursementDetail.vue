@@ -446,7 +446,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'expense-form_expense',
+            appFlowName: 'expense-form_reimbursement',
             formName: 'expense_forms',
             comments: [],
             dialogVisibleCrumb: false,

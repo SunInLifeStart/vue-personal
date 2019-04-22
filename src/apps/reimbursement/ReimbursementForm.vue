@@ -413,7 +413,7 @@ export default {
             users: [],
             options_spec: [],
             selectOptions: [],
-            appFlowName: 'expense-form_expense',
+            appFlowName: 'expense-form_reimbursement',
             clearing_method: [
                 '网银',
                 '电汇',
