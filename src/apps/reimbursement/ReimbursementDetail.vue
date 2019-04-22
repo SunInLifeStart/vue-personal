@@ -13,7 +13,7 @@
 
             </el-row>
         </div>
-        <div class="formContent">
+        <div class="formContent" style="margin-top: 5px;">
             <div>
                 <el-button type="primary" @click="getFlowNode">查看流程</el-button>
             </div>
@@ -446,7 +446,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'appFlowName',
+            appFlowName: 'expense-form_expense',
             formName: 'expense_forms',
             comments: [],
             dialogVisibleCrumb: false,
@@ -571,7 +571,10 @@ export default {
         },
         rejectPut() {
             const self = this;
-            if (this.tableData.borrow.borrowId != '') {
+            if (
+                this.tableData.borrow.borrowId &&
+                this.tableData.borrow.borrowId != ''
+            ) {
                 axios
                     .put(
                         '/api/v1/expense_forms/' +
@@ -615,6 +618,7 @@ export default {
                         : response.data.borrow;
                 $self.tableData = response.data;
                 if (
+                    $self.currentAction &&
                     $self.currentAction.action &&
                     $self.currentAction.action == 'REJECT'
                 ) {

@@ -81,7 +81,7 @@
                             接待部门
                         </td>
                         <td colspan="3">
-                            <el-select v-model="formData.organ" placeholder="请选择" filterable>
+                            <el-select v-model="formData.hospitalitySector" placeholder="请选择" filterable>
                                 <el-option v-for="item in organ" :key="item.id" :label="item.name" :value="item.name">
                                 </el-option>
                             </el-select>
@@ -90,7 +90,7 @@
                             接待时间
                         </td>
                         <td colspan="3">
-                            <el-date-picker v-model="formData.cometime" type="datetime" placeholder="选择日期" style="width:100%">
+                            <el-date-picker v-model="formData.treatTime" type="datetime" placeholder="选择日期" style="width:100%">
                             </el-date-picker>
                         </td>
                     </tr>
@@ -100,19 +100,19 @@
                     <tr>
                         <td>客户单位</td>
                         <td colspan="7">
-                            <el-input v-model="formData.unit"></el-input>
+                            <el-input v-model="formData.customerUnit"></el-input>
                         </td>
                     </tr>
                     <tr>
                         <td>招待事由</td>
                         <td colspan="7">
-                            <el-input v-model="formData.reason"></el-input>
+                            <el-input v-model="formData.servedFor"></el-input>
                         </td>
                     </tr>
                     <tr>
                         <td>招待地点</td>
                         <td colspan="7">
-                            <el-input v-model="formData.position"></el-input>
+                            <el-input v-model="formData.hostingSites"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -129,23 +129,23 @@
                             客户来访人员及职务
                         </td>
                         <td colspan="3">
-                            <el-input v-model="formData.po"></el-input>
+                            <el-input v-model="formData.visitor"></el-input>
                         </td>
                     </tr>
                     <tr>
                         <td>预计人数</td>
                         <td colspan="7">
-                            <el-input v-model="formData.amount"></el-input>
+                            <el-input v-model="formData.peopleNumber"></el-input>
                         </td>
                     </tr>
                     <tr>
                         <td>预计金额
                         </td>
                         <td colspan="3">
-                            <el-input placeholder="小写" @input="moneyChange" v-model.number="formData.smallUpper" @mousewheel.native.prevent type="number"></el-input>
+                            <el-input placeholder="小写" @input="moneyChange" v-model.number="formData.amountInFigures" @mousewheel.native.prevent type="number"></el-input>
                         </td>
                         <td colspan="4">
-                            {{formData.bigUpper}}
+                            {{formData.amountInWords}}
                         </td>
                     </tr>
                     <tr>
@@ -155,9 +155,9 @@
                             是否标准内
                         </td>
                         <td colspan="7">
-                            <el-radio-group v-model="formData.allow">
-                                <el-radio :label="true">是</el-radio>
-                                <el-radio :label="false">否</el-radio>
+                            <el-radio-group v-model="formData.utype">
+                                <el-radio label="是">是</el-radio>
+                                <el-radio label="否">否</el-radio>
                             </el-radio-group>
                         </td>
                     </tr>
@@ -171,9 +171,8 @@
                             </el-upload>
                         </td>
                         <td colspan="7">
-                            <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
-                                <i class="el-icon-delete" @click.stop="deleteAttachments(item.id)"></i>
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -200,22 +199,9 @@ export default {
         return {
             dialogFormVisible: false,
             formData: this.resetForm(),
-            appFlowName: 'expenses',
+            appFlowName: 'motor-entertainmentexpense_entertainment',
             organ: [],
-            submissionSelections: [
-                {
-                    id: 1111,
-                    submissionNo: '部门城堡1'
-                },
-                {
-                    id: 22222,
-                    submissionNo: '部门城堡2'
-                },
-                {
-                    id: 33333,
-                    submissionNo: '部门城堡3'
-                }
-            ],
+            submissionSelections: [],
             travelSelections: [
                 {
                     id: 77777,
@@ -245,7 +231,9 @@ export default {
     },
     methods: {
         moneyChange() {
-            this.formData.bigUpper = this.common.DX(this.formData.smallUpper);
+            this.formData.amountInWords = this.common.DX(
+                this.formData.amountInFigures
+            );
         },
         travelChange(val) {
             this.formData.travelView = true;
@@ -352,14 +340,19 @@ export default {
                 });
         },
         setDataFromParent(data) {
+            this.getSubmissionlList();
+            this.getUsers();
+            this.organs();
             this.formData.submission = '';
             this.formData = data;
+            this.formData.people = data.accompanying.split(',');
             this.formData.submission = data.subNo;
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
         },
         createForm() {
+            this.getSubmissionlList();
             this.formData = this.resetForm();
             this.formData.submission = '';
             this.getNum();
@@ -381,16 +374,18 @@ export default {
                 creatorName: cookies.get('uname'),
                 organName: cookies.get('oname'),
                 created: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
-                cometime: '',
-                unit: '',
-                reason: '',
-                position: '',
+                hospitalitySector: '',
+                treatTime: '',
+                customerUnit: '',
+                servedFor: '',
+                accompanying: '',
+                hostingSites: '',
                 people: [],
-                po: '',
-                amount: '',
-                smallUpper: '',
-                bigUpper: '',
-                allow: true,
+                visitor: '',
+                peopleNumber: '',
+                amountInFigures: '',
+                amountInWords: '',
+                utype: '是',
                 attachments: []
             };
             return formData;
@@ -401,22 +396,30 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
-            if ($self.formData.borrowTime) {
-                $self.formData.borrowTime = moment(
-                    $self.formData.borrowTime
+            if ($self.formData.created) {
+                $self.formData.created = moment($self.formData.created).format(
+                    'YYYY-MM-DD HH:mm:ss'
+                );
+            } else {
+                $self.formData.created = '';
+            }
+            if ($self.formData.treatTime) {
+                $self.formData.treatTime = moment(
+                    $self.formData.treatTime
                 ).format('YYYY-MM-DD HH:mm:ss');
             } else {
-                $self.formData.borrowTime = '';
+                $self.formData.treatTime = '';
             }
             if (this.formData.subView == false) {
                 this.formData.subNo = this.formData.submission;
             }
+            this.formData.accompanying = this.formData.people.join(',');
             let response = await $self.saveFormData(
-                '/api/v1/expenses_forms/save',
+                '/api/v1/entertainmentExpense/save',
                 $self.formData
             );
             if (response) {
-                $self.formId = response.data.id;
+                $self.formId = response.data.content.id;
                 $self.dialogFormVisible = false;
                 if (params) {
                     $self.msgTips('提交成功', 'success');
@@ -553,29 +556,23 @@ export default {
         display: inline-block;
         cursor: pointer;
     }
-    .attachments {
-        position: relative;
-        margin-right: 30px;
-        width: 200px;
-        display: inline-block;
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
         cursor: pointer;
-        p {
-            margin: 0;
-            line-height: 20px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-right: 20px;
-        }
 
-        i {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 5px;
-            &:hover {
-                color: red;
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
             }
         }
     }

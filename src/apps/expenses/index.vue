@@ -3,21 +3,20 @@
         <el-card class="box-card">
             <div id="ExpensesFilter">
                 <el-form :inline="true" class="demo-form-inline" label-width="60px;">
-                    <!--
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="提单人">
-                                <el-input v-model="formInline.borrower" placeholder="借款人"></el-input>
+                                <el-input v-model="params.creatorName" placeholder="借款人"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="费用承担部门">
-                                <el-input v-model="formInline.borrowDept" placeholder="费用承担部门"></el-input>
+                            <el-form-item label="所属部门">
+                                <el-input v-model="params.organName" placeholder="费用承担部门"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="状态">
-                                <el-select v-model="formInline.status" placeholder="请选择">
+                                <el-select v-model="params.status" placeholder="请选择">
                                     <el-option label="已保存" value="00"></el-option>
                                     <el-option label="审核中" value="01"></el-option>
                                     <el-option label="已驳回" value="02"></el-option>
@@ -26,7 +25,6 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    -->
                     <el-row class="filterForm">
                         <!--
                         <el-col :span="8">
@@ -49,17 +47,23 @@
             </div>
             <div id="ExpensesList">
                 <el-table :data="tableData" stripe @row-click="showCurrentId">
-                    <el-table-column prop="borrower" label="提单人" align="left">
+                    <el-table-column prop="creatorName" label="提单人" align="left">
                     </el-table-column>
-                    <el-table-column prop="borrowDept" label="所属部门" align="left" min-width="100">
+                    <el-table-column prop="organName" label="所属部门" align="left" min-width="100">
                     </el-table-column>
                     <el-table-column prop="number" label="流水单号" align="left" width="150">
                     </el-table-column>
                     <el-table-column prop="status" label="单据状态" align="left">
-                    </el-table-column>
-                    <el-table-column prop="borrowTime" label="提单时间" align="left" min-width="100">
                         <template slot-scope="scope">
-                            {{scope.row.borrowTime | dateformat}}
+                            {{scope.row.status | filterStatus}}
+                            <!--
+                            {{scope.row.status == '00'? '已保存' :scope.row.status == '01' ? '审核中': scope.row.status == '02' ? '已驳回': scope.row.status == '03' ? '已撤销': scope.row.status == '04'? '已完成': ''}}
+                        -->
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="created" label="提单时间" align="left" min-width="100">
+                        <template slot-scope="scope">
+                            {{scope.row.created | dateformat}}
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">
@@ -75,7 +79,7 @@
                         </template>
                     </el-table-column>
                 </el-table>
-                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.page" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
             </div>
         </el-card>
         <br>
@@ -98,11 +102,13 @@ export default {
             searchOptions: [],
             formId: '',
             params: {
-                page: 1,
-                pageSize: 5,
-                total: 0
+                creatorName: '',
+                organName: '',
+                status: '',
+                pageNum: 1,
+                pageSize: 5
             },
-            formName: 'expenses_forms'
+            formName: 'entertainmentExpense'
         };
     },
     filters: {
@@ -146,18 +152,18 @@ export default {
             }
             this.params.options = this.searchOptions;
         },
-        async getList(page) {
+        async getList(pageNum) {
             let $self = this;
             //this.getFilter();
-            $self.url = '/api/v1/expenses_forms/query';
+            $self.url = '/api/v1/entertainmentExpense/queryList';
             let response = await $self.getQueryList();
             if (response) {
-                if (response.data.forms.length > 0) {
-                    let formId = response.data.forms[0].id;
+                if (response.data.content.list.length > 0) {
+                    let formId = response.data.content.list[0].id;
                     $self.$refs.ExpensesDetail.getFormDetails(formId);
                 }
-                $self.tableData = response.data.forms;
-                $self.params.total = response.data.totalCount;
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
             } else {
                 $self.msgTips('获取列表失败', 'warning');
             }
@@ -186,7 +192,7 @@ export default {
         },
         reloadList(params) {
             if (params == 'reload') {
-                this.params.page = 1;
+                this.params.pageNum = 1;
                 this.getList();
             } else {
                 this.$refs.ExpensesDetail.getFormDetails(params.id);
@@ -194,9 +200,9 @@ export default {
         },
 
         //分页
-        currentChange(page) {
-            this.params.page = page;
-            this.getList(page);
+        currentChange(pageNum) {
+            this.params.pageNum = pageNum;
+            this.getList(pageNum);
         },
         sizeChange(pageSize) {
             this.params.pageSize = pageSize;
@@ -206,9 +212,9 @@ export default {
             this.getList();
         },
         resetInput() {
-            // this.formInline.borrower = this.formInline.borrowDept = this.formInline.status =
-            //    '';
-            this.params.page = 1;
+            this.params.creatorName = this.params.organName = this.params.status =
+                '';
+            this.params.pageNum = 1;
             this.getList();
         }
     },

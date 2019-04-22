@@ -413,7 +413,7 @@ export default {
             users: [],
             options_spec: [],
             selectOptions: [],
-            appFlowName: 'motor-receive_articles',
+            appFlowName: 'expense-form_expense',
             clearing_method: [
                 '网银',
                 '电汇',
@@ -1425,7 +1425,7 @@ export default {
                 $self.formData
             );
             if (response) {
-                $self.formId = response.data.content;
+                $self.formId = response.data.id;
                 $self.dialogFormVisible = false;
                 if (params) {
                     $self.msgTips('提交成功', 'success');

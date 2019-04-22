@@ -28,7 +28,7 @@
                         <span :class="{titlename:tableData.subView}" @click="ViewDetail('chengbao')">{{tableData.subNo}}</span>
                     </el-col>
                 </el-row>
-                <table>
+                <table class="tablePrint" style="width: 99%; height: 100%; table-layout: fixed; word-break: break-all;margin-top:10px;">
                     <col style="width: 10%" />
                     <col style="width: 10%" />
                     <col style="width: 10%" />
@@ -67,13 +67,13 @@
                             接待部门
                         </td>
                         <td colspan="3">
-                            {{tableData.organ}}
+                            {{tableData.hospitalitySector}}
                         </td>
                         <td>
                             接待时间
                         </td>
                         <td colspan="3">
-                            {{tableData.cometime}}
+                            {{tableData.treatTime}}
                         </td>
                     </tr>
                     <tr>
@@ -82,19 +82,19 @@
                     <tr>
                         <td>客户单位</td>
                         <td colspan="7">
-                            {{tableData.unit}}
+                            {{tableData.customerUnit}}
                         </td>
                     </tr>
                     <tr>
                         <td>招待事由</td>
                         <td colspan="7">
-                            {{tableData.reason}}
+                            {{tableData.servedFor}}
                         </td>
                     </tr>
                     <tr>
                         <td>招待地点</td>
                         <td colspan="7">
-                            {{table.position}}
+                            {{tableData.hostingSites}}
                         </td>
                     </tr>
                     <tr>
@@ -102,30 +102,29 @@
                             公司参加陪同人员
                         </td>
                         <td colspan="3">
-                            {{tableData.people}}
+                            {{tableData.accompanying}}
                         </td>
                         <td>
                             客户来访人员及职务
                         </td>
                         <td colspan="3">
-                            {{tableData.po}}
+                            {{tableData.visitor}}
                         </td>
                     </tr>
                     <tr>
                         <td>预计人数</td>
                         <td colspan="7">
-                            {{tableData.amount}}
+                            {{tableData.peopleNumber}}
                         </td>
                     </tr>
                     <tr>
                         <td>预计金额
                         </td>
                         <td colspan="3">
-                            {{tableData.smallUpper}}
-                            <el-input placeholder="小写" @input="moneyChange" v-model.number="formData.smallUpper" @mousewheel.native.prevent type="number"></el-input>
+                            {{tableData.amountInFigures}}
                         </td>
                         <td colspan="4">
-                            {{tableData.bigUpper}}
+                            {{tableData.amountInWords}}
                         </td>
                     </tr>
                     <tr>
@@ -135,18 +134,18 @@
                             是否标准内
                         </td>
                         <td colspan="7">
-                            {{tableData.allow ? '是' : '否'}}
+                            {{tableData.utype}}
                         </td>
                     </tr>
                     <tr>
                         <td colspan="8" style="font-weight:bold;">附件</td>
                     </tr>
                     <tr>
-                        <td colspan="2">附件上传
+                        <td colspan="1">附件
                         </td>
-                        <td colspan="6">
-                            <div class="attachments" v-for="item in tableData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
+                        <td colspan="7">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -197,6 +196,7 @@
 import axios from 'axios';
 import Comment from '../Comment';
 import { publicMethods } from '../application.js';
+import FilesOperate from '../FilesOperate';
 export default {
     mixins: [publicMethods],
     name: 'ExpensesDetail',
@@ -209,15 +209,16 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'appFlowName',
-            formName: 'expenses_forms',
+            appFlowName: 'motor-entertainmentexpense_entertainment',
+            formName: 'entertainmentExpense',
             comments: [],
             dialogVisibleCrumb: false,
             flowNodeUrl: ''
         };
     },
     components: {
-        Comment
+        Comment,
+        FilesOperate
     },
     // mounted() {
     //     // this.getAgree()
@@ -266,14 +267,14 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url = '/api/v1/' + $self.formName + '/' + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/detail/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
-                $self.tableData = response.data;
+                $self.tableData = response.data.content;
                 $self.$emit('resetStatus', {
                     id: $self.tableData.id,
                     status: $self.tableData.status
@@ -301,22 +302,6 @@ export default {
     .titlename {
         color: #1c47f3;
         text-decoration: underline;
-    }
-    .attachments {
-        margin-left: 10px;
-        width: 170px;
-        // height: 80px;
-        display: inline-block;
-        cursor: pointer;
-        p {
-            margin: 0;
-            line-height: 15px;
-            color: #606266;
-            overflow: hidden;
-            margin-right: 20px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
     }
     .audit {
         position: relative;
