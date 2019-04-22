@@ -90,17 +90,17 @@ export const publicMethods = {
                             let type  = this.$store.getters.LoginData.code.split("_")[0];
                             if(type){
                                 if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "chairman") > -1){  //董事长
-                                    options.push( "characterLevel=1");
+                                    options.push("characterLevel=1");
                                 }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManager") > -1){ //总经理
-                                    options.push( "characterLevel=2");
+                                    options.push("characterLevel=2");
                                 }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManagerAssistant") > -1){ //总经理助理
-                                    options.push( "characterLevel=3");
+                                    options.push("characterLevel=3");
                                 }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "duptyGeneralManager") > -1){ //副总经理
-                                    options.push( "characterLevel=3");
+                                    options.push("characterLevel=3");
                                 }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "deptManager") > -1){ //部门负责人
-                                    options.push( "characterLevel=4");
+                                    options.push("characterLevel=4");
                                 }else{
-                                    options.push( "characterLevel=5");  
+                                    options.push("characterLevel=5");  
                                 }
                             } 
                        }else {
