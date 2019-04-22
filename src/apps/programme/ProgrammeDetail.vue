@@ -80,14 +80,14 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="评判办法：">{{tableData.reviewWay}}
+                        <el-form-item label="评审办法：">{{tableData.reviewWay}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="征集公告附件：" v-if="tableData.procschemeAttachmentsAnno && tableData.procschemeAttachmentsAnno.length > 0">
-                            <div v-for="item in tableData.procschemeAttachmentsAnno" :key="item.id" style="float:left">
+                        <el-form-item label="征集公告附件：" v-if="tableData.attachmentsAnno && tableData.attachmentsAnno.length > 0">
+                            <div v-for="item in tableData.attachmentsAnno" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
@@ -95,8 +95,8 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="考察报告附件：" v-if="tableData.procschemeAttachmentsIns && tableData.procschemeAttachmentsIns.length > 0">
-                            <div v-for="item in tableData.procschemeAttachmentsIns" :key="item.id" style="float:left">
+                        <el-form-item label="考察报告附件：" v-if="tableData.attachmentsIns && tableData.attachmentsIns.length > 0">
+                            <div v-for="item in tableData.attachmentsIns" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
@@ -104,8 +104,8 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="其他附件：" v-if="tableData.procschemeAttachmentsOth && tableData.procschemeAttachmentsOth.length > 0">
-                            <div v-for="item in tableData.procschemeAttachmentsOth" :key="item.id" style="float:left">
+                        <el-form-item label="其他附件：" v-if="tableData.attachmentsOth && tableData.attachmentsOth.length > 0">
+                            <div v-for="item in tableData.attachmentsOth" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>

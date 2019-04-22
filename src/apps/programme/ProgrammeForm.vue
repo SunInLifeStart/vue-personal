@@ -1,7 +1,7 @@
 <template>
     <el-dialog title="采购方案审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
         <div id="ProgrammeForm">
-            <el-form :model="formData" label-width="140px" ref="formupdate">
+            <el-form :model="formData" :rules="rules" label-width="140px" ref="formupdate">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号:">
@@ -21,14 +21,14 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购标的简述">
+                        <el-form-item label="采购标的简述" prop="purchaseSignSketch">
                             <el-input v-model="formData.purchaseSignSketch"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="采购业务类别" style="text-align: left">
+                        <el-form-item label="采购业务类别" style="text-align: left" prop="purchaseBusinessType">
                             <el-radio-group v-model="formData.purchaseBusinessType">
                                     <el-radio   v-for="item in radioOption"
                                                 :key="item.value"
@@ -41,7 +41,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="采购方案是否是规定情形">
+                        <el-form-item label="采购方案是否是规定情形" prop="purchaseSchemeSign">
                             <el-radio-group v-model="formData.purchaseSchemeSign">
                                 <el-radio key="1" value="1" label="是"></el-radio>
                                 <el-radio key="2" value="2" label="否"></el-radio>
@@ -49,13 +49,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购发起时间">
+                        <el-form-item label="采购发起时间" prop="purchaseStartTime">
                             <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.purchaseStartTime" style="width:100%" type="datetime">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购主责部门">
+                        <el-form-item label="采购主责部门" prop="purchaseDeptName">
                             <el-select
                                     value-key="id"
                                     v-model="formData.purchaseDeptName">
@@ -71,12 +71,12 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="采购预估金额(元)">
+                        <el-form-item label="采购预估金额(元)" prop="estimatedAmount">
                             <el-input v-model="formData.estimatedAmount"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="目标成本/预算金融(元)">
+                        <el-form-item label="目标成本/预算金融(元)" prop="budgetAmount">
                             <el-input v-model="formData.budgetAmount"></el-input>
                         </el-form-item>
                     </el-col>
@@ -124,7 +124,7 @@
                 </table>
                 <el-row>
                     <el-col :span="18">
-                        <el-form-item label="采购方式">
+                        <el-form-item label="采购方式" prop="purchaseWay">
                             <el-radio-group v-model="formData.purchaseWay" @change="changePurchaseWay">
                                 <el-radio key="1" value="1" label="公开招标"></el-radio>
                                 <el-radio key="2" value="2" label="邀请招标"></el-radio>
@@ -140,7 +140,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="10">
-                        <el-form-item label="实施主体">
+                        <el-form-item label="实施主体" prop="executor">
                             <el-radio-group v-model="formData.executor">
                                 <el-radio key="1" value="1" label="自主实施"></el-radio>
                                 <el-radio key="2" value="2" label="代理机构实施"></el-radio>
@@ -150,7 +150,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="18">
-                        <el-form-item label="评审/谈判机构">
+                        <el-form-item label="评审/谈判机构" prop="negotiateAgent">
                             <el-radio-group v-model="formData.negotiateAgent" @change="changeNegotiateAgent">
                                 <el-radio key="1" value="1" label="评标委员会"></el-radio>
                                 <el-radio key="2" value="2" label="评审谈判小组"></el-radio>
@@ -165,7 +165,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="评审/谈判名单">
+                        <el-form-item label="评审/谈判名单" prop="negotiateLeader">
                             <el-row>
                                 <el-col :span="8">
                                     <el-select
@@ -201,7 +201,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="评判办法">
+                        <el-form-item label="评判办法" prop="reviewWay">
                             <el-input v-model="formData.reviewWay"></el-input>
                         </el-form-item>
                     </el-col>
@@ -213,24 +213,24 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="征集公告附件">
+                        <el-form-item label="征集公告附件" prop="attachmentsAnno">
                             <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
-                            <div v-for="item in formData.procschemeAttachmentsAnno" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'procschemeAttachmentsAnno')"></FilesOperate>
+                            <div v-for="item in formData.attachmentsAnno" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'attachmentsAnno')"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="考察报告附件">
+                        <el-form-item label="考察报告附件" prop="attachmentsIns">
                             <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
-                            <div v-for="item in formData.procschemeAttachmentsIns" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'procschemeAttachmentsIns')"></FilesOperate>
+                            <div v-for="item in formData.attachmentsIns" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'attachmentsIns')"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -241,8 +241,8 @@
                             <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
-                            <div v-for="item in formData.procschemeAttachmentsOth" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'procschemeAttachmentsOth')"></FilesOperate>
+                            <div v-for="item in formData.attachmentsOth" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'attachmentsOth')"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
@@ -268,6 +268,58 @@
         data() {
             return {
                 dialogFormVisible: false,
+                rules: {
+                    projectName: [
+                        { required: true, message: '请输入项目名称', trigger: 'blur' }
+                    ],
+                    purchaseProjectName: [
+                        { required: true, message: '请输入采购项目名称', trigger: 'blur' }
+                    ],
+                    purchaseSignSketch: [
+                        { required: true, message: '请输入采购标的简述', trigger: 'blur' }
+                    ],
+                    purchaseBusinessType: [
+                        { required: true, message: '请输入采购业务类别', trigger: 'blur' }
+                    ],
+                    purchaseSchemeSign: [
+                        { required: true, message: '请输入采购方案是否是规定情形', trigger: 'blur' }
+                    ],
+                    purchaseStartTime: [
+                        { type: 'date', required: true, message: '请输入采购发起时间', trigger: 'blur' }
+                    ],
+                    purchaseDeptName: [
+                        { required: true, message: '请输入采购主责部门', trigger: 'change' }
+                    ],
+                    estimatedAmount: [
+                        { required: true, message: '请输入采购预估金额'},
+                        { type: 'number', message: '年龄必须为数字值'}
+                    ],
+                    budgetAmount: [
+                        { required: true, message: '请输入目标成本/预算金融'},
+                        { type: 'number', message: '年龄必须为数字值'}
+                    ],
+                    purchaseWay: [
+                        { required: true, message: '请输入采购方式', trigger: 'blur' }
+                    ],
+                    executor: [
+                        { required: true, message: '请输入实施主体', trigger: 'blur' }
+                    ],
+                    negotiateAgent: [
+                        { required: true, message: '请输入评审/谈判机构', trigger: 'blur' }
+                    ],
+                    reviewWay: [
+                        { required: true, message: '请输入评审办法', trigger: 'blur' }
+                    ],
+                    attachmentsAnno: [
+                        { type: 'array', required: true, message: '请输入征集公告附件', trigger: 'blur' }
+                    ],
+                    attachmentsIns: [
+                        { type: 'array', required: true, message: '请输入考察报告附件', trigger: 'blur' }
+                    ],
+                    procschemeProvider: [
+                        { type: 'array', required: true, message: '请输入供应商入围情况', trigger: 'blur' }
+                    ],
+                },
                 radioOption: [
                     {
                         value: '1',
@@ -368,10 +420,9 @@
                     projectName: '',
                     purchaseProjectName: '',
                     purchaseSignSketch: '',
-                    purchaseBusinessType: '',
+                    purchaseBusinessType: '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
                     purchaseSchemeSign: '是',
                     purchaseStartTime: '',
-                    purchaseDeptName: {},
                     estimatedAmount: 0,
                     budgetAmount: 0,
                     procschemeProvider: [{}],
@@ -384,9 +435,9 @@
                     negotiatePersonnel: [],
                     reviewWay: '',
                     otherCase: '',
-                    procschemeAttachmentsAnno: [],
-                    procschemeAttachmentsIns: [],
-                    procschemeAttachmentsOth: []
+                    attachmentsAnno: [],
+                    attachmentsIns: [],
+                    attachmentsOth: []
                 }
                 return formData
             },
@@ -466,7 +517,7 @@
                 const self = this;
                 if (response.length > 0) {
                     response.forEach(function(item) {
-                        self.formData.procschemeAttachmentsAnno.push(item);
+                        self.formData.attachmentsAnno.push(item);
                     });
                 }
                 this.$refs.uploadAnno.clearFiles();
@@ -475,7 +526,7 @@
                 const self = this;
                 if (response.length > 0) {
                     response.forEach(function(item) {
-                        self.formData.procschemeAttachmentsIns.push(item);
+                        self.formData.attachmentsIns.push(item);
                     });
                 }
                 this.$refs.uploadIns.clearFiles();
@@ -484,7 +535,7 @@
                 const self = this;
                 if (response.length > 0) {
                     response.forEach(function(item) {
-                        self.formData.procschemeAttachmentsOth.push(item);
+                        self.formData.attachmentsOth.push(item);
                     });
                 }
                 this.$refs.uploadOth.clearFiles();
