@@ -109,8 +109,11 @@
                     </tr>
                     <tr v-for="(Item,index) in this.formData.borrows" :key="Item.index" @contextmenu.prevent="deleteItem(Item,index)">
                         <td>
+                            <el-input v-model="Item.bigType"></el-input>
+                            <!--
                             <el-cascader :options="getclass" change-on-select v-model="Item.purpose1" :props="{value:'name',label:'name'}">
                             </el-cascader>
+                            -->
                         </td>
                         <td>
                             <el-input type="number" @mousewheel.native.prevent v-model.number="Item.loanAmount" @input="getAmount(Item)"></el-input>
@@ -173,9 +176,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p class="titlename" :title="item.name">{{item.name}}</p>
-                                <i class="el-icon-delete" @click.stop="deleteAttachments"></i>
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -428,7 +430,7 @@ export default {
             let loanmessage = true;
             for (let data of this.formData.borrows) {
                 if (
-                    !data.purpose1[0] ||
+                    data.bigType == '' ||
                     data.loanAmount == '' ||
                     data.estimateRate == ''
                 ) {
@@ -450,6 +452,7 @@ export default {
                             ? 1
                             : this.formData.borrows[0].estimateRate,
                     purpose1: [],
+                    bigType: '',
                     purpose: '',
                     loanAmount: '',
                     estimateDomestic: '',
@@ -561,9 +564,11 @@ export default {
             this.getSubmissionlList();
             this.formData.travelPeople = '';
             this.formData.submission = '';
+            /** 
             for (let item of data.borrows) {
                 item.purpose1 = item.bigType.split(',');
             }
+            */
             this.formData = data;
             this.formData.travelPeople = data.busNo;
             this.formData.submission = data.subNo;
@@ -603,6 +608,7 @@ export default {
                         loanAmount: '',
                         estimateDomestic: '',
                         purpose1: [],
+                        bigType: '',
                         purpose: '',
                         id: ''
                     }
@@ -656,9 +662,11 @@ export default {
             if (this.formData.subView == false) {
                 this.formData.subNo = this.formData.submission;
             }
+            /** 
             for (let data of this.formData.borrows) {
                 data.bigType = data.purpose1.join(',');
             }
+            */
             let response = await $self.saveFormData(
                 '/api/v1/loan_forms/save',
                 $self.formData
@@ -794,36 +802,23 @@ export default {
     table tr:nth-child(even) {
         background: #fff;
     }
-    .upload {
-        position: relative;
-        margin-right: 30px;
-        // width: 100px;
-        display: inline-block;
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
         cursor: pointer;
-    }
-    .attachments {
-        position: relative;
-        margin-right: 30px;
-        width: 200px;
-        display: inline-block;
-        cursor: pointer;
-        p {
-            margin: 0;
-            line-height: 20px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-right: 20px;
-        }
 
-        i {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 5px;
-            &:hover {
-                color: red;
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
             }
         }
     }
