@@ -114,14 +114,233 @@
                     </el-col>
                     
                 </el-row>
+                <table class="tableNoBorders">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="学习及培训经历" prop="">
+                                <!-- <div style="float: right;">
+                                    <span @click="addItem('personal')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                 </div> -->
+                                <el-table :data="tableData.requestedItems" border style="width: 100%; margin-top: 5px;" >
+                                    <el-table-column prop="" label="起止时间(年月)">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.content"></el-input>
+                                            <!-- <el-date-picker v-model="scope.row.qizhi" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                            </el-date-picker> -->
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="毕业院校/培训机构">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.content"></el-input>
+                                        </template>
+                                    </el-table-column>
+                                
+                                    <el-table-column prop="" label="所学专业/培训项目">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.fileNum" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="所得学历">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.fileNum" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="所得学位">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.fileNum" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="就读方式">
+                                        <template slot-scope="scope">
+                                            <!-- <el-input v-model="scope.row.fileNum" ></el-input> -->
+                                            <el-radio v-model="scope.row.lendOutType" label="true">统招</el-radio>
+                                            <el-radio v-model="scope.row.lendOutType" label="false">自费</el-radio>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                                
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="工作经历" prop="">
+                                <!-- <tr v-for="(item,index) in tableData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                                </tr> -->
+                               <!-- <div style="float: right;">
+                                    <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                 </div> -->
+                                <el-table :data="tableData.attendingDepartment" border style="width: 100%; margin-top: 5px;" >
+                                    <el-table-column prop="" label="起止时间">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.department"></el-input>
+                                            <!-- <el-date-picker v-model="scope.row.departmentime" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                            </el-date-picker> -->
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="公司名称">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.department"></el-input>
+                                        </template>
+                                    </el-table-column>
+                                
+                                    <el-table-column prop="" label="职位名称">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.department" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="离职原因">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.department" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="证明人及联系电话">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.department" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="职责简述">
+                                        <template slot-scope="scope">
+                                           <el-input v-model="scope.row.department" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="技能" prop="">
+                                <el-input type="textarea" placeholder="请描述可证明你专业能力的业绩,例如曾参与过具有挑战性的项目" v-model="tableData.creatorNames" ></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="家庭关系" prop="">
+                                <!-- <tr v-for="(item,index) in tableData.sitIn" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
+                                   
+                                </tr> -->
+                                <!-- <div style="float: right;">
+                                    <span @click="addItem('sitIn')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                 </div> -->
+                                <el-table :data="tableData.sitIn" border style="width: 100%; margin-top: 5px;" >
+                                    <el-table-column prop="" label="姓名">
+                                        <template slot-scope="scope">
+                                            <!-- <el-input v-model="scope.row.people"></el-input> -->
+                                             <el-select style="width:100%;" clearable v-model="scope.row.useItems" placeholder="请选择">
+                                                <el-option
+                                                    v-for="item in onOption"
+                                                    :key="item.value"
+                                                    :label="item.label"
+                                                    :value="item.value">
+                                                </el-option>
+                                            </el-select>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="出生年月">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.people"></el-input>
+                                        </template>
+                                    </el-table-column>
+                                
+                                    <el-table-column prop="" label="居住地">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.people" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="工作单位">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.people" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="联系电话">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.people" ></el-input>
+                                        </template>
+                                    </el-table-column>
+                                    <el-table-column prop="" label="备注">
+                                        <template slot-scope="scope">
+                                           <el-input v-model="scope.row.people" placeholder=""></el-input>
+                                        </template>
+                                    </el-table-column>
+                                </el-table>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </table>
                 <el-row>
-                    <!-- <el-col :span="24">
+                    <el-col :span="24">
                         <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
+                    </el-col>
+                </el-row>
+                 <el-row v-if="tableData.postApproval!=''" >
+                     <el-col :span="24">
+                         <h1 style="text-align:center">拟聘人员信息</h1>
+                    </el-col>
+                     <!-- <el-col :span="8">
+                        <el-form-item label="电子邮箱：">{{tableData.conferenceTitle}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="日常交通方式：">{{tableData.conferenceTitle}}
+                        </el-form-item>
                     </el-col> -->
+                    <el-col :span="12">
+                        <el-form-item label="姓名:" >
+                            <!-- .postApproval -->
+                            {{tableData.shengao}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="性别:">
+                           {{tableData.xuexing}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="定岗:">
+                           {{tableData.xuexing}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="部门:">
+                           {{tableData.xuexing}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="职级:">
+                           {{tableData.xuexing}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="薪酬:">
+                           {{tableData.xuexing}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="定岗:">
+                           {{tableData.xuexing}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="定岗:">
+                           {{tableData.xuexing}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="试用期(月):">
+                           {{tableData.xuexing}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="试用期薪酬标准(%):">
+                           {{tableData.xuexing}}
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
@@ -344,6 +563,10 @@
         .crumbList {
             margin: 15px 0px;
         }
+    }
+    .tableNoBorders{
+        width: 1100px;
+        max-width: 1100px;
     }
     .fullScreen {
         position: fixed;

@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="入职审批" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+    <el-dialog title="入职审批" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="95%" style="text-align: center;">
         <div id="ProcessingForm">
             <el-form :model="formData"  :rules="rules" label-width="100px" ref="formData">
                 <el-row>
@@ -8,10 +8,13 @@
                             <el-input v-model="formData.number"></el-input>
                         </el-form-item>
                     </el-col> -->
-                   <el-col :span="8">
+                    <el-col :span="12">
+                        <el-form-item label="申请岗位" prop="gangwei">
+                           <el-input v-model="formData.gangwei" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                   <el-col :span="12">
                         <el-form-item label="填表日期" prop="">
-                            <!-- <el-date-picker v-model="formData.committed" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
-                            </el-date-picker> -->
                             <el-input v-model="formData.committed" ></el-input>
                         </el-form-item>
                     </el-col>
@@ -66,10 +69,14 @@
                     </el-col>
                     <el-col :span="8">
                        <el-form-item label="婚姻状况">
-                            <!-- <el-input v-model="formData.organNames" ></el-input> -->
-                             <el-checkbox-group v-model="formData.hunyin">
+                            <el-radio-group v-model="formData.hunyin">
+                                <el-radio :label="1">未婚</el-radio>
+                                <el-radio :label="2">已婚</el-radio>
+                                <el-radio :label="3">离异</el-radio>
+                            </el-radio-group>
+                             <!-- <el-checkbox-group v-model="formData.hunyin">
                                 <el-checkbox v-for="city in checkListsone" :label="city" :key="city">{{city}}</el-checkbox>
-                            </el-checkbox-group>
+                            </el-checkbox-group> -->
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -103,10 +110,13 @@
                     </el-col>
                     <el-col :span="8">
                        <el-form-item label="日常交通方式">
-                            <!-- <el-input v-model="formData.organNames" ></el-input> -->
-                            <el-checkbox-group v-model="formData.jiaotong">
+                            <el-radio-group v-model="formData.jiaotong">
+                                <el-radio :label="1">自驾</el-radio>
+                                <el-radio :label="2">公共交通</el-radio>
+                            </el-radio-group>
+                             <!-- <el-checkbox-group v-model="formData.jiaotong">
                                 <el-checkbox v-for="city in checkListstwo" :label="city" :key="city">{{city}}</el-checkbox>
-                            </el-checkbox-group>
+                            </el-checkbox-group> -->
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -139,14 +149,18 @@
                         <el-col :span="24">
                             <el-form-item label="学习及培训经历" prop="">
                                 <div style="float: right;">
-                                    <span @click="addItem('personal')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                  <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem('personal')" style="margin-right: 5px;"></el-button>
+                                  <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('personal')"></el-button>
                                  </div>
-                                <el-table :data="formData.requestedItems" border style="width: 100%; margin-top: 5px;" >
+                                <el-table :data="formData.requestedItems" border style="width: 100%; margin-top: 5px;"
+                                    @selection-change="handleSelectionChangeone"
+                                     >
+                                     <el-table-column type="selection" width="70px"></el-table-column>
                                     <el-table-column prop="" label="起止时间(年月)">
                                         <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.content"></el-input> -->
-                                            <el-date-picker v-model="scope.row.qizhi" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
-                                            </el-date-picker>
+                                            <el-input v-model="scope.row.content"></el-input>
+                                            <!-- <el-date-picker v-model="scope.row.qizhi" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                            </el-date-picker> -->
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="毕业院校/培训机构">
@@ -154,8 +168,7 @@
                                             <el-input v-model="scope.row.content"></el-input>
                                         </template>
                                     </el-table-column>
-                                
-                                    <el-table-column prop="" label="所学专业/培训项目">
+                                  <el-table-column prop="" label="所学专业/培训项目">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.fileNum" ></el-input>
                                         </template>
@@ -172,30 +185,30 @@
                                     </el-table-column>
                                     <el-table-column prop="" label="就读方式">
                                         <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.fileNum" ></el-input> -->
-                                            <el-radio v-model="scope.row.lendOutType" label="true">统招</el-radio>
+                                           <el-radio v-model="scope.row.lendOutType" label="true">统招</el-radio>
                                             <el-radio v-model="scope.row.lendOutType" label="false">自费</el-radio>
                                         </template>
                                     </el-table-column>
                                 </el-table>
-                                
-                            </el-form-item>
+                           </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="工作经历" prop="">
-                                <!-- <tr v-for="(item,index) in formData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
-                                </tr> -->
                                <div style="float: right;">
-                                    <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                    <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem('message')" style="margin-right: 5px;"></el-button>
+                                  <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('message')"></el-button>
                                  </div>
-                                <el-table :data="formData.attendingDepartment" border style="width: 100%; margin-top: 5px;" >
+                                <el-table :data="formData.attendingDepartment" border style="width: 100%; margin-top: 5px;" 
+                                    @selection-change="handleSelectionChangetwo"
+                                   >
+                                   <el-table-column type="selection" width="70px"></el-table-column>
                                     <el-table-column prop="" label="起止时间">
                                         <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.department"></el-input> -->
-                                            <el-date-picker v-model="scope.row.departmentime" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
-                                            </el-date-picker>
+                                            <el-input v-model="scope.row.department"></el-input>
+                                            <!-- <el-date-picker v-model="scope.row.departmentime" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                            </el-date-picker> -->
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="公司名称">
@@ -203,7 +216,6 @@
                                             <el-input v-model="scope.row.department"></el-input>
                                         </template>
                                     </el-table-column>
-                                
                                     <el-table-column prop="" label="职位名称">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.department" ></el-input>
@@ -238,13 +250,14 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="家庭关系" prop="">
-                                <!-- <tr v-for="(item,index) in formData.sitIn" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
-                                   
-                                </tr> -->
                                 <div style="float: right;">
-                                    <span @click="addItem('sitIn')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                     <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem('sitIn')" style="margin-right: 5px;"></el-button>
+                                  <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('sitIn')"></el-button>
                                  </div>
-                                <el-table :data="formData.sitIn" border style="width: 100%; margin-top: 5px;" >
+                                <el-table :data="formData.sitIn" border style="width: 100%; margin-top: 5px;" 
+                                    @selection-change="handleSelectionChangethree"
+                                    >
+                                    <el-table-column type="selection" width="70px"></el-table-column>
                                     <el-table-column prop="" label="姓名">
                                         <template slot-scope="scope">
                                             <!-- <el-input v-model="scope.row.people"></el-input> -->
@@ -263,8 +276,7 @@
                                             <el-input v-model="scope.row.people"></el-input>
                                         </template>
                                     </el-table-column>
-                                
-                                    <el-table-column prop="" label="居住地">
+                                  <el-table-column prop="" label="居住地">
                                         <template slot-scope="scope">
                                             <el-input v-model="scope.row.people" ></el-input>
                                         </template>
@@ -296,8 +308,63 @@
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                             </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                 <el-row v-if="formData.postApproval!=''">
+                     <el-col :span="24">
+                         <h1 style="text-align:center">拟聘人员信息</h1>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="姓名:" >
+                            <el-input v-model="formData.postApproval.shengao" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="性别:">
+                            <el-input v-model="formData.postApproval.xuexing" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="定岗:">
+                           <el-input v-model="formData.postApproval.xuexing" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="部门:">
+                           <el-input v-model="formData.postApproval.xuexing" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="职级:">
+                           <el-input v-model="formData.xuexing" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="薪酬:">
+                           <el-input v-model="formData.xuexing" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="定岗:">
+                           <el-input v-model="formData.xuexing" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="定岗:">
+                           <el-input v-model="formData.xuexing" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="试用期(月):">
+                           <el-input v-model="formData.xuexing" ></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                       <el-form-item label="试用期薪酬标准(%):">
+                           <el-input v-model="formData.xuexing" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -325,6 +392,9 @@
                 checkListsone:['未婚','已婚','离异'],
                 checkListstwo:['自驾','公共交通'],
                 rules: {
+                    gangwei: [
+                        { required: true, message: '请输入岗位', trigger: 'blur' }
+                    ],
                     creatorNamesone: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
                     ],
@@ -343,12 +413,7 @@
                      hukou: [
                         { required: true, message: '请输入户口', trigger: 'blur' }
                     ],
-                     creatorNamesone: [
-                        { required: true, message: '请输入姓名', trigger: 'blur' }
-                    ],
-                     creatorNamesone: [
-                        { required: true, message: '请输入姓名', trigger: 'blur' }
-                    ],
+                    
                     number: [
                         { required: true, message: '请输入流水号', trigger: 'blur' }
                     ],
@@ -387,9 +452,11 @@
                         label: '女儿'
                     },
                 ],
-                personOptions: [],
                 formData: this.resetForm(),
                 users: [],
+                selectionItemstwo:[],
+                selectionItemsone:[],
+                selectionItemsthree:[],
                 uploadId: 0,
                 formLabelWidth: '120px',
                 appFlowName: "motor-meetingApply_application-meeting",
@@ -403,17 +470,19 @@
             
         },
         mounted() {
-            this.getDiscussionUser()
+           
         },
         methods: {
-            async getDiscussionUser() {
-                let user = await this.getUsers("/api/v1/users")
-                if (user) this.personOptions = user.data
+            handleSelectionChangeone(selection) {
+                this.selectionItemsone = selection;
             },
-            changePeople() {
-                this.$forceUpdate()
+            handleSelectionChangetwo(selection) {
+                this.selectionItemstwo = selection;
             },
-            deleteItem(item, index, type) {
+            handleSelectionChangethree(selection) {
+                this.selectionItemstwo = selection;
+            },
+           deleteItem(item, index, type) {
                 this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                     if (type == 'message' && this.formData.attendingDepartment.length > 1) {
                         this.formData.attendingDepartment.splice(index, 1);
@@ -431,31 +500,21 @@
             },
             addItem(type) {
                 if (type == 'message') {
+                    // 工作经历
                     this.formData.attendingDepartment.push({});
                 } else if (type == 'personal') {
+                    // 学习及培训经历
                     this.formData.requestedItems.push({})
                 } else if (type == 'sitIn') {
+                    // 家庭关系
                     this.formData.sitIn.push({})
                 }
             },
-            getId(id) {
-                let self = this;
-                self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                    self.formData.attachments.forEach(function(value, index) {
-                        if (value.id == id) {
-                            axios
-                                .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
-                                .then(res => {
-                                    self.formData.attachments.splice(index, 1);
-                                });
-                            self.formData.attachments.splice(index, 1);
-                        }
-                    });
-                });
-            },
+            
             resetForm() {
                 let formData =  {
                     creatorNamesone:"",
+                    gangwei:"",
                     sex:"",
                     chusheng:"",
                     minzu:"",
@@ -486,6 +545,10 @@
                         // people: "",
                         // department: ''
                     }],
+                    postApproval:{
+                        shengao:'111',
+                        xuexing:"222"
+                    },
                     branchlineTo: '',
                     businessType: '',
                     created: '',
@@ -545,11 +608,8 @@
             saveFormValidate(type) {
                 this.$refs['formData'].validate(valid => {
                     if (valid) {
-                        if (this.formData.attendingDepartment[0].people && this.formData.attendingDepartment[0].people.length > 0) {
-                            this.saveForm(type);
-                        } else {
-                            this.msgTips("请添加参会人员", "error");
-                        }
+                         this.saveForm(type);
+                       
                     }
                 });
             },
