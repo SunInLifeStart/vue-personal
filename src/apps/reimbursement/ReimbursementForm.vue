@@ -378,9 +378,8 @@
                             </el-upload>
                         </td>
                         <td colspan="7">
-                            <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
-                                <i class="el-icon-delete" @click.stop="deleteAttachments(item.id)"></i>
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                             </div>
                         </td>
                     </tr>

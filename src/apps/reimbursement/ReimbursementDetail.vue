@@ -1,5 +1,5 @@
 <template>
-    <div id="ExpenseDetail">
+    <div id="ReimbursementDetail">
         <!-- <el-steps :active="crumb.index" finish-status="success">
             <el-step :title="item.name" :key="item.id" v-for="item in crumb.items"></el-step>
         </el-steps> -->
@@ -322,9 +322,8 @@
                     <tr>
                         <td class="fontBold">附件信息</td>
                         <td colspan="7">
-                            <div class="attachments" v-for="item in tableData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
-                                <!-- <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate> -->
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -393,9 +392,10 @@ import Comment from '../Comment';
 import moment from 'moment';
 import cookies from 'js-cookie';
 import { publicMethods } from '../application.js';
+import FilesOperate from '../FilesOperate';
 export default {
     mixins: [publicMethods],
-    name: 'ExpenseDetail',
+    name: 'ReimbursementDetail',
     data() {
         return {
             tableData: {
@@ -454,7 +454,8 @@ export default {
         };
     },
     components: {
-        Comment
+        Comment,
+        FilesOperate
     },
     // mounted() {
     //     // this.getAgree()
@@ -647,7 +648,7 @@ export default {
 };
 </script>
 <style lang="scss" scope>
-#ExpenseDetail {
+#ReimbursementDetail {
     .formContent {
         flex: 1;
         height: 100%;
@@ -655,26 +656,21 @@ export default {
         overflow-y: auto;
         padding: 15px 30px;
     }
+    .tablePrint td,
+    .tablePrint th {
+        padding: 0px;
+        margin: 0px;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-size: 13px;
+        height: 35px;
+        text-align: center;
+    }
     .titlename {
         color: #1c47f3;
         text-decoration: underline;
     }
-    .attachments {
-        margin-left: 10px;
-        width: 170px;
-        // height: 80px;
-        display: inline-block;
-        cursor: pointer;
-        p {
-            margin: 0;
-            line-height: 15px;
-            color: #606266;
-            overflow: hidden;
-            margin-right: 20px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-    }
+
     .audit {
         position: relative;
         margin-bottom: 10px;
