@@ -5,14 +5,12 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人" prop="creatorName">
-                           
                             <el-input v-model="formData.creatorName" placeholder="请输入申请人" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="部门" prop="organName">
-                            
-                             <el-input v-model="formData.organName" placeholder="请输入部门" :disabled="true"></el-input>
+                            <el-input v-model="formData.organName" placeholder="请输入部门" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -83,8 +81,7 @@
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
                                         <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
-                                            <!-- @getId="getId" -->
-                                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachmentsone(scope.$index)"></FilesOperate>
+                                           <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachmentsone(scope.$index)"></FilesOperate>
                                         </div>
                                     </template>
                                      
@@ -100,21 +97,8 @@
                         </el-form-item>
                     </el-col>
                </el-row>
-               <!-- <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                                <i class="el-icon-plus"></i>
-                            </el-upload>
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,download:true,del:true}" @getId="getId"></FilesOperate>
-                            </div>
-                        </el-form-item>
-                    </el-col>
-                </el-row> -->
-            </el-form>
-            
-        </div>
+           </el-form>
+       </div>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
             <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
@@ -242,20 +226,16 @@ export default {
                     if(this.formData.cardPrinting[i].printNumber){
                         totalCount += this.formData.cardPrinting[i].printNumber;
                     }
-                
                 }
                 this.formData.allPrintNumber=totalCount
                 return totalCount
         },
         deleteAttachmentsone(index) {
-            //  debugger
-            let $self = this;
+           let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
                  $self.formData.cardPrinting[index].attachments.splice(0, 1);
-                
             });
         },
-        
         setDataFromParent(data) {
             this.formData = data;
             this.formId = data.id;
@@ -292,19 +272,12 @@ export default {
                 proposerId: '',
                 applyDeptId: '',
                 creatorName: cookies.get('uname'),
-                // organName: cookies.get('oname'),
                 supplyCode: '',//资产类型-流程判断
                 inbuget: true,
             };
             return formData;
         },
-
-        saveFormValidate(type) {
-            // if (this.formData.plan && this.formData.budget) {
-            //     this.formData.inbuget = true;
-            // } else {
-            //     this.formData.inbuget = false;
-            // }
+         saveFormValidate(type) {
             let compare = true;
             for (let data of this.formData.cardPrinting) {
                 if (
@@ -374,18 +347,15 @@ export default {
             row.index = rowIndex;
         },
          show(row, event, column){
-            //  debugger
             this.uploadImageType=row.index
         },
         handleSuccess(response, file,fileList) {
-            // debugger
             const self = this;
             const aaa=self.uploadImageType
             const bbb=self.formData.cardPrinting[aaa]
             if (response.length > 0) {
                 response.forEach(function (item,index) {
-                    // self.formData.attachments.push(item);
-                    self.formData.cardPrinting[aaa].attachments.push(item);
+                   self.formData.cardPrinting[aaa].attachments.push(item);
                 });
             }
             this.$refs.upload.clearFiles();
@@ -395,9 +365,7 @@ export default {
         },
         handlePreview() { },
         handleRemove() { },
-
-
-        //获取申请人列表
+         //获取申请人列表
         getUsers() {
             axios.get('/api/v1/users').then(res => {
                 this.payeePeople = res.data;
@@ -416,8 +384,7 @@ export default {
                 this.formData.organName = this.payeeOrgan[0].name;
             }
         },
-      
-        addItem() {
+       addItem() {
             this.formData.cardPrinting.push({
                 id: '',
                 fileName: '',
@@ -433,24 +400,9 @@ export default {
         deleteItem() {
             const self = this;
             if (self.selectionItems.length > 0) {
-                self
-                    .$confirm('是否删除?', '提示', { type: 'warning' })
-                    .then(() => {
+                self.$confirm('是否删除?', '提示', { type: 'warning' }) .then(() => {
                         self.selectionItems.forEach(function (oData) {
-                            // if (oData.id == '') {
-                            //     self.formData.cardPrinting.forEach(function (
-                            //         item,
-                            //         index
-                            //     ) {
-                            //         if (item.count == oData.count) {
-                            //             self.formData.cardPrinting.splice(index, 1);
-                            //         }
-                            //     });
-                            // } else {
-                                axios
-                                    .get(
-                                        '/api/v1/documentPrinting/delete/' + self.formData.id+'/'+oData.index,
-                                        '',
+                                axios.get('/api/v1/documentPrinting/delete/' + self.formData.id+'/'+oData.index,'',
                                         {
                                             headers: {
                                                 'Content-type':
@@ -459,15 +411,9 @@ export default {
                                         }
                                     )
                                     .then(res => {
-                                        self.formData.cardPrinting.forEach(function (
-                                            item,
-                                            index
-                                        ) {
+                                        self.formData.cardPrinting.forEach(function (item,index) {
                                             if (item.index == oData.index) {
-                                                self.formData.cardPrinting.splice(
-                                                    index,
-                                                    1
-                                                );
+                                                self.formData.cardPrinting.splice(index,1);
                                                 self.$message({
                                                     message: '删除成功',
                                                     type: 'success'
@@ -481,7 +427,6 @@ export default {
                                             type: 'error'
                                         });
                                     });
-                            // }
                         });
                     });
             }
@@ -489,52 +434,10 @@ export default {
         handleSelectionChange(selection) {
             this.selectionItems = selection;
         },
-        getId(id) {
-            const self = this;
-            if (this.formData.attachments.length > 0) {
-                this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
-                    () => {
-                        const params = {
-                            id: id
-                        };
-                        axios
-                            .get(
-                                '/api/v1/documentPrinting/deleteAttachment/' + id,
-                                '',
-                                {
-                                    headers: {
-                                        'Content-type': 'application/json'
-                                    }
-                                }
-                            )
-                            .then(res => {
-                                self.formData.attachments.forEach(function (
-                                    item,
-                                    index
-                                ) {
-                                    if (item.id == id) {
-                                        self.formData.attachments.splice(
-                                            index,
-                                            1
-                                        );
-                                    }
-                                });
-                            })
-                            .catch(function () {
-                                self.$message({
-                                    message: '操作失败',
-                                    type: 'error'
-                                });
-                            });
-                    }
-                );
-            }
-        },
+        
     },
     watch: {
-        'formData.lowercase'(val) {
-            this.formData.upper = val ? this.convertCurrency(val) : "";
-        }
+       
     }
 };
 </script>
