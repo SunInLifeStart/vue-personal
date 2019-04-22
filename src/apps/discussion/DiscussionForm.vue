@@ -172,25 +172,7 @@ export default {
             rules: {
                 branchlineTo: [
                     { required: true, message: '请输入会议类型', trigger: 'blur' }
-                ],
-                // timeApplication: [
-                //     { required: true, message: '请输入提请时间', trigger: 'blur' }
-                // ],
-                // creatorName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // organName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // applyDepartment: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // timeApplication: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // topicName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ]
+                ]
             },
             uploadId: 0,
             person: [],

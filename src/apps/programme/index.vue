@@ -1,11 +1,36 @@
 <template>
     <div id="Programme">
         <el-card class="box-card">
-            <el-form :inline="true" :model="params" class="demo-form-inline">
+            <el-form :inline="true" label-width="100px"  label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="项目名称">
                             <el-input v-model="params.projectName" placeholder="请输入项目名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购项目名称">
+                            <el-input v-model="params.purchaseProjectName" placeholder="请输入采购项目名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购发起时间">
+                            <el-date-picker v-model="params.purchaseStartTime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请输入采购发起时间" style="width:100%" type="date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="单据状态">
+                            <el-select v-model="params.status" placeholder="请输入单据状态">
+                                <el-option
+                                        v-for="item in statusOption"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -25,13 +50,13 @@
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
                 <el-table-column prop="projectName" label="项目名称">
                 </el-table-column>
-                <el-table-column prop="creatorName" label="招标项目名称">
+                <el-table-column prop="purchaseProjectName" label="采购项目名称">
                 </el-table-column>
-                <el-table-column prop="organName" label="招标人">
+                <el-table-column prop="purchaseSignSketch" label="采购标的简述">
                 </el-table-column>
-                <el-table-column prop="committed" label="预计金额">
+                <el-table-column prop="purchaseSchemeSign" label="采购方案是否是规定情形">
                 </el-table-column>
-                <el-table-column prop="meetingPlace" label="标的简述">
+                <el-table-column prop="purchaseStartTime" label="采购发起时间">
                 </el-table-column>
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
@@ -70,6 +95,28 @@
                     pageSize: 5,
                     total: 0
                 },
+                statusOption: [
+                    {
+                        value: '00',
+                        label: '已保存'
+                    },
+                    {
+                        value: '01',
+                        label: '审核中'
+                    },
+                    {
+                        value: '02',
+                        label: '已驳回'
+                    },
+                    {
+                        value: '03',
+                        label: '已撤销'
+                    },
+                    {
+                        value: '04',
+                        label: '已完成'
+                    }
+                ],
                 dialogFormVisibleProgramme: false,
                 searchBoardOptions: [],
                 formBoardId: '',
@@ -129,7 +176,10 @@
                 this.getList();
             },
             onReset() {
-                this.params.projectName = '';
+                this.params = {
+                    pageNum: 1,
+                    pageSize: 5
+                }
                 this.onSubmit();
             },
             onSubmit() {
@@ -147,6 +197,9 @@
 </script>
 <style lang="scss" scoped>
     #Programme {
+        .el-select {
+            width: 100%;
+        }
         .card_margin_10 {
             margin-top: 10px;
         }
@@ -157,6 +210,6 @@
 </style>
 <style scoped>
     #Programme .filterForm >>> .el-form-item__content{
-        width: calc(100% - 80px);
+        width: calc(100% - 110px);
     }
 </style>
