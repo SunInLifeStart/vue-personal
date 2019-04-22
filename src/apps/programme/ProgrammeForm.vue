@@ -30,11 +30,12 @@
                     <el-col :span="24">
                         <el-form-item label="采购业务类别" style="text-align: left" prop="purchaseBusinessType">
                             <el-radio-group v-model="formData.purchaseBusinessType">
-                                    <el-radio   v-for="item in radioOption"
-                                                :key="item.value"
+                                <div v-for="item in radioOption">
+                                    <el-radio   :key="item.value"
                                                 :value="item.value"
                                                 :label="item.label">
                                     </el-radio>
+                                </div>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
@@ -72,12 +73,12 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="采购预估金额(元)" prop="estimatedAmount">
-                            <el-input v-model="formData.estimatedAmount"></el-input>
+                            <el-input v-model.number="formData.estimatedAmount"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="目标成本/预算金融(元)" prop="budgetAmount">
-                            <el-input v-model="formData.budgetAmount"></el-input>
+                            <el-input v-model.number="formData.budgetAmount"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -284,9 +285,9 @@
                     purchaseSchemeSign: [
                         { required: true, message: '请输入采购方案是否是规定情形', trigger: 'blur' }
                     ],
-                    purchaseStartTime: [
-                        { type: 'date', required: true, message: '请输入采购发起时间', trigger: 'blur' }
-                    ],
+                    // purchaseStartTime: [
+                    //     { type: 'date', required: true, message: '请输入采购发起时间', trigger: 'blur' }
+                    // ],
                     purchaseDeptName: [
                         { required: true, message: '请输入采购主责部门', trigger: 'change' }
                     ],
@@ -350,7 +351,7 @@
                 users: [],
                 userOptions: [],
                 organsOptions: [],
-                appFlowName: "motor-trainingapplication_train",
+                appFlowName: "motor-procscheme",
             };
         },
         components: {

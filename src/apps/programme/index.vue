@@ -125,7 +125,7 @@
                 formBoardId: '',
                 dialogBoardFormId: '',
                 operationBoardType: 'create',
-                formName:"meetingApply/zd",
+                formName:"motor-procscheme",
                 statusNews: ''
             };
         },
@@ -163,7 +163,7 @@
             },
             async getList() {
                 const $self = this;
-                $self.url = "/api/v1/motor-procscheme/queryList";
+                $self.url = "/api/v1/motor-procscheme/query";
                 let response = await $self.getQueryList();
                 if (response) {
                     if (response.data.content.list.length > 0) {
