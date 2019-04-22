@@ -201,8 +201,6 @@ export const publicMethods = {
                         }else{
                             $self.currentAction.options = [$self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value];
                         }
-
-
                     }else{
                         $self.currentAction[item.labelName] = item.checkedValue;
                     }
@@ -304,7 +302,7 @@ export const publicMethods = {
         },
 
 
-        //以下方法关于ntko创建,以及编辑文件文件
+        //以下方法关于ntko创建,以及编辑文件
         openData(url) {
             let $self = this;
             if (process.env.NODE_ENV === 'production') {
