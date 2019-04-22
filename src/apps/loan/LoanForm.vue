@@ -171,7 +171,7 @@
                     <tr>
                         <td class="bolder" colspan="2" style="padding-left:50px">
                             <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                                <span class="span1">*</span> 附件上传
+                                附件上传
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                         </td>

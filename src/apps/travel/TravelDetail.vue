@@ -143,7 +143,23 @@
                         </td>
 
                     </tr>
-
+                    <tr>
+                        <td colspan="8" style="font-weight:bold;">预算、资金计划信息</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            是否资金计划内
+                        </td>
+                        <td colspan="3">
+                            {{tableData.fundPlan ? '是': '否'}}
+                        </td>
+                        <td>
+                            是否预算内
+                        </td>
+                        <td colspan="3">
+                            {{tableData.est ? '是': '否'}}
+                        </td>
+                    </tr>
                     <tr>
                         <td colspan="2">合计金额</td>
                         <td colspan="6">

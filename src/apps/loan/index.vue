@@ -64,6 +64,12 @@
                         </template>
                     </el-table-column>
                     <el-table-column prop="status" label="单据状态" align="left">
+                        <template slot-scope="scope">
+                            {{scope.row.status | filterStatus}}
+                            <!--
+                            {{scope.row.status == '00'? '已保存' :scope.row.status == '01' ? '审核中': scope.row.status == '02' ? '已驳回': scope.row.status == '03' ? '已撤销': scope.row.status == '04'? '已完成': ''}}
+                        -->
+                        </template>
                     </el-table-column>
                     <el-table-column prop="borrowTime" label="借款时间" align="left" min-width="100">
                         <template slot-scope="scope">
@@ -74,10 +80,10 @@
                         <template slot-scope="scope">
                             <!--v-if="scope.row.status == '00' || scope.row.status == '02'"-->
                             <!--v-if="scope.row.status == '00'"-->
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>

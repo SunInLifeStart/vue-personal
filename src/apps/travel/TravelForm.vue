@@ -194,10 +194,34 @@
                             <p @click="addItem('fenDetaill')">插入</p>
                         </td>
                     </tr>
+
                     <tr>
                         <td colspan="2">合计金额</td>
                         <td colspan="6">
                             {{this.formData.estimate.length ==0 ? '￥': this.formData.estimate[0].currency.value}} {{this.formData.total}} （金额大写:({{this.formData.estimate.length ==0 ? '人民币': this.formData.estimate[0].currency.label}} ): {{this.formData.upper}})
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" style="font-weight:bold;">预算、资金计划信息</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            是否资金计划内
+                        </td>
+                        <td colspan="3">
+                            <el-radio-group v-model="formData.fundPlan">
+                                <el-radio :label="true">是</el-radio>
+                                <el-radio :label="false">否</el-radio>
+                            </el-radio-group>
+                        </td>
+                        <td>
+                            是否预算内
+                        </td>
+                        <td colspan="3">
+                            <el-radio-group v-model="formData.est">
+                                <el-radio :label="true">是</el-radio>
+                                <el-radio :label="false">否</el-radio>
+                            </el-radio-group>
                         </td>
                     </tr>
                     <tr>
@@ -761,6 +785,8 @@ export default {
                 day: '',
                 travelType: '',
                 submissionId: '',
+                est: false,
+                fundPlan: false,
                 submissionName: '',
                 submitter: cookies.get('uname'),
                 subOrganName: cookies.get('oname'),
