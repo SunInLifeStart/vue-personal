@@ -285,8 +285,8 @@
                             <span class="span">*</span>
                             累计付款比例（%）</td>
                         <td>
-                            <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativeProShow" disabled class="money"></el-input>
-                            <el-input v-else v-model="formData.contract.cumulativeProShow" class="money" @input="getReal()"></el-input>
+                            <el-input v-if="this.moneyType=='1'" type="number" @mousewheel.native.prevent v-model.number="formData.contract.cumulativeProShow" disabled class="money"></el-input>
+                            <el-input v-else @mousewheel.native.prevent type="number" v-model.number="formData.contract.cumulativeProShow" class="money" @input="getReal()"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -294,8 +294,8 @@
                             <span class="span">*</span>
                             本次付款后累计支付比例（%）</td>
                         <td>
-                            <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativeAfterShow" disabled class="money"></el-input>
-                            <el-input v-else v-model="formData.contract.cumulativeAfterShow" class="money" @input="getReal()"></el-input>
+                            <el-input v-if="this.moneyType=='1'" @mousewheel.native.prevent type="number" v-model.number="formData.contract.cumulativeAfterShow" disabled class="money"></el-input>
+                            <el-input v-else @mousewheel.native.prevent type="number" v-model.number="formData.contract.cumulativeAfterShow" class="money" @input="getReal()"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -369,9 +369,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div class="attachments" v-for="item in formData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
-                                <i class="el-icon-delete" @click.stop="deleteAttachments"></i>
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -391,6 +390,7 @@ import cookies from 'js-cookie';
 import FilesOperate from '../FilesOperate';
 import { application } from '../application.js';
 import { publicMethods } from '../application.js';
+import { truncate } from 'fs';
 export default {
     mixins: [publicMethods],
     name: 'PaymentForm',
@@ -496,6 +496,11 @@ export default {
                     for (let data of res.data.content[0].children) {
                         response.push(this.interatorData(data));
                     }
+                    response.push({
+                        id: 565655656565,
+                        name: '支出土地保证金(土地款)',
+                        children: null
+                    });
                     this.getclass = response;
                 })
                 .catch(function() {
@@ -1122,6 +1127,9 @@ export default {
                 sub: 'true',
                 capitalYes: true,
                 budgetYes: true,
+                beyondContract: false,
+                landExpense: false,
+                beyondMoney: false,
                 numericalOrder: '', //流水号
                 allocation: '否', //分摊
                 organ: cookies.get('oname'),
@@ -1236,6 +1244,23 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
+            let boolean = false;
+            for (let data of this.formData.details) {
+                if (data.type[0] == '支出土地保证金(土地款)') {
+                    boolean = true;
+                }
+            }
+            this.formData.landExpense = boolean;
+            if (parseFloat(this.formData.contract.cumulativeAfterShow) > 1) {
+                this.formData.beyondContract = true;
+            } else {
+                this.formData.beyondContract = false;
+            }
+            if (parseFloat(this.formData.contract.payAmount) > 10000000) {
+                this.formData.beyondMoney = true;
+            } else {
+                this.formData.beyondMoney = false;
+            }
             if ($self.formData.applicantTime) {
                 $self.formData.applicantTime = moment(
                     $self.formData.applicantTime
@@ -1402,29 +1427,30 @@ export default {
     table tr:nth-child(even) {
         background: #fff;
     }
-    .attachments {
+    .upload {
         position: relative;
         margin-right: 30px;
-        width: 200px;
+        // width: 100px;
         display: inline-block;
         cursor: pointer;
-        p {
-            margin: 0;
-            line-height: 20px;
-            color: #606266;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            margin-right: 20px;
-        }
+    }
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
 
-        i {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 5px;
-            &:hover {
-                color: red;
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
             }
         }
     }

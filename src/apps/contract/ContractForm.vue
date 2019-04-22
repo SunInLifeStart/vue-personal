@@ -443,7 +443,10 @@ export default {
         getNo() {
             const self = this;
             let params = {
-                code: 'contract_forms'
+                code: 'contract_forms',
+                companyName: decodeURI(
+                    this.$store.getters.LoginData.companyName
+                )
             };
             axios
                 .post('/synergy-common/serialNumber/getByTableCode', params)
