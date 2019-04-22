@@ -6,21 +6,21 @@
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
-                    <span v-for="action in actions" :key="action.type" class="btnList" @click="doAction(action)">
+                    <span v-for="action in actions" :key="action.index" style="margin-left: 10px;" class="btnList" @click="doAction(action)">
                         {{action.name}}
                     </span>
                 </div>
 
             </el-row>
         </div>
-        <div class="formContent" style="margin-top: 5px;">
+        <div class="formContent" style="margin-top: 5px;margin-left:10px;overflow:auto;">
             <div>
                 <el-button type="primary" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
-                <h2 style="text-align: center;">报销审批单</h2>
-                <el-row style="margin-top: 25px;">
+                <h4 style="text-align: center;">报销审批单</h4>
+                <el-row style="margin-top: 20px;">
                     <el-col :span="7">
                         <el-form-item label="单据编号：">
                             <span style="font-size:10px">
@@ -648,6 +648,13 @@ export default {
 </script>
 <style lang="scss" scope>
 #ExpenseDetail {
+    .formContent {
+        flex: 1;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 15px 30px;
+    }
     .titlename {
         color: #1c47f3;
         text-decoration: underline;
