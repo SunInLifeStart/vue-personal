@@ -6,12 +6,12 @@
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="提单人">
-                                <el-input v-model="params.creatorName" placeholder="借款人"></el-input>
+                                <el-input v-model="params.creatorName" placeholder="提单人"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="所属部门">
-                                <el-input v-model="params.organName" placeholder="费用承担部门"></el-input>
+                                <el-input v-model="params.organName" placeholder="所属部门"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
