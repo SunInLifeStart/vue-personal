@@ -268,6 +268,7 @@ export default {
                 options: [],
                 orderBy: "created"
             }
+            this.getList();
         }
     },
     mounted() {
