@@ -15,6 +15,7 @@
                         <el-form-item label="流水单号：">{{formData.number}}
                         </el-form-item>
                     </el-col>
+                    <!--
                     <el-col :span="8">
                         <el-form-item label="出差类型：" :required="true">
                             <el-select v-model="formData.travelType" :required="true" placeholder="选择出差类型" @change="SubmissionChange">
@@ -23,6 +24,7 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
+                    -->
                     <el-col :span="8">
                         <el-form-item label="呈报件：" :required="true" label-width="30px;">
                             <el-select v-model="submission" clearable filterable placeholder="选择呈报件" allow-create @change="SubmissionChange">
@@ -234,7 +236,7 @@ export default {
         return {
             dialogFormVisible: false,
             formData: this.resetForm(),
-            appFlowName: 'motor-trainingapplication_train',
+            appFlowName: 'travel-form_travel',
             submission: '',
             submissionSelections: [],
             typeoption: ['市内', '市外'],
@@ -806,7 +808,6 @@ export default {
                 });
             } else if (
                 this.formData.submission == '' ||
-                this.formData.travelType == '' ||
                 this.formData.subOrganName == '' ||
                 this.formData.reason == '' ||
                 this.checkTravelMessage() == false ||

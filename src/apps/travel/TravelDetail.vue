@@ -157,9 +157,8 @@
                             <!-- </el-upload> -->
                         </td>
                         <td colspan="6">
-                            <div class="attachments" v-for="item in tableData.attachments" :key="item.id" @click="downloadFile(item)">
-                                <p :title="item.name">{{item.name}}</p>
-                                <!-- <i class="el-icon-delete" @click.stop="deleteAttachment(item.id)"></i> -->
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -229,6 +228,7 @@
 import axios from 'axios';
 import Comment from '../Comment';
 import { publicMethods } from '../application.js';
+import FilesOperate from '../FilesOperate';
 export default {
     mixins: [publicMethods],
     name: 'TravelDetail',
@@ -254,7 +254,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'appFlowName',
+            appFlowName: 'travel-form_travel',
             formName: 'travel_forms',
             comments: [],
             dialogVisibleCrumb: false,
@@ -262,7 +262,8 @@ export default {
         };
     },
     components: {
-        Comment
+        Comment,
+        FilesOperate
     },
     // mounted() {
     //     // this.getAgree()
@@ -350,22 +351,6 @@ export default {
     .titlename {
         color: #1c47f3;
         text-decoration: underline;
-    }
-    .attachments {
-        margin-left: 10px;
-        width: 170px;
-        // height: 80px;
-        display: inline-block;
-        cursor: pointer;
-        p {
-            margin: 0;
-            line-height: 15px;
-            color: #606266;
-            overflow: hidden;
-            margin-right: 20px;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
     }
     .audit {
         position: relative;
