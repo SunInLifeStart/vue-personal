@@ -575,6 +575,7 @@ export default {
                 borrowDept: cookies.get('oname'),
                 creatorName: cookies.get('uname'),
                 borrower: cookies.get('uname'),
+                borrowerId: cookies.get('uid'),
                 borrows: [
                     {
                         currency: '人民币',
@@ -635,6 +636,11 @@ export default {
             }
             if (this.formData.subView == false) {
                 this.formData.subNo = this.formData.submission;
+            }
+            for (let item of this.users) {
+                if (item.name == this.formData.borrower) {
+                    this.formData.borrowerId = item.id;
+                }
             }
             /** 
             for (let data of this.formData.borrows) {
