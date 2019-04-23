@@ -129,30 +129,30 @@
                                 <el-table :data="tableData.studyExperience" border style="width: 100%; margin-top: 5px;" >
                                     <el-table-column prop="" label="起止时间(年月)">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.fromTo"></el-input>
+                                            <el-input v-model="scope.row.fromTo" disabled></el-input>
                                             <!-- <el-date-picker v-model="scope.row.fromTo" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
                                             </el-date-picker> -->
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="毕业院校/培训机构">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.graduateTnstitution"></el-input>
+                                            <el-input v-model="scope.row.graduateTnstitution" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                 
                                     <el-table-column prop="" label="所学专业/培训项目">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.major" ></el-input>
+                                            <el-input v-model="scope.row.major" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="所得学历">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.educationBackground" ></el-input>
+                                            <el-input v-model="scope.row.educationBackground" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="所得学位">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.degree" ></el-input>
+                                            <el-input v-model="scope.row.degree" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="就读方式">
@@ -177,35 +177,35 @@
                                 <el-table :data="tableData.workExperience" border style="width: 100%; margin-top: 5px;" >
                                     <el-table-column prop="" label="起止时间">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.fromTo"></el-input>
+                                            <el-input v-model="scope.row.fromTo" disabled></el-input>
                                             <!-- <el-date-picker v-model="scope.row.fromTo" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
                                             </el-date-picker> -->
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="公司名称">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.companyName"></el-input>
+                                            <el-input v-model="scope.row.companyName" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                 
                                     <el-table-column prop="" label="职位名称">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.jobTitle" ></el-input>
+                                            <el-input v-model="scope.row.jobTitle" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="离职原因">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.reasonToLeave" ></el-input>
+                                            <el-input v-model="scope.row.reasonToLeave" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="证明人及联系电话">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.referenceNumber" ></el-input>
+                                            <el-input v-model="scope.row.referenceNumber" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="职责简述">
                                         <template slot-scope="scope">
-                                           <el-input v-model="scope.row.JobDescription" ></el-input>
+                                           <el-input v-model="scope.row.jobDescription" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -213,9 +213,8 @@
                         </el-col>
                     </el-row>
                     <el-row>
-                        <el-col :span="24">
-                            <el-form-item label="技能" prop="">
-                                <el-input type="textarea" placeholder="请描述可证明你专业能力的业绩,例如曾参与过具有挑战性的项目" v-model="tableData.creatorNames" ></el-input>
+                          <el-col :span="24">
+                            <el-form-item label="技能：">{{tableData.skill}}
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -231,7 +230,7 @@
                                 <el-table :data="tableData.familyTies" border style="width: 100%; margin-top: 5px;" >
                                     <el-table-column prop="" label="称谓">
                                         <template slot-scope="scope">
-                                            <el-select style="width:100%;" clearable v-model="scope.row.appellation" placeholder="请选择">
+                                            <el-select style="width:100%;" clearable v-model="scope.row.appellation"  disabled placeholder="请选择">
                                                 <el-option
                                                     v-for="item in onOption"
                                                     :key="item.value"
@@ -243,33 +242,33 @@
                                     </el-table-column>
                                     <el-table-column prop="" label="姓名">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.name"></el-input>
+                                            <el-input v-model="scope.row.name" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="出生年月">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.birthday"></el-input>
+                                            <el-input v-model="scope.row.birthday" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                 
                                     <el-table-column prop="" label="居住地">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.placeOfAbode" ></el-input>
+                                            <el-input v-model="scope.row.placeOfAbode" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="工作单位">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.workUnit" ></el-input>
+                                            <el-input v-model="scope.row.workUnit" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="联系电话">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.contactNumber" ></el-input>
+                                            <el-input v-model="scope.row.contactNumber" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="备注">
                                         <template slot-scope="scope">
-                                           <el-input v-model="scope.row.remark" placeholder=""></el-input>
+                                           <el-input v-model="scope.row.remark" placeholder="" disabled></el-input>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -286,7 +285,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                 <el-row v-if="tableData.positionsWage!=''" >
+                 <el-row v-if="tableData.positionsWage && tableData.positionsWage!=''" >
                      <el-col :span="24">
                          <h1 style="text-align:center">拟聘人员信息</h1>
                     </el-col>
@@ -386,6 +385,28 @@
         name: 'ProcessingDetail',
         data() {
             return {
+                onOption: [
+                    {
+                        value: '父亲',
+                        label: '父亲'
+                    },
+                    {
+                        value: '母亲',
+                        label: '母亲'
+                    },
+                    {
+                        value: '配偶',
+                        label: '配偶'
+                    },
+                     {
+                        value: '儿子',
+                        label: '儿子'
+                    },
+                    {
+                        value: '女儿',
+                        label: '女儿'
+                    },
+                ],
                 tableData: {},
                 actions: [],
                 actionsDialogArr: [],
@@ -423,8 +444,8 @@
         },
         studyingWayone: function(data) {
                 let xmlJson = {
-                    "1":"自费",
-                    "0" :"统招",
+                    1:"自费",
+                    0 :"统招",
                 };
                 return xmlJson[data];
         },

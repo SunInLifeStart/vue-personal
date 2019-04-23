@@ -228,7 +228,7 @@
                                     </el-table-column>
                                     <el-table-column prop="" label="职责简述">
                                         <template slot-scope="scope">
-                                           <el-input v-model="scope.row.JobDescription" ></el-input>
+                                           <el-input v-model="scope.row.jobDescription" ></el-input>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -304,7 +304,10 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="照片及附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload"
+                             :on-success="handleSuccess"
+                              :on-preview="handlePreview" 
+                              :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -313,7 +316,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                 <el-row v-if="formData.positionsWage==''">
+                 <el-row v-if="formData.positionsWage!=''">
                      <el-col :span="24">
                          <h1 style="text-align:center">拟聘人员信息</h1>
                     </el-col>
@@ -472,6 +475,7 @@
         },
         watch: {
         },
+        // props: ['formId', 'operationType'],
         mounted() {
          },
         methods: {
@@ -485,20 +489,52 @@
                 this.selectionItemsthree = selection;
             },
            deleteItem(item, index, type) {
-                this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                    if (type == 'message' && this.formData.workExperience.length > 1) {
-                        this.formData.workExperience.splice(index, 1);
-                    } else if (type == 'personal' && this.formData.studyExperience.length > 1) {
-                        this.formData.studyExperience.splice(index, 1);
-                    } else if (type == 'sitIn' && this.formData.familyTies.length > 1) {
-                        this.formData.familyTies.splice(index, 1);
-                    } else {
-                        this.$message({
-                            message: '最后一组不能删除',
-                            type: 'error'
+                // this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                //     if (type == 'message' && this.formData.workExperience.length > 1) {
+                //         this.formData.workExperience.splice(index, 1);
+                //     } else if (type == 'personal' && this.formData.studyExperience.length > 1) {
+                //         this.formData.studyExperience.splice(index, 1);
+                //     } else if (type == 'sitIn' && this.formData.familyTies.length > 1) {
+                //         this.formData.familyTies.splice(index, 1);
+                //     } else {
+                //         this.$message({
+                //             message: '最后一组不能删除',
+                //             type: 'error'
+                //         });
+                //     }
+                // });
+                const self = this;
+            if (self.selectionItemsone.length > 0) {
+                self.$confirm('是否删除?', '提示', { type: 'warning' }) .then(() => {
+                        self.selectionItemsone.forEach(function (oData) {
+                                axios.get('/api/v1/examinationApproval/delete/' + self.formData.id+'/'+oData.index+'/'+'1','',
+                                        {
+                                            headers: {
+                                                'Content-type':
+                                                    'application/json'
+                                            }
+                                        }
+                                    )
+                                    .then(res => {
+                                        self.formData.cardPrinting.forEach(function (item,index) {
+                                            if (item.index == oData.index) {
+                                                self.formData.cardPrinting.splice(index,1);
+                                                self.$message({
+                                                    message: '删除成功',
+                                                    type: 'success'
+                                                });
+                                            }
+                                        });
+                                    })
+                                    .catch(function () {
+                                        self.$message({
+                                            message: '操作失败',
+                                            type: 'error'
+                                        });
+                                    });
                         });
-                    }
-                });
+                    });
+            }
             },
             addItem(type) {
                 if (type == 'message') {
@@ -544,7 +580,7 @@
                         jobTitle:"",
                         reasonToLeave:"",
                         referenceNumber:"",
-                        JobDescription:""
+                        jobDescription:""
                     }],
                     //学习经历
                     studyExperience: [{
@@ -586,6 +622,7 @@
                 return formData
             },
             setDataFromParent(data) {
+                this.formData = data;
                 this.formId = data.id;
                 this.dialogFormVisible = true;
                 this.createForm_status = false;
@@ -609,7 +646,7 @@
                     $self.formData
                 );
                 if (response) {
-                    $self.formId = response.data.content.id;
+                   $self.formId = response.data.content.id;
                     $self.dialogFormVisible = false;
                     if (params) {
                         $self.msgTips("提交成功", "success");
@@ -643,10 +680,10 @@
                 }
             },
             handleSuccess(response, file) {
-                const self = this;
+                 const self = this;
                 if (response.length > 0) {
                     response.forEach(function(item) {
-                        self.formData.attachments.push(item);
+                       self.formData.attachments.push(item);
                     });
                 }
                 this.$refs.upload.clearFiles();
