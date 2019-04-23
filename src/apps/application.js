@@ -99,6 +99,8 @@ export const publicMethods = {
                                     options.push("characterLevel=3");
                                 } else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "deptManager") > -1) { //部门负责人
                                     options.push("characterLevel=4");
+                                }else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "deputyManager") > -1) { //副部门长负责人
+                                    options.push("characterLevel=4");
                                 } else {
                                     options.push("characterLevel=5");
                                 }
