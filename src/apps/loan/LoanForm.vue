@@ -155,6 +155,29 @@
                         </td>
                     </tr>
                     <tr>
+                        <td colspan="8" style="font-weight:bold;">预算、资金计划信息</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            是否资金计划内
+                        </td>
+                        <td colspan="3">
+                            <el-radio-group v-model="formData.fundPlan">
+                                <el-radio :label="true">是</el-radio>
+                                <el-radio :label="false">否</el-radio>
+                            </el-radio-group>
+                        </td>
+                        <td>
+                            是否预算内
+                        </td>
+                        <td colspan="3">
+                            <el-radio-group v-model="formData.est">
+                                <el-radio :label="true">是</el-radio>
+                                <el-radio :label="false">否</el-radio>
+                            </el-radio-group>
+                        </td>
+                    </tr>
+                    <tr>
                         <td class="bolder" width="10%" colspan="2">
                             <span class="span1">*</span>结算方式</td>
                         <td colspan="4">
@@ -571,6 +594,8 @@ export default {
                 busId: '',
                 busNo: '',
                 dx: '',
+                fundPlan: false,
+                est: false,
                 number: '',
                 borrowDept: cookies.get('oname'),
                 creatorName: cookies.get('uname'),

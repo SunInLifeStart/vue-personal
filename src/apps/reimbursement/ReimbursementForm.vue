@@ -478,34 +478,8 @@ export default {
             borrowPerson: [],
             travelPeople: '',
             submission: '',
-            submissionSelections: [
-                {
-                    id: 1111,
-                    submissionNo: '部门城堡1'
-                },
-                {
-                    id: 22222,
-                    submissionNo: '部门城堡2'
-                },
-                {
-                    id: 33333,
-                    submissionNo: '部门城堡3'
-                }
-            ],
-            travelSelections: [
-                {
-                    id: 77777,
-                    number: '出差审批单1'
-                },
-                {
-                    id: 88888,
-                    number: '出差审批单2'
-                },
-                {
-                    id: 99999,
-                    number: '出差审批单3'
-                }
-            ],
+            submissionSelections: [],
+            travelSelections: [],
             changeTotal: 0,
             travelList: []
         };
@@ -1429,9 +1403,8 @@ export default {
                 if (params) {
                     $self.msgTips('提交成功', 'success');
                     if (this.createForm_status) {
-                        let data = $self.startSignalForStart('reload');
+                        let data = await $self.startSignalForStart('reload');
                         if (data) {
-                            debugger;
                             $self.emitMessage();
                             $self.updateBorrow($self.formId);
                         }

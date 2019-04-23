@@ -128,6 +128,26 @@
                         </td>
                     </tr>
                     <tr>
+                        <td colspan="8" style="font-weight:bold;">预算、资金计划信息</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            是否资金计划内
+                        </td>
+                        <td colspan="3">
+                            {{tableData.fundPlan ? '是': '否'}}
+                        </td>
+                        <td>
+                            是否预算内
+                        </td>
+                        <td colspan="3">
+                            {{tableData.est ? '是': '否'}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="8" class="fontBold">借款信息</td>
+                    </tr>
+                    <tr>
                         <td class="bolder" width="10%" colspan="2">结算方式</td>
                         <td colspan="4">
                             {{tableData.settlement}}
