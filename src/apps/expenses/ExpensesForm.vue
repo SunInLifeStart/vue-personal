@@ -225,6 +225,7 @@ export default {
         FilesOperate
     },
     mounted() {
+        console.log(this.$store.getters.LoginData.Role);
         this.getUsers();
         this.organs();
         // this.getTravelList();
@@ -399,13 +400,10 @@ export default {
                 this.formData.submission != ''
             ) {
                 if (typee) {
+                    let arr = this.$store.getters.LoginData.Role.split(',');
                     if (
-                        (this.$store.getters.LoginData.Role.indexOf(
-                            typee + '_' + 'chairman'
-                        ) > -1 ||
-                            this.$store.getters.LoginData.Role.indexOf(
-                                typee + '_' + 'generalManager'
-                            ) > -1) &&
+                        (arr.includes(typee + '_' + 'chairman') ||
+                            arr.includes(typee + '_' + 'generalManager')) &&
                         parseFloat(this.formData.amountInFigures) <= 2000
                     ) {
                         $self.msgTips(
@@ -413,12 +411,12 @@ export default {
                             'warning'
                         );
                     } else if (
-                        (this.$store.getters.LoginData.Role.indexOf(
+                        (arr.includes(
                             typee + '_' + 'generalManagerAssistant'
-                        ) > -1 ||
-                            this.$store.getters.LoginData.Role.indexOf(
+                        ) ||
+                            arr.includes(
                                 typee + '_' + 'duptyGeneralManager'
-                            ) > -1) &&
+                            )) &&
                         parseFloat(this.formData.amountInFigures) <= 1000
                     ) {
                         $self.msgTips(
