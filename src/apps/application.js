@@ -95,17 +95,18 @@ export const publicMethods = {
                         } else if (key == "characterLevel") {
                             let type = this.$store.getters.LoginData.code.split("_")[0];
                             if (type) {
-                                if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "chairman") > -1) {  //董事长
+                                let arr = this.$store.getters.LoginData.Role.split(',');
+                                if (arr.includes(type + "_" + "chairman")) {  //董事长
                                     options.push("characterLevel=1");
-                                } else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManager") > -1) { //总经理
+                                } else if (arr.includes(type + "_" + "generalManager")) { //总经理
                                     options.push("characterLevel=2");
-                                } else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManagerAssistant") > -1) { //总经理助理
+                                } else if (arr.includes(type + "_" + "generalManagerAssistant")) { //总经理助理
                                     options.push("characterLevel=3");
-                                } else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "duptyGeneralManager") > -1) { //副总经理
+                                } else if (arr.includes(type + "_" + "duptyGeneralManager")) { //副总经理
                                     options.push("characterLevel=3");
-                                } else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "deptManager") > -1) { //部门负责人
+                                } else if (arr.includes(type + "_" + "deptManager")) { //部门负责人
                                     options.push("characterLevel=4");
-                                }else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "deputyManager") > -1) { //副部门长负责人
+                                }else if (arr.includes(type + "_" + "deputyManager")) { //副部门长负责人
                                     options.push("characterLevel=4");
                                 } else {
                                     options.push("characterLevel=5");
