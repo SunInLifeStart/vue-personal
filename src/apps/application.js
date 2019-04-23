@@ -51,7 +51,7 @@ export const publicMethods = {
                 await this.emitMessage();
             }
         },
-        async startSignalForStart() {
+        async startSignalForStart(type) {
             await this.startSignalForSave("forStart");
             let actions2 = await this.getActions();
             if (actions2.data.types.length > 0) {
@@ -65,7 +65,13 @@ export const publicMethods = {
             }
             actions2.data.types[0]["comment"] = actions2.data.types[0].name;
             let complete2 = await this.startSignal(actions2.data.types[0]);
-            await this.emitMessage();
+            if(type){
+                return  complete2.data;
+            }else{
+                await this.emitMessage();
+            }
+            //return complete2.data;
+            
         },
         hasRequired(data) {
             let $self = this;
