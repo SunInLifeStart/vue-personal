@@ -195,9 +195,7 @@ export default {
                 "shieryue" :"十二月",
             };
             return xmlJson[data];
-            
-        },
-        
+       },
     },
     methods: {
         fomutype(row, column) {
@@ -213,7 +211,6 @@ export default {
             }
             return state;
         },
-        
         getFormDetails(formId) {
 
             let $self = this;
