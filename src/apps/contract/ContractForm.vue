@@ -443,10 +443,7 @@ export default {
         getNo() {
             const self = this;
             let params = {
-                code: 'contract_forms',
-                companyName: decodeURI(
-                    this.$store.getters.LoginData.companyName
-                )
+                code: 'contract_forms'
             };
             axios
                 .post('/synergy-common/serialNumber/getByTableCode', params)
@@ -460,13 +457,23 @@ export default {
                     });
                 });
         },
+        /** 
+         companyName: decodeURI(
+                    this.$store.getters.LoginData.companyName
+                )
+                */
         getContractNum() {
             const self = this;
             const year = moment()
                 .utc()
                 .format('YYYY');
             axios
-                .get('/api/v1/contract_forms/contractNum/' + year)
+                .get(
+                    '/api/v1/contract_forms/contractNum/' +
+                        year +
+                        '?companyName=' +
+                        decodeURI(this.$store.getters.LoginData.companyName)
+                )
                 .then(res => {
                     self.formData.contractNum = res.data;
                 })

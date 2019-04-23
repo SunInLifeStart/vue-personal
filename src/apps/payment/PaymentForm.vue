@@ -427,7 +427,7 @@ export default {
             },
             dialogFormVisible: false,
             formData: this.resetForm(),
-            appFlowName: 'motor-paymentform',
+            appFlowName: 'payment-form_payment',
             options: [
                 {
                     value: 'C$',

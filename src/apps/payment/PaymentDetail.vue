@@ -13,7 +13,7 @@
             </el-row>
         </div>
         <div class="formContent">
-            <div>
+            <div v-show="this.tableData.status && this.tableData.status != '04'">
                 <el-button type="primary" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
@@ -430,7 +430,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'appFlowName',
+            appFlowName: 'payment-form_payment',
             formName: 'payment_forms',
             comments: [],
             dialogVisibleCrumb: false,
