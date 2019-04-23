@@ -584,7 +584,8 @@ export default {
                 partyA: '', // 甲方
                 partyB: '', //  乙方
                 otherParty: '',
-                datecontractTime: ''
+                datecontractTime: '',
+                type: 1
             };
             return formData;
         },
