@@ -105,6 +105,8 @@ export const publicMethods = {
                                     options.push("characterLevel=5");
                                 }
                             }
+                        }  else if (key == "role" && detailsData.appFlowName !="travel-form_travel" ) {
+                             options.push("role=" +  this.$store.getters.LoginData.Role);
                         } else {
                             if (key.indexOf("filterButton") > -1) {
                             } else {
