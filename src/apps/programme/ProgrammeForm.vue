@@ -446,8 +446,9 @@
                 const self = this;
                 if (this.formId != '') {
                     axios
-                        .get('/api/v1/meetingApply/zd/detail/' + this.formId)
+                        .get('/api/v1/motor-procscheme/get/' + this.formId)
                         .then(res => {
+                            debugger
                             self.formData = res.data.content;
                         })
                         .catch(function() {
