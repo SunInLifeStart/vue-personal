@@ -5,7 +5,7 @@
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="姓名">
-                            <el-input v-model="params.conferenceTitle" placeholder="请输入姓名"></el-input>
+                            <el-input v-model="params.uname" placeholder="请输入姓名"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8"> &nbsp;
@@ -16,11 +16,7 @@
                             <el-button @click="onReset">重置</el-button>
                         </el-form-item>
                     </el-col>
-                    <!-- <el-col :span="8">
-                        <el-form-item label="提单人">
-                            <el-input v-model="params.creatorName" placeholder="请输入提单人"></el-input>
-                        </el-form-item>
-                    </el-col>
+                    <!-- 
                     <el-col :span="8">
                         <el-form-item label="提单时间">
                             <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd 00:00:00" placeholder="请输入提单时间" style="width:100%" type="date">
@@ -58,31 +54,37 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-                <el-table-column prop="conferenceTitle" label="姓名">
+                 <el-table-column prop="applyPosition" label="申请岗位">
                 </el-table-column>
-                <el-table-column prop="creatorName" label="性别">
-                </el-table-column>电子邮箱
-                <el-table-column prop="organName" label="民族">
+                 <el-table-column prop="fillingTime" label="填表日期">
                 </el-table-column>
-                <el-table-column prop="committed" label="籍贯/出生地">
+                <el-table-column prop="uname" label="姓名">
                 </el-table-column>
-                <el-table-column prop="organName" label="电子邮箱">
+                <el-table-column prop="sex" label="性别">
                 </el-table-column>
-                <el-table-column prop="meetingPlace" label="婚姻状况">
+                <el-table-column prop="nation" label="民族">
                 </el-table-column>
-                <el-table-column prop="meetingPlace" label="手机/家庭电话">
+                <el-table-column prop="nativePlace" label="籍贯/出生地">
                 </el-table-column>
-                <el-table-column prop="meetingTime" label="最高学历">
+                <el-table-column prop="nativePlace" label="电子邮箱">
+                </el-table-column>
+                <el-table-column prop="maritalStatus" label="婚姻状况">
+                </el-table-column>
+                <el-table-column prop="phone" label="手机/家庭电话">
+                </el-table-column>
+                <el-table-column prop="highestEducation" label="最高学历">
                 </el-table-column>
                 <el-table-column label="单据状态">
                     <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                 </el-table-column>
                 <el-table-column label="操作" >
                     <template slot-scope="scope">
-                        <el-tooltip class="item" effect="dark" content="编辑" placement="left">
+                        <el-tooltip class="item" effect="dark" content="编辑" placement="left" 
+                        v-if="scope.row.status == '00' || scope.row.status == '02'">
                             <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                         </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                        <el-tooltip class="item" effect="dark" content="删除" placement="left"
+                        v-if="scope.row.status == '00' || scope.row.status == '02'">
                             <el-button type="text" icon="el-icon-delete" @click="deleteCurrentLine(scope.row.id)"></el-button>
                         </el-tooltip>
                     </template>
@@ -113,7 +115,7 @@
                     pageNum: 1,
                     pageSize: 5,
                     // conferenceTitle: '',
-                    // creatorName: '',
+                    uname: '',
                     // committed: '',
                     // status: '',
                     total: 0
@@ -123,7 +125,7 @@
                 formBoardId: '',
                 dialogBoardFormId: '',
                 operationBoardType: 'create',
-                formName:"processing",
+                formName:"examinationApproval",
                 statusNews: '',
                 statusOption: [
                     {
@@ -190,10 +192,10 @@
             },
             async getList() {
                 const $self = this;
-                $self.url = "/api/v1/meetingApply/queryList";
+                $self.url = "/api/v1/examinationApproval/queryList";
                 let response = await $self.getQueryList();
                 if (response) {
-                    if (response.data.content.list.length > 0) {
+                    if (response.data.content.list && response.data.content.list.length > 0) {
                         let formId = response.data.content.list[0].id;
                         $self.$refs.ProcessingDetail.getFormDetails(formId);
                     }

@@ -3,26 +3,21 @@
         <div id="ProcessingForm">
             <el-form :model="formData"  :rules="rules" label-width="100px" ref="formData">
                 <el-row>
-                    <!-- <el-col :span="8">
-                        <el-form-item label="流水号:" prop="number">
-                            <el-input v-model="formData.number"></el-input>
-                        </el-form-item>
-                    </el-col> -->
                     <el-col :span="12">
-                        <el-form-item label="申请岗位" prop="gangwei">
-                           <el-input v-model="formData.gangwei" ></el-input>
+                        <el-form-item label="申请岗位" prop="applyPosition">
+                           <el-input v-model="formData.applyPosition" ></el-input>
                         </el-form-item>
                     </el-col>
                    <el-col :span="12">
-                        <el-form-item label="填表日期" prop="">
-                            <el-input v-model="formData.committed" ></el-input>
+                        <el-form-item label="填表日期" prop="fillingTime">
+                            <el-input v-model="formData.fillingTime" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="姓名" prop="creatorNamesone">
-                            <el-input v-model="formData.creatorNamesone" ></el-input>
+                        <el-form-item label="姓名" prop="uname">
+                            <el-input v-model="formData.uname" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -31,50 +26,50 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                       <el-form-item label="出生日期" prop="chusheng">
-                            <el-date-picker v-model="formData.chusheng" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
-                            </el-date-picker>
-                            <!-- <el-input v-model="formData.chusheng" ></el-input> -->
+                       <el-form-item label="出生日期" prop="birthday">
+                            <!-- <el-date-picker v-model="formData.birthday" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                            </el-date-picker> -->
+                            <el-input v-model="formData.birthday" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="民族" prop="minzu">
-                            <el-input v-model="formData.minzu" placeholder="请输入民族"></el-input>
+                        <el-form-item label="民族" prop="nation">
+                            <el-input v-model="formData.nation" placeholder="请输入民族"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                         <el-form-item label="籍贯/出生地" prop="jiguan">
-                            <el-input v-model="formData.jiguan"></el-input>
+                         <el-form-item label="籍贯/出生地" prop="nativePlace">
+                            <el-input v-model="formData.nativePlace"></el-input>
                         </el-form-item>
                        
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="户口所在地" prop="hukou">
-                            <el-input v-model="formData.hukou"></el-input>
+                        <el-form-item label="户口所在地" prop="placeDomicile">
+                            <el-input v-model="formData.placeDomicile"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                  <el-row>
                     <el-col :span="8">
                         <el-form-item label="身高" >
-                            <el-input v-model="formData.shengao" ></el-input>
+                            <el-input v-model="formData.stature" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="血型">
-                            <el-input v-model="formData.xuexing" ></el-input>
+                            <el-input v-model="formData.bloodType" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                        <el-form-item label="婚姻状况">
-                            <el-radio-group v-model="formData.hunyin">
-                                <el-radio :label="1">未婚</el-radio>
-                                <el-radio :label="2">已婚</el-radio>
-                                <el-radio :label="3">离异</el-radio>
+                            <el-radio-group v-model="formData.maritalStatus">
+                                <el-radio :label="0">未婚</el-radio>
+                                <el-radio :label="1">已婚</el-radio>
+                                <el-radio :label="2">离异</el-radio>
                             </el-radio-group>
-                             <!-- <el-checkbox-group v-model="formData.hunyin">
+                             <!-- <el-checkbox-group v-model="formData.maritalStatus">
                                 <el-checkbox v-for="city in checkListsone" :label="city" :key="city">{{city}}</el-checkbox>
                             </el-checkbox-group> -->
                         </el-form-item>
@@ -83,38 +78,38 @@
                  <el-row>
                     <el-col :span="8">
                         <el-form-item label="外语水平" >
-                            <el-input v-model="formData.waiyu" ></el-input>
+                            <el-input v-model="formData.languageLevel" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="职称/职业资格">
-                            <el-input v-model="formData.zhicheng" ></el-input>
+                            <el-input v-model="formData.technicalTitle" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                        <el-form-item label="政治面貌">
-                            <el-input v-model="formData.zhengzhi" ></el-input>
+                            <el-input v-model="formData.politicsStatus" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                  <el-row>
                     <el-col :span="8">
-                        <el-form-item label="最高学历" prop="">
-                            <el-input v-model="formData.xueli" ></el-input>
+                        <el-form-item label="最高学历" >
+                            <el-input v-model="formData.highestEducation" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="电子邮箱">
-                            <el-input v-model="formData.youxiang" ></el-input>
+                            <el-input v-model="formData.emailAddress" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                        <el-form-item label="日常交通方式">
-                            <el-radio-group v-model="formData.jiaotong">
-                                <el-radio :label="1">自驾</el-radio>
-                                <el-radio :label="2">公共交通</el-radio>
+                            <el-radio-group v-model="formData.byPrep">
+                                <el-radio :label="2">自驾</el-radio>
+                                <el-radio :label="1">公共交通</el-radio>
                             </el-radio-group>
-                             <!-- <el-checkbox-group v-model="formData.jiaotong">
+                             <!-- <el-checkbox-group v-model="formData.byPrep">
                                 <el-checkbox v-for="city in checkListstwo" :label="city" :key="city">{{city}}</el-checkbox>
                             </el-checkbox-group> -->
                         </el-form-item>
@@ -122,25 +117,25 @@
                 </el-row>
                  <el-row>
                     <el-col :span="12">
-                        <el-form-item label="身份证号码/护照号ID" prop="">
-                            <el-input v-model="formData.shenfen" ></el-input>
+                        <el-form-item label="身份证号码/护照号ID" >
+                            <el-input v-model="formData.idNumber" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                        <el-form-item label="紧急联系人及电话">
-                            <el-input v-model="formData.dianhua" ></el-input>
+                            <el-input v-model="formData.contacts" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                  <el-row>
                     <el-col :span="12">
                         <el-form-item label="目前住址" prop="">
-                            <el-input v-model="formData.zhuzhi" ></el-input>
+                            <el-input v-model="formData.address" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                          <el-form-item label="手机/家庭电话">
-                            <el-input v-model="formData.shouji" ></el-input>
+                            <el-input v-model="formData.phone" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -152,41 +147,41 @@
                                   <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem('personal')" style="margin-right: 5px;"></el-button>
                                   <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('personal')"></el-button>
                                  </div>
-                                <el-table :data="formData.requestedItems" border style="width: 100%; margin-top: 5px;"
+                                <el-table :data="formData.studyExperience" border style="width: 100%; margin-top: 5px;"
                                     @selection-change="handleSelectionChangeone"
                                      >
                                      <el-table-column type="selection" width="70px"></el-table-column>
                                     <el-table-column prop="" label="起止时间(年月)">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.content"></el-input>
-                                            <!-- <el-date-picker v-model="scope.row.qizhi" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                            <el-input v-model="scope.row.fromTo"></el-input>
+                                            <!-- <el-date-picker v-model="scope.row.fromTo" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
                                             </el-date-picker> -->
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="毕业院校/培训机构">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.content"></el-input>
+                                            <el-input v-model="scope.row.graduateTnstitution"></el-input>
                                         </template>
                                     </el-table-column>
                                   <el-table-column prop="" label="所学专业/培训项目">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.fileNum" ></el-input>
+                                            <el-input v-model="scope.row.major" ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="所得学历">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.fileNum" ></el-input>
+                                            <el-input v-model="scope.row.educationBackground" ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="所得学位">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.fileNum" ></el-input>
+                                            <el-input v-model="scope.row.degree" ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="就读方式">
                                         <template slot-scope="scope">
-                                           <el-radio v-model="scope.row.lendOutType" label="true">统招</el-radio>
-                                            <el-radio v-model="scope.row.lendOutType" label="false">自费</el-radio>
+                                           <el-radio v-model="scope.row.studyingWay" label="0">统招</el-radio>
+                                            <el-radio v-model="scope.row.studyingWay" label="1">自费</el-radio>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -200,40 +195,40 @@
                                     <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem('message')" style="margin-right: 5px;"></el-button>
                                   <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('message')"></el-button>
                                  </div>
-                                <el-table :data="formData.attendingDepartment" border style="width: 100%; margin-top: 5px;" 
+                                <el-table :data="formData.workExperience" border style="width: 100%; margin-top: 5px;" 
                                     @selection-change="handleSelectionChangetwo"
                                    >
                                    <el-table-column type="selection" width="70px"></el-table-column>
                                     <el-table-column prop="" label="起止时间">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.department"></el-input>
-                                            <!-- <el-date-picker v-model="scope.row.departmentime" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
+                                            <el-input v-model="scope.row.fromTo"></el-input>
+                                            <!-- <el-date-picker v-model="scope.row.fromTo" value-format="yyyy-MM-dd HH:mm:ss" style="width:100%" type="date" >
                                             </el-date-picker> -->
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="公司名称">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.department"></el-input>
+                                            <el-input v-model="scope.row.companyName"></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="职位名称">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.department" ></el-input>
+                                            <el-input v-model="scope.row.jobTitle" ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="离职原因">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.department" ></el-input>
+                                            <el-input v-model="scope.row.reasonToLeave" ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="证明人及联系电话">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.department" ></el-input>
+                                            <el-input v-model="scope.row.referenceNumber" ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="职责简述">
                                         <template slot-scope="scope">
-                                           <el-input v-model="scope.row.department" ></el-input>
+                                           <el-input v-model="scope.row.JobDescription" ></el-input>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -243,7 +238,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="技能" prop="">
-                                <el-input type="textarea" placeholder="请描述可证明你专业能力的业绩,例如曾参与过具有挑战性的项目" v-model="formData.creatorNames" ></el-input>
+                                <el-input type="textarea" placeholder="请描述可证明你专业能力的业绩,例如曾参与过具有挑战性的项目" v-model="formData.skill" ></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -254,14 +249,14 @@
                                      <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem('sitIn')" style="margin-right: 5px;"></el-button>
                                   <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('sitIn')"></el-button>
                                  </div>
-                                <el-table :data="formData.sitIn" border style="width: 100%; margin-top: 5px;" 
+                                <el-table :data="formData.familyTies" border style="width: 100%; margin-top: 5px;" 
                                     @selection-change="handleSelectionChangethree"
                                     >
                                     <el-table-column type="selection" width="70px"></el-table-column>
-                                    <el-table-column prop="" label="姓名">
+                                    <el-table-column prop="" label="称谓">
                                         <template slot-scope="scope">
                                             <!-- <el-input v-model="scope.row.people"></el-input> -->
-                                             <el-select style="width:100%;" clearable v-model="scope.row.useItems" placeholder="请选择">
+                                             <el-select style="width:100%;" clearable v-model="scope.row.appellation" placeholder="请选择">
                                                 <el-option
                                                     v-for="item in onOption"
                                                     :key="item.value"
@@ -271,29 +266,34 @@
                                             </el-select>
                                         </template>
                                     </el-table-column>
+                                    <el-table-column prop="" label="姓名">
+                                        <template slot-scope="scope">
+                                            <el-input v-model="scope.row.name"></el-input>
+                                        </template>
+                                    </el-table-column>
                                     <el-table-column prop="" label="出生年月">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.people"></el-input>
+                                            <el-input v-model="scope.row.birthday"></el-input>
                                         </template>
                                     </el-table-column>
                                   <el-table-column prop="" label="居住地">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.people" ></el-input>
+                                            <el-input v-model="scope.row.placeOfAbode" ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="工作单位">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.people" ></el-input>
+                                            <el-input v-model="scope.row.workUnit" ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="联系电话">
                                         <template slot-scope="scope">
-                                            <el-input v-model="scope.row.people" ></el-input>
+                                            <el-input v-model="scope.row.contactNumber" ></el-input>
                                         </template>
                                     </el-table-column>
                                     <el-table-column prop="" label="备注">
                                         <template slot-scope="scope">
-                                           <el-input v-model="scope.row.people" placeholder=""></el-input>
+                                           <el-input v-model="scope.row.remark" placeholder=""></el-input>
                                         </template>
                                     </el-table-column>
                                 </el-table>
@@ -313,58 +313,48 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                 <el-row v-if="formData.postApproval!=''">
+                 <el-row v-if="formData.positionsWage==''">
                      <el-col :span="24">
                          <h1 style="text-align:center">拟聘人员信息</h1>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="姓名:" >
-                            <el-input v-model="formData.postApproval.shengao" ></el-input>
+                        <el-form-item label="姓名:" prop="positionsWage.name">
+                            <el-input v-model="formData.positionsWage.name" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="性别:">
-                            <el-input v-model="formData.postApproval.xuexing" ></el-input>
+                        <el-form-item label="性别:" prop="positionsWage.sex">
+                            <el-input v-model="formData.positionsWage.sex" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="定岗:">
-                           <el-input v-model="formData.postApproval.xuexing" ></el-input>
+                       <el-form-item label="定岗:" prop="positionsWage.determinePosts">
+                           <el-input v-model="formData.positionsWage.determinePosts" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="部门:">
-                           <el-input v-model="formData.postApproval.xuexing" ></el-input>
+                       <el-form-item label="部门:" prop="positionsWage.department">
+                           <el-input v-model="formData.positionsWage.department" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="职级:">
-                           <el-input v-model="formData.xuexing" ></el-input>
+                       <el-form-item label="职级:" prop="positionsWage.rank">
+                           <el-input v-model="formData.positionsWage.rank" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="薪酬:">
-                           <el-input v-model="formData.xuexing" ></el-input>
+                       <el-form-item label="薪酬:" prop="positionsWage.remuneration">
+                           <el-input v-model="formData.positionsWage.remuneration" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="定岗:">
-                           <el-input v-model="formData.xuexing" ></el-input>
+                       <el-form-item label="试用期(月):" prop="positionsWage.probationPeriod">
+                           <el-input v-model="formData.positionsWage.probationPeriod" ></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="定岗:">
-                           <el-input v-model="formData.xuexing" ></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                       <el-form-item label="试用期(月):">
-                           <el-input v-model="formData.xuexing" ></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                       <el-form-item label="试用期薪酬标准(%):">
-                           <el-input v-model="formData.xuexing" ></el-input>
+                       <el-form-item label="试用期薪酬标准(%):" prop="positionsWage.percentage">
+                           <el-input v-model="formData.positionsWage.percentage" ></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -392,36 +382,56 @@
                 checkListsone:['未婚','已婚','离异'],
                 checkListstwo:['自驾','公共交通'],
                 rules: {
-                    gangwei: [
+                   'positionsWage.name': [
+                            { required: true, message: '请输入姓名', trigger: 'blur' }
+                    ],
+                    'positionsWage.sex': [
+                        { required: true, message: '请输入性别', trigger: 'blur' }
+                    ],
+                     'positionsWage.determinePosts': [
+                            { required: true, message: '请输入定岗', trigger: 'blur' }
+                    ],
+                    'positionsWage.department': [
+                        { required: true, message: '请输入部门', trigger: 'blur' }
+                    ],
+                     'positionsWage.rank': [
+                            { required: true, message: '请输入职级', trigger: 'blur' }
+                    ],
+                    'positionsWage.remuneration': [
+                        { required: true, message: '请输入薪酬', trigger: 'blur' }
+                    ],
+                     'positionsWage.probationPeriod': [
+                            { required: true, message: '请输入试用期', trigger: 'blur' }
+                    ],
+                    'positionsWage.percentage': [
+                        { required: true, message: '请输入百分比', trigger: 'blur' }
+                    ],
+                    applyPosition: [
                         { required: true, message: '请输入岗位', trigger: 'blur' }
                     ],
-                    creatorNamesone: [
+                    uname: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
                     ],
                      sex: [
                         { required: true, message: '请输入性别', trigger: 'blur' }
                     ],
-                     chusheng: [
+                     birthday: [
                         { required: true, message: '请输入出生日期', trigger: 'blur' }
                     ],
-                     minzu: [
+                     nation: [
                         { required: true, message: '请输入民族', trigger: 'blur' }
                     ],
-                     jiguan: [
+                     nativePlace: [
                         { required: true, message: '请输入籍贯', trigger: 'blur' }
                     ],
-                     hukou: [
+                     placeDomicile: [
                         { required: true, message: '请输入户口', trigger: 'blur' }
                     ],
-                    
-                    number: [
+                     number: [
                         { required: true, message: '请输入流水号', trigger: 'blur' }
                     ],
-                    branchlineTo: [
-                        { required: true, message: '请输入会议类型', trigger: 'blur' }
-                    ],
-                    committed: [
-                        { required: true, message: '请输入提单时间', trigger: 'blur' }
+                    fillingTime: [
+                        { required: true, message: '请输入填表日期', trigger: 'blur' }
                     ],
                    
                 },
@@ -439,11 +449,7 @@
                         value: '配偶',
                         label: '配偶'
                     },
-                    {
-                        value: '工会章',
-                        label: '工会章'
-                    },
-                    {
+                     {
                         value: '儿子',
                         label: '儿子'
                     },
@@ -457,8 +463,6 @@
                 selectionItemstwo:[],
                 selectionItemsone:[],
                 selectionItemsthree:[],
-                uploadId: 0,
-                formLabelWidth: '120px',
                 appFlowName: "motor-meetingApply_application-meeting",
                 currentFormId: this.operationType == 'create' ? '' : this.formId
             };
@@ -467,11 +471,9 @@
             FilesOperate
         },
         watch: {
-            
         },
         mounted() {
-           
-        },
+         },
         methods: {
             handleSelectionChangeone(selection) {
                 this.selectionItemsone = selection;
@@ -480,16 +482,16 @@
                 this.selectionItemstwo = selection;
             },
             handleSelectionChangethree(selection) {
-                this.selectionItemstwo = selection;
+                this.selectionItemsthree = selection;
             },
            deleteItem(item, index, type) {
                 this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                    if (type == 'message' && this.formData.attendingDepartment.length > 1) {
-                        this.formData.attendingDepartment.splice(index, 1);
-                    } else if (type == 'personal' && this.formData.requestedItems.length > 1) {
-                        this.formData.requestedItems.splice(index, 1);
-                    } else if (type == 'sitIn' && this.formData.sitIn.length > 1) {
-                        this.formData.sitIn.splice(index, 1);
+                    if (type == 'message' && this.formData.workExperience.length > 1) {
+                        this.formData.workExperience.splice(index, 1);
+                    } else if (type == 'personal' && this.formData.studyExperience.length > 1) {
+                        this.formData.studyExperience.splice(index, 1);
+                    } else if (type == 'sitIn' && this.formData.familyTies.length > 1) {
+                        this.formData.familyTies.splice(index, 1);
                     } else {
                         this.$message({
                             message: '最后一组不能删除',
@@ -501,59 +503,81 @@
             addItem(type) {
                 if (type == 'message') {
                     // 工作经历
-                    this.formData.attendingDepartment.push({});
+                    this.formData.workExperience.push({});
                 } else if (type == 'personal') {
                     // 学习及培训经历
-                    this.formData.requestedItems.push({})
+                    this.formData.studyExperience.push({})
                 } else if (type == 'sitIn') {
                     // 家庭关系
-                    this.formData.sitIn.push({})
+                    this.formData.familyTies.push({})
                 }
             },
-            
             resetForm() {
                 let formData =  {
-                    creatorNamesone:"",
-                    gangwei:"",
+                    uname:"",
+                    applyPosition:"",
                     sex:"",
-                    chusheng:"",
-                    minzu:"",
-                    jiguan:"",
-                    hukou:"",
-                    shengao:"",
-                    xuexing:"",
-                    hunyin:"",
-                    waiyu:"",
-                    zhicheng:"",
-                    zhengzhi:"",
-                    xueli:"",
-                    youxiang:"",
-                    jiaotong:"",
-                    shenfen:"",
-                    zhuzhi:"",
-                    dianhua:"",
-                    shouji:"",
+                    birthday:"",
+                    nation:"",
+                    nativePlace:"",
+                    placeDomicile:"",
+                    stature:"",
+                    bloodType:"",
+                    maritalStatus:"",
+                    languageLevel:"",
+                    technicalTitle:"",
+                    politicsStatus:"",
+                    highestEducation:"",
+                    emailAddress:"",
+                    byPrep:"",
+                    idNumber:"",
+                    address:"",
+                    contacts:"",
+                    phone:"",
+                    skill:"",
                     attachments: [],
-                    attendingDepartment: [{
-                        // people: [],
-                        department: ''
+                    //工作经历
+                    workExperience: [{
+                        id:"",
+                        fromTo:"",
+                        companyName:"",
+                        jobTitle:"",
+                        reasonToLeave:"",
+                        referenceNumber:"",
+                        JobDescription:""
                     }],
-                    requestedItems: [{
-                        qizhi:"",
+                    //学习经历
+                    studyExperience: [{
+                        id:"",
+                        fromTo:"",
+                        graduateTnstitution:"",
+                        major:"",
+                        educationBackground:"",
+                        degree:"",
+                        studyingWay:""
                     }],
-                    sitIn: [{
-                        // people: "",
-                        // department: ''
+                    familyTies: [{
+                        id:"",
+                        appellation:"",
+                        name:"",
+                        birthday:"",
+                        placeOfAbode:"",
+                        workUnit:"",
+                        contactNumber:"",
+                        remark:""
                     }],
-                    postApproval:{
-                        shengao:'111',
-                        xuexing:"222"
+                    positionsWage:{
+                        id:"",
+                        name:"",
+                        sex:"",
+                        determinePosts:"",
+                        department:"",
+                        rank:"",
+                        remuneration:"",
+                        probationPeriod:"",
+                        percentage:""
                     },
-                    branchlineTo: '',
-                    businessType: '',
-                    created: '',
-                    sendMessage: [],
-                    committed: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                    fillingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
                     organName: this.$store.getters.LoginData.oname || '',
                     creatorName: this.$store.getters.LoginData.uname || '',
                     creatorId: this.$store.getters.LoginData.uid || '',
@@ -561,43 +585,8 @@
                 }
                 return formData
             },
-            getForm() {
-                const self = this;
-                if (this.formId != '') {
-                    axios
-                        .get('/api/v1/meetingApply/detail/' + this.formId)
-                        .then(res => {
-                            self.formData = res.data.content;
-                            // self.$nextTick(() => {
-                                if (self.formData.attendingDepartment) {
-                                    self.formData.attendingDepartment.forEach(item => {
-                                        if (item.person) {
-                                            item.people = item.person.split(',')
-                                        }
-                                        for (let i = 0; i<item.people.length; i++) {
-                                            item.people[i] = parseInt(item.people[i])
-                                        }
-                                    })
-                                    self.formData.sitIn.forEach(item => {
-                                        if (item.person) {
-                                            item.people = item.person.split(',')
-                                        }
-                                        if (item.people) {
-                                            for (let i = 0; i<item.people.length; i++) {
-                                                item.people[i] = parseInt(item.people[i])
-                                            }
-                                        } else {
-                                            item.people = []
-                                        }
-                                    })
-                                }
-                            // })
-                        })
-                }
-            },
             setDataFromParent(data) {
                 this.formId = data.id;
-                this.getForm()
                 this.dialogFormVisible = true;
                 this.createForm_status = false;
             },
@@ -615,28 +604,8 @@
             },
             async saveForm(params) {
                 const $self = this;
-                this.formData.sendMessage = []
-                $self.formData.attendingDepartment.forEach(item => {
-                    if (item.people) {
-                        item.person = item.people.join(',')
-                        this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
-                    }
-                })
-                $self.formData.sitIn.forEach(item => {
-                    if (item.people) {
-                        item.person = item.people.join(',')
-                        this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
-                    }
-                })
-                this.formData.sendMessage = this.formData.sendMessage.join(',')
-                if (this.formData.sendMessage &&this.formData.sendMessage.length <= 0) {
-                    delete this.formData.sendMessage
-                }
-                // let business = this.discussionOption.filter((item) => { return item.value === this.formData.branchlineTo})
-                if (business.length > 0)
-                this.formData.businessType = business[0].value + '_' +  business[0].label
-                let response = await $self.saveFormData(
-                    "/api/v1/meetingApply/save",
+                 let response = await $self.saveFormData(
+                    "/api/v1/examinationApproval/save",
                     $self.formData
                 );
                 if (response) {
