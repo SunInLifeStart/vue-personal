@@ -170,6 +170,11 @@ export default {
             // debugger;
             let actions = await $self.getActions();
             $self.actions = actions.data.types;
+            if($self.tableData.status == "04"){
+               $self.actions.push({
+                   name:"打印"
+               }); 
+            }
             let comments =  await $self.getComments();
             $self.comments = comments.data;
         },

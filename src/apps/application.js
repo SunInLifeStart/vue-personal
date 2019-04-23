@@ -75,35 +75,35 @@ export const publicMethods = {
                 for (let item of data.required) {
                     let key = item.split(":")[0];
                     if (detailsData[key] || detailsData[key] == false) {
-                            if (item.split(":")[1] == "arrays" && typeof (detailsData[key]) == "string") {
-                                options.push(key + "=" + '[' + detailsData[key] + ']'); //如果是数组类型的拼成数组
-                            } else {
-                                detailsData[key] = detailsData[key] === "" ? 0 : detailsData[key];
-                                options.push(key + "=" + detailsData[key]);
-                            }
+                        if (item.split(":")[1] == "arrays" && typeof (detailsData[key]) == "string") {
+                            options.push(key + "=" + '[' + detailsData[key] + ']'); //如果是数组类型的拼成数组
+                        } else {
+                            detailsData[key] = detailsData[key] === "" ? 0 : detailsData[key];
+                            options.push(key + "=" + detailsData[key]);
+                        }
                     } else {
                         if (key == "oid") {
                             options.push(key + "=" + this.$store.getters.LoginData.oid);
-                        }else if(key == "code"){
-                             options.push(key + "="  + this.$store.getters.LoginData.code.split('_')[0]);
-                        }else if(key == "characterLevel"){
-                            let type  = this.$store.getters.LoginData.code.split("_")[0];
-                            if(type){
-                                if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "chairman") > -1){  //董事长
+                        } else if (key == "code") {
+                            options.push(key + "=" + this.$store.getters.LoginData.code.split('_')[0]);
+                        } else if (key == "characterLevel") {
+                            let type = this.$store.getters.LoginData.code.split("_")[0];
+                            if (type) {
+                                if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "chairman") > -1) {  //董事长
                                     options.push("characterLevel=1");
-                                }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManager") > -1){ //总经理
+                                } else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManager") > -1) { //总经理
                                     options.push("characterLevel=2");
-                                }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManagerAssistant") > -1){ //总经理助理
+                                } else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "generalManagerAssistant") > -1) { //总经理助理
                                     options.push("characterLevel=3");
-                                }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "duptyGeneralManager") > -1){ //副总经理
+                                } else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "duptyGeneralManager") > -1) { //副总经理
                                     options.push("characterLevel=3");
-                                }else if(this.$store.getters.LoginData.Role.indexOf(type + "_" + "deptManager") > -1){ //部门负责人
+                                } else if (this.$store.getters.LoginData.Role.indexOf(type + "_" + "deptManager") > -1) { //部门负责人
                                     options.push("characterLevel=4");
-                                }else{
-                                    options.push("characterLevel=5");  
+                                } else {
+                                    options.push("characterLevel=5");
                                 }
-                            } 
-                       }else {
+                            }
+                        } else {
                             if (key.indexOf("filterButton") > -1) {
                             } else {
                                 $self.msgTips('依赖的' + key + '表单中找不到', "warning");
@@ -127,7 +127,7 @@ export const publicMethods = {
         async doAction(action) {
             let $self = this;
             $self.actionsDialogArr = [];
-            if($self.tableData && $self.appFlowName == "outgoing-form_outgoing" && JSON.stringify(action.required).indexOf("branchlineTo") > -1){ //特殊处理写死了
+            if ($self.tableData && $self.appFlowName == "outgoing-form_outgoing" && JSON.stringify(action.required).indexOf("branchlineTo") > -1) { //特殊处理写死了
                 $self.showCheckBox = true;
             }
             $self.currentAction = action;
@@ -142,8 +142,8 @@ export const publicMethods = {
             }
 
             if (action.selContents && action.selContents.length > 0) {
-                for(var i = 0; i<action.selContents.length; i++){
-                    action.selContents[i].id =  action.selContents[i].value;
+                for (var i = 0; i < action.selContents.length; i++) {
+                    action.selContents[i].id = action.selContents[i].value;
                 };
                 $self.actionsDialogArr.push({
                     seletList: action.selContents,
@@ -170,32 +170,32 @@ export const publicMethods = {
             } else if ($self.currentAction.action == 'CANCEL') {
                 await $self.startSignal();
                 $self.deleteCurrentLine($self.tableData.id, "CANCEL");
-            } else if($self.currentAction.name == "编辑"){
+            } else if ($self.currentAction.name == "编辑") {
                 $self.reEditForm();
-            } else if($self.currentAction.name == "打印"){
+            } else if ($self.currentAction.name == "打印") {
                 let url;
-                if($self.printerFormName == "outgoing_forms"){
-                    url = "/api/v1/"+ $self.printerFormName+"/getForm/" + $self.tableData.id; 
+                if ($self.printerFormName == "outgoing_forms") {
+                    url = "/api/v1/" + $self.printerFormName + "/getForm/" + $self.tableData.id;
                 }
-                if($self.printerFormName == "submission_forms"){
-                    url = "/api/v1/"+ $self.printerFormName+"/" + $self.tableData.id +"/getForm";
+                if ($self.printerFormName == "submission_forms") {
+                    url = "/api/v1/" + $self.printerFormName + "/" + $self.tableData.id + "/getForm";
                 }
-                if($self.printerFormName == "incoming_forms"){
+                if ($self.printerFormName == "incoming_forms") {
                     url = "/api/v1/incoming_forms/print/" + $self.tableData.id
                 }
                 $self.$axios
-                .get(url)
-                .then(res => {
-                    if (process.env.NODE_ENV === 'production') {
-                        $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
-                    } else {
-                        $self.openUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&"
-                    }
-                    ntkoBrowser.openWindow(
-                        $self.openUrl + "url=" + res.data
-                    );
-                });
-            }else {
+                    .get(url)
+                    .then(res => {
+                        if (process.env.NODE_ENV === 'production') {
+                            $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
+                        } else {
+                            $self.openUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&"
+                        }
+                        ntkoBrowser.openWindow(
+                            $self.openUrl + "url=" + res.data
+                        );
+                    });
+            } else {
                 $self.dialogVisible = true;
             }
         },
@@ -206,18 +206,18 @@ export const publicMethods = {
             $self.hasRequired($self.currentAction);
             if ($self.actionsDialogArr.length > 0 && ($self.actionsDialogArr[0].checkedValue != "" || $self.actionsDialogArr[0].checkedValue.length > 0)) {
                 for (let item of $self.actionsDialogArr) {
-                    if(item.labelName == "selContents"){
-                        if($self.currentAction.options){                            
-                            for(var i= 0; i<$self.currentAction.options.length; i++){
-                                if($self.currentAction.options[i].indexOf($self.currentAction[item.labelName][0].code) > -1){
-                                    $self.currentAction.options.splice(i,1);
+                    if (item.labelName == "selContents") {
+                        if ($self.currentAction.options) {
+                            for (var i = 0; i < $self.currentAction.options.length; i++) {
+                                if ($self.currentAction.options[i].indexOf($self.currentAction[item.labelName][0].code) > -1) {
+                                    $self.currentAction.options.splice(i, 1);
                                 }
                             };
-                          $self.currentAction.options.push($self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value);
-                        }else{
+                            $self.currentAction.options.push($self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value);
+                        } else {
                             $self.currentAction.options = [$self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value];
                         }
-                    }else{
+                    } else {
                         $self.currentAction[item.labelName] = item.checkedValue;
                     }
                 }
@@ -311,8 +311,8 @@ export const publicMethods = {
         deleteAttachmentsone(index) {
             let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
-                 $self.formData.usingApproval[index].attachments.splice(0, 1);
-                
+                $self.formData.usingApproval[index].attachments.splice(0, 1);
+
             });
         },
 
@@ -349,13 +349,13 @@ export const publicMethods = {
                     $self.$axios
                         .get("/api/v1/ntko/session/finish?token=" + res.data)
                         .then(res => {
-                            if(res.data.file_name){
+                            if (res.data.file_name) {
                                 $self.formData.text = {
                                     iconUrl: res.data.icon_url,
                                     name: res.data.originalFilename,
                                     url: res.data.url,
                                     path: res.data.path,
-                                    file_name:res.data.file_name,
+                                    file_name: res.data.file_name,
                                     pdfUrl:
                                         res.data.url.split("files")[0] +
                                         "pdf" +
