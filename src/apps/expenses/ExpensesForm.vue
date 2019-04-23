@@ -139,7 +139,8 @@
                         </td>
                     </tr>
                     <tr>
-                        <td>预计金额
+                        <td>
+                            <span style="color:red;">*</span>预计金额
                         </td>
                         <td colspan="3">
                             <el-input placeholder="小写" @input="moneyChange" v-model.number="formData.amountInFigures" @mousewheel.native.prevent type="number"></el-input>
@@ -391,7 +392,47 @@ export default {
             return formData;
         },
         saveFormValidate(type) {
-            this.saveForm(type);
+            const $self = this;
+            let typee = this.$store.getters.LoginData.code.split('_')[0];
+            if (
+                this.formData.amountInFigures != '' &&
+                this.formData.submission != ''
+            ) {
+                if (typee) {
+                    if (
+                        (this.$store.getters.LoginData.Role.indexOf(
+                            typee + '_' + 'chairman'
+                        ) > -1 ||
+                            this.$store.getters.LoginData.Role.indexOf(
+                                typee + '_' + 'generalManager'
+                            ) > -1) &&
+                        parseFloat(this.formData.amountInFigures) <= 2000
+                    ) {
+                        $self.msgTips(
+                            '申请额度需要大于2000元可提单',
+                            'warning'
+                        );
+                    } else if (
+                        (this.$store.getters.LoginData.Role.indexOf(
+                            typee + '_' + 'generalManagerAssistant'
+                        ) > -1 ||
+                            this.$store.getters.LoginData.Role.indexOf(
+                                typee + '_' + 'duptyGeneralManager'
+                            ) > -1) &&
+                        parseFloat(this.formData.amountInFigures) <= 1000
+                    ) {
+                        $self.msgTips(
+                            '申请额度需要大于1000元可提单',
+                            'warning'
+                        );
+                    } else {
+                        this.saveForm(type);
+                    }
+                } else {
+                }
+            } else {
+                $self.msgTips('请输入必输项', 'warning');
+            }
         },
         // 提交保存
         async saveForm(params) {
