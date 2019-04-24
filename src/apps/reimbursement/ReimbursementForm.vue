@@ -195,19 +195,19 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model.number="item.money" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
+                            <el-input v-model="item.money" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.estRate" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
+                            <el-input v-model="item.estRate" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.estSum" type="number" @mousewheel.native.prevent></el-input>
+                            <el-input v-model="item.estSum" type="number" @mousewheel.native.prevent></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.noTax" @mousewheel.native.prevent @input="loseFocus(item,index,'money','notax')"></el-input>
+                            <el-input v-model="item.noTax" @mousewheel.native.prevent @input="loseFocus(item,index,'money','notax')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.tax" @mousewheel.native.prevent @input="loseFocus(item,index,'money', 'tax')"></el-input>
+                            <el-input v-model="item.tax" @mousewheel.native.prevent @input="loseFocus(item,index,'money', 'tax')"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -356,13 +356,13 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model.number="item.bearSum" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'bearSum')"></el-input>
+                            <el-input v-model="item.bearSum" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'bearSum')"></el-input>
                         </td>
                         <td colspan="3">
                             <el-input v-model="item.upper"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.shareRatio" type="number" @mousewheel.native.prevent></el-input>
+                            <el-input v-model="item.shareRatio" type="number" @mousewheel.native.prevent></el-input>
                         </td>
                     </tr>
                     <tr v-show="formData.share == true">
