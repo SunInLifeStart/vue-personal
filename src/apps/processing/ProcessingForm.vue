@@ -145,10 +145,12 @@
                             <el-form-item label="学习及培训经历" prop="">
                                 <div style="float: right;">
                                   <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem('personal')" style="margin-right: 5px;"></el-button>
-                                  <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('personal')"></el-button>
+                                  <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('0')"></el-button>
                                  </div>
                                 <el-table :data="formData.studyExperience" border style="width: 100%; margin-top: 5px;"
                                     @selection-change="handleSelectionChangeone"
+                                    :row-class-name="tableRowClassNameone"
+                                    @row-click='showone'
                                      >
                                      <el-table-column type="selection" width="70px"></el-table-column>
                                     <el-table-column prop="" label="起止时间(年月)">
@@ -193,10 +195,12 @@
                             <el-form-item label="工作经历" prop="">
                                <div style="float: right;">
                                     <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem('message')" style="margin-right: 5px;"></el-button>
-                                  <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('message')"></el-button>
+                                  <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('1')"></el-button>
                                  </div>
                                 <el-table :data="formData.workExperience" border style="width: 100%; margin-top: 5px;" 
-                                    @selection-change="handleSelectionChangetwo"
+                                    @selection-change="handleSelectionChangeone"
+                                    :row-class-name="tableRowClassNameone"
+                                    @row-click='showone'
                                    >
                                    <el-table-column type="selection" width="70px"></el-table-column>
                                     <el-table-column prop="" label="起止时间">
@@ -247,10 +251,12 @@
                             <el-form-item label="家庭关系" prop="">
                                 <div style="float: right;">
                                      <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem('sitIn')" style="margin-right: 5px;"></el-button>
-                                  <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('sitIn')"></el-button>
+                                  <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem('2')"></el-button>
                                  </div>
                                 <el-table :data="formData.familyTies" border style="width: 100%; margin-top: 5px;" 
-                                    @selection-change="handleSelectionChangethree"
+                                     @selection-change="handleSelectionChangeone"
+                                     :row-class-name="tableRowClassNameone"
+                                     @row-click='showone'
                                     >
                                     <el-table-column type="selection" width="70px"></el-table-column>
                                     <el-table-column prop="" label="称谓">
@@ -381,6 +387,8 @@
         name: 'ProcessingForm',
         data() {
             return {
+                uploadImageType:'',
+                counts: 0,
                 dialogFormVisible: false,
                 checkListsone:['未婚','已婚','离异'],
                 checkListstwo:['自驾','公共交通'],
@@ -463,9 +471,7 @@
                 ],
                 formData: this.resetForm(),
                 users: [],
-                selectionItemstwo:[],
                 selectionItemsone:[],
-                selectionItemsthree:[],
                 appFlowName: "motor-meetingApply_application-meeting",
                 currentFormId: this.operationType == 'create' ? '' : this.formId
             };
@@ -481,20 +487,24 @@
         methods: {
             handleSelectionChangeone(selection) {
                 this.selectionItemsone = selection;
+               
             },
-            handleSelectionChangetwo(selection) {
-                this.selectionItemstwo = selection;
+            tableRowClassNameone({row, rowIndex}) {
+                //把每一行的索引放进row
+                row.index = rowIndex;
             },
-            handleSelectionChangethree(selection) {
-                this.selectionItemsthree = selection;
+            showone(row, event, column){
+                this.uploadImageType=row.index
             },
-           deleteItem(item, index, type) {
+            
+           deleteItem(type) {
+            //   
                 // this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                //     if (type == 'message' && this.formData.workExperience.length > 1) {
+                //     if (type == '1' && this.formData.workExperience.length > 1) {
                 //         this.formData.workExperience.splice(index, 1);
-                //     } else if (type == 'personal' && this.formData.studyExperience.length > 1) {
+                //     } else if (type == '0' && this.formData.studyExperience.length > 1) {
                 //         this.formData.studyExperience.splice(index, 1);
-                //     } else if (type == 'sitIn' && this.formData.familyTies.length > 1) {
+                //     } else if (type == '2' && this.formData.familyTies.length > 1) {
                 //         this.formData.familyTies.splice(index, 1);
                 //     } else {
                 //         this.$message({
@@ -504,10 +514,13 @@
                 //     }
                 // });
                 const self = this;
-            if (self.selectionItemsone.length > 0) {
+                let a=self.formData
+           if (self.selectionItemsone.length > 0) {
                 self.$confirm('是否删除?', '提示', { type: 'warning' }) .then(() => {
                         self.selectionItemsone.forEach(function (oData) {
-                                axios.get('/api/v1/examinationApproval/delete/' + self.formData.id+'/'+oData.index+'/'+'1','',
+                           
+                            if (oData.fromTo || oData.appellation) {
+                                axios.get('/api/v1/examinationApproval/delete/' + self.formData.id+'/'+oData.index+'/'+type,'',
                                         {
                                             headers: {
                                                 'Content-type':
@@ -516,15 +529,40 @@
                                         }
                                     )
                                     .then(res => {
-                                        self.formData.cardPrinting.forEach(function (item,index) {
-                                            if (item.index == oData.index) {
-                                                self.formData.cardPrinting.splice(index,1);
+                                        if(type=='0'){
+                                            self.formData.studyExperience.forEach(function (item,index) {
+                                             if (item.index == oData.index) {
+                                                self.formData.studyExperience.splice(index,1);
                                                 self.$message({
                                                     message: '删除成功',
                                                     type: 'success'
                                                 });
                                             }
                                         });
+                                        }
+                                        if(type=='1'){
+                                            self.formData.workExperience.forEach(function (item,index) {
+                                            if (item.index == oData.index) {
+                                                self.formData.workExperience.splice(index,1);
+                                                self.$message({
+                                                    message: '删除成功',
+                                                    type: 'success'
+                                                });
+                                            }
+                                        });
+                                        }
+                                        if(type=='2'){
+                                            self.formData.familyTies.forEach(function (item,index) {
+                                            if (item.index == oData.index) {
+                                                self.formData.familyTies.splice(index,1);
+                                                self.$message({
+                                                    message: '删除成功',
+                                                    type: 'success'
+                                                });
+                                            }
+                                        });
+                                        }
+                                        
                                     })
                                     .catch(function () {
                                         self.$message({
@@ -532,6 +570,30 @@
                                             type: 'error'
                                         });
                                     });
+                                
+                            } else{
+                                if(type=='0'){
+                                    self.formData.studyExperience.forEach(function(item,index) {
+                                    if (item.count == oData.count) {
+                                        self.formData.studyExperience.splice(index, 1);
+                                    }
+                                    });
+                                }
+                                if(type=='1'){
+                                    self.formData.workExperience.forEach(function(item,index) {
+                                    if (item.count == oData.count) {
+                                        self.formData.workExperience.splice(index, 1);
+                                    }
+                                    });
+                                }
+                                if(type=='2'){
+                                    self.formData.familyTies.forEach(function(item,index) {
+                                    if (item.count == oData.count) {
+                                        self.formData.familyTies.splice(index, 1);
+                                    }
+                                    });
+                                }
+                        }
                         });
                     });
             }
@@ -539,13 +601,19 @@
             addItem(type) {
                 if (type == 'message') {
                     // 工作经历
-                    this.formData.workExperience.push({});
+                    this.formData.workExperience.push({
+                        count: ++this.counts,
+                    });
                 } else if (type == 'personal') {
                     // 学习及培训经历
-                    this.formData.studyExperience.push({})
+                    this.formData.studyExperience.push({
+                        count: ++this.counts,
+                    })
                 } else if (type == 'sitIn') {
                     // 家庭关系
-                    this.formData.familyTies.push({})
+                    this.formData.familyTies.push({
+                        count: ++this.counts,
+                    })
                 }
             },
             resetForm() {
@@ -575,6 +643,7 @@
                     //工作经历
                     workExperience: [{
                         id:"",
+                        count:0,
                         fromTo:"",
                         companyName:"",
                         jobTitle:"",
@@ -585,6 +654,7 @@
                     //学习经历
                     studyExperience: [{
                         id:"",
+                         count:0,
                         fromTo:"",
                         graduateTnstitution:"",
                         major:"",
@@ -594,6 +664,7 @@
                     }],
                     familyTies: [{
                         id:"",
+                         count:0,
                         appellation:"",
                         name:"",
                         birthday:"",

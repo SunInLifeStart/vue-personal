@@ -210,7 +210,7 @@ export default {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 #TrainDetail {
     .el-step__main {
         margin-top: 10px;

@@ -484,7 +484,7 @@
         }
     };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     #ProcessingDetail {
         .el-step__main {
             margin-top: 10px;

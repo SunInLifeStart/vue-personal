@@ -526,8 +526,7 @@ export default {
 
 <style lang="scss" scoped>
 #OutgoingForm {
-    
-    .uploadBtn {
+     .uploadBtn {
         margin-right: 10px;
         width: 100px;
         height: 130px;
