@@ -529,7 +529,7 @@ export default {
                 }
             }
         },
-        organs() {
+        getorgans() {
             axios.get('/api/v1/organs').then(res => {
                 this.organs = res.data;
             });
@@ -741,7 +741,7 @@ export default {
         },
         setDataFromParent(data) {
             this.getUsers();
-            this.organs();
+            this.getorgans();
             this.getClass();
             this.getSubmissionlList();
             if (data.estimate.length > 0) {
@@ -770,7 +770,7 @@ export default {
         },
         createForm() {
             this.getUsers();
-            this.organs();
+            this.getorgans();
             this.submission = '';
             this.formData = this.resetForm();
             this.getNum();
