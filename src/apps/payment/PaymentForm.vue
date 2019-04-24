@@ -181,10 +181,10 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model.number="payItem.amount" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)" class="money"></el-input>
+                            <el-input v-model.number="payItem.amount" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
                         </td>
                         <td>
-                            <el-input class="money" v-model.number="payItem.rate" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
+                            <el-input v-model.number="payItem.rate" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
                         </td>
                         <td>
                             <el-input v-model="payItem.localAmount" disabled class="money"></el-input>

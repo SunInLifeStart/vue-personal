@@ -1485,7 +1485,7 @@ export default {
     }
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss">
 #ReimbursementForm {
     table {
         border-collapse: collapse;
