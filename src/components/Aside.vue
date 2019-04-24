@@ -17,7 +17,7 @@
                 <div class="content">
                     <router-link to="/home/todo">
                         <div class="item" :class="{active:$route.params.type=='todo'}">
-                            <i class="icon iconfont el-icon-daiban" /><span>待办</span>
+                            <i class="icon iconfont el-icon-daiban" /><span>待办 &nbsp;</span><span v-if="todoListLength">({{todoListLength}})</span>
                         </div>
                     </router-link>
                     <router-link to="/home/done">
@@ -27,7 +27,7 @@
                     </router-link>
                     <router-link to="/home/reading">
                         <div class="item" :class="{active:$route.params.type=='reading'}">
-                            <i class="icon iconfont el-icon-caogao" /><span>待阅</span>
+                            <i class="icon iconfont el-icon-caogao" /><span>待阅 &nbsp;</span><span v-if="todoListLength">({{readingListLength}})</span>
                         </div>
                     </router-link>
                 </div>
@@ -70,19 +70,38 @@ export default {
     name: "Aside",
     data() {
         return {
-            msg:false,
+            msg: false,
+            todoListLength: "",
+            readingListLength: ""
         };
     },
-    mounted:function(){
-        console.log();
-        if(Vue.prototype.socket){
+    mounted: function() {
+        let $self = this;
+        if (Vue.prototype.socket) {
             this.socket.on("message", value => {
-               // this.msg = value.from != this.$store.getters.LoginData.uid ? true : false;
-                this.msg = this.$route.path.indexOf('webim') > -1 ? false : true;
+                // this.msg = value.from != this.$store.getters.LoginData.uid ? true : false;
+                this.msg =
+                    this.$route.path.indexOf("webim") > -1 ? false : true;
             });
         }
+        $self.$axios
+            .get(
+                "/api/v1/push/513/list?type=todo&business=&page=1&pageSize=10000"
+            )
+            .then(res => {
+               console.log(123);
+               this.todoListLength = res.data.count;
+            });
+             $self.$axios
+            .get(
+                "/api/v1/push/513/list?type=reading&business=&page=1&pageSize=10000"
+            )
+            .then(res => {
+               console.log(123);
+               this.readingListLength = res.data.count;
+            });
     }
-}
+};
 </script>
 
 <style lang="scss" scoped>
