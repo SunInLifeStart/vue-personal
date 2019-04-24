@@ -355,3 +355,8 @@ body .el-table th.gutter {
   right: 0px;
 }
 </style>
+<style scoped>
+.blockcolor >>> .el-input__inner{
+    color: black
+}
+</style>
