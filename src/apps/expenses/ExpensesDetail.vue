@@ -347,6 +347,16 @@ export default {
         float: left;
         margin-right: 10px;
     }
+    .tablePrint td,
+    .tablePrint th {
+        padding: 0px;
+        margin: 0px;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-size: 13px;
+        height: 35px;
+        text-align: center;
+    }
     #actionList {
         background: #f4f4f4;
         border-bottom: 1px solid #eaeaea;

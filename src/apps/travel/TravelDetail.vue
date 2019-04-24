@@ -401,6 +401,16 @@ export default {
         color: #1c47f3;
         text-decoration: underline;
     }
+    .tablePrint td,
+    .tablePrint th {
+        padding: 0px;
+        margin: 0px;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-size: 13px;
+        height: 35px;
+        text-align: center;
+    }
     .audit {
         position: relative;
         margin-bottom: 10px;

@@ -631,6 +631,16 @@ export default {
             }
         }
     }
+    .tablePrint td,
+    .tablePrint th {
+        padding: 0px;
+        margin: 0px;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-size: 13px;
+        height: 35px;
+        text-align: center;
+    }
     #moneyright {
         text-align: right;
         padding-right: 10px;
