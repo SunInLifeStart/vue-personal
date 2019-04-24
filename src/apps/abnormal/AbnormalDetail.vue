@@ -42,12 +42,11 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="招标情况说明：">{{tableData.bidCondition}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="异常情况：">{{tableData.anomalyConditions}}
+                    <el-col :span="24">
+                        <el-form-item label="异常情况：">
+                            <span v-for="item in tableData.anomalyConditions">
+                                {{item}}
+                            </span>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -67,7 +66,6 @@
                         </div>
                     </el-col>
                 </el-row>
-
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>

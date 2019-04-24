@@ -57,7 +57,7 @@
                             <el-row>
                                 <el-checkbox label="排序第一的投标人弃标。"></el-checkbox>
                                 <el-checkbox label="其他"></el-checkbox>
-                                <el-input style="width: 50%" v-model="formData.anomalyConditionsOth"></el-input>
+                                <el-input style="width: 50%" :disabled="changeConditionsOther" v-model="formData.anomalyConditionsOth"></el-input>
                             </el-row>
                         </el-checkbox-group>
                     </el-form-item>
@@ -145,6 +145,15 @@ export default {
             appFlowName:'motor-bidanomaly_bidanomaly'
         };
     },
+    computed: {
+        changeConditionsOther() {
+            if (this.formData.anomalyConditions.includes('其他')) {
+                return false;
+            } else {
+                return true;
+            }
+        },
+    },
     methods: {
         resetForm() {
             let formData =  {
@@ -186,6 +195,9 @@ export default {
         },
         async saveForm(params) {
             const $self = this;
+            if (!this.formData.anomalyConditions.includes('其他')) {
+                this.formData.anomalyConditionsOth = ''
+            }
             let response = await $self.saveFormData(
                 "/api/v1/motor-bidanomaly/save",
                 $self.formData

@@ -55,6 +55,13 @@
                         <el-form-item label="是否有授权：">{{tableData.accreditSign}}
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="经营模式：">
+                            <div v-for="item in tableData.businessModels">
+                                {{item}}
+                            </div>
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
@@ -164,12 +171,8 @@ export default {
             comments: [],
             textarea: '',
             dialogVisible: false,
-            appFlowName:'motor-issuesreported_party-agendasheet',
-            SupplierOption: {
-                general: '总办会',
-                chairman: '党支委会'
-            },
-            formName:'issuesReported',
+            appFlowName:'motor-supplier_supplier',
+            formName:"motor-supplier",
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
         };
@@ -182,7 +185,7 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/issuesReported/detail/" + $self.formId;
+            $self.url= "/api/v1/motor-supplier/get/" + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -193,42 +196,10 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            // debugger;
             let actions = await $self.getActions();
-            let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();
-            for(let i = 0; i < actions.data.types.length; i++){
-                if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
-                    for(let j = 0; j<actions.data.types[i].required.length; j++){
-                        if(actions.data.types[i].required[j].indexOf("filterButton") > -1){
-                            if(actions.data.types[i].required[j].indexOf("==") > -1){
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split("==")[0].split(":")[1];
-                                let value = a.split("==")[1];
-                                if($self.tableData[key_a] != value){
-                                    actions.data.types[i].hideCurrent = true;
-                                }
-                            }else{
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split("!=")[0].split(":")[1];
-                                let value = a.split("!=")[1];
-                                if($self.tableData[key_a] == value){
-                                    actions.data.types[i].hideCurrent = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            };
             $self.actions = actions.data.types;
-            $self.crumbs =  {items: crumbs.data, index: -1};
             $self.comments = comments.data;
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;
-                }
-            }
-
         }
     }
 };
