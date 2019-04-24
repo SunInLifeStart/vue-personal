@@ -1,4 +1,3 @@
-
 export const publicMethods = {
     methods: {
         async saveFormData(url, data) {
@@ -55,7 +54,7 @@ export const publicMethods = {
             await this.startSignalForSave("forStart");
             let actions2 = await this.getActions();
             if (actions2.data.types.length > 0) {
-                actions2.data.types = actions2.data.types.filter(function (item) {
+                actions2.data.types = actions2.data.types.filter(function(item) {
                     return item.action == "COMMIT";
                 });
                 this.hasRequired(actions2.data.types[0]);
@@ -65,13 +64,13 @@ export const publicMethods = {
             }
             actions2.data.types[0]["comment"] = actions2.data.types[0].name;
             let complete2 = await this.startSignal(actions2.data.types[0]);
-            if(type){
-                return  complete2.data;
-            }else{
+            if (type) {
+                return complete2.data;
+            } else {
                 await this.emitMessage();
             }
             //return complete2.data;
-            
+
         },
         hasRequired(data) {
             let $self = this;
@@ -81,7 +80,7 @@ export const publicMethods = {
                 for (let item of data.required) {
                     let key = item.split(":")[0];
                     if (detailsData[key] || detailsData[key] == false) {
-                        if (item.split(":")[1] == "arrays" && typeof (detailsData[key]) == "string") {
+                        if (item.split(":")[1] == "arrays" && typeof(detailsData[key]) == "string") {
                             options.push(key + "=" + '[' + detailsData[key] + ']'); //如果是数组类型的拼成数组
                         } else {
                             detailsData[key] = detailsData[key] === "" ? 0 : detailsData[key];
@@ -96,7 +95,7 @@ export const publicMethods = {
                             let type = this.$store.getters.LoginData.code.split("_")[0];
                             if (type) {
                                 let arr = this.$store.getters.LoginData.Role.split(',');
-                                if (arr.includes(type + "_" + "chairman")) {  //董事长
+                                if (arr.includes(type + "_" + "chairman")) { //董事长
                                     options.push("characterLevel=1");
                                 } else if (arr.includes(type + "_" + "generalManager")) { //总经理
                                     options.push("characterLevel=2");
@@ -104,19 +103,20 @@ export const publicMethods = {
                                     options.push("characterLevel=3");
                                 } else if (arr.includes(type + "_" + "duptyGeneralManager")) { //副总经理
                                     options.push("characterLevel=3");
+                                } else if (arr.includes(type + "_" + "deputyGeneralManager")) { //副总经理常务
+                                    options.push("characterLevel=3");
                                 } else if (arr.includes(type + "_" + "deptManager")) { //部门负责人
                                     options.push("characterLevel=4");
-                                }else if (arr.includes(type + "_" + "deputyManager")) { //副部门长负责人
+                                } else if (arr.includes(type + "_" + "deputyManager")) { //副部门长负责人
                                     options.push("characterLevel=4");
                                 } else {
                                     options.push("characterLevel=5");
                                 }
                             }
-                        }  else if (key == "role" && detailsData.appFlowName !="travel-form_travel" ) {
-                             options.push("role=" +  this.$store.getters.LoginData.Role);
+                        } else if (key == "role" && detailsData.appFlowName != "travel-form_travel") {
+                            options.push("role=" + this.$store.getters.LoginData.Role);
                         } else {
-                            if (key.indexOf("filterButton") > -1) {
-                            } else {
+                            if (key.indexOf("filterButton") > -1) {} else {
                                 $self.msgTips('依赖的' + key + '表单中找不到', "warning");
                                 return false;
                             }
@@ -307,7 +307,7 @@ export const publicMethods = {
         deleteAttachments(id) {
             let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
-                $self.formData.attachments.forEach(function (value, index) {
+                $self.formData.attachments.forEach(function(value, index) {
                     $self.formData.attachments.splice(index, 1);
                     // if (value.id == id) {
                     //     axios
@@ -344,8 +344,7 @@ export const publicMethods = {
                 if (res.data) {
                     $self.$axios
                         .get("/api/v1/ntko/session/create?token=" + res.data)
-                        .then(res => {
-                        });
+                        .then(res => {});
                 }
                 if (url) {
                     ntkoBrowser.openWindow(
@@ -356,7 +355,7 @@ export const publicMethods = {
                         $self.openUrl + "token=" + res.data
                     );
                 }
-                $self.timer = setInterval(function () {
+                $self.timer = setInterval(function() {
                     $self.$axios
                         .get("/api/v1/ntko/session/finish?token=" + res.data)
                         .then(res => {
@@ -367,8 +366,7 @@ export const publicMethods = {
                                     url: res.data.url,
                                     path: res.data.path,
                                     file_name: res.data.file_name,
-                                    pdfUrl:
-                                        res.data.url.split("files")[0] +
+                                    pdfUrl: res.data.url.split("files")[0] +
                                         "pdf" +
                                         res.data.url.split("files")[1]
                                 };
