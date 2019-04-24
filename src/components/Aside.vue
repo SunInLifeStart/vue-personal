@@ -89,7 +89,6 @@ export default {
                 "/api/v1/push/513/list?type=todo&business=&page=1&pageSize=10000"
             )
             .then(res => {
-               console.log(123);
                this.todoListLength = res.data.count;
             });
              $self.$axios
@@ -97,7 +96,6 @@ export default {
                 "/api/v1/push/513/list?type=reading&business=&page=1&pageSize=10000"
             )
             .then(res => {
-               console.log(123);
                this.readingListLength = res.data.count;
             });
     }

@@ -179,7 +179,6 @@ export const publicMethods = {
                 $self.msgTips($self.currentAction.name + "成功", "success");
                 $self.getFormDetailsData();
             } else if ($self.currentAction.action == 'CANCEL') {
-                await $self.startSignal();
                 $self.deleteCurrentLine($self.tableData.id, "CANCEL");
             } else if ($self.currentAction.name == "编辑") {
                 $self.reEditForm();
@@ -282,6 +281,7 @@ export const publicMethods = {
                 $self.$axios.get("/api/v1/" + $self.formName + "/delete/" + id).then(res => {
                     $self.msgTips(params ? "撤销成功" : "删除成功", "success");
                     if (params) {
+                        $self.startSignal();
                         $self.$emit("reloadList", "reload");
                     } else {
                         $self.getList();

@@ -121,7 +121,7 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="供应商入库申请表附件">
+                    <el-form-item label="供应商入库申请表附件" prop="attachmentsSto">
                         <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessSto" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
@@ -167,30 +167,18 @@ export default {
             formData: this.resetForm(),
             users: [],
             rules: {
-                number: [
-                    { required: true, message: '请输入流水单号', trigger: 'blur' }
+                recommendDept: [
+                    { required: true, message: '请输入推荐部门/个人', trigger: 'blur' }
                 ],
-                branchlineTo: [
-                    { required: true, message: '请输入会议类型', trigger: 'blur' }
+                supplierName: [
+                    { required: true, message: '请输入供应商名称', trigger: 'blur' }
                 ],
-                committed: [
-                    { required: true, message: '请输入提单时间', trigger: 'blur' }
+                supplierSource: [
+                    { required: true, message: '请输入供应商来源', trigger: 'blur' }
                 ],
-                // creatorName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // organName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // applyDepartment: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // timeApplication: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // topicName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ]
+                attachmentsSto: [
+                    { required: true, message: '请输入供应商入库申请表附件', trigger: 'blur' }
+                ]
             },
             appFlowName:'motor-supplier_supplier'
         };
