@@ -32,8 +32,8 @@
                             <el-radio-group v-model="formData.purchaseBusinessType">
                                 <div v-for="item in radioOption">
                                     <el-radio   :key="item.value"
-                                                :value="item.value"
-                                                :label="item.label">
+                                                :label="item.value">
+                                        {{item.label}}
                                     </el-radio>
                                 </div>
                             </el-radio-group>
@@ -44,8 +44,8 @@
                     <el-col :span="8">
                         <el-form-item label="采购方案是否是规定情形" prop="purchaseSchemeSign">
                             <el-radio-group v-model="formData.purchaseSchemeSign">
-                                <el-radio key="1" value="1" label="是"></el-radio>
-                                <el-radio key="2" value="2" label="否"></el-radio>
+                                <el-radio key="1" label="1">是</el-radio>
+                                <el-radio key="2" label="2">否</el-radio>
                             </el-radio-group>
                         </el-form-item>
                     </el-col>
@@ -56,10 +56,10 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购主责部门" prop="purchaseDeptName">
+                        <el-form-item label="采购主责部门" prop="purchaseDeptNames">
                             <el-select
                                     value-key="id"
-                                    v-model="formData.purchaseDeptName">
+                                    v-model="formData.purchaseDeptNames">
                                 <el-option
                                         v-for="item in organsOptions"
                                         :key="item.id"
@@ -73,12 +73,12 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="采购预估金额(元)" prop="estimatedAmount">
-                            <el-input v-model.number="formData.estimatedAmount"></el-input>
+                            <format-input separator="," :precision="2" v-model="formData.estimatedAmount" :max="10000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="目标成本/预算金融(元)" prop="budgetAmount">
-                            <el-input v-model.number="formData.budgetAmount"></el-input>
+                            <format-input separator="," :precision="2" v-model="formData.budgetAmount" :max="10000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -97,7 +97,7 @@
                                     <th colspan="2">注册资金</th>
                                     <th colspan="2">  </th>
                                 </tr>
-                                <tr v-for="(item,index) in formData.procschemeProvider" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                                <tr v-for="(item,index) in formData.provider" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
                                     <td colspan="2" style="width: 50px;">
                                         {{index + 1}}
                                     </td>
@@ -166,12 +166,12 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="评审/谈判名单" prop="negotiateLeader">
+                        <el-form-item label="评审/谈判名单" prop="negotiateLeaders">
                             <el-row>
                                 <el-col :span="8">
                                     <el-select
                                             value-key="id"
-                                            v-model="formData.negotiateLeader">
+                                            v-model="formData.negotiateLeaders">
                                         <el-option
                                                 v-for="item in userOptions"
                                                 :key="item.id"
@@ -182,7 +182,7 @@
                                 </el-col>
                                 <el-col :span="16">
                                     <el-select
-                                            v-model="formData.negotiatePersonnel"
+                                            v-model="formData.negotiatePersonnels"
                                             multiple
                                             filterable
                                             allow-create
@@ -202,7 +202,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="评判办法" prop="reviewWay">
+                        <el-form-item label="评审办法" prop="reviewWay">
                             <el-input v-model="formData.reviewWay"></el-input>
                         </el-form-item>
                     </el-col>
@@ -260,6 +260,7 @@
     /* eslint-disable */
     import axios from 'axios';
     import moment from 'moment';
+    import formatInput from '@/components/formatInput'
     import FilesOperate from '../FilesOperate';
     import { application } from "../application.js";
     import { publicMethods } from "../application.js";
@@ -288,16 +289,16 @@
                     // purchaseStartTime: [
                     //     { type: 'date', required: true, message: '请输入采购发起时间', trigger: 'blur' }
                     // ],
-                    purchaseDeptName: [
+                    purchaseDeptNames: [
                         { required: true, message: '请输入采购主责部门', trigger: 'change' }
                     ],
                     estimatedAmount: [
                         { required: true, message: '请输入采购预估金额'},
-                        { type: 'number', message: '年龄必须为数字值'}
+                        // { type: 'number', message: '年龄必须为数字值'}
                     ],
                     budgetAmount: [
                         { required: true, message: '请输入目标成本/预算金融'},
-                        { type: 'number', message: '年龄必须为数字值'}
+                        // { type: 'number', message: '年龄必须为数字值'}
                     ],
                     purchaseWay: [
                         { required: true, message: '请输入采购方式', trigger: 'blur' }
@@ -317,7 +318,7 @@
                     attachmentsIns: [
                         { type: 'array', required: true, message: '请输入考察报告附件', trigger: 'blur' }
                     ],
-                    procschemeProvider: [
+                    provider: [
                         { type: 'array', required: true, message: '请输入供应商入围情况', trigger: 'blur' }
                     ],
                 },
@@ -351,11 +352,12 @@
                 users: [],
                 userOptions: [],
                 organsOptions: [],
-                appFlowName: "motor-procscheme",
+                appFlowName: "motor-procscheme_procscheme",
             };
         },
         components: {
-            FilesOperate
+            FilesOperate,
+            formatInput
         },
         mounted() {
             this.getUser()
@@ -389,16 +391,16 @@
                 this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                     if (type == 'message') {
                         if (item.id) {
-                            this.formData.procschemeProvider.splice(index, 1);
+                            this.formData.provider.splice(index, 1);
                         } else {
-                            this.formData.procschemeProvider.splice(index, 1);
+                            this.formData.provider.splice(index, 1);
                         }
                     }
                 });
             },
             addItem(type) {
                 if (type == 'message') {
-                    this.formData.procschemeProvider.push({});
+                    this.formData.provider.push({});
                 }
             },
             getId(id, type) {
@@ -421,19 +423,19 @@
                     projectName: '',
                     purchaseProjectName: '',
                     purchaseSignSketch: '',
-                    purchaseBusinessType: '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
-                    purchaseSchemeSign: '是',
+                    purchaseBusinessType: '1',
+                    purchaseSchemeSign: '1',
                     purchaseStartTime: '',
                     estimatedAmount: 0,
                     budgetAmount: 0,
-                    procschemeProvider: [{}],
+                    provider: [{}],
                     purchaseWay: '公开招标',
                     purchaseOther: '',
                     executor: '自主实施',
                     negotiateAgent: '评标委员会',
                     negotiateAgentOther: '',
-                    negotiateLeader: {},
-                    negotiatePersonnel: [],
+                    negotiateLeaders: {},
+                    negotiatePersonnels: [],
                     reviewWay: '',
                     otherCase: '',
                     attachmentsAnno: [],
@@ -448,7 +450,6 @@
                     axios
                         .get('/api/v1/motor-procscheme/get/' + this.formId)
                         .then(res => {
-                            debugger
                             self.formData = res.data.content;
                         })
                         .catch(function() {

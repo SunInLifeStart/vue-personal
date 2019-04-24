@@ -19,49 +19,35 @@
                 <!--</el-steps>-->
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="流水号：">{{tableData.number}}
+                        <el-form-item label="招标人：">{{tableData.tenderee}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="招标人：">{{tableData.creatorName}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="联系人及电话：">{{tableData.organName}}
+                        <el-form-item label="联系人及电话：">{{tableData.linkman}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="项目名称：">{{tableData.committed}}
+                        <el-form-item label="项目名称：">{{tableData.projectName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="招标情况说明：">{{tableData.applyDepartment}}
+                        <el-form-item label="招标情况说明：">{{tableData.bidCondition}}
                         </el-form-item>
                     </el-col>
-                    <!--<el-col :span="8">-->
-                        <!--<el-form-item label="提请时间：">{{tableData.timeApplication}}-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
+                    <el-col :span="8">
+                        <el-form-item label="采购业务类别：">{{tableData.purchaseType}}
+                        </el-form-item>
+                    </el-col>
                 </el-row>
-                <!--<el-row>-->
-                    <!--<el-col :span="8">-->
-                        <!--<el-form-item label="会议类型：">-->
-                            <!--<span  v-html="AbnormalOption[tableData.branchlineTo]" ></span>-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                    <!--<el-col :span="8">-->
-                        <!--<el-form-item label="议题名称：">{{tableData.topicName}}-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                <!--</el-row>-->
                 <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
-                            </div>
+                    <el-col :span="8">
+                        <el-form-item label="招标情况说明：">{{tableData.bidCondition}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="异常情况：">{{tableData.anomalyConditions}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -123,16 +109,11 @@ export default {
             actions: [],
             actionsDialogArr: [],
             users: [],
-            crumbs: [],
             comments: [],
             textarea: '',
             dialogVisible: false,
-            appFlowName:'motor-issuesreported_party-agendasheet',
-            AbnormalOption: {
-                general: '总办会',
-                chairman: '党支委会'
-            },
-            formName:'issuesReported',
+            appFlowName:'motor-bidanomaly_bidanomaly',
+            formName:'motor-bidanomaly',
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
         };
@@ -145,7 +126,7 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/issuesReported/detail/" + $self.formId;
+            $self.url= "/api/v1/motor-bidanomaly/get/" + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -156,42 +137,10 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            // debugger;
             let actions = await $self.getActions();
-            let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();
-            for(let i = 0; i < actions.data.types.length; i++){
-                if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
-                    for(let j = 0; j<actions.data.types[i].required.length; j++){
-                        if(actions.data.types[i].required[j].indexOf("filterButton") > -1){
-                            if(actions.data.types[i].required[j].indexOf("==") > -1){
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split("==")[0].split(":")[1];
-                                let value = a.split("==")[1];
-                                if($self.tableData[key_a] != value){
-                                    actions.data.types[i].hideCurrent = true;
-                                }
-                            }else{
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split("!=")[0].split(":")[1];
-                                let value = a.split("!=")[1];
-                                if($self.tableData[key_a] == value){
-                                    actions.data.types[i].hideCurrent = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            };
             $self.actions = actions.data.types;
-            $self.crumbs =  {items: crumbs.data, index: -1};
             $self.comments = comments.data;
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;
-                }
-            }
-
         }
     }
 };

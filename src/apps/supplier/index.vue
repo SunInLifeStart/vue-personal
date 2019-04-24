@@ -5,7 +5,32 @@
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="供应商名称">
-                            <el-input v-model="params.topicName" placeholder="请输入供应商名称"></el-input>
+                            <el-input v-model="params.supplierName" placeholder="请输入供应商名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="推荐参与项目">
+                            <el-input v-model="params.recommendProject" placeholder="请输入推荐参与项目"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购发起时间">
+                            <el-date-picker v-model="params.purchaseStartTime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请输入采购发起时间" style="width:100%" type="date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="单据状态">
+                            <el-select v-model="params.status" placeholder="请输入单据状态">
+                                <el-option
+                                        v-for="item in statusOption"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -23,17 +48,20 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-                <el-table-column prop="topicName" label="推荐部门/个人">
+                <el-table-column prop="recommendDept" label="推荐部门/个人">
                 </el-table-column>
-                <el-table-column prop="creatorName" label="供应商名称">
+                <el-table-column prop="supplierName" label="供应商名称">
                 </el-table-column>
-                <el-table-column prop="organName" label="推荐参与项目">
+                <el-table-column prop="recommendProject" label="推荐参与项目">
                 </el-table-column>
-                <el-table-column prop="committed" label="推荐参与采购项目">
+                <el-table-column prop="recommendPurProject" label="推荐参与采购项目">
                 </el-table-column>
-                <el-table-column prop="applyDepartment" label="供应商所在地">
+                <el-table-column prop="supplieLocation" label="供应商所在地">
                 </el-table-column>
-                <el-table-column prop="timeApplication" label="联系人">
+                <el-table-column prop="linkman" label="联系人">
+                </el-table-column>
+                <el-table-column label="单据状态">
+                    <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
@@ -77,6 +105,28 @@ export default {
             searchBoardOptions: [],
             formBoardId: '',
             dialogBoardFormId: '',
+            statusOption: [
+                {
+                    value: '00',
+                    label: '已保存'
+                },
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '03',
+                    label: '已撤销'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ],
             operationBoardType: 'create',
             formName:"issuesReported",
             appFlowName:'motor-issuesreported_party-agendasheet',
@@ -86,6 +136,18 @@ export default {
     components: {
         SupplierForm,
         SupplierDetail
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+                "00":"已保存",
+                "01":"审核中",
+                "02" :"已驳回",
+                "03" :"已撤销",
+                "04" :"已完成"
+            };
+            return xmlJson[data];
+        }
     },
     mounted() {
         this.getList();

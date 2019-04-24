@@ -19,47 +19,84 @@
                 <!--</el-steps>-->
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="流水号：">{{tableData.number}}
+                        <el-form-item label="推荐时间：">{{tableData.recommendTime}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="推荐部门/个人：">{{tableData.creatorName}}
+                        <el-form-item label="推荐部门/个人：">{{tableData.recommendDept}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="供应商名称：">{{tableData.organName}}
+                        <el-form-item label="供应商名称：">{{tableData.supplierName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="推荐参与项目：">{{tableData.committed}}
+                        <el-form-item label="推荐参与项目：">{{tableData.recommendProject}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="推荐参与采购项目：">{{tableData.applyDepartment}}
+                        <el-form-item label="推荐参与采购项目：">{{tableData.recommendPurProject}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="供应商所在地：">{{tableData.timeApplication}}
+                        <el-form-item label="供应商所在地：">{{tableData.supplieLocation}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="联系人：">
-                            <span  v-html="SupplierOption[tableData.branchlineTo]" ></span>
+                            <span  v-html="tableData.linkman" ></span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="是否有授权：">{{tableData.topicName}}
+                        <el-form-item label="是否有授权：">{{tableData.accreditSign}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="联系方式：">{{tableData.contactWay}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="主营行业：">{{tableData.mainTrade}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="主力产品/业务：">{{tableData.mainProduct}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="供应商基本情况：">{{tableData.supplierBasic}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="考察评估情况：">{{tableData.inspectSituation}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="推荐意见：">{{tableData.recommendations}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                        <el-form-item label="供应商入库申请表附件：" v-if="tableData.attachmentsSto && tableData.attachmentsSto.length > 0">
+                            <div v-for="item in tableData.attachmentsSto" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="考察报告附件：" v-if="tableData.attachmentsIns && tableData.attachmentsIns.length > 0">
+                            <div v-for="item in tableData.attachmentsIns" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>

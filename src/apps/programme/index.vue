@@ -55,6 +55,7 @@
                 <el-table-column prop="purchaseSignSketch" label="采购标的简述">
                 </el-table-column>
                 <el-table-column prop="purchaseSchemeSign" label="采购方案是否是规定情形">
+                    <template slot-scope="scope">{{scope.row.purchaseSchemeSign | filterSchemeSign}}</template>
                 </el-table-column>
                 <el-table-column prop="purchaseStartTime" label="采购发起时间">
                 </el-table-column>
@@ -145,6 +146,13 @@
                     "02" :"已驳回",
                     "03" :"已撤销",
                     "04" :"已完成"
+                };
+                return xmlJson[data];
+            },
+            filterSchemeSign: function(data) {
+                let xmlJson = {
+                    "1":"是",
+                    "2":"否"
                 };
                 return xmlJson[data];
             }
