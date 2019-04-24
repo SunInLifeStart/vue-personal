@@ -395,10 +395,7 @@ export default {
     components: {
         FilesOperate
     },
-    mounted() {
-        this.getUsers();
-        this.organs();
-    },
+    mounted() {},
     methods: {
         ranksChange(item) {
             item.level = this.getRanks(item.ranks);
@@ -743,6 +740,8 @@ export default {
             this.formData.upper = this.common.DX(this.formData.total);
         },
         setDataFromParent(data) {
+            this.getUsers();
+            this.organs();
             this.getClass();
             this.getSubmissionlList();
             if (data.estimate.length > 0) {
@@ -770,6 +769,8 @@ export default {
             this.createForm_status = false;
         },
         createForm() {
+            this.getUsers();
+            this.organs();
             this.submission = '';
             this.formData = this.resetForm();
             this.getNum();
