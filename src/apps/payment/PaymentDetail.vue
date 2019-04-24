@@ -120,14 +120,12 @@
                     </tr>
                     <tr>
                         <td>
-                            <span class="span">*</span>
                             支出说明
                         </td>
                         <td colspan="4">
                             {{tableData.paymentExplain}}
                         </td>
                         <td>
-                            <span class="span">*</span>
                             费用归属项目
                         </td>
                         <td colspan="2">
@@ -343,22 +341,20 @@
                             </div>
                         </td>
                     </tr>
-                    <!--
-                    <tr v-show="approval" id="approval">
+                    <tr id="approval">
                         <td colspan="2" class="fontBold">领导审批</td>
                         <td colspan="6" style="text-align: left;">
-                            <div class="audit" v-for="item in this.array" :key="item.id" v-if="item.action == 'APPROVE'">
+                            <div class="audit" v-for="item in this.array" :key="item.id">
                                 <div class="info">
                                     <div class="creator">
-                                        <a href="#">{{item.creatorName}}</a> {{item.created | dateformat}}
+                                        <a href="#">{{item.userName}}</a> {{item.times | dateformat}}
                                     </div>
                                     <span style="color: #0c21e8;">【同意】</span>
-                                    <span class="content">{{item.content}}</span>
+                                    <span class="content">{{item.fullMessage}}</span>
                                 </div>
                             </div>
                         </td>
                     </tr>
-                    -->
                 </table>
             </el-form>
             <el-row v-if="comments && comments.length > 0">
@@ -477,28 +473,61 @@ export default {
         getAgree() {
             this.array = [];
             let j = -1;
-            let p;
-            for (var i = 0; i < this.tableData.comments.length; i++) {
-                if (this.tableData.comments[i].action == 'REJECT') {
+            for (var i = 0; i < this.comments.length; i++) {
+                if (this.comments[i].fullMessage == '驳回') {
                     j = i;
-                } else if (this.tableData.comments[i].action == 'PULL') {
-                    p = i;
-                    j = 2;
                 }
             }
+
             if (j == -1) {
-                this.array = this.tableData.comments;
-            } else if ((j = 2)) {
-                for (var a = 0; a < this.tableData.comments.length; a++) {
-                    if (a == p || a == p - 1) {
-                        this.array = this.array;
+                let arrayConst = [];
+                let boolean = false;
+                for (var i = 0; i < this.comments.length; i++) {
+                    if (
+                        this.comments[i + 1] &&
+                        this.comments[i + 1].fullMessage == '撤回'
+                    ) {
                     } else {
-                        this.array.push(this.tableData.comments[a]);
+                        arrayConst.push(this.comments[i]);
+                    }
+                    if (i == this.comments.length - 1) {
+                        boolean = true;
+                    }
+                }
+                if (boolean) {
+                    for (let data of arrayConst) {
+                        if (
+                            data.fullMessage != null &&
+                            data.fullMessage == '同意'
+                        ) {
+                            this.array.push(data);
+                        }
                     }
                 }
             } else {
-                for (var k = j + 2; k < this.tableData.comments.length; k++) {
-                    this.array.push(this.tableData.comments[k]);
+                let arrayreject = [];
+                let boolean = false;
+                for (var a = j + 1; a < this.comments.length; a++) {
+                    if (
+                        this.comments[a + 1] &&
+                        this.comments[a + 1].fullMessage == '撤回'
+                    ) {
+                    } else {
+                        arrayreject.push(this.comments[a]);
+                    }
+                    if (a == this.comments.length - 1) {
+                        boolean = true;
+                    }
+                }
+                if (boolean) {
+                    for (let data of arrayreject) {
+                        if (
+                            data.fullMessage != null &&
+                            data.fullMessage == '同意'
+                        ) {
+                            this.array.push(data);
+                        }
+                    }
                 }
             }
         },
@@ -548,6 +577,7 @@ export default {
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
             $self.comments = comments.data;
+            this.getAgree();
             // $self.crumbs =  {items: crumbs.data, index: -1};
             // for(var i= 0; i<$self.crumbs.items.length; i++){
             //     if($self.crumbs.items[i].active){
