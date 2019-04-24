@@ -92,6 +92,12 @@
                     </el-col>
                 </el-row>
                 <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="供应商来源：">{{sourceOption[tableData.supplierSource]}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="24">
                         <el-form-item label="供应商入库申请表附件：" v-if="tableData.attachmentsSto && tableData.attachmentsSto.length > 0">
                             <div v-for="item in tableData.attachmentsSto" :key="item.id" style="float:left">
@@ -164,6 +170,11 @@ export default {
     data() {
         return {
             tableData: {},
+            sourceOption: {
+                '1': '采购主责部门推荐/股东方供应商库项目引入模式',
+                '2': '常规引入',
+                '3': '批量引入股东方供应商资源或/“战略合作”关系（级别）股东方供应商资源'
+            },
             actions: [],
             actionsDialogArr: [],
             users: [],

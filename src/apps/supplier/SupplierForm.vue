@@ -24,9 +24,9 @@
                 <el-col :span="16">
                     <el-form-item label="供应商来源" prop="supplierSource">
                         <el-radio-group v-model="formData.supplierSource">
-                            <el-radio key="1" value="1" label="采购主责部门推荐/股东方供应商库项目引入模式"></el-radio>
-                            <el-radio key="2" value="2" label="常规引入"></el-radio>
-                            <el-radio key="3" value="3" label="批量引入股东方供应商资源或/“战略合作”关系（级别）股东方供应商资源"></el-radio>
+                            <el-radio key="1" label="1">采购主责部门推荐/股东方供应商库项目引入模式</el-radio>
+                            <el-radio key="2" label="2">常规引入</el-radio>
+                            <el-radio key="3" label="3">批量引入股东方供应商资源或/“战略合作”关系（级别）股东方供应商资源</el-radio>
                         </el-radio-group>
                     </el-form-item>
                 </el-col>
@@ -81,7 +81,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="联系方式" prop="contactWay">
-                        <el-input v-model="formData.contactWay"></el-input>
+                        <el-input v-model="formData.contactWay" placeholder="请输入联系方式"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -98,7 +98,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="主营品牌" prop="mainBrand">
-                        <el-input v-model="formData.mainBrand"></el-input>
+                        <el-input v-model="formData.mainBrand" placeholder="请输入主营品牌"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -115,7 +115,7 @@
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="推荐意见" prop="recommendations">
-                        <el-input v-model="formData.recommendations"></el-input>
+                        <el-input v-model="formData.recommendations" placeholder="请输入推荐意见"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -195,7 +195,7 @@ export default {
                 recommendTime: '',
                 recommendDept: '',
                 supplierName: '',
-                supplierSource: '采购主责部门推荐/股东方供应商库项目引入模式',
+                supplierSource: '1',
                 recommendProject: '',
                 recommendPurProject: '',
                 supplieLocation: '',
