@@ -87,21 +87,21 @@
                 <el-table :data="tableData.usingApproval" border style="width: 90%; margin-top: 5px;" >
                            <el-table-column prop="fileName" label="用印文件名称">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.fileName" disabled></el-input>
+                                    <el-input class="blockcolor"  v-model="scope.row.fileName" disabled></el-input>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="useReason" label="使用事由">
+                            <el-table-column prop="useReason" label="使用事由"  width="250">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.useReason" disabled></el-input>
+                                    <el-input  class="blockcolor" v-model="scope.row.useReason" disabled></el-input>
                                 </template>
                             </el-table-column>
                         
-                            <el-table-column prop="fileNum" label="用印份数">
+                            <el-table-column prop="fileNum" label="用印份数"  width="110">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.fileNum" disabled></el-input>
+                                    <el-input  class="blockcolor" v-model="scope.row.fileNum" disabled></el-input>
                                 </template>
                             </el-table-column>
-                             <el-table-column  label="附件" align="center">
+                             <el-table-column  label="附件" align="center"  width="150">
                                 <template slot-scope="scope" >
                                     <el-form-item label="" v-if="scope.row.attachments && scope.row.attachments.length > 0" disabled>
                                         <div v-for="item in scope.row.attachments" :key="item.id">
@@ -244,7 +244,7 @@ export default {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
 #ApprovalDetail {
     .el-step__main {
         margin-top: 10px;
@@ -338,4 +338,11 @@ export default {
     left: 0px;
     right: 0px;
 }
+
 </style>
+<style scoped>
+.blockcolor >>> .el-input__inner{
+    color: black
+}
+</style>
+

@@ -24,7 +24,7 @@ export default {
     methods: {}
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 #APPROVE {
     height: 100%;
     #ApprovalDetail {

@@ -1,5 +1,5 @@
 <template>
-<el-dialog title="用印审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">  
+<el-dialog title="用印审批表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="85%" style="text-align: center;">  
     <div id="ApprovalForm">
         <el-form :model="formData" label-width="100px" :rules="rules" ref="formupdate">
             <!-- <el-row >
@@ -105,29 +105,29 @@
                             <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
                             <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                         </div>
-                        <el-table :data="formData.usingApproval" border style="width: 100%; margin-top: 5px;"
+                        <el-table :data="formData.usingApproval" border style="width: 100%; margin-top: 5px;color:black"
                          @selection-change="handleSelectionChange" 
                           :row-class-name="tableRowClassName"
                           @row-click='show'
                           >
                             <el-table-column type="selection"></el-table-column>
-                            <el-table-column prop="fileName" label="用印文件名称">
+                            <el-table-column prop="fileName"  label="用印文件名称">
                                 <template slot-scope="scope">
                                     <el-input v-model="scope.row.fileName"></el-input>
                                 </template>
                             </el-table-column>
-                            <el-table-column prop="useReason" label="使用事由">
+                            <el-table-column prop="useReason" width="250" label="使用事由">
                                 <template slot-scope="scope">
                                     <el-input v-model="scope.row.useReason"></el-input>
                                 </template>
                             </el-table-column>
                         
-                            <el-table-column prop="fileNum" label="用印份数">
+                            <el-table-column prop="fileNum" width="110" label="用印份数">
                                 <template slot-scope="scope">
                                     <el-input v-model="scope.row.fileNum" ></el-input>
                                 </template>
                             </el-table-column>
-                             <el-table-column  label="附件" align="center">
+                             <el-table-column  label="附件" width="150" align="center">
                                 <template slot-scope="scope" >
                                     <el-upload  name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" 
                                     :on-success="handleSuccess"
