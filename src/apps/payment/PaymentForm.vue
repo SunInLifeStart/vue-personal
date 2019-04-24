@@ -478,9 +478,7 @@ export default {
     components: {
         FilesOperate
     },
-    mounted() {
-        this.getOrgan();
-    },
+    mounted() {},
     methods: {
         getClass() {
             const self = this;
@@ -929,6 +927,7 @@ export default {
             this.formData.travelId = '';
             this.formData.tra = '';
             this.formData.sub = '';
+            this.getOrgan();
             this.loadAll();
             this.getClass();
             this.getTravelList();
@@ -1122,6 +1121,7 @@ export default {
         createForm() {
             this.submission = '';
             this.loadAll();
+            this.getOrgan();
             this.getClass();
             this.getTravelList();
             this.getSubmissionlList();
