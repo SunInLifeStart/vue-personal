@@ -26,7 +26,6 @@
                     </el-col>
                     -->
                     <el-col :span="8" style="position: relative;">
-                        <span class="span3">*</span>
                         <el-form-item label="呈报件：" label-width="30px;">
                             <el-select v-model="formData.submission" filterable allow-create style="width: 50%;" value-key="id" placeholder="选择呈报件" @change="SubmissionChange">
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item">
@@ -143,7 +142,7 @@
                             <span style="color:red;">*</span>预计金额
                         </td>
                         <td colspan="3">
-                            <el-input placeholder="小写" @input="moneyChange" v-model.number="formData.amountInFigures" @mousewheel.native.prevent type="number"></el-input>
+                            <el-input placeholder="小写" @input="moneyChange" v-model="formData.amountInFigures" @mousewheel.native.prevent type="number"></el-input>
                         </td>
                         <td colspan="4">
                             {{formData.amountInWords}}
@@ -395,10 +394,7 @@ export default {
         saveFormValidate(type) {
             const $self = this;
             let typee = this.$store.getters.LoginData.code.split('_')[0];
-            if (
-                this.formData.amountInFigures != '' &&
-                this.formData.submission != ''
-            ) {
+            if (this.formData.amountInFigures != '') {
                 if (typee) {
                     let arr = this.$store.getters.LoginData.Role.split(',');
                     if (

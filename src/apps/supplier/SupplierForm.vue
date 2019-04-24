@@ -5,7 +5,7 @@
             <el-row>
                 <el-col :span="8">
                     <el-form-item label="推荐时间" prop="recommendTime">
-                        <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.recommendTime" style="width:100%" type="datetime">
+                        <el-date-picker value-format="yyyy-MM-dd" v-model="formData.recommendTime" style="width:100%" type="date">
                         </el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -50,13 +50,15 @@
             </el-row>
             <el-row>
                 <el-col :span="20">
-                    <el-form-item label="经营模式" prop="businessModel">
-                        <el-checkbox>承包商</el-checkbox>
-                        <el-checkbox>制造商</el-checkbox>
-                        <el-checkbox>代理商</el-checkbox>
-                        <el-checkbox>经销商</el-checkbox>
-                        <el-checkbox>服务商</el-checkbox>
-                        <el-checkbox>其他</el-checkbox>
+                    <el-form-item label="经营模式" prop="businessModels">
+                        <el-checkbox-group v-model="formData.businessModels">
+                            <el-checkbox label="承包商">承包商</el-checkbox>
+                            <el-checkbox label="制造商">制造商</el-checkbox>
+                            <el-checkbox label="代理商">代理商</el-checkbox>
+                            <el-checkbox label="经销商">经销商</el-checkbox>
+                            <el-checkbox label="服务商">服务商</el-checkbox>
+                            <el-checkbox label="其他">其他</el-checkbox>
+                        </el-checkbox-group>
                     </el-form-item>
                 </el-col>
                 <el-col :span="2">
@@ -72,8 +74,8 @@
                 <el-col :span="8">
                     <el-form-item label="是否有授权" prop="accreditSign">
                         <el-select v-model="formData.accreditSign">
-                            <el-option key="1" label="是" value="1"></el-option>
-                            <el-option key="2" label="否" value="2"></el-option>
+                            <el-option key="1" label="是" value="是"></el-option>
+                            <el-option key="2" label="否" value="否"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
@@ -119,8 +121,8 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="供应商入库申请表附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                    <el-form-item label="供应商入库申请表附件" prop="attachmentsSto">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessSto" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachmentsSto" :key="item.id" style="float:left">
@@ -132,7 +134,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="考察报告附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessIns" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachmentsIns" :key="item.id" style="float:left">
@@ -162,69 +164,29 @@ export default {
     data() {
         return {
             dialogFormVisible: false,
-            options: [
-                {
-                    value: '1',
-                    label: '主管部门'
-                },
-                {
-                    value: '2',
-                    label: '部门'
-                }
-            ],
-            SupplierOption: [
-                {
-                    value: 'general',
-                    label: '总办会'
-                },
-                {
-                    value: 'chairman',
-                    label: '党支委会'
-                }
-            ],
-            personOptions: [],
             formData: this.resetForm(),
             users: [],
             rules: {
-                number: [
-                    { required: true, message: '请输入流水单号', trigger: 'blur' }
+                recommendDept: [
+                    { required: true, message: '请输入推荐部门/个人', trigger: 'blur' }
                 ],
-                branchlineTo: [
-                    { required: true, message: '请输入会议类型', trigger: 'blur' }
+                supplierName: [
+                    { required: true, message: '请输入供应商名称', trigger: 'blur' }
                 ],
-                committed: [
-                    { required: true, message: '请输入提单时间', trigger: 'blur' }
+                supplierSource: [
+                    { required: true, message: '请输入供应商来源', trigger: 'blur' }
                 ],
-                // creatorName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // organName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // applyDepartment: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // timeApplication: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // topicName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ]
+                attachmentsSto: [
+                    { required: true, message: '请输入供应商入库申请表附件', trigger: 'blur' }
+                ]
             },
-            appFlowName:'motor-issuesreported_party-agendasheet'
+            appFlowName:'motor-supplier_supplier'
         };
     },
     components: {
         FilesOperate
     },
-    mounted() {
-        this.getSupplierUser()
-    },
     methods: {
-        async getSupplierUser() {
-            let user = await this.getUsers("/api/v1/users")
-            if (user) this.personOptions = user.data
-        },
         changePeople() {
             this.$forceUpdate()
         },
@@ -233,11 +195,11 @@ export default {
                 recommendTime: '',
                 recommendDept: '',
                 supplierName: '',
-                supplierSource: '',
+                supplierSource: '采购主责部门推荐/股东方供应商库项目引入模式',
                 recommendProject: '',
                 recommendPurProject: '',
                 supplieLocation: '',
-                businessModel: '',
+                businessModels: [],
                 businessModelOth: '',
                 linkman: '',
                 accreditSign: '',
@@ -257,19 +219,9 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/api/v1/issuesReported/detail/' + this.formId)
+                    .get('/api/v1/motor-supplier/get/' + this.formId)
                     .then(res => {
                         self.formData = res.data.content;
-                        if (self.formData.attendingDepartment) {
-                            self.formData.attendingDepartment.forEach(item => {
-                                if (item.person) {
-                                    item.people = item.person.split(',')
-                                }
-                                for (let i = 0; i<item.people.length; i++) {
-                                    item.people[i] = parseInt(item.people[i])
-                                }
-                            })
-                        }
                     })
             }
         },
@@ -292,16 +244,8 @@ export default {
         },
         async saveForm(params) {
             const $self = this;
-            this.formData.sendMessage = []
-            $self.formData.attendingDepartment.forEach(item => {
-                if (item.people) {
-                    item.person = item.people.join(',')
-                }
-                this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
-            })
-            this.formData.sendMessage = this.formData.sendMessage.join(',')
             let response = await $self.saveFormData(
-                "/api/v1/issuesReported/save",
+                "/api/v1/motor-supplier/save",
                 $self.formData
             );
             if (response) {
@@ -337,11 +281,20 @@ export default {
                 }
             }
         },
-        handleSuccess(response, file) {
+        handleSuccessSto(response, file) {
             const self = this;
             if (response.length > 0) {
                 response.forEach(function(item) {
-                    self.formData.attachments.push(item);
+                    self.formData.attachmentsSto.push(item);
+                });
+            }
+            this.$refs.upload.clearFiles();
+        },
+        handleSuccessIns(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.formData.attachmentsIns.push(item);
                 });
             }
             this.$refs.upload.clearFiles();

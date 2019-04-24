@@ -9,7 +9,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label='出差申请单：' :required="true" label-width="110px">
+                        <el-form-item label='出差申请单：' label-width="110px">
                             <el-select v-model="formData.travelId" filterable placeholder="选择出差申请单" allow-create @change="travelChange">
                                 <el-option v-for="item in travelSelections" :key="item.id" :label="item.number" :value="item.id">
                                 </el-option>
@@ -23,7 +23,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="9">
-                        <el-form-item label='呈报件：' :required="true" label-width="110px">
+                        <el-form-item label='呈报件：' label-width="110px">
                             <el-select style="min-width:240px" v-model="submission" filterable placeholder="选择呈报件" allow-create @change="SubmissionChange">
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
@@ -181,19 +181,19 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model.number="payItem.amount" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
+                            <el-input v-model="payItem.amount" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="payItem.rate" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
+                            <el-input v-model="payItem.rate" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
                         </td>
                         <td>
                             <el-input v-model="payItem.localAmount" disabled class="money"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="payItem.noTax" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'notax')"></el-input>
+                            <el-input v-model="payItem.noTax" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'notax')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="payItem.tax" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'tax')"></el-input>
+                            <el-input v-model="payItem.tax" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'tax')"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -257,7 +257,7 @@
                             合同金额
                         </td>
                         <td rowspan="3">
-                            <el-input v-if="this.moneyType=='1'" v-model.number="formData.contract.amount" class="money" type="number" @mousewheel.native.prevent @input="getAmount('contractDetail')"></el-input>
+                            <el-input v-if="this.moneyType=='1'" v-model="formData.contract.amount" class="money" type="number" @mousewheel.native.prevent @input="getAmount('contractDetail')"></el-input>
                             <el-input v-else v-model="formData.contract.amount" class="money"></el-input>
                         </td>
                         <td rowspan="3">
@@ -268,8 +268,8 @@
                             累计已付款
                         </td>
                         <td>
-                            <el-input v-if="this.moneyType=='1'" v-model.number="formData.contract.payments" class="money" type="number" @mousewheel.native.prevent @input="getAmount('contractDetail')"></el-input>
-                            <el-input v-else @mousewheel.native.prevent v-model.number="formData.contract.payments" type="number" class="money"></el-input>
+                            <el-input v-if="this.moneyType=='1'" v-model="formData.contract.payments" class="money" type="number" @mousewheel.native.prevent @input="getAmount('contractDetail')"></el-input>
+                            <el-input v-else @mousewheel.native.prevent v-model="formData.contract.payments" type="number" class="money"></el-input>
                         </td>
                         <td rowspan="3">
                             <span class="span">*</span>
@@ -285,8 +285,8 @@
                             <span class="span">*</span>
                             累计付款比例（%）</td>
                         <td>
-                            <el-input v-if="this.moneyType=='1'" type="number" @mousewheel.native.prevent v-model.number="formData.contract.cumulativeProShow" disabled class="money"></el-input>
-                            <el-input v-else @mousewheel.native.prevent type="number" v-model.number="formData.contract.cumulativeProShow" class="money" @input="getReal()"></el-input>
+                            <el-input v-if="this.moneyType=='1'" type="number" @mousewheel.native.prevent v-model="formData.contract.cumulativeProShow" disabled class="money"></el-input>
+                            <el-input v-else @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeProShow" class="money" @input="getReal()"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -294,8 +294,8 @@
                             <span class="span">*</span>
                             本次付款后累计支付比例（%）</td>
                         <td>
-                            <el-input v-if="this.moneyType=='1'" @mousewheel.native.prevent type="number" v-model.number="formData.contract.cumulativeAfterShow" disabled class="money"></el-input>
-                            <el-input v-else @mousewheel.native.prevent type="number" v-model.number="formData.contract.cumulativeAfterShow" class="money" @input="getReal()"></el-input>
+                            <el-input v-if="this.moneyType=='1'" @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfterShow" disabled class="money"></el-input>
+                            <el-input v-else @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfterShow" class="money" @input="getReal()"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -346,7 +346,7 @@
                             <el-input v-model="shareItem.project"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="shareItem.amount" type="number" @mousewheel.native.prevent class="money" @input="getAmount('shareDetail',shareItem)"></el-input>
+                            <el-input v-model="shareItem.amount" type="number" @mousewheel.native.prevent class="money" @input="getAmount('shareDetail',shareItem)"></el-input>
                         </td>
                         <td colspan="2">
                             <el-input v-model="shareItem.amountCap" disabled></el-input>
@@ -478,9 +478,7 @@ export default {
     components: {
         FilesOperate
     },
-    mounted() {
-        this.getOrgan();
-    },
+    mounted() {},
     methods: {
         getClass() {
             const self = this;
@@ -929,6 +927,7 @@ export default {
             this.formData.travelId = '';
             this.formData.tra = '';
             this.formData.sub = '';
+            this.getOrgan();
             this.loadAll();
             this.getClass();
             this.getTravelList();
@@ -938,14 +937,26 @@ export default {
             }
             this.formData = data;
             if (self.formData.tra == 'true') {
-                this.formData.travelId = parseInt(data.travelId);
+                this.formData.travelId =
+                    data.travelId == null || data.travelId == ''
+                        ? ''
+                        : parseInt(data.travelId);
             } else {
-                this.formData.travelId = data.travelId;
+                this.formData.travelId =
+                    data.travelId == null || data.travelId == ''
+                        ? ''
+                        : data.travelId;
             }
             if (self.formData.sub == 'true') {
-                this.submission = parseInt(data.submissionId);
+                this.submission =
+                    data.submissionId == null || data.submissionId == ''
+                        ? ''
+                        : parseInt(data.submissionId);
             } else {
-                this.submission = data.submissionName;
+                this.submission =
+                    data.submissionName == null || data.submissionId == ''
+                        ? ''
+                        : data.submissionName;
             }
             this.moneyType = this.formData.contract.orAmount;
             if (this.formData.contract.orAmount == '2') {
@@ -1110,6 +1121,7 @@ export default {
         createForm() {
             this.submission = '';
             this.loadAll();
+            this.getOrgan();
             this.getClass();
             this.getTravelList();
             this.getSubmissionlList();

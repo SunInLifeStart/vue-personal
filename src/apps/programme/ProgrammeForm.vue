@@ -108,7 +108,7 @@
                                         <el-input v-model="item.enterpriseNature" placeholder="请输入企业性质"></el-input>
                                     </td>
                                     <td colspan="2">
-                                        <el-input v-model="item.registeredFund" placeholder="请输入注册资金(元)"></el-input>
+                                        <format-input separator="," :precision="2" v-model="item.registeredFund" placeholder="请输入注册资金(元)" :max="10000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
                                     </td>
                                     <td colspan="2">
                                         <el-input v-model="item.inspectConclusion" placeholder="请输入考察结论"></el-input>
@@ -294,7 +294,7 @@
                     ],
                     estimatedAmount: [
                         { required: true, message: '请输入采购预估金额'},
-                        // { type: 'number', message: '年龄必须为数字值'}
+                        { type: 'number', message: '金额必须为数字值'}
                     ],
                     budgetAmount: [
                         { required: true, message: '请输入目标成本/预算金融'},

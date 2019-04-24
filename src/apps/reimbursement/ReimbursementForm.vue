@@ -9,7 +9,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="9">
-                        <el-form-item label="出差审批单：" :required="true" label-width="115px">
+                        <el-form-item label="出差审批单：" label-width="115px">
                             <el-select v-model="travelPeople" placeholder="选择出差审批单" @change="travelChange" allow-create filterable>
                                 <el-option v-for="item in travelSelections" :key="item.id" :label="item.number" :value="item.id">
                                 </el-option>
@@ -23,7 +23,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="9">
-                        <el-form-item label="呈报件：" :required="true" label-width="25px;">
+                        <el-form-item label="呈报件：" label-width="25px;">
                             <el-select v-model="submission" filterable placeholder="选择呈报件" allow-create @change="SubmissionChange">
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
@@ -195,19 +195,19 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model.number="item.money" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
+                            <el-input v-model="item.money" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.estRate" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
+                            <el-input v-model="item.estRate" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.estSum" type="number" @mousewheel.native.prevent></el-input>
+                            <el-input v-model="item.estSum" type="number" @mousewheel.native.prevent></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.noTax" @mousewheel.native.prevent @input="loseFocus(item,index,'money','notax')"></el-input>
+                            <el-input v-model="item.noTax" @mousewheel.native.prevent @input="loseFocus(item,index,'money','notax')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.tax" @mousewheel.native.prevent @input="loseFocus(item,index,'money', 'tax')"></el-input>
+                            <el-input v-model="item.tax" @mousewheel.native.prevent @input="loseFocus(item,index,'money', 'tax')"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -356,13 +356,13 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model.number="item.bearSum" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'bearSum')"></el-input>
+                            <el-input v-model="item.bearSum" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'bearSum')"></el-input>
                         </td>
                         <td colspan="3">
                             <el-input v-model="item.upper"></el-input>
                         </td>
                         <td>
-                            <el-input v-model.number="item.shareRatio" type="number" @mousewheel.native.prevent></el-input>
+                            <el-input v-model="item.shareRatio" type="number" @mousewheel.native.prevent></el-input>
                         </td>
                     </tr>
                     <tr v-show="formData.share == true">
@@ -1300,8 +1300,6 @@ export default {
                 });
             } else {
                 if (
-                    this.travelPeople != '' &&
-                    this.submission != '' &&
                     this.formData.payee != '' &&
                     this.formData.bank != '' &&
                     this.formData.cardNo != '' &&

@@ -14,8 +14,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购发起时间">
-                            <el-date-picker v-model="params.purchaseStartTime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请输入采购发起时间" style="width:100%" type="date">
+                        <el-form-item label="推荐时间">
+                            <el-date-picker v-model="params.recommendTime" value-format="yyyy-MM-dd" placeholder="请输入采购发起时间" style="width:100%" type="date">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -59,6 +59,8 @@
                 <el-table-column prop="supplieLocation" label="供应商所在地">
                 </el-table-column>
                 <el-table-column prop="linkman" label="联系人">
+                </el-table-column>
+                <el-table-column prop="recommendTime" label="推荐时间">
                 </el-table-column>
                 <el-table-column label="单据状态">
                     <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
@@ -128,8 +130,8 @@ export default {
                 }
             ],
             operationBoardType: 'create',
-            formName:"issuesReported",
-            appFlowName:'motor-issuesreported_party-agendasheet',
+            formName:"motor-supplier",
+            appFlowName:'motor-supplier_supplier',
             statusNews: ''
         };
     },
@@ -166,15 +168,15 @@ export default {
         },
         async getList() {
             const $self = this;
-            $self.url = "/api/v1/issuesReported/queryList";
+            $self.url = "/api/v1/motor-supplier/query";
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {
                     let formId = response.data.content.list[0].id;
-                    // $self.$refs.SupplierDetail.getFormDetails(formId);
+                    $self.$refs.SupplierDetail.getFormDetails(formId);
                 }
-                // $self.tableData = response.data.content.list;
-                // $self.params.total = response.data.content.total;
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
@@ -194,7 +196,10 @@ export default {
             this.getList();
         },
         onReset() {
-            this.params.topicName = '';
+            this.params = {
+                pageNum: 1,
+                pageSize: 5
+            }
             this.onSubmit();
         },
         onSubmit() {
@@ -211,6 +216,9 @@ export default {
 </script>
 <style lang="scss" scoped>
     #Supplier {
+        .el-select {
+            width: 100%;
+        }
         .card_margin_10 {
             margin-top: 10px;
         }

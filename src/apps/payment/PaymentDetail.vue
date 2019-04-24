@@ -430,7 +430,8 @@ export default {
             formName: 'payment_forms',
             comments: [],
             dialogVisibleCrumb: false,
-            flowNodeUrl: ''
+            flowNodeUrl: '',
+            array: []
         };
     },
     components: {

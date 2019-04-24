@@ -262,6 +262,7 @@ export default {
                 evections: [],
                 estimate: []
             },
+            array: [],
             actions: [],
             formId: '',
             textarea: '',
