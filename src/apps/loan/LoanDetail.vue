@@ -256,7 +256,8 @@ export default {
             formName: 'loan_forms',
             comments: [],
             dialogVisibleCrumb: false,
-            flowNodeUrl: ''
+            flowNodeUrl: '',
+            array: []
         };
     },
     components: {

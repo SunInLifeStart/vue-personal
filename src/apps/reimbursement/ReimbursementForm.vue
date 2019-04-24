@@ -9,7 +9,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="9">
-                        <el-form-item label="出差审批单：" :required="true" label-width="115px">
+                        <el-form-item label="出差审批单：" label-width="115px">
                             <el-select v-model="travelPeople" placeholder="选择出差审批单" @change="travelChange" allow-create filterable>
                                 <el-option v-for="item in travelSelections" :key="item.id" :label="item.number" :value="item.id">
                                 </el-option>
@@ -23,7 +23,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="9">
-                        <el-form-item label="呈报件：" :required="true" label-width="25px;">
+                        <el-form-item label="呈报件：" label-width="25px;">
                             <el-select v-model="submission" filterable placeholder="选择呈报件" allow-create @change="SubmissionChange">
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
@@ -1300,8 +1300,6 @@ export default {
                 });
             } else {
                 if (
-                    this.travelPeople != '' &&
-                    this.submission != '' &&
                     this.formData.payee != '' &&
                     this.formData.bank != '' &&
                     this.formData.cardNo != '' &&

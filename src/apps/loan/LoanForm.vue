@@ -23,7 +23,6 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="9" style="position: relative;">
-                        <span class="span2">*</span>
                         <el-form-item label="出差审批单：" label-width="110px">
                             <el-select v-model="formData.travelPeople" filterable value-key="id" allow-create placeholder="" @change="travelChange">
                                 <el-option v-for="item in travelSelections" :key="item.id" :label="item.number" :value="item">
@@ -38,7 +37,6 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="7" style="position: relative;">
-                        <span class="span3">*</span>
                         <el-form-item label="呈报件：" label-width="30px;">
                             <el-select v-model="formData.submission" filterable allow-create value-key="id" placeholder="选择呈报件" @change="SubmissionChange">
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item">
@@ -116,7 +114,7 @@
                             -->
                         </td>
                         <td>
-                            <el-input type="number" @mousewheel.native.prevent v-model.number="Item.loanAmount" @input="getAmount(Item)"></el-input>
+                            <el-input type="number" @mousewheel.native.prevent v-model="Item.loanAmount" @input="getAmount(Item)"></el-input>
                         </td>
                         <td>
                             <el-select v-model="Item.currency" placeholder="" @change="currencyChange2(Item,index)">
@@ -125,7 +123,7 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model.number="Item.estimateRate" type="number" @mousewheel.native.prevent @input="getAmount(Item)"></el-input>
+                            <el-input v-model="Item.estimateRate" type="number" @mousewheel.native.prevent @input="getAmount(Item)"></el-input>
                         </td>
                         <td colspan="2">
                             <el-input v-model="Item.estimateDomestic" disabled></el-input>
@@ -567,7 +565,7 @@ export default {
             }
             */
             this.formData = data;
-            this.formData.travelPeople = data.busNo;
+            this.formData.travelPeople = data.busNo == '' ? {} : data.busNo;
             this.formData.submission = data.subNo;
             this.formId = data.id;
             this.dialogFormVisible = true;
@@ -627,10 +625,6 @@ export default {
                     type: 'error'
                 });
             } else if (
-                this.formData.submission == '' ||
-                this.formData.submission == {} ||
-                this.formData.travelPeople == {} ||
-                this.formData.travelPeople == '' ||
                 this.formData.borrower == '' ||
                 this.formData.borrowDept == '' ||
                 this.formData.bank == '' ||

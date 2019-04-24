@@ -143,7 +143,7 @@
                             <span style="color:red;">*</span>预计金额
                         </td>
                         <td colspan="3">
-                            <el-input placeholder="小写" @input="moneyChange" v-model.number="formData.amountInFigures" @mousewheel.native.prevent type="number"></el-input>
+                            <el-input placeholder="小写" @input="moneyChange" v-model="formData.amountInFigures" @mousewheel.native.prevent type="number"></el-input>
                         </td>
                         <td colspan="4">
                             {{formData.amountInWords}}

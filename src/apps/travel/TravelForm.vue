@@ -26,7 +26,7 @@
                     </el-col>
                     -->
                     <el-col :span="8">
-                        <el-form-item label="呈报件：" :required="true" label-width="30px;">
+                        <el-form-item label="呈报件：" label-width="30px;">
                             <el-select v-model="submission" clearable filterable placeholder="选择呈报件" allow-create @change="SubmissionChange">
                                 <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
@@ -168,10 +168,10 @@
                             </el-cascader>
                         </td>
                         <td colspan="1">
-                            <el-input @mousewheel.native.prevent type="number" v-model.number="item.price" @input="getAmount(item)"></el-input>
+                            <el-input @mousewheel.native.prevent type="number" v-model="item.price" @input="getAmount(item)"></el-input>
                         </td>
                         <td colspan="1">
-                            <el-input @mousewheel.native.prevent type="number" v-model.number="item.number" @input="getAmount(item)"></el-input>
+                            <el-input @mousewheel.native.prevent type="number" v-model="item.number" @input="getAmount(item)"></el-input>
                         </td>
                         <td colspan="1">
                             <el-select v-model="item.currency" placeholder="" @change="currencyChange2(item,index)">
@@ -180,13 +180,13 @@
                             </el-select>
                         </td>
                         <td colspan="1">
-                            <el-input v-model.number="item.rate" @mousewheel.native.prevent type="number" @input="getAmount(item)"></el-input>
+                            <el-input v-model="item.rate" @mousewheel.native.prevent type="number" @input="getAmount(item)"></el-input>
                         </td>
                         <td colspan="1" id="moneyright">
-                            <el-input v-model.number="item.subtotal" @mousewheel.native.prevent type="number" disabled></el-input>
+                            <el-input v-model="item.subtotal" @mousewheel.native.prevent type="number" disabled></el-input>
                         </td>
                         <td colspan="1" id="moneyright">
-                            <el-input v-model.number="item.principal" @mousewheel.native.prevent type="number" disabled></el-input>
+                            <el-input v-model="item.principal" @mousewheel.native.prevent type="number" disabled></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -316,6 +316,7 @@ export default {
             ],
             formData: this.resetForm(),
             users: [],
+            organs: [],
             getclass: [],
             loadData: {
                 attachments: [
@@ -834,7 +835,6 @@ export default {
                     type: 'error'
                 });
             } else if (
-                this.formData.submission == '' ||
                 this.formData.subOrganName == '' ||
                 this.formData.reason == '' ||
                 this.checkTravelMessage() == false ||
