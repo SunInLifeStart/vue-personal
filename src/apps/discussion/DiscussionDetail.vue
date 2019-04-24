@@ -253,6 +253,9 @@ export default {
             let $self = this;
             let response = await $self.getDetails();
             let a = await $self.getDiscussionUser();
+            let actions = await $self.getActions();
+            let comments =  await $self.getComments();
+            $self.comments = comments.data;
             if (response) {
                 $self.tableData = response.data.content;
                 // setTimeout(() => {
@@ -281,9 +284,6 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            let actions = await $self.getActions();
-            // let crumbs = await $self.getCrumbs();
-            let comments =  await $self.getComments();
             for(let i = 0; i < actions.data.types.length; i++){
                 if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
                     for(let j = 0; j<actions.data.types[i].required.length; j++){
@@ -308,14 +308,6 @@ export default {
                 }
             };
             $self.actions = actions.data.types;
-            $self.crumbs =  {items: crumbs.data, index: -1};
-            $self.comments = comments.data;
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;
-                }
-            }
-
         }
     }
 };

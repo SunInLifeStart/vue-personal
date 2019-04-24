@@ -34,11 +34,11 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购业务类别：">{{tableData.purchaseBusinessType}}
+                        <el-form-item label="采购业务类别：">{{radioOption[tableData.purchaseBusinessType]}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购方案是否是规定情形：">{{tableData.purchaseSchemeSign}}
+                        <el-form-item label="采购方案是否是规定情形：">{{SignOption[tableData.purchaseSchemeSign]}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -48,7 +48,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购主责部门：">{{tableData.purchaseDeptName}}
+                        <el-form-item label="采购主责部门：">{{tableData.purchaseDeptNames.name}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -84,6 +84,42 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <table class="tableNoBorder">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="供应商入围情况">
+                                <tr style="backgorund:#ccc">
+                                    <th colspan="8">推荐采购入围名单</th>
+                                    <th colspan="2">考察结论</th>
+                                </tr>
+                                <tr style="backgorund:#ccc">
+                                    <th colspan="2">序号</th>
+                                    <th colspan="2">名称</th>
+                                    <th colspan="2">企业性质</th>
+                                    <th colspan="2">注册资金</th>
+                                    <th colspan="2">  </th>
+                                </tr>
+                                <tr v-for="(item,index) in tableData.provider" :key="index">
+                                    <td colspan="2" style="width: 50px;">
+                                        {{index + 1}}
+                                    </td>
+                                    <td colspan="2">
+                                        {{item.providerName}}
+                                    </td>
+                                    <td colspan="2">
+                                        {{item.enterpriseNature}}
+                                    </td>
+                                    <td colspan="2">
+                                        {{item.registeredFund}}
+                                    </td>
+                                    <td colspan="2">
+                                        {{item.inspectConclusion}}
+                                    </td>
+                                </tr>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </table>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="征集公告附件：" v-if="tableData.attachmentsAnno && tableData.attachmentsAnno.length > 0">
@@ -160,7 +196,21 @@
         name: 'ProgrammeDetail',
         data() {
             return {
-                tableData: {},
+                tableData: {
+                    purchaseDeptNames: {}
+                },
+                SignOption: {
+                    '1': '是',
+                    '2': '否'
+                },
+                radioOption: {
+                    '1': '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
+                    '2': '开发建设类采购(竞价谈判方式：100万>工程类>=20万、50万>货物类>=10万、30万>服务类>=10万)',
+                    '3': '非开发建设类采购(招标方式：估算金额>=30万)',
+                    '4': '非开发建设类采购(竞价谈判方式：30万>估算金额>=10万)',
+                    '5': '行政非业务类采购(招标方式：估算金额>=30万)',
+                    '6': '行政非业务类采购(竞价谈判方式：30万>估算金额>=1万)'
+                },
                 actions: [],
                 actionsDialogArr: [],
                 users: [],
@@ -169,7 +219,7 @@
                 comments: [],
                 textarea: '',
                 dialogVisible: false,
-                appFlowName:'motor-procscheme'
+                appFlowName:'motor-procscheme_procscheme'
             };
         },
         components: {
@@ -208,10 +258,16 @@
         }
     };
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     #ProgrammeDetail {
         .el-step__main {
             margin-top: 10px;
+        }
+        .tableNoBorder {
+            width: 100%;
+            table-layout: fixed;
+            word-break: break-all;
+            border-collapse: collapse;
         }
         .audit {
             position: relative;
@@ -301,5 +357,11 @@
         background: #fff;
         left: 0px;
         right: 0px;
+    }
+</style>
+
+<style scoped>
+    .tableNoBorder >>> .el-input--small .el-input__inner{
+        border: none;
     }
 </style>

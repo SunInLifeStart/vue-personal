@@ -4,62 +4,62 @@
         <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="招标人" prop="creatorName">
-                        <el-input v-model="formData.creatorName"></el-input>
+                    <el-form-item label="招标人" prop="tenderee">
+                        <el-input v-model="formData.tenderee"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="联系人及电话">
-                        <el-input v-model="formData.organName"></el-input>
+                    <el-form-item label="联系人及电话" prop="tenderee">
+                        <el-input v-model="formData.linkman"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="项目名称" prop="committed">
-                        <el-input v-model="formData.organName"></el-input>
+                    <el-form-item label="项目名称" prop="projectName">
+                        <el-input v-model="formData.projectName"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-col :span="24">
-                        <el-form-item label="采购业务类别" style="text-align: left">
-                            <el-radio-group v-model="formData.radio">
+                    <el-form-item label="采购业务类别" prop="purchaseType" style="text-align: left">
+                            <el-radio-group v-model="formData.purchaseType">
                                 <div v-for="item in radioOption">
                                     <el-radio
                                             :key="item.value"
-                                            :value="item.value"
                                             :label="item.label">
+                                        {{item.label}}
                                     </el-radio>
                                 </div>
                             </el-radio-group>
                         </el-form-item>
-                    </el-col>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="招标情况说明" prop="applyDepartment">
-                        <el-input v-model="formData.applyDepartment"></el-input>
+                    <el-form-item label="招标情况说明" prop="bidCondition">
+                        <el-input v-model="formData.bidCondition"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
-                    <el-form-item label="异常情况" prop="topicName">
-                        <el-row>
-                            <el-checkbox>投标报价均超上限的；</el-checkbox>
-                            <el-checkbox>投标有效单位不足的；</el-checkbox>
-                            <el-checkbox>存在围标串标行为或重大嫌疑的；</el-checkbox>
-                        </el-row>
-                        <el-row>
-                            <el-checkbox>排序第一的投标人实施有重大风险的，且对方不承诺弃标将其废标的。</el-checkbox>
-                            <el-checkbox>不按评标原则定标的；</el-checkbox>
-                        </el-row>
-                        <el-row>
-                            <el-checkbox>排序第一的投标人弃标；</el-checkbox>
-                            <el-checkbox>其他</el-checkbox>
-                            <el-input style="width: 50%" v-model="formData.organName"></el-input>
-                        </el-row>
+                    <el-form-item label="异常情况" prop="anomalyConditions">
+                        <el-checkbox-group v-model="formData.anomalyConditions">
+                            <el-row>
+                                <el-checkbox label="投标报价均超上限的；"></el-checkbox>
+                                <el-checkbox label="投标有效单位不足的；"></el-checkbox>
+                                <el-checkbox label="存在围标串标行为或重大嫌疑的；"></el-checkbox>
+                            </el-row>
+                            <el-row>
+                                <el-checkbox label="排序第一的投标人实施有重大风险的，且对方不承诺弃标将其废标的；"></el-checkbox>
+                                <el-checkbox label="不按评标原则定标的；"></el-checkbox>
+                            </el-row>
+                            <el-row>
+                                <el-checkbox label="排序第一的投标人弃标。"></el-checkbox>
+                                <el-checkbox label="其他"></el-checkbox>
+                                <el-input style="width: 50%" v-model="formData.anomalyConditionsOth"></el-input>
+                            </el-row>
+                        </el-checkbox-group>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -75,8 +75,6 @@
 /* eslint-disable */
 import axios from 'axios';
 import moment from 'moment';
-import FilesOperate from '../FilesOperate';
-import { application } from "../application.js";
 import { publicMethods } from "../application.js";
 export default {
     mixins: [publicMethods],
@@ -84,16 +82,6 @@ export default {
     data() {
         return {
             dialogFormVisible: false,
-            options: [
-                {
-                    value: '1',
-                    label: '主管部门'
-                },
-                {
-                    value: '2',
-                    label: '部门'
-                }
-            ],
             radioOption: [
                 {
                     value: '1',
@@ -132,99 +120,40 @@ export default {
                     label: '行政非业务类采购(零星采购；估算金额＜1万）'
                 }
             ],
-            AbnormalOption: [
-                {
-                    value: 'general',
-                    label: '总办会'
-                },
-                {
-                    value: 'chairman',
-                    label: '党支委会'
-                }
-            ],
-            personOptions: [],
             formData: this.resetForm(),
             users: [],
             rules: {
-                number: [
-                    { required: true, message: '请输入流水单号', trigger: 'blur' }
+                tenderee: [
+                    { required: true, message: '请输入招标人', trigger: 'blur' }
                 ],
-                branchlineTo: [
-                    { required: true, message: '请输入会议类型', trigger: 'blur' }
+                linkman: [
+                    { required: true, message: '请输入联系人及电话', trigger: 'blur' }
                 ],
-                committed: [
-                    { required: true, message: '请输入提单时间', trigger: 'blur' }
+                projectName: [
+                    { required: true, message: '请输入项目名称', trigger: 'blur' }
                 ],
-                // creatorName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // organName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // applyDepartment: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // timeApplication: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // topicName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ]
+                purchaseType: [
+                    { required: true, message: '请输入采购业务类别', trigger: 'blur' }
+                ],
+                bidCondition: [
+                    { required: true, message: '请输入招标情况说明', trigger: 'blur' }
+                ],
+                anomalyConditions: [
+                    { required: true, message: '请输入异常情况', trigger: 'blur' }
+                ]
             },
-            appFlowName:'motor-issuesreported_party-agendasheet'
+            appFlowName:'motor-bidanomaly_bidanomaly'
         };
     },
-    components: {
-        FilesOperate
-    },
-    mounted() {
-        this.getAbnormalUser()
-    },
     methods: {
-        async getAbnormalUser() {
-            let user = await this.getUsers("/api/v1/users")
-            if (user) this.personOptions = user.data
-        },
-        changePeople() {
-            this.$forceUpdate()
-        },
-        deleteItem(item, index, type) {
-            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                if (type == 'message' && this.formData.attendingDepartment.length > 1) {
-                    this.formData.attendingDepartment.splice(index, 1);
-                } else if (type == 'personal' && this.formData.requestedItems.length > 1) {
-                    this.formData.requestedItems.splice(index, 1);
-                } else {
-                    this.$message({
-                        message: '最后一组不能删除',
-                        type: 'error'
-                    });
-                }
-            });
-        },
-        addItem(type) {
-            if (type == 'message') {
-                this.formData.attendingDepartment.push({});
-            } else if (type == 'personal') {
-                this.formData.requestedItems.push({})
-            }
-        },
         resetForm() {
             let formData =  {
-                attachments: [],
-                sendMessage: [],
-                branchlineTo: "",
-                numbers: '',
-                created: '',
-                business: '',
-                committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
-                applyDepartment: this.$store.getters.LoginData.oname || '',
-                timeApplication: '',
-                topicName: '',
-                organName: this.$store.getters.LoginData.oname || '',
-                creatorName: this.$store.getters.LoginData.uname || '',
-                creatorId: this.$store.getters.LoginData.uid || '',
-                organId: this.$store.getters.LoginData.oid || ''
+                tenderee: '',
+                linkman: '',
+                projectName: '',
+                purchaseType: '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
+                bidCondition: '',
+                anomalyConditions: []
             }
             return formData
         },
@@ -232,19 +161,9 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/api/v1/issuesReported/detail/' + this.formId)
+                    .get('/api/v1/motor-bidanomaly/get/' + this.formId)
                     .then(res => {
                         self.formData = res.data.content;
-                        if (self.formData.attendingDepartment) {
-                            self.formData.attendingDepartment.forEach(item => {
-                                if (item.person) {
-                                    item.people = item.person.split(',')
-                                }
-                                for (let i = 0; i<item.people.length; i++) {
-                                    item.people[i] = parseInt(item.people[i])
-                                }
-                            })
-                        }
                     })
             }
         },
@@ -267,16 +186,8 @@ export default {
         },
         async saveForm(params) {
             const $self = this;
-            this.formData.sendMessage = []
-            $self.formData.attendingDepartment.forEach(item => {
-                if (item.people) {
-                    item.person = item.people.join(',')
-                }
-                this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
-            })
-            this.formData.sendMessage = this.formData.sendMessage.join(',')
             let response = await $self.saveFormData(
-                "/api/v1/issuesReported/save",
+                "/api/v1/motor-bidanomaly/save",
                 $self.formData
             );
             if (response) {
@@ -311,15 +222,6 @@ export default {
                     $self.msgTips($self, "保存失败", "warning");
                 }
             }
-        },
-        handleSuccess(response, file) {
-            const self = this;
-            if (response.length > 0) {
-                response.forEach(function(item) {
-                    self.formData.attachments.push(item);
-                });
-            }
-            this.$refs.upload.clearFiles();
         },
         submitUpload() {
             this.$refs.upload.submit();

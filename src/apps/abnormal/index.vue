@@ -1,11 +1,35 @@
 <template>
     <div id="Abnormal">
         <el-card class="box-card">
-            <el-form :inline="true" :model="params" class="demo-form-inline">
+            <el-form :inline="true" label-width="100px"  label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="招标人">
-                            <el-input v-model="params.topicName" placeholder="请输入招标人"></el-input>
+                            <el-input v-model="params.tenderee" placeholder="请输入招标人"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="联系人及电话">
+                            <el-input v-model="params.linkman" placeholder="请输入联系人及电话"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="项目名称">
+                            <el-input v-model="params.projectName" placeholder="请输入项目名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="单据状态">
+                            <el-select v-model="params.status" placeholder="请输入单据状态">
+                                <el-option
+                                        v-for="item in statusOption"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -23,13 +47,16 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-                <el-table-column prop="topicName" label="招标人">
+                <el-table-column prop="tenderee" label="招标人">
                 </el-table-column>
-                <el-table-column prop="creatorName" label="联系人及电话">
+                <el-table-column prop="linkman" label="联系人及电话">
                 </el-table-column>
-                <el-table-column prop="organName" label="项目名称">
+                <el-table-column prop="projectName" label="项目名称">
                 </el-table-column>
-                <el-table-column prop="committed" label="招标情况说明">
+                <el-table-column prop="bidCondition" label="招标情况说明">
+                </el-table-column>
+                <el-table-column label="单据状态">
+                    <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
@@ -66,17 +93,33 @@ export default {
             params: {
                 pageNum: 1,
                 pageSize: 5,
-                topicName: '',
                 total: 0
             },
-            dialogFormVisibleAbnormal: false,
-            searchBoardOptions: [],
+            statusOption: [
+                {
+                    value: '00',
+                    label: '已保存'
+                },
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '03',
+                    label: '已撤销'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ],
             formBoardId: '',
-            dialogBoardFormId: '',
-            operationBoardType: 'create',
-            formName:"issuesReported",
-            appFlowName:'motor-issuesreported_party-agendasheet',
-            statusNews: ''
+            formName:"motor-bidanomaly",
+            appFlowName:'motor-bidanomaly_bidanomaly'
         };
     },
     components: {
@@ -85,6 +128,18 @@ export default {
     },
     mounted() {
         this.getList();
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+                "00":"已保存",
+                "01":"审核中",
+                "02" :"已驳回",
+                "03" :"已撤销",
+                "04" :"已完成"
+            };
+            return xmlJson[data];
+        }
     },
     methods: {
         reloadList(params) {
@@ -100,15 +155,15 @@ export default {
         },
         async getList() {
             const $self = this;
-            $self.url = "/api/v1/issuesReported/queryList";
+            $self.url = "/api/v1/motor-bidanomaly/query";
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {
                     let formId = response.data.content.list[0].id;
-                    // $self.$refs.AbnormalDetail.getFormDetails(formId);
+                    $self.$refs.AbnormalDetail.getFormDetails(formId);
                 }
-                // $self.tableData = response.data.content.list;
-                // $self.params.total = response.data.content.total;
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
@@ -128,7 +183,11 @@ export default {
             this.getList();
         },
         onReset() {
-            this.params.topicName = '';
+            this.params = {
+                pageNum: 1,
+                pageSize: 5,
+                total: 0
+            }
             this.onSubmit();
         },
         onSubmit() {
@@ -145,6 +204,9 @@ export default {
 </script>
 <style lang="scss" scoped>
     #Abnormal {
+        .el-select {
+            width: 100%;
+        }
         .card_margin_10 {
             margin-top: 10px;
         }
@@ -155,6 +217,6 @@ export default {
 </style>
 <style scoped>
     #Abnormal .filterForm >>> .el-form-item__content{
-        width: calc(100% - 80px);
+        width: calc(100% - 110px);
     }
 </style>

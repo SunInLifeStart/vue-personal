@@ -4,20 +4,26 @@
         <el-form :model="formData"  :rules="rules" label-width="140px" ref="formData">
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="推荐部门/个人" prop="number">
-                        <el-input v-model="formData.number"></el-input>
+                    <el-form-item label="推荐时间" prop="recommendTime">
+                        <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="formData.recommendTime" style="width:100%" type="datetime">
+                        </el-date-picker>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="供应商名称" prop="branchlineTo">
-                        <el-input v-model="formData.number"></el-input>
+                    <el-form-item label="推荐部门/个人" prop="recommendDept">
+                        <el-input v-model="formData.recommendDept"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="供应商名称" prop="supplierName">
+                        <el-input v-model="formData.supplierName"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="16">
-                    <el-form-item label="供应商来源" prop="creatorName">
-                        <el-radio-group v-model="formData.radio">
+                    <el-form-item label="供应商来源" prop="supplierSource">
+                        <el-radio-group v-model="formData.supplierSource">
                             <el-radio key="1" value="1" label="采购主责部门推荐/股东方供应商库项目引入模式"></el-radio>
                             <el-radio key="2" value="2" label="常规引入"></el-radio>
                             <el-radio key="3" value="3" label="批量引入股东方供应商资源或/“战略合作”关系（级别）股东方供应商资源"></el-radio>
@@ -27,24 +33,24 @@
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="推荐参与项目" prop="applyDepartment">
-                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    <el-form-item label="推荐参与项目" prop="recommendProject">
+                        <el-input v-model="formData.recommendProject" placeholder="请输入推荐参与项目"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="推荐参与采购项目" prop="timeApplication">
-                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    <el-form-item label="推荐参与采购项目" prop="recommendPurProject">
+                        <el-input v-model="formData.recommendPurProject" placeholder="请输入推荐参与采购项目"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="供应商所在地" prop="topicName">
-                        <el-input v-model="formData.topicName"></el-input>
+                    <el-form-item label="供应商所在地" prop="supplieLocation">
+                        <el-input v-model="formData.supplieLocation"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="20">
-                    <el-form-item label="经营模式" prop="creatorName">
+                    <el-form-item label="经营模式" prop="businessModel">
                         <el-checkbox>承包商</el-checkbox>
                         <el-checkbox>制造商</el-checkbox>
                         <el-checkbox>代理商</el-checkbox>
@@ -54,70 +60,70 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="2">
-                    <el-input v-model="formData.organName"></el-input>
+                    <el-input v-model="formData.businessModelOth"></el-input>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="联系人" prop="applyDepartment">
-                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    <el-form-item label="联系人" prop="linkman">
+                        <el-input v-model="formData.linkman" placeholder="请输入联系人"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="是否有授权" prop="timeApplication">
-                        <el-select v-model="formData.applyDepartment">
+                    <el-form-item label="是否有授权" prop="accreditSign">
+                        <el-select v-model="formData.accreditSign">
                             <el-option key="1" label="是" value="1"></el-option>
                             <el-option key="2" label="否" value="2"></el-option>
                         </el-select>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="联系方式" prop="topicName">
-                        <el-input v-model="formData.topicName"></el-input>
+                    <el-form-item label="联系方式" prop="contactWay">
+                        <el-input v-model="formData.contactWay"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="主营行业" prop="applyDepartment">
-                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    <el-form-item label="主营行业" prop="mainTrade">
+                        <el-input v-model="formData.mainTrade" placeholder="请输入主营行业"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="主力产品/业务" prop="timeApplication">
-                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    <el-form-item label="主力产品/业务" prop="mainProduct">
+                        <el-input v-model="formData.mainProduct" placeholder="请输入主力产品/业务"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="主营品牌" prop="topicName">
-                        <el-input v-model="formData.topicName"></el-input>
+                    <el-form-item label="主营品牌" prop="mainBrand">
+                        <el-input v-model="formData.mainBrand"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="供应商基本情况" prop="applyDepartment">
-                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    <el-form-item label="供应商基本情况" prop="supplierBasic">
+                        <el-input v-model="formData.supplierBasic" placeholder="请输入供应商基本情况"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="考察评估情况" prop="timeApplication">
-                        <el-input v-model="formData.applyDepartment" placeholder="请输入拟稿单位"></el-input>
+                    <el-form-item label="考察评估情况" prop="inspectSituation">
+                        <el-input v-model="formData.inspectSituation" placeholder="请输入考察评估情况"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="推荐意见" prop="topicName">
-                        <el-input v-model="formData.topicName"></el-input>
+                    <el-form-item label="推荐意见" prop="recommendations">
+                        <el-input v-model="formData.recommendations"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="供应商入库申请表附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
-                        <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                        <div v-for="item in formData.attachmentsSto" :key="item.id" style="float:left">
                             <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
                         </div>
                     </el-form-item>
@@ -129,7 +135,7 @@
                         <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
-                        <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                        <div v-for="item in formData.attachmentsIns" :key="item.id" style="float:left">
                             <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
                         </div>
                     </el-form-item>
@@ -224,20 +230,26 @@ export default {
         },
         resetForm() {
             let formData =  {
-                attachments: [],
-                sendMessage: [],
-                branchlineTo: "",
-                numbers: '',
-                created: '',
-                business: '',
-                committed: moment(new Date()).format('YYYY-MM-DD hh:mm:ss'),
-                applyDepartment: this.$store.getters.LoginData.oname || '',
-                timeApplication: '',
-                topicName: '',
-                organName: this.$store.getters.LoginData.oname || '',
-                creatorName: this.$store.getters.LoginData.uname || '',
-                creatorId: this.$store.getters.LoginData.uid || '',
-                organId: this.$store.getters.LoginData.oid || ''
+                recommendTime: '',
+                recommendDept: '',
+                supplierName: '',
+                supplierSource: '',
+                recommendProject: '',
+                recommendPurProject: '',
+                supplieLocation: '',
+                businessModel: '',
+                businessModelOth: '',
+                linkman: '',
+                accreditSign: '',
+                contactWay: '',
+                mainTrade: '',
+                mainProduct: '',
+                mainBrand: '',
+                supplierBasic: '',
+                inspectSituation: '',
+                recommendations: '',
+                attachmentsSto: [],
+                attachmentsIns: []
             }
             return formData
         },
