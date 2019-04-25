@@ -62,7 +62,7 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="2">
-                    <el-input v-model="formData.businessModelOth"></el-input>
+                    <el-input v-model="formData.businessModelOth" :disabled="!formData.businessModels.includes('其他')"></el-input>
                 </el-col>
             </el-row>
             <el-row>
@@ -244,6 +244,9 @@ export default {
         },
         async saveForm(params) {
             const $self = this;
+            if (!this.formData.businessModels.includes('其他')) {
+                this.formData.businessModelOth = ''
+            }
             let response = await $self.saveFormData(
                 "/api/v1/motor-supplier/save",
                 $self.formData

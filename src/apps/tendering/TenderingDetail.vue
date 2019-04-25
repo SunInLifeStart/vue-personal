@@ -10,9 +10,9 @@
             </el-row>
         </div>
         <div class="formContent">
-            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-            </el-steps>
+            <br />
+            <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
+            <br />
             <el-form :model='tableData' class="formList">
                 <el-row>
                     <el-col :span="8">
@@ -97,6 +97,11 @@
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
                 </span>
             </el-dialog>
+            <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
+                <el-form>
+                    <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
+                </el-form>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -114,9 +119,11 @@
                 tableData: {},
                 actions: [],
                 actionsDialogArr: [],
+                dialogVisibleCrumb:false,
                 users: [],
                 comments: [],
                 formId: "",
+                flowNodeUrl: "",
                 crumbs:[],
                 textarea: '',
                 dialogVisible: false,
