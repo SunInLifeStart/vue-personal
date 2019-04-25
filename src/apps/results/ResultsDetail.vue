@@ -14,16 +14,13 @@
             <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
             <br />
             <el-form :model='tableData' class="formList">
-                <!--<el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">-->
-                    <!--<el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>-->
-                <!--</el-steps>-->
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号：">{{tableData.number}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="项目名称：">{{tableData.creatorName}}
+                        <el-form-item label="项目名称：">{{tableData.purchaseProjectName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -33,33 +30,60 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="目标成本/预算完成情况：">{{tableData.committed}}
+                        <el-form-item label="目标成本/预算完成情况：">{{tableData.budgetPerformance}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购起止时间：">{{tableData.applyDepartment}}
+                        <el-form-item label="采购起止时间：">{{tableData.proTimeStart}}至{{tableData.proTimeEnd}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购内容摘要：">{{tableData.timeApplication}}
+                        <el-form-item label="采购内容摘要：">{{tableData.proContent}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="采购过程简述：">
-                            <span  v-html="ResultsOption[tableData.branchlineTo]" ></span>
+                        <el-form-item label="采购过程简述：">{{tableData.proProcess}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购结果：">{{tableData.topicName}}
+                        <el-form-item label="采购结果：">{{tableData.proResult}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="采购结果是否是规定情形：">{{tableData.proResultYes}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="签章需求：">{{tableData.signDemand}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                        <el-form-item label="经审批采购方案的附审资料：" v-if="tableData.attachmentsAnno && tableData.attachmentsAnno.length > 0">
+                            <div v-for="item in tableData.attachmentsAnno" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="采购报告(评标报告)的附审资料：" v-if="tableData.attachmentsRep && tableData.attachmentsRep.length > 0">
+                            <div v-for="item in tableData.attachmentsRep" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="其他：" v-if="tableData.attachmentsOth && tableData.attachmentsOth.length > 0">
+                            <div v-for="item in tableData.attachmentsOth" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
@@ -123,16 +147,11 @@ export default {
             actions: [],
             actionsDialogArr: [],
             users: [],
-            crumbs: [],
             comments: [],
             textarea: '',
             dialogVisible: false,
-            appFlowName:'motor-issuesreported_party-agendasheet',
-            ResultsOption: {
-                general: '总办会',
-                chairman: '党支委会'
-            },
-            formName:'issuesReported',
+            appFlowName:'motor-procresult_procresult',
+            formName:'motor-procresult',
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
         };
@@ -145,7 +164,7 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/issuesReported/detail/" + $self.formId;
+            $self.url= "/api/v1/motor-procresult/detail/" + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -156,42 +175,10 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            // debugger;
             let actions = await $self.getActions();
-            let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();
-            for(let i = 0; i < actions.data.types.length; i++){
-                if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
-                    for(let j = 0; j<actions.data.types[i].required.length; j++){
-                        if(actions.data.types[i].required[j].indexOf("filterButton") > -1){
-                            if(actions.data.types[i].required[j].indexOf("==") > -1){
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split("==")[0].split(":")[1];
-                                let value = a.split("==")[1];
-                                if($self.tableData[key_a] != value){
-                                    actions.data.types[i].hideCurrent = true;
-                                }
-                            }else{
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split("!=")[0].split(":")[1];
-                                let value = a.split("!=")[1];
-                                if($self.tableData[key_a] == value){
-                                    actions.data.types[i].hideCurrent = true;
-                                }
-                            }
-                        }
-                    }
-                }
-            };
             $self.actions = actions.data.types;
-            $self.crumbs =  {items: crumbs.data, index: -1};
             $self.comments = comments.data;
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;
-                }
-            }
-
         }
     }
 };

@@ -63,6 +63,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="采购方式：">{{tableData.purchaseWay}}
+                            <span>{{tableData.purchaseOther}}</span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -73,6 +74,7 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="评审/谈判机构：">{{tableData.negotiateAgent}}
+                            <span>{{tableData.negotiateAgentOther}}</span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -84,42 +86,40 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <table class="tableNoBorder">
-                    <el-row>
-                        <el-col :span="24">
-                            <el-form-item label="供应商入围情况">
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="供应商入围情况">
+                            <table class="tableNoBorder">
+                                <th colspan="8" style="width: 80%">推荐采购入围名单</th>
+                                <th colspan="2" style="width: 20%">考察结论</th>
                                 <tr style="backgorund:#ccc">
-                                    <th colspan="8">推荐采购入围名单</th>
-                                    <th colspan="2">考察结论</th>
-                                </tr>
-                                <tr style="backgorund:#ccc">
-                                    <th colspan="2">序号</th>
+                                    <th colspan="1">序号</th>
                                     <th colspan="2">名称</th>
                                     <th colspan="2">企业性质</th>
                                     <th colspan="2">注册资金</th>
                                     <th colspan="2">  </th>
                                 </tr>
                                 <tr v-for="(item,index) in tableData.provider" :key="index">
-                                    <td colspan="2" style="width: 50px;">
+                                    <td colspan="1" style="text-align: center">
                                         {{index + 1}}
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="2" style="text-align: center">
                                         {{item.providerName}}
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="2" style="text-align: center">
                                         {{item.enterpriseNature}}
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="2" style="text-align: center">
                                         {{item.registeredFund}}
                                     </td>
-                                    <td colspan="2">
+                                    <td colspan="2" style="text-align: right">
                                         {{item.inspectConclusion}}
                                     </td>
                                 </tr>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </table>
+                            </table>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="征集公告附件：" v-if="tableData.attachmentsAnno && tableData.attachmentsAnno.length > 0">
