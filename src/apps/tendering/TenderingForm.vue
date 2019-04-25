@@ -9,15 +9,15 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row v-if="formData.branchlineTo === 'gmoMeeting' || formData.branchlineTo === 'partyMeeting'">
+                <el-row>
                     <el-col :span="24">
                         <el-form-item label="关联采购结果" prop="meetingPlace">
-                            <el-select v-model="formData.discussionContent" multiple value-key="discussionId" placeholder="请选择采购结果">
+                            <el-select v-model="formData.discussionContent" value-key="id" placeholder="请选择采购结果">
                                 <el-option
                                         v-for="item in issueOption"
                                         :key="item.id"
-                                        :label="item.topicName"
-                                        :value="{discussionId: item.id, discussionName: item.topicName}">
+                                        :label="item.number"
+                                        :value="{id: item.id, number: item.number}">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -167,6 +167,11 @@
                         label: '行政非业务类采购(招标方式：估算金额>=30万)'
                     }
                 ],
+                params: {
+                    pageNum: 1,
+                    status: '04',
+                    pageSize: 100000
+                },
                 options: [
                     {
                         value: '1',
@@ -206,7 +211,7 @@
             },
             async getList() {
                 const $self = this;
-                $self.url = "/api/v1/issuesReported/queryList";
+                $self.url = "/api/v1/motor-procscheme/query";
                 let response = await $self.getQueryList();
                 if (response) {
                     $self.issueOption = response.data.content.list;

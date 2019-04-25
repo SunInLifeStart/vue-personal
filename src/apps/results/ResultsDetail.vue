@@ -11,7 +11,7 @@
         </div>
         <div class="formContent">
             <br />
-            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
             <br />
             <el-form :model='tableData' class="formList">
                 <el-row>
@@ -25,6 +25,21 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="采购项目名称：">{{tableData.organName}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="关联采购方案：">{{tableData.procschemeNos}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="关联招标文件：">{{tableData.biddocumentNos}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购方式：">{{tableData.purchaseWay}}
+                            {{tableData.purchaseOther}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -51,14 +66,14 @@
                         <el-form-item label="采购结果：">{{tableData.proResult}}
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="8">
                         <el-form-item label="采购结果是否是规定情形：">{{tableData.proResultYes}}
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="签章需求：">{{tableData.signDemand}}
+                        <el-form-item label="签章需求：">{{tableData.signDemand}}{{tableData.signDemandOth}}
                         </el-form-item>
                     </el-col>
                 </el-row>

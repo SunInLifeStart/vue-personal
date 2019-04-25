@@ -1,5 +1,5 @@
 <template>
-    <div id="TrainDetail">
+    <div id="TrainDetail" >
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -11,13 +11,13 @@
             </el-row>
         </div>
         <br />
-        <div class="formContent">
+        <div class="formContent" style="padding: 15px 30px">
             <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
             <br />
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps> -->
-            <el-form :model='tableData' class="formList">
+            <el-form :model='tableData' class="formList" >
                 <el-row>
                     
                     <el-col :span="8">
@@ -212,6 +212,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 #TrainDetail {
+   
     .el-step__main {
         margin-top: 10px;
     }
@@ -275,6 +276,7 @@ export default {
         }
     }
     #actionList {
+         padding-left: 20px;
         background: #f4f4f4;
         border-bottom: 1px solid #eaeaea;
         height: 40px;

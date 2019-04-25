@@ -11,7 +11,7 @@
         </div>
         <div class="formContent">
             <br />
-            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
             <br />
             <el-form :model='tableData' class="formList">
                 <!--<el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">-->
@@ -57,9 +57,9 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="经营模式：">
-                            <div v-for="item in tableData.businessModels">
+                            <span v-for="item in tableData.businessModels" style="margin-left: 20px">
                                 {{item}}
-                            </div>
+                            </span>
                             <span>{{tableData.businessModelOth}}</span>
                         </el-form-item>
                     </el-col>

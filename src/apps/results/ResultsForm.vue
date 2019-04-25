@@ -22,7 +22,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="关联采购方案" prop="procschemeNo">
-                        <el-select v-model="formData.procschemeNos" multiple value-key="discussionId" placeholder="请选择采购方案">
+                        <el-select v-model="formData.procschemeNos" value-key="id" placeholder="请选择采购方案">
                             <el-option
                                     v-for="item in issueOption"
                                     :key="item.id"
@@ -36,7 +36,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="关联招标文件" prop="biddocumentNo">
-                        <el-select v-model="formData.biddocumentNos" multiple value-key="discussionId" placeholder="请选择招标文件">
+                        <el-select v-model="formData.biddocumentNos" value-key="id" placeholder="请选择招标文件">
                             <el-option
                                     v-for="item in issueOption"
                                     :key="item.id"
@@ -202,6 +202,11 @@ export default {
             personOptions: [],
             formData: this.resetForm(),
             users: [],
+            params: {
+                pageNum: 1,
+                status: '04',
+                pageSize: 100000
+            },
             rules: {
                 number: [
                     { required: true, message: '请输入流水单号', trigger: 'blur' }
@@ -211,22 +216,7 @@ export default {
                 ],
                 committed: [
                     { required: true, message: '请输入提单时间', trigger: 'blur' }
-                ],
-                // creatorName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // organName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // applyDepartment: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // timeApplication: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ],
-                // topicName: [
-                //     { required: true, message: '请输入活动名称', trigger: 'blur' }
-                // ]
+                ]
             },
             issueOption: [],
             radioOption: [
@@ -275,8 +265,19 @@ export default {
     },
     mounted() {
         this.getList()
+        this.getSchemeNos()
     },
     methods: {
+        async getSchemeNos() {
+            const $self = this;
+            $self.url = "/api/v1/motor-procscheme/query";
+            let response = await $self.getQueryList();
+            if (response) {
+                $self.issueOption = response.data.content.list;
+            } else {
+                $self.msgTips("获取列表失败", "warning");
+            }
+        },
         async getTableCode() {
             let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procresult' })
             if (user) this.formData.number = user.data.content.serialNumber
