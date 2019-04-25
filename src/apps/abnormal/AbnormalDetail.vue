@@ -47,6 +47,7 @@
                             <span v-for="item in tableData.anomalyConditions">
                                 {{item}}
                             </span>
+                            <span>{{tableData.anomalyConditionOth}}</span>
                         </el-form-item>
                     </el-col>
                 </el-row>

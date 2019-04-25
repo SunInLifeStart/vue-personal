@@ -60,6 +60,7 @@
                             <div v-for="item in tableData.businessModels">
                                 {{item}}
                             </div>
+                            <span>{{tableData.businessModelOth}}</span>
                         </el-form-item>
                     </el-col>
                 </el-row>

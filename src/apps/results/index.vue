@@ -14,9 +14,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购发起时间">
-                            <el-date-picker v-model="params.purchaseStartTime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请输入采购发起时间" style="width:100%" type="date">
-                            </el-date-picker>
+                        <el-form-item label="采购内容摘要">
+                            <el-input v-model="params.proContent" placeholder="请输入采购内容摘要"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -46,26 +45,26 @@
             <div class="toolbar">
                 <el-button type="primary" icon="el-icon-plus" @click="cleanform">新建</el-button>
             </div>
-
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-                <el-table-column prop="topicName" label="项目名称">
+                <el-table-column prop="projectName" label="项目名称">
                 </el-table-column>
-                <el-table-column prop="creatorName" label="采购项目名称">
+                <el-table-column prop="purchaseProjectName" label="采购项目名称">
                 </el-table-column>
-                <el-table-column prop="organName" label="目标成本/预算完成情况">
+                <el-table-column prop="budgetPerformance" label="目标成本/预算完成情况">
                 </el-table-column>
-                <el-table-column prop="committed" label="采购起止时间">
+                <el-table-column prop="proContent" label="采购内容摘要">
                 </el-table-column>
-                <el-table-column prop="applyDepartment" label="采购内容摘要">
+                <el-table-column prop="proProcess" label="采购过程简述">
                 </el-table-column>
-                <el-table-column prop="timeApplication" label="采购过程简述">
+                <el-table-column label="单据状态">
+                    <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
-                        <el-tooltip class="item" effect="dark" content="编辑" placement="left">
+                        <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status === '00' || scope.row.status === '02'">
                             <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                         </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                        <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status === '00' || scope.row.status === '02'">
                             <el-button type="text" icon="el-icon-delete" @click="deleteCurrentLine(scope.row.id)"></el-button>
                         </el-tooltip>
                     </template>
@@ -95,16 +94,37 @@ export default {
             params: {
                 pageNum: 1,
                 pageSize: 5,
-                topicName: '',
                 total: 0
             },
+            statusOption: [
+                {
+                    value: '00',
+                    label: '已保存'
+                },
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '03',
+                    label: '已撤销'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ],
             dialogFormVisibleResults: false,
             searchBoardOptions: [],
             formBoardId: '',
             dialogBoardFormId: '',
             operationBoardType: 'create',
-            formName:"issuesReported",
-            appFlowName:'motor-issuesreported_party-agendasheet',
+            formName:"motor-procresult",
+            appFlowName:'motor-procresult_procresult',
             statusNews: ''
         };
     },
@@ -114,6 +134,18 @@ export default {
     },
     mounted() {
         this.getList();
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+                "00":"已保存",
+                "01":"审核中",
+                "02" :"已驳回",
+                "03" :"已撤销",
+                "04" :"已完成"
+            };
+            return xmlJson[data];
+        }
     },
     methods: {
         reloadList(params) {
@@ -129,15 +161,15 @@ export default {
         },
         async getList() {
             const $self = this;
-            $self.url = "/api/v1/issuesReported/queryList";
+            $self.url = "/api/v1/motor-procresult/queryList";
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {
                     let formId = response.data.content.list[0].id;
-                    // $self.$refs.ResultsDetail.getFormDetails(formId);
+                    $self.$refs.ResultsDetail.getFormDetails(formId);
                 }
-                // $self.tableData = response.data.content.list;
-                // $self.params.total = response.data.content.total;
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
@@ -168,6 +200,7 @@ export default {
         },
         cleanform() {
             this.$refs.ResultsForm.createForm();
+            this.$refs.ResultsForm.getTableCode();
         },
         refreshBoardData() {
             this.getList();
