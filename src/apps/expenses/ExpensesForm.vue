@@ -27,8 +27,8 @@
                     -->
                     <el-col :span="8" style="position: relative;">
                         <el-form-item label="呈报件：" label-width="30px;">
-                            <el-select v-model="formData.submission" filterable allow-create style="width: 50%;" value-key="id" placeholder="选择呈报件" @change="SubmissionChange">
-                                <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item">
+                            <el-select v-model="formData.submission" filterable allow-create style="width: 50%;" placeholder="选择呈报件" @change="SubmissionChange">
+                                <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
                             </el-select>
                             <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.subView">
@@ -297,6 +297,16 @@ export default {
         },
         //部门呈报件改变
         SubmissionChange(val) {
+            console.log(val);
+            this.formData.subView = true;
+            let boolean = false;
+            for (let data of this.submissionSelections) {
+                if (data.id == val) {
+                    boolean = true;
+                }
+            }
+            this.formData.subView = boolean;
+            /** 
             this.formData.subView = true;
             let boolean = false;
             for (let data of this.submissionSelections) {
@@ -307,6 +317,7 @@ export default {
                 }
             }
             this.formData.subView = boolean;
+            */
         },
         submissionDetail() {
             if (this.formData.submission && this.formData.submission != null) {
@@ -347,7 +358,13 @@ export default {
             this.formData.submission = '';
             this.formData = data;
             this.formData.people = data.accompanying.split(',');
-            this.formData.submission = data.subNo;
+            if (data.subId && data.subId != '') {
+                if (data.subView) {
+                    this.formData.submission = parseInt(data.subId);
+                } else {
+                    this.formData.submission = data.subId;
+                }
+            }
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
@@ -365,7 +382,7 @@ export default {
             let formData = {
                 // travelView: true,
                 // travelPeople: {},
-                submission: {},
+                submission: '',
                 subView: true,
                 subId: '',
                 subNo: '',
@@ -445,9 +462,22 @@ export default {
             } else {
                 $self.formData.treatTime = '';
             }
+            if (this.formData.submission != '') {
+                this.formData.subId = this.formData.submission;
+                for (let data of this.submissionSelections) {
+                    if (data.id == this.formData.submission) {
+                        this.formData.subNo = data.submissionNo;
+                    }
+                }
+                if (this.formData.subView == false) {
+                    this.formData.subNo = this.formData.submission;
+                }
+            }
+            /** 
             if (this.formData.subView == false) {
                 this.formData.subNo = this.formData.submission;
             }
+            */
             this.formData.accompanying = this.formData.people.join(',');
             let response = await $self.saveFormData(
                 '/api/v1/entertainmentExpense/save',

@@ -25,7 +25,7 @@
                     <el-col :span="9" style="position: relative;">
                         <el-form-item label="出差审批单：" label-width="110px">
                             <el-select v-model="formData.travelPeople" filterable value-key="id" allow-create placeholder="" @change="travelChange">
-                                <el-option v-for="item in travelSelections" :key="item.id" :label="item.number" :value="item">
+                                <el-option v-for="item in travelSelections" :key="item.id" :label="item.number" :value="item.id">
                                 </el-option>
                             </el-select>
                             <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.travelView">
@@ -39,7 +39,7 @@
                     <el-col :span="7" style="position: relative;">
                         <el-form-item label="呈报件：" label-width="30px;">
                             <el-select v-model="formData.submission" filterable allow-create value-key="id" placeholder="选择呈报件" @change="SubmissionChange">
-                                <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item">
+                                <el-option v-for="item in submissionSelections" :key="item.id" :label="item.submissionNo" :value="item.id">
                                 </el-option>
                             </el-select>
                             <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.subView">
@@ -218,6 +218,7 @@ import cookies from 'js-cookie';
 import FilesOperate from '../FilesOperate';
 import { application } from '../application.js';
 import { publicMethods } from '../application.js';
+import { debug } from 'util';
 export default {
     mixins: [publicMethods],
     name: 'LoanForm',
@@ -329,6 +330,16 @@ export default {
             }
         },
         travelChange(val) {
+            console.log(val);
+            this.formData.travelView = true;
+            let boolean = false;
+            for (let data of this.travelSelections) {
+                if (data.id == val) {
+                    boolean = true;
+                }
+            }
+            this.formData.travelView = boolean;
+            /** 
             this.formData.travelView = true;
             let boolean = false;
             for (let data of this.travelSelections) {
@@ -339,6 +350,7 @@ export default {
                 }
             }
             this.formData.travelView = boolean;
+            */
         },
         //根据uid获取列表
         getTravelList() {
@@ -389,6 +401,16 @@ export default {
         },
         //部门呈报件改变
         SubmissionChange(val) {
+            console.log(val);
+            this.formData.subView = true;
+            let boolean = false;
+            for (let data of this.submissionSelections) {
+                if (data.id == val) {
+                    boolean = true;
+                }
+            }
+            this.formData.subView = boolean;
+            /** 
             this.formData.subView = true;
             let boolean = false;
             for (let data of this.submissionSelections) {
@@ -399,6 +421,7 @@ export default {
                 }
             }
             this.formData.subView = boolean;
+            */
         },
         submissionDetail() {
             if (this.formData.submission && this.formData.submission != null) {
@@ -554,7 +577,7 @@ export default {
             this.formData.moneyUpper = this.common.DX(this.formData.total);
         },
         setDataFromParent(data) {
-            this.getClass();
+            // this.getClass();
             this.getTravelList();
             this.getSubmissionlList();
             this.formData.travelPeople = '';
@@ -565,8 +588,21 @@ export default {
             }
             */
             this.formData = data;
-            this.formData.travelPeople = data.busNo == '' ? {} : data.busNo;
-            this.formData.submission = data.subNo;
+            if (data.busId && data.busId != '') {
+                if (data.travelView) {
+                    this.formData.travelPeople = parseInt(data.busId);
+                } else {
+                    this.formData.travelPeople = data.busId;
+                }
+            }
+            if (data.subId && data.subId != '') {
+                if (data.subView) {
+                    this.formData.submission = parseInt(data.subId);
+                } else {
+                    this.formData.submission = data.subId;
+                }
+            }
+            // this.formData.submission = data.subNo;
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
@@ -576,7 +612,7 @@ export default {
             this.formData.travelPeople = '';
             this.formData.submission = '';
             this.getNum();
-            this.getClass();
+            // this.getClass();
             this.getTravelList();
             this.getSubmissionlList();
             this.dialogFormVisible = this.createForm_status = true;
@@ -585,8 +621,8 @@ export default {
             let formData = {
                 subView: true,
                 travelView: true,
-                travelPeople: {},
-                submission: {},
+                travelPeople: '',
+                submission: '',
                 subId: '',
                 subNo: '',
                 busId: '',
@@ -650,12 +686,36 @@ export default {
             } else {
                 $self.formData.borrowTime = '';
             }
+            if (this.formData.travelPeople != '') {
+                this.formData.busId = this.formData.travelPeople;
+                for (let data of this.travelSelections) {
+                    if (data.id == this.formData.travelPeople) {
+                        this.formData.busNo = data.number;
+                    }
+                }
+                if (this.formData.travelView == false) {
+                    this.formData.busNo = this.formData.travelPeople;
+                }
+            }
+            if (this.formData.submission != '') {
+                this.formData.subId = this.formData.submission;
+                for (let data of this.submissionSelections) {
+                    if (data.id == this.formData.submission) {
+                        this.formData.subNo = data.submissionNo;
+                    }
+                }
+                if (this.formData.subView == false) {
+                    this.formData.subNo = this.formData.submission;
+                }
+            }
+            /** 
             if (this.formData.travelView == false) {
                 this.formData.busNo = this.formData.travelPeople;
             }
             if (this.formData.subView == false) {
                 this.formData.subNo = this.formData.submission;
             }
+            */
             for (let item of this.users) {
                 if (item.name == this.formData.borrower) {
                     this.formData.borrowerId = item.id;
