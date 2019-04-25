@@ -99,6 +99,28 @@
                 dialogFormVisibleTendering: false,
                 searchBoardOptions: [],
                 formBoardId: '',
+                statusOption: [
+                    {
+                        value: '00',
+                        label: '已保存'
+                    },
+                    {
+                        value: '01',
+                        label: '审核中'
+                    },
+                    {
+                        value: '02',
+                        label: '已驳回'
+                    },
+                    {
+                        value: '03',
+                        label: '已撤销'
+                    },
+                    {
+                        value: '04',
+                        label: '已完成'
+                    }
+                ],
                 dialogBoardFormId: '',
                 operationBoardType: 'create',
                 formName:"meetingApply/zc",

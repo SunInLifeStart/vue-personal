@@ -203,6 +203,7 @@
             return {
                 dialogVisibleCrumb:false,
                 tableData: {
+                    status: '',
                     purchaseDeptNames: {}
                 },
                 SignOption: {

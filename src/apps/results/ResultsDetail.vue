@@ -30,6 +30,21 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
+                        <el-form-item label="关联采购方案：">{{tableData.procschemeNos}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="关联招标文件：">{{tableData.biddocumentNos}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购方式：">{{tableData.purchaseWay}}
+                            {{tableData.purchaseOther}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
                         <el-form-item label="目标成本/预算完成情况：">{{tableData.budgetPerformance}}
                         </el-form-item>
                     </el-col>
@@ -51,14 +66,14 @@
                         <el-form-item label="采购结果：">{{tableData.proResult}}
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row>
                     <el-col :span="8">
                         <el-form-item label="采购结果是否是规定情形：">{{tableData.proResultYes}}
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="签章需求：">{{tableData.signDemand}}
+                        <el-form-item label="签章需求：">{{tableData.signDemand}}{{tableData.signDemandOth}}
                         </el-form-item>
                     </el-col>
                 </el-row>
