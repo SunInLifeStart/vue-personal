@@ -1243,14 +1243,36 @@ export default {
                     message: '费用承担部门选择错误，请重新选择',
                     type: 'error'
                 });
-            } else if (this.addxtnht) {
-                this.saveForm(type);
             } else {
-                this.$confirm('合同信息为系统外合同,是否添加?', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    this.saveForm(type);
-                });
+                if (
+                    this.formData.receiptUnit == '' ||
+                    this.formData.openingLine == '' ||
+                    this.formData.bankNumber == '' ||
+                    this.formData.settlement == '' ||
+                    this.formData.costUnit == '' ||
+                    this.formData.contract.numNo == '' ||
+                    this.formData.contract.name == '' ||
+                    this.checkPayDetail() == false
+                ) {
+                    self.$message({
+                        message: '请输入必填项',
+                        type: 'error'
+                    });
+                } else {
+                    if (this.addxtnht == false && type) {
+                        this.$confirm(
+                            '合同信息为系统外合同,是否添加?',
+                            '提示',
+                            {
+                                type: 'warning'
+                            }
+                        ).then(() => {
+                            this.saveForm(type);
+                        });
+                    } else {
+                        this.saveForm(type);
+                    }
+                }
             }
         },
         // 提交保存
@@ -1293,7 +1315,13 @@ export default {
                 if (params) {
                     $self.msgTips('提交成功', 'success');
                     if (this.createForm_status) {
-                        $self.startSignalForStart();
+                        let data = await $self.startSignalForStart('reload');
+                        if (data) {
+                            $self.emitMessage();
+                            if (!this.addxtnht) {
+                                this.saveContract();
+                            }
+                        }
                         //如果是 "新建提交" 启动工作流（调用两次）
                     } else {
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
@@ -1309,9 +1337,9 @@ export default {
                             'fromeEdit'
                         );
                         $self.emitMessage();
-                    }
-                    if (!this.addxtnht) {
-                        this.saveContract();
+                        if (!this.addxtnht) {
+                            this.saveContract();
+                        }
                     }
                 } else {
                     $self.msgTips('保存成功', 'success');
@@ -1320,9 +1348,6 @@ export default {
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
                         $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
-                    }
-                    if (!this.addxtnht) {
-                        this.saveContract();
                     }
                 }
             } else {
