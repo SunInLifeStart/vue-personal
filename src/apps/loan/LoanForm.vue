@@ -192,11 +192,13 @@
                     <tr>
                         <td class="bolder" colspan="2" style="padding-left:50px">
                             <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                                附件上传
-                                <i class="el-icon-plus"></i>
+                                <span style="color:#06940c"> 附件上传
+                                    <i class="el-icon-plus"></i>
+                                </span>
                             </el-upload>
+
                         </td>
-                        <td colspan="6">
+                        <td colspan="6" style="padding:10px;">
                             <div v-for="item in formData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
                             </div>
@@ -839,10 +841,14 @@ export default {
     }
     table td,
     table th {
-        border: 1px solid #000;
-        color: #000;
+        border: 1px solid #ccc;
+        padding: 0px;
+        margin: 0px;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-size: 14px;
         height: 40px;
-        vertical-align: middle;
+        text-align: center;
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
             -webkit-appearance: none !important;

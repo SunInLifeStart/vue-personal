@@ -321,7 +321,7 @@
                     </tr>
                     <tr>
                         <td class="fontBold">附件信息</td>
-                        <td colspan="7">
+                        <td colspan="7" style="padding: 10px;">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>

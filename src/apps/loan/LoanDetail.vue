@@ -156,7 +156,7 @@
                     <tr>
                         <td class="bolder" colspan="2">附件上传
                         </td>
-                        <td colspan="6">
+                        <td colspan="6" style="padding:10px;">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>

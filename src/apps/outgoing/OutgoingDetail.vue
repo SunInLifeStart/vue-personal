@@ -11,7 +11,7 @@
             </el-row>
         </div>
         <br />
-        <div class="formContent">
+        <div class="formContent"  style="padding: 15px 30px">
             <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
             <br />
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
@@ -347,6 +347,7 @@ export default {
         }
     }
     #actionList {
+         padding-left: 20px;
         background: #f4f4f4;
         border-bottom: 1px solid #eaeaea;
         height: 40px;

@@ -9,7 +9,7 @@
                 </div>
             </el-row>
         </div>
-        <div class="formContent">
+        <div class="formContent" style="padding: 15px 30px">
             <br />
             <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
             <br />
@@ -549,6 +549,7 @@
             }
         }
         #actionList {
+             padding-left: 20px;
             background: #f4f4f4;
             border-bottom: 1px solid #eaeaea;
             height: 40px;
