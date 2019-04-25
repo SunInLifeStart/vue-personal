@@ -65,12 +65,12 @@
                                 </el-table-column>
                                 <el-table-column prop="applyNumber" label="申请数量">
                                     <template slot-scope="scope">
-                                        <el-input v-model.number="scope.row.applyNumber" type="number" @mousewheel.native.prevent></el-input>
+                                        <el-input v-model="scope.row.applyNumber" type="number" @mousewheel.native.prevent></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="employYear" label="使用年限">
                                     <template slot-scope="scope">
-                                        <el-input v-model.number="scope.row.employYear" type="number" @mousewheel.native.prevent></el-input>
+                                        <el-input v-model="scope.row.employYear" type="number" @mousewheel.native.prevent></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="supplyNo" label="物品编号">

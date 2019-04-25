@@ -13,10 +13,7 @@
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="申请部门" prop="applyDept">
-                            <el-select v-model="formData.applyDept" placeholder="请选择" filterable>
-                                <el-option v-for="item in payeeOrgan" :key="item.id" :label="item.name" :value="item.name">
-                                </el-option>
-                            </el-select>
+                            <el-input v-model="formData.applyDept" disabled></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -78,12 +75,12 @@
                                 </el-table-column>
                                 <el-table-column prop="number" label="计划采购数量">
                                     <template slot-scope="scope">
-                                        <el-input v-model.number="scope.row.number" @input="getAmount(scope.row)" @mousewheel.native.prevent type="number"></el-input>
+                                        <el-input v-model="scope.row.number" @input="getAmount(scope.row)" @mousewheel.native.prevent type="number"></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="price" label="计划单价">
                                     <template slot-scope="scope">
-                                        <el-input v-model.number="scope.row.price" @input="getAmount(scope.row)" type="number" @mousewheel.native.prevent></el-input>
+                                        <el-input v-model="scope.row.price" @input="getAmount(scope.row)" type="number" @mousewheel.native.prevent></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="totalPrice" label="计划总价">
@@ -93,7 +90,7 @@
                                 </el-table-column>
                                 <el-table-column prop="inventory" label="库存数量">
                                     <template slot-scope="scope">
-                                        <el-input v-model.number="scope.row.inventory" type="number" @mousewheel.native.prevent></el-input>
+                                        <el-input v-model="scope.row.inventory" type="number" @mousewheel.native.prevent></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="buyTime" label="要求购入时间" width="160px">

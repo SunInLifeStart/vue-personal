@@ -172,10 +172,10 @@
                                 <el-col :span="24">
                                     <el-radio-group v-model="formData.moneyRadio" @change="typeandradioChange('moneyRadio')" :disabled="this.showSubmit == 'false'">
                                         <el-radio label="1">
-                                            <el-input v-model.number="formData.contractAmount" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='1' ||this.showSubmit == 'false'"></el-input>
+                                            <el-input v-model="formData.contractAmount" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='1' ||this.showSubmit == 'false'"></el-input>
                                             元</el-radio>
                                         <el-radio label="2">其他 成本上线总额
-                                            <el-input v-model.number="formData.uptotal" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='2' ||this.showSubmit == 'false'"></el-input>
+                                            <el-input v-model="formData.uptotal" type="number" @mousewheel.native.prevent style="width: 110px" :disabled="formData.moneyRadio!='2' ||this.showSubmit == 'false'"></el-input>
                                             元</el-radio>
                                     </el-radio-group>
                                 </el-col>
