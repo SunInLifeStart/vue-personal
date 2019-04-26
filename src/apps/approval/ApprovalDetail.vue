@@ -87,18 +87,21 @@
                 <el-table :data="tableData.usingApproval" border style="width: 90%; margin-top: 5px;" >
                            <el-table-column prop="fileName" label="用印文件名称">
                                 <template slot-scope="scope">
-                                    <el-input class="blockcolor"  v-model="scope.row.fileName" disabled></el-input>
+                                    {{scope.row.fileName}}
+                                    <!-- <el-input class="blockcolor"  v-model="scope.row.fileName" disabled></el-input> -->
                                 </template>
                             </el-table-column>
                             <el-table-column prop="useReason" label="使用事由"  width="250">
                                 <template slot-scope="scope">
-                                    <el-input  class="blockcolor" v-model="scope.row.useReason" disabled></el-input>
+                                    {{scope.row.useReason}}
+                                    <!-- <el-input  class="blockcolor" v-model="scope.row.useReason" disabled></el-input> -->
                                 </template>
                             </el-table-column>
                         
                             <el-table-column prop="fileNum" label="用印份数"  width="110">
                                 <template slot-scope="scope">
-                                    <el-input  class="blockcolor" v-model="scope.row.fileNum" disabled></el-input>
+                                    {{scope.row.fileNum}}
+                                    <!-- <el-input  class="blockcolor" v-model="scope.row.fileNum" disabled></el-input> -->
                                 </template>
                             </el-table-column>
                              <el-table-column  label="附件" align="center"  width="150">

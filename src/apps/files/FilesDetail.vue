@@ -148,7 +148,7 @@ export default {
             users: [],
             actionsDialogArr: [],
             appFlowName: 'montor-documentprint_documentprint',//固定资产流程 Files-form_fixedFiles  低值易耗办公品  Files-form_lowFiles 
-            formName: 'documentprint_文件印刷',
+            formName: 'documentPrinting',
             comments: [],
             dialogVisibleCrumb: false,
             flowNodeUrl: "",

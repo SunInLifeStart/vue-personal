@@ -172,9 +172,8 @@ export default {
                 fileName:'',
             },
             searchOptions: [],
-            formName: "documentprint_文件印刷",
-            
-        };
+            formName: "documentPrinting",
+         };
     },
     components: {
         FilesForm,
