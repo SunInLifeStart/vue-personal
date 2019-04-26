@@ -68,8 +68,8 @@
                                 </el-table-column>
                                 <el-table-column prop="" label="印刷色彩" width="110px">
                                     <template slot-scope="scope">
-                                       <el-radio v-model="formData.colourType" label="1">彩色</el-radio>
-                                       <el-radio v-model="formData.colourType" label="0">白色</el-radio>
+                                       <el-radio v-model="scope.row.colourType" label="1">彩色</el-radio>
+                                       <el-radio v-model="scope.row.colourType" label="0">白色</el-radio>
                                     </template>
                                 </el-table-column>
                                <el-table-column prop="demand" label="其他需求">
@@ -255,7 +255,7 @@ export default {
                         count: 0,
                         fileName: '',
                         demand: '',
-                        colourType:true,
+                        colourType:'',
                         printNumber:"",
                         printingPicture: '',
                         attachments: [],
@@ -390,7 +390,7 @@ export default {
                 id: '',
                 fileName: '',
                 demand: '',
-                colourType:true,
+                colourType:'',
                 printNumber:"",
                 printingPicture: '',
                 attachments: [],

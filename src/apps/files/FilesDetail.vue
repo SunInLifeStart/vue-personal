@@ -58,7 +58,7 @@
                                 </el-table-column>
                                 <el-table-column prop="colourType" label="印刷色彩">
                                     <template slot-scope="scope">
-                                        {{scope.row.colourType |numFilter}}
+                                        {{scope.row.colourType | numFilter}}
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="demand" label="其他需求">
@@ -178,20 +178,11 @@ export default {
     mounted() {
     },
      filters: {
-         fomumonth: function(data) {
+         numFilter: function(data) {
              let xmlJson = {
-                "yiyue":"一月",
-                "eryue":"二月",
-                "sanyue" :"三月",
-                "siyue" :"四月",
-                "wuyue" :"五月",
-                 "liuyue":"六月",
-                "qiyue":"七月",
-                "bayue" :"八月",
-                "jiuyue" :"九月",
-                "shiyue" :"十月",
-                "shiyiyue" :"十一月",
-                "shieryue" :"十二月",
+                "0":"白色",
+                "1":"彩色",
+               
             };
             return xmlJson[data];
        },
