@@ -227,7 +227,6 @@
                         <el-col :span="24">
                             <el-form-item label="家庭关系" prop="">
                                 <!-- <tr v-for="(item,index) in tableData.familyTies" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
-                                   
                                 </tr> -->
                                 <!-- <div style="float: right;">
                                     <span @click="addItem('sitIn')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
