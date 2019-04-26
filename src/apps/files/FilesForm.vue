@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="文件印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">
+    <el-dialog title="文件印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="85%" style="text-align: center;">
         <div id="FilesForm">
             <el-form ref="formupdate" :model="formData" :rules="rules" label-width="90px">
                 <el-row>
@@ -18,8 +18,10 @@
                             <el-input v-model="formData.created" placeholder="请输入申请时间" :disabled="true"></el-input>
                          </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="8">
-                        <el-form-item label="资金计划所属月份" label-width="89px">
+                        <el-form-item label="资金计划所属月份" >
                             <!-- <el-input v-model="formData.apply" placeholder="资金计划所属月份"></el-input> -->
                             <el-select v-model="formData.umonth" placeholder="请选择月份"  clearable filterable>
                                 <el-option v-for="item in onOption"
@@ -30,12 +32,14 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="是否属于年度预算内" style="float:left"  label-width="166px">
+                    <el-col :span="10">
+                        <el-form-item label="是否属于年度预算内" label-width="166px">
                             <el-radio v-model="formData.utype" label="true">是</el-radio>
                              <el-radio v-model="formData.utype" label="false">否</el-radio>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
                   <el-col :span="24">
                         <el-form-item label="文件印刷明细" label-width="104px">
                             <div style="float: right;">
@@ -46,7 +50,7 @@
                                @selection-change="handleSelectionChange"
                                :row-class-name="tableRowClassName"
                                @row-click='show'>
-                              <el-table-column type="selection" width="70px"></el-table-column>
+                              <el-table-column type="selection" width="60px"></el-table-column>
                                 <el-table-column prop="fileName" label="文件名称">
                                     <template slot-scope="scope">
                                         <el-input v-model="scope.row.fileName"></el-input>
@@ -57,12 +61,12 @@
                                         <el-input v-model="scope.row.printingPicture"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="printNumber" label="印刷数量（套）">
+                                <el-table-column prop="printNumber" label="印刷数量（套）" width="110px">
                                     <template slot-scope="scope">
                                         <el-input v-model.number="scope.row.printNumber" @change="totleCurrency" placeholder=""></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="" label="印刷色彩">
+                                <el-table-column prop="" label="印刷色彩" width="110px">
                                     <template slot-scope="scope">
                                        <el-radio v-model="formData.colourType" label="1">彩色</el-radio>
                                        <el-radio v-model="formData.colourType" label="0">白色</el-radio>
@@ -182,8 +186,7 @@ export default {
             cookie_uname: '',
             cookie_oname: '',
             selectionItems: [],
-            currentFormId: this.operationType == 'create' ? '' : this.formId,
-            // createForm_status: false,
+            
             rules: {
                 creatorName: [
                     {
@@ -213,8 +216,6 @@ export default {
     components: {
         FilesOperate
     }, 
-   
-    props: ['formId', 'operationType'],
     mounted() {
         this.getUsers();
     },
@@ -307,7 +308,7 @@ export default {
             let response = await $self.saveFormData("/api/v1/documentPrinting/save", $self.formData);
             this.totleCurrency()
             if (response) {
-                $self.formId = response.data.id;
+                $self.formId = response.data.content.id;
                 $self.dialogFormVisible = false;
                 if (params) {
                     $self.msgTips("提交成功", "success");

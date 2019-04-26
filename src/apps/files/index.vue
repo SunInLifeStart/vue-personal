@@ -86,7 +86,7 @@
                     </el-table-column>
                 </el-table>
                 <br />
-                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.page" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
             </div>
         </el-card>
         <br>
@@ -163,8 +163,9 @@ export default {
             formDetails: {},
             formId: "",
             params: {
-                pageNum: 1,
+                total: 0,
                 pageSize: 5,
+                page: 1,
                 created: "",
                 creatorName: "",
                 umonth: '',
@@ -190,10 +191,11 @@ export default {
             if (response) {
                 if (response.data.content.list && response.data.content.list.length > 0) {
                     let formId = response.data.content.list[0].id;
+                    // debugger
                     $self.$refs.FilesDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.content.list;
-                // $self.params.total = response.data.content.total;
+                $self.params.total = response.data.content.total;
 
             } else {
                 $self.msgTips("获取列表失败", "warning");
@@ -216,7 +218,7 @@ export default {
         },
         reloadList(params) {
             if (params == "reload") {
-                this.params.pageNum = 1;
+                this.params.page = 1;
                 this.getList();
             } else {
                 this.$refs.FilesDetail.getFormDetails(params.id);
@@ -233,7 +235,7 @@ export default {
         
         //分页
         currentChange(pageNum) {
-            this.params.pageNum = pageNum;
+            this.params.page = pageNum;
             this.getList(pageNum);
         },
         sizeChange(pageSize) {
@@ -245,7 +247,7 @@ export default {
         },
         resetInput() {
            this.params={
-                pageNum: 1,
+                page: 1,
                 pageSize: 5,
                 created: "",
                 creatorName: "",

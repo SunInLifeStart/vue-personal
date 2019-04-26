@@ -88,7 +88,7 @@
         <br>
         <el-card class="box-card">
             <TrainDetail :formId="formId" ref="TrainDetail" @reloadList = "reloadList" @resetStatus = "resetStatus"></TrainDetail>
-             <!-- :formId="formId" -->
+           
         </el-card>
          <TrainForm  ref="TrainForm" @reloadList = "reloadList"></TrainForm>
          <!-- :formDataFromIndex="formDataFromIndex"  -->
