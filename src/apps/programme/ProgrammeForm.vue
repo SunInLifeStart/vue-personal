@@ -85,7 +85,7 @@
                 <table class="tableNoBorder">
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="供应商入围情况" prop="phone">
+                            <el-form-item label="供应商入围情况" prop="provider">
                                 <tr style="backgorund:#ccc">
                                     <th colspan="8">推荐采购入围名单</th>
                                     <th colspan="2">考察结论</th>
@@ -479,6 +479,14 @@
             },
             async saveForm(params) {
                 const $self = this;
+                if ($self.formData.provider && $self.formData.provider.length > 0) {
+                    if ($self.formData.provider[0].providerName && $self.formData.provider[0].providerName.length > 0) {
+
+                    } else {
+                        $self.msgTips("请填写运营商入围情况名称", "error");
+                        return false;
+                    }
+                }
                 let response = await $self.saveFormData(
                     "/api/v1/motor-procscheme/save",
                     $self.formData

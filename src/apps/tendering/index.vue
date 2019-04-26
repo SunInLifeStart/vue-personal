@@ -9,14 +9,13 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购项目名称">
-                            <el-input v-model="params.purchaseProjectName" placeholder="请输入采购项目名称"></el-input>
+                        <el-form-item label="招标项目名称">
+                            <el-input v-model="params.biddingProjectName" placeholder="请输入采购项目名称"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购发起时间">
-                            <el-date-picker v-model="params.purchaseStartTime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="请输入采购发起时间" style="width:100%" type="date">
-                            </el-date-picker>
+                        <el-form-item label="招标人">
+                            <el-input v-model="params.tenderee" placeholder="请输入招标人"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -48,22 +47,25 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
-                <el-table-column prop="conferenceTitle" label="项目名称">
+                <el-table-column prop="projectName" label="项目名称">
                 </el-table-column>
-                <el-table-column prop="creatorName" label="招标项目名称">
+                <el-table-column prop="biddingProjectName" label="招标项目名称">
                 </el-table-column>
-                <el-table-column prop="organName" label="招标人">
+                <el-table-column prop="tenderee" label="招标人">
                 </el-table-column>
-                <el-table-column prop="committed" label="预计金额">
+                <el-table-column prop="estimatedAmount" label="预计金额">
                 </el-table-column>
-                <el-table-column prop="meetingPlace" label="标的简述">
+                <el-table-column prop="bidingSketch" label="标的简述">
+                </el-table-column>
+                <el-table-column label="单据状态">
+                    <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                 </el-table-column>
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
-                        <el-tooltip class="item" effect="dark" content="编辑" placement="left">
+                        <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status === '00' || scope.row.status === '02'">
                             <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                         </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="删除" placement="left">
+                        <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status === '00' || scope.row.status === '02'">
                             <el-button type="text" icon="el-icon-delete" @click="deleteCurrentLine(scope.row.id)"></el-button>
                         </el-tooltip>
                     </template>
@@ -93,7 +95,6 @@
                 params: {
                     pageNum: 1,
                     pageSize: 5,
-                    conferenceTitle: '',
                     total: 0
                 },
                 dialogFormVisibleTendering: false,
@@ -123,7 +124,7 @@
                 ],
                 dialogBoardFormId: '',
                 operationBoardType: 'create',
-                formName:"meetingApply/zc",
+                formName:"motor-biddocument",
                 statusNews: ''
             };
         },
@@ -133,6 +134,18 @@
         },
         mounted() {
             this.getList();
+        },
+        filters: {
+            filterStatus: function(data) {
+                let xmlJson = {
+                    "00":"已保存",
+                    "01":"审核中",
+                    "02" :"已驳回",
+                    "03" :"已撤销",
+                    "04" :"已完成"
+                };
+                return xmlJson[data];
+            }
         },
         methods: {
             reloadList(params) {
@@ -148,7 +161,7 @@
             },
             async getList() {
                 const $self = this;
-                $self.url = "/api/v1/meetingApply/zc/queryList";
+                $self.url = "/api/v1/motor-biddocument/queryList";
                 let response = await $self.getQueryList();
                 if (response) {
                     if (response.data.content.list.length > 0) {
@@ -178,7 +191,8 @@
             onReset() {
                 this.params = {
                     pageNum: 1,
-                    pageSize: 5
+                    pageSize: 5,
+                    total: 0
                 }
                 this.onSubmit();
             },
@@ -187,6 +201,7 @@
             },
             cleanform() {
                 this.$refs.TenderingForm.createForm();
+                this.$refs.TenderingForm.getTableCode();
             },
             refreshBoardData() {
                 this.getList();

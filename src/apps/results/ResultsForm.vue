@@ -9,12 +9,12 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="项目名称" prop="creatorName">
+                    <el-form-item label="项目名称" prop="projectName">
                         <el-input v-model="formData.projectName"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="采购项目名称">
+                    <el-form-item label="采购项目名称" prop="projectName">
                         <el-input v-model="formData.purchaseProjectName"></el-input>
                     </el-form-item>
                 </el-col>
@@ -38,7 +38,7 @@
                     <el-form-item label="关联招标文件" prop="biddocumentNo">
                         <el-select v-model="formData.biddocumentNos" value-key="id" placeholder="请选择招标文件">
                             <el-option
-                                    v-for="item in issueOption"
+                                    v-for="item in biddocumentOption"
                                     :key="item.id"
                                     :label="item.number"
                                     :value="{id: item.id, number: item.number}">
@@ -86,7 +86,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-col :span="24">
-                        <el-form-item label="采购业务类别" style="text-align: left">
+                        <el-form-item label="采购业务类别" prop="proType" style="text-align: left">
                             <el-radio-group v-model="formData.proType">
                                 <div v-for="item in radioOption">
                                     <el-radio
@@ -121,8 +121,8 @@
                 <el-col :span="8">
                     <el-form-item label="采购结果是否是规定情形" prop="proResultYes">
                         <el-radio-group v-model="formData.proResultYes">
-                            <el-radio key="1" value="1" label="是"></el-radio>
-                            <el-radio key="2" value="2" label="否"></el-radio>
+                            <el-radio key="1" label="1">是</el-radio>
+                            <el-radio key="2" label="2">否</el-radio>
                         </el-radio-group>
                     </el-form-item>
                 </el-col>
@@ -211,14 +211,39 @@ export default {
                 number: [
                     { required: true, message: '请输入流水单号', trigger: 'blur' }
                 ],
-                branchlineTo: [
-                    { required: true, message: '请输入会议类型', trigger: 'blur' }
+                projectName: [
+                    { required: true, message: '请输入项目名称', trigger: 'blur' }
                 ],
-                committed: [
-                    { required: true, message: '请输入提单时间', trigger: 'blur' }
+                purchaseWay: [
+                    { required: true, message: '请输入采购方式', trigger: 'blur' }
+                ],
+                budgetPerformance: [
+                    { required: true, message: '请输入目标成本/预算完成情况', trigger: 'blur' }
+                ],
+                proTime: [
+                    { required: true, message: '请输入采购起止时间', trigger: 'blur' }
+                ],
+                proContent: [
+                    { required: true, message: '请输入采购内容摘要', trigger: 'blur' }
+                ],
+                proProcess: [
+                    { required: true, message: '请输入采购过程简述', trigger: 'blur' }
+                ],
+                proResultYes: [
+                    { required: true, message: '请输入采购结果是否是规定情形', trigger: 'blur' }
+                ],
+                proResult: [
+                    { required: true, message: '请输入采购结果', trigger: 'blur' }
+                ],
+                signDemand: [
+                    { required: true, message: '请输入签章需求', trigger: 'blur' }
+                ],
+                proType: [
+                    { required: true, message: '请输入采购业务类别', trigger: 'blur' }
                 ]
             },
             issueOption: [],
+            biddocumentOption: [],
             radioOption: [
                 {
                     value: '1',
@@ -265,10 +290,24 @@ export default {
     },
     mounted() {
         this.getList()
-        this.getSchemeNos()
+        // this.getSchemeNos()
     },
     methods: {
-        async getSchemeNos() {
+        // async getSchemeNos() {
+        //     const $self = this;
+        //     $self.url = "/api/v1/motor-procresult/query";
+        //     let response = await $self.getQueryList();
+        //     if (response) {
+        //         $self.issueOption = response.data.content.list;
+        //     } else {
+        //         $self.msgTips("获取列表失败", "warning");
+        //     }
+        // },
+        async getTableCode() {
+            let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procresult' })
+            if (user) this.formData.number = user.data.content.serialNumber
+        },
+        async getList() {
             const $self = this;
             $self.url = "/api/v1/motor-procscheme/query";
             let response = await $self.getQueryList();
@@ -277,17 +316,10 @@ export default {
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
-        },
-        async getTableCode() {
-            let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procresult' })
-            if (user) this.formData.number = user.data.content.serialNumber
-        },
-        async getList() {
-            const $self = this;
-            $self.url = "/api/v1/motor-procresult/queryList";
-            let response = await $self.getQueryList();
-            if (response) {
-                $self.issueOption = response.data.content.list;
+            $self.url = "/api/v1/motor-biddocument/queryList";
+            let re = await $self.getQueryList();
+            if (re) {
+                $self.biddocumentOption = re.data.content.list;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
@@ -316,18 +348,18 @@ export default {
                 projectName: '',
                 procschemeNos: {},
                 biddocumentNos: {},
-                purchaseWay: '',
+                purchaseWay: '公开招标',
                 purchaseOther: '',
                 budgetPerformance: '',
                 proTime: [],
-                proType: '',
+                proType: '1',
                 proTimeStart: '',
                 proTimeEnd: '',
                 proContent: '',
                 proProcess: '',
                 proResult: '',
-                proResultYes: '',
-                signDemand: '',
+                proResultYes: '1',
+                signDemand: '无',
                 signDemandOth: '',
                 attachmentsAnno: [],
                 attachmentsRep: [],
@@ -339,7 +371,7 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/api/v1/motor-procresult/detail/' + this.formId)
+                    .get('/api/v1/motor-procresult/get/' + this.formId)
                     .then(res => {
                         self.formData = res.data.content;
                         self.formData.proTime = [self.formData.proTimeStart, self.formData.proTimeEnd]

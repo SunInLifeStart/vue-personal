@@ -161,7 +161,7 @@ export default {
         },
         async getList() {
             const $self = this;
-            $self.url = "/api/v1/motor-procresult/queryList";
+            $self.url = "/api/v1/motor-procresult/query";
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {

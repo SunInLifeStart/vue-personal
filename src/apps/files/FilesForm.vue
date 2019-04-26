@@ -120,7 +120,7 @@ export default {
     data() {
         return {
             uploadImageType:'',
-            appFlowName: "files-form_files",
+            appFlowName: "montor-documentprint_documentprint",
             counts: 0,
             dialogFormVisible: false,
             purposeDialog: false,

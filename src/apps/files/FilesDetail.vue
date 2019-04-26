@@ -147,13 +147,12 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'files-form_files',//固定资产流程 Files-form_fixedFiles  低值易耗办公品  Files-form_lowFiles 
+            appFlowName: 'montor-documentprint_documentprint',//固定资产流程 Files-form_fixedFiles  低值易耗办公品  Files-form_lowFiles 
             formName: 'documentPrinting',
             comments: [],
             dialogVisibleCrumb: false,
             flowNodeUrl: "",
-
-            crumb: { items: [] },
+             crumb: { items: [] },
             tabledata: {
                 cardPrinting: []
             },

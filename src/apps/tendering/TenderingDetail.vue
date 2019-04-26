@@ -20,44 +20,77 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="项目名称：">{{tableData.creatorName}}
+                        <el-form-item label="项目名称：">{{tableData.projectName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="招标项目名称：">{{tableData.organName}}
+                        <el-form-item label="招标项目名称：">{{tableData.biddingProjectName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="招标人：">{{tableData.committed}}
+                        <el-form-item label="招标人：">{{tableData.tenderee}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="预计金额：">{{tableData.meetingPlace}}
+                        <el-form-item label="采购业务类别：">{{tableData.procurementType}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="标的简述：">{{tableData.meetingTime}}
+                        <el-form-item label="采购标的类别：">{{tableData.purchaseType}}
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <!--<el-row>-->
-                    <!--<el-col :span="24">-->
-                        <!--<el-form-item label="会议名称：">{{tableData.conferenceTitle}}-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                <!--</el-row>-->
-                <!--<el-row>-->
-                    <!--<el-col :span="24">-->
-                        <!--<el-form-item label="各级领导意见及审批：">{{tableData.idea}}-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
-                <!--</el-row>-->
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="招标方式：">{{tableData.biddingType}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="签章需求：">{{tableData.signatureRequirements}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="预计金额(元)：">{{tableData.estimatedAmount}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                        <el-form-item label="标的简述：">{{tableData.bidingSketch}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="关联采购方案：">
+                            <span @click="common.open('#/apps/programme/' + tableData.procurementScheme.id);">{{tableData.procurementScheme.number}}</span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="招标文件(评审版)附件：" v-if="tableData.biddingDocumentAttachment && tableData.biddingDocumentAttachment.length > 0">
+                            <div v-for="item in tableData.biddingDocumentAttachment" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="经审批的采购方案附件：" v-if="tableData.procurementSchemeAttachment && tableData.procurementSchemeAttachment.length > 0">
+                            <div v-for="item in tableData.procurementSchemeAttachment" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="其他附件：" v-if="tableData.otherAttachment && tableData.otherAttachment.length > 0">
+                            <div v-for="item in tableData.otherAttachment" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
@@ -116,7 +149,9 @@
         name: 'TenderingDetail',
         data() {
             return {
-                tableData: {},
+                tableData: {
+                    procurementScheme: {}
+                },
                 actions: [],
                 actionsDialogArr: [],
                 dialogVisibleCrumb:false,
@@ -124,10 +159,9 @@
                 comments: [],
                 formId: "",
                 flowNodeUrl: "",
-                crumbs:[],
                 textarea: '',
                 dialogVisible: false,
-                appFlowName:'motor-issuesReported',
+                appFlowName:'motor-biddocument_biddocument',
             };
         },
         components: {
@@ -138,7 +172,7 @@
             getFormDetails(formId) {
                 let $self = this;
                 $self.formId = formId;
-                $self.url= "/api/v1/meetingApply/zc/detail/" + $self.formId;
+                $self.url= "/api/v1/motor-biddocument/detail/" + $self.formId;
                 $self.getFormDetailsData();
             },
             async getFormDetailsData() {
@@ -149,19 +183,10 @@
                 } else {
                     $self.msgTips("获取表单失败", "warning");
                 }
-                // debugger;
                 let actions = await $self.getActions();
-                let crumbs = await $self.getCrumbs();
                 let comments =  await $self.getComments();
                 $self.actions = actions.data.types;
-                $self.crumbs =  {items: crumbs.data, index: -1};
                 $self.comments = comments.data;
-                for(var i= 0; i<$self.crumbs.items.length; i++){
-                    if($self.crumbs.items[i].active){
-                        $self.crumbs.index = i;
-                    }
-                }
-
             }
         }
     };

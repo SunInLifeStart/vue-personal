@@ -173,8 +173,7 @@ export default {
             },
             searchOptions: [],
             formName: "documentPrinting",
-            
-        };
+         };
     },
     components: {
         FilesForm,
