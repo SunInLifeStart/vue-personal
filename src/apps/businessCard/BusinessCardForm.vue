@@ -168,7 +168,7 @@ export default {
     name: 'BusinessCardForm',
     data() {
         return {
-            appFlowName: "cardPrinting",
+            appFlowName: "motor-cardprint_cardprint",
             counts: 0,
             dialogFormVisible: false,
             purposeDialog: false,

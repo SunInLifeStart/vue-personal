@@ -168,7 +168,7 @@ export default {
                 // options: []
             },
             searchOptions: [],
-            formName: "cardPrinting",
+            formName: "cardprint_名片印刷",
             formInline: {
                 umonth: '',
                 creatorName: "",
