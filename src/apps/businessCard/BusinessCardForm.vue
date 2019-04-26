@@ -168,7 +168,7 @@ export default {
     name: 'BusinessCardForm',
     data() {
         return {
-            appFlowName: "motor-cardprint_cardprint",
+            appFlowName: "motor-cardprinting_cardprint",
             counts: 0,
             dialogFormVisible: false,
             purposeDialog: false,
@@ -230,8 +230,6 @@ export default {
             cookie_uname: '',
             cookie_oname: '',
             selectionItems: [],
-            // currentFormId: this.operationType == 'create' ? '' : this.formId,
-            // createForm_status: false,
             rulesform:{
                 name: [
                     {
@@ -275,9 +273,7 @@ export default {
           this.formData.totlenumbers = val ? this.totleCurrency(val) : "";
       }
     },
-
-    props: ['formId', 'operationType'],
-    mounted() {
+     mounted() {
         this.getUsers();
     },
     methods: {
@@ -312,7 +308,7 @@ export default {
         },
         setDataFromParent(data) {
             this.formData = data;
-            // this.formId = data.id;
+            this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
         },
@@ -390,7 +386,7 @@ export default {
             let response = await $self.saveFormData("/api/v1/cardPrinting/save", $self.formData);
             this.totleCurrency()
             if (response) {
-                $self.formId = response.data.id;
+                $self.formId = response.data.content.id;
                 $self.dialogFormVisible = false;
                 if (params) {
                     $self.msgTips("提交成功", "success");

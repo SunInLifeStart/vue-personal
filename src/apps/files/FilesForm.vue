@@ -124,7 +124,7 @@ export default {
     data() {
         return {
             uploadImageType:'',
-            appFlowName: "montor-documentprint_documentprint",
+            appFlowName: "motor-documentprinting_documentprint",
             counts: 0,
             dialogFormVisible: false,
             purposeDialog: false,
