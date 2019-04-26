@@ -27,7 +27,7 @@
                     </router-link>
                     <router-link to="/home/reading">
                         <div class="item" :class="{active:$route.params.type=='reading'}">
-                            <i class="icon iconfont el-icon-caogao" /><span>待阅 &nbsp;</span><span v-if="todoListLength" style="color:#a71616">({{readingListLength}})</span>
+                            <i class="icon iconfont el-icon-caogao" /><span>待阅 &nbsp;</span><span v-if="readingListLength" style="color:#a71616">({{readingListLength}})</span>
                         </div>
                     </router-link>
                 </div>
@@ -86,17 +86,17 @@ export default {
         }
         $self.$axios
             .get(
-                "/api/v1/push/513/list?type=todo&business=&page=1&pageSize=10000"
+                "/api/v1/push/"+ this.$store.getters.LoginData.uid+"/list?type=todo&business=&page=1&pageSize=10000"
             )
             .then(res => {
-               this.todoListLength = res.data.count;
+               this.todoListLength = res.data.content.length == 0 ? "" :  res.data.content.length;
             });
              $self.$axios
             .get(
-                "/api/v1/push/513/list?type=reading&business=&page=1&pageSize=10000"
+                "/api/v1/push/"+ this.$store.getters.LoginData.uid +"/list?type=reading&business=&page=1&pageSize=10000"
             )
             .then(res => {
-               this.readingListLength = res.data.count;
+                 this.readingListLength = res.data.content.length == 0 ? "" :  res.data.content.length;
             });
     }
 };

@@ -419,7 +419,7 @@ export default {
                                 return item.action == "COMMIT";
                             }
                         );
-                        await $self.startSignal(actions.data.types[0]);
+                        await $self.startSignal(actions.data.types[0],"fromEdit");
                         $self.emitMessage();
                     }
                 } else {
