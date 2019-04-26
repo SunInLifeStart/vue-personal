@@ -547,7 +547,14 @@ export default {
         },
         //获得费用承担部门
         getOrgan() {
-            axios.get('/api/v1/users/get/allOrgans').then(res => {
+            axios.get('/api/v1/users/list/organss').then(res => {
+                this.organs = [];
+                for (let data of res.data) {
+                    this.organs.push({
+                        id: data.id,
+                        name: data.name
+                    });
+                }
                 this.organs = res.data;
             });
         },

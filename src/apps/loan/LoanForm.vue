@@ -283,8 +283,8 @@ export default {
         FilesOperate
     },
     mounted() {
-        this.getUsers();
-        this.organs();
+        //this.getUsers();
+        // this.organs();
         // this.getTravelList();
         // this.getSubmissionlList();
     },
@@ -442,7 +442,14 @@ export default {
             }
         },
         organs() {
-            axios.get('/api/v1/organs').then(res => {
+            axios.get('/api/v1/users/list/organss').then(res => {
+                this.organ = [];
+                for (let data of res.data) {
+                    this.organ.push({
+                        id: data.id,
+                        name: data.name
+                    });
+                }
                 this.organ = res.data;
             });
         },
@@ -580,6 +587,8 @@ export default {
         },
         setDataFromParent(data) {
             // this.getClass();
+            this.getUsers();
+            this.organs();
             this.getTravelList();
             this.getSubmissionlList();
             this.formData.travelPeople = '';
@@ -610,6 +619,9 @@ export default {
             this.createForm_status = false;
         },
         createForm() {
+            this.getUsers();
+            this.organs();
+            this.getO;
             this.formData = this.resetForm();
             this.formData.travelPeople = '';
             this.formData.submission = '';

@@ -627,7 +627,14 @@ export default {
         },
         //获取各个部门数据
         getOgans() {
-            axios.get('/api/v1/users/get/allOrgans').then(res => {
+            axios.get('/api/v1/users/list/organss').then(res => {
+                this.combinedUnit = [];
+                for (let data of res.data) {
+                    this.combinedUnit.push({
+                        id: data.id,
+                        name: data.name
+                    });
+                }
                 this.combinedUnit = res.data;
             });
         },

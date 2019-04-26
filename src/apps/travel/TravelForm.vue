@@ -532,7 +532,14 @@ export default {
             }
         },
         getorgans() {
-            axios.get('/api/v1/organs').then(res => {
+            axios.get('/api/v1/users/list/organss').then(res => {
+                this.organs = [];
+                for (let data of res.data) {
+                    this.organs.push({
+                        id: data.id,
+                        name: data.name
+                    });
+                }
                 this.organs = res.data;
             });
         },
