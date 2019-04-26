@@ -67,13 +67,17 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购结果是否是规定情形：">{{tableData.proResultYes}}
+                        <el-form-item label="采购结果是否是规定情形：">{{tableData.proResultYes == '1' ? '是': '否'}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="签章需求：">{{tableData.signDemand}}{{tableData.signDemandOth}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购业务类别：">{{proTypeOption[tableData.proType]}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -159,6 +163,17 @@ export default {
     data() {
         return {
             tableData: {},
+            proTypeOption: {
+                '1': '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
+                '2': '开发建设类采购(竞价谈判方式：100万>工程类>=20万、50万>货物类>=10万、30万>服务类>=10万)',
+                '7': '开发建设类采购(零星采购；工程类＜20万、货物类＜10万、服务类＜10万',
+                '3': '非开发建设类采购(招标方式：估算金额>=30万)',
+                '4': '非开发建设类采购(竞价谈判方式：30万>估算金额>=10万)',
+                '8': '非开发建设类采购(零星采购；估算金额＜10万）',
+                '5': '行政非业务类采购(招标方式：估算金额>=30万)',
+                '6': '行政非业务类采购(竞价谈判方式：30万>估算金额>=1万)',
+                '9': '行政非业务类采购(零星采购；估算金额＜1万）'
+            },
             actions: [],
             actionsDialogArr: [],
             users: [],
@@ -179,7 +194,7 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/motor-procresult/detail/" + $self.formId;
+            $self.url= "/api/v1/motor-procresult/get/" + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {

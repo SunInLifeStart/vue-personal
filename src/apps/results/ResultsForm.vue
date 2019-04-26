@@ -121,8 +121,8 @@
                 <el-col :span="8">
                     <el-form-item label="采购结果是否是规定情形" prop="proResultYes">
                         <el-radio-group v-model="formData.proResultYes">
-                            <el-radio key="1" value="1" label="是"></el-radio>
-                            <el-radio key="2" value="2" label="否"></el-radio>
+                            <el-radio key="1" label="1">是</el-radio>
+                            <el-radio key="2" label="2">否</el-radio>
                         </el-radio-group>
                     </el-form-item>
                 </el-col>
@@ -265,26 +265,26 @@ export default {
     },
     mounted() {
         this.getList()
-        this.getSchemeNos()
+        // this.getSchemeNos()
     },
     methods: {
-        async getSchemeNos() {
-            const $self = this;
-            $self.url = "/api/v1/motor-procscheme/query";
-            let response = await $self.getQueryList();
-            if (response) {
-                $self.issueOption = response.data.content.list;
-            } else {
-                $self.msgTips("获取列表失败", "warning");
-            }
-        },
+        // async getSchemeNos() {
+        //     const $self = this;
+        //     $self.url = "/api/v1/motor-procresult/query";
+        //     let response = await $self.getQueryList();
+        //     if (response) {
+        //         $self.issueOption = response.data.content.list;
+        //     } else {
+        //         $self.msgTips("获取列表失败", "warning");
+        //     }
+        // },
         async getTableCode() {
             let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procresult' })
             if (user) this.formData.number = user.data.content.serialNumber
         },
         async getList() {
             const $self = this;
-            $self.url = "/api/v1/motor-procresult/queryList";
+            $self.url = "/api/v1/motor-procscheme/query";
             let response = await $self.getQueryList();
             if (response) {
                 $self.issueOption = response.data.content.list;
@@ -316,18 +316,18 @@ export default {
                 projectName: '',
                 procschemeNos: {},
                 biddocumentNos: {},
-                purchaseWay: '',
+                purchaseWay: '公开招标',
                 purchaseOther: '',
                 budgetPerformance: '',
                 proTime: [],
-                proType: '',
+                proType: '1',
                 proTimeStart: '',
                 proTimeEnd: '',
                 proContent: '',
                 proProcess: '',
                 proResult: '',
-                proResultYes: '',
-                signDemand: '',
+                proResultYes: '1',
+                signDemand: '无',
                 signDemandOth: '',
                 attachmentsAnno: [],
                 attachmentsRep: [],
@@ -339,7 +339,7 @@ export default {
             const self = this;
             if (this.formId != '') {
                 axios
-                    .get('/api/v1/motor-procresult/detail/' + this.formId)
+                    .get('/api/v1/motor-procresult/get/' + this.formId)
                     .then(res => {
                         self.formData = res.data.content;
                         self.formData.proTime = [self.formData.proTimeStart, self.formData.proTimeEnd]
