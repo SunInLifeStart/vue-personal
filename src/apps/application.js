@@ -121,7 +121,6 @@ export const publicMethods = {
                                 return false;
                             }
                         }
-
                     }
                 };
                 if (data.options && data.options.length > 0) {

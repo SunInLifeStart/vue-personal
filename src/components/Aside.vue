@@ -17,7 +17,7 @@
                 <div class="content">
                     <router-link to="/home/todo">
                         <div class="item" :class="{active:$route.params.type=='todo'}">
-                            <i class="icon iconfont el-icon-daiban" /><span>待办 &nbsp;</span><span v-if="todoListLength">({{todoListLength}})</span>
+                            <i class="icon iconfont el-icon-daiban" /><span>待办 &nbsp;</span><span v-if="todoListLength" style="color:#a71616">({{todoListLength}})</span>
                         </div>
                     </router-link>
                     <router-link to="/home/done">
@@ -27,7 +27,7 @@
                     </router-link>
                     <router-link to="/home/reading">
                         <div class="item" :class="{active:$route.params.type=='reading'}">
-                            <i class="icon iconfont el-icon-caogao" /><span>待阅 &nbsp;</span><span v-if="todoListLength">({{readingListLength}})</span>
+                            <i class="icon iconfont el-icon-caogao" /><span>待阅 &nbsp;</span><span v-if="todoListLength" style="color:#a71616">({{readingListLength}})</span>
                         </div>
                     </router-link>
                 </div>
