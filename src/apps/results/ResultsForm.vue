@@ -9,12 +9,12 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="项目名称" prop="creatorName">
+                    <el-form-item label="项目名称" prop="projectName">
                         <el-input v-model="formData.projectName"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
-                    <el-form-item label="采购项目名称">
+                    <el-form-item label="采购项目名称" prop="projectName">
                         <el-input v-model="formData.purchaseProjectName"></el-input>
                     </el-form-item>
                 </el-col>
@@ -86,7 +86,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-col :span="24">
-                        <el-form-item label="采购业务类别" style="text-align: left">
+                        <el-form-item label="采购业务类别" prop="proType" style="text-align: left">
                             <el-radio-group v-model="formData.proType">
                                 <div v-for="item in radioOption">
                                     <el-radio
@@ -211,11 +211,35 @@ export default {
                 number: [
                     { required: true, message: '请输入流水单号', trigger: 'blur' }
                 ],
-                branchlineTo: [
-                    { required: true, message: '请输入会议类型', trigger: 'blur' }
+                projectName: [
+                    { required: true, message: '请输入项目名称', trigger: 'blur' }
                 ],
-                committed: [
-                    { required: true, message: '请输入提单时间', trigger: 'blur' }
+                purchaseWay: [
+                    { required: true, message: '请输入采购方式', trigger: 'blur' }
+                ],
+                budgetPerformance: [
+                    { required: true, message: '请输入目标成本/预算完成情况', trigger: 'blur' }
+                ],
+                proTime: [
+                    { required: true, message: '请输入采购起止时间', trigger: 'blur' }
+                ],
+                proContent: [
+                    { required: true, message: '请输入采购内容摘要', trigger: 'blur' }
+                ],
+                proProcess: [
+                    { required: true, message: '请输入采购过程简述', trigger: 'blur' }
+                ],
+                proResultYes: [
+                    { required: true, message: '请输入采购结果是否是规定情形', trigger: 'blur' }
+                ],
+                proResult: [
+                    { required: true, message: '请输入采购结果', trigger: 'blur' }
+                ],
+                signDemand: [
+                    { required: true, message: '请输入签章需求', trigger: 'blur' }
+                ],
+                proType: [
+                    { required: true, message: '请输入采购业务类别', trigger: 'blur' }
                 ]
             },
             issueOption: [],
