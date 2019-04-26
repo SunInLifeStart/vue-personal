@@ -86,7 +86,7 @@
                     </el-table-column>
                 </el-table>
                 <br />
-                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.page" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
             </div>
         </el-card>
         <br>
@@ -165,7 +165,7 @@ export default {
             params: {
                 total: 0,
                 pageSize: 5,
-                page: 1,
+                pageNum: 1,
                 created: "",
                 creatorName: "",
                 umonth: '',
@@ -218,7 +218,7 @@ export default {
         },
         reloadList(params) {
             if (params == "reload") {
-                this.params.page = 1;
+                this.params.pageNum = 1;
                 this.getList();
             } else {
                 this.$refs.FilesDetail.getFormDetails(params.id);
@@ -235,7 +235,8 @@ export default {
         
         //分页
         currentChange(pageNum) {
-            this.params.page = pageNum;
+            // debugger
+            this.params.pageNum = pageNum;
             this.getList(pageNum);
         },
         sizeChange(pageSize) {
@@ -247,7 +248,7 @@ export default {
         },
         resetInput() {
            this.params={
-                page: 1,
+                pageNum: 1,
                 pageSize: 5,
                 created: "",
                 creatorName: "",
