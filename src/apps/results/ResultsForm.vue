@@ -38,7 +38,7 @@
                     <el-form-item label="关联招标文件" prop="biddocumentNo">
                         <el-select v-model="formData.biddocumentNos" value-key="id" placeholder="请选择招标文件">
                             <el-option
-                                    v-for="item in issueOption"
+                                    v-for="item in biddocumentOption"
                                     :key="item.id"
                                     :label="item.number"
                                     :value="{id: item.id, number: item.number}">
@@ -219,6 +219,7 @@ export default {
                 ]
             },
             issueOption: [],
+            biddocumentOption: [],
             radioOption: [
                 {
                     value: '1',
@@ -288,6 +289,13 @@ export default {
             let response = await $self.getQueryList();
             if (response) {
                 $self.issueOption = response.data.content.list;
+            } else {
+                $self.msgTips("获取列表失败", "warning");
+            }
+            $self.url = "/api/v1/motor-biddocument/queryList";
+            let re = await $self.getQueryList();
+            if (re) {
+                $self.biddocumentOption = re.data.content.list;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }

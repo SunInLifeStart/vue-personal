@@ -30,11 +30,13 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="关联采购方案：">{{tableData.procschemeNos}}
+                        <el-form-item label="关联采购方案：">
+                            <span @click="common.open('#/apps/programme/' + tableData.procschemeNos.id);">{{tableData.procschemeNos.number}}</span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="关联招标文件：">{{tableData.biddocumentNos}}
+                        <el-form-item label="关联招标文件：">
+                            <span @click="common.open('#/apps/tendering/' + tableData.biddocumentNos.id);">{{tableData.biddocumentNos.number}}</span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -162,7 +164,10 @@ export default {
     name: 'ResultsDetail',
     data() {
         return {
-            tableData: {},
+            tableData: {
+                procschemeNos: {},
+                biddocumentNos: {}
+            },
             proTypeOption: {
                 '1': '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
                 '2': '开发建设类采购(竞价谈判方式：100万>工程类>=20万、50万>货物类>=10万、30万>服务类>=10万)',

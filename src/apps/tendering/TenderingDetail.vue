@@ -64,6 +64,13 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
+                        <el-form-item label="关联采购方案：">
+                            <span @click="common.open('#/apps/programme/' + tableData.procurementScheme.id);">{{tableData.procurementScheme.number}}</span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
                         <el-form-item label="招标文件(评审版)附件：" v-if="tableData.biddingDocumentAttachment && tableData.biddingDocumentAttachment.length > 0">
                             <div v-for="item in tableData.biddingDocumentAttachment" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
@@ -142,7 +149,9 @@
         name: 'TenderingDetail',
         data() {
             return {
-                tableData: {},
+                tableData: {
+                    procurementScheme: {}
+                },
                 actions: [],
                 actionsDialogArr: [],
                 dialogVisibleCrumb:false,
