@@ -102,15 +102,15 @@
                             <span class="span">*</span>
                             合同类型
                         </td>
-                        <td colspan="2">
-                            <el-select v-model="formData.contractType" placeholder="请选择" @change="typeandradioChange('contractType')" :disabled="decodeURI(this.$store.getters.LoginData.companyName) == '中关村协同发展投资有限公司' || this.showSubmit == 'false'">
+                        <td colspan="4">
+                            <el-select style="width:100%;" v-model="formData.contractType" placeholder="请选择" @change="typeandradioChange('contractType')" :disabled="decodeURI(this.$store.getters.LoginData.companyName) == '中关村协同发展投资有限公司' || this.showSubmit == 'false'">
                                 <el-option label="土地出让合同签订" value="土地出让合同签订" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村科技城发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津中科城乐居房地产开发有限公司'"></el-option>
-                                <el-option label="合同签订（土地出让合同外）" value="合同签订(土地出让合同外)" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村科技城发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津中科城乐居房地产开发有限公司'"></el-option>
-                                <el-option label="超出招采委审批条款的合同审批(合同调整审批)" value="超出招采委审批条款的合同审批(合同调整审批)" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '合肥中关村协同产业发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '石家庄中关村协同发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村孵化器有限公司'"></el-option>
+                                <el-option label="合同签订(土地出让合同外)" value="合同签订" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村科技城发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津中科城乐居房地产开发有限公司'"></el-option>
+                                <el-option label="超出招采委审批条款的合同审批(合同调整审批)" value="超出招采委审批条款的合同审批" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '合肥中关村协同产业发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '石家庄中关村协同发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村孵化器有限公司'"></el-option>
                                 <el-option label="符合招采委审批条款的合同审批" value="符合招采委审批条款的合同审批" v-show="decodeURI(this.$store.getters.LoginData.companyName) == '合肥中关村协同产业发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '石家庄中关村协同发展有限公司' || decodeURI(this.$store.getters.LoginData.companyName) == '天津京津中关村孵化器有限公司'"></el-option>
                             </el-select>
                         </td>
-                        <td colspan="4">
+                        <td colspan="2">
                         </td>
                     </tr>
                     <tr>

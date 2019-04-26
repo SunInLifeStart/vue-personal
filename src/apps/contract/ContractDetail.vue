@@ -389,6 +389,15 @@ export default {
             console.log(response);
             if (response) {
                 $self.tableData = response.data;
+                if (this.tableData.contractType == '合同签订') {
+                    this.tableData.contractType = '合同签订(土地出让合同外)';
+                } else if (
+                    this.tableData.contractType ==
+                    '超出招采委审批条款的合同审批'
+                ) {
+                    this.tableData.contractType =
+                        '超出招采委审批条款的合同审批(合同调整审批)';
+                }
                 $self.$emit('resetStatus', {
                     id: $self.tableData.id,
                     status: $self.tableData.status
