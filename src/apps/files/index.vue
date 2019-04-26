@@ -172,7 +172,7 @@ export default {
                 fileName:'',
             },
             searchOptions: [],
-            formName: "documentPrinting",
+            formName: "documentprint_文件印刷",
             
         };
     },
