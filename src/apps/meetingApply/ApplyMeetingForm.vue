@@ -538,7 +538,7 @@
                 if ($self.formData.organName === '综合管理部') {
                     $self.formData.generalManagement = true
                 }
-                let response = await $self.getCommonData(
+                let response = await $self.saveFormData(
                     "/api/v1/meetingApply/save",
                     $self.formData
                 );

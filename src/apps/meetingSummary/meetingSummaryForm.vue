@@ -271,7 +271,7 @@ export default {
         async saveForm(params) {
             const $self = this;
             this.formData.distribute = this.formData.distributes.join(',')
-            let response = await $self.getCommonData(
+            let response = await $self.saveFormData(
                 "/api/v1/meeting_forms/save",
                 $self.formData
             );

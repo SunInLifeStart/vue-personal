@@ -153,7 +153,7 @@ export default {
                     'YYYY-MM-DD hh:mm:ss'
                 );
             }
-            let response = await this.getCommonData(
+            let response = await this.saveFormData(
                 "/api/v1/incoming_forms/save",
                 this.formData
             );

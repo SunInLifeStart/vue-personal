@@ -283,7 +283,7 @@ export default {
     // 提交保存
     async saveForm(params) {
       const $self = this;
-      let response = await $self.getCommonData(
+      let response = await $self.saveFormData(
         "/api/v1/inspect_forms/save",
         $self.formData
       );

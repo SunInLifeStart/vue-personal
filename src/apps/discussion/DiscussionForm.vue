@@ -356,7 +356,7 @@ export default {
                 this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
             })
             this.formData.sendMessage = this.formData.sendMessage.join(',')
-            let response = await $self.getCommonData(
+            let response = await $self.saveFormData(
                 "/api/v1/issuesReported/save",
                 $self.formData
             );
