@@ -1,38 +1,31 @@
 export const publicMethods = {
     methods: {
         async saveFormData(url, data) {
-            if(this.createForm_status){
+            try {
+                return await this.$axios.post(url, data);
+            } catch (err) {
+                return false;
+            }     
+        },
+
+        async juderCode(){
                 if(this.$store.getters.LoginData.currentRoles.length > 1){ 
                     if(this.branchCode){
-                        try {
-                            return await this.$axios.post(url, data);
-                        } catch (err) {
-                            return false;
-                        }
+                        await this.saveFormData();
                     }else{
                         this.dialogSelectCode = true;
                         this.dialogTitle = "请选择以什么公司名义发起";
                         this.currentRoles = this.$store.getters.LoginData.currentRoles;
                         this.branchCode = this.currentRoles[0].code;
+                        return "returnDialog";
                     }
                 }
                 if(this.$store.getters.LoginData.currentRoles.length == 1){
                        this.branchCode = this.$store.getters.LoginData.currentRoles[0].code;
-                        try {
-                            return await this.$axios.post(url, data);
-                        } catch (err) {
-                            return false;
-                        }
+                       await this.saveFormData();
                 }
-            }else{
-                try {
-                    return await this.$axios.post(url, data);
-                } catch (err) {
-                    return false;
-                }  
-            }
-            
         },
+        
         async getDetails() {
             try {
                 return await this.$axios.get(this.url);
@@ -125,7 +118,12 @@ export const publicMethods = {
                         } else if (key == "code") {
                             if(this.branchCode){
                                 options.push(key + "=" + this.branchCode);
+                            }else{
+                                if(this.$store.getters.LoginData.currentRoles.length == 0){
+                                    options.push(key + "=" + this.$store.getters.LoginData.code.split("_")[0]);  
+                                } 
                             }
+
                         } else if (key == "characterLevel") {
                             let type = this.$store.getters.LoginData.code.split("_")[0];
                             if (type) {
