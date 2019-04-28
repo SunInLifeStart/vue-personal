@@ -17,16 +17,16 @@
                 <!--<el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>-->
             <!--</el-steps>-->
             <el-form :model='tableData' class="formList">
-                 <!-- <el-row>
+                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="员工级别：">{{tableData.yuangong}}
+                        <el-form-item label="员工级别：">{{tableData.positions}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="关键程度：">{{tableData.guanjian}}
+                        <el-form-item label="关键程度：">{{isKeyone}}
                         </el-form-item>
                     </el-col>
-                </el-row> -->
+                </el-row>
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="申请岗位：">{{tableData.applyPosition}}
@@ -428,6 +428,7 @@
                         label: '女儿'
                     },
                 ],
+                isKeyone:'',
                 tableData: {},
                 actions: [],
                 actionsDialogArr: [],
@@ -483,6 +484,12 @@
                 let response = await $self.getDetails();
                 if (response) {
                     $self.tableData = response.data.content;
+                    if($self.tableData.isKey=='是'){
+                        this.isKeyone="关键岗位"
+                    }
+                    else{
+                        this.isKeyone="非关键岗位"
+                    }
                     $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
                 } else {
                     $self.msgTips("获取表单失败", "warning");
