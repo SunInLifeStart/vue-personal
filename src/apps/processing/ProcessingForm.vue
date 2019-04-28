@@ -4,8 +4,8 @@
             <el-form :model="formData"  :rules="rules" label-width="100px" ref="formData">
                <el-row>
                     <el-col :span="12">
-                        <el-form-item label="员工级别" prop="yuangong">
-                           <el-select v-model="formData.yuangong" placeholder="请选择员工级别" clearable filterable>
+                        <el-form-item label="员工级别" prop="positions">
+                           <el-select v-model="formData.positions" placeholder="请选择员工级别" clearable filterable>
                                 <el-option v-for="item in onOptionone"
                                     :key="item.value"
                                     :label="item.label"
@@ -15,8 +15,8 @@
                         </el-form-item>
                     </el-col>
                    <el-col :span="12">
-                        <el-form-item label="关键程度" prop="guanjian">
-                            <el-select v-model="formData.guanjian" placeholder="请选择关键程度" clearable filterable>
+                        <el-form-item label="关键程度" prop="isKey">
+                            <el-select v-model="formData.isKey" placeholder="请选择关键程度" clearable filterable>
                                 <el-option v-for="item in onOptiontwo"
                                     :key="item.value"
                                     :label="item.label"
@@ -466,10 +466,10 @@
                     applyPosition: [
                         { required: true, message: '请输入岗位', trigger: 'blur' }
                     ],
-                    yuangong: [
+                    positions: [
                         { required: true, message: '请输入员工级别', trigger: 'change' }
                     ],
-                    guanjian: [
+                    isKey: [
                         { required: true, message: '请输入关键成都', trigger: 'change' }
                     ],
                     uname: [
@@ -515,11 +515,11 @@
                 ],
                 onOptiontwo: [
                     {
-                        value: '关键岗位',
+                        value: '是',
                         label: '关键岗位'
                     },
                     {
-                        value: '非关键岗位',
+                        value: '否',
                         label: '非关键岗位'
                     }
                 ],
@@ -696,8 +696,8 @@
                 let formData =  {
                     uname:"",
                     applyPosition:"",
-                    yuangong:"",
-                    guanjian:"",
+                    positions:"",
+                    isKey:"",
                     sex:"",
                     birthday:"",
                     nation:"",
