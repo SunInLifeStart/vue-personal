@@ -63,7 +63,7 @@
                     <el-col :span="24">
                         <el-form-item label="发送" prop="distributes">
                             <el-select style="width:100%;" v-model="formData.distributes" @change="changePeople" multiple placeholder="请选择分送人员">
-                                <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.name">
+                                <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -228,6 +228,9 @@ export default {
          setDataFromParent(data) {
             this.formData = data;
             this.formData.distributes = this.formData.distribute.split(',');
+            for (let i=0; i<this.formData.distributes.length; i++) {
+                this.formData.distributes[i] = parseInt(this.formData.distributes[i])
+            }
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
