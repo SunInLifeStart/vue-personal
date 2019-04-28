@@ -11,11 +11,11 @@
         </div>
         <br />
         <div class="formContent">
-            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+            <div><el-button type="primary"  @click="getFlowNode"  v-if="tableData.status != '04'">查看流程</el-button></div>
             <br />
-            <el-steps :active="crumb.index" finish-status="success" class="crumbList">
-                <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>
-            </el-steps>
+            <!--<el-steps :active="crumb.index" finish-status="success" class="crumbList">-->
+                <!--<el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>-->
+            <!--</el-steps>-->
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps> -->
@@ -124,30 +124,24 @@ export default {
             budgetCheck: [],
             auditSituationChecked: '',
             created: '',
-            actions: [],
             actions_status: false,
             crumb: { items: [] },
             isEdit: false,
-            editBtnText: '编辑',
             item_status: {},
-            users: [],
             rejectTarget: '',
             rejectList: [],
             reject_status: false,
             presign_status: false,
             seleteUsers: [],
             seleteUserLabel: '',
-            textarea: '',
             dialogVisible: false,
             currentAction: '',
             submitData: {},
             dialogUpload: false,
-            fullScreen: false,
             crumbNodeName: '',
             nodename: '',
             tableData: {},
             actions: [],
-            crumbs:[],
             formId: "",
             textarea: "",
             users: [],

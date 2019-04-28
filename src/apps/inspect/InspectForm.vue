@@ -229,11 +229,6 @@ export default {
       }
     };
   },
-  watch: {
-    "formData.lowercase"(val) {
-      this.formData.upper = val ? this.convertCurrency(val) : "";
-    }
-  },
   components: {
     FilesOperate
   },
