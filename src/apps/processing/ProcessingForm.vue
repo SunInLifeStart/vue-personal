@@ -133,9 +133,7 @@
                                 <el-radio :label="2">自驾</el-radio>
                                 <el-radio :label="1">公共交通</el-radio>
                             </el-radio-group>
-                             <!-- <el-checkbox-group v-model="formData.byPrep">
-                                <el-checkbox v-for="city in checkListstwo" :label="city" :key="city">{{city}}</el-checkbox>
-                            </el-checkbox-group> -->
+                            
                         </el-form-item>
                     </el-col>
                 </el-row>
