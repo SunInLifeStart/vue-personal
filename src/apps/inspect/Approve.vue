@@ -1,7 +1,7 @@
 <template>
   <div id="APPROVE">
       <InspectDetail :formId="formId" ref="InspectDetail"></InspectDetail>
-    <!-- <TrainDetail ref="TrainDetail"> </TrainDetail> -->
+    <!-- <InspectDetail ref="InspectDetail"> </InspectDetail> -->
      <!-- :formId="formId" -->
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
 <style lang="scss" scope>
 #APPROVE {
     height: 100%;
-    #TrainDetail {
+    #InspectDetail {
         height: 100%;
         width: 100%;
         display: flex;
