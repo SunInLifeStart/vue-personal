@@ -17,7 +17,7 @@
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps> -->
-            <el-form :model='tableData' class="formList" >
+            <el-form :model='tableData' class="formList">
                 <el-row>
                     
                     <el-col :span="8">

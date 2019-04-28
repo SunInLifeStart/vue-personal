@@ -1,11 +1,37 @@
 export const publicMethods = {
     methods: {
         async saveFormData(url, data) {
-            try {
-                return await this.$axios.post(url, data);
-            } catch (err) {
-                return false;
+            if(this.createForm_status){
+                if(this.$store.getters.LoginData.currentRoles.length > 1){ 
+                    if(this.branchCode){
+                        try {
+                            return await this.$axios.post(url, data);
+                        } catch (err) {
+                            return false;
+                        }
+                    }else{
+                        this.dialogSelectCode = true;
+                        this.dialogTitle = "请选择以什么公司名义发起";
+                        this.currentRoles = this.$store.getters.LoginData.currentRoles;
+                        this.branchCode = this.currentRoles[0].code;
+                    }
+                }
+                if(this.$store.getters.LoginData.currentRoles.length == 1){
+                       this.branchCode = this.$store.getters.LoginData.currentRoles[0].code;
+                        try {
+                            return await this.$axios.post(url, data);
+                        } catch (err) {
+                            return false;
+                        }
+                }
+            }else{
+                try {
+                    return await this.$axios.post(url, data);
+                } catch (err) {
+                    return false;
+                }  
             }
+            
         },
         async getDetails() {
             try {
@@ -90,7 +116,9 @@ export const publicMethods = {
                         if (key == "oid") {
                             options.push(key + "=" + this.$store.getters.LoginData.oid);
                         } else if (key == "code") {
-                            options.push(key + "=" + this.$store.getters.LoginData.code.split('_')[0]);
+                            if(this.branchCode){
+                                options.push(key + "=" + this.branchCode);
+                            }
                         } else if (key == "characterLevel") {
                             let type = this.$store.getters.LoginData.code.split("_")[0];
                             if (type) {
