@@ -68,7 +68,7 @@
                     </el-table-column>
                     <el-table-column prop="utype" label="是否属于年度预算内"  :formatter="fomutype">
                     </el-table-column>
-                    <el-table-column prop="umonth" label="资金计划所属月份"  :formatter="fomumonth">
+                    <el-table-column prop="umonth" label="资金计划所属月份" >
                     </el-table-column>
                     <el-table-column prop="allPrintNumber" label="总印刷数量">
                     </el-table-column>
@@ -294,49 +294,7 @@ export default {
             }
             return state;
         },
-        fomumonth(row, column) {
-            let state;
-            //0已保存1审核中2驳回3撤销4完成
-            switch (row.umonth) {
-                case 'yiyue':
-                    state = "一月";
-                    break;
-                case 'eryue':
-                    state = "二月";
-                    break;
-                case 'sanyue':
-                    state = "三月";
-                    break;
-                case 'siyue':
-                    state = "四月";
-                    break;
-                case 'wuyue':
-                    state = "五月";
-                    break;
-                case 'liuyue':
-                    state = "六月";
-                    break;
-                case 'qiyue':
-                    state = "七月";
-                    break;
-                case 'bayue':
-                    state = "八月";
-                    break;
-                case 'jiuyue':
-                    state = "九月";
-                    break;
-                case 'shiyue':
-                    state = "十月";
-                    break;
-                case 'shiyiyue':
-                    state = "十一月";
-                    break;
-                case 'shieryue':
-                    state = "十二月";
-                    break;
-            }
-            return state;
-        },
+        
     },
     mounted() {
         this.getList();
