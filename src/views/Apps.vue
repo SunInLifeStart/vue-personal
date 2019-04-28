@@ -30,6 +30,7 @@ export default {
                 news: "新闻发布",
                 publish:"信息发布",
                 discussion: "议题上会",
+                meetingSummary: "会议纪要",
                 meetingApply: "会议申请",
                 gmomeeting: "总办会纪要",
                 specmeeting: "专题会纪要",

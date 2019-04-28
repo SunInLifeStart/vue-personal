@@ -152,14 +152,13 @@ export default {
                             icon: 'el-icon-duorenhuiyi',
                             to: 'discussion'
                         },
-                        
-                        // {
-                        //     id: "metting_3",
-                        //     name: '会议纪要',
-                        //     icon: 'el-icon-ziyuan',
-                        //     to: 'summary'
-                        //     //没有
-                        // },
+                        {
+                            id: "metting_3",
+                            name: '会议纪要',
+                            icon: 'el-icon-ziyuan',
+                            to: 'meetingSummary'
+                            //没有
+                        },
                         {
                             id: "metting_3",
                             name: '总办会纪要',
