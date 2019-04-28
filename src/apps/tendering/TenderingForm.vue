@@ -307,7 +307,7 @@
             },
             async saveForm(params) {
                 const $self = this;
-                let response = await $self.getCommonData(
+                let response = await $self.saveFormData(
                     "/api/v1/motor-biddocument/save",
                     $self.formData
                 );

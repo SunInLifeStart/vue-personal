@@ -487,7 +487,7 @@
                         return false;
                     }
                 }
-                let response = await $self.getCommonData(
+                let response = await $self.saveFormData(
                     "/api/v1/motor-procscheme/save",
                     $self.formData
                 );

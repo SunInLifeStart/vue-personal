@@ -401,7 +401,7 @@ export default {
                 this.formData.proTimeStart = this.formData.proTime[0]
                 this.formData.proTimeEnd = this.formData.proTime[1]
             }
-            let response = await $self.getCommonData(
+            let response = await $self.saveFormData(
                 "/api/v1/motor-procresult/save",
                 $self.formData
             );
