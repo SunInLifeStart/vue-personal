@@ -30,7 +30,8 @@
                         <el-form-item label="申请日期：" >{{tableData.created | dateformat('YYYY-MM-DD')}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属月份：">{{tableData.umonth | fomumonth}}</el-form-item>
+                         <!-- | fomumonth -->
+                        <el-form-item label="所属月份：">{{tableData.umonth}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="是否属于年度预算内：">{{utypeone}}</el-form-item>
@@ -182,6 +183,24 @@ export default {
              let xmlJson = {
                 "0":"白色",
                 "1":"彩色",
+               
+            };
+            return xmlJson[data];
+       },
+       fomumonth: function(data) {
+             let xmlJson = {
+                "yiyue":"一月",
+                "eryue":"二月",
+                 "sanyue":"三月",
+                "siyue":"四月",
+                 "wuyue":"五月",
+                "liuyue":"六月",
+                 "qiyue":"七月",
+                "bayue":"八月",
+                 "jiuyue":"九月",
+                "shiyue":"十月",
+                 "shiyiyue":"十一月",
+                "shieryue":"十二月",
                
             };
             return xmlJson[data];
