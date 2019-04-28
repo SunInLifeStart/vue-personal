@@ -5,8 +5,7 @@
                 <h2>注意</h2>
                 <ol>
                     <li>完整填写所有出差人员；</li>
-                    <li>预估费用按照厉行节俭的要求严格控制，费用标准请参考集团国内差旅制度；</li>
-                    <li>出差补助金额不需计入。</li>
+                    <li>预估费用按照厉行节俭的要求严格控制，费用标准请参考公司国内差旅制度；</li>
                 </ol>
             </div>
             <el-form :model='formData' class="demo-form-inline" ref="formupdate">
@@ -241,6 +240,17 @@
                 </table>
             </el-form>
         </div>
+        <el-dialog :title="dialogTitle" :visible.sync="dialogSelectCode" width="30%" append-to-body center>
+            <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
+                <el-option v-for="item in currentRoles" :key="item.code" :label="item.name" :value="item.code">
+                </el-option>
+            </el-select>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="default" @click="saveFormValidate()">保存</el-button>
+                <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+            </span>
+        </el-dialog>
+
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
             <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
@@ -259,6 +269,11 @@ export default {
     name: 'travelForm',
     data() {
         return {
+            dialogTitle: '',
+            dialogSelectCode: false,
+            currentRoles: [],
+            branchCode: '',
+
             dialogFormVisible: false,
             formData: this.resetForm(),
             appFlowName: 'travel-form_travel',
@@ -786,6 +801,7 @@ export default {
             this.getClass();
             this.getSubmissionlList();
             this.dialogFormVisible = this.createForm_status = true;
+            this.branchCode = '';
         },
         resetForm() {
             let formData = {
@@ -864,6 +880,11 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
+            if ($self.createForm_status) {
+                if ((await $self.juderCode()) == 'returnDialog') {
+                    return false;
+                }
+            }
             if ($self.formData.submitted) {
                 $self.formData.submitted = moment(
                     $self.formData.submitted
@@ -927,7 +948,7 @@ export default {
             );
             if (response) {
                 $self.formId = response.data.id;
-                $self.dialogFormVisible = false;
+                $self.dialogFormVisible = $self.dialogSelectCode = false;
                 if (params) {
                     $self.msgTips('提交成功', 'success');
                     if (this.createForm_status) {
@@ -957,9 +978,13 @@ export default {
                 }
             } else {
                 if (params) {
-                    $self.msgTips('提交失败', 'warning');
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('提交失败', 'warning');
+                    }
                 } else {
-                    $self.msgTips('保存失败', 'warning');
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('保存失败', 'warning');
+                    }
                 }
             }
         },

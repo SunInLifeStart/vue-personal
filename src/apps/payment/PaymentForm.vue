@@ -377,6 +377,16 @@
                 </table>
             </el-form>
         </div>
+        <el-dialog :title="dialogTitle" :visible.sync="dialogSelectCode" width="30%" append-to-body center>
+            <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
+                <el-option v-for="item in currentRoles" :key="item.code" :label="item.name" :value="item.code">
+                </el-option>
+            </el-select>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="default" @click="saveFormValidate()">保存</el-button>
+                <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+            </span>
+        </el-dialog>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
             <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
@@ -396,6 +406,10 @@ export default {
     name: 'PaymentForm',
     data() {
         return {
+            dialogTitle: '',
+            dialogSelectCode: false,
+            currentRoles: [],
+            branchCode: '',
             isMoney: '',
             moneyType: '2',
             clearing_method: [
@@ -1135,6 +1149,7 @@ export default {
             this.formData = this.resetForm();
             this.getNum();
             this.dialogFormVisible = this.createForm_status = true;
+            this.branchCode = '';
         },
         resetForm() {
             let formData = {
@@ -1285,6 +1300,11 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
+            if ($self.createForm_status) {
+                if ((await $self.juderCode()) == 'returnDialog') {
+                    return false;
+                }
+            }
             let boolean = false;
             for (let data of this.formData.details) {
                 if (data.type[0] == '支出土地保证金(土地款)') {
@@ -1318,7 +1338,7 @@ export default {
             );
             if (response) {
                 $self.formId = response.data.id;
-                $self.dialogFormVisible = false;
+                $self.dialogFormVisible = $self.dialogSelectCode = false;
                 if (params) {
                     $self.msgTips('提交成功', 'success');
                     if (this.createForm_status) {
@@ -1359,9 +1379,13 @@ export default {
                 }
             } else {
                 if (params) {
-                    $self.msgTips('提交失败', 'warning');
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('提交失败', 'warning');
+                    }
                 } else {
-                    $self.msgTips('保存失败', 'warning');
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('保存失败', 'warning');
+                    }
                 }
             }
         },
