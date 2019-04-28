@@ -41,7 +41,7 @@
                   v-for="item in inspectors"
                   :key="item.id"
                   :label="item.name"
-                  :value="item.name"
+                  :value="item.id"
                 ></el-option>
               </el-select>
             </el-form-item>
@@ -257,6 +257,7 @@ export default {
   methods: {
     setDataFromParent(data) {
       this.formData = data;
+      this.formData.inspector = parseInt(this.formData.inspector);
       this.formId = data.id;
       this.dialogFormVisible = true;
       this.createForm_status = false;

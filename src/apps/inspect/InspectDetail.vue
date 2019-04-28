@@ -36,7 +36,21 @@
                         <el-form-item label="立项单位：">{{tabledata.organName}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="被督办部门负责人：">{{tabledata.inspector}}</el-form-item>
+                        <el-form-item label="被督办部门负责人：">
+                            <el-select
+                                    disabled
+                                    v-model="tabledata.inspector"
+                                    filterable
+                                    placeholder="请选择"
+                                    style="width:60%"
+                            >
+                                <el-option
+                                        v-for="item in inspectors"
+                                        :key="item.id"
+                                        :label="item.name"
+                                        :value="item.id"
+                                ></el-option>
+                            </el-select></el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
@@ -144,6 +158,7 @@ export default {
             actions: [],
             formId: "",
             textarea: "",
+            inspectors: [],
             users: [],
             actionsDialogArr: [],
             appFlowName:'inspect-form_inspect',
@@ -157,7 +172,25 @@ export default {
         Comment,
         FilesOperate
     },
+    mounted() {
+        this.getInspector();
+    },
     methods: {
+        getInspector() {
+            const self = this;
+
+            axios
+                .get("/api/v1/users/role/xtfz_deptManager")
+                .then(res => {
+                    self.inspectors = res.data;
+                })
+                .catch(function() {
+                    self.$message({
+                        message: "操作失败",
+                        type: "error"
+                    });
+                });
+        },
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
@@ -169,6 +202,7 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tabledata = response.data;
+                $self.tabledata.inspector = parseInt($self.tabledata.inspector);
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
