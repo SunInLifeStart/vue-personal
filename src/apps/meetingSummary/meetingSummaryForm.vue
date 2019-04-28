@@ -62,7 +62,7 @@
                 <el-col :span="24">
                     <el-col :span="24">
                         <el-form-item label="发送" prop="distributes">
-                            <el-select style="width:100%;" v-model="formData.distributes" value-key="id" multiple filterable allow-create default-first-option placeholder="请选择分送人员">
+                            <el-select style="width:100%;" v-model="formData.distributes" @change="changePeople" multiple placeholder="请选择分送人员">
                                 <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.name">
                                 </el-option>
                             </el-select>
@@ -210,6 +210,21 @@ export default {
             this.dialogFormVisible = true;
             this.createForm_status = false;
         },
+        getId(id) {
+            let self = this;
+            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                self.formData.attachments.forEach(function(value, index) {
+                    if (value.id == id) {
+                        axios
+                            .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
+                            .then(res => {
+                                self.formData.attachments.splice(index, 1);
+                            });
+                        self.formData.attachments.splice(index, 1);
+                    }
+                });
+            });
+        },
         resetForm() {
             let formData = {
                 text: '',
@@ -248,6 +263,9 @@ export default {
                     this.users.push({ id: item.id, name: item.name });
                 }
             });
+        },
+        changePeople() {
+            this.$forceUpdate()
         },
         // 提交保存
         async saveForm(params) {
