@@ -46,6 +46,9 @@
                     </el-row>
                 </el-form>
             </div>
+            <div class="toolbar">
+                <el-button type="primary" @click="excel()">导出</el-button>
+            </div>
             <div id="ConductList">
                 <el-table :data="tableData " stripe style="width: 100%; cursor:pointer " @row-click="showCurrentId">
                     <!--
@@ -98,12 +101,14 @@ import PaymentDetail from './PaymentDetail';
 import TravelDetail from './TravelDetail';
 import ReimbursementDetail from './ReimbursementDetail';
 import ExpensesDetail from './ExpensesDetail';
+import axios from 'axios';
 export default {
     mixins: [publicMethods],
     name: 'Conduct',
     data() {
         return {
             tableData: [],
+            tableDataAll: [],
             formDetails: {},
             formId: '',
             options1: [
@@ -181,6 +186,25 @@ export default {
         ExpensesDetail
     },
     methods: {
+        //导出
+        excel() {
+            const self = this;
+            axios
+                .post('/api/v1/reim/excel', JSON.stringify(this.tableDataAll), {
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
+                })
+                .then(res => {
+                    this.common.downloadExport(res.data);
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '导出操作失败',
+                        type: 'error'
+                    });
+                });
+        },
         getFilter() {
             this.searchOptions = [];
             if (this.formInline.creatorName.trim() !== '') {
@@ -236,6 +260,7 @@ export default {
                     this.showDetailsPay(response.data.forms[0]);
                 }
                 $self.tableData = response.data.forms;
+                $self.tableDataAll = response.data.form;
                 $self.params.total = response.data.pageCount;
             } else {
                 $self.msgTips('获取列表失败', 'warning');
