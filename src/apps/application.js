@@ -47,6 +47,13 @@ export const publicMethods = {
                 return false;
             }
         },
+        async getCommonData(url, data) {
+            try {
+                return await this.$axios.post(url, data);
+            } catch (err) {
+                return false;
+            }
+        },
         async emitMessage() {
             if (this.createForm_status) {
                 this.$emit("reloadList", "reload"); //如果是 "新建" 表单刷新 "列表"
