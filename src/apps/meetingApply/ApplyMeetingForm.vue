@@ -317,7 +317,7 @@
                 });
             },
             async getTableCode() {
-                let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'meetingApply' })
+                let user = await this.getCommonData("/synergy-common/serialNumber/getByTableCode", { code: 'meetingApply' })
                 if (user) this.formData.number = user.data.content.serialNumber
                 this.changePeople()
             },
@@ -538,7 +538,7 @@
                 if ($self.formData.organName === '综合管理部') {
                     $self.formData.generalManagement = true
                 }
-                let response = await $self.saveFormData(
+                let response = await $self.getCommonData(
                     "/api/v1/meetingApply/save",
                     $self.formData
                 );

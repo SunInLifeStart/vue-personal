@@ -247,7 +247,7 @@ export default {
             if (!this.formData.businessModels.includes('其他')) {
                 this.formData.businessModelOth = ''
             }
-            let response = await $self.saveFormData(
+            let response = await $self.getCommonData(
                 "/api/v1/motor-supplier/save",
                 $self.formData
             );

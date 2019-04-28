@@ -304,7 +304,7 @@ export default {
         //     }
         // },
         async getTableCode() {
-            let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procresult' })
+            let user = await this.getCommonData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procresult' })
             if (user) this.formData.number = user.data.content.serialNumber
         },
         async getList() {
@@ -401,7 +401,7 @@ export default {
                 this.formData.proTimeStart = this.formData.proTime[0]
                 this.formData.proTimeEnd = this.formData.proTime[1]
             }
-            let response = await $self.saveFormData(
+            let response = await $self.getCommonData(
                 "/api/v1/motor-procresult/save",
                 $self.formData
             );

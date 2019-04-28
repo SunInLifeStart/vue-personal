@@ -198,7 +198,7 @@ export default {
             if (!this.formData.anomalyConditions.includes('其他')) {
                 this.formData.anomalyConditionOth = ''
             }
-            let response = await $self.saveFormData(
+            let response = await $self.getCommonData(
                 "/api/v1/motor-bidanomaly/save",
                 $self.formData
             );

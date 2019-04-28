@@ -380,7 +380,7 @@
                 if (user) this.userOptions = user.data
             },
             async getTableCode() {
-                let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procscheme' })
+                let user = await this.getCommonData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procscheme' })
                 if (user) this.formData.number = user.data.content.serialNumber
                 this.changePeople()
             },
@@ -487,7 +487,7 @@
                         return false;
                     }
                 }
-                let response = await $self.saveFormData(
+                let response = await $self.getCommonData(
                     "/api/v1/motor-procscheme/save",
                     $self.formData
                 );
