@@ -228,11 +228,13 @@ export default {
                     value: this.formInline.organName
                 });
             }
+            /** 
             this.searchOptions.push({
                 field: 'status',
                 filter: 'NOEQUAL',
                 value: '已删除'
             });
+            */
             if (this.formInline.status.trim() !== '') {
                 this.searchOptions.push({
                     field: 'status',

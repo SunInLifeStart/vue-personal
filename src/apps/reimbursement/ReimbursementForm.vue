@@ -1362,8 +1362,6 @@ export default {
                     return false;
                 }
             }
-            console.log('这是打印的字符串');
-            console.log(this.formData);
             for (let data of this.formData.shares) {
                 data.bearSum = parseFloat(data.bearSum);
                 data.shareRatio = data.shareRatio;
@@ -1446,7 +1444,10 @@ export default {
                         });
                         actions.data.types[0]['comment'] =
                             actions.data.types[0].name;
-                        await $self.startSignal(actions.data.types[0]);
+                        await $self.startSignal(
+                            actions.data.types[0],
+                            'fromeEdit'
+                        );
                         $self.updateBorrow($self.formId);
                         $self.emitMessage();
                     }
