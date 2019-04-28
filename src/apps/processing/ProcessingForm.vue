@@ -2,6 +2,30 @@
     <el-dialog title="入职审批" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="95%" style="text-align: center;">
         <div id="ProcessingForm">
             <el-form :model="formData"  :rules="rules" label-width="100px" ref="formData">
+               <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="员工级别" prop="yuangong">
+                           <el-select v-model="formData.yuangong" placeholder="请选择员工级别" clearable filterable>
+                                <el-option v-for="item in onOptionone"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                   <el-col :span="12">
+                        <el-form-item label="关键程度" prop="guanjian">
+                            <el-select v-model="formData.guanjian" placeholder="请选择关键程度" clearable filterable>
+                                <el-option v-for="item in onOptiontwo"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="申请岗位" prop="applyPosition">
@@ -442,6 +466,12 @@
                     applyPosition: [
                         { required: true, message: '请输入岗位', trigger: 'blur' }
                     ],
+                    yuangong: [
+                        { required: true, message: '请输入员工级别', trigger: 'change' }
+                    ],
+                    guanjian: [
+                        { required: true, message: '请输入关键成都', trigger: 'change' }
+                    ],
                     uname: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
                     ],
@@ -468,6 +498,31 @@
                     ],
                    
                 },
+                onOptionone: [
+                    {
+                        value: '普通员工',
+                        label: '普通员工'
+                    },
+                    {
+                        value: '中层干部',
+                        label: '中层干部'
+                    },
+                    {
+                        value: '高管',
+                        label: '高管'
+                    },
+                    
+                ],
+                onOptiontwo: [
+                    {
+                        value: '关键岗位',
+                        label: '关键岗位'
+                    },
+                    {
+                        value: '非关键岗位',
+                        label: '非关键岗位'
+                    }
+                ],
                 // 父亲、母亲、配偶、儿子、女儿
                 onOption: [
                     {
@@ -641,6 +696,8 @@
                 let formData =  {
                     uname:"",
                     applyPosition:"",
+                    yuangong:"",
+                    guanjian:"",
                     sex:"",
                     birthday:"",
                     nation:"",
@@ -734,6 +791,11 @@
             },
             async saveForm(params) {
                 const $self = this;
+                if($self.createForm_status){
+                    if(await $self.juderCode() == "returnDialog"){
+                        return false;
+                    }
+                }
                  let response = await $self.saveFormData(
                     "/api/v1/examinationApproval/save",
                     $self.formData
@@ -855,4 +917,8 @@
      #ProcessingForm >>> .el-checkbox{
          width: 30px;
     }
+     #ProcessingForm>>> .el-select {
+        width: calc(100% - 2px);
+    }
+    
 </style>

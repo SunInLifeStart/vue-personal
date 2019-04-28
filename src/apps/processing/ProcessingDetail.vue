@@ -17,6 +17,16 @@
                 <!--<el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>-->
             <!--</el-steps>-->
             <el-form :model='tableData' class="formList">
+                 <!-- <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="员工级别：">{{tableData.yuangong}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="关键程度：">{{tableData.guanjian}}
+                        </el-form-item>
+                    </el-col>
+                </el-row> -->
                 <el-row>
                     <el-col :span="12">
                         <el-form-item label="申请岗位：">{{tableData.applyPosition}}

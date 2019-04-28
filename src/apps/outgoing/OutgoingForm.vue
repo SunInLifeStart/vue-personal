@@ -411,6 +411,11 @@ export default {
         // 提交保存
         async saveForm(params) {
              const $self = this;
+             if($self.createForm_status){
+                if(await $self.juderCode() == "returnDialog"){
+                    return false;
+                }
+            }
             $self.formData.text = JSON.stringify($self.formData.text);
             if ($self.formData.mainTo_1.length > 0) {
                 let mainTo = $self.formData.mainTo_1.slice(0);
