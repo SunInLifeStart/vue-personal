@@ -472,7 +472,7 @@
                 formData: this.resetForm(),
                 users: [],
                 selectionItemsone:[],
-                appFlowName: "motor-meetingApply_application-meeting",
+                appFlowName: "motor-examinationapproval",
                 currentFormId: this.operationType == 'create' ? '' : this.formId
             };
         },

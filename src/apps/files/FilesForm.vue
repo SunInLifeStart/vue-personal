@@ -61,7 +61,8 @@
                                         <el-input v-model="scope.row.printingPicture"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="printNumber" label="印刷数量（套）" width="110px">
+                                <!-- cardPrinting.printNumber -->
+                                <el-table-column :prop="'cardPrinting.' + scope.$index + '.printNumber'" :rules='rules.printNumber' label="印刷数量（套）" width="110px">
                                     <template slot-scope="scope">
                                         <el-input v-model.number="scope.row.printNumber" @change="totleCurrency" placeholder=""></el-input>
                                     </template>
@@ -133,7 +134,6 @@ export default {
             formData: this.resetForm(),
             payeePeople: [],
             payeeOrgan: [],
-            
             onOption: [
                 {
                     value: '一月',
@@ -187,8 +187,13 @@ export default {
             cookie_uname: '',
             cookie_oname: '',
             selectionItems: [],
-            
             rules: {
+                printNumber: [
+                    { required: true, message: '请输入数量', trigger: 'blur' }
+                ],
+                'positionsWage.sex': [
+                    { required: true, message: '请输入性别', trigger: 'blur' }
+                ],
                 creatorName: [
                     {
                         required: true, //是否必填

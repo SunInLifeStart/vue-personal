@@ -11,7 +11,7 @@
             </el-row>
         </div>
         <br />
-        <div class="formContent"  style="padding: 15px 30px">
+        <div class="formContent"  style="padding: 15px 30px;overflow-y:auto">
             <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
             <br />
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
@@ -120,22 +120,7 @@
                         </div>
                     </el-col>
                 </el-row>
-            <!-- <el-row v-if="tableData.comments && tableData.comments.length > 0">
-                <el-col :span="24">
-                    <h3>审批意见</h3>
-                    <div class="items">
-                        <div class="item" v-for="item in tableData.comments" :key="item.id">
-                            <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
-                            <div class="info">
-                                <div class="creator">
-                                    <span href="#">{{item.creatorName}}</span> &nbsp; ({{item.created | dateformat}})
-                                </div>
-                                <div class="content">{{item.content}}</div>
-                            </div>
-                        </div>
-                    </div>
-                </el-col>
-            </el-row> -->
+          
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
@@ -200,8 +185,7 @@ export default {
             comments:[],
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
-
-             dialogFormId: "",
+            dialogFormId: "",
             operationType: "edit",
             dialogFormVisible: false,
             fileleng: "show",
