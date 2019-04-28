@@ -10,7 +10,7 @@
             </el-row>
         </div>
         <br />
-        <div class="formContent" style="padding: 15px 30px;overflow-y:auto">
+        <div class="formContent" style="padding: 15px 20px;overflow-y:auto">
             <div>
                 <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
             </div>
@@ -41,38 +41,38 @@
                     <el-col :span="24">
                         <el-form-item label="印刷明细：">
                             <el-table :data="tableData.cardPrinting" border style="width: 100%; margin: 5px;">
-                                <el-table-column prop="uname" label="姓名">
+                                <el-table-column prop="uname" label="姓名" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.uname}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="organ" label="部门">
+                                <el-table-column prop="organ" label="部门" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.organ}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="duty" label="职务">
+                                <el-table-column prop="duty" label="职务" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.duty}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="quantity" label="数量（盒）">
+                                <el-table-column prop="quantity" label="数量（盒）" width="70px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.quantity}}
                                         <!-- |numFilter -->
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="phone" label="电话">
+                                <el-table-column prop="phone" label="电话" width="70px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.phone}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="telephone" label="座机号">
+                                <el-table-column prop="telephone" label="座机号" width="70px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.telephone}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="mailbox" label="邮箱" >
+                                <el-table-column prop="mailbox" label="邮箱" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.mailbox}}
                                     </template>
@@ -82,12 +82,12 @@
                                         {{scope.row.company}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="mailingAddress" label="通讯地址">
+                                <el-table-column prop="mailingAddress" label="通讯地址" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.mailingAddress}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="postcode" label="邮编" >
+                                <el-table-column prop="postcode" label="邮编" show-overflow-tooltip >
                                     <template slot-scope="scope">
                                         {{scope.row.postcode}}
                                     </template>
@@ -341,3 +341,9 @@ body .el-table th.gutter {
   right: 0px;
 }
 </style>
+<style scoped>
+#BusinessCardDetail >>>.el-table__header{
+    width: 0px;
+}
+</style>
+

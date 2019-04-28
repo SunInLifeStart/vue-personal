@@ -189,9 +189,9 @@ export default {
             cookie_oname: '',
             selectionItems: [],
             rules: {
-                printNumber: [
-                    { required: true, message: '请输入数量', trigger: 'blur' }
-                ],
+                // printNumber: [
+                //     { required: true, message: '请输入数量', trigger: 'blur' }
+                // ],
                 'positionsWage.sex': [
                     { required: true, message: '请输入性别', trigger: 'blur' }
                 ],
