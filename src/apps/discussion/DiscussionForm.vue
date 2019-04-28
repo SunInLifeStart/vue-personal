@@ -187,7 +187,7 @@ export default {
     },
     methods: {
         async getTableCode() {
-            let user = await this.saveFormData("/synergy-common/serialNumber/getByTableCode", { code: 'issuesReported' })
+            let user = await this.getCommonData("/synergy-common/serialNumber/getByTableCode", { code: 'issuesReported' })
             if (user) this.formData.number = user.data.content.serialNumber
             this.changePeople()
         },
