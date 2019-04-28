@@ -185,7 +185,7 @@ export default {
             if ($self.formData.draftUnit === '综合管理部') {
                 $self.formData.generalManagement = true
             }
-            let response = await $self.saveFormData(
+            let response = await $self.getCommonData(
                 "/api/v1/submission_forms/save",
                 $self.formData
             );
