@@ -250,6 +250,24 @@
                 </el-row>
             </el-form>
         </div>
+        <el-dialog
+                :title="dialogTitle"
+                :visible.sync="dialogSelectCode"
+                width="30%"  append-to-body
+                center>
+            <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
+                <el-option
+                        v-for="item in currentRoles"
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code">
+                </el-option>
+            </el-select>
+            <span slot="footer" class="dialog-footer">
+                   <el-button type="default" @click="saveFormValidate()">保存</el-button>
+                   <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+                </span>
+        </el-dialog>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
             <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
@@ -269,6 +287,10 @@
         name: 'ProgrammeForm',
         data() {
             return {
+                dialogTitle:"",
+                dialogSelectCode:false,
+                currentRoles:[],
+                branchCode:"",
                 dialogFormVisible: false,
                 rules: {
                     projectName: [
@@ -469,6 +491,7 @@
             createForm() {
                 this.formData = this.resetForm();
                 this.dialogFormVisible = this.createForm_status = true;
+                this.branchCode = "";
             },
             saveFormValidate(type) {
                 this.$refs['formupdate'].validate(valid => {
@@ -479,6 +502,11 @@
             },
             async saveForm(params) {
                 const $self = this;
+                if($self.createForm_status){
+                    if(await $self.juderCode() == "returnDialog"){
+                        return false;
+                    }
+                }
                 if ($self.formData.provider && $self.formData.provider.length > 0) {
                     if ($self.formData.provider[0].providerName && $self.formData.provider[0].providerName.length > 0) {
 
@@ -493,7 +521,7 @@
                 );
                 if (response) {
                     $self.formId = response.data.content.id;
-                    $self.dialogFormVisible = false;
+                    $self.dialogFormVisible = $self.dialogSelectCode =  false;
                     if (params) {
                         $self.msgTips("提交成功", "success");
                         if (this.createForm_status) {
@@ -518,9 +546,13 @@
                     }
                 } else {
                     if (params) {
-                        $self.msgTips($self, "提交失败", "warning");
+                        if(!this.dialogSelectCode){
+                            $self.msgTips("提交失败", "warning");
+                        }
                     } else {
-                        $self.msgTips($self, "保存失败", "warning");
+                        if(!this.dialogSelectCode){
+                            $self.msgTips("保存失败", "warning");
+                        }
                     }
                 }
             },

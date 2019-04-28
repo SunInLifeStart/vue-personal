@@ -68,6 +68,24 @@
             </el-row>
         </el-form>
     </div>
+        <el-dialog
+                :title="dialogTitle"
+                :visible.sync="dialogSelectCode"
+                width="30%"  append-to-body
+                center>
+            <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
+                <el-option
+                        v-for="item in currentRoles"
+                        :key="item.code"
+                        :label="item.name"
+                        :value="item.code">
+                </el-option>
+            </el-select>
+            <span slot="footer" class="dialog-footer">
+                   <el-button type="default" @click="saveFormValidate()">保存</el-button>
+                   <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+                </span>
+        </el-dialog>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
             <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
@@ -85,6 +103,10 @@ export default {
     name: 'IncomingForm',
     data() {
         return {
+            dialogTitle:"",
+            dialogSelectCode:false,
+            currentRoles:[],
+            branchCode:"",
             formData: this.resetForm(),
             dialogFormVisible: false,
             createForm_status: false,
@@ -136,6 +158,7 @@ export default {
         createForm() {
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
+            this.branchCode = "";
         },
         setDataFromParent(data) {
             this.formData = data;
@@ -144,6 +167,11 @@ export default {
             this.createForm_status = false;
         },
         async saveForm(params) {
+            if(this.createForm_status){
+                if(await this.juderCode() == "returnDialog"){
+                    return false;
+                }
+            }
             if (this.formData.receiptDate) {
                 this.formData.receiptDate = moment(this.formData.receiptDate).format(
                     'YYYY-MM-DD hh:mm:ss'
@@ -159,7 +187,7 @@ export default {
             );
             if (response) {
                 this.formId = response.data.id;
-                this.dialogFormVisible = false;
+                this.dialogFormVisible = this.dialogSelectCode =  false;
                 if (params) {
                     this.msgTips("提交成功", "success");
                     if (this.createForm_status) {
@@ -185,9 +213,13 @@ export default {
                 }
             } else {
                 if (params) {
-                    this.msgTips("提交失败", "warning");
+                    if(!this.dialogSelectCode){
+                        $self.msgTips("提交失败", "warning");
+                    }
                 } else {
-                    this.msgTips("保存失败", "warning");
+                    if(!this.dialogSelectCode){
+                        $self.msgTips("保存失败", "warning");
+                    }
                 }
             }
         },
