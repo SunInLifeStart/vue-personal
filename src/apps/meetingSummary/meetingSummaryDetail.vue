@@ -77,7 +77,11 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="分送:">{{tableData.distribute}}
+                        <el-form-item label="分送:">
+                            <el-select style="width:90%;" v-model="tableData.distributes" multiple placeholder="请选择分送人员" disabled>
+                                <el-option v-for="item in distributeOption" :key="item.id" :label="item.name" :value="item.id">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -137,6 +141,7 @@ import moment from "moment";
 import Comment from "../Comment";
 import FilesOperate from "../FilesOperate";
 import { publicMethods } from "../application.js";
+import axios from 'axios';
 export default {
     mixins:[publicMethods],
     name: "MeetingSummaryDetail",
@@ -157,6 +162,7 @@ export default {
             textarea: "",
             dialogVisible: false,
             users: [],
+            distributeOption: [],
             actionsDialogArr: [],
             appFlowName:'meeting-form_meeting',
             formName:'meeting_forms',
@@ -171,6 +177,9 @@ export default {
         Comment,
         FilesOperate
     },
+    mounted() {
+        this.getUsers();
+    },
     methods: {
         getFormDetails(formId) {
             let $self = this;
@@ -178,12 +187,22 @@ export default {
             $self.url= "/api/v1/"+$self.formName+"/get/" + $self.formId;
             $self.getFormDetailsData();
         },
+        getUsers() {
+            axios.get('/api/v1/users', '').then(res => {
+                for (let item of res.data) {
+                    this.distributeOption.push({ id: item.id, name: item.name });
+                }
+            });
+        },
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data;
                 this.tableData.distributes = this.tableData.distribute.split(',');
+                for (let i=0; i<this.tableData.distributes.length; i++) {
+                    this.tableData.distributes[i] = parseInt(this.tableData.distributes[i])
+                }
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
