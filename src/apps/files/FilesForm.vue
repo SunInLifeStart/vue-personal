@@ -62,7 +62,8 @@
                                     </template>
                                 </el-table-column>
                                 <!-- cardPrinting.printNumber -->
-                                <el-table-column :prop="'cardPrinting.' + scope.$index + '.printNumber'" :rules='rules.printNumber' label="印刷数量（套）" width="110px">
+                                <!-- :prop="'cardPrinting.' + scope.$index + '.printNumber'" :rules='rules.printNumber' -->
+                                <el-table-column  label="印刷数量（套）" width="110px">
                                     <template slot-scope="scope">
                                         <el-input v-model.number="scope.row.printNumber" @change="totleCurrency" placeholder=""></el-input>
                                     </template>

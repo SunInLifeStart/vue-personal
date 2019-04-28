@@ -231,7 +231,7 @@ export default {
             $self.url = "/api/v1/singApproval/queryList";
             let response = await $self.getQueryList();
             if (response) {
-                if (response.data.content.list.length > 0) {
+                if (response.data.content.list && response.data.content.list.length > 0) {
                    let formId = response.data.content.list[0].id;
                    $self.$refs.ApprovalDetail.getFormDetails(formId);
                 }

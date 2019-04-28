@@ -9,7 +9,7 @@
                 </div>
             </el-row>
         </div>
-        <div class="formContent" style="padding: 15px 30px">
+        <div class="formContent" style="padding: 15px 30px;overflow-y:auto">
             <br />
             <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
             <br />
