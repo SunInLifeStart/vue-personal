@@ -320,6 +320,11 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
+            if($self.createForm_status){
+                if(await $self.juderCode() == "returnDialog"){
+                    return false;
+                }
+            }
             let response = await $self.saveFormData(
                 "/api/v1/trainingApplication/save",
                 $self.formData
