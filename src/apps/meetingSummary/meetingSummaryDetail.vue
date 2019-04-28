@@ -1,5 +1,5 @@
 <template>
-    <div id="InspectDetail">
+    <div id="MeetingSummaryDetail" >
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -7,76 +7,100 @@
                         {{action.name}}
                     </span>
                 </div>
+                
             </el-row>
         </div>
         <br />
-        <div class="formContent">
-            <div><el-button type="primary"  @click="getFlowNode">查看流程</el-button></div>
+        <div class="formContent" style="padding: 15px 30px">
+            <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
             <br />
-            <el-steps :active="crumb.index" finish-status="success" class="crumbList">
-                <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumb.items"></el-step>
-            </el-steps>
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps> -->
-            <el-form :model='tabledata' class="formList">
+            <el-form :model='tableData' class="formList" >
                 <el-row>
-                    <el-col :span="16">
-                        <el-form-item label="标题：">{{tabledata.title}}</el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="督办类型：">{{tabledata.lamp}}</el-form-item>
+                    <el-col :span="12">
+                        <el-form-item label="会议类型：">
+                            {{discussionOption[tableData.meetingType]}}
+                        </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="立项人：">{{tabledata.definer}}</el-form-item>
+                    <el-col :span="12">
+                        <el-form-item label="总办会编号：">
+                            {{tableData.numbers}}
+                        </el-form-item>
                     </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="立项单位：">{{tabledata.organName}}</el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="被督办部门负责人：">{{tabledata.inspector}}</el-form-item>
+                    <el-col :span="12">
+                        <el-form-item label="文件标题：">
+                            {{tableData.title}}
+                        </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="截至日期：">{{tabledata.deadline}}</el-form-item>
+                    <el-col :span="12">
+                        <el-form-item label="拟稿单位：">
+                            {{tableData.draftUnit}}
+                        </el-form-item>
                     </el-col>
-                    <el-col :span="16">
-                        <el-form-item label="备注：">{{tabledata.remark}}</el-form-item>
+                    <el-col :span="12">
+                        <el-form-item label="拟稿时间：">
+                            {{tableData.draftTime}}
+                        </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="拟稿人：">
+                            {{tableData.drafter}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="电话：">
+                            {{tableData.phone}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
                     <el-col :span="24">
-                        <el-form-item label="内容：">{{tabledata.content}}</el-form-item>
+                        <el-form-item label="正文：">
+                            <FilesOperate v-if="tableData.text.name" :item="tableData.text" :options="{preview:true,download:true,edit:true}" @editText="editText"></FilesOperate>
+                        </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tabledata.attachments && tabledata.attachments.length > 0">
-                            <div v-for="item in tabledata.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
+                        <el-form-item label="备注：">
+                            {{tableData.remarks}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="分送:">{{tableData.distribute}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="反馈内容：" v-if="tabledata.attachments && tabledata.attachments.length > 0">
-                            <div v-for="item in tabledata.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
-                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
-                            </div>
-                        </el-form-item>
-                    </el-col>
                 </el-row>
-                <el-row v-if="tabledata.comments && tabledata.comments.length > 0">
+                <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
                         <div class="items">
-                            <div class="item" v-for="item in tabledata.comments" :key="item.id">
+                            <div class="item" v-for="item in comments" :key="item.id">
                                 <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
                                 <div class="info">
                                     <div class="creator">
-                                        <span href="#">{{item.creatorName}}</span> &nbsp; ({{item.created | dateformat}})
+                                        <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
                                     </div>
-                                    <div class="content">{{item.content}}</div>
+                                    <div class="content">{{item.fullMessage}}</div>
                                 </div>
                             </div>
                         </div>
@@ -109,54 +133,38 @@
     </div>
 </template>
 <script>
-import axios from 'axios';
 import moment from "moment";
 import Comment from "../Comment";
 import FilesOperate from "../FilesOperate";
 import { publicMethods } from "../application.js";
 export default {
     mixins:[publicMethods],
-    name: "InspectDetail",
+    name: "MeetingSummaryDetail",
     data() {
         return {
-            attType: '',
-            tabledata: {},
-            budgetCheck: [],
-            auditSituationChecked: '',
-            created: '',
+            tableData: {
+                text: {}
+            },
+            discussionOption: {
+                'specMeeting': '专题会',
+                'communMeeting': '班子沟通会',
+                'gmoMeeting': '总办会',
+                'partyMeeting': '党支委会',
+                'recruMeeting': '招采委员会',
+            },
             actions: [],
-            actions_status: false,
-            crumb: { items: [] },
-            isEdit: false,
-            editBtnText: '编辑',
-            item_status: {},
-            users: [],
-            rejectTarget: '',
-            rejectList: [],
-            reject_status: false,
-            presign_status: false,
-            seleteUsers: [],
-            seleteUserLabel: '',
-            textarea: '',
-            dialogVisible: false,
-            currentAction: '',
-            submitData: {},
-            dialogUpload: false,
-            fullScreen: false,
-            crumbNodeName: '',
-            nodename: '',
-            tableData: {},
-            actions: [],
-            crumbs:[],
             formId: "",
             textarea: "",
+            dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'inspect-form_inspect',
-            formName:'inspect_forms',
+            appFlowName:'meeting-form_meeting',
+            formName:'meeting_forms',
             comments:[],
             dialogVisibleCrumb:false,
             flowNodeUrl:"",
+            typeJuder:"",
+            isAnnualPlanone:""
         };
     },
     components: {
@@ -174,29 +182,23 @@ export default {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
-                $self.tabledata = response.data;
+                $self.tableData = response.data;
+                this.tableData.distributes = this.tableData.distribute.split(',');
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            // debugger;
             let actions = await $self.getActions();
-            // let crumbs = await $self.getCrumbs();
             let comments =  await $self.getComments();
             $self.actions = actions.data.types;
             $self.comments = comments.data;
-            // $self.crumbs =  {items: crumbs.data, index: -1};
-            // for(var i= 0; i<$self.crumbs.items.length; i++){
-            //     if($self.crumbs.items[i].active){
-            //         $self.crumbs.index = i;    
-            //     }
-            // }
         }
     }
 };
 </script>
-<style lang="scss">
-#InspectDetail {
+<style lang="scss" scoped>
+#MeetingSummaryDetail {
+   
     .el-step__main {
         margin-top: 10px;
     }
@@ -260,6 +262,7 @@ export default {
         }
     }
     #actionList {
+         padding-left: 20px;
         background: #f4f4f4;
         border-bottom: 1px solid #eaeaea;
         height: 40px;

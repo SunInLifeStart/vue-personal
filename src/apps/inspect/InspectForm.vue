@@ -60,8 +60,10 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="督办类型:">
-              <el-radio v-model="formData.radio" label="1">红灯</el-radio>
-              <el-radio v-model="formData.radio" label="2">黄灯</el-radio>
+              <el-radio-group v-model="formData.lamp">
+                <el-radio label="红灯"></el-radio>
+                <el-radio label="黄灯"></el-radio>
+              </el-radio-group>
             </el-form-item>
           </el-col>
         </el-row>
@@ -130,7 +132,7 @@ export default {
       dialogFormVisible: false,
       formData: this.resetForm(),
       users: [],
-      appFlowName: "inspect-form_super",
+      appFlowName: "inspect-form_inspect",
       rules: {
         submitter: [
           {
@@ -254,6 +256,7 @@ export default {
         inspector: "",
         deadline: "",
         frequency: "",
+        lamp: "红灯",
         remark: "",
         content: "",
         attachments: []
