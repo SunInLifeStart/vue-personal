@@ -438,7 +438,7 @@
                 comments: [],
                 textarea: '',
                 dialogVisible: false,
-                appFlowName:'motor-examinationapproval',
+                appFlowName:'motor-examinationapproval_examinationapproval',
                 formName:'examinationApproval',
                 dialogVisibleCrumb:false,
                 flowNodeUrl:"",

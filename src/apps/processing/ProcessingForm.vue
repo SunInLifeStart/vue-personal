@@ -547,7 +547,7 @@
                 formData: this.resetForm(),
                 users: [],
                 selectionItemsone:[],
-                appFlowName: "motor-examinationapproval",
+                appFlowName: "motor-examinationapproval_examinationapproval",
                 currentFormId: this.operationType == 'create' ? '' : this.formId
             };
         },
