@@ -111,7 +111,9 @@ export default {
     name: "PublishDetail",
     data() {
         return {
-            tableData: {},
+            tableData: {
+                text: {name:""}
+            },
             actions: [],
             crumbs:[],
             formId: "",
