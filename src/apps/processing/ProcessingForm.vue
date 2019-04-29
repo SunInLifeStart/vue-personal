@@ -468,7 +468,7 @@
                         { required: true, message: '请输入员工级别', trigger: 'change' }
                     ],
                     isKey: [
-                        { required: true, message: '请输入关键成都', trigger: 'change' }
+                        { required: true, message: '请输入关键程度', trigger: 'change' }
                     ],
                     uname: [
                         { required: true, message: '请输入姓名', trigger: 'blur' }
