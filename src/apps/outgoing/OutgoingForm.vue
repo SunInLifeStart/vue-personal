@@ -538,11 +538,12 @@ export default {
                 self.cookie_oname = decodeURIComponent(item.split("=")[1]);
             }
             if (item.indexOf("uid") > -1 && !self.formData.checkorName) {
+                let type  = self.$store.getters.LoginData.code.split("_")[0];
                 axios
                     .get(
                         "/api/v1/users/" +
                             decodeURIComponent(item.split("=")[1]) +
-                            "/organ/role/xtfz_deptManager"
+                            "/organ/role/"+type+"_deptManager"
                     )
                     .then(res => {
                         self.formData.checkorName = self.checkorName =
