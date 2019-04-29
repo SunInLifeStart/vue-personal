@@ -346,7 +346,6 @@
                         </el-col>
                     </el-row>
                 </div>
-               <!-- v-if="formData.positionsWage==''" -->
                 <el-row v-if="isFromDetailsEdit">
                      <el-col :span="24">
                          <h1 style="text-align:center">拟聘人员信息</h1>
@@ -437,7 +436,7 @@
                 branchCode:"",
                 uploadImageType:'',
                 isFromDetailsEdit:false,
-                counts: 0,
+                 counts: 0,
                 dialogFormVisible: false,
                 checkListsone:['未婚','已婚','离异'],
                 checkListstwo:['自驾','公共交通'],
@@ -777,13 +776,15 @@
                  this.formId = data.id;
                 this.dialogFormVisible = true;
                 this.createForm_status = false;
+                
             },
             setDataFromParentone(data,status) {
-                // this.formData = data;
+                this.formData = data;
                 if(!this.formData.positionsWage){
                     this.formData.positionsWage={}
                 }
-                // this.formId = data.id;
+                this.formData.positionsWage.name=this.formData.uname
+                this.formData.positionsWage.sex=this.formData.sex
                 this.dialogFormVisible = true;
                 this.createForm_status = false;
                 this.isFromDetailsEdit = status;
@@ -835,6 +836,7 @@
                         $self.msgTips("保存成功", "success");
                         if (this.createForm_status) {
                             $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
+                           
                         } else {
                             $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
                         }

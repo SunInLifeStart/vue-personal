@@ -17,296 +17,298 @@
                 <!--<el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>-->
             <!--</el-steps>-->
             <el-form :model='tableData' class="formList">
-                 <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="员工级别：">{{tableData.positions}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="关键程度：">{{isKeyone}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="12">
-                        <el-form-item label="申请岗位：">{{tableData.applyPosition}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="填表日期：">{{tableData.fillingTime}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="姓名：">{{tableData.uname}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="性别：">{{tableData.sex}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="出生日期：">{{tableData.birthday}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="民族：">{{tableData.nation}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="籍贯/出生地：">{{tableData.nativePlace}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="户口所在地：">{{tableData.placeDomicile}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="身高：">{{tableData.stature}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="血型：">{{tableData.bloodType}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="婚姻状况：">{{tableData.maritalStatus | maritalStatusone}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="外语水平：">{{tableData.languageLevel}}
-                       </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="职称/职业资格：">{{tableData.technicalTitle}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="政治面貌：">{{tableData.politicsStatus}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="最高学历：">{{tableData.highestEducation}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="电子邮箱：">{{tableData.emailAddress}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="日常交通方式：">{{tableData.byPrep | byPreptwo}}
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="身份证号码/护照号ID：">{{tableData.idNumber}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="紧急联系人及电话：">{{tableData.contacts}}
-                        </el-form-item>
-                    </el-col>
-                    
-                </el-row>
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="目前住址：">{{tableData.address}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="手机/家庭电话：">{{tableData.phone}}
-                        </el-form-item>
-                    </el-col>
-                    
-                </el-row>
-                <table class="tableNoBorders">
+                <div >
                     <el-row>
-                        <el-col :span="24">
-                            <el-form-item label="学习及培训经历" prop="">
+                        <el-col :span="12">
+                            <el-form-item label="员工级别：">{{tableData.positions}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="关键程度：">{{isKeyone}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="12">
+                            <el-form-item label="申请岗位：">{{tableData.applyPosition}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="填表日期：">{{tableData.fillingTime}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="姓名：">{{tableData.uname}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="性别：">{{tableData.sex}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="出生日期：">{{tableData.birthday}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="民族：">{{tableData.nation}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="籍贯/出生地：">{{tableData.nativePlace}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="户口所在地：">{{tableData.placeDomicile}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="身高：">{{tableData.stature}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="血型：">{{tableData.bloodType}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="婚姻状况：">{{tableData.maritalStatus | maritalStatusone}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="外语水平：">{{tableData.languageLevel}}
+                        </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="职称/职业资格：">{{tableData.technicalTitle}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="政治面貌：">{{tableData.politicsStatus}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="最高学历：">{{tableData.highestEducation}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="电子邮箱：">{{tableData.emailAddress}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="日常交通方式：">{{tableData.byPrep | byPreptwo}}
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="身份证号码/护照号ID：">{{tableData.idNumber}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="紧急联系人及电话：">{{tableData.contacts}}
+                            </el-form-item>
+                        </el-col>
+                        
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="目前住址：">{{tableData.address}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="手机/家庭电话：">{{tableData.phone}}
+                            </el-form-item>
+                        </el-col>
+                        
+                    </el-row>
+                    <table class="tableNoBorders">
+                        <el-row>
+                            <el-col :span="24">
+                                <el-form-item label="学习及培训经历" prop="">
+                                    <!-- <div style="float: right;">
+                                        <span @click="addItem('personal')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                    </div> -->
+                                    <el-table :data="tableData.studyExperience" border style="width: 100%; margin-top: 5px;" >
+                                        <el-table-column prop="" label="起止时间(年月)">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.fromTo" disabled></el-input> -->
+                                                {{scope.row.fromTo}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="毕业院校/培训机构">
+                                            <template slot-scope="scope">
+                                                {{scope.row.graduateTnstitution}}
+                                                <!-- <el-input v-model="scope.row.graduateTnstitution" disabled></el-input> -->
+                                            </template>
+                                        </el-table-column>
+                                    
+                                        <el-table-column prop="" label="所学专业/培训项目">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.major" disabled></el-input> -->
+                                                {{scope.row.major}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="所得学历">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.educationBackground" disabled></el-input> -->
+                                                {{scope.row.educationBackground}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="所得学位">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.degree" disabled></el-input> -->
+                                                {{scope.row.degree}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="就读方式">
+                                            <template slot-scope="scope">
+                                                {{scope.row.studyingWay | studyingWayone}}
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <el-form-item label="工作经历" prop="">
+                                    <!-- <tr v-for="(item,index) in tableData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                                    </tr> -->
                                 <!-- <div style="float: right;">
-                                    <span @click="addItem('personal')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
-                                 </div> -->
-                                <el-table :data="tableData.studyExperience" border style="width: 100%; margin-top: 5px;" >
-                                    <el-table-column prop="" label="起止时间(年月)">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.fromTo" disabled></el-input> -->
+                                        <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                    </div> -->
+                                    <el-table :data="tableData.workExperience" border style="width: 100%; margin-top: 5px;" >
+                                        <el-table-column prop="" label="起止时间">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.fromTo" disabled></el-input> -->
                                             {{scope.row.fromTo}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="毕业院校/培训机构">
-                                        <template slot-scope="scope">
-                                            {{scope.row.graduateTnstitution}}
-                                            <!-- <el-input v-model="scope.row.graduateTnstitution" disabled></el-input> -->
-                                        </template>
-                                    </el-table-column>
-                                
-                                    <el-table-column prop="" label="所学专业/培训项目">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.major" disabled></el-input> -->
-                                            {{scope.row.major}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="所得学历">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.educationBackground" disabled></el-input> -->
-                                            {{scope.row.educationBackground}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="所得学位">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.degree" disabled></el-input> -->
-                                            {{scope.row.degree}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="就读方式">
-                                        <template slot-scope="scope">
-                                            {{scope.row.studyingWay | studyingWayone}}
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                             </el-form-item>
-                        </el-col>
-                    </el-row>
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="公司名称">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.companyName" disabled></el-input> -->
+                                                {{scope.row.companyName}}
+                                            </template>
+                                        </el-table-column>
+                                    
+                                        <el-table-column prop="" label="职位名称">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.jobTitle" disabled></el-input> -->
+                                                {{scope.row.jobTitle}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="离职原因">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.reasonToLeave" disabled></el-input> -->
+                                                {{scope.row.reasonToLeave}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="证明人及联系电话">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.referenceNumber" disabled></el-input> -->
+                                                {{scope.row.referenceNumber}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="职责简述">
+                                            <template slot-scope="scope">
+                                            <!-- <el-input v-model="scope.row.jobDescription" disabled></el-input> -->
+                                            {{scope.row.jobDescription}}
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <el-form-item label="技能：">{{tableData.skill}}
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <el-form-item label="家庭关系" prop="">
+                                    <!-- <tr v-for="(item,index) in tableData.familyTies" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
+                                    </tr> -->
+                                    <!-- <div style="float: right;">
+                                        <span @click="addItem('sitIn')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                    </div> -->
+                                    <el-table :data="tableData.familyTies" border style="width: 100%; margin-top: 5px;" >
+                                        <el-table-column prop="" label="称谓">
+                                            <template slot-scope="scope">
+                                                <!-- <el-select style="width:100%;" clearable v-model="scope.row.appellation"  disabled placeholder="请选择">
+                                                    <el-option
+                                                        v-for="item in onOption"
+                                                        :key="item.value"
+                                                        :label="item.label"
+                                                        :value="item.value">
+                                                    </el-option>
+                                                </el-select> -->
+                                                {{scope.row.appellation}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="姓名">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.name" disabled></el-input> -->
+                                                {{scope.row.name}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="出生年月">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.birthday" disabled></el-input> -->
+                                                {{scope.row.birthday}}
+                                            </template>
+                                        </el-table-column>
+                                    
+                                        <el-table-column prop="" label="居住地">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.placeOfAbode" disabled></el-input> -->
+                                                {{scope.row.placeOfAbode}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="工作单位">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.workUnit" disabled></el-input> -->
+                                                {{scope.row.workUnit}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="联系电话">
+                                            <template slot-scope="scope">
+                                                <!-- <el-input v-model="scope.row.contactNumber" disabled></el-input> -->
+                                                {{scope.row.contactNumber}}
+                                            </template>
+                                        </el-table-column>
+                                        <el-table-column prop="" label="备注">
+                                            <template slot-scope="scope">
+                                            <!-- <el-input v-model="scope.row.remark" placeholder="" disabled></el-input> -->
+                                            {{scope.row.remark}}
+                                            </template>
+                                        </el-table-column>
+                                    </el-table>
+                                </el-form-item>
+                            </el-col>
+                        </el-row>
+                    </table>
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="工作经历" prop="">
-                                <!-- <tr v-for="(item,index) in tableData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
-                                </tr> -->
-                               <!-- <div style="float: right;">
-                                    <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
-                                 </div> -->
-                                <el-table :data="tableData.workExperience" border style="width: 100%; margin-top: 5px;" >
-                                    <el-table-column prop="" label="起止时间">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.fromTo" disabled></el-input> -->
-                                           {{scope.row.fromTo}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="公司名称">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.companyName" disabled></el-input> -->
-                                            {{scope.row.companyName}}
-                                        </template>
-                                    </el-table-column>
-                                
-                                    <el-table-column prop="" label="职位名称">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.jobTitle" disabled></el-input> -->
-                                            {{scope.row.jobTitle}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="离职原因">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.reasonToLeave" disabled></el-input> -->
-                                            {{scope.row.reasonToLeave}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="证明人及联系电话">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.referenceNumber" disabled></el-input> -->
-                                            {{scope.row.referenceNumber}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="职责简述">
-                                        <template slot-scope="scope">
-                                           <!-- <el-input v-model="scope.row.jobDescription" disabled></el-input> -->
-                                           {{scope.row.jobDescription}}
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
+                            <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
+                                <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                                </div>
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
-                          <el-col :span="24">
-                            <el-form-item label="技能：">{{tableData.skill}}
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row>
-                        <el-col :span="24">
-                            <el-form-item label="家庭关系" prop="">
-                                <!-- <tr v-for="(item,index) in tableData.familyTies" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
-                                </tr> -->
-                                <!-- <div style="float: right;">
-                                    <span @click="addItem('sitIn')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
-                                 </div> -->
-                                <el-table :data="tableData.familyTies" border style="width: 100%; margin-top: 5px;" >
-                                    <el-table-column prop="" label="称谓">
-                                        <template slot-scope="scope">
-                                            <!-- <el-select style="width:100%;" clearable v-model="scope.row.appellation"  disabled placeholder="请选择">
-                                                <el-option
-                                                    v-for="item in onOption"
-                                                    :key="item.value"
-                                                    :label="item.label"
-                                                    :value="item.value">
-                                                </el-option>
-                                            </el-select> -->
-                                            {{scope.row.appellation}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="姓名">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.name" disabled></el-input> -->
-                                            {{scope.row.name}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="出生年月">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.birthday" disabled></el-input> -->
-                                            {{scope.row.birthday}}
-                                        </template>
-                                    </el-table-column>
-                                
-                                    <el-table-column prop="" label="居住地">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.placeOfAbode" disabled></el-input> -->
-                                            {{scope.row.placeOfAbode}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="工作单位">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.workUnit" disabled></el-input> -->
-                                            {{scope.row.workUnit}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="联系电话">
-                                        <template slot-scope="scope">
-                                            <!-- <el-input v-model="scope.row.contactNumber" disabled></el-input> -->
-                                            {{scope.row.contactNumber}}
-                                        </template>
-                                    </el-table-column>
-                                    <el-table-column prop="" label="备注">
-                                        <template slot-scope="scope">
-                                           <!-- <el-input v-model="scope.row.remark" placeholder="" disabled></el-input> -->
-                                           {{scope.row.remark}}
-                                        </template>
-                                    </el-table-column>
-                                </el-table>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                </table>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
-                            </div>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                 <el-row v-if="tableData.positionsWage && tableData.positionsWage!=''" >
+                </div>
+                 <el-row v-if="isFromDetailsEdit" >
                      <el-col :span="24">
                          <h1 style="text-align:center">拟聘人员信息</h1>
                     </el-col>
@@ -430,6 +432,7 @@
                         label: '女儿'
                     },
                 ],
+                isFromDetailsEdit:false,
                 isKeyone:'',
                 tableData: {},
                 actions: [],
@@ -514,6 +517,7 @@
             },
              salaryEditForm(){
                 let $self = this;
+                //  this.isFromDetailsEdit = true
                 $self.$refs.processingForm.setDataFromParentone(this.tableData,true);
             }
         }
