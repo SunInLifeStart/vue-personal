@@ -46,8 +46,8 @@
     </div>
 </template>
 <script>
-import newsForm from "./newsForm";
-import newsDetail from "./newsDetail";
+import newsForm from "./NewsForm";
+import newsDetail from "./NewsDetail";
 import {publicMethods} from "../application.js";
 export default {
     mixins:[publicMethods],

@@ -179,7 +179,6 @@ export default {
             }
         },
         handleSuccess(response, file) {
-            // debugger
             const self = this;
             if (response.length > 0) {
                 response.forEach(function(item) {

@@ -6,7 +6,7 @@
 </template>
 <script>
 import axios from "axios";
-import newsDetail from "./newsDetail";
+import newsDetail from "./NewsDetail";
 export default {
     name: "APPROVE",
     data() {
