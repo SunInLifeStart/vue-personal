@@ -79,7 +79,6 @@ export const publicMethods = {
                         }
                     };
                  }
-      
             }
             let url = `/workflow/${this.appFlowName}/${
                 this.formId
