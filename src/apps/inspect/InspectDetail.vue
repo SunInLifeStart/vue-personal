@@ -19,27 +19,27 @@
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps> -->
-            <el-form :model='tabledata' class="formList">
+            <el-form :model='tableData' class="formList">
                 <el-row>
                     <el-col :span="16">
-                        <el-form-item label="标题：">{{tabledata.title}}</el-form-item>
+                        <el-form-item label="标题：">{{tableData.title}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="督办类型：">{{tabledata.lamp}}</el-form-item>
+                        <el-form-item label="督办类型：">{{tableData.lamp}}</el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="立项人：">{{tabledata.definer}}</el-form-item>
+                        <el-form-item label="立项人：">{{tableData.definer}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="立项单位：">{{tabledata.organName}}</el-form-item>
+                        <el-form-item label="立项单位：">{{tableData.organName}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="被督办部门负责人：">
                             <el-select
                                     disabled
-                                    v-model="tabledata.inspector"
+                                    v-model="tableData.inspector"
                                     filterable
                                     placeholder="请选择"
                                     style="width:60%"
@@ -55,26 +55,26 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="截至日期：">{{tabledata.deadline}}</el-form-item>
+                        <el-form-item label="截至日期：">{{tableData.deadline}}</el-form-item>
                     </el-col>
                     <el-col :span="16">
-                        <el-form-item label="备注：">{{tabledata.remark}}</el-form-item>
+                        <el-form-item label="备注：">{{tableData.remark}}</el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="内容：">{{tabledata.content}}</el-form-item>
+                        <el-form-item label="内容：">{{tableData.content}}</el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="附件：" v-if="tabledata.attachments && tabledata.attachments.length > 0">
-                            <div v-for="item in tabledata.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
+                        <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
                     <el-col :span="24">
-                        <el-form-item label="反馈内容：" v-if="tabledata.attachments && tabledata.attachments.length > 0">
-                            <div v-for="item in tabledata.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
+                        <el-form-item label="反馈内容：" v-if="tableData.attachments && tableData.attachments.length > 0">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
@@ -134,7 +134,7 @@ export default {
     data() {
         return {
             attType: '',
-            tabledata: {},
+            tableData: {},
             budgetCheck: [],
             auditSituationChecked: '',
             created: '',
@@ -201,8 +201,8 @@ export default {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
-                $self.tabledata = response.data;
-                $self.tabledata.inspector = parseInt($self.tabledata.inspector);
+                $self.tableData = response.data;
+                $self.tableData.inspector = parseInt($self.tableData.inspector);
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
             } else {
                 $self.msgTips("获取表单失败", "warning");
