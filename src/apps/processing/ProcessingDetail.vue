@@ -393,6 +393,7 @@
                 </el-form>
             </el-dialog>
         </div>
+        <ProcessingForm  ref="processingForm"></ProcessingForm>
     </div>
 </template>
 <script>
@@ -400,6 +401,7 @@
     import moment from 'moment';
     import Comment from '../Comment';
     import FilesOperate from '../FilesOperate';
+    import ProcessingForm from "./ProcessingForm";
     import { publicMethods } from "../application.js";
     export default {
         mixins:[publicMethods],
@@ -446,32 +448,33 @@
         },
         components: {
             Comment,
-            FilesOperate
+            FilesOperate,
+            ProcessingForm
         },
         filters: {
-         maritalStatusone: function(data) {
-             let xmlJson = {
-                "0":"未婚",
-                "1":"已婚",
-                "2" :"离异",
-            };
-            return xmlJson[data];
-        },
-        byPreptwo: function(data) {
+            maritalStatusone: function(data) {
                 let xmlJson = {
-                    "1":"公共交通",
-                    "2" :"自驾",
+                    "0":"未婚",
+                    "1":"已婚",
+                    "2" :"离异",
                 };
                 return xmlJson[data];
-        },
-        studyingWayone: function(data) {
-                let xmlJson = {
-                    1:"自费",
-                    0 :"统招",
-                };
-                return xmlJson[data];
-        },
-    },
+            },
+            byPreptwo: function(data) {
+                    let xmlJson = {
+                        "1":"公共交通",
+                        "2" :"自驾",
+                    };
+                    return xmlJson[data];
+            },
+            studyingWayone: function(data) {
+                    let xmlJson = {
+                        1:"自费",
+                        0 :"统招",
+                    };
+                    return xmlJson[data];
+            },
+         },
         methods: {
             getFormDetails(formId) {
                 let $self = this;
@@ -508,6 +511,10 @@
                     }
                 }
 
+            },
+             salaryEditForm(){
+                let $self = this;
+                $self.$refs.processingForm.setDataFromParentone(this.tableData,true);
             }
         }
     };
