@@ -28,6 +28,14 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
+                    <el-form-item label="正文" style="float:left">
+                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}"  @editText="openData(formData.text.url)"></FilesOperate>
+                        <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
                     <el-form-item label="附件">
                         <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
@@ -99,6 +107,11 @@ export default {
     },
     methods: {
          setDataFromParent(data) {
+            if(typeof data.text == "string"){
+                    if(data.text && JSON.parse(data.text).name){
+                    data.text = JSON.parse(data.text);
+                 }
+            }
             this.formData = data;
             this.formId = data.id;
             this.dialogFormVisible = true;
@@ -112,7 +125,7 @@ export default {
                 keyword: '',
                 content: '',
                 attachments: [],
-                // text:{name:''}
+                text:{name:''}
             };
             return formData;
         },
@@ -136,6 +149,7 @@ export default {
                     return false;
                 }
             }
+            $self.formData.text = JSON.stringify($self.formData.text);
             let response = await $self.saveFormData(
                 "/api/v1/publish_forms/save",
                 $self.formData
@@ -177,6 +191,9 @@ export default {
                    }
                 }
             }
+        },
+        createTextBody() {
+            this.openData();
         },
         handleSuccess(response, file) {
             const self = this;

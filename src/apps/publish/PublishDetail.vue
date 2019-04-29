@@ -31,6 +31,13 @@
                         <el-form-item label="关键字：">{{tableData.keyword}}</el-form-item>
                     </el-col>
                 </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="正文：">
+                                <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true}"></FilesOperate>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <!--<el-row>-->
                     <!--<el-col :span="24">-->
                         <!--<el-form-item label="正文：" >-->
@@ -136,6 +143,9 @@ export default {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
+                if(response.data.text && JSON.parse(response.data.text).name){
+                    response.data.text = JSON.parse(response.data.text);
+                }
                 $self.tableData = response.data;
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
 
