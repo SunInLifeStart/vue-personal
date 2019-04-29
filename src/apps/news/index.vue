@@ -1,14 +1,57 @@
 <template>
-    <div id="Train">
+    <div id="News">
         <el-card class="box-card">
                <!-- 查询 -->
-          
+            <el-form :inline="true" label-width="70px"  label-position="left" :model="params" class="demo-form-inline">
+                <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="标题">
+                            <el-input v-model="params.title" placeholder="标题"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="作者">
+                            <el-input v-model="params.creatorName" placeholder="作者"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="报送单位">
+                            <el-input v-model="params.reportingOrg" placeholder="报送单位"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="状态">
+                            <el-select v-model="params.status" placeholder="请选择">
+                                <el-option
+                                        v-for="item in statusOption"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="创建时间">
+                            <el-date-picker v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item>
+                            <el-button type="primary" @click="searchList">查询</el-button>
+                            <el-button @click="resetInput">重置</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
 
                   <!-- 新建 -->
                 <div class="toolbar">
                     <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
                 </div>
-                <div id="TrainList">
+                <div id="NewsList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
                     <el-table-column prop="title" label="标题">
                     </el-table-column>
@@ -20,10 +63,8 @@
                      <el-table-column  width="100" label="单据状态">
                          <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                      </el-table-column>
-                </el-table>
                     <el-table-column label="操作" width="100">
                     <template slot-scope="scope">
-                            
                         <el-tooltip class="item" effect="dark" content="编辑" placement="left"
                             v-if="scope.row.status == '00' || scope.row.status == '02'" >
                             <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
@@ -34,8 +75,9 @@
                         </el-tooltip>
                     </template>
                 </el-table-column>
+                </el-table>
                    <br />
-                 <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+                 <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.page" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
             </div>
           </el-card>
         <br>
@@ -47,6 +89,7 @@
 </template>
 <script>
 import newsForm from "./NewsForm";
+import moment from "moment";
 import newsDetail from "./NewsDetail";
 import {publicMethods} from "../application.js";
 export default {
@@ -55,15 +98,37 @@ export default {
     data() {
         return {
             tableData: [],
+            searchOptions: [],
             formDetails: {},
             formId: "",
+            statusOption: [
+                {
+                    value: '00',
+                    label: '已保存'
+                },
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '03',
+                    label: '已撤销'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ],
             params: {
                 page: 1,
                 pageSize: 5,
                 desc: true,
                 options: [],
                 orderBy: "created"
-               
             },
             formName:"news_forms"
         };
@@ -96,6 +161,7 @@ export default {
                    $self.$refs.newsDetail.getFormDetails(formId);
                 }
                 $self.tableData = response.data.forms;
+                $self.params.total = response.data.totalCount;
             } else {
                 $self.msgTips("获取列表失败", "warning");
             }
@@ -117,7 +183,7 @@ export default {
         },
         reloadList(params) {
             if (params == "reload") {
-                this.params.pageNum = 1;
+                this.params.page = 1;
                 this.getList();
             } else {
                 this.$refs.newsDetail.getFormDetails(params.id);
@@ -134,7 +200,7 @@ export default {
 
         //分页
         currentChange(pageNum) {
-            this.params.pageNum = pageNum;
+            this.params.page = pageNum;
             this.getList(pageNum);
         },
         sizeChange(pageSize) {
@@ -142,18 +208,57 @@ export default {
             this.getList();
         },
         searchList() {
+            this.searchOptions = [];
+            if (this.params.title && this.params.title.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'title',
+                    filter: 'LIKE',
+                    value: this.params.title
+                });
+            }
+            if (this.params.creatorName && this.params.creatorName.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'creatorName',
+                    filter: 'EQUAL',
+                    value: this.params.creatorName
+                });
+            }
+            if (this.params.reportingOrg && this.params.reportingOrg.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'reportingOrg',
+                    filter: 'LIKE',
+                    value: this.params.reportingOrg
+                });
+            }
+            if (this.params.created && this.params.created.length > 0) {
+                this.searchOptions.push({
+                    field: 'created',
+                    filter: 'BETWEEN',
+                    value: moment(this.params.created[0]).format(
+                        'YYYY-MM-DD'
+                    ),
+                    value2: moment(this.params.created[1]).format(
+                        'YYYY-MM-DD'
+                    )
+                });
+            }
+            if (this.params.status && this.params.status.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'status',
+                    filter: 'LIKE',
+                    value: this.params.status
+                });
+            }
+            this.params.options = this.searchOptions
             this.getList();
         },
         resetInput() {
             this.params={
-               department: "",
-                submitter: "",
-                committed:"",
-                status:"",
-                trainingTime:[],
-                 startTime:"",
-                endTime:"",
-               
+                page: 1,
+                pageSize: 5,
+                desc: true,
+                options: [],
+                orderBy: "created"
             }
         }
     },
@@ -163,16 +268,19 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-      #TrainFilter  .el-form-item--small.el-form-item{
+      #News  .el-form-item--small.el-form-item{
             width: 100%;
         }
-         #TrainFilter {
-             .searchBtn {
-            padding-right: 10px;
-            .positionBtn{
-                text-align: right;
-            }
-        }}
 </style>
-
+<style scoped>
+    #News .filterForm >>> .el-form-item__content{
+        width: calc(100% - 80px);
+    }
+    #News .filterForm >>> .el-select {
+        width: 100%;
+    }
+    #News .filterForm >>> .el-date-editor{
+        width: calc(100% - 0px);
+    }
+</style>
 
