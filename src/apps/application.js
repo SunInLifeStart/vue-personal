@@ -54,16 +54,37 @@ export const publicMethods = {
                 this.$emit("reloadList", this.formData); //如果是 "编辑" 表单刷新 "详情页"
             }
         },
+
+        async getCommonType(url) {
+            try {
+                return await this.$axios.get(url);
+            } catch (err) {
+                return false;
+            }
+        },
         async startSignal(actions, status) {
+            let $self = this;
+            let nowActins = actions ? actions : $self.currentAction;
             if (status) {
-                this.hasRequired(actions ? actions : this.currentAction);
+                $self.hasRequired(nowActins);
             }
 
-            console.log(this.$store.getters.LoginData.uid);
+            //督办特殊情况特殊处理
+            if($self.appFlowName == "inspect-form_inspect" && nowActins.assigneeListTos && nowActins.assigneeListTos.indexOf("assigneeListVarable") > -1){
+                 let response = await $self.getCommonType("/api/v1/users/role/xtfz_deptManager");
+                 if(response){
+                    for(var i = 0; i<response.data.length; i++){
+                        if(response.data[i].id == $self.formData.inspector){
+                            nowActins.assigneeList.push({"name":response.data[i].name,"id":$self.formData.inspector});
+                        }
+                    };
+                 }
+      
+            }
             let url = `/workflow/${this.appFlowName}/${
                 this.formId
                 }/${this.$store.getters.LoginData.uid}/signal`;
-            return await this.$axios.put(url, actions ? actions : this.currentAction);
+            return await this.$axios.put(url, nowActins);
         },
         async startSignalForSave(type) {
             let actions = await this.getActions();
@@ -200,7 +221,7 @@ export const publicMethods = {
                     labelName: "selContents"
                 });
             }
-            if($self.appFlowName == "inspect-form_inspect" && action.assigneeListTos.indexOf("assigneeListVarable") > -1){
+            if($self.appFlowName == "inspect-form_inspect" && action.assigneeListTos && action.assigneeListTos.indexOf("assigneeListVarable") > -1){
                 $self.$axios
                 .get("/api/v1/users/role/xtfz_deptManager")
                 .then(res => {
