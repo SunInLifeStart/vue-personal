@@ -1,6 +1,7 @@
 <template>
   <div id="APPROVE">
-    <PublishDetail :formId="formId" ref="PublishDetail"></PublishDetail>
+    <PublishDetail ref="PublishDetail"> </PublishDetail>
+     <!-- :formId="formId" -->
   </div>
 </template>
 <script>
@@ -13,17 +14,17 @@ export default {
     },
     props: ["formId"],
     mounted() {
-        // this.$refs.IncomingDetail.setTab();
+         this.$refs.PublishDetail.getFormDetails(this.formId);
     },
     components: {
-        PublishDetail
+       PublishDetail
     },
     watch: {},
 
     methods: {}
 };
 </script>
-<style lang="scss" scope>
+<style lang="scss" scoped>
 #APPROVE {
     height: 100%;
     #PublishDetail {
