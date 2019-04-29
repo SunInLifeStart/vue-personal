@@ -177,7 +177,6 @@ export default {
             formData: this.resetForm(),
             users: [],
             appFlowName: "outgoing-form_outgoing",
-            dialogFormVisible: false,
             percentage: 0,
             isFromDetailsEdit:false,
             formData: {
