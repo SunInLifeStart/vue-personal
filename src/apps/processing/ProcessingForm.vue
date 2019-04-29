@@ -562,7 +562,6 @@
         methods: {
             handleSelectionChangeone(selection) {
                 this.selectionItemsone = selection;
-               
             },
             tableRowClassNameone({row, rowIndex}) {
                 //把每一行的索引放进row

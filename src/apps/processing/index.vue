@@ -8,23 +8,11 @@
                             <el-input v-model="params.uname" placeholder="请输入姓名"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8"> &nbsp;
-                    </el-col>
-                    <el-col :span="8" class="searchBtn">
-                        <el-form-item class="positionBtn">
-                            <el-button type="primary" @click="onSubmit">查询</el-button>
-                            <el-button @click="onReset">重置</el-button>
-                        </el-form-item>
-                    </el-col>
-                    <!-- 
                     <el-col :span="8">
-                        <el-form-item label="提单时间">
-                            <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd 00:00:00" placeholder="请输入提单时间" style="width:100%" type="date">
-                            </el-date-picker>
+                        <el-form-item label="申请岗位">
+                            <el-input v-model="params.applyPosition" placeholder="请输入申请岗位"></el-input>
                         </el-form-item>
-                    </el-col> -->
-                </el-row>
-                <!-- <el-row class="filterForm">
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="单据状态">
                             <el-select v-model="params.status" placeholder="请输入单据状态">
@@ -37,15 +25,16 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8"> &nbsp;
-                    </el-col>
+                   
+                </el-row>
+                <el-row class="filterForm">
                     <el-col :span="8" class="searchBtn">
                         <el-form-item class="positionBtn">
                             <el-button type="primary" @click="onSubmit">查询</el-button>
                             <el-button @click="onReset">重置</el-button>
                         </el-form-item>
                     </el-col>
-                </el-row> -->
+                </el-row>
             </el-form>
         </el-card>
         <el-card class="box-card card_margin_10">
@@ -114,10 +103,9 @@
                 params: {
                     pageNum: 1,
                     pageSize: 5,
-                    // conferenceTitle: '',
                     uname: '',
-                    // committed: '',
-                    // status: '',
+                    applyPosition: '',
+                    status: '',
                     total: 0
                 },
                 dialogFormVisibleProcessing: false,
@@ -220,8 +208,11 @@
                 this.getList();
             },
             onReset() {
-                this.params.conferenceTitle = '';
-                this.onSubmit();
+                this.params={
+                    uname: '',
+                    applyPosition: '',
+                    status: '',
+                }
             },
             onSubmit() {
                 this.getList();
