@@ -124,6 +124,7 @@ export default {
                 columns: '',
                 keyword: '',
                 content: '',
+                generalManagement: false,
                 attachments: [],
                 text:{name:''}
             };
@@ -150,6 +151,9 @@ export default {
                 }
             }
             $self.formData.text = JSON.stringify($self.formData.text);
+            if (this.$store.getters.LoginData.oname === '综合管理部') {
+                $self.formData.generalManagement = true
+            }
             let response = await $self.saveFormData(
                 "/api/v1/publish_forms/save",
                 $self.formData
