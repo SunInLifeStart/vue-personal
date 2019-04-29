@@ -58,6 +58,8 @@ export const publicMethods = {
             if (status) {
                 this.hasRequired(actions ? actions : this.currentAction);
             }
+
+            console.log(this.$store.getters.LoginData.uid);
             let url = `/workflow/${this.appFlowName}/${
                 this.formId
                 }/${this.$store.getters.LoginData.uid}/signal`;
@@ -149,7 +151,9 @@ export const publicMethods = {
                         } else if (key == "role" && detailsData.appFlowName != "travel-form_travel") {
                             options.push("role=" + this.$store.getters.LoginData.Role);
                         } else {
-                            if (key.indexOf("filterButton") > -1) {} else {
+                            if (key.indexOf("filterButton") > -1) {
+
+                            } else {
                                 $self.msgTips('依赖的' + key + '表单中找不到', "warning");
                                 return false;
                             }
@@ -196,15 +200,28 @@ export const publicMethods = {
                     labelName: "selContents"
                 });
             }
-            if (action.assigneeList && action.assigneeList.length > 0) {
-                $self.actionsDialogArr.push({
-                    seletList: action.assigneeList,
-                    label: action.assigneeListLabel,
-                    multiple: action.assigneeListMul == "true" ? true : false,
-                    checkedValue: action.assigneeListMul == "true" ? [] : "",
-                    labelName: "assigneeList"
-                });
+            if($self.appFlowName == "inspect-form_inspect" && action.assigneeListTos.indexOf("assigneeListVarable") > -1){
+                $self.$axios
+                .get("/api/v1/users/role/xtfz_deptManager")
+                .then(res => {
+                    for(var i = 0; i<res.data.length; i++){
+                        if(res.data[i].id == $self.tableData.inspector){
+                           action.assigneeList.push({"name":res.data[i].name,"id":$self.tableData.inspector});
+                        }
+                    };
+                }) 
+            }else{
+                if (action.assigneeList && action.assigneeList.length > 0) {
+                    $self.actionsDialogArr.push({
+                        seletList: action.assigneeList,
+                        label: action.assigneeListLabel,
+                        multiple: action.assigneeListMul == "true" ? true : false,
+                        checkedValue: action.assigneeListMul == "true" ? [] : "",
+                        labelName: "assigneeList"
+                    });
+                }
             }
+
             if ($self.currentAction.action == 'PULL') {
                 $self.currentAction["comment"] = $self.currentAction.name;
                 await $self.startSignal();
@@ -273,8 +290,15 @@ export const publicMethods = {
                 $self.msgTips($self.currentAction.name + "成功", "success");
             } else {
                 if ($self.currentAction.assigneeList && $self.currentAction.assigneeList.length > 0) {
-                    $self.msgTips($self.currentAction.assigneeListLabel, "warning");
-                    return false;
+                    if($self.appFlowName == "inspect-form_inspect"){
+                        await $self.startSignal();
+                        $self.getFormDetailsData();
+                        $self.dialogVisible = false;
+                        $self.msgTips($self.currentAction.name + "成功", "success");
+                    }else{
+                        $self.msgTips($self.currentAction.assigneeListLabel, "warning");
+                        return false;
+                    }
                 } else if ($self.currentAction.addAssigneeList && $self.currentAction.addAssigneeList.length > 0) {
                     $self.msgTips($self.currentAction.addAssigneeListLabel, "warning");
                     return false;

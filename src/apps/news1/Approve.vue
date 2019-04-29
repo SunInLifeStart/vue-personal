@@ -1,33 +1,32 @@
 <template>
-  <div id="APPROVE">
-    <newsDetail ref="newsDetail"> </newsDetail>
-     <!-- :formId="formId" -->
-  </div>
+    <div id="APPROVE">
+        <NewsDetail :formId="formId" ref="NewsDetail"></NewsDetail>
+    </div>
 </template>
 <script>
-import axios from "axios";
-import newsDetail from "./newsDetail";
+import axios from 'axios';
+import NewsDetail from './NewsDetail';
 export default {
-    name: "APPROVE",
+    name: 'APPROVE',
     data() {
         return {};
     },
-    props: ["formId"],
+    props: ['formId'],
     mounted() {
-         this.$refs.newsDetail.getFormDetails(this.formId);
+        // this.$refs.IncomingDetail.setTab();
     },
     components: {
-       newsDetail
+        NewsDetail
     },
     watch: {},
 
     methods: {}
 };
 </script>
-<style lang="scss" scoped>
+<style lang="scss" scope>
 #APPROVE {
     height: 100%;
-    #newsDetail {
+    #NewsDetail {
         height: 100%;
         width: 100%;
         display: flex;
@@ -35,9 +34,9 @@ export default {
         #actionList {
             padding-left: 20px;
         }
-        .btnhide{
-             display: block;
-         }
+        .btnhide {
+            display: block;
+        }
         .formContent {
             flex: 1;
             height: 100%;
@@ -45,7 +44,6 @@ export default {
             overflow-y: auto;
             padding: 15px 30px;
         }
-        
     }
 }
 </style>

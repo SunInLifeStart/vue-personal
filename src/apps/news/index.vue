@@ -1,144 +1,178 @@
 <template>
-    <div id="News" class="main-container">
-        <div class="content-container">
-            <el-card class="box-card">
-                <NewsFilter @searchList="getSearchOptions"></NewsFilter>
-                <div class="toolbar" style="margin-top: 10px;">
-                    <el-button type="primary" icon="el-icon-plus" @click="createForm">新建</el-button>
-                    <el-button type="primary" @click="moreDeleteNews">批量删除</el-button>
-                    <el-button type="primary" @click="moreUplode">批量下载</el-button>
+    <div id="Train">
+        <el-card class="box-card">
+               <!-- 查询 -->
+          
+
+                  <!-- 新建 -->
+                <div class="toolbar">
+                    <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
                 </div>
-            </el-card>
-            <el-card class="box-card">
-                <NewsList ref="newslist" @formId="getFormId" @editForm="editForm" @deleteForm="deleteForm" :searchOptions="searchOptions" @showStatus="showStatus"></NewsList>
-            </el-card>
-            <br>
-            <el-card class="box-card">
-                <NewsDetail ref="newsdetail" :formId="formId"></NewsDetail>
-            </el-card>
-        </div>
-        <el-dialog title="新闻管理" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%">
-            <NewsForm ref="newsform" @refreshData="refreshData" @refreshDetail="refreshDetail" @saveStatus="saveStatus" :formId="dialogFormId" :operationType="operationType"></NewsForm>
-            <div slot="footer" class="dialog-footer">
-                <el-button type="default" @click="saveForm">保存</el-button>
-                <el-button type="primary" @click="submitForm" v-if="showCreateBtn">提交</el-button>
+                <div id="TrainList">
+                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
+                    <el-table-column prop="title" label="标题">
+                    </el-table-column>
+                    <el-table-column prop="reportingOrg" label="报送单位">
+                    </el-table-column>
+                    <el-table-column prop="creatorName" label="作者">
+                    </el-table-column>
+                    <el-table-column prop="created" width="250" label="创建时间"></el-table-column>
+                     <el-table-column  width="100" label="单据状态">
+                         <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
+                     </el-table-column>
+                </el-table>
+                    <el-table-column label="操作" width="100">
+                    <template slot-scope="scope">
+                            
+                        <el-tooltip class="item" effect="dark" content="编辑" placement="left"
+                            v-if="scope.row.status == '00' || scope.row.status == '02'" >
+                            <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
+                        </el-tooltip>
+                        <el-tooltip class="item" effect="dark" content="删除" placement="left"
+                            v-if="scope.row.status == '00' || scope.row.status == '02'">
+                            <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
+                        </el-tooltip>
+                    </template>
+                </el-table-column>
+                   <br />
+                 <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
             </div>
-        </el-dialog>
+          </el-card>
+        <br>
+        <el-card class="box-card">
+            <newsDetail :formId="formId" ref="newsDetail" @reloadList = "reloadList" @resetStatus = "resetStatus"></newsDetail>
+        </el-card>
+         <newsForm  ref="newsForm" @reloadList = "reloadList"></newsForm>
     </div>
 </template>
 <script>
-import NewsForm from './NewsForm';
-import NewsFilter from './NewsFilter';
-import NewsList from './NewsList';
-import NewsDetail from './NewsDetail';
-import axios from 'axios';
+import newsForm from "./newsForm";
+import newsDetail from "./newsDetail";
+import {publicMethods} from "../application.js";
 export default {
-    name: 'News',
-    mounted() {},
+    mixins:[publicMethods],
+    name: "news",
     data() {
         return {
-            dialogFormVisible: false,
-            searchOptions: [],
-            formId: '',
-            dialogFormId: '',
-            operationType: 'create',
-            statusNews: '',
-            showCreateBtn:true
+            tableData: [],
+            formDetails: {},
+            formId: "",
+            params: {
+                page: 1,
+                pageSize: 5,
+                desc: true,
+                options: [],
+                orderBy: "created"
+               
+            },
+            formName:"news_forms"
         };
     },
     components: {
-        NewsForm,
-        NewsFilter,
-        NewsList,
-        NewsDetail
+        newsForm,
+        newsDetail
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+               "00":"已保存", 
+               "01":"审核中",
+               "02" :"已驳回",
+               "03" :"已撤销",
+               "04" :"已完成"
+            };
+            return xmlJson[data];
+        }
     },
     methods: {
-        showStatus(status,row) {
-            if(row.processId){
-                this.showCreateBtn = false;
-            }
-            if (status == '已保存') {
-                this.statusNews = '';
+        //获取列表
+         async getList(pageNum) {
+            let $self = this;
+            $self.url = "/api/v1/news_forms/query";
+            let response = await $self.getQueryList();
+            if (response) {
+                if (response.data.forms.length > 0) {
+                   let formId = response.data.forms[0].id;
+                   $self.$refs.newsDetail.getFormDetails(formId);
+                }
+                $self.tableData = response.data.forms;
             } else {
-                this.statusNews = '已驳回';
+                $self.msgTips("获取列表失败", "warning");
             }
         },
-        getSearchOptions(searchOptions) {
-            this.searchOptions = searchOptions;
+
+        //选择行
+        showCurrentId(row) {
+            this.$refs.newsDetail.getFormDetails(row.id);
         },
-        getFormId(id) {
-            this.formId = id;
+
+        //新建
+        createNewForm() {
+            this.$refs.newsForm.createForm();
         },
-        moreDeleteNews() {
-            if (this.$refs.newslist) {
-                this.$refs.newslist.moreDelete();
+
+        //编辑
+        editForm(data) {
+            this.$refs.newsForm.setDataFromParent(data);
+        },
+        reloadList(params) {
+            if (params == "reload") {
+                this.params.pageNum = 1;
+                this.getList();
+            } else {
+                this.$refs.newsDetail.getFormDetails(params.id);
             }
         },
-        moreUplode() {
-            if (this.$refs.newslist) {
-                this.$refs.newslist.moreUplode();
+        resetStatus(data){
+              let $self = this;
+            for(let item of $self.tableData){
+                if(data.id == item.id){
+                  item.status = data.status;
+                }
             }
         },
-        createForm() {
-            this.statusNews = '';
-            this.dialogFormId = '';
-            this.dialogFormVisible = true;
-            this.operationType = 'create';
-            if (this.$refs.newsform) {
-                this.$refs.newsform.clearForm();
+
+        //分页
+        currentChange(pageNum) {
+            this.params.pageNum = pageNum;
+            this.getList(pageNum);
+        },
+        sizeChange(pageSize) {
+            this.params.pageSize = pageSize;
+            this.getList();
+        },
+        searchList() {
+            this.getList();
+        },
+        resetInput() {
+            this.params={
+               department: "",
+                submitter: "",
+                committed:"",
+                status:"",
+                trainingTime:[],
+                 startTime:"",
+                endTime:"",
+               
             }
-        },
-        editForm(id) {
-            this.dialogFormId = id;
-            this.dialogFormVisible = true;
-            this.operationType = 'edit';
-        },
-        deleteForm(id) {
-            const self = this;
-            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                const ids = [id];
-                axios
-                    .delete(
-                        '/api/v1/news_forms/deleteForm',
-                        { data: ids },
-                        {
-                            headers: {
-                                'Content-type': 'application/json'
-                            }
-                        }
-                    )
-                    .then(res => {
-                        this.$refs.newslist.getList();
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: '操作失败',
-                            type: 'error'
-                        });
-                    });
-            });
-        },
-        refreshData() {
-            this.$refs.newslist.getList();
-            this.$refs.newsdetail.getForm();
-        },
-        refreshDetail() {
-            if (this.$refs.newsdetail) {
-                this.$refs.newsdetail.getForm();
-                this.$refs.newsdetail.getActions();
-            }
-        },
-        saveForm() {
-            this.$refs.newsform.saveFormValidate();
-        },
-        saveStatus(status) {
-            this.dialogFormVisible = status;
-        },
-        submitForm() {
-            this.$refs.newsform.submitCheck();
         }
+    },
+    mounted() {
+        this.getList();
     }
 };
 </script>
 <style lang="scss" scoped>
+      #TrainFilter  .el-form-item--small.el-form-item{
+            width: 100%;
+        }
+         #TrainFilter {
+             .searchBtn {
+            padding-right: 10px;
+            .positionBtn{
+                text-align: right;
+            }
+        }}
 </style>
+
+
