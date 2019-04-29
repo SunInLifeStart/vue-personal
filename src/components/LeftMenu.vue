@@ -120,17 +120,17 @@ export default {
                             icon: 'el-icon-xinwenguanli1',
                             to: 'news'
                         },
-                        {
-                            id: "commonly_10",
-                            name: '信息发布',
-                            icon: 'el-icon-publish',
-                            to: 'publish'
-                        },
                          {
                             id: "commonly_11",
                             name: '督办',
                             icon: 'el-icon-inspect',
                             to: 'inspect'
+                        },
+                        {
+                            id: "commonly_10",
+                            name: '信息发布',
+                            icon: 'el-icon-publish',
+                            to:'publish'
                         }
                         
                     ]

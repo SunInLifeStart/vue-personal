@@ -28,7 +28,6 @@ export default {
                 goods: "物品领用",
                 asset: "资产采购",
                 news: "新闻发布",
-                publish:"信息发布",
                 discussion: "议题上会",
                 meetingSummary: "会议纪要",
                 meetingApply: "会议申请",
@@ -52,7 +51,8 @@ export default {
                 abnormal: "招标异常事项",
                 supplier: "供应商引入审批",
                 portalmananger:"门户管理后台",
-                inspect:"督办管理"
+                inspect:"督办管理",
+                publish:"信息发布",
             }
         };
     },
