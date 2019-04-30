@@ -14,8 +14,8 @@
                                 <el-form-item label="信息类型:" style="padding-right: 0px;">
                                     <el-select v-model="params.type" placeholder="请选择信息类型">
                                         <!--<el-option label="领导讲话" value="领导讲话"></el-option>-->
-                                        <el-option label="规章制度" value="规章制度"></el-option>
-                                        <el-option label="通知公告" value="通知公告"></el-option>
+                                        <el-option label="规章制度" value="1"></el-option>
+                                        <el-option label="通知公告" value="2"></el-option>
                                         <!--<el-option label="工作简报" value="工作简报"></el-option>-->
                                     </el-select>
                                 </el-form-item>
