@@ -27,7 +27,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="总办会编号：">
+                        <el-form-item label="会议编号：">
                             {{tableData.numbers}}
                         </el-form-item>
                     </el-col>

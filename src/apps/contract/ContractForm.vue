@@ -486,7 +486,7 @@ export default {
                     '/api/v1/contract_forms/contractNum/' +
                         year +
                         '?companyName=' +
-                        decodeURI(this.$store.getters.LoginData.companyName)
+                        this.$store.getters.LoginData.companyName
                 )
                 .then(res => {
                     self.formData.contractNum = res.data;

@@ -19,8 +19,8 @@
             </el-row>
             <el-row>
                 <el-col :span="12">
-                    <el-form-item label="总办会编号" prop="numbers">
-                        <el-input v-model="formData.numbers" placeholder="请输入总办会编号"></el-input>
+                    <el-form-item label="会议编号" prop="numbers">
+                        <el-input v-model="formData.numbers" placeholder="请输入会议编号"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
@@ -174,7 +174,7 @@ export default {
                     {
                         required: true, //是否必填
                         trigger: 'blur', //何事件触发
-                        message: '请输入总办会编号'
+                        message: '请输入会议编号'
                     }
                 ],
                 meetingType: [
