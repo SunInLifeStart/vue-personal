@@ -67,18 +67,18 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="反馈内容：" v-if="tableData.attachments && tableData.attachments.length > 0">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
-                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
-                            </div>
-                        </el-form-item>
-                    </el-col>
+                    <!--<el-col :span="24">-->
+                        <!--<el-form-item label="反馈内容：" v-if="tableData.attachments && tableData.attachments.length > 0">-->
+                            <!--<div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">-->
+                                <!--<FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>-->
+                            <!--</div>-->
+                        <!--</el-form-item>-->
+                    <!--</el-col>-->
                 </el-row>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
