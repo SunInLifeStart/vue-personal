@@ -25,7 +25,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="12">
-                        <el-form-item label="信息栏目：">{{tableData.columns}}</el-form-item>
+                        <el-form-item label="信息栏目：">{{tableData.columns == '1'? '规章制度':'通知公告'}}</el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="关键字：">{{tableData.keyword}}</el-form-item>

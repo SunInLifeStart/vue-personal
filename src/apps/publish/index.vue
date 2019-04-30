@@ -58,6 +58,7 @@
                     <el-table-column prop="title" label="标题">
                     </el-table-column>
                     <el-table-column prop="columns" label="类型">
+                        <template slot-scope="scope">{{scope.row.columns == '1'? '规章制度':'通知公告'}}</template>
                     </el-table-column>
                     <el-table-column prop="created" label="时间">
                     </el-table-column>
