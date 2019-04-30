@@ -135,6 +135,7 @@ export default {
                 keywords: '',
                 toSite: null,
                 toPortal: true,
+                generalManagement: false,
                 toWechat: null,
                 toWeibo: null,
                 attachments: []
@@ -195,6 +196,9 @@ export default {
                 if(await $self.juderCode() == "returnDialog"){
                     return false;
                 }
+            }
+            if (this.$store.getters.LoginData.oname === '综合管理部') {
+                $self.formData.generalManagement = true
             }
             let response = await $self.saveFormData(
                 "/api/v1/news_forms/save",

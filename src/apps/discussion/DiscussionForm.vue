@@ -101,7 +101,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="提请事项" prop="content">
+                        <el-form-item label="提请事项" prop="requestedItems">
                             <tr v-for="(item,index) in formData.requestedItems" :key="index" @contextmenu.prevent="deleteItem(item,index,'personal')">
                                 <td colspan="8" style="width: 20%;">
                                     <el-input v-model="item.content" placeholder="请输入提请事项"></el-input>
@@ -194,7 +194,11 @@ export default {
             rules: {
                 branchlineTo: [
                     { required: true, message: '请输入会议类型', trigger: 'blur' }
-                ]
+                ],
+                topicName: [
+                    { required: true, message: '请输入议题名称', trigger: 'blur' }
+                ],
+                requestedItems: []
             },
             uploadId: 0,
             person: [],
@@ -375,7 +379,11 @@ export default {
                     return false;
                 }
             }
-            this.formData.sendMessage = []
+            if (!$self.formData.requestedItems[0] || !$self.formData.requestedItems[0].content || $self.formData.requestedItems[0].content.length <= 0){
+                $self.msgTips("请填写提请事项", "error");
+                return false
+            }
+                this.formData.sendMessage = []
             $self.formData.attendingDepartment.forEach(item => {
                 if (item.people) {
                     item.department = item.department.join(',')
