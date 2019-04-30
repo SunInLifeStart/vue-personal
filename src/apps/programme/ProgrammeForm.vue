@@ -108,7 +108,7 @@
                                         <el-input v-model="item.enterpriseNature" placeholder="请输入企业性质"></el-input>
                                     </td>
                                     <td colspan="2">
-                                        <format-input separator="," :precision="2" v-model="item.registeredFund" placeholder="请输入注册资金(元)" :max="10000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
+                                        <format-input separator="," :precision="2" v-model="item.registeredFund" placeholder="请输入注册资金(元)" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
                                     </td>
                                     <td colspan="2">
                                         <el-input v-model="item.inspectConclusion" placeholder="请输入考察结论"></el-input>
