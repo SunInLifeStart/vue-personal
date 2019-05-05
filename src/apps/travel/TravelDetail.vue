@@ -14,11 +14,13 @@
             </el-row>
         </div>
         <div class="formContent">
-            <div v-show="this.tableData.status && this.tableData.status != '04'">
-                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
+            <div>
+                <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print">打印</el-button>
             </div>
             <br />
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
+                <h4 style="text-align: center;">出差审批单</h4>
                 <el-row style="margin-top: 25px;">
                     <el-col :span="8">
                         <el-form-item label="流水单号：">{{tableData.number}}
@@ -289,6 +291,11 @@ export default {
     //     }
     // },
     methods: {
+        async print() {
+            // document.getElementById('approval').style.display = 'table-row';
+            this.$print(this.$refs.formupdate.$el);
+            //  document.getElementById('approval').style.display = 'none';
+        },
         ViewDetail() {
             if (
                 this.tableData.submissionId &&

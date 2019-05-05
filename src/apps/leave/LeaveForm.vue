@@ -63,7 +63,9 @@
                                 </el-option>
                             </el-select>
                         </td>
-                        <td colspan="1">拟休时间</td>
+                        <td colspan="1">
+                            <span style="color:red;">*</span>
+                            拟休时间</td>
                         <td colspan="2">
                             <template>
                                 <el-date-picker v-model="formData.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="开始时间">
@@ -227,11 +229,19 @@ export default {
             return formData;
         },
         saveFormValidate(type) {
-            this.$refs['formupdate'].validate(valid => {
-                if (valid) {
-                    this.saveForm(type);
-                }
-            });
+            const $self = this;
+            // this.$refs['formupdate'].validate(valid => {
+            // if (valid) {
+            if (this.formData.startTime == '' || this.formData.endTime == '') {
+                $self.msgTips('请输入请假日期', 'warning');
+            } else if (!this.formData.day || this.formData.day == '') {
+                $self.msgTips('请输入休假时长', 'warning');
+            } else {
+                this.saveForm(type);
+            }
+
+            // }
+            // });
         },
         // 提交保存
         async saveForm(params) {
