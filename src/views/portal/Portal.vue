@@ -115,13 +115,16 @@
         <el-row class="articles" :gutter="15">
           <el-col :span="8">
              <div class="article article2">
-                  <h3>督办上墙<router-link :to="{path:'/portal/list/duban/1'}"><el-button size="mini">更多</el-button></router-link></h3>
+                  <h3>督办上墙
+                      <router-link :to="{path:'/portal/list/duban/1'}">
+                      <!--<el-button size="mini">更多</el-button>-->
+                        </router-link></h3>
                   <ul>
                     <li v-for="(item,index) in duban" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px">
                        <img src="@/assets/arrow.png"  v-if="index == 0" style="top:15px;"> 
                        <img src="@/assets/arrow2.png"  v-if="index != 0" style="top:15px;"> 
                        <router-link :to="'/portal/list/duban/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
-                      <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
+                      <span style="float:right;margin-right:10px;">{{item.created | formDate}}</span>
                     </li>
                   </ul>
               </div>
@@ -202,6 +205,7 @@ import TopBar from "@/components/TopBar.vue";
 import countTo from "vue-count-to";
 import axios from "axios";
 import moment from "moment";
+import cookies from "js-cookie";
 export default {
     name: "apps",
     props: ["appname"],
@@ -223,6 +227,14 @@ export default {
             newDocs:[],
             yq:[],
             newsListRight:[],
+            inspectParams: {
+                page: 1,
+                pageSize: 10000,
+                orderBy: "created",
+                desc: true,
+                options: [{"field":"status","filter":"LIKE","value":"04"}],
+                uid: parseInt(cookies.get("uid"))
+            },
             duban:[]
         };
     },
@@ -245,6 +257,13 @@ export default {
                  this.common.preview(item);
             }
         
+        },
+        getInspect() {
+            axios
+                .post("/api/v1/inspect_forms/query",
+                     this.inspectParams).then((response) => {
+                this.duban = response.data.forms;
+            })
         },
         getMsgList() {
             let self = this;
@@ -358,6 +377,7 @@ export default {
         document.title = "集团门户-中关村发展";
         this.getMsgList();
         this.getNewDocs();
+        this.getInspect();
     }
 };
 </script>

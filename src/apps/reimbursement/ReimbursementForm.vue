@@ -176,11 +176,11 @@
                             预估本币金额
                         </td>
                         <td>
-                            <span style="color:red;">*</span>
+                            <!--<span style="color:red;">*</span>-->
                             不含税价格
                         </td>
                         <td>
-                            <span style="color:red;">*</span>
+                            <!--<span style="color:red;">*</span>-->
                             税金
                         </td>
                     </tr>
