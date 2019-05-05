@@ -200,6 +200,13 @@ export default {
             if (this.$store.getters.LoginData.oname === '综合管理部') {
                 $self.formData.generalManagement = true
             }
+            $self.formData.pushAddr = []
+            if ($self.formData.toSite) {
+                $self.formData.pushAddr.push('site')
+            }
+            if ($self.formData.toPortal) {
+                $self.formData.pushAddr.push('portal')
+            }
             let response = await $self.saveFormData(
                 "/api/v1/news_forms/save",
                 $self.formData
