@@ -72,7 +72,7 @@
         <el-table :data="tableData" style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
           <el-table-column prop="title" label="标题" min-width="150px" align="center"></el-table-column>
           <el-table-column prop="definer" label="立项人" min-width="150px" align="center"></el-table-column>
-          <el-table-column prop="inspector" label="被督办部门负责人" min-width="150px" align="center"></el-table-column>
+          <!--<el-table-column prop="inspector" label="被督办部门负责人" min-width="150px" align="center"></el-table-column>-->
           <el-table-column prop="created" label="创建时间" min-width="150px" align="center"></el-table-column>
           <el-table-column
             prop="deadline"
