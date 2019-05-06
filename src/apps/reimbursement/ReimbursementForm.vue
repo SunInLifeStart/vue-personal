@@ -980,11 +980,13 @@ export default {
                         data.estSum = this.common.toDecimal2(0);
                     }
                     if (shui && shui == 'tax') {
-                        item.noTax =
-                            parseFloat(item.estSum) - parseFloat(item.tax);
+                        item.noTax = this.common.toDecimal2(
+                            parseFloat(item.estSum) - parseFloat(item.tax)
+                        );
                     } else if (shui && shui == 'notax') {
-                        item.tax =
-                            parseFloat(item.estSum) - parseFloat(item.noTax);
+                        item.tax = this.common.toDecimal2(
+                            parseFloat(item.estSum) - parseFloat(item.noTax)
+                        );
                     } else {
                         item.tax = this.common.toDecimal2(0);
                         item.noTax = this.common.toDecimal2(0);
