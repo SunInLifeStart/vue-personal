@@ -798,7 +798,6 @@
                 this.$refs['formData'].validate(valid => {
                     if (valid) {
                          this.saveForm(type);
-                       
                     }
                 });
             },
