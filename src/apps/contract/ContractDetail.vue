@@ -541,6 +541,14 @@ export default {
         margin: 15px 0px;
     }
 }
+.el-radio__input.is-disabled + span.el-radio__label {
+    color: #082b4e;
+    cursor: not-allowed;
+}
+.el-radio__input.is-disabled.is-checked .el-radio__inner {
+    background-color: #4a6286;
+    border-color: #e4e7ed;
+}
 .fullScreen {
     position: fixed;
     top: 0px;
