@@ -68,7 +68,7 @@
                             提单时间
                         </td>
                         <td colspan="2">
-                            <el-date-picker v-model="formData.applicantTime" type="datetime" placeholder="选择日期" style="width:100%">
+                            <el-date-picker v-model="formData.applicantTime" type="datetime" value-format="yyyy-MM-dd HH:mm:ss" placeholder="选择日期" style="width:100%">
                             </el-date-picker>
                         </td>
                     </tr>
@@ -1169,7 +1169,7 @@ export default {
                 organ: cookies.get('oname'),
                 costUnit: cookies.get('oname'),
                 applicantName: cookies.get('uname'),
-                applicantTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                applicantTime: moment().format('YYYY-MM-DD HH:mm:ss'),
                 submissionName: '',
                 submissionId: '',
                 details: [
