@@ -93,14 +93,14 @@
                     <el-col :span="8">
                         <el-form-item label="预计金额(元)" prop="estimatedAmount">
                             <!--<el-input v-model="formData.estimatedAmount"></el-input>-->
-                            <format-input separator="," :precision="2" v-model="formData.estimatedAmount" :max="10000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
+                            <format-input separator="," :precision="2" v-model="formData.estimatedAmount" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="招标文件(评审版)附件" prop="biddingDocumentAttachment">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessDocument" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadDocument" action="/api/v1/files/upload" :on-success="handleSuccessDocument" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.biddingDocumentAttachment" :key="item.id" style="float:left">
@@ -112,7 +112,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="经审批的采购方案附件" prop="procurementSchemeAttachment">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessScheme" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadScheme" action="/api/v1/files/upload" :on-success="handleSuccessScheme" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.procurementSchemeAttachment" :key="item.id" style="float:left">
@@ -124,7 +124,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="其他附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessOther" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOther" action="/api/v1/files/upload" :on-success="handleSuccessOther" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.otherAttachment" :key="item.id" style="float:left">
@@ -384,7 +384,7 @@
                         self.formData.biddingDocumentAttachment.push(item);
                     });
                 }
-                this.$refs.upload.clearFiles();
+                this.$refs.uploadDocument.clearFiles();
             },
             handleSuccessScheme(response, file) {
                 const self = this;
@@ -394,7 +394,7 @@
                         self.formData.procurementSchemeAttachment.push(item);
                     });
                 }
-                this.$refs.upload.clearFiles();
+                this.$refs.uploadScheme.clearFiles();
             },
             handleSuccessOther(response, file) {
                 const self = this;
@@ -404,7 +404,7 @@
                         self.formData.otherAttachment.push(item);
                     });
                 }
-                this.$refs.upload.clearFiles();
+                this.$refs.uploadOther.clearFiles();
             },
             submitUpload() {
                 this.$refs.upload.submit();

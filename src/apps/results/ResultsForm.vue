@@ -168,6 +168,18 @@
             </el-row>
             <el-row>
                 <el-col :span="24">
+                    <el-form-item label="招标采购管理委员会会议纪要附件" prop="attachmentsMan">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="uploadMan" action="/api/v1/files/upload" :on-success="handleSuccessMan" accept="" :auto-upload="true" :with-credentials="true">
+                            <i class="el-icon-plus"></i>
+                        </el-upload>
+                        <div v-for="item in formData.attachmentsMan" :key="item.id" style="float:left">
+                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'attachmentsMan')"></FilesOperate>
+                        </div>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+            <el-row>
+                <el-col :span="24">
                     <el-form-item label="其他">
                         <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessOth" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
@@ -260,6 +272,9 @@ export default {
                 signDemand: [
                     { required: true, message: '请输入签章需求', trigger: 'blur' }
                 ],
+                attachmentsMan: [
+                    { type: 'array', required: true, message: '请输入招标采购管理委员会会议纪要附件', trigger: 'blur' }
+                ],
                 proType: [
                     { required: true, message: '请输入采购业务类别', trigger: 'blur' }
                 ]
@@ -349,6 +364,15 @@ export default {
         changePeople() {
             this.$forceUpdate()
         },
+        handleSuccessMan(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.formData.attachmentsMan.push(item);
+                });
+            }
+            this.$refs.uploadMan.clearFiles();
+        },
         getId(id, type) {
             let self = this;
             self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
@@ -385,6 +409,7 @@ export default {
                 signDemandOth: '',
                 attachmentsAnno: [],
                 attachmentsRep: [],
+                attachmentsMan: [],
                 attachmentsOth: []
             }
             return formData
