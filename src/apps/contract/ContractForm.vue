@@ -355,7 +355,7 @@
                                 <el-col :span="14">
                                     <div style="float:left">
                                         谈判小组成员（不同部门2人或以上）签字：
-                                        <el-select v-model="formData.tpxzId" multiple filterable placeholder="请选择" :disabled="this.showSubmit == 'false'">
+                                        <el-select v-model="formData.tpxzId" value-key="id" multiple filterable placeholder="请选择" :disabled="this.showSubmit == 'false'">
                                             <el-option v-for="item in options" :key="item.id" :label="item.name" :value="item.name">
                                             </el-option>
                                         </el-select>
