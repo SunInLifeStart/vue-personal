@@ -32,7 +32,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="申请时间">
-                            <el-date-picker v-model="formData.applyTime" type="datetime" placeholder="选择日期" style="width:100%">
+                            <el-date-picker v-model="formData.applyTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期" style="width:100%">
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
@@ -347,7 +347,7 @@ export default {
                 applyUser: cookies.get('uname'),
                 no: '',
                 dept: cookies.get('oname'),
-                applyTime: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                applyTime: moment().format('YYYY-MM-DD HH:mm:ss'),
                 supplyType: '',
                 reason: '',
                 supplyCode: '',
