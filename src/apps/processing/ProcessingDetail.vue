@@ -517,7 +517,7 @@
             },
              salaryEditForm(){
                 let $self = this;
-                //  this.isFromDetailsEdit = true
+                 this.isFromDetailsEdit = true
                 $self.$refs.processingForm.setDataFromParentone(this.tableData,true);
             }
         }

@@ -57,7 +57,9 @@
                 </el-table-column>
                 <el-table-column prop="nativePlace" label="电子邮箱">
                 </el-table-column>
-                <el-table-column prop="maritalStatus" label="婚姻状况">
+                <!-- prop="maritalStatus" -->
+                <el-table-column  label="婚姻状况">
+                    <template slot-scope="scope">{{scope.row.maritalStatus | filtermaritalStatus}}</template>
                 </el-table-column>
                 <el-table-column prop="phone" label="手机/家庭电话">
                 </el-table-column>
@@ -156,7 +158,15 @@
                     "04" :"已完成"
                 };
                 return xmlJson[data];
-            }
+            },
+            filtermaritalStatus: function(data) {
+                let xmlJson = {
+                     "0":"未婚",
+                    "1":"已婚",
+                    "2" :"离异",
+                };
+                return xmlJson[data];
+            },
         },
         methods: {
             resetStatus(data){
