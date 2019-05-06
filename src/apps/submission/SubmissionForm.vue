@@ -210,6 +210,8 @@ export default {
             $self.formData.text = JSON.stringify($self.formData.text);
             if ($self.formData.draftUnit === '综合管理部') {
                 $self.formData.generalManagement = true
+            } else {
+                $self.formData.generalManagement = false
             }
             let response = await $self.saveFormData(
                 "/api/v1/submission_forms/save",
@@ -305,7 +307,6 @@ export default {
                 telephone: '',
                 generalManagement: false,
                 commonUser: '',
-                generalManagement: false,
                 remarks: '',
                 content: '',
                 attachments: [],
