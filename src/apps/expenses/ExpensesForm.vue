@@ -71,7 +71,7 @@
                             申请时间
                         </td>
                         <td colspan="2">
-                            <el-date-picker v-model="formData.created" type="datetime" placeholder="选择日期" style="width:100%">
+                            <el-date-picker v-model="formData.created" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="选择日期" style="width:100%">
                             </el-date-picker>
                         </td>
                     </tr>
@@ -415,7 +415,7 @@ export default {
                 number: '',
                 creatorName: cookies.get('uname'),
                 organName: cookies.get('oname'),
-                created: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
+                created: moment().format('YYYY-MM-DD HH:mm:ss'),
                 hospitalitySector: '',
                 treatTime: '',
                 customerUnit: '',
