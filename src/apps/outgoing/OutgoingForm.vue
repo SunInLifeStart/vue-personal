@@ -421,7 +421,7 @@ export default {
                 $self.formData.mainTo = mainTo.join(",");
             }
 
-            if ($self.formData.copyto_1.length > 0) {
+            if ($self.formData.copyto_1 && $self.formData.copyto_1.length > 0) {
                 let copyto = $self.formData.copyto_1.slice(0);
                 $self.formData.copyto = copyto.join(",");
             }
