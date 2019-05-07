@@ -160,6 +160,7 @@
                             <tr v-for="(item,index) in tableData.requestedItems" :key="index">
                                 <td colspan="8" style="width: 20%;">
                                     {{item.content}}
+                                    <!--<el-input v-model="item.content" disabled></el-input>-->
                                 </td>
                             </tr>
                         </el-form-item>
