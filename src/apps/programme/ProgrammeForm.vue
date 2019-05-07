@@ -238,7 +238,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="招标采购管理委员会会议纪要附件" prop="attachmentsMan">
+                        <el-form-item label="招标采购管理委员会会议纪要附件">
                             <el-upload name="files" class="upload-demo uploadBtn" ref="uploadMan" action="/api/v1/files/upload" :on-success="handleSuccessMan" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
@@ -351,9 +351,6 @@
                     ],
                     attachmentsIns: [
                         { type: 'array', required: true, message: '请输入考察报告附件', trigger: 'blur' }
-                    ],
-                    attachmentsMan: [
-                        { type: 'array', required: true, message: '请输入招标采购管理委员会会议纪要附件', trigger: 'blur' }
                     ],
                     provider: [
                         { type: 'array', required: true, message: '请输入供应商入围情况', trigger: 'blur' }
