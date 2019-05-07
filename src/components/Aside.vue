@@ -96,7 +96,7 @@ export default {
                 "/api/v1/push/"+ this.$store.getters.LoginData.uid +"/list?type=reading&business=&page=1&pageSize=10000"
             )
             .then(res => {
-                 this.readingListLength = res.data.content.length == 0 ? "" :  res.data.content.length;
+                 this.readingListLength = res.data.count || 0;
             });
     }
 };

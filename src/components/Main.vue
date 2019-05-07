@@ -43,7 +43,7 @@
                 <div class="content">
                   <div
                     class="from"
-                    :class="{todo: type == 'todo' ? true : false,readed:item.readed}"
+                    :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}"
                   >
                     <div
                       class="from-title"
@@ -55,7 +55,7 @@
                   </div>
                   <div
                     class="title"
-                    :class="{todo: type == 'todo' ? true : false,readed:item.readed}"
+                    :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}"
                   >{{item.body.title}}</div>
                   <div class="describe" style="display:none;">{{item.body.content}}</div>
                 </div>
@@ -141,7 +141,7 @@ export default {
       this.formId = item.body.businessKey;
       this.messageId = item.id;
 
-      if (this.type == "todo" && !item.readed) {
+      if ((this.type == "todo" || this.type == "reading") && !item.readed) {
         axios
           .get(
             `/api/v1/push/${this.LoginData.uid}/messages/${

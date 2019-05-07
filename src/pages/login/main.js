@@ -7,6 +7,8 @@ import '@/plugins/element.js'
 import '@/assets/normalize.css'
 import '@/assets/animate.css'
 import '@/assets/font/iconfont.css'
+import axios from '@/plugins/axios.js'
+Vue.prototype.$axios = axios;
 
 new Vue({
   store,
