@@ -371,12 +371,14 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="8" style="font-weight:bold;">附件</td>
+                        <td colspan="8" style="font-weight:bold;">
+                            附件</td>
                     </tr>
                     <tr>
                         <td>
                             <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                                <span style="color:#06940c"> 附件上传
+                                <span style="color:#06940c">
+                                    <span style="color:red;">*</span> 附件上传
                                     <i class="el-icon-plus"></i>
                                 </span>
                             </el-upload>
@@ -1332,7 +1334,8 @@ export default {
                     this.formData.cardNo != '' &&
                     this.formData.expenseDep != '' &&
                     this.formData.clearing != '' &&
-                    this.checkBaoDetail()
+                    this.checkBaoDetail() &&
+                    this.formData.attachments.length > 0
                 ) {
                     if (this.formData.share) {
                         if (this.checkFenDetail()) {
