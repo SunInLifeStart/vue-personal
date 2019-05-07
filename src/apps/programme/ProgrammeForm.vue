@@ -215,7 +215,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="征集公告附件" prop="attachmentsAnno">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsAnno" :key="item.id" style="float:left">
@@ -227,7 +227,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="考察报告附件" prop="attachmentsIns">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsIns" :key="item.id" style="float:left">
@@ -251,7 +251,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="其他附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsOth" :key="item.id" style="float:left">

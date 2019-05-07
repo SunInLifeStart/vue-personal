@@ -122,7 +122,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="供应商入库申请表附件" prop="attachmentsSto">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessSto" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="uploadSto" action="/api/v1/files/upload" :on-success="handleSuccessSto" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachmentsSto" :key="item.id" style="float:left">
@@ -134,7 +134,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="考察报告附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessIns" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachmentsIns" :key="item.id" style="float:left">
@@ -323,7 +323,7 @@ export default {
                     self.formData.attachmentsSto.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            this.$refs.uploadSto.clearFiles();
         },
         handleSuccessIns(response, file) {
             const self = this;
@@ -332,7 +332,7 @@ export default {
                     self.formData.attachmentsIns.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            this.$refs.uploadIns.clearFiles();
         },
         submitUpload() {
             this.$refs.upload.submit();
