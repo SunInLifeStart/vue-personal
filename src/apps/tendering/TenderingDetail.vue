@@ -34,7 +34,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购业务类别：">{{tableData.procurementType}}
+                        <el-form-item label="采购业务类别：">{{procurementOption[tableData.procurementType]}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -153,6 +153,11 @@
                     procurementScheme: {}
                 },
                 actions: [],
+                procurementOption: {
+                    '1': '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
+                    '3': '非开发建设类采购(招标方式：估算金额>=30万)',
+                    '5': '行政非业务类采购(招标方式：估算金额>=30万)'
+                },
                 actionsDialogArr: [],
                 dialogVisibleCrumb:false,
                 users: [],

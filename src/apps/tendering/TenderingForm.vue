@@ -59,8 +59,8 @@
                                 <div v-for="item in radioOption">
                                     <el-radio
                                             :key="item.value"
-                                            :value="item.value"
-                                            :label="item.label">
+                                            :label="item.value">
+                                        {{item.label}}
                                     </el-radio>
                                 </div>
                             </el-radio-group>
@@ -284,7 +284,7 @@
                     tenderee: '',
                     biddingType: '公开招标(有形市场)',
                     estimatedAmount: '',
-                    procurementType: '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
+                    procurementType: '1',
                     purchaseType: '工程类',
                     bidingSketch: '',
                     signatureRequirements: '公司公章',
