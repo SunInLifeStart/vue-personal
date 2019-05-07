@@ -113,13 +113,13 @@
                                 </el-table-column>
                                  <el-table-column prop="" label="附件">
                                     <template slot-scope="scope">
-                                        <el-upload  name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" 
+                                        <el-upload  name="files" class="upload-demo uploadBtn" style="width:70px;height:110px" ref="upload" action="/api/v1/files/upload" 
                                         :on-success="handleSuccess"
                                         :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
                                         <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
-                                           <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachmentsone(scope.$index)"></FilesOperate>
+                                           <FilesOperate  :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachmentsone(scope.$index)"></FilesOperate>
                                         </div>
                                     </template>
                                      
