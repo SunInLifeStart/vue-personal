@@ -92,19 +92,18 @@
                                         {{scope.row.postcode}}
                                     </template>
                                 </el-table-column>
+                                <el-table-column prop="buyTime" label="附件" >
+                                    <template slot-scope="scope">
+                                        <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
+                                           <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                                        </div>
+                                    </template>
+                                </el-table-column>
                             </el-table>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="附件：">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
-                            </div>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
+               
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>

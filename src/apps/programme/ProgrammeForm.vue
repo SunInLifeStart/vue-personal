@@ -73,12 +73,12 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="采购预估金额(元)" prop="estimatedAmount">
-                            <format-input separator="," :precision="2" v-model="formData.estimatedAmount" :max="10000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
+                            <format-input separator="," :precision="2" v-model="formData.estimatedAmount" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="目标成本/预算金融(元)" prop="budgetAmount">
-                            <format-input separator="," :precision="2" v-model="formData.budgetAmount" :max="10000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
+                            <format-input separator="," :precision="2" v-model="formData.budgetAmount" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -215,7 +215,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="征集公告附件" prop="attachmentsAnno">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsAnno" :key="item.id" style="float:left">
@@ -227,7 +227,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="考察报告附件" prop="attachmentsIns">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsIns" :key="item.id" style="float:left">
@@ -238,8 +238,20 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
+                        <el-form-item label="招标采购管理委员会会议纪要附件" prop="attachmentsMan">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadMan" action="/api/v1/files/upload" :on-success="handleSuccessMan" accept="" :auto-upload="true" :with-credentials="true">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                            <div v-for="item in formData.attachmentsMan" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'attachmentsMan')"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
                         <el-form-item label="其他附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsOth" :key="item.id" style="float:left">
@@ -339,6 +351,9 @@
                     ],
                     attachmentsIns: [
                         { type: 'array', required: true, message: '请输入考察报告附件', trigger: 'blur' }
+                    ],
+                    attachmentsMan: [
+                        { type: 'array', required: true, message: '请输入招标采购管理委员会会议纪要附件', trigger: 'blur' }
                     ],
                     provider: [
                         { type: 'array', required: true, message: '请输入供应商入围情况', trigger: 'blur' }
@@ -462,6 +477,7 @@
                     otherCase: '',
                     attachmentsAnno: [],
                     attachmentsIns: [],
+                    attachmentsMan: [],
                     attachmentsOth: []
                 }
                 return formData
@@ -564,6 +580,15 @@
                     });
                 }
                 this.$refs.uploadAnno.clearFiles();
+            },
+            handleSuccessMan(response, file) {
+                const self = this;
+                if (response.length > 0) {
+                    response.forEach(function(item) {
+                        self.formData.attachmentsMan.push(item);
+                    });
+                }
+                this.$refs.uploadMan.clearFiles();
             },
             handleSuccessIns(response, file) {
                 const self = this;

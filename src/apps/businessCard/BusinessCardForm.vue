@@ -111,27 +111,27 @@
                                         <el-input v-model="scope.row.postcode"></el-input>
                                     </template>
                                 </el-table-column>
+                                 <el-table-column prop="" label="附件">
+                                    <template slot-scope="scope">
+                                        <el-upload  name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" 
+                                        :on-success="handleSuccess"
+                                        :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                                            <i class="el-icon-plus"></i>
+                                        </el-upload>
+                                        <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
+                                           <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachmentsone(scope.$index)"></FilesOperate>
+                                        </div>
+                                    </template>
+                                     
+                                </el-table-column>
                             </el-table>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <!-- 总印刷数量（标签展示出来）、是否属于年度预算内、资金计划所属月份 -->
-                 <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="总印刷数量" >
-                            <el-input v-model="formData.totlenumbers" :disabled="true"  placeholder="印刷数量"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
-                                <i class="el-icon-plus"></i>
-                            </el-upload>
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,download:true,del:true}" @getId="getId"></FilesOperate>
-                            </div>
+                        <el-form-item label="总印刷数量" >
+                            <el-input v-model="formData.totlenumbers" :disabled="true"  placeholder="印刷数量"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -196,6 +196,7 @@ export default {
             purposeDialog: false,
             resonindex: -1,
             inputreason: '',
+            uploadImageType:'',
             formData: this.resetForm(),
             payeePeople: [],
             payeeOrgan: [],
@@ -299,6 +300,12 @@ export default {
         this.getUsers();
     },
     methods: {
+         deleteAttachmentsone(index) {
+           let $self = this;
+            $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+                 $self.formData.cardPrinting[index].attachments.splice(0, 1);
+            });
+        },
         // 总数量
         totleCurrency(totle){
             // debugger
@@ -355,6 +362,7 @@ export default {
                         company: '',//公司
                         mailingAddress:'',//通讯地址
                         postcode:'',//邮编
+                        attachments: [],
                     }
                 ],
                 totlenumbers:"",// 流水号
@@ -363,7 +371,7 @@ export default {
                 status:'',
                 umonth:'',//月份
                 utype:'1',
-                attachments: [],
+                
                 creatorName: this.$store.getters.LoginData.uname || '', //申请人
                 organName: this.$store.getters.LoginData.oname || '',
                 creatorId: this.$store.getters.LoginData.uid || '',
@@ -456,12 +464,16 @@ export default {
             }
         },
         handleSuccess(response, file) {
-            const self = this;
+           
+             const self = this;
+            const aaa=self.uploadImageType
+            const bbb=self.formData.cardPrinting[aaa]
             if (response.length > 0) {
-                response.forEach(function (item) {
-                    self.formData.attachments.push(item);
+                response.forEach(function (item,index) {
+                   self.formData.cardPrinting[aaa].attachments.push(item);
                 });
             }
+            this.$refs.upload.clearFiles();
             // this.$refs.upload.clearBusinessCard();
         },
         submitUpload() {
@@ -513,6 +525,7 @@ export default {
                 mailingAddress:'',
                 company: '',
                 postcode:'',
+                attachments: [],
                 count: ++this.counts
             });
             this.formData.count = this.formData.count + 1;

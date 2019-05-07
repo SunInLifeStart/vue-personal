@@ -140,6 +140,15 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
+                        <el-form-item label="招标采购管理委员会会议纪要附件：" v-if="tableData.attachmentsMan && tableData.attachmentsMan.length > 0">
+                            <div v-for="item in tableData.attachmentsMan" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
                         <el-form-item label="其他附件：" v-if="tableData.attachmentsOth && tableData.attachmentsOth.length > 0">
                             <div v-for="item in tableData.attachmentsOth" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
