@@ -241,7 +241,7 @@ export default {
         },
         searchPersonOptions(array, value) {
             array.forEach(item => {
-                if (item.id === value) {
+                if (item.id === value && item.type) {
                     this.person = item.children;
                 }
                 if (item.children && item.children.length > 0) {
