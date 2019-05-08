@@ -126,7 +126,7 @@
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachmentsSto" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'attachmentsSto')"></FilesOperate>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -138,7 +138,7 @@
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachmentsIns" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId(item.id, 'attachmentsIns')"></FilesOperate>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -337,21 +337,21 @@ export default {
         submitUpload() {
             this.$refs.upload.submit();
         },
-        getId(id) {
+        getId(id, type) {
             let self = this;
             self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                self.formData.attachments.forEach(function(value, index) {
+                self.formData[type].forEach(function(value, index) {
                     if (value.id == id) {
                         axios
                             .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
                             .then(res => {
-                                self.formData.attachments.splice(index, 1);
+                                self.formData[type].splice(index, 1);
                             });
-                        self.formData.attachments.splice(index, 1);
+                        self.formData[type].splice(index, 1);
                     }
                 });
             });
-        }
+        },
     }
 };
 </script>
