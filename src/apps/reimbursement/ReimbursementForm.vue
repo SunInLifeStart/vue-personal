@@ -385,8 +385,8 @@
 
                         </td>
                         <td colspan="7" style="padding: 10px;">
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/expense_forms/deleteAtt/' + item.id,'get')"></FilesOperate>
                             </div>
                         </td>
                     </tr>
