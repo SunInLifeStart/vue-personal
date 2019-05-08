@@ -7,7 +7,7 @@ export const publicMethods = {
                 return false;
             }     
         },
-
+        //提交时判断以什么公司名义发起
         async juderCode(){
                 if(this.$store.getters.LoginData.currentRoles.length > 1){ 
                     if(this.branchCode){
@@ -25,7 +25,7 @@ export const publicMethods = {
                        await this.saveFormData();
                 }
         },
-        
+        //获取表单详情
         async getDetails() {
             try {
                 return await this.$axios.get(this.url);
@@ -33,6 +33,8 @@ export const publicMethods = {
                 return false;
             }
         },
+
+        //获取列表
         async getQueryList() {
             try {
                 return await this.$axios.post(this.url, this.params);
@@ -47,6 +49,7 @@ export const publicMethods = {
                 return false;
             }
         },
+        //刷新列表
         async emitMessage() {
             if (this.createForm_status) {
                 this.$emit("reloadList", "reload"); //如果是 "新建" 表单刷新 "列表"
@@ -62,6 +65,8 @@ export const publicMethods = {
                 return false;
             }
         },
+
+        //启动工作流
         async startSignal(actions, status) {
             let $self = this;
             let nowActins = actions ? actions : $self.currentAction;
@@ -85,6 +90,8 @@ export const publicMethods = {
                 }/${this.$store.getters.LoginData.uid}/signal`;
             return await this.$axios.put(url, nowActins);
         },
+
+        //保存的时候启动工作流（一次）
         async startSignalForSave(type) {
             let actions = await this.getActions();
             if (actions.data.types.length > 0) {
@@ -98,6 +105,7 @@ export const publicMethods = {
                 await this.emitMessage();
             }
         },
+        //提交的时候启动工作流（两次）
         async startSignalForStart(type) {
             await this.startSignalForSave("forStart");
             let actions2 = await this.getActions();
@@ -120,6 +128,8 @@ export const publicMethods = {
             //return complete2.data;
 
         },
+
+        //判断表单中依赖的required
         hasRequired(data) {
             let $self = this;
             let detailsData = $self.tableData ? $self.tableData : $self.formData;
@@ -242,6 +252,8 @@ export const publicMethods = {
                 }
             }
 
+
+            //特殊的审批动作
             if ($self.currentAction.action == 'PULL') {
                 $self.currentAction["comment"] = $self.currentAction.name;
                 await $self.startSignal();
@@ -270,8 +282,6 @@ export const publicMethods = {
                 if ($self.formName == "issuesReported") {
                     url = "/api/v1/issuesReported/print/" + $self.tableData.id
                 }
-
-
                 $self.$axios
                     .get(url)
                     .then(res => {
@@ -288,6 +298,8 @@ export const publicMethods = {
                 $self.dialogVisible = true;
             }
         },
+
+
         //提交表单
         async submitForm() {
             let $self = this;
@@ -346,21 +358,27 @@ export const publicMethods = {
                 }/${this.$store.getters.LoginData.uid}/crumb`;
             return await this.$axios.get(url);
         },
+
+        //获取动作
         async getActions() {
             let url = `/workflow/${this.appFlowName}/${
                 this.formId
                 }/${this.$store.getters.LoginData.uid}/actions`;
             return await this.$axios.get(url);
         },
+
+        //获取评论
         async getComments() {
             let url = `/workflow/${this.appFlowName}/${
                 this.formId
                 }/getComments`;
             return await this.$axios.get(url);
         },
+        //获取人员信息
         async getUsers(url) {
             return await this.$axios.get(url);
         },
+        //删除该行
         deleteCurrentLine(id, params) {
             let $self = this;
             $self.$confirm(params ? "是否撤销?" : "是否删除?", "提示", { type: "warning" }).then(() => {
@@ -375,6 +393,7 @@ export const publicMethods = {
                 });
             });
         },
+        //获取流程图
         async getFlowNode() {
             let $self = this;
             let url = `/workflow/${$self.appFlowName}/processContent`;
@@ -384,12 +403,16 @@ export const publicMethods = {
             $self.flowNodeUrl = `/bpmn-viewer/view.html?url=${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0].taskDefinitionKey}`;
             $self.dialogVisibleCrumb = true;
         },
+
+        //提示消息
         msgTips(message, type) {
             this.$message({
                 message: message,
                 type: type
             });
         },
+
+        //删除附件
         deleteAttachments(index,attachments,url,type) {
             let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
