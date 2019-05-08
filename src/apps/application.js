@@ -393,17 +393,15 @@ export const publicMethods = {
         deleteAttachments(index,attachments,url) {
             let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
-                console.log(index);
-                // $self.formData.attachments.forEach(function(value, index) {
-                //     $self.formData.attachments.splice(index, 1);
-                //     // if (value.id == id) {
-                //     //     axios
-                //     //         .get("/api/v1/incoming_forms/deleteAtt/" + id)
-                //     //         .then(res => {
-
-                //     //         });
-                //     // }
-                // });
+                if(url){
+                    $self.$axios
+                    .get(url)
+                    .then(res => {
+                        attachments.splice(index, 1);    
+                    });
+                }else{
+                    attachments.splice(index, 1);
+                }
             });
         },
         deleteAttachmentsone(index) {
