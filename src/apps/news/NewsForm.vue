@@ -43,7 +43,7 @@
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}"></FilesOperate>
+                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
                         </div>
                         <div style="color:#bb4747;text-align:left;clear:both;">*附件中的第一张为焦点图</div>
                     </el-form-item>
@@ -187,6 +187,16 @@ export default {
                 if (valid) {
                     this.saveForm(type);
                 }
+            });
+        },
+        getId(id) {
+            let self = this;
+            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                self.formData.attachments.forEach(function(value, index) {
+                    if (value.id == id) {
+                        self.formData.attachments.splice(index, 1);
+                    }
+                });
             });
         },
         // 提交保存

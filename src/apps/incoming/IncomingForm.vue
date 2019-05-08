@@ -61,7 +61,7 @@
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
                         </div>
                     </el-form-item>
                 </el-col>
@@ -148,6 +148,16 @@ export default {
         FilesOperate
     },
     methods: {
+        getId(id) {
+            let self = this;
+            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                self.formData.attachments.forEach(function(value, index) {
+                    if (value.id == id) {
+                        self.formData.attachments.splice(index, 1);
+                    }
+                });
+            });
+        },
         saveFormValidate(data) {
             this.$refs['formupdate'].validate(valid => {
                 if (valid) {
