@@ -91,8 +91,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,null,'get')"></FilesOperate>
                             </div>
                         </td>
                     </tr>
