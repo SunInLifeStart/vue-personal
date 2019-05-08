@@ -6,7 +6,7 @@
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
-                    <span v-for="action in actions" :key="action.type" class="btnList" @click="doAction(action)">
+                    <span v-for="action in actions" :key="action.index" class="btnList" @click="doAction(action)">
                         {{action.name}}
                     </span>
                 </div>
