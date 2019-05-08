@@ -123,7 +123,7 @@
                             <i class="el-icon-plus"></i>
                         </el-upload>
                          <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments)"></FilesOperate>
+                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/outgoing_forms/deleteAtt?id='+ item.id,'delete')"></FilesOperate>
                         </div>
                     </el-form-item>
                 </el-col>

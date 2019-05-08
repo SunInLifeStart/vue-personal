@@ -390,15 +390,24 @@ export const publicMethods = {
                 type: type
             });
         },
-        deleteAttachments(index,attachments,url) {
+        deleteAttachments(index,attachments,url,type) {
             let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
                 if(url){
-                    $self.$axios
-                    .get(url)
-                    .then(res => {
-                        attachments.splice(index, 1);    
-                    });
+                    if(type == 'delete'){
+                        $self.$axios
+                        .delete(url)
+                        .then(res => {
+                            attachments.splice(index, 1);    
+                        });
+                    }
+                    if(type == 'get'){
+                        $self.$axios
+                        .get(url)
+                        .then(res => {
+                            attachments.splice(index, 1);    
+                        });
+                    }
                 }else{
                     attachments.splice(index, 1);
                 }
