@@ -157,8 +157,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/contract_forms/deleteAttachment/' + item.id,'get')"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -265,8 +265,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/contract_forms/deleteAttachment/' + item.id,'get')"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -278,8 +278,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType3'">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType3'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/contract_forms/deleteAttachment/' + item.id,'get')"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -291,8 +291,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType4'">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType4'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/contract_forms/deleteAttachment/' + item.id,'get')"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -304,8 +304,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType5'">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType5'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/contract_forms/deleteAttachment/' + item.id,'get')"></FilesOperate>
                             </div>
                         </td>
                     </tr>
@@ -317,8 +317,8 @@
                             </el-upload>
                         </td>
                         <td colspan="6">
-                            <div v-for="item in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType6'">
-                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                            <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType6'">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/contract_forms/deleteAttachment/' + item.id,'get')"></FilesOperate>
                             </div>
                         </td>
                     </tr>
