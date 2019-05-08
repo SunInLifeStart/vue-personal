@@ -145,7 +145,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="经审批采购方案的附审资料">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessAnno" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachmentsAnno" :key="item.id" style="float:left">
@@ -157,7 +157,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="采购报告(评标报告)的附审资料">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessRep" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="uploadRep" action="/api/v1/files/upload" :on-success="handleSuccessRep" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachmentsRep" :key="item.id" style="float:left">
@@ -181,7 +181,7 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="其他">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccessOth" accept="" :auto-upload="true" :with-credentials="true">
+                        <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" accept="" :auto-upload="true" :with-credentials="true">
                             <i class="el-icon-plus"></i>
                         </el-upload>
                         <div v-for="item in formData.attachmentsOth" :key="item.id" style="float:left">
@@ -500,7 +500,7 @@ export default {
                     self.formData.attachmentsAnno.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            this.$refs.uploadAnno.clearFiles();
         },
         handleSuccessRep(response, file) {
             const self = this;
@@ -510,7 +510,7 @@ export default {
                     self.formData.attachmentsRep.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            this.$refs.uploadRep.clearFiles();
         },
         handleSuccessOth(response, file) {
             const self = this;
@@ -520,7 +520,7 @@ export default {
                     self.formData.attachmentsOth.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            this.$refs.uploadOth.clearFiles();
         },
         submitUpload() {
             this.$refs.upload.submit();
