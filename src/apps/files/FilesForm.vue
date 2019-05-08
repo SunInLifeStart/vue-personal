@@ -86,8 +86,8 @@
                                         :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
-                                        <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
-                                           <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachmentsone(scope.$index)"></FilesOperate>
+                                        <div v-for="(item,index) in scope.row.attachments" :key="index" class="opertes">
+                                           <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,scope.row.attachments)"></FilesOperate>
                                         </div>
                                     </template>
                                      
@@ -260,13 +260,7 @@ export default {
                 this.formData.allPrintNumber=totalCount
                 return totalCount
         },
-        deleteAttachmentsone(index) {
-           let $self = this;
-            $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
-                 $self.formData.cardPrinting[index].attachments.splice(0, 1);
-            });
-        },
-        setDataFromParent(data) {
+         setDataFromParent(data) {
             this.formData = data;
             this.formId = data.id;
             this.dialogFormVisible = true;
