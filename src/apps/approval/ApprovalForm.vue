@@ -117,9 +117,8 @@
                                         <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" accept="" :auto-upload="true" :with-credentials="true">
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
-                                        <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
-                                            <!-- @getId="getId" -->
-                                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachmentsone(scope.$index)"></FilesOperate>
+                                        <div v-for="(item,index) in scope.row.attachments" :key="index" class="opertes">
+                                           <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,scope.row.attachments)"></FilesOperate>
                                         </div>
                                     </template>
                                 </el-table-column>
@@ -335,18 +334,6 @@ export default {
         FilesOperate
     },
     methods: {
-        deleteAttachmentsone(index) {
-            //  debugger
-            let $self = this;
-            $self
-                .$confirm('是否删除?', '提示', { type: 'warning' })
-                .then(() => {
-                    $self.formData.usingApproval[index].attachments.splice(
-                        0,
-                        1
-                    );
-                });
-        },
         // 时长
         getHour(a1, a2) {
             const $self = this;

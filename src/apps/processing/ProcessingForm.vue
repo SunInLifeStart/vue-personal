@@ -339,8 +339,8 @@
                                 :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
-                                <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                                    <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments"></FilesOperate>
+                                <div v-for="(item,index) in formData.attachments" :key="index" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments)"></FilesOperate>
                                 </div>
                             </el-form-item>
                         </el-col>
@@ -575,23 +575,8 @@
                 this.uploadImageType=row.index
             },
            deleteItem(type) {
-            //   
-                // this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                //     if (type == '1' && this.formData.workExperience.length > 1) {
-                //         this.formData.workExperience.splice(index, 1);
-                //     } else if (type == '0' && this.formData.studyExperience.length > 1) {
-                //         this.formData.studyExperience.splice(index, 1);
-                //     } else if (type == '2' && this.formData.familyTies.length > 1) {
-                //         this.formData.familyTies.splice(index, 1);
-                //     } else {
-                //         this.$message({
-                //             message: '最后一组不能删除',
-                //             type: 'error'
-                //         });
-                //     }
-                // });
-                const self = this;
-                let a=self.formData
+             const self = this;
+            let a=self.formData
              if (self.selectionItemsone.length > 0) {
                 self.$confirm('是否删除?', '提示', { type: 'warning' }) .then(() => {
                         self.selectionItemsone.forEach(function (oData) {
