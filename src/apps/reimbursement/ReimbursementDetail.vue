@@ -16,14 +16,14 @@
         <div class="formContent" style="margin-top: 5px;margin-left:10px;overflow:auto;">
             <div>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print">打印</el-button>
             </div>
             <br />
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
                 <h4 style="text-align: center;">报销审批单</h4>
                 <el-row style="margin-top: 10px;">
                     <el-col :span="7">
-                        <el-form-item label="单据编号：">
+                        <el-form-item label="单据编号：" style="margin-left:5px;">
                             <span style="font-size:10px">
                                 {{tableData.no}}
                             </span>
@@ -347,7 +347,7 @@
                 </table>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
-                        <h3>审批意见</h3>
+                        <h3 style="margin-left: 10px;">审批意见</h3>
                         <div class="items">
                             <div class="item" v-for="item in comments" :key="item.id">
                                 <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
