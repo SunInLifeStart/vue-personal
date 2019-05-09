@@ -167,14 +167,12 @@ export default {
         pushItToDoor(){
             const self = this;
             let arrurl = [];
-         //   let arrimage = [];
-            if(this.tableData.text){
+            if(this.tableData.text && typeof(this.tableData.text) == "object"){
                 this.tableData.text.type = "doc";
                 arrurl.push(this.tableData.text);
             }
             for (let data of this.tableData.attachments) {
                 arrurl.push(data);
-               // arrimage.push(data.iconUrl);
             }
 
             const params = {
@@ -203,9 +201,6 @@ export default {
                 img: [],
                 about: null
             };
-
-            // console.log(params);
-            // return false;
            self.$axios
                 .post('/api/v1/portal/article', params, {
                 })
