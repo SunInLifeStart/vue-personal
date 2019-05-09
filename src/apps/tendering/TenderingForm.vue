@@ -12,7 +12,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="关联采购方案" prop="meetingPlace">
-                            <el-select v-model="formData.procurementScheme" value-key="id" placeholder="请选择采购结果">
+                            <el-select v-model="formData.procurementScheme" value-key="id" placeholder="请选择采购方案">
                                 <el-option
                                         v-for="item in issueOption"
                                         :key="item.id"

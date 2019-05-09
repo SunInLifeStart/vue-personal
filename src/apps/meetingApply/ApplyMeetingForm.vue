@@ -607,6 +607,7 @@
                 const self = this;
                 if (response.length > 0) {
                     response.forEach(function(item) {
+                        item.attachmentType = 'attachments'
                         self.formData.attachments.push(item);
                     });
                 }
