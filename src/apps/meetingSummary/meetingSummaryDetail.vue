@@ -71,7 +71,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="分送:">
-                            <el-select style="width:90%;" v-model="tableData.distributes" multiple placeholder="请选择分送人员" disabled>
+                           <el-select style="width:90%;" v-model="tableData.distributes" multiple placeholder="请选择分送人员" disabled>
                                 <el-option v-for="item in distributeOption" :key="item.id" :label="item.name" :value="item.id">
                                 </el-option>
                             </el-select>
