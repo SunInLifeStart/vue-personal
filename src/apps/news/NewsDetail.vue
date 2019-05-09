@@ -33,7 +33,7 @@
                 <el-row>
                      <el-col :span="24">
                         <el-form-item label="信息内容：">
-                            <div v-html="tableData.content"></div>
+                            <div v-html="tableData.content" class="newsContent"></div>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -251,4 +251,9 @@ export default {
     left: 0px;
     right: 0px;
 }
+</style>
+<style scoped>
+    .newsContent >>> img {
+        width: 100%;
+    }
 </style>
