@@ -217,6 +217,9 @@ export default {
             if ($self.formData.toPortal) {
                 $self.formData.pushAddr.push('portal')
             }
+             if ($self.formData.attachments.length > 0) {
+                $self.formData.attachments[0].attType = "group"
+            }
             let response = await $self.saveFormData(
                 "/api/v1/news_forms/save",
                 $self.formData

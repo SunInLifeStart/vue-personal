@@ -138,6 +138,7 @@ export default {
             .then(res => {
                 if(res.data.length == 1){
                     if(res.data[0].children.length == 1){
+                        $self.options = $self.selectedOptions = [];
                         $self.checkedObject = res.data[0].children[0];
                         if(fromLogin){
                             this.login();
