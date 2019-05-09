@@ -204,7 +204,9 @@ export default {
            self.$axios
                 .post('/api/v1/portal/article', params, {
                 })
-                .then(res => {})
+                .then(res => {
+                    self.msgTips("发布成功", "success");
+                })
                 .catch(function() {
                     self.$message({
                         message: '操作失败',
