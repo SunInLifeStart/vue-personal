@@ -156,9 +156,67 @@ export default {
             }
             let actions = await $self.getActions();
             let comments =  await $self.getComments();
+            if(actions.data.types.length == 0 && $self.tableData.status == "04"){
+                actions.data.types.push({
+                    name:"发布到公司门户"
+                });
+            }
             $self.actions = actions.data.types;
             $self.comments = comments.data;
-        }
+        },
+        pushItToDoor(){
+            const self = this;
+            let arrurl = [];
+         //   let arrimage = [];
+            if(this.tableData.text){
+                this.tableData.text.type = "doc";
+                arrurl.push(this.tableData.text);
+            }
+            for (let data of this.tableData.attachments) {
+                arrurl.push(data);
+               // arrimage.push(data.iconUrl);
+            }
+
+            const params = {
+                id: this.formId,
+                publisher:
+                    this.tableData.creatorName != null
+                        ? this.tableData.creatorName
+                        : null,
+                title:
+                    this.tableData.title != null ? this.tableData.title : null,
+                time:
+                    this.tableData.created != null
+                        ? this.tableData.created
+                        : null,
+                content:
+                    this.tableData.content != null
+                        ? this.tableData.content
+                        : null,
+                source:
+                    this.tableData.organName != null
+                        ? this.tableData.organName
+                        : null,
+                abstract: null,
+                tags: this.tableData.columns == '1'? '规章制度':'通知公告',
+                url: arrurl,
+                img: [],
+                about: null
+            };
+
+            // console.log(params);
+            // return false;
+           self.$axios
+                .post('/api/v1/portal/article', params, {
+                })
+                .then(res => {})
+                .catch(function() {
+                    self.$message({
+                        message: '操作失败',
+                        type: 'error'
+                    });
+                });
+        },
     }
 };
 </script>
