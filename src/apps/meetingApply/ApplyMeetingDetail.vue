@@ -174,6 +174,15 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="会议纪要附件：" v-if="tableData.summaryAttachments && tableData.summaryAttachments.length > 0">
+                            <div v-for="item in tableData.summaryAttachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
@@ -207,6 +216,28 @@
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
                     <el-button type="primary" @click="submitForm()">确 定</el-button>
+                </span>
+            </el-dialog>
+            <el-dialog :visible.sync="dialogVisibleSummary" width="31%">
+                <el-form>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="上传会议纪要附件">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOther" action="/api/v1/files/upload" :on-success="handleSuccess" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div style="margin-left: 5px">
+                                    <div v-for="item in tableData.summaryAttachments" :key="item.id" style="float:left">
+                                        <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                                    </div>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleSummary = false">取 消</el-button>
+                    <el-button type="primary" @click="saveMeetingApply">确 定</el-button>
                 </span>
             </el-dialog>
             <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
@@ -246,6 +277,7 @@
                 dataOptions: [],
                 textarea: '',
                 dialogVisible: false,
+                dialogVisibleSummary: false,
                 appFlowName:'motor-meetingApply_application-meeting',
                 discussionOption: {
                     specMeeting: '专题会',
@@ -267,6 +299,63 @@
         //     this.getDiscussionUser()
         // },
         methods: {
+            async saveMeetingApply() {
+                const $self = this;
+                this.dialogVisibleSummary = false
+                this.tableData.sendMessage = []
+                $self.tableData.attendingDepartment.forEach(item => {
+                    if (item.people && item.department) {
+                        item.department = item.department.join(',')
+                        item.person = item.people.join(',')
+                        this.tableData.sendMessage = this.tableData.sendMessage.concat(item.people)
+                    }
+                })
+                $self.tableData.sitIn.forEach(item => {
+                    if (item.people && item.department) {
+                        item.department = item.department.join(',')
+                        item.person = item.people.join(',')
+                        this.tableData.sendMessage = this.tableData.sendMessage.concat(item.people)
+                    }
+                })
+                this.tableData.sendMessage = this.tableData.sendMessage.join(',')
+                if (this.tableData.sendMessage &&this.tableData.sendMessage.length <= 0) {
+                    delete this.tableData.sendMessage
+                }
+                let response = await $self.saveFormData(
+                    "/api/v1/meetingApply/save",
+                    $self.tableData
+                );
+                if (response) {
+                    $self.getFormDetailsData();
+                }
+            },
+            editMeetingSummary() {
+                this.dialogVisibleSummary = true
+            },
+            getId(id) {
+                let self = this;
+                self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                    self.tableData.summaryAttachments.forEach(function(value, index) {
+                        if (value.id == id) {
+                            self.tableData.summaryAttachments.splice(index, 1);
+                        }
+                    });
+                });
+            },
+            handleSuccess(response, file) {
+                const self = this;
+                if (!self.tableData.summaryAttachments) {
+                    self.tableData.summaryAttachments = []
+                }
+                if (response.length > 0) {
+                    response.forEach(function(item) {
+                        item.attachmentType = 'summaryAttachments'
+                        self.tableData.summaryAttachments.push(item);
+                        self.$forceUpdate()
+                    });
+                }
+                this.$refs.uploadOther.clearFiles();
+            },
             async getDiscussionUser() {
                 let a = await axios.get("/api/v1/users/list/organs")
                 if (a) this.dataOptions = a.data || []

@@ -267,6 +267,9 @@ export const publicMethods = {
             else if ($self.currentAction.name == "定岗定薪") {
                 $self.salaryEditForm();
             }
+            else if ($self.currentAction.name == "编写会议纪要") {
+                $self.editMeetingSummary();
+            }
              else if ($self.currentAction.name == "打印") {
                 let url;
                 if ($self.printerFormName == "outgoing_forms") {
