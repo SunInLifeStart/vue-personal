@@ -364,14 +364,13 @@ export default {
         },
         addItem() {
             this.formData.usingApproval.push({
-                id: '',
                 fileName: '',
                 useReason: '',
                 fileNum: '',
                 attachments: [],
                 count: ++this.counts
             });
-            this.formData.count = this.formData.count + 1;
+            // this.formData.count = this.formData.count + 1;
         },
         deleteItem() {
             const self = this;
@@ -451,7 +450,6 @@ export default {
             let formData = {
                 usingApproval: [
                     {
-                        id: '',
                         count: 0,
                         fileName: '',
                         useReason: '',
@@ -560,15 +558,12 @@ export default {
             this.uploadImageType = row.index;
         },
         handleSuccess(response, file, fileList) {
-            // debugger
             const self = this;
             const aaa = self.uploadImageType;
             if (response.length > 0) {
                 response.forEach(function(item, index) {
-                    // self.formData.attachments.push(item);
-                    //    filelist.forEach(function(val,index){
-                    self.formData.usingApproval[aaa].attachments.push(item);
-                    // })
+                   self.formData.usingApproval[aaa].attachments.push(item);
+                    
                 });
             }
             // this.$refs.upload.clearFiles();
