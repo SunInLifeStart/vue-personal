@@ -1,13 +1,13 @@
 <template>
     <el-popover placement="bottom-start" width="260" height="500" class="drawer">
-        <!-- <div>
+        <div>
             <div>扫一扫下载Android版App</div>
             <img :src="qrcode" alt="" width="180px"/>
             <br />
             <br />
             <br />
-            <a href="http://static.yxpe.com.cn/docs/文档以及插件.rar" alt="" width="180px" download="文档控件EXT跨浏览器插件.exe">点击下载Chrome插件以及文档</a>
-        </div> -->
+            <!-- <a href="http://static.yxpe.com.cn/docs/文档以及插件.rar" alt="" width="180px" download="文档控件EXT跨浏览器插件.exe">点击下载Chrome插件以及文档</a> -->
+        </div>
         <div class="icon" slot="reference">
            <i class="el-icon-star-off" style="cursor:pointer" />
         </div>
@@ -41,10 +41,9 @@ export default {
     },
     mounted() {
         if (process.env.NODE_ENV == 'production') {
-            this.qrcode = 'http://static.yxpe.com.cn/docs/app.png';
+            this.qrcode= "http://124.205.31.66:2097/static/docs/appAndroid.png"
         }else{
-          // this.qrcode = 'http://59.110.172.228/docs/test.png';
-             this.qrcode = 'http://static.yxpe.com.cn/docs/app.png';
+            this.qrcode = 'http://static1.yxpe.com.cn/docs/appAndroid.png';
         }
     }
 };

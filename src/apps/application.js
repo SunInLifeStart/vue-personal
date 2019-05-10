@@ -320,7 +320,7 @@ export const publicMethods = {
                                     $self.currentAction.options.splice(i, 1);
                                 }
                             };
-                            $self.currentAction.options.push($self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value);
+                            $self.currentAction.options.push($self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value);                                                                                                     
                         } else {
                             $self.currentAction.options = [$self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value];
                         }
