@@ -40,7 +40,7 @@ export default {
          }
         .formContent {
             flex: 1;
-            height: 100%;
+            height: 90%;
             overflow-x: hidden;
             overflow-y: auto;
             padding: 15px 30px;
