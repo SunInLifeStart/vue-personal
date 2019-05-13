@@ -87,14 +87,14 @@
                             <el-input v-model="formData.receiptUnit"></el-input>
                         </td>
                         <td class="fontBold">
-                            <span class="span">*</span>
+                            <span class="span" v-show="this.showSpan">*</span>
                             开户行
                         </td>
                         <td colspan="2">
                             <el-input v-model="formData.openingLine"></el-input>
                         </td>
                         <td class="fontBold">
-                            <span class="span">*</span>
+                            <span class="span" v-show="this.showSpan">*</span>
                             银行账号
                         </td>
                         <td colspan="2">
@@ -108,7 +108,7 @@
                         </td>
                         <td>
                             <!-- <el-input v-model="selectItem.settlement"></el-input> -->
-                            <el-select v-model="formData.settlement" placeholder="请选择">
+                            <el-select v-model="formData.settlement" placeholder="请选择" @change="changeSettlemnt">
                                 <el-option v-for="item in clearing_method" :key="item" :label="item" :value="item">
                                 </el-option>
                             </el-select>
@@ -363,6 +363,7 @@
                     <tr>
                         <td colspan="2" class="fontBold">
                             <el-upload name="files" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                                <span class="span">*</span>
                                 <span style="color:#06940c">附件上传
                                     <i class="el-icon-plus"></i>
                                 </span>
@@ -408,6 +409,7 @@ export default {
         return {
             dialogTitle: '',
             dialogSelectCode: false,
+            showSpan: false,
             currentRoles: [],
             branchCode: '',
             isMoney: '',
@@ -419,7 +421,8 @@ export default {
                 '转账支票',
                 '信汇',
                 '现金',
-                '存单'
+                '存单',
+                '网上托收'
             ],
             travelSelections: [],
             submission: '',
@@ -494,6 +497,19 @@ export default {
     },
     mounted() {},
     methods: {
+        changeSettlemnt() {
+            this.showSspan();
+        },
+        showSspan() {
+            this.showSpan = false;
+            this.showSpan =
+                this.formData.settlement == '网上托收' ||
+                this.formData.settlement == '现金支票' ||
+                this.formData.settlement == '转账支票'
+                    ? true
+                    : false;
+            return this.showSpan;
+        },
         getClass() {
             const self = this;
             const params = { type: 'category' };
@@ -991,6 +1007,7 @@ export default {
                     this.formData.contract.cumulativePro * 100
                 );
             }
+            this.showSspan();
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
@@ -1163,7 +1180,11 @@ export default {
                 budgetYes: true,
                 beyondContract: false,
                 landExpense: false,
+                openingLine: '',
+                bankNumber: '',
                 beyondMoney: false,
+                settlement: '',
+                receiptUnit: '',
                 numericalOrder: '', //流水号
                 allocation: '否', //分摊
                 organ: cookies.get('oname'),
@@ -1242,6 +1263,21 @@ export default {
                     });
                 });
         },
+        compareBank() {
+            const self = this;
+            if (this.showSpan) {
+                if (
+                    this.formData.openingLine == '' ||
+                    this.formData.bankNumber == ''
+                ) {
+                    return false;
+                } else {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+        },
         saveFormValidate(type) {
             const self = this;
             this.formData.contract.orAmount = this.moneyType
@@ -1268,13 +1304,13 @@ export default {
             } else {
                 if (
                     this.formData.receiptUnit == '' ||
-                    this.formData.openingLine == '' ||
-                    this.formData.bankNumber == '' ||
                     this.formData.settlement == '' ||
                     this.formData.costUnit == '' ||
                     this.formData.contract.numNo == '' ||
                     this.formData.contract.name == '' ||
-                    this.checkPayDetail() == false
+                    this.checkPayDetail() == false ||
+                    this.formData.attachments.length <= 0 ||
+                    this.compareBank() == false
                 ) {
                     self.$message({
                         message: '请输入必填项',
