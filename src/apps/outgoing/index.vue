@@ -56,10 +56,12 @@
                     <el-table-column label="操作" width="150" align="center">
                         <template slot-scope="scope">
                             <!-- v-if="scope.row.status == '已驳回' || scope.row.status == '已保存'" -->
-                            <el-tooltip class="item" effect="dark" content="编辑" placement="left"  v-if="scope.row.status == '00' || scope.row.status == '02'">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" 
+                             v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left"
+                             v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-delete" @click="deleteForm(scope.row)"></el-button>
                             </el-tooltip>
                         </template>
