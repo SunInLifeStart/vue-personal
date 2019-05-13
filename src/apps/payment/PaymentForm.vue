@@ -506,8 +506,8 @@ export default {
                 this.formData.settlement == '网上托收' ||
                 this.formData.settlement == '现金支票' ||
                 this.formData.settlement == '转账支票'
-                    ? true
-                    : false;
+                    ? false
+                    : true;
             return this.showSpan;
         },
         getClass() {
