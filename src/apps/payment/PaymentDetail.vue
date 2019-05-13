@@ -125,13 +125,13 @@
                             支出说明
                         </td>
                         <td colspan="4">
-                            {{tableData.paymentExplain}}
+                            <el-input type="textarea" v-model="tableData.paymentExplain" disabled :autosize="{minRows: 5}"></el-input>
                         </td>
                         <td>
                             费用归属项目
                         </td>
                         <td colspan="2">
-                            {{tableData.project}}
+                            <el-input type="textarea" v-model="tableData.project" disabled :autosize="{minRows: 5}"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -681,6 +681,12 @@ export default {
     }
     .el-step__main {
         margin-top: 10px;
+    }
+    .el-textarea.is-disabled .el-textarea__inner {
+        background-color: #e0e1e205;
+        border-color: #e4e7ed;
+        color: #85888e;
+        cursor: not-allowed;
     }
 }
 </style>
