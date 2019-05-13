@@ -231,8 +231,10 @@ export const publicMethods = {
                 });
             }
             if($self.appFlowName == "inspect-form_inspect" && action.assigneeListTos && action.assigneeListTos.indexOf("assigneeListVarable") > -1){
+
+                let type = this.$store.getters.LoginData.code.split('_')[0];
                 $self.$axios
-                .get("/api/v1/users/role/xtfz_deptManager")
+                .get("/api/v1/users/role/"+ type +"_deptManager")
                 .then(res => {
                     for(var i = 0; i<res.data.length; i++){
                         if(res.data[i].id == $self.tableData.inspector){
@@ -404,9 +406,11 @@ export const publicMethods = {
             let $self = this;
             let url = `/workflow/${$self.appFlowName}/processContent`;
             let currentNodeUrl = `/workflow/${$self.appFlowName}/${$self.formId}/curActions`;
+            let nodeNameURl =  `/workflow/${$self.appFlowName}/${$self.formId}/historyActions`;  
             let bpmnData = await this.$axios.get(url);
             let bpmnDataCurrent = await this.$axios.get(currentNodeUrl);
-            $self.flowNodeUrl = `/bpmn-viewer/view.html?url=${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0].taskDefinitionKey}`;
+            // let nodeName = await this.$axios.get(nodeNameURl);
+            $self.flowNodeUrl = `/bpmn-viewer/view.html?url=${bpmnData.data.resourceName}&&id=${bpmnDataCurrent.data[0].taskDefinitionKey}&&nodeNameUrl=${nodeNameURl}`;
             $self.dialogVisibleCrumb = true;
         },
 
