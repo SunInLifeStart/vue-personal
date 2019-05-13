@@ -15,7 +15,7 @@
         <div class="formContent">
             <div>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" @click="print">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
@@ -335,7 +335,7 @@
 
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="no-print">
                         <td colspan="2" class="fontBold">附件上传</td>
                         <td colspan="6" style="padding:10px;">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
@@ -343,7 +343,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr id="approval">
+                    <tr id="approval" class="no-print">
                         <td colspan="2" class="fontBold">领导审批</td>
                         <td colspan="6" style="text-align: left;">
                             <div class="audit" v-for="item in this.array" :key="item.id">

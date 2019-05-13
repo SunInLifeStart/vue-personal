@@ -16,17 +16,17 @@
         <div class="formContent">
             <div>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" @click="print">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
                 <h4 style="text-align: center;">出差审批单</h4>
                 <el-row style="margin-top: 25px;">
-                    <el-col :span="8">
-                        <el-form-item label="流水单号：">{{tableData.number}}
+                    <el-col :span="12">
+                        <el-form-item label="流水单号：" style="margin-left:5px;">{{tableData.number}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="12">
                         <el-form-item label="呈报件：">
                             <span style="font-size:10px" @click="ViewDetail()" :class="{'titlename':this.tableData.travelView}"> {{tableData.submissionName}}</span>
                         </el-form-item>
@@ -168,7 +168,7 @@
                             {{this.tableData.estimate.length ==0 ? '￥': this.tableData.estimate[0].currency.curValue}}: &nbsp; {{tableData.total}}（金额大写:【{{this.tableData.estimate.length ==0 ? '人民币': this.tableData.estimate[0].currency.label}} 】: {{this.tableData.upper}})
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="no-print">
                         <td colspan="2">
                             <!-- <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false"> -->
                             <span>附件上传</span>
@@ -180,7 +180,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="no-print">
                         <td colspan="2">
                             审批意见
                         </td>
@@ -197,24 +197,24 @@
                         </td>
                     </tr>
                 </table>
-
-            </el-form>
-            <el-row v-if="comments && comments.length > 0">
-                <el-col :span="24">
-                    <h3>审批意见</h3>
-                    <div class="items">
-                        <div class="item" v-for="item in comments" :key="item.id">
-                            <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
-                            <div class="info">
-                                <div class="creator">
-                                    <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
+                <el-row v-if="comments && comments.length > 0">
+                    <el-col :span="24">
+                        <h3 style="margin-left:5px;">审批意见</h3>
+                        <div class="items">
+                            <div class="item" v-for="item in comments" :key="item.id">
+                                <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
+                                <div class="info">
+                                    <div class="creator">
+                                        <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
+                                    </div>
+                                    <div class="content">{{item.fullMessage}}</div>
                                 </div>
-                                <div class="content">{{item.fullMessage}}</div>
                             </div>
                         </div>
-                    </div>
-                </el-col>
-            </el-row>
+                    </el-col>
+                </el-row>
+            </el-form>
+
         </div>
         <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
             <el-form>

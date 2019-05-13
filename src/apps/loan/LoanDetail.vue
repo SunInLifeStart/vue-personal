@@ -16,14 +16,14 @@
         <div class="formContent" style="margin-top: 10px;">
             <div>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" @click="print">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
                 <h4 style="text-align: center;">借款申请单</h4>
                 <el-row style="margin-top: 25px;vertical-align: middle; line-height: 34px;">
-                    <el-col :span="8">
-                        <span class="bolder">流水单号</span> ：{{tableData.number}}
+                    <el-col :span="9">
+                        <span class="bolder" style="margin-left:5px;">流水单号</span> ：{{tableData.number}}
                     </el-col>
                     <el-col :span="8">
                         <span class="bolder">出差审批单：</span>
@@ -37,7 +37,7 @@
                             <el-button type="text" style="margin-left: 10px;color:gray;" icon="el-icon-view"></el-button>
                         </el-tooltip>
                     </el-col> -->
-                    <el-col :span="8">
+                    <el-col :span="7">
                         <span class="bolder">呈报件：</span>
                         <span :class="{titlename:tableData.subView}" @click="ViewDetail('chengbao')">{{tableData.subNo}}</span>
                     </el-col>
@@ -155,7 +155,7 @@
                             {{tableData.settlement}}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="no-print">
                         <td class="bolder" colspan="2">附件上传
                         </td>
                         <td colspan="6" style="padding:10px;">
@@ -164,7 +164,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="no-print">
                         <td class="bolder" colspan="2">领导审批</td>
                         <td colspan="6" style="text-align: left;">
                             <div class="audit" v-for="item in this.array" :key="item.index">
@@ -179,23 +179,24 @@
                         </td>
                     </tr>
                 </table>
-            </el-form>
-            <el-row v-if="comments && comments.length > 0">
-                <el-col :span="24">
-                    <h3>审批意见</h3>
-                    <div class="items">
-                        <div class="item" v-for="item in comments" :key="item.id">
-                            <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
-                            <div class="info">
-                                <div class="creator">
-                                    <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
+                <el-row v-if="comments && comments.length > 0">
+                    <el-col :span="24">
+                        <h3 style="margin-left:5px;">审批意见</h3>
+                        <div class="items">
+                            <div class="item" v-for="item in comments" :key="item.id">
+                                <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
+                                <div class="info">
+                                    <div class="creator">
+                                        <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
+                                    </div>
+                                    <div class="content">{{item.fullMessage}}</div>
                                 </div>
-                                <div class="content">{{item.fullMessage}}</div>
                             </div>
                         </div>
-                    </div>
-                </el-col>
-            </el-row>
+                    </el-col>
+                </el-row>
+            </el-form>
+
         </div>
         <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
             <el-form>

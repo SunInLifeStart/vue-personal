@@ -14,16 +14,17 @@
             </el-row>
         </div>
         <div class="formContent">
-            <div v-show="this.tableData.status && this.tableData.status != '04'">
-                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
+            <div>
+                <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
+                <el-button style="margin-left: 25px;" type="primary" v-show="this.tableData.status && this.tableData.status == '04'" @click="print">打印</el-button>
             </div>
             <br />
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
                 <el-row style="margin-top: 25px;vertical-align: middle; line-height: 34px;">
-                    <el-col :span="8">
+                    <el-col :span="12" style="margin-left:5px;">
                         <span class="bolder">流水单号</span> ：{{tableData.number}}
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="10">
                         <span class="bolder">呈报件：</span>
                         <span :class="{titlename:tableData.subView}" @click="ViewDetail('chengbao')">{{tableData.subNo}}</span>
                     </el-col>
@@ -137,10 +138,10 @@
                             {{tableData.utype}}
                         </td>
                     </tr>
-                    <tr>
+                    <tr class="no-print">
                         <td colspan="8" style="font-weight:bold;">附件</td>
                     </tr>
-                    <tr>
+                    <tr class="no-print">
                         <td colspan="1">附件
                         </td>
                         <td colspan="7" style="padding: 10px;">
@@ -150,23 +151,24 @@
                         </td>
                     </tr>
                 </table>
-            </el-form>
-            <el-row v-if="comments && comments.length > 0">
-                <el-col :span="24">
-                    <h3>审批意见</h3>
-                    <div class="items">
-                        <div class="item" v-for="item in comments" :key="item.id">
-                            <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
-                            <div class="info">
-                                <div class="creator">
-                                    <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
+                <el-row v-if="comments && comments.length > 0">
+                    <el-col :span="24">
+                        <h3 style="margin-left:5px;">审批意见</h3>
+                        <div class="items">
+                            <div class="item" v-for="item in comments" :key="item.id">
+                                <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
+                                <div class="info">
+                                    <div class="creator">
+                                        <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
+                                    </div>
+                                    <div class="content">{{item.fullMessage}}</div>
                                 </div>
-                                <div class="content">{{item.fullMessage}}</div>
                             </div>
                         </div>
-                    </div>
-                </el-col>
-            </el-row>
+                    </el-col>
+                </el-row>
+            </el-form>
+
         </div>
         <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
             <el-form>
@@ -229,6 +231,11 @@ export default {
     //     }
     // },
     methods: {
+        async print() {
+            // document.getElementById('approval').style.display = 'table-row';
+            this.$print(this.$refs.formupdate.$el);
+            //  document.getElementById('approval').style.display = 'none';
+        },
         ViewDetail(view) {
             if (view == 'chengbao' && this.tableData.subView) {
                 // if (this.rows.submissionId && this.rows.submissionId != '') {
