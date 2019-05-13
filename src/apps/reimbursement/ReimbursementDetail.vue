@@ -317,10 +317,10 @@
                         <td colspan="8">
                         </td>
                     </tr>
-                    <tr>
+                    <tr v-if="this.showPrint == false">
                         <td colspan="8" style="font-weight:bold;">附件</td>
                     </tr>
-                    <tr>
+                    <tr v-if="this.showPrint == false">
                         <td class="fontBold">附件信息</td>
                         <td colspan="7" style="padding: 10px;">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
@@ -400,6 +400,7 @@ export default {
     name: 'ReimbursementDetail',
     data() {
         return {
+            showPrint: false,
             tableData: {
                 no: '',
                 type: '',
@@ -469,6 +470,7 @@ export default {
     // },
     methods: {
         async print() {
+            this.showPrint = true;
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el);
             //  document.getElementById('approval').style.display = 'none';
