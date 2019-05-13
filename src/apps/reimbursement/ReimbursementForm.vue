@@ -84,14 +84,12 @@
                             </el-select>
                         </td>
                         <td>
-                            <span style="color:red;">*</span>
                             开户行
                         </td>
                         <td colspan="2">
                             <el-input v-model="formData.bank"></el-input>
                         </td>
                         <td>
-                            <span style="color:red;">*</span>
                             银行卡号
                         </td>
                         <td colspan="2">
@@ -1330,8 +1328,6 @@ export default {
             } else {
                 if (
                     this.formData.payee != '' &&
-                    this.formData.bank != '' &&
-                    this.formData.cardNo != '' &&
                     this.formData.expenseDep != '' &&
                     this.formData.clearing != '' &&
                     this.checkBaoDetail() &&
