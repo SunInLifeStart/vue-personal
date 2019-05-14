@@ -13,7 +13,7 @@
                             </el-col>
                             <el-col :span="8">
                                 <el-form-item label="单据状态">
-                                    <el-select v-model="params.status" placeholder="请选择">
+                                    <el-select v-model="params.status" clearable placeholder="请选择">
                                         <el-option v-for="item in s_status" 
                                         :key="item.value"
                                         :label="item.label"
