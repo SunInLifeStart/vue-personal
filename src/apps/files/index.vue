@@ -263,7 +263,6 @@ export default {
         },
         fomatterStatus(row, column) {
             let state;
-            //0已保存1审核中2驳回3撤销4完成
             switch (row.status) {
                 case '00':
                     state = "已保存";
@@ -274,9 +273,6 @@ export default {
                 case '02':
                     state = "驳回";
                     break;
-                case '03':
-                    state = "撤销";
-                    break;
                 case '04':
                     state = "已完成";
                     break;
@@ -285,7 +281,6 @@ export default {
         },
         fomutype(row, column) {
             let state;
-            //0已保存1审核中2驳回3撤销4完成
             switch (row.utype) {
                 case 'true':
                     state = "是";

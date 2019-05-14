@@ -160,7 +160,7 @@ export default {
             formId: "",
             params: {
                 umonth: '',
-                page: 1,
+                pageNum: 1,
                 pageSize: 5,
                 creatorName: "",
                 created: "",
@@ -269,7 +269,7 @@ export default {
         },
         reloadList(params) {
             if (params == "reload") {
-                this.params.page = 1;
+                this.params.pageNum = 1;
                 this.getList();
             } else {
                 this.$refs.BusinessCardDetail.getFormDetails(params.id);
@@ -286,7 +286,7 @@ export default {
         
         //分页
         currentChange(pageNum) {
-            this.params.page = pageNum;
+            this.params.pageNum = pageNum;
             this.getList(pageNum);
         },
         sizeChange(pageSize) {
@@ -306,7 +306,6 @@ export default {
         },
         fomatterStatus(row, column) {
             let state;
-            //0已保存1审核中2驳回3撤销4完成
             switch (row.status) {
                 case '00':
                     state = "已保存";
@@ -316,9 +315,6 @@ export default {
                     break;
                 case '02':
                     state = "驳回";
-                    break;
-                case '03':
-                    state = "撤销";
                     break;
                 case '04':
                     state = "已完成";

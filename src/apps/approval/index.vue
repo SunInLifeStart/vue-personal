@@ -166,10 +166,7 @@ export default {
                         value: '02',
                         label: '已驳回'
                     },
-                    {
-                        value: '03',
-                        label: '已撤销'
-                    },
+                    
                     {
                         value: '04',
                         label: '已完成'
@@ -210,7 +207,6 @@ export default {
                "00":"已保存", 
                "01":"审核中",
                "02" :"已驳回",
-               "03" :"已撤销",
                "04" :"已完成"
             };
             return xmlJson[data];
