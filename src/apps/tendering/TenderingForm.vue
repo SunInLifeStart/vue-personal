@@ -287,7 +287,7 @@
                     organName: this.$store.getters.LoginData.oname || '',
                     creatorName: this.$store.getters.LoginData.uname || '',
                     creatorId: this.$store.getters.LoginData.uid || '',
-                    organId: this.$store.getters.LoginData.oid || ''
+                    organId: this.$store.getters.LoginData.oid || '',
                     procurementSchemeAttachment: [],
                     otherAttachment: [],
                 }
