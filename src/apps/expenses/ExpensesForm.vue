@@ -415,6 +415,8 @@ export default {
                 number: '',
                 creatorName: cookies.get('uname'),
                 organName: cookies.get('oname'),
+                creatorId: this.$store.getters.LoginData.uid || '',
+                organId: this.$store.getters.LoginData.oid || '',
                 created: moment().format('YYYY-MM-DD HH:mm:ss'),
                 hospitalitySector: '',
                 treatTime: '',
