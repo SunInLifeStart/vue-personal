@@ -284,6 +284,10 @@
                     bidingSketch: '',
                     signatureRequirements: '公司公章',
                     biddingDocumentAttachment: [],
+                    organName: this.$store.getters.LoginData.oname || '',
+                    creatorName: this.$store.getters.LoginData.uname || '',
+                    creatorId: this.$store.getters.LoginData.uid || '',
+                    organId: this.$store.getters.LoginData.oid || ''
                     procurementSchemeAttachment: [],
                     otherAttachment: [],
                 }
