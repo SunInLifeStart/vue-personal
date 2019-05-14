@@ -12,12 +12,15 @@
         </div>
         <br />
         <div class="formContent" style="padding: 15px 30px;overflow: scroll;">
-            <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+            </div>
             <br />
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps> -->
-            <el-form :model='tableData' class="formList">
+            <el-form :model='tableData' class="formList" ref="formupdate">
                 <el-row>
                     
                     <el-col :span="8">
@@ -33,22 +36,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
-                     <el-col :span="8">
-                        <el-form-item label="流水号：">{{tableData.number}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="培训/学习(项目)：">{{tableData.trainingPrograms}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="培训时间：">{{tableData.startTime}}至{{tableData.endTime}}
-                        </el-form-item>
-                    </el-col>
-                    
-                </el-row>
-                <el-row>
+                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="是否资金计划内：">{{typeJuder}}
                         </el-form-item>
@@ -59,6 +47,22 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="预算费用：">{{tableData.upper}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="培训/学习(项目)：">{{tableData.trainingPrograms}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-form-item label="培训时间：">{{tableData.startTime}}至{{tableData.endTime}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                     <el-col :span="24">
+                        <el-form-item label="流水号：">{{tableData.number}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -163,6 +167,10 @@ export default {
         FilesOperate
     },
     methods: {
+        async print() {
+            this.$print(this.$refs.formupdate.$el);
+            
+        },
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
