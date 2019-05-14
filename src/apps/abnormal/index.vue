@@ -109,10 +109,6 @@ export default {
                     label: '已驳回'
                 },
                 {
-                    value: '03',
-                    label: '已撤销'
-                },
-                {
                     value: '04',
                     label: '已完成'
                 }
