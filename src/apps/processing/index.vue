@@ -240,9 +240,9 @@
      {
         .searchBtn {
             padding-right: 10px;
-            .positionBtn{
-                text-align: right;
-            }
+            // .positionBtn{
+            //     // text-align: right;
+            // }
         }
         .el-select {
             width: 100%;

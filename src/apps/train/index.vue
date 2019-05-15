@@ -36,7 +36,7 @@
                             </el-col>
                             <el-col :span="8">
                                <el-form-item label="提单时间">
-                                    <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd 00:00:00" type="date" ></el-date-picker>
+                                    <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd" type="date" ></el-date-picker>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8" class="searchBtn">
