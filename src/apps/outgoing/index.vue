@@ -7,7 +7,7 @@
                         <el-row class="filterForm">
                             <el-col :span="8">
                                 <el-form-item label="标题" label-width="50px">
-                                    <el-input v-model="params.title" placeholder="请输入申请人"></el-input>
+                                    <el-input v-model="params.title" placeholder="请输入标题"></el-input>
                                 </el-form-item>
 
                             </el-col>
