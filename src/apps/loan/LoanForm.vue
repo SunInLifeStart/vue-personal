@@ -114,7 +114,7 @@
                             -->
                         </td>
                         <td>
-                            <el-input type="number" @mousewheel.native.prevent v-model="Item.loanAmount" @input="getAmount(Item)"></el-input>
+                            <el-input type="number" oninput="if(value.length>9) value=value.slice(0,9)" @mousewheel.native.prevent v-model="Item.loanAmount" @input="getAmount(Item)"></el-input>
                         </td>
                         <td>
                             <el-select v-model="Item.currency" placeholder="" @change="currencyChange2(Item,index)">

@@ -167,7 +167,7 @@
                             </el-cascader>
                         </td>
                         <td colspan="1">
-                            <el-input @mousewheel.native.prevent type="number" v-model="item.price" @input="getAmount(item)"></el-input>
+                            <el-input @mousewheel.native.prevent type="number" oninput="if(value.length>9) value=value.slice(0,9)" v-model="item.price" @input="getAmount(item)"></el-input>
                         </td>
                         <td colspan="1">
                             <el-input @mousewheel.native.prevent type="number" v-model="item.number" @input="getAmount(item)"></el-input>

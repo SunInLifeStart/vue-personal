@@ -193,7 +193,7 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model="item.money" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
+                            <el-input v-model="item.money" oninput="if(value.length>9) value=value.slice(0,9)" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
                         </td>
                         <td>
                             <el-input v-model="item.estRate" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
