@@ -42,6 +42,7 @@
                     <el-table-column prop="partyB" label="合同对方" min-width="260"></el-table-column>
                     <el-table-column prop="contractNum" label="合同编号" min-width="200"></el-table-column>
                     <el-table-column prop="applyName" label="制单人" min-width="120"></el-table-column>
+                    <el-table-column prop="initiateTime" label="提单时间" min-width="120"></el-table-column>
                     <el-table-column prop="status" label="状态">
                         <template slot-scope="scope">
                             {{scope.row.status | filterStatus}}
