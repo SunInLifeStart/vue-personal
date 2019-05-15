@@ -181,7 +181,7 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model="payItem.amount" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
+                            <el-input v-model="payItem.amount" type="number" oninput="if(value.length>9) value=value.slice(0,9)" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
                         </td>
                         <td>
                             <el-input v-model="payItem.rate" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
@@ -402,6 +402,7 @@ import FilesOperate from '../FilesOperate';
 import { application } from '../application.js';
 import { publicMethods } from '../application.js';
 import { truncate } from 'fs';
+import formatInput from '@/components/formatInput';
 export default {
     mixins: [publicMethods],
     name: 'PaymentForm',
@@ -493,7 +494,8 @@ export default {
         };
     },
     components: {
-        FilesOperate
+        FilesOperate,
+        formatInput
     },
     mounted() {},
     methods: {
