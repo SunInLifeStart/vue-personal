@@ -20,7 +20,7 @@
             <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps> -->
-            <el-form :model='tableData' class="formList" ref="formupdate">
+            <el-form :model='tableData' class="formList" ref="formupdate" style="height:100%">
                 <el-row>
                     
                     <el-col :span="8">
@@ -218,6 +218,13 @@ export default {
     }
 };
 </script>
+<style>
+@media print {
+html, body {
+height: inherit;
+}
+}
+</style>
 <style lang="scss" scoped>
 #TrainDetail {
    
