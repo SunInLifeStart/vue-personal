@@ -3,44 +3,31 @@
         <el-card class="box-card">
             <!-- 查询 -->
             <div id="LedgerFilter">
-                <el-form :inline="true" label-width="140px" label-position="left" class="demo-form-inline">
-                    <el-row>
+                <el-form :inline="true" class="demo-form-inline" label-width="80px;">
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="提单人：">
-                                <el-input v-model="formInline.applyName" placeholder="" style="width:100%"></el-input>
+                                <el-input v-model="formInline.applyName" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="所属项目：">
+                            <el-form-item label="项目：">
                                 <el-input v-model="formInline.project" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="申请部门：">
+                            <el-form-item label="部门：">
                                 <el-input v-model="formInline.dept" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row>
                         <el-col :span="8">
-                            <el-form-item label="合同价格形式：" prop="status">
-                                <el-input v-model="formInline.shape" placeholder=""></el-input>
-                                <!-- <el-select v-model="formInline.status" filterable placeholder="全部">
-                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.value">
-                                    </el-option>
-                                </el-select> -->
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="16">
-                            <el-form-item label="合同约定生效日期：">
-                                <div>
-                                    <el-date-picker style="width:141%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                                    </el-date-picker>
-                                </div>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item class="">
+                            <el-form-item>
+                                <el-button type="primary" @click="searchList">查询</el-button>
+                                <!--
                                 <el-button type="primary" @click="searchList">统计</el-button>
-                                <el-button type="primary" @click="searchList">导出</el-button>
+                                <el-button type="primary" @click="searchList">导出</el-button>-->
                                 <el-button @click="resetInput">重置</el-button>
                             </el-form-item>
                         </el-col>
@@ -49,27 +36,25 @@
             </div>
             <div id="LedgerList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
+                    <el-table-column prop="applyName" label="提单人">
+                    </el-table-column>
+                    <el-table-column prop="dept" label="所属部门">
+                    </el-table-column>
+                     <el-table-column prop="project" label="所属项目">
+                    </el-table-column>
                     <el-table-column prop="contractNum" label="合同编号">
                     </el-table-column>
                     <el-table-column prop="contractName" label="合同名称" min-width='150px'>
                     </el-table-column>
-                    <el-table-column prop="shape" label="合同价格形式" min-width='120px'>
+                    <el-table-column prop="initiateTime" label="提单时间">
                     </el-table-column>
-                    <el-table-column prop="contractAmount" label="合同金额（万元）" min-width='120px'>
-                    </el-table-column>
-                    <el-table-column prop="deadStartTime" label="生效日期" sortable min-width='120px'>
+                    <el-table-column prop="status" label="状态">
                         <template slot-scope="scope">
-                            {{scope.row.deadStartTime | dateformat('YYYY-MM-DD')}}
+                            {{scope.row.status | filterStatus}}
+                            <!--
+                            {{scope.row.status == '00'? '已保存' :scope.row.status == '01' ? '审核中': scope.row.status == '02' ? '已驳回': scope.row.status == '03' ? '已撤销': scope.row.status == '04'? '已完成': ''}}
+                        -->
                         </template>
-                    </el-table-column>
-                    <el-table-column prop="deadEndTime" label="终止日期" sortable min-width='120px'>
-                        <template slot-scope="scope">
-                            {{scope.row.deadEndTime | dateformat('YYYY-MM-DD')}}
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="payAmount" label="已收（支）金额" min-width='100px' :formatter="fomatterStatus">
-                    </el-table-column>
-                    <el-table-column prop="status" label="合同执行进度" min-width='100px' :formatter="fomatterStatus">
                     </el-table-column>
                 </el-table>
                 <br />
@@ -86,41 +71,54 @@
 <script>
 import moment from 'moment';
 import axios from 'axios';
-import LedgerForm from "./LedgerForm";
-import LedgerDetail from "./LedgerDetail";
+import LedgerForm from './LedgerForm';
+import LedgerDetail from './LedgerDetail';
 import { CONFIG } from '../data.js';
-import { publicMethods } from "../application.js";
+import { publicMethods } from '../application.js';
 export default {
     mixins: [publicMethods],
-    name: "Ledger",
+    name: 'Ledger',
     data() {
         return {
             statusAll: CONFIG['status'],
             tableData: [],
             formDetails: {},
-            formId: "",
+            formId: '',
             params: {
                 desc: true,
                 page: 1,
                 pageSize: 5,
-                department: "",
-                submitter: "",
+                department: '',
+                submitter: '',
                 total: 0,
                 orderBy: 'created',
                 desc: true,
                 options: []
             },
             searchOptions: [],
-            formName: "contract_forms",
+            formName: 'contract_forms',
             formInline: {
                 applyName: '',
                 project: '',
-                dept: '',//申请部门
-                shape: '',//合同价格形式
+                dept: '', //申请部门
+                shape: '', //合同价格形式
                 applyDate: [],
                 status: ''
-            },
+            }
         };
+    },
+    filters: {
+        filterStatus: function(data) {
+            console.log(data);
+            let xmlJson = {
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '03': '已撤销',
+                '04': '已完成'
+            };
+            return xmlJson[data];
+        }
     },
     components: {
         LedgerForm,
@@ -131,7 +129,7 @@ export default {
         async getList(pageNum) {
             this.onSubmit();
             let $self = this;
-            $self.url = "/api/v1/contract_forms/query";
+            $self.url = '/api/v1/contract_forms/query';
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.forms.length > 0) {
@@ -140,9 +138,8 @@ export default {
                 }
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
-
             } else {
-                $self.msgTips("获取列表失败", "warning");
+                $self.msgTips('获取列表失败', 'warning');
             }
         },
         onSubmit() {
@@ -248,32 +245,44 @@ export default {
             //0已保存1审核中2驳回3撤销4完成
             switch (row.status) {
                 case '00':
-                    state = "已保存";
+                    state = '已保存';
                     break;
                 case '01':
-                    state = "审核中";
+                    state = '审核中';
                     break;
                 case '02':
-                    state = "驳回";
+                    state = '驳回';
                     break;
                 case '03':
-                    state = "撤销";
+                    state = '撤销';
                     break;
                 case '04':
-                    state = "已完成";
+                    state = '已完成';
                     break;
             }
             return state;
-        },
+        }
     },
     mounted() {
         this.getList();
-
     }
 };
 </script>
 <style lang="scss" scoped>
 #LedgerFilter .el-form-item--small.el-form-item {
-  width: 100%;
+    width: 100%;
+}
+#Ledger {
+    .searchBtn {
+        padding-right: 10px;
+        .positionBtn {
+            text-align: right;
+        }
+    }
+}
+</style>
+<style scoped>
+#LedgerFilter .filterForm >>> .el-form-item__content {
+    width: calc(100% - 80px);
 }
 </style>
