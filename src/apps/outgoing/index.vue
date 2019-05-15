@@ -13,7 +13,7 @@
                             </el-col>
                             <el-col :span="8">
                                 <el-form-item label="单据状态">
-                                    <el-select v-model="params.status" placeholder="请选择">
+                                    <el-select v-model="params.status" clearable placeholder="请选择">
                                         <el-option v-for="item in s_status" 
                                         :key="item.value"
                                         :label="item.label"
@@ -68,7 +68,7 @@
                     </el-table-column>
                 </el-table>
                    <br />
-                 <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+                 <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.page" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
             </div>
           </el-card>
         <br>
@@ -106,17 +106,14 @@ export default {
                         value: '02',
                         label: '已驳回'
                     },
-                    {
-                        value: '03',
-                        label: '已撤销'
-                    },
+                   
                     {
                         value: '04',
                         label: '已完成'
                     }
                 ],
             params: {
-                pageNum: 1,
+                page: 1,
                 pageSize: 5,
                 department: "",
                 title: "",
@@ -145,7 +142,6 @@ export default {
                "00":"已保存", 
                "01":"审核中",
                "02" :"已驳回",
-               "03" :"已撤销",
                "04" :"已完成"
             };
             return xmlJson[data];
@@ -174,7 +170,7 @@ export default {
         },
         
         //获取列表
-         async getList(pageNum) {
+         async getList(page) {
             let $self = this;
             $self.url = "/api/v1/outgoing_forms/query";
             let response = await $self.getQueryList();
@@ -208,7 +204,7 @@ export default {
         },
         reloadList(params) {
             if (params == "reload") {
-                this.params.pageNum = 1;
+                this.params.page = 1;
                 this.getList();
             } else {
                 this.$refs.OutgoingDetail.getFormDetails(params.id);
@@ -224,9 +220,9 @@ export default {
         },
 
         //分页
-        currentChange(pageNum) {
-            this.params.pageNum = pageNum;
-            this.getList(pageNum);
+        currentChange(page) {
+            this.params.page = page;
+            this.getList(page);
         },
         sizeChange(pageSize) {
             this.params.pageSize = pageSize;
@@ -253,7 +249,7 @@ export default {
         },
         resetInput() {
            this.params={
-                pageNum: 1,
+                page: 1,
                 pageSize: 5,
                 department: "",
                 title: "",

@@ -174,8 +174,9 @@ export default {
   methods: {
     getInspector() {
           const self = this;
+          let type = this.$store.getters.LoginData.code.split('_')[0];
           axios
-              .get("/api/v1/users/role/xtfz_deptManager")
+            .get(`/api/v1/users/role/${type}_deptManager`)
               .then(res => {
                   self.inspectors = res.data;
               })

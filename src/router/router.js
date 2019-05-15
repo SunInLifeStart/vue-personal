@@ -14,7 +14,7 @@ let routes = new Router({
     },
     {
       path: '/profile',
-      name: '个人资料',
+      name: '个人资料' ,
       component: () => import('../views/Profile')
     },
     {

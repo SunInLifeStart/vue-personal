@@ -106,51 +106,51 @@ export default {
         return {
             onOption: [
                 {
-                    value: 'yiyue',
+                    value: '一月',
                     label: '一月'
                 },
                 {
-                    value: 'eryue',
+                    value: '二月',
                     label: '二月'
                 },
                 {
-                    value: 'sanyue',
+                    value: '三月',
                     label: '三月'
                 },
                 {
-                    value: 'siyue',
+                    value: '四月',
                     label: '四月'
                 },
                 {
-                    value: 'wuyue',
+                    value: '五月',
                     label: '五月'
                 },
                 {
-                    value: 'liuyue',
+                    value: '六月',
                     label: '六月'
                 },
                 {
-                    value: 'qiyue',
+                    value: '七月',
                     label: '七月'
                 },
                 {
-                    value: 'bayue',
+                    value: '八月',
                     label: '八月'
                 },
                 {
-                    value: 'jiuyue',
+                    value: '九月',
                     label: '九月'
                 },
                 {
-                    value: 'shiyue',
+                    value: '十月',
                     label: '十月'
                 },
                 {
-                    value: 'shiyiyue',
+                    value: '十一月',
                     label: '十一月'
                 },
                 {
-                    value: 'shieryue',
+                    value: '十二月',
                     label: '十二月'
                 },
             ],
@@ -160,7 +160,7 @@ export default {
             formId: "",
             params: {
                 umonth: '',
-                page: 1,
+                pageNum: 1,
                 pageSize: 5,
                 creatorName: "",
                 created: "",
@@ -269,7 +269,7 @@ export default {
         },
         reloadList(params) {
             if (params == "reload") {
-                this.params.page = 1;
+                this.params.pageNum = 1;
                 this.getList();
             } else {
                 this.$refs.BusinessCardDetail.getFormDetails(params.id);
@@ -286,7 +286,7 @@ export default {
         
         //分页
         currentChange(pageNum) {
-            this.params.page = pageNum;
+            this.params.pageNum = pageNum;
             this.getList(pageNum);
         },
         sizeChange(pageSize) {
@@ -306,7 +306,6 @@ export default {
         },
         fomatterStatus(row, column) {
             let state;
-            //0已保存1审核中2驳回3撤销4完成
             switch (row.status) {
                 case '00':
                     state = "已保存";
@@ -316,9 +315,6 @@ export default {
                     break;
                 case '02':
                     state = "驳回";
-                    break;
-                case '03':
-                    state = "撤销";
                     break;
                 case '04':
                     state = "已完成";

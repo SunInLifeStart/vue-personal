@@ -27,7 +27,7 @@
                             <el-col :span="8">
                                 <el-form-item label="申请时间">
                                     <!-- <el-input placeholder="请输入申请时间" v-model="params.created"></el-input> -->
-                                    <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" style="width:100%" type="date" >
+                                    <el-date-picker v-model="params.created" value-format="yyyy-MM-dd 00:00:00" style="width:100%" type="date" >
                                   </el-date-picker>
                                 </el-form-item>
                             </el-col>
@@ -166,10 +166,7 @@ export default {
                         value: '02',
                         label: '已驳回'
                     },
-                    {
-                        value: '03',
-                        label: '已撤销'
-                    },
+                    
                     {
                         value: '04',
                         label: '已完成'
@@ -210,7 +207,6 @@ export default {
                "00":"已保存", 
                "01":"审核中",
                "02" :"已驳回",
-               "03" :"已撤销",
                "04" :"已完成"
             };
             return xmlJson[data];
