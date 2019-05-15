@@ -27,7 +27,7 @@
                             <el-col :span="8">
                                 <el-form-item label="申请时间">
                                     <!-- <el-input placeholder="请输入申请时间" v-model="params.created"></el-input> -->
-                                    <el-date-picker v-model="params.created" value-format="yyyy-MM-dd 00:00:00" style="width:100%" type="date" >
+                                    <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" style="width:100%" type="date" >
                                   </el-date-picker>
                                 </el-form-item>
                             </el-col>
@@ -273,14 +273,10 @@ export default {
             this.getList();
         },
         resetInput() {
-            // this.params.sealType = this.params.creatorName = "";
-            this.params={
-                creatorName: "",
-                useItems: "",
-                created:"",
-                organName:"",
-                status:""
-            }
+            this.params.creatorName = this.params.useItems = "";
+             this.params.created = this.params.organName = "";
+            this.params.status=""
+            this.getList();
         }
     },
     mounted() {

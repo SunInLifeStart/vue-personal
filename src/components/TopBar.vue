@@ -19,6 +19,9 @@
                         <el-menu-item index=""><a href="http://zhizhao.bjzcdi.com" style="color:#fff;display:block" target="_blank">大数据平台</a></el-menu-item>
                         <el-menu-item index=""><a href="https://www.wind.com.cn/newsite/data.html" style="color:#fff;display:block" target="_blank">wind-数据服务</a></el-menu-item>       
                         <el-menu-item index=""><a href="https://creis.fang.com/land/home/index" style="color:#fff;display:block" target="_blank">CREIS指数</a></el-menu-item>       
+                         <el-menu-item index=""><a href="http://mail.bjzcdi.com" style="color:#fff;display:block" target="_blank">邮箱链接</a></el-menu-item>
+                        <el-menu-item index=""><a href="http://www.bjzcdi.com/" style="color:#fff;display:block" target="_blank">公司网站</a></el-menu-item>       
+                        
                     </el-submenu>
                 </el-menu>
             </div>
