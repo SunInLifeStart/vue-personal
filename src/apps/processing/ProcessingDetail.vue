@@ -271,7 +271,7 @@
                         </el-col>
                     </el-row>
                 </div>
-                 <el-row v-if="isFromDetailsEdit" >
+                 <el-row v-if="tableData.positionsWage.remuneration!=''" >
                      <el-col :span="24">
                          <h1 style="text-align:center">拟聘人员信息</h1>
                     </el-col>
