@@ -19,7 +19,7 @@
                 <el-button style="margin-left: 25px;" type="primary" v-show="this.tableData.status && this.tableData.status == '04'" @click="print">打印</el-button>
             </div>
             <br />
-            <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
+            <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
                 <el-row style="margin-top: 25px;vertical-align: middle; line-height: 34px;">
                     <el-col :span="12" style="margin-left:5px;">
                         <span class="bolder">流水单号</span> ：{{tableData.number}}
@@ -138,10 +138,10 @@
                             {{tableData.utype}}
                         </td>
                     </tr>
-                    <tr class="no-print">
+                    <tr>
                         <td colspan="8" style="font-weight:bold;">附件</td>
                     </tr>
-                    <tr class="no-print">
+                    <tr>
                         <td colspan="1">附件
                         </td>
                         <td colspan="7" style="padding: 10px;">
@@ -304,6 +304,14 @@ export default {
     }
 };
 </script>
+<style>
+@media print {
+    html,
+    body {
+        height: inherit;
+    }
+}
+</style>
 <style lang="scss" scope>
 #ExpensesDetail {
     .titlename {

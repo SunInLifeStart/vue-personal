@@ -19,7 +19,7 @@
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
-            <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
+            <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
                 <h4 style="text-align: center;">借款申请单</h4>
                 <el-row style="margin-top: 25px;vertical-align: middle; line-height: 34px;">
                     <el-col :span="9">
@@ -155,7 +155,7 @@
                             {{tableData.settlement}}
                         </td>
                     </tr>
-                    <tr class="no-print">
+                    <tr >
                         <td class="bolder" colspan="2">附件上传
                         </td>
                         <td colspan="6" style="padding:10px;">
@@ -164,7 +164,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr class="no-print">
+                    <tr >
                         <td class="bolder" colspan="2">领导审批</td>
                         <td colspan="6" style="text-align: left;">
                             <div class="audit" v-for="item in this.array" :key="item.index">
@@ -385,6 +385,14 @@ export default {
     }
 };
 </script>
+<style>
+@media print {
+    html,
+    body {
+        height: inherit;
+    }
+}
+</style>
 <style lang="scss" scope>
 #LoanDetail {
     .titlename {

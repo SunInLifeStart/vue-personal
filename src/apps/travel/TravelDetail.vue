@@ -19,7 +19,7 @@
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
-            <el-form :model='tableData' class="demo-form-inline" ref="formupdate">
+            <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
                 <h4 style="text-align: center;">出差审批单</h4>
                 <el-row style="margin-top: 25px;">
                     <el-col :span="12">
@@ -168,7 +168,7 @@
                             {{this.tableData.estimate.length ==0 ? '￥': this.tableData.estimate[0].currency.curValue}}: &nbsp; {{tableData.total}}（金额大写:【{{this.tableData.estimate.length ==0 ? '人民币': this.tableData.estimate[0].currency.label}} 】: {{this.tableData.upper}})
                         </td>
                     </tr>
-                    <tr class="no-print">
+                    <tr>
                         <td colspan="2">
                             <!-- <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false"> -->
                             <span>附件上传</span>
@@ -180,7 +180,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr class="no-print">
+                    <tr>
                         <td colspan="2">
                             审批意见
                         </td>
@@ -402,6 +402,14 @@ export default {
     }
 };
 </script>
+<style>
+@media print {
+    html,
+    body {
+        height: inherit;
+    }
+}
+</style>
 <style lang="scss" scope>
 #TravelDetail {
     .titlename {

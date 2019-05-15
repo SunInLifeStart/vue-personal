@@ -317,10 +317,10 @@
                         <td colspan="8">
                         </td>
                     </tr>
-                    <tr class="no-print">
+                    <tr>
                         <td colspan="8" style="font-weight:bold;">附件</td>
                     </tr>
-                    <tr class="no-print">
+                    <tr>
                         <td class="fontBold">附件信息</td>
                         <td colspan="7" style="padding: 10px;">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
@@ -328,7 +328,7 @@
                             </div>
                         </td>
                     </tr>
-                    <tr class="no-print">
+                    <tr>
                         <td colspan="2">
                             审批意见
                         </td>
@@ -690,10 +690,11 @@ export default {
 </script>
 <style>
 @media print {
-    html, body {
+    html,
+    body {
         height: inherit;
     }
-  }
+}
 </style>
 <style lang="scss" scope>
 #ReimbursementDetail {
