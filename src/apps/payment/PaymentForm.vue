@@ -190,10 +190,10 @@
                             <el-input v-model="payItem.localAmount" disabled class="money"></el-input>
                         </td>
                         <td>
-                            <el-input v-model="payItem.noTax" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'notax')"></el-input>
+                            <el-input v-model="payItem.noTax" oninput="if(value.length>9) value=value.slice(0,9)" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'notax')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model="payItem.tax" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'tax')"></el-input>
+                            <el-input v-model="payItem.tax" oninput="if(value.length>9) value=value.slice(0,9)" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'tax')"></el-input>
                         </td>
                     </tr>
                     <tr>
