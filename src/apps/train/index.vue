@@ -233,15 +233,18 @@ export default {
         resetInput() {
             // this.params.submitter = this.params.department = "";
             this.params={
-               department: "",
+                pageNum: 1,
+                pageSize: 5,
+                department: "",
                 submitter: "",
                 committed:"",
                 status:"",
                 trainingTime:[],
-                 startTime:"",
+                startTime:"",
                 endTime:"",
                
             }
+            this.getList();
             this.s_status=[]
         }
     },

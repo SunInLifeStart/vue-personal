@@ -273,14 +273,10 @@ export default {
             this.getList();
         },
         resetInput() {
-            // this.params.sealType = this.params.creatorName = "";
-            this.params={
-                creatorName: "",
-                useItems: "",
-                created:"",
-                organName:"",
-                status:""
-            }
+            this.params.creatorName = this.params.useItems = "";
+             this.params.created = this.params.organName = "";
+            this.params.status=""
+            this.getList();
         }
     },
     mounted() {

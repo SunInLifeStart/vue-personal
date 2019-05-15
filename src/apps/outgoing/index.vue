@@ -264,6 +264,7 @@ export default {
                 options: []
                
             }
+            this.getList();
             // this.s_status=[]
         }
     },

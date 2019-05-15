@@ -214,10 +214,13 @@
             },
             onReset() {
                 this.params={
+                    pageNum: 1,
+                    pageSize: 5,
                     uname: '',
                     applyPosition: '',
                     status: '',
                 }
+                this.getList();
             },
             onSubmit() {
                 this.getList();
