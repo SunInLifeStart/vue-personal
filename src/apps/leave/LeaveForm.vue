@@ -83,7 +83,7 @@
                         <td colspan="2">
                             <!-- @mousewheel.native.prevent type="number" -->
                            
-                            <el-input placeholder="休假时长"  v-model="formData.day">
+                            <el-input placeholder="休假时长" disabled="disabled"  v-model="formData.day">
                                 <template style="width:20px;" slot="append">天</template>
                             </el-input>
                         </td>
