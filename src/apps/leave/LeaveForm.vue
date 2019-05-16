@@ -68,22 +68,24 @@
                             拟休时间</td>
                         <td colspan="2">
                             <template>
-                                <el-date-picker v-model="formData.startTime" @change="getHour(formData.startTime,formData.endTime)"
+                                <!-- @change="getHour(formData.startTime,formData.endTime)" -->
+                                <el-date-picker v-model="formData.startTime" 
                                  value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="开始时间">
                                 </el-date-picker>
                             </template>
                         </td>
                         <td colspan="1">
                             <template>
-                                <el-date-picker style="width:100%;" v-model="formData.endTime" @change="getHour(formData.startTime,formData.endTime)"
+                                <!-- @change="getHour(formData.startTime,formData.endTime)" -->
+                                <el-date-picker style="width:100%;" v-model="formData.endTime" 
                                  value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间">
                                 </el-date-picker>
                             </template>
                         </td>
                         <td colspan="2">
-                            <!-- @mousewheel.native.prevent type="number" -->
-                           
-                            <el-input placeholder="休假时长" disabled="disabled"  v-model="formData.day">
+                            
+                           <!-- disabled="disabled" -->
+                            <el-input placeholder="休假时长" @mousewheel.native.prevent type="number"  v-model="formData.day">
                                 <template style="width:20px;" slot="append">天</template>
                             </el-input>
                         </td>
