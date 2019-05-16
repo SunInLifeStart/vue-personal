@@ -386,8 +386,7 @@ export default {
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
-            console.log(response);
-            if (response) {
+           if (response) {
                 $self.tableData = response.data;
                 if (this.tableData.contractType == '合同签订') {
                     this.tableData.contractType = '合同签订(土地出让合同外)';
