@@ -53,6 +53,7 @@
                             <el-select style="width:100%;" clearable v-model="formData.useItems" placeholder="请选择印章种类">
                                 <el-option v-for="item in onOption" :key="item.value" :label="item.label" :value="item.value" :disabled=" item.label == '党支部章' && formData.organName !='综合管理部' ">
                                 </el-option>
+                               
                             </el-select>
                         </el-form-item>
                     </el-col>
@@ -175,14 +176,14 @@ export default {
                 useItems: [
                     {
                         required: true, //是否必填
-                        trigger: 'blur', //何事件触发
+                        trigger: 'change', //何事件触发
                         message: '请输入印章种类'
                     }
                 ],
                 sealType: [
                     {
                         required: true, //是否必填
-                        trigger: 'blur', //何事件触发
+                        trigger: 'change', //何事件触发
                         message: '请输入类型'
                     }
                 ],
@@ -210,7 +211,7 @@ export default {
                 accompanyingPerson: [
                     {
                         required: true, //是否必填
-                        trigger: 'blur', //何事件触发
+                        trigger: 'change', //何事件触发
                         message: '陪同人'
                     }
                 ],
