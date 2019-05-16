@@ -374,7 +374,7 @@ export default {
         }
     },
     mounted() {
-        document.title = "集团门户-中关村发展";
+        document.title = "公司门户-中关村协同发展";
         this.getMsgList();
         this.getNewDocs();
         this.getInspect();

@@ -1,3 +1,4 @@
+
 export const publicMethods = {
     methods: {
         async saveFormData(url, data) {
@@ -76,14 +77,16 @@ export const publicMethods = {
 
             //督办特殊情况特殊处理
             if($self.appFlowName == "inspect-form_inspect" && nowActins.assigneeListTos && nowActins.assigneeListTos.indexOf("assigneeListVarable") > -1){
-                 let response = await $self.getCommonType("/api/v1/users/role/xtfz_deptManager");
-                 if(response){
-                    for(var i = 0; i<response.data.length; i++){
-                        if(response.data[i].id == $self.formData.inspector){
-                            nowActins.assigneeList.push({"name":response.data[i].name,"id":$self.formData.inspector});
+                let type = this.$store.getters.LoginData.code.split('_')[0];
+                let res =   await $self.getCommonType("/api/v1/users/role/"+ type +"_deptManager");
+                if(res){
+                    let detailsData = $self.tableData ? $self.tableData : $self.formData;
+                    for(var i = 0; i<res.data.length; i++){
+                        if(res.data[i].id == detailsData.inspector){
+                           actions.assigneeList.push({"name":res.data[i].name,"id":detailsData.inspector});
                         }
                     };
-                 }
+                }
             }
             let url = `/workflow/${this.appFlowName}/${
                 this.formId
@@ -179,7 +182,12 @@ export const publicMethods = {
                                 }
                             }
                         } else if (key == "role" && detailsData.appFlowName != "travel-form_travel") {
-                            options.push("role=" + this.$store.getters.LoginData.Role);
+                         
+                            if(this.$store.getters.LoginData.Role){
+                                options.push("role=" + this.$store.getters.LoginData.Role);
+                            }else{
+                                options.push("role=''");
+                            }
                         } else {
                             if (key.indexOf("filterButton") > -1) {
 
@@ -230,28 +238,30 @@ export const publicMethods = {
                     labelName: "selContents"
                 });
             }
-            if($self.appFlowName == "inspect-form_inspect" && action.assigneeListTos && action.assigneeListTos.indexOf("assigneeListVarable") > -1){
+            // if($self.appFlowName == "inspect-form_inspect" && action.assigneeListTos && action.assigneeListTos.indexOf("assigneeListVarable") > -1){
 
-                let type = this.$store.getters.LoginData.code.split('_')[0];
-                $self.$axios
-                .get("/api/v1/users/role/"+ type +"_deptManager")
-                .then(res => {
-                    for(var i = 0; i<res.data.length; i++){
-                        if(res.data[i].id == $self.tableData.inspector){
-                           action.assigneeList.push({"name":res.data[i].name,"id":$self.tableData.inspector});
-                        }
-                    };
-                }) 
-            }else{
-                if (action.assigneeList && action.assigneeList.length > 0) {
-                    $self.actionsDialogArr.push({
-                        seletList: action.assigneeList,
-                        label: action.assigneeListLabel,
-                        multiple: action.assigneeListMul == "true" ? true : false,
-                        checkedValue: action.assigneeListMul == "true" ? [] : "",
-                        labelName: "assigneeList"
-                    });
-                }
+            //     let type = this.$store.getters.LoginData.code.split('_')[0];
+            //     $self.$axios
+            //     .get("/api/v1/users/role/"+ type +"_deptManager")
+            //     .then(res => {
+            //         for(var i = 0; i<res.data.length; i++){
+            //             if(res.data[i].id == $self.tableData.inspector){
+            //                action.assigneeList.push({"name":res.data[i].name,"id":$self.tableData.inspector});
+            //             }
+            //         };
+            //     }) 
+            // }else{
+               
+            // }
+
+            if (action.assigneeList && action.assigneeList.length > 0) {
+                $self.actionsDialogArr.push({
+                    seletList: action.assigneeList,
+                    label: action.assigneeListLabel,
+                    multiple: action.assigneeListMul == "true" ? true : false,
+                    checkedValue: action.assigneeListMul == "true" ? [] : "",
+                    labelName: "assigneeList"
+                });
             }
 
 
