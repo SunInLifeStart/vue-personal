@@ -261,11 +261,12 @@
                     <tr>
                         <td colspan="2">
                             合同价格形势
+                            
                         </td>
                         <td colspan="6">
                             <el-radio-group v-model="tableData.shape" disabled>
-                                <el-radio label="1">固定总价</el-radio>
                                 <el-radio label="2">固定综合单价</el-radio>
+                                <el-radio label="1">固定总价</el-radio>
                                 <el-radio label="3">其他</el-radio>
                             </el-radio-group>
                         </td>
