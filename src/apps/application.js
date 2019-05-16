@@ -155,9 +155,9 @@ export const publicMethods = {
                             if(this.branchCode){
                                 options.push(key + "=" + this.branchCode);
                             }else{
-                                if(this.$store.getters.LoginData.currentRoles.length == 0){
+                                if(this.$store.getters.LoginData.currentRoles.length == 0 || this.$store.getters.LoginData.currentRoles.length == 1){
                                     options.push(key + "=" + this.$store.getters.LoginData.code.split("_")[0]);  
-                                } 
+                                }
                             }
 
                         } else if (key == "characterLevel") {

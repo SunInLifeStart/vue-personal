@@ -68,7 +68,8 @@ export default {
       showUser: false,
       options:[],
       selectedOptions:[],
-      dialogUserId:false
+      dialogUserId:false,
+      checkedObject:{}
     };
   },
   components: {
@@ -96,18 +97,6 @@ export default {
         window.location.href = "login.html";  
       });
     },
-     handleChange(value) {
-             let $self = this;
-              for(let i = 0; i<$self.options.length; i++){
-                if($self.options[i].value == value[0]){
-                    for(let j = 0; j< $self.options[i].children.length; j++){
-                        if($self.options[i].children[j].value == value[1]){
-                             $self.checkedObject = $self.options[i].children[j];
-                        }
-                    }
-                }
-            }   
-      },
       checkeUserOrgans(name){
             let $self = this;
              $self.$axios
@@ -143,13 +132,28 @@ export default {
                 // Cookies.remove("uid");
                 // Cookies.remove("uname");
                 // Cookies.remove("username");
-                 this.$store
-                .dispatch("Login", formdata)
-                .then(data => {
-                                                                           
-               })
+
+                  let $self = this;
+                  $self.$axios
+                    .post('/api/auth/jwt/switchingDepartments',{department:this.checkedObject})
+                    .then(res => {
+                      console.log(res);
+                  })          
             }
         },
+
+          handleChange(value) {
+             let $self = this;
+              for(let i = 0; i<$self.options.length; i++){
+                if($self.options[i].value == value[0]){
+                    for(let j = 0; j< $self.options[i].children.length; j++){
+                        if($self.options[i].children[j].value == value[1]){
+                             $self.checkedObject = $self.options[i].children[j];
+                        }
+                    }
+                }
+            }   
+      },
     aaa() {
       this.showUser = false;
     }

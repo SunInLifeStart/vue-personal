@@ -50,7 +50,7 @@
                     <!-- {{formData.useItems}} -->
                     <el-col :span="12">
                         <el-form-item label="印章种类" prop="useItems">
-                            <el-select style="width:100%;" clearable v-model="formData.useItems" placeholder="请选择印章种类">
+                            <el-select style="width:100%;" clearable v-model="formData.useItems" placeholder="请选择印章种类"  @change="selectPrint(formData.useItems)">
                                 <el-option v-for="item in onOption" :key="item.value" :label="item.label" :value="item.value" :disabled=" item.label == '党支部章' && formData.organName !='综合管理部' ">
                                 </el-option>
                                
@@ -59,8 +59,8 @@
                     </el-col>
                     <!-- :style="{display:(formData.useItems=='公章'?'black':'none')}"  -->
                     <el-col :span="12">
-                        <el-form-item label="类型" :prop="formData.useItems=='gongzhang'?'sealType':''">
-                            <el-select style="width:100%;" clearable v-model="formData.sealType" placeholder="请选择类型" :disabled="formData.useItems=='gongzhang'?false:true">
+                        <el-form-item label="类型" hide-required-asterisk = 'false'>
+                            <el-select style="width:100%;" clearable v-model="formData.sealType" placeholder="请选择类型" :disabled="formData.useItems=='gongzhang'?false:true" >
                                 <el-option v-for="item in typeOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
@@ -335,6 +335,11 @@ export default {
         FilesOperate
     },
     methods: {
+        selectPrint(data){
+          if(data != 'gongzhang'){
+              this.formData.sealType = '';
+          }
+        },
         // 时长
         getHour(a1, a2) {
             const $self = this;
@@ -493,7 +498,7 @@ export default {
                     if (compare) {
                         this.saveForm(type);
                     } else {
-                        this.msgTips('用印明细不完整，请填写完整！', 'warning');
+                        this.msgTips('用印明细不完整，请填写完整', 'warning');
                     }
                 }
             });
@@ -501,6 +506,16 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
+
+            if($self.formData.useItems == "gongzhang" &&  !$self.formData.sealType){  //公章类型必选
+                $self.msgTips('请选择公章类型','warning');
+                return false;
+            }
+
+            if($self.formData.useItems != "gongzhang"){ // 其他章不要sealtype
+                delete $self.formData.sealType;
+            }
+
             if ($self.createForm_status) {
                 if ((await $self.juderCode()) == 'returnDialog') {
                     return false;
