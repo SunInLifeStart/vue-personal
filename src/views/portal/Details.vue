@@ -4,20 +4,20 @@
     <div class="portal">
         <div class="portalList">
             <div style="padding:15px 10px" v-if="type == 'newsList' || type =='newsListToList'"><router-link :to="{path:'/portal'}">首页</router-link> > <router-link :to="'/portal/list/newsListToList'+'/'+page">新闻中心</router-link></div>
-             <div style="padding:15px 10px" v-if="type != 'newsList' && type !='newsListToList'"><router-link :to="{path:'/portal'}">首页</router-link> > <router-link :to="'/portal/list/'+type+'/'+ page">{{name}}</router-link></div>
+             <div style="padding:15px 10px" v-if="type != 'newsList' && type !='newsListToList' && type !='duban' "><router-link :to="{path:'/portal'}">首页</router-link> > <router-link :to="'/portal/list/'+type+'/'+ page">{{name}}</router-link></div>
+              <div style="padding:15px 10px" v-if="type == 'duban'"><router-link :to="{path:'/portal'}">首页</router-link></div>
             <div class="content">
                 <!-- {{data.url[0]}} -->
                   <div class="title">
                         <h3>{{data.title}}</h3>
                         <p>发布时间：{{data.time}} &nbsp; &nbsp; 发布人：{{data.publisher}}  &nbsp; &nbsp;来源：{{data.source}}</p>
                   </div> 
-                 <!-- <div v-if="pdfUrl" style="text-align:center"><PdfJs :pdfUrl="pdfUrl" /></div> -->
                  <div  style="text-align:center" v-if="pdfUrl">
                      <div style="width:100%;background:#FFF;height:60px; position:relative; z-index:999"></div>
                       <iframe width="100%" height="1000px" :src="pdfUrl" frameborder="0" style="margin-top:-52px;"></iframe>
                  </div>
-                 <div v-html="data.content" class="newsContentDetails"></div>
-                 <div style="text-align:left; padding:30px; border-top:1px solid #f1f1f1; margin-top:-50px;position:relative;z-index:9999;background:#FFF" v-if="data.url && data.url.length>0">
+                 <div v-html="data.content" class="newsContentDetails" v-if="data.content"></div>
+                 <div style="text-align:left; padding:30px; border-top:1px solid #f1f1f1;position:relative;z-index:9999;background:#FFF" v-if="data.url && data.url.length>0">
                     <div>附件：</div>
                     <br />
                     <div v-for="url of data.url" :key="url.type"  style="color:#0066cc;display:block;line-height:2; cursor:pointer; font-size:18px;">
@@ -126,6 +126,24 @@ export default {
                 }
                 this.data = data;
             });
+
+            if(this.type == "duban"){
+             axios
+                    .get("/api/v1/inspect_forms/get/" + params.id)
+                    .then(res => {
+                            this.data = {
+                                title:res.data.title,
+                                publisher:res.data.creatorName,
+                                source:res.data.organName,
+                                time:res.data.done,
+                                content:res.data.content,
+                                url:res.data.attachments
+                            }
+                    });
+
+            }
+
+           
     }
 };
 </script>
@@ -163,6 +181,7 @@ export default {
             text-align: left;
             font-size:18px;
             line-height:1.8em;
+            min-height:300px;
             img{
                 display:block;
                 margin:0 auto;

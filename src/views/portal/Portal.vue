@@ -120,10 +120,10 @@
                       <!--<el-button size="mini">更多</el-button>-->
                         </router-link></h3>
                   <ul>
-                    <li v-for="(item,index) in duban" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px">
+                    <li v-for="(item,index) in duban" :key="item.id" style="padding-left:18px; height:40px;line-height:40px">
                        <img src="@/assets/arrow.png"  v-if="index == 0" style="top:15px;"> 
                        <img src="@/assets/arrow2.png"  v-if="index != 0" style="top:15px;"> 
-                       <router-link :to="'/portal/list/duban/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
+                       <router-link :to="'/portal/list/duban/1/' + item.id" :title="item.title"> {{item.title | formTxt}}</router-link>
                       <span style="float:right;margin-right:10px;">{{item.created | formDate}}</span>
                     </li>
                   </ul>

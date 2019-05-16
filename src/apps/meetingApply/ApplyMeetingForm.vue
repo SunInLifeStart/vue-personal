@@ -574,11 +574,14 @@
                             $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                         } else {
                             let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-                            actions.data.types = actions.data.types.filter(
-                                function(item) {
-                                    return item.action == "COMMIT";
-                                }
-                            );
+                            if(actions.data.types.length == 1 && actions.data.types[0].action == 'START'){
+                            }else{
+                                actions.data.types = actions.data.types.filter(
+                                    function(item) {
+                                        return item.action == "COMMIT";
+                                    }
+                                );
+                            }
                             actions.data.types[0]["comment"] =  actions.data.types[0].name;
                             await $self.startSignal(actions.data.types[0],"fromeEdit");
                             $self.emitMessage();
