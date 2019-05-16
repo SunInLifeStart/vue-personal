@@ -337,9 +337,11 @@ export default {
         // 时长
         getHour(a1, a2) {
             const $self = this;
-            var date3 =
-                new Date(a2.replace(/-/g, '/')).getTime() -
-                new Date(a1.replace(/-/g, '/')).getTime(); //时间差的毫秒数
+            if(a1 && a2){
+                var date3 =
+                    new Date(a2.replace(/-/g, '/')).getTime() -
+                    new Date(a1.replace(/-/g, '/')).getTime(); //时间差的毫秒数
+            }
             //计算出相差天数
             var days = Math.floor(date3 / (24 * 3600 * 1000));
             //计算出小时数
