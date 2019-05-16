@@ -1,7 +1,7 @@
 <template>
     <el-popover placement="bottom-start" width="260" height="500" class="drawer">
         <div>
-            <div>扫一扫下载Android版App</div>
+            <div>扫一扫下载手机版App</div>
             <img :src="qrcode" alt="" width="180px"/>
             <br />
             <br />
@@ -41,9 +41,9 @@ export default {
     },
     mounted() {
         if (process.env.NODE_ENV == 'production') {
-            this.qrcode= "http://124.205.31.66:2097/static/docs/appAndroid.png"
+            this.qrcode= "http://124.205.31.66:2097/static/docs/erwm.png"
         }else{
-            this.qrcode = 'http://static1.yxpe.com.cn/docs/appAndroid.png';
+            this.qrcode = 'http://static1.yxpe.com.cn/docs/erwm.png';
         }
     }
 };
