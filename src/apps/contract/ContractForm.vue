@@ -700,7 +700,6 @@ export default {
         },
         //输入项警告检查
         ruleHint() {
-            debugger
             let ruleHint = true;
             if (
                 this.formData.initiateTime == '' ||
