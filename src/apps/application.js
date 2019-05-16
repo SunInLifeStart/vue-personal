@@ -1,4 +1,5 @@
 
+
 export const publicMethods = {
     methods: {
         async saveFormData(url, data) {
@@ -321,7 +322,9 @@ export const publicMethods = {
         //提交表单
         async submitForm() {
             let $self = this;
-            $self.currentAction["comment"] = $self.textarea ? $self.textarea : $self.currentAction.name;
+            if($self.currentAction.action !="START"){
+                $self.currentAction["comment"] = $self.textarea ? $self.textarea : $self.currentAction.name;
+            }
             $self.hasRequired($self.currentAction);
             if ($self.actionsDialogArr.length > 0 && ($self.actionsDialogArr[0].checkedValue != "" || $self.actionsDialogArr[0].checkedValue.length > 0)) {
                 for (let item of $self.actionsDialogArr) {
