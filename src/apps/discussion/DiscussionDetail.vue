@@ -264,6 +264,8 @@ export default {
                             // 处理部门
                             if (item.person) {
                                 item.people = item.person.split(',')
+                            }
+                            if (item.department) {
                                 item.department = item.department.split(',')
                             }
                             for (let i = 0; i<item.department.length; i++) {

@@ -10,7 +10,14 @@
                 <!-- {{data.url[0]}} -->
                   <div class="title">
                         <h3>{{data.title}}</h3>
-                        <p>发布时间：{{data.time}} &nbsp; &nbsp; 发布人：{{data.publisher}}  &nbsp; &nbsp;来源：{{data.source}}</p>
+                        <p>
+                            发布时间：{{data.time}} &nbsp; &nbsp; 发布人：{{data.publisher}}  &nbsp; &nbsp;来源：{{data.source}} &nbsp; &nbsp; 
+                            <span v-if="type == 'duban'">
+                                督办类型：{{data.lamp}} &nbsp; &nbsp; 
+                                截止日期：{{data.deadline}}&nbsp; &nbsp; 
+                                被督办部门负责人:{{data.inspector}}
+                            </span>
+                        </p>
                   </div> 
                  <div  style="text-align:center" v-if="pdfUrl">
                      <div style="width:100%;background:#FFF;height:60px; position:relative; z-index:999"></div>
@@ -51,6 +58,7 @@ export default {
         return {
             pdfUrl: "",
             data: {},
+            inspectors: [],
             name: "",
         };
     },
@@ -63,6 +71,9 @@ export default {
     methods: {
         showPreview(url){          
             this.common.preview(url);
+        },
+        getInspector() {
+            const self = this;
         },
         windowPreview(url){
              console.log(process.env.NODE_ENV);
@@ -83,6 +94,7 @@ export default {
         }
     },
     mounted() {
+        this.getInspector()
         let xml = {
             newsList: "新闻中心",
             anno: "通知公告",
@@ -128,18 +140,42 @@ export default {
             });
 
             if(this.type == "duban"){
+                let self = this
+
+            let type = this.$store.getters.LoginData.code.split('_')[0];
+            axios
+            .get(`/api/v1/users/role/${type}_deptManager`)
+            .then(res => {
+            self.inspectors = res.data;
+
              axios
                     .get("/api/v1/inspect_forms/get/" + params.id)
                     .then(res => {
-                            this.data = {
-                                title:res.data.title,
-                                publisher:res.data.creatorName,
-                                source:res.data.organName,
-                                time:res.data.done,
-                                content:res.data.content,
-                                url:res.data.attachments
-                            }
+                        let demo = self.inspectors.filter(item => {
+                                return res.data.inspector == item.id
+                            })
+                        if(demo.length > 0) {
+                            demo = demo[0].name
+                        }
+                        this.data = {
+                            title:res.data.title,
+                            publisher:res.data.creatorName,
+                            source:res.data.organName,
+                            time:res.data.done,
+                            lamp:res.data.lamp,
+                            inspector:demo,
+                            deadline:res.data.deadline,
+                            content:res.data.content,
+                            url:res.data.attachments
+                        }
                     });
+            })
+            .catch(function() {
+            self.$message({
+                message: "操作失败",
+                type: "error"
+            });
+            });
 
             }
 
