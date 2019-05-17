@@ -513,7 +513,7 @@ export default {
             }
 
             if($self.formData.useItems != "gongzhang"){ // 其他章不要sealtype
-                delete $self.formData.sealType;
+                 $self.formData.sealType="";
             }
 
             if ($self.createForm_status) {
