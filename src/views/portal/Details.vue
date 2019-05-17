@@ -15,19 +15,7 @@
                             <span v-if="type == 'duban'">
                                 督办类型：{{data.lamp}} &nbsp; &nbsp; 
                                 截止日期：{{data.deadline}}&nbsp; &nbsp; 
-                                被督办部门负责人
-                                <el-select
-                                    v-model="data.inspector"
-                                    filterable
-                                    disabled
-                                >
-                                    <el-option
-                                    v-for="item in inspectors"
-                                    :key="item.id"
-                                    :label="item.name"
-                                    :value="item.id"
-                                    ></el-option>
-                                </el-select>  
+                                被督办部门负责人:{{data.inspector}}
                             </span>
                         </p>
                   </div> 
@@ -86,18 +74,6 @@ export default {
         },
         getInspector() {
             const self = this;
-            let type = this.$store.getters.LoginData.code.split('_')[0];
-            axios
-            .get(`/api/v1/users/role/${type}_deptManager`)
-            .then(res => {
-            self.inspectors = res.data;
-            })
-            .catch(function() {
-            self.$message({
-                message: "操作失败",
-                type: "error"
-            });
-            });
         },
         windowPreview(url){
              console.log(process.env.NODE_ENV);
@@ -164,21 +140,42 @@ export default {
             });
 
             if(this.type == "duban"){
+                let self = this
+
+            let type = this.$store.getters.LoginData.code.split('_')[0];
+            axios
+            .get(`/api/v1/users/role/${type}_deptManager`)
+            .then(res => {
+            self.inspectors = res.data;
+
              axios
                     .get("/api/v1/inspect_forms/get/" + params.id)
                     .then(res => {
-                            this.data = {
-                                title:res.data.title,
-                                publisher:res.data.creatorName,
-                                source:res.data.organName,
-                                time:res.data.done,
-                                lamp:res.data.lamp,
-                                inspector:parseInt(res.data.inspector),
-                                deadline:res.data.deadline,
-                                content:res.data.content,
-                                url:res.data.attachments
-                            }
+                        let demo = self.inspectors.filter(item => {
+                                return res.data.inspector == item.id
+                            })
+                        if(demo.length > 0) {
+                            demo = demo[0].name
+                        }
+                        this.data = {
+                            title:res.data.title,
+                            publisher:res.data.creatorName,
+                            source:res.data.organName,
+                            time:res.data.done,
+                            lamp:res.data.lamp,
+                            inspector:demo,
+                            deadline:res.data.deadline,
+                            content:res.data.content,
+                            url:res.data.attachments
+                        }
                     });
+            })
+            .catch(function() {
+            self.$message({
+                message: "操作失败",
+                type: "error"
+            });
+            });
 
             }
 
