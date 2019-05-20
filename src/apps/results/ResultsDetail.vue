@@ -20,11 +20,11 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="项目名称：">{{tableData.purchaseProjectName}}
+                        <el-form-item label="项目名称：">{{tableData.projectName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购项目名称：">{{tableData.organName}}
+                        <el-form-item label="采购项目名称：">{{tableData.purchaseProjectName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
