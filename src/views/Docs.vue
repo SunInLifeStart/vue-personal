@@ -8,7 +8,7 @@
                     <el-dialog title="分享文档" :visible.sync="dialogTableVisible" width="460px">
                         <el-row>
                             <el-col :span="24">
-                                <el-upload class="upload-demo" drag name="files" ref="upload" accept=".pdf,.PDF,.doc,.docx,.xls,.xlsx,.txt" action="/api/v1/files/upload" :http-request="uploadFile" :on-success="handleSuccess" :on-remove="handleRemove" :auto-upload="true" :with-credentials="true">
+                                <el-upload class="upload-demo" drag name="files" ref="upload" accept=".pdf,.PDF,.doc,.docx,.xls,.xlsx,.txt" action="/api/v1/files/upload" :on-success="handleSuccess" :on-remove="handleRemove" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-upload"></i>
                                     <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
                                 </el-upload>
