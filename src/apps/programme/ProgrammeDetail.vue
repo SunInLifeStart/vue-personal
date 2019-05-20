@@ -88,6 +88,44 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
+                        <el-form-item label="评审/谈判名单" >
+                            <tr >
+                                <td colspan="4" style="width: 21%;">
+                                    <el-select
+                                            disabled
+                                            value-key="id"
+                                            v-model="tableData.negotiateLeaders">
+                                        <el-option
+                                                v-for="item in userOptions"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="{id: item.id, name: item.name}">
+                                        </el-option>
+                                    </el-select>
+                                </td>
+                               <td colspan="8" id="seles">
+                                    <el-select
+                                             disabled
+                                            v-model="tableData.negotiatePersonnels"
+                                            multiple
+                                            filterable
+                                            allow-create
+                                            value-key="id"
+                                            default-first-option>
+                                        <el-option
+                                                v-for="item in userOptions"
+                                                :key="item.id"
+                                                :label="item.name"
+                                                :value="{id: item.id, name: item.name}">
+                                        </el-option>
+                                    </el-select>
+                                </td>
+                            </tr>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
                         <el-form-item label="供应商入围情况">
                             <table class="tableNoBorder">
                                 <th colspan="8" style="width: 80%">推荐采购入围名单</th>
@@ -210,6 +248,9 @@
         name: 'ProgrammeDetail',
         data() {
             return {
+                 userOptions: [],
+                options: [],
+                dataOptions: [],
                 dialogVisibleCrumb:false,
                 tableData: {
                     status: '',
@@ -243,7 +284,15 @@
             Comment,
             FilesOperate
         },
+         mounted() {
+            this.getUser()
+            // this.getOrgans()
+        },
         methods: {
+            async getUser() {
+                let user = await this.getUsers("/api/v1/users")
+                if (user) this.userOptions = user.data
+            },
             getFormDetails(formId) {
                 let $self = this;
                 $self.formId = formId;
@@ -255,6 +304,7 @@
                 let response = await $self.getDetails();
                 if (response) {
                     $self.tableData = response.data.content;
+                   
                 } else {
                     $self.msgTips("获取表单失败", "warning");
                 }
@@ -371,5 +421,8 @@
 <style scoped>
     .tableNoBorder >>> .el-input--small .el-input__inner{
         border: none;
+    }
+    #seles  >>> .el-select{
+        width: calc(100% - 180px);
     }
 </style>
