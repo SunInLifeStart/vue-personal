@@ -285,8 +285,8 @@
                             <span class="span">*</span>
                             累计付款比例（%）</td>
                         <td>
-                            <!-- <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativeProShow" disabled class="money"></el-input>-->
-                            <el-input v-model="formData.contract.cumulativeProShow" class="money"></el-input>
+                            <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativeProShow" disabled class="money"></el-input>
+                            <el-input v-else v-model="formData.contract.cumulativeProShow" class="money" @input="getReal()"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -1005,8 +1005,12 @@ export default {
             }
             this.moneyType = this.formData.contract.orAmount;
             if (this.formData.contract.orAmount == '2') {
-                this.formData.contract.cumulativeAfterShow = this.formData.contract.cumulativeAfter;
-                this.formData.contract.cumulativeProShow = this.formData.contract.cumulativePro;
+                this.formData.contract.cumulativeAfterShow = String(
+                    this.formData.contract.cumulativeAfter
+                );
+                this.formData.contract.cumulativeProShow = String(
+                    this.formData.contract.cumulativePro
+                );
             } else {
                 this.formData.contract.cumulativeAfterShow = this.common.toDecimal2(
                     this.formData.contract.cumulativeAfter * 100
