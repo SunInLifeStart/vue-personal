@@ -119,24 +119,27 @@ export default {
     },
     methods: {
         previewFile(item) {
-        if(item.file_name){
-            item.type = "DOC";
-        }
-        if ('DOCX,PPTX,XLSX,DOC,XLS'.includes(item.type.toUpperCase())) {
-                let url = "";
-                if (process.env.NODE_ENV === 'production') {
-                        url = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url=" + item.url;
-                    }else{
-                        url = "http://static1.yxpe.com.cn/edit.html?removeBar=true&url=" + item.url;
-                }
+            // debugger
+            if(item.file_name){
+                item.type = "DOC";
+            }
+            if ('DOCX,PPTX,XLSX,DOC,XLS'.includes(item.type.toUpperCase())) {
+                    let url = "";
+                    if (process.env.NODE_ENV === 'production') {
+                            url = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url=" + item.url;
+                        }else{
+                            url = "http://static1.yxpe.com.cn/edit.html?removeBar=true&url=" + item.url;
+                    }
 
-             ntkoBrowser.openWindow(
-                   url
-            );
-                        
-        }else{
-              this.common.preview(item);
-        }
+                ntkoBrowser.openWindow(url);
+                            
+            }
+            // else if('JPG,JPEG,GIF,PNG,BMP'.includes(item.type.toUpperCase()) && !!window.ActiveXObject || "ActiveXObject" in window){
+            //      this.common.download(item.url, item.name);
+            // }
+            else{
+                this.common.preview(item);
+            }
         },
         editFile(item) {
             this.$emit("editText");
@@ -145,8 +148,16 @@ export default {
             this.$emit("getId", item.id);
         },
         downloadFile(item) {
-            this.common.download(item.url, item.name);
+        //     debugger
+        //     if('JPG,JPEG,GIF,PNG,BMP'.includes(item.type.toUpperCase()) && !!window.ActiveXObject || "ActiveXObject" in window){
+        //         this.common.preview(item);
+        //    }
+        //     else{
+                this.common.download(item.url, item.name);
+            // }
+            
         },
+
         handleSuccess(resData) {
             this.$emit("getReviseData", {
                 data: resData[0],
