@@ -251,14 +251,14 @@
                 <el-form>
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="编辑延迟开会日期和延期原因">
+                            <el-form-item label="延期原因">
                                 <el-input v-model="tableData.delayReason" :autosize="{minRows: 4}" type="textarea"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-form-item label="延期时间">
+                            <el-form-item label="延期日期">
                                 <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="tableData.meetingDelayTime" style="width:100%" type="datetime">
                                 </el-date-picker>
                             </el-form-item>
