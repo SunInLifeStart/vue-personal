@@ -417,7 +417,7 @@ export const publicMethods = {
         //获取流程图
         async getFlowNode() {
             let $self = this;
-            let url = `/workflow/${$self.appFlowName}/processContent`;
+            let url = `/workflow/${$self.appFlowName}/${$self.formId}/processContent`;
             let currentNodeUrl = `/workflow/${$self.appFlowName}/${$self.formId}/curActions`;
             let nodeNameURl =  `/workflow/${$self.appFlowName}/${$self.formId}/historyActions`;  
             let bpmnData = await this.$axios.get(url);
