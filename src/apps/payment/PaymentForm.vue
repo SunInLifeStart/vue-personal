@@ -48,7 +48,7 @@
                     <col style="width: 10%" />
                     <tr>
                         <td colspan="8" class="fontBold">
-                            基本信息55
+                            基本信息
                         </td>
                     </tr>
                     <tr>
@@ -1014,6 +1014,8 @@ export default {
                 this.formData.contract.cumulativeProShow = String(
                     this.formData.contract.cumulativePro
                 );
+                this.formData.contract.cumulativePro = this.formData.contract.cumulativeProShow;
+                this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;
             } else {
                 this.formData.contract.cumulativeAfterShow = this.common.toDecimal2(
                     this.formData.contract.cumulativeAfter * 100
@@ -1021,6 +1023,8 @@ export default {
                 this.formData.contract.cumulativeProShow = this.common.toDecimal2(
                     this.formData.contract.cumulativePro * 100
                 );
+                this.formData.contract.cumulativePro = this.formData.contract.cumulativeProShow;
+                this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;
             }
             this.showSspan();
             this.formId = data.id;
