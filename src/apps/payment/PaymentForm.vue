@@ -285,8 +285,8 @@
                             <span class="span">*</span>
                             累计付款比例（%）</td>
                         <td>
-                            <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativeProShow" disabled class="money"></el-input>
-                            <el-input v-else v-model="formData.contract.cumulativeProShow" class="money" @input="getReal()"></el-input>
+                            <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativePro" disabled class="money"></el-input>
+                            <el-input v-else v-model="formData.contract.cumulativePro" class="money" @input="getReal()"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -294,8 +294,8 @@
                             <span class="span">*</span>
                             本次付款后累计支付比例（%）</td>
                         <td>
-                            <el-input v-if="this.moneyType=='1'" @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfterShow" disabled class="money"></el-input>
-                            <el-input v-else @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfterShow" class="money" @input="getReal()"></el-input>
+                            <el-input v-if="this.moneyType=='1'" @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfter" disabled class="money"></el-input>
+                            <el-input v-else @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfter" class="money" @input="getReal()"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -755,8 +755,8 @@ export default {
         //获得真实值
         getReal() {
             if (this.moneyType != '1') {
-                this.formData.contract.cumulativePro = this.formData.contract.cumulativeProShow;
-                this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;
+                //this.formData.contract.cumulativePro = this.formData.contract.cumulativeProShow;
+                // this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;
             } else {
                 this.formData.contract.cumulativePro = this.common.toDecimal5(
                     this.formData.contract.cumulativeProShow / 100
@@ -810,6 +810,7 @@ export default {
                         this.formData.contract.cumulativeProShow = this.common.toDecimal2(
                             this.formData.contract.cumulativePro * 100
                         );
+                        this.formData.contract.cumulativePro = this.formData.contract.cumulativeProShow;
                         this.formData.contract.unAmount =
                             this.formData.contract.amount -
                             this.formData.contract.payments;
@@ -866,6 +867,7 @@ export default {
                     this.formData.contract.cumulativeAfterShow = this.common.toDecimal2(
                         this.formData.contract.cumulativeAfter * 100
                     );
+                    this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;
                 } else if (
                     this.formData.contract.amount &&
                     this.formData.contract.payAmount
@@ -882,6 +884,7 @@ export default {
                     this.formData.contract.cumulativeAfterShow = this.common.toDecimal2(
                         this.formData.contract.cumulativeAfter * 100
                     );
+                    this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;
                 } else {
                     this.formData.contract.cumulativeAfter = this.formData.contract.cumulativePro;
                     this.formData.contract.cumulativeAfterShow = this.formData.contract.cumulativeProShow;
@@ -1347,6 +1350,7 @@ export default {
         },
         // 提交保存
         async saveForm(params) {
+            console.log(this.formData);
             const $self = this;
             if ($self.createForm_status) {
                 if ((await $self.juderCode()) == 'returnDialog') {
