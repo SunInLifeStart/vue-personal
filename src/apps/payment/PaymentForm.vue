@@ -285,8 +285,8 @@
                             <span class="span">*</span>
                             累计付款比例（%）</td>
                         <td>
-                            <el-input v-if="this.moneyType=='1'" type="number" @mousewheel.native.prevent v-model="formData.contract.cumulativeProShow" disabled class="money"></el-input>
-                            <el-input v-else @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeProShow" class="money" @change='changeInput' @input="getReal()"></el-input>
+                            <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativeProShow" disabled class="money"></el-input>
+                            <el-input v-else v-model="formData.contract.cumulativeProShow" class="money" @input="getReal()"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -295,7 +295,7 @@
                             本次付款后累计支付比例（%）</td>
                         <td>
                             <el-input v-if="this.moneyType=='1'" @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfterShow" disabled class="money"></el-input>
-                            <el-input v-else @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfterShow" @change='changeInput' class="money" @input="getReal()"></el-input>
+                            <el-input v-else @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfterShow" class="money" @input="getReal()"></el-input>
                         </td>
                     </tr>
                     <tr>
