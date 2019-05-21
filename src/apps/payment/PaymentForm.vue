@@ -285,8 +285,8 @@
                             <span class="span">*</span>
                             累计付款比例（%）</td>
                         <td>
-                           <!-- <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativeProShow" disabled class="money"></el-input>-->
-                            <el-input  v-model="formData.contract.cumulativeProShow" class="money" @input="getReal()"></el-input>
+                            <!-- <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativeProShow" disabled class="money"></el-input>-->
+                            <el-input v-model="formData.contract.cumulativeProShow" class="money"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
