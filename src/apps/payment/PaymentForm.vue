@@ -775,12 +775,14 @@ export default {
                         index.localAmount = 0;
                     }
                     if (shui && shui == 'tax') {
-                        Item.noTax =
-                            parseFloat(Item.localAmount) - parseFloat(Item.tax);
+                        Item.noTax = this.common.toDecimal2(
+                            parseFloat(Item.localAmount) - parseFloat(Item.tax)
+                        );
                     } else if (shui && shui == 'notax') {
-                        Item.tax =
+                        Item.tax = this.common.toDecimal2(
                             parseFloat(Item.localAmount) -
-                            parseFloat(Item.noTax);
+                                parseFloat(Item.noTax)
+                        );
                     } else {
                         Item.tax = this.common.toDecimal2(0);
                         Item.noTax = this.common.toDecimal2(0);
