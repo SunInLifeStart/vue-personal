@@ -60,6 +60,12 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row v-if="tableData.delayReason">
+                    <el-col :span="24">
+                        <el-form-item label="延期原因：">{{tableData.delayReason}}
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="关联议题：">
@@ -240,6 +246,31 @@
                     <el-button type="primary" @click="saveMeetingApply">确 定</el-button>
                 </span>
             </el-dialog>
+
+            <el-dialog :visible.sync="dialogVisibleDelay" width="31%">
+                <el-form>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="延期原因">
+                                <el-input v-model="tableData.delayReason" :autosize="{minRows: 4}" type="textarea"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="延期日期">
+                                <el-date-picker value-format="yyyy-MM-dd HH:mm:ss" v-model="tableData.meetingDelayTime" style="width:100%" type="datetime">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleDelay = false">取 消</el-button>
+                    <el-button type="primary" @click="saveMeetingDelay">确 定</el-button>
+                </span>
+            </el-dialog>
+
             <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
                 <el-form>
                     <iframe :src="flowNodeUrl" width="100%" height="550px" frameborder="0" v-if="flowNodeUrl"></iframe>
@@ -278,6 +309,7 @@
                 textarea: '',
                 dialogVisible: false,
                 dialogVisibleSummary: false,
+                dialogVisibleDelay: false,
                 appFlowName:'motor-meetingApply_application-meeting',
                 discussionOption: {
                     specMeeting: '专题会',
@@ -295,10 +327,20 @@
             Comment,
             FilesOperate
         },
-        // mounted() {
-        //     this.getDiscussionUser()
-        // },
         methods: {
+            saveMeetingDelay() {
+                if(!this.tableData.meetingDelayTime) {
+                    this.msgTips("请填写延期时间", "warning");
+                    return false
+                }
+                if(!this.tableData.delayReason) {
+                    this.msgTips("请填写延期原因", "warning");
+                    return false
+                }
+                this.dialogVisibleDelay = false
+                this.tableData.meetingTime = JSON.parse(JSON.stringify(this.tableData.meetingDelayTime))
+                this.saveMeetingApply()
+            },
             async saveMeetingApply() {
                 const $self = this;
                 this.dialogVisibleSummary = false
@@ -331,6 +373,9 @@
             },
             editMeetingSummary() {
                 this.dialogVisibleSummary = true
+            },
+            delayMeeting() {
+                this.dialogVisibleDelay = true
             },
             getId(id) {
                 let self = this;
