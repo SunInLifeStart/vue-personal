@@ -1,3 +1,5 @@
+
+
 export const publicMethods = {
     methods: {
         async saveFormData(url, data) {
@@ -76,14 +78,16 @@ export const publicMethods = {
 
             //督办特殊情况特殊处理
             if($self.appFlowName == "inspect-form_inspect" && nowActins.assigneeListTos && nowActins.assigneeListTos.indexOf("assigneeListVarable") > -1){
-                 let response = await $self.getCommonType("/api/v1/users/role/xtfz_deptManager");
-                 if(response){
-                    for(var i = 0; i<response.data.length; i++){
-                        if(response.data[i].id == $self.formData.inspector){
-                            nowActins.assigneeList.push({"name":response.data[i].name,"id":$self.formData.inspector});
+                let type = this.$store.getters.LoginData.code.split('_')[0];
+                let res =   await $self.getCommonType("/api/v1/users/role/"+ type +"_deptManager");
+                if(res){
+                    let detailsData = $self.tableData ? $self.tableData : $self.formData;
+                    for(var i = 0; i<res.data.length; i++){
+                        if(res.data[i].id == detailsData.inspector){
+                           actions.assigneeList.push({"name":res.data[i].name,"id":detailsData.inspector});
                         }
                     };
-                 }
+                }
             }
             let url = `/workflow/${this.appFlowName}/${
                 this.formId
@@ -151,9 +155,9 @@ export const publicMethods = {
                             if(this.branchCode){
                                 options.push(key + "=" + this.branchCode);
                             }else{
-                                if(this.$store.getters.LoginData.currentRoles.length == 0){
+                                if(this.$store.getters.LoginData.currentRoles.length == 0 || this.$store.getters.LoginData.currentRoles.length == 1){
                                     options.push(key + "=" + this.$store.getters.LoginData.code.split("_")[0]);  
-                                } 
+                                }
                             }
 
                         } else if (key == "characterLevel") {
@@ -179,7 +183,12 @@ export const publicMethods = {
                                 }
                             }
                         } else if (key == "role" && detailsData.appFlowName != "travel-form_travel") {
-                            options.push("role=" + this.$store.getters.LoginData.Role);
+                         
+                            if(this.$store.getters.LoginData.Role){
+                                options.push("role=" + this.$store.getters.LoginData.Role);
+                            }else{
+                                options.push("role=''");
+                            }
                         } else {
                             if (key.indexOf("filterButton") > -1) {
 
@@ -230,28 +239,30 @@ export const publicMethods = {
                     labelName: "selContents"
                 });
             }
-            if($self.appFlowName == "inspect-form_inspect" && action.assigneeListTos && action.assigneeListTos.indexOf("assigneeListVarable") > -1){
+            // if($self.appFlowName == "inspect-form_inspect" && action.assigneeListTos && action.assigneeListTos.indexOf("assigneeListVarable") > -1){
 
-                let type = this.$store.getters.LoginData.code.split('_')[0];
-                $self.$axios
-                .get("/api/v1/users/role/"+ type +"_deptManager")
-                .then(res => {
-                    for(var i = 0; i<res.data.length; i++){
-                        if(res.data[i].id == $self.tableData.inspector){
-                           action.assigneeList.push({"name":res.data[i].name,"id":$self.tableData.inspector});
-                        }
-                    };
-                }) 
-            }else{
-                if (action.assigneeList && action.assigneeList.length > 0) {
-                    $self.actionsDialogArr.push({
-                        seletList: action.assigneeList,
-                        label: action.assigneeListLabel,
-                        multiple: action.assigneeListMul == "true" ? true : false,
-                        checkedValue: action.assigneeListMul == "true" ? [] : "",
-                        labelName: "assigneeList"
-                    });
-                }
+            //     let type = this.$store.getters.LoginData.code.split('_')[0];
+            //     $self.$axios
+            //     .get("/api/v1/users/role/"+ type +"_deptManager")
+            //     .then(res => {
+            //         for(var i = 0; i<res.data.length; i++){
+            //             if(res.data[i].id == $self.tableData.inspector){
+            //                action.assigneeList.push({"name":res.data[i].name,"id":$self.tableData.inspector});
+            //             }
+            //         };
+            //     }) 
+            // }else{
+               
+            // }
+
+            if (action.assigneeList && action.assigneeList.length > 0) {
+                $self.actionsDialogArr.push({
+                    seletList: action.assigneeList,
+                    label: action.assigneeListLabel,
+                    multiple: action.assigneeListMul == "true" ? true : false,
+                    checkedValue: action.assigneeListMul == "true" ? [] : "",
+                    labelName: "assigneeList"
+                });
             }
 
 
@@ -274,6 +285,9 @@ export const publicMethods = {
               }
             else if ($self.currentAction.name == "编写会议纪要") {
                 $self.editMeetingSummary();
+            }
+            else if ($self.currentAction.name == "延期") {
+                $self.delayMeeting();
             }
              else if ($self.currentAction.name == "打印") {
                 let url;
@@ -311,7 +325,9 @@ export const publicMethods = {
         //提交表单
         async submitForm() {
             let $self = this;
-            $self.currentAction["comment"] = $self.textarea ? $self.textarea : $self.currentAction.name;
+            if($self.currentAction.action !="START"){
+                $self.currentAction["comment"] = $self.textarea ? $self.textarea : $self.currentAction.name;
+            }
             $self.hasRequired($self.currentAction);
             if ($self.actionsDialogArr.length > 0 && ($self.actionsDialogArr[0].checkedValue != "" || $self.actionsDialogArr[0].checkedValue.length > 0)) {
                 for (let item of $self.actionsDialogArr) {
@@ -404,7 +420,7 @@ export const publicMethods = {
         //获取流程图
         async getFlowNode() {
             let $self = this;
-            let url = `/workflow/${$self.appFlowName}/processContent`;
+            let url = `/workflow/${$self.appFlowName}/${$self.formId}/processContent`;
             let currentNodeUrl = `/workflow/${$self.appFlowName}/${$self.formId}/curActions`;
             let nodeNameURl =  `/workflow/${$self.appFlowName}/${$self.formId}/historyActions`;  
             let bpmnData = await this.$axios.get(url);

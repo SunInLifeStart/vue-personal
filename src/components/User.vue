@@ -25,7 +25,9 @@
             outside="true"
           >编辑个人资料</a>
         </div>
-
+        <div class="item-text">
+          <el-button type="text" @click="dialogUserId = true">切换登录身份</el-button>
+        </div>
         <div class="item-text">
           <el-button @click="logout" type="text">退出登录</el-button>
         </div>
@@ -34,6 +36,21 @@
     <el-dialog title="编辑个人资料" :visible.sync="outerVisible" width="900px">
       <Profile @savesucess="savesucess"></Profile>
     </el-dialog>
+
+     <el-dialog title="切换登录身份" :visible.sync="dialogUserId" width="500px">
+          <div class="block" v-if="options.length > 0">
+          <el-cascader
+              expand-trigger="hover"
+              :options="options"
+              v-model="selectedOptions"
+              @change="handleChange" style="width:100%">
+          </el-cascader>
+        </div>
+        <br />
+         <el-button type="primary" @click="submitUserId()">确定</el-button>
+    </el-dialog>
+
+        
   </div>
 </template>
 
@@ -48,7 +65,11 @@ export default {
   data() {
     return {
       outerVisible: false,
-      showUser: false
+      showUser: false,
+      options:[],
+      selectedOptions:[],
+      dialogUserId:false,
+      checkedObject:{}
     };
   },
   components: {
@@ -73,19 +94,73 @@ export default {
         Cookies.remove("uid");
         Cookies.remove("uname");
         Cookies.remove("username");
-        window.location.href = "login.html";
-        // if (process.env.NODE_ENV == 'test') {
-        //   window.location.href = "/logout";
-        // } else {
-        //   window.location.href = "login.html";
-        // }       
+        window.location.href = "login.html";  
       });
     },
+      checkeUserOrgans(name){
+            let $self = this;
+             $self.$axios
+            .get('/api/v1/organ/checkDepartment/' + name)
+            .then(res => {
+                if(res.data.length == 1){
+                    if(res.data[0].children.length == 1){
+                        $self.options = $self.selectedOptions = [];
+                        $self.checkedObject = res.data[0].children[0];
+                    }else{
+                        $self.options = res.data;             
+                    }
+                }
+                 if(res.data.length > 1){
+                     $self.options = res.data; 
+                     $self.$forceUpdate();
+                }
+            })          
+        },
+        submitUserId(){
+            if(this.selectedOptions.length == 0){
+               this.$message({
+                type:"warning",
+                message: '请选择身份'
+              });
+            }else{
+                // Cookies.remove("Role");
+                // Cookies.remove("deptType");
+                // Cookies.remove("md5");
+                // Cookies.remove("oid");
+                // Cookies.remove("oname");
+                // Cookies.remove("token");
+                // Cookies.remove("uid");
+                // Cookies.remove("uname");
+                // Cookies.remove("username");
+
+                  let $self = this;
+                  $self.$axios
+                    .post('/api/auth/jwt/switchingDepartments',{department:this.checkedObject})
+                    .then(res => {
+                      console.log(res);
+                  })          
+            }
+        },
+
+          handleChange(value) {
+             let $self = this;
+              for(let i = 0; i<$self.options.length; i++){
+                if($self.options[i].value == value[0]){
+                    for(let j = 0; j< $self.options[i].children.length; j++){
+                        if($self.options[i].children[j].value == value[1]){
+                             $self.checkedObject = $self.options[i].children[j];
+                        }
+                    }
+                }
+            }   
+      },
     aaa() {
       this.showUser = false;
     }
   },
-  mounted() {}
+  mounted() {
+    this.checkeUserOrgans(this.$store.getters.LoginData.username);
+  }
 };
 </script>
 

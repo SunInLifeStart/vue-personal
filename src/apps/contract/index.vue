@@ -124,7 +124,6 @@ export default {
     },
     filters: {
         filterStatus: function(data) {
-            console.log(data);
             let xmlJson = {
                 '00': '已保存',
                 '01': '审核中',
@@ -234,8 +233,6 @@ export default {
         }
     },
     mounted() {
-        console.log(this.$store.getters.LoginData.oname);
-        console.log(decodeURI(this.$store.getters.LoginData.companyName));
         this.getList();
     }
 };

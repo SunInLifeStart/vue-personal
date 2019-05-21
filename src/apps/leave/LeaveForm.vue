@@ -68,18 +68,24 @@
                             拟休时间</td>
                         <td colspan="2">
                             <template>
-                                <el-date-picker v-model="formData.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="开始时间">
+                                <!-- @change="getHour(formData.startTime,formData.endTime)" -->
+                                <el-date-picker v-model="formData.startTime" 
+                                 value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="开始时间">
                                 </el-date-picker>
                             </template>
                         </td>
                         <td colspan="1">
                             <template>
-                                <el-date-picker style="width:100%;" v-model="formData.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间">
+                                <!-- @change="getHour(formData.startTime,formData.endTime)" -->
+                                <el-date-picker style="width:100%;" v-model="formData.endTime" 
+                                 value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间">
                                 </el-date-picker>
                             </template>
                         </td>
                         <td colspan="2">
-                            <el-input placeholder="休假时长" @mousewheel.native.prevent type="number" v-model.number="formData.day">
+                            
+                           <!-- disabled="disabled" -->
+                            <el-input placeholder="休假时长" @mousewheel.native.prevent type="number"  v-model="formData.day">
                                 <template style="width:20px;" slot="append">天</template>
                             </el-input>
                         </td>
@@ -179,6 +185,34 @@ export default {
         FilesOperate
     },
     methods: {
+        // 时长
+       getHour(a1, a2) {
+            // debugger
+            const $self = this;
+            if(a1 && a2){
+                 var date3 =
+                new Date(a2.replace(/-/g, '/')).getTime() -
+                new Date(a1.replace(/-/g, '/')).getTime(); //时间差的毫秒数
+            }
+           
+            //计算出相差天数Math.floor
+            var days = (date3 / (24 * 3600 * 1000)).toFixed(1);
+            //计算出小时数
+           
+            if (a1 == null || a2 == null || a1 == '' || a2 == '') {
+                this.formData.day = '';
+            } else {
+                if (days < 0) {
+                    $self.msgTips('结束时间不能在开始时间之前', 'error');
+                    this.formData.day = '';
+                    this.formData.endTime = '';
+                } else {
+                    this.formData.day = days;
+                }
+                this.$forceUpdate()
+            }
+            // return this.formData.day;
+          },
         getNum() {
             const self = this;
             let params = {

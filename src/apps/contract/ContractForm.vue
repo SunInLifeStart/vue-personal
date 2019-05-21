@@ -88,13 +88,13 @@
                             合同名称
                         </td>
                         <td colspan="3">
-                            <el-input v-model="formData.contractName" :disabled="this.showSubmit == 'false'"></el-input>
+                            <el-input v-model.trim="formData.contractName" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                         <td>
                             合同编号
                         </td>
                         <td colspan="2">
-                            <el-input v-model="formData.contractNum" :disabled="this.showSubmit == 'false'"></el-input>
+                            <el-input v-model.trim="formData.contractNum" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                     </tr>
                     <tr v-show="decodeURI(this.$store.getters.LoginData.companyName) != '中关村协同发展投资有限公司'">
@@ -129,7 +129,7 @@
                             甲方
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.partyA" :disabled="this.showSubmit == 'false'"></el-input>
+                            <el-input v-model.trim="formData.partyA" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -138,7 +138,7 @@
                             乙方
                         </td>
                         <td colspan="6">
-                            <el-input v-model="formData.partyB" :disabled="this.showSubmit == 'false'"></el-input>
+                            <el-input v-model.trim="formData.partyB" :disabled="this.showSubmit == 'false'"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -208,14 +208,12 @@
                             <el-radio-group v-model="formData.terminationPeople" @change="typeandradioChange('dateRadio')" :disabled="this.showSubmit == 'false'">
                                 <el-row>
                                     <el-col :span="24">
-                                        <el-radio label="1">自
-                                            <!--
-                                 <el-date-picker v-model="formData.deadStartTime" type="daterange" range-separator="至" style="width:300px" :disabled="formData.deadline!='1'">
-                                </el-date-picker>
-                                -->
-                                            <el-date-picker v-model="formData.effectiveStart" type="date" placeholder="开始日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
+                                        <el-radio label="1">
+                                            <el-date-picker v-model="formData.effectiveStart" type="date" placeholder="开始日期"
+                                             value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
                                             </el-date-picker>至
-                                            <el-date-picker v-model="formData.effectiveEnd" type="date" placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
+                                            <el-date-picker v-model="formData.effectiveEnd" type="date" placeholder="结束日期" 
+                                            value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
                                             </el-date-picker>
                                         </el-radio>
                                     </el-col>
@@ -329,7 +327,7 @@
                         <td colspan="6">
                             <el-radio-group v-model="formData.shape" :disabled="this.showSubmit == 'false'">
                                 <el-radio label="1">固定总价</el-radio>
-                                <el-radio label="2">固定总和单价</el-radio>
+                                <el-radio label="2">固定综合单价</el-radio>
                                 <el-radio label="3">其他</el-radio>
                             </el-radio-group>
                         </td>
@@ -349,7 +347,7 @@
                         </td>
                         <td colspan="6">
                             <el-row>
-                                <el-input type="textarea" :autosize="{minRows: 2}" :disabled="this.showSubmit == 'false'" v-model="formData.sponsor"></el-input>
+                                <el-input type="textarea" :autosize="{minRows: 2}" :disabled="this.showSubmit == 'false'" v-model.trim="formData.sponsor"></el-input>
                             </el-row>
                             <el-row style="padding:5px">
                                 <el-col :span="14">
@@ -442,6 +440,7 @@ export default {
             this.attType = type;
         },
         typeandradioChange(type) {
+            const $self = this;
             if (type == 'contractType') {
             } else if (type == 'moneyRadio') {
                 if (this.formData.moneyRadio == '1') {
@@ -450,10 +449,12 @@ export default {
                     this.formData.contractAmount = '0';
                 }
             } else if (type == 'dateRadio') {
+               
                 if (this.formData.terminationPeople == '2') {
                     this.formData.effectiveStart = '';
                     this.formData.effectiveEnd = '';
                 }
+               
             } else {
             }
         },
@@ -655,7 +656,6 @@ export default {
                 '/api/v1/contract_forms/save',
                 $self.formData
             );
-            console.log(response.data);
             if (response) {
                 $self.formId = response.data.id;
                 $self.dialogFormVisible = $self.dialogSelectCode = false;
@@ -764,6 +764,14 @@ export default {
                     message: '合同内容摘要为必输项，请输入',
                     type: 'error'
                 });
+            } else if (this.formData.terminationPeople == '1' && this.formData.effectiveStart == '' &&
+                     this.formData.effectiveEnd == '')
+             {
+                ruleHint = false;
+                this.$message({
+                    message: '合同期限为必输项，请输入开始结束时间',
+                    type: 'error'
+                });
             } else {
                 ruleHint = true;
             }
@@ -788,7 +796,6 @@ export default {
                     });
                 });
             }
-            console.log(this.formData.attachments);
             this.$refs.upload.clearFiles();
         },
         submitUpload() {

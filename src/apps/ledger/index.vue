@@ -3,21 +3,55 @@
         <el-card class="box-card">
             <!-- 查询 -->
             <div id="LedgerFilter">
-                <el-form :inline="true" class="demo-form-inline" label-width="80px;">
+                <el-form :inline="true" class="demo-form-inline" >
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="提单人：">
                                 <el-input v-model="formInline.applyName" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                         <el-col :span="8">
                             <el-form-item label="项目：">
                                 <el-input v-model="formInline.project" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
+                         <el-col :span="8">
                             <el-form-item label="部门：">
                                 <el-input v-model="formInline.dept" placeholder=""></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
+                        <el-col :span="8">
+                            <el-form-item label="合同价格形势：">
+                                <!-- <el-input v-model="formInline.shape" placeholder=""></el-input> -->
+                                <el-select v-model="formInline.shape" clearable placeholder="请输入单据状态">
+                                    <el-option
+                                            v-for="item in shapeOption"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                       
+                        <el-col :span="8">
+                            <el-form-item label="发起时间：">
+                                 <el-date-picker v-model="formInline.initiateTime" value-format="yyyy-MM-dd" placeholder="请输入时间" style="width:100%" type="date">
+                            </el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="单据状态">
+                                <el-select v-model="formInline.status" clearable placeholder="请输入单据状态">
+                                    <el-option
+                                            v-for="item in statusOption"
+                                            :key="item.value"
+                                            :label="item.label"
+                                            :value="item.value">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -43,6 +77,13 @@
                      <el-table-column prop="project" label="所属项目">
                     </el-table-column>
                     <el-table-column prop="contractNum" label="合同编号">
+                    </el-table-column>
+                    
+                    <el-table-column prop="shape" label="合同价格形势">
+                        <template slot-scope="scope">
+                            {{scope.row.shape | filtershape}}
+                           
+                        </template>
                     </el-table-column>
                     <el-table-column prop="contractName" label="合同名称" min-width='150px'>
                     </el-table-column>
@@ -84,6 +125,38 @@ export default {
             tableData: [],
             formDetails: {},
             formId: '',
+            statusOption: [
+                    {
+                        value: '00',
+                        label: '已保存'
+                    },
+                    {
+                        value: '01',
+                        label: '审核中'
+                    },
+                    {
+                        value: '02',
+                        label: '已驳回'
+                    },
+                    {
+                        value: '04',
+                        label: '已完成'
+                    }
+            ],
+            shapeOption: [
+                    {
+                        value: '1',
+                        label: '固定总价'
+                    },
+                    {
+                        value: '2',
+                        label: '固定综合单价'
+                    },
+                    {
+                        value: '3',
+                        label: '其他'
+                    }
+            ],
             params: {
                 desc: true,
                 page: 1,
@@ -100,6 +173,8 @@ export default {
             formInline: {
                 applyName: '',
                 project: '',
+                initiateTime:'',
+                shape:'',
                 dept: '', //申请部门
                 shape: '', //合同价格形式
                 applyDate: [],
@@ -109,13 +184,19 @@ export default {
     },
     filters: {
         filterStatus: function(data) {
-            console.log(data);
             let xmlJson = {
                 '00': '已保存',
                 '01': '审核中',
                 '02': '已驳回',
-                '03': '已撤销',
                 '04': '已完成'
+            };
+            return xmlJson[data];
+        },
+        filtershape: function(data) {
+            let xmlJson = {
+                '1': '固定总价',
+                '2': '固定综合单价',
+                '3': '其他',
             };
             return xmlJson[data];
         }
@@ -156,6 +237,30 @@ export default {
                     field: 'project',
                     filter: 'LIKE',
                     value: this.formInline.project
+                });
+            }
+            
+            if (this.formInline.initiateTime) {
+                this.searchOptions.push({
+                    field: 'initiateTime',
+                    filter: 'LIKE',
+                    value: this.formInline.initiateTime
+                });
+            }
+            // if (this.formInline.initiateTime) {
+            //      this.searchOptions.push({
+            //          field: 'initiateTime',
+            //          filter: 'BETWEEN',
+            //          value: this.formInline.initiateTime,
+            //          value2: this.formInline.initiateTime
+            //      });
+            //  }
+          
+            if (this.formInline.status.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'status',
+                    filter: 'LIKE',
+                    value: this.formInline.status
                 });
             }
             if (this.formInline.dept.trim() !== '') {
@@ -234,6 +339,9 @@ export default {
         resetInput() {
             this.formInline.applyName = '';
             this.formInline.project = '';
+            this.formInline.initiateTime= '';
+            this.formInline.shape= '';
+            this.formInline.status= '';
             this.formInline.dept = '';
             this.formInline.shape = '';
             this.formInline.applyDate = [];
@@ -282,7 +390,13 @@ export default {
 }
 </style>
 <style scoped>
-#LedgerFilter .filterForm >>> .el-form-item__content {
-    width: calc(100% - 80px);
-}
+#LedgerFilter .filterForm >>> .el-form-item__content{
+        width: calc(100% - 120px);
+    }
+    #LedgerFilter .filterForm >>> .el-select {
+        width: calc(100% - 15px);
+    }
+    #LedgerFilter .filterForm >>> .el-date-editor{
+        width: calc(100% - 0px);
+    }
 </style>

@@ -50,16 +50,17 @@
                     <!-- {{formData.useItems}} -->
                     <el-col :span="12">
                         <el-form-item label="印章种类" prop="useItems">
-                            <el-select style="width:100%;" clearable v-model="formData.useItems" placeholder="请选择印章种类">
+                            <el-select style="width:100%;" clearable v-model="formData.useItems" placeholder="请选择印章种类"  @change="selectPrint(formData.useItems)">
                                 <el-option v-for="item in onOption" :key="item.value" :label="item.label" :value="item.value" :disabled=" item.label == '党支部章' && formData.organName !='综合管理部' ">
                                 </el-option>
+                               
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <!-- :style="{display:(formData.useItems=='公章'?'black':'none')}"  -->
                     <el-col :span="12">
-                        <el-form-item label="类型" :prop="formData.useItems=='gongzhang'?'sealType':''">
-                            <el-select style="width:100%;" clearable v-model="formData.sealType" placeholder="请选择类型" :disabled="formData.useItems=='gongzhang'?false:true">
+                        <el-form-item label="类型" hide-required-asterisk = 'false'>
+                            <el-select style="width:100%;" clearable v-model="formData.sealType" placeholder="请选择类型" :disabled="formData.useItems=='gongzhang'?false:true" >
                                 <el-option v-for="item in typeOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
@@ -175,14 +176,14 @@ export default {
                 useItems: [
                     {
                         required: true, //是否必填
-                        trigger: 'blur', //何事件触发
+                        trigger: 'change', //何事件触发
                         message: '请输入印章种类'
                     }
                 ],
                 sealType: [
                     {
                         required: true, //是否必填
-                        trigger: 'blur', //何事件触发
+                        trigger: 'change', //何事件触发
                         message: '请输入类型'
                     }
                 ],
@@ -210,7 +211,7 @@ export default {
                 accompanyingPerson: [
                     {
                         required: true, //是否必填
-                        trigger: 'blur', //何事件触发
+                        trigger: 'change', //何事件触发
                         message: '陪同人'
                     }
                 ],
@@ -334,12 +335,19 @@ export default {
         FilesOperate
     },
     methods: {
+        selectPrint(data){
+          if(data != 'gongzhang'){
+              this.formData.sealType = '';
+          }
+        },
         // 时长
         getHour(a1, a2) {
             const $self = this;
-            var date3 =
-                new Date(a2.replace(/-/g, '/')).getTime() -
-                new Date(a1.replace(/-/g, '/')).getTime(); //时间差的毫秒数
+            if(a1 && a2){
+                var date3 =
+                    new Date(a2.replace(/-/g, '/')).getTime() -
+                    new Date(a1.replace(/-/g, '/')).getTime(); //时间差的毫秒数
+            }
             //计算出相差天数
             var days = Math.floor(date3 / (24 * 3600 * 1000));
             //计算出小时数
@@ -490,7 +498,7 @@ export default {
                     if (compare) {
                         this.saveForm(type);
                     } else {
-                        this.msgTips('用印明细不完整，请填写完整！', 'warning');
+                        this.msgTips('用印明细不完整，请填写完整', 'warning');
                     }
                 }
             });
@@ -498,6 +506,16 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
+
+            if($self.formData.useItems == "gongzhang" &&  !$self.formData.sealType){  //公章类型必选
+                $self.msgTips('请选择公章类型','warning');
+                return false;
+            }
+
+            if($self.formData.useItems != "gongzhang"){ // 其他章不要sealtype
+                 $self.formData.sealType="";
+            }
+
             if ($self.createForm_status) {
                 if ((await $self.juderCode()) == 'returnDialog') {
                     return false;
