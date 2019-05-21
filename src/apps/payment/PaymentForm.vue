@@ -48,7 +48,7 @@
                     <col style="width: 10%" />
                     <tr>
                         <td colspan="8" class="fontBold">
-                            基本信息
+                            基本信息55
                         </td>
                     </tr>
                     <tr>
