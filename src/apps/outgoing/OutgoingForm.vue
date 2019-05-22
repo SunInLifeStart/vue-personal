@@ -2,7 +2,7 @@
 <el-dialog title="文件签发申请表" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">  
     <div id="OutgoingForm">
         <el-form ref="formupdate" :model="formData" :rules="rules" label-width="80px" style="margin-top:10px;">
-            <el-row>
+            <el-row v-if="isFromDetailsEdits">
                 <el-col :span="8">
                     <el-form-item label="发文字号">
                         <el-select v-model="formData.wordNo" @change="getWordyear" style="width: 100%;">
@@ -17,117 +17,112 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            <el-row>
-                <el-col :span="8">
-                    <el-form-item label="发文类型">
-                        <el-select v-model="formData.type" style="width: 100%;">
-                            <el-option v-for="item in type" :key="item" :label="item" :value="item"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="紧急程度">
-                        <el-select v-model="formData.urgency" style="width: 100%;">
-                            <el-option v-for="item in urgency" :key="item" :label="item" :value="item"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="行文方向" prop="direction">
-                        <el-select v-model="formData.direction" style="width: 100%;">
-                            <el-option v-for="item in direction" :key="item" :label="item" :value="item"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="12">
-                  <el-form-item label="主送" prop="mainTo_1">
-                        <el-select v-model="formData.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
-                            <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="抄送">
-                        <el-select v-model="formData.copyto_1" multiple filterable allow-create default-first-option placeholder="请选择抄送部门" style="width:100%">
-                            <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="8">
-                    <el-form-item label="拟稿单位">
-                        <el-input v-model="formData.organName" disabled="disabled"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="拟稿人">
-                        <el-input v-model="formData.creatorName" disabled="disabled"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="核稿">
-                        <el-input v-model="formData.checkorName" disabled="disabled"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                
-                <el-col :span="12">
-                    <el-form-item label="核对">
-                        <el-input v-model="formData.verify"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="12">
-                    <el-form-item label="印发份数">
-                        <el-input v-model="formData.parts"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <!-- <el-form-item label="印制">
-                        <el-select v-model="formData.printer" style="width: 100%;">
-                            <el-option label="中关村发展集团办公室" value="中关村发展集团办公室"></el-option>
-                        </el-select>
-                    </el-form-item> -->
+            <div v-if="!isFromDetailsEdits">
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="发文类型">
+                            <el-select v-model="formData.type" style="width: 100%;">
+                                <el-option v-for="item in type" :key="item" :label="item" :value="item"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="紧急程度">
+                            <el-select v-model="formData.urgency" style="width: 100%;">
+                                <el-option v-for="item in urgency" :key="item" :label="item" :value="item"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="行文方向" prop="direction">
+                            <el-select v-model="formData.direction" style="width: 100%;">
+                                <el-option v-for="item in direction" :key="item" :label="item" :value="item"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                    <el-form-item label="主送" prop="mainTo_1">
+                            <el-select v-model="formData.mainTo_1" multiple filterable allow-create default-first-option placeholder="请选择主送部门" style="width:100%">
+                                <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="抄送">
+                            <el-select v-model="formData.copyto_1" multiple filterable allow-create default-first-option placeholder="请选择抄送部门" style="width:100%">
+                                <el-option v-for="item in optionsone" :key="item.id" :label="item.label" :value="item.value"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="拟稿单位">
+                            <el-input v-model="formData.organName" disabled="disabled"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="拟稿人">
+                            <el-input v-model="formData.creatorName" disabled="disabled"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="核稿">
+                            <el-input v-model="formData.checkorName" disabled="disabled"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="核对">
+                            <el-input v-model="formData.verify"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="印发份数">
+                            <el-input v-model="formData.parts"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
                     <el-form-item label="印制">
-                        <el-input v-model="formData.printer"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="标题" prop="title">
-                        <el-input v-model="formData.title"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                     <el-form-item label="正文" style="float:left">
-                        <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}"  @editText="openData(formData.text.url)"></FilesOperate>
-                        <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                         <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/outgoing_forms/deleteAtt?id='+ item.id,'delete')"></FilesOperate>
-                        </div>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+                            <el-input v-model="formData.printer"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="标题" prop="title">
+                            <el-input v-model="formData.title"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="正文" style="float:left">
+                            <FilesOperate v-if="formData.text.name" :item="formData.text" :options="{preview:true,download:true,edit:true}"  @editText="openData(formData.text.url)"></FilesOperate>
+                            <el-button type="primary" size="small" @click="createTextBody" v-if="!formData.text.name">创建文件</el-button>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="附件">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                            <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,formData.attachments,'/api/v1/outgoing_forms/deleteAtt?id='+ item.id,'delete')"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </div>
         </el-form>
     </div>
     <el-dialog
@@ -151,7 +146,7 @@
     <div slot="footer" class="dialog-footer">
         <!-- v-if="this.status == '' || this.status == '已驳回' " -->
         <el-button type="default" @click="saveFormValidate()" >保存</el-button>
-        <el-button type="primary" @click="saveFormValidate(true)" v-if="!isFromDetailsEdit">提交</el-button>
+        <el-button type="primary" @click="saveFormValidate(true)" v-if="!isFromDetailsEdit && !isFromDetailsEdits">提交</el-button>
     </div>
 </el-dialog>
   
@@ -178,6 +173,7 @@ export default {
             appFlowName: "outgoing-form_outgoing",
             percentage: 0,
             isFromDetailsEdit:false,
+            isFromDetailsEdits:false,
             formData: {
                 wordNo: "",
                 docNo: "",
@@ -348,8 +344,8 @@ export default {
         },
         setDataFromParent(data,status) {
             this.getwordNoList()
-        if(typeof data.text == "string"){
-                    if(data.text && JSON.parse(data.text).name){
+            if(typeof data.text == "string"){
+                if(data.text && JSON.parse(data.text).name){
                     data.text = JSON.parse(data.text);
                  }
             }
@@ -364,6 +360,24 @@ export default {
             this.dialogFormVisible = true;
             this.createForm_status = false;
             this.isFromDetailsEdit = status;
+        },
+        setDataFromParents(data,status) {
+           if(typeof data.text == "string"){
+                if(data.text && JSON.parse(data.text).name){
+                    data.text = JSON.parse(data.text);
+                 }
+            }
+            this.formData = data;
+            if(data.mainTo!="" && data.mainTo!==null){
+               this.formData.mainTo_1 = data.mainTo.split(",");
+            }
+            if(data.copyto!="" && data.copyto!==null){
+             this.formData.copyto_1 = data.copyto.split(",");
+            }
+            this.formId = data.id;
+            this.dialogFormVisible = true;
+            this.createForm_status = false;
+            this.isFromDetailsEdits = status;
         },
         createForm() {
            this.formData = this.resetForm();

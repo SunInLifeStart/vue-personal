@@ -14,29 +14,16 @@
         <div class="formContent"  style="padding: 15px 30px;overflow-y:auto">
             <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
             <br />
-            <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-            </el-steps> -->
-             <!-- <div class="tabmsg" ref="tabmsg">
-                <el-tabs v-model="activeName" type="card">
-                    <el-tab-pane label="表单详情" name="second"></el-tab-pane>
-                    <el-tab-pane label="正文" name="first"></el-tab-pane>
-                </el-tabs>
-            </div> -->
-            <!-- class="formList" -->
-            <el-form :model='tableData' >
-                <el-row>
-                <el-col :span="8">
-                    <el-form-item label="发文字号：">{{tableData.wordNo}}</el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="发文文号：">{{tableData.docNo}}</el-form-item>
-                </el-col>
-            </el-row>
-            <!-- v-if="activeName == 'first' " -->
-            
-             <!-- v-if="activeName == 'second' " -->
-            <el-row>
+         <el-form :model='tableData' >
+                <el-row  v-if="tableData.wordNo && tableData.wordNo!=''">
+                    <el-col :span="8">
+                        <el-form-item label="发文字号：">{{tableData.wordNo}}</el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="发文文号：">{{tableData.docNo}}</el-form-item>
+                    </el-col>
+                </el-row>
+         <el-row>
                 <el-col :span="8">
                     <el-form-item label="发文类型：">{{tableData.type}}</el-form-item>
                 </el-col>
@@ -222,6 +209,7 @@ export default {
         OutgoingForm,
     },
     methods: {
+        
         getId(id) {},
         getFormDetails(formId) {
             let $self = this;
@@ -259,9 +247,12 @@ export default {
         },
         reEditForm(){
             let $self = this;
-            console.log($self.$refs.OutgoingForm);
             $self.$refs.outgoingForm.setDataFromParent(this.tableData,true);
-        }
+        },
+        symbolEditForm(){
+            let $self = this;
+            $self.$refs.outgoingForm.setDataFromParents(this.tableData,true);
+        },
         
     }
 };
