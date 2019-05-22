@@ -25,9 +25,9 @@
             outside="true"
           >编辑个人资料</a>
         </div>
-        <div class="item-text">
+        <!-- <div class="item-text">
           <el-button type="text" @click="dialogUserId = true">切换登录身份</el-button>
-        </div>
+        </div> -->
         <div class="item-text">
           <el-button @click="logout" type="text">退出登录</el-button>
         </div>

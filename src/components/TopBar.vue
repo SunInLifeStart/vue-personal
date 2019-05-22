@@ -29,7 +29,15 @@
                 <el-input size="small" placeholder="请输入搜索内容" v-model="$root.searchKey" @keyup.enter.native="search()" suffix-icon="el-icon-search">
                 </el-input>
             </div>
+            <el-cascader
+                expand-trigger="hover"
+                :options="options"
+                placeholder="请选择公司或部门"
+                v-model="selectedOptions"
+                @change="handleChange">
+            </el-cascader>
             <div class="info">Hello，{{$store.getters.LoginData.uname}}&nbsp;&nbsp;&nbsp;在线：{{uc}}</div>
+            
             <div class="tools">
                 <Link />
                 <User />
@@ -60,11 +68,33 @@ export default {
     },
     data() {
         return {
-            uc:0
+            uc:0,
+            selectedOptions: [],
+            checkedObject: {},
+            options: []
         };
     },
 
     methods: {
+      checkeUserOrgans(name){
+            let $self = this;
+             $self.$axios
+            .get('/api/v1/organ/checkDepartment/' + name)
+            .then(res => {
+                if(res.data.length == 1){
+                    if(res.data[0].children.length == 1){
+                        $self.options = $self.selectedOptions = [];
+                        $self.checkedObject = res.data[0].children[0];
+                    }else{
+                        $self.options = res.data;             
+                    }
+                }
+                 if(res.data.length > 1){
+                     $self.options = res.data; 
+                     $self.$forceUpdate();
+                }
+            })          
+        },
         search() {
             if (this.$root.searchKey.trim().length > 0) {
                 //if (this.$router.currentRoute.path == "/search/"+this.$root.searchKey) {
@@ -76,6 +106,50 @@ export default {
                 //}
             } else {
                 this.$router.go(-1);
+            }
+        },
+        handleChange(value) {
+             let $self = this;
+              for(let i = 0; i<$self.options.length; i++){
+                if($self.options[i].value == value[0]){
+                    for(let j = 0; j< $self.options[i].children.length; j++){
+                        if($self.options[i].children[j].value == value[1]){
+                             $self.checkedObject = $self.options[i].children[j];
+                        }
+                    }
+                }
+            }   
+            if(this.selectedOptions.length == 0){
+               this.$message({
+                type:"warning",
+                message: '请选择身份'
+              });
+            }else{
+                // Cookies.remove("Role");
+                // Cookies.remove("deptType");
+                // Cookies.remove("md5");
+                // Cookies.remove("oid");
+                // Cookies.remove("oname");
+                // Cookies.remove("token");
+                // Cookies.remove("uid");
+                // Cookies.remove("uname");
+                // Cookies.remove("username");
+                let $self = this;
+                $self.$axios
+                .post('/api/auth/jwt/switchingDepartments',this.checkedObject)
+                .then(res => {
+                    if(res.data.status == 200) {
+                    this.$message({
+                        type:"success",
+                        message: res.data.message
+                    });
+                    } else {
+                    this.$message({
+                        type:"warning",
+                        message: '服务器异常'
+                    });
+                    }
+                })          
             }
         },
         open(data) {
@@ -138,6 +212,8 @@ export default {
         axios.get('/api/v1/portal/uc').then(res => {
             this.uc = res.data;
         })
+
+        this.checkeUserOrgans(this.$store.getters.LoginData.username);
     }
 };
 </script>
