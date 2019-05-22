@@ -328,7 +328,7 @@
             FilesOperate
         },
         methods: {
-            saveMeetingDelay() {
+            async saveMeetingDelay() {
                 if(!this.tableData.meetingDelayTime) {
                     this.msgTips("请填写延期时间", "warning");
                     return false
@@ -339,9 +339,10 @@
                 }
                 this.dialogVisibleDelay = false
                 this.tableData.meetingTime = JSON.parse(JSON.stringify(this.tableData.meetingDelayTime))
-                this.saveMeetingApply()
+                let a = await this.saveMeetingApply('delay')
+
             },
-            async saveMeetingApply() {
+            async saveMeetingApply(flag) {
                 const $self = this;
                 this.dialogVisibleSummary = false
                 this.tableData.sendMessage = []
@@ -368,6 +369,9 @@
                     $self.tableData
                 );
                 if (response) {
+                    if(flag) {
+                        let demo = await this.startSignal()
+                    }
                     $self.getFormDetailsData();
                 }
             },
