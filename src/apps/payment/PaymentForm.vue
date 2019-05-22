@@ -1008,20 +1008,16 @@ export default {
             }
             this.moneyType = this.formData.contract.orAmount;
             if (this.formData.contract.orAmount == '2') {
-                this.formData.contract.cumulativeAfterShow = String(
-                    this.formData.contract.cumulativeAfter
-                );
-                this.formData.contract.cumulativeProShow = String(
-                    this.formData.contract.cumulativePro
-                );
+                this.formData.contract.cumulativeAfterShow = this.formData.contract.cumulativeAfter;
+                this.formData.contract.cumulativeProShow = this.formData.contract.cumulativePro;
                 this.formData.contract.cumulativePro = this.formData.contract.cumulativeProShow;
                 this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;
             } else {
                 this.formData.contract.cumulativeAfterShow = this.common.toDecimal2(
-                    this.formData.contract.cumulativeAfter * 100
+                    this.formData.contract.cumulativeAfter 
                 );
                 this.formData.contract.cumulativeProShow = this.common.toDecimal2(
-                    this.formData.contract.cumulativePro * 100
+                    this.formData.contract.cumulativePro 
                 );
                 this.formData.contract.cumulativePro = this.formData.contract.cumulativeProShow;
                 this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;

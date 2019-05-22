@@ -556,10 +556,10 @@ export default {
                     this.tableData.contract.cumulativeProShow = this.tableData.contract.cumulativePro;
                 } else {
                     this.tableData.contract.cumulativeAfterShow = this.common.toDecimal2(
-                        this.tableData.contract.cumulativeAfter * 100
+                        this.tableData.contract.cumulativeAfter
                     );
                     this.tableData.contract.cumulativeProShow = this.common.toDecimal2(
-                        this.tableData.contract.cumulativePro * 100
+                        this.tableData.contract.cumulativePro
                     );
                 }
                 if (/^[0-9.]+$/.test(this.tableData.contract.amount)) {
