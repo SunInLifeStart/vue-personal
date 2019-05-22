@@ -134,9 +134,9 @@ export default {
                 ntkoBrowser.openWindow(url);
                             
             }
-            // else if('JPG,JPEG,GIF,PNG,BMP'.includes(item.type.toUpperCase()) && !!window.ActiveXObject || "ActiveXObject" in window){
-            //      this.common.download(item.url, item.name);
-            // }
+            else if('JPG,JPEG,GIF,PNG,BMP'.includes(item.type.toUpperCase()) && !!window.ActiveXObject || "ActiveXObject" in window){
+                 this.common.download(item.url, item.name);
+            }
             else{
                 this.common.preview(item);
             }
@@ -148,13 +148,15 @@ export default {
             this.$emit("getId", item.id);
         },
         downloadFile(item) {
-        //     debugger
-        //     if('JPG,JPEG,GIF,PNG,BMP'.includes(item.type.toUpperCase()) && !!window.ActiveXObject || "ActiveXObject" in window){
-        //         this.common.preview(item);
-        //    }
-        //     else{
+            if('JGIF,PNG,BMP'.includes(item.type.toUpperCase()) && !!window.ActiveXObject || "ActiveXObject" in window){
+                this.common.preview(item);
+           }
+            if('JPG,JPEG'.includes(item.type.toUpperCase()) && !!window.ActiveXObject || "ActiveXObject" in window){
+                window.open(item.url,item.name);
+           }
+            else{
                 this.common.download(item.url, item.name);
-            // }
+            }
             
         },
 
