@@ -119,7 +119,8 @@ export default {
     },
     methods: {
         previewFile(item) {
-           if(item.file_name){
+            // debugger
+            if(item.file_name){
                 item.type = "DOC";
             }
             if ('DOCX,PPTX,XLSX,DOC,XLS'.includes(item.type.toUpperCase())) {
@@ -133,7 +134,7 @@ export default {
                 ntkoBrowser.openWindow(url);
                             
             }
-            else if('JPG,JPEG,GIF,PNG,BMP'.includes(item.type.toUpperCase()) && (!!window.ActiveXObject || "ActiveXObject" in window){
+            else if('JPG,JPEG,GIF,PNG,BMP'.includes(item.type.toUpperCase()) && (!!window.ActiveXObject || "ActiveXObject" in window)){
                  this.common.download(item.url, item.name);
             }
             else{
