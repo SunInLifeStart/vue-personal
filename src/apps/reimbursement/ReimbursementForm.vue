@@ -37,6 +37,23 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+                <el-row>
+                    <el-col :span='8'>
+                        <el-form-item label="招待费审批表：" label-width="25px;">
+                            <el-select v-model="expenses" filterable placeholder="选择招待费审批单" allow-create @change="expensesChange">
+                                <el-option v-for="item in expensesSelections" :key="item.id" :label="item.number" :value="item.id">
+                                </el-option>
+                            </el-select>
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.expensesView">
+                                <el-button type="text" style="margin-left: 10px;" icon="el-icon-view" @click="expensesDetail"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="查看" placement="right" v-show="this.formData.expensesView == false">
+                                <el-button type="text" style="margin-left: 10px;color:gray;" icon="el-icon-view"></el-button>
+                            </el-tooltip>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+
                 <table border="1px solid #f00" style="width: 99%; height: 100%; table-layout: fixed; word-break: break-all;margin-top:20px;">
                     <col style="width: 10%" />
                     <col style="width: 10%" />
@@ -494,6 +511,8 @@ export default {
             combinedUnit: [],
             borrowPerson: [],
             travelPeople: '',
+            expenses: '',
+            expensesSelections: [],
             submission: '',
             submissionSelections: [],
             travelSelections: [],
@@ -810,6 +829,7 @@ export default {
         },
         //获取详情前清空数据方法，要调用，不然有缓存，影响借款相关数据
         getClearForm() {
+            this.expenses = '';
             this.submission = '';
             this.travelPeople = '';
             this.getOgans();
@@ -819,6 +839,9 @@ export default {
             this.formData = {
                 no: '',
                 id: '',
+                expensesView: true,
+                expensesId: '',
+                expensesName: '',
                 subView: true,
                 travelView: true,
                 travellerId: '',
@@ -879,6 +902,7 @@ export default {
             $self.getClass();
             $self.getSubmissionlList();
             $self.getTravelList();
+            this.getExpenseslList();
             // this.formData = data;
             $self.url = '/api/v1/expense_forms/' + data.id;
             let response = await $self.getDetails();
@@ -891,6 +915,16 @@ export default {
                         this.submission = parseInt(response.data.submissionId);
                     } else {
                         this.submission = response.data.submissionId;
+                    }
+                }
+                if (
+                    response.data.expensesId &&
+                    response.data.expensesId != null
+                ) {
+                    if (response.data.expensesView) {
+                        this.expenses = parseInt(response.data.expensesId);
+                    } else {
+                        this.expenses = response.data.expensesId;
                     }
                 }
                 if (
@@ -937,10 +971,12 @@ export default {
             this.getOgans();
             this.getSubmissionlList();
             this.getTravelList();
+            this.getExpenseslList();
             this.getClass();
             this.formData = this.resetForm();
             this.submission = '';
             this.travelPeople = '';
+            this.expenses = '';
             this.dialogFormVisible = this.createForm_status = true;
             this.branchCode = '';
             this.getNo();
@@ -1040,6 +1076,55 @@ export default {
             this.formData.total = this.common.toDecimal2(sum);
             this.formData.upper = this.common.DX(this.formData.total);
             this.changeTotal = this.common.toDecimal2(sum);
+        },
+        getExpenseslList() {
+            const self = this;
+            self.expensesSelections = [];
+            if (cookies.get('uid')) {
+                axios
+                    .get(
+                        '/api/v1/entertainmentExpense/listDone/' +
+                            cookies.get('uid')
+                    )
+                    .then(res => {
+                        if (res.data.content) {
+                            for (let data of res.data.content) {
+                                this.expensesSelections.push({
+                                    id: data.id,
+                                    number: data.number
+                                });
+                            }
+                        }
+                    })
+                    .catch(function() {
+                        self.$message({
+                            message: '操作失败',
+                            type: 'error'
+                        });
+                    });
+            }
+        },
+        //部门呈报件改变
+        expensesChange(val) {
+            console.log(val);
+            this.formData.expensesView = true;
+            let boolean = false;
+            for (let data of this.expensesSelections) {
+                if (data.id == val) {
+                    boolean = true;
+                }
+            }
+            this.formData.expensesView = boolean;
+        },
+        //查看选择的部门呈报件（点击小眼睛）
+        expensesDetail() {
+            if (
+                this.expenses &&
+                this.expenses != null &&
+                this.formData.expensesView
+            ) {
+                this.common.open('#/apps/expenses/' + this.expenses);
+            }
         },
         //根据uid获取部门呈报件
         getSubmissionlList() {
@@ -1246,6 +1331,9 @@ export default {
             let formData = {
                 no: '',
                 id: '',
+                expensesView: true,
+                expensesId: '',
+                expensesName: '',
                 subView: true,
                 travelView: true,
                 travellerId: '',
@@ -1418,6 +1506,17 @@ export default {
                 }
                 if (this.formData.subView == false) {
                     this.formData.submissionName = this.formData.submissionId;
+                }
+            }
+            if (this.expenses != '') {
+                this.formData.expensesId = this.expenses;
+                for (let data of this.expensesSelections) {
+                    if (data.id == this.expenses) {
+                        this.formData.expensesName = data.number;
+                    }
+                }
+                if (this.formData.expensesView == false) {
+                    this.formData.expensesName = this.formData.expensesId;
                 }
             }
             let response = await $self.saveFormData(

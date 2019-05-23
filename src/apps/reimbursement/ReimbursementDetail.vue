@@ -19,7 +19,7 @@
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
-            <el-form :model='tableData' class="demo-form-inline" id="printContent" ref="formupdate" style="height:100%">
+            <el-form :model='tableData' class="demo-form-inline" id="printContent" ref="formupdate" style="height:150%">
                 <h4 style="text-align: center;">报销审批单</h4>
                 <el-row style="margin-top: 10px;">
                     <el-col :span="7">
@@ -37,6 +37,13 @@
                     <el-col :span="8">
                         <el-form-item label="呈报件：">
                             <span style="font-size:10px" @click="ViewDetail('chengbao')" :class="{'titlename':this.tableData.subView}"> {{tableData.submissionName}}</span>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="招待费审批单：">
+                            <span style="font-size:10px" @click="ViewDetail('expenses')" :class="{'titlename':this.tableData.expensesView}"> {{tableData.expensesName}}</span>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -395,14 +402,14 @@ import moment from 'moment';
 import cookies from 'js-cookie';
 import { publicMethods } from '../application.js';
 import FilesOperate from '../FilesOperate';
-import printJS from 'print-js'
-const style = '@page { margin: 0 } @media print {  }'//自定义样式
-      printJS({
-        printable: 'printContent',//要打印内容的id
-        type: 'html',
-        style: style,
-        scanStyles: false
-      })
+import printJS from 'print-js';
+const style = '@page { margin: 0 } @media print {  }'; //自定义样式
+printJS({
+    printable: 'printContent', //要打印内容的id
+    type: 'html',
+    style: style,
+    scanStyles: false
+});
 export default {
     mixins: [publicMethods],
     name: 'ReimbursementDetail',
@@ -511,12 +518,25 @@ export default {
                         '#/apps/travel/' + this.tableData.travellerId
                     );
                 }
+            } else if (view == 'expenses') {
+                if (
+                    this.tableData.expensesId &&
+                    this.tableData.expensesId != '' &&
+                    this.tableData.expensesView
+                ) {
+                    this.common.open(
+                        '#/apps/expenses/' + this.tableData.expensesId
+                    );
+                }
             }
         },
         clearForm() {
             this.tableData = {
                 no: '',
                 type: '',
+                expensesView: true,
+                expensesId: '',
+                expensesName: '',
                 subView: true,
                 budgetSure: false,
                 travellerId: '',
