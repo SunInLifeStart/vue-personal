@@ -1014,10 +1014,10 @@ export default {
                 this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;
             } else {
                 this.formData.contract.cumulativeAfterShow = this.common.toDecimal2(
-                    this.formData.contract.cumulativeAfter 
+                    this.formData.contract.cumulativeAfter
                 );
                 this.formData.contract.cumulativeProShow = this.common.toDecimal2(
-                    this.formData.contract.cumulativePro 
+                    this.formData.contract.cumulativePro
                 );
                 this.formData.contract.cumulativePro = this.formData.contract.cumulativeProShow;
                 this.formData.contract.cumulativeAfter = this.formData.contract.cumulativeAfterShow;
@@ -1364,7 +1364,7 @@ export default {
                 }
             }
             this.formData.landExpense = boolean;
-            if (parseFloat(this.formData.contract.cumulativeAfterShow) > 1) {
+            if (parseFloat(this.formData.contract.cumulativeAfter) > 100) {
                 this.formData.beyondContract = true;
             } else {
                 this.formData.beyondContract = false;
