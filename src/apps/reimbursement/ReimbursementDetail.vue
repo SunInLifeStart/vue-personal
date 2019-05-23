@@ -19,7 +19,7 @@
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
-            <el-form :model='tableData' class="demo-form-inline" id="printContent" ref="formupdate" style="height:150%">
+            <el-form :model='tableData' id='queryTable' class="demo-form-inline" ref="formupdate" style="height:150%">
                 <h4 style="text-align: center;">报销审批单</h4>
                 <el-row style="margin-top: 10px;">
                     <el-col :span="7">
@@ -402,14 +402,6 @@ import moment from 'moment';
 import cookies from 'js-cookie';
 import { publicMethods } from '../application.js';
 import FilesOperate from '../FilesOperate';
-import printJS from 'print-js';
-const style = '@page { margin: 0 } @media print {  }'; //自定义样式
-printJS({
-    printable: 'printContent', //要打印内容的id
-    type: 'html',
-    style: style,
-    scanStyles: false
-});
 export default {
     mixins: [publicMethods],
     name: 'ReimbursementDetail',
@@ -486,14 +478,6 @@ export default {
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el);
-            const style = '@page { margin: 0 } @media print { #printContent{height: inherit;color:red;}}'//自定义样式
-            printJS({
-                printable: 'printContent',//要打印内容的id
-                type: 'html',
-                style: style,
-                scanStyles: false
-            })
-            //  document.getElementById('approval').style.display = 'none';
         },
         ViewDetail(view) {
             if (view == 'borrow') {
@@ -729,10 +713,26 @@ export default {
     body {
         height: inherit;
     }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
 }
 </style>
 <style lang="scss" scope>
 #ReimbursementDetail {
+    html,
+    body {
+        height: inherit;
+    }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
     .formContent {
         flex: 1;
         height: 100%;
