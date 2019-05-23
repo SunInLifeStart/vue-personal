@@ -81,7 +81,7 @@
                         <td>拟休时间</td>
                         <td colspan="5">
                             <template>
-                                {{tableData.startTime}}至 {{tableData.endTime}}
+                                {{tableData.startTime}}{{tableData.startPart && tableData.startPart != '' ? tableData.startPart : ''}}至 {{tableData.endTime}}{{tableData.endPart && tableData.endPart != '' ?tableData.endPart : ''}}
                             </template>
                             共({{tableData.day}})天
                         </td>

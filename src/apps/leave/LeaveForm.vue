@@ -68,24 +68,42 @@
                             拟休时间</td>
                         <td colspan="2">
                             <template>
-                                <!-- @change="getHour(formData.startTime,formData.endTime)" -->
-                                <el-date-picker v-model="formData.startTime" 
-                                 value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="开始时间">
-                                </el-date-picker>
+                                <el-row>
+                                    <el-col :span="16">
+                                        <!-- @change="getHour(formData.startTime,formData.endTime)" -->
+                                        <el-date-picker v-model="formData.startTime" value-format="yyyy-MM-dd" type="date" placeholder="开始时间" @change='dateTimeChange'>
+                                        </el-date-picker>
+                                    </el-col>
+                                    <el-col :span="8">
+                                        <el-select v-model="formData.startPart" placeholder="请选择" @change='dateTimeChange'>
+                                            <el-option label="上午" value="上午"></el-option>
+                                            <el-option label="下午" value="下午"></el-option>
+                                        </el-select>
+                                    </el-col>
+                                </el-row>
                             </template>
                         </td>
                         <td colspan="1">
                             <template>
-                                <!-- @change="getHour(formData.startTime,formData.endTime)" -->
-                                <el-date-picker style="width:100%;" v-model="formData.endTime" 
-                                 value-format="yyyy-MM-dd HH:mm:ss" type="datetime" placeholder="结束时间">
-                                </el-date-picker>
+                                <el-row>
+                                    <el-col :span="15">
+                                        <!-- @change="getHour(formData.startTime,formData.endTime)" -->
+                                        <el-date-picker v-model="formData.endTime" value-format="yyyy-MM-dd" type="date" @change='dateTimeChange' placeholder="结束时间">
+                                        </el-date-picker>
+                                    </el-col>
+                                    <el-col :span="9">
+                                        <el-select v-model="formData.endPart" placeholder="请选择" @change='dateTimeChange'>
+                                            <el-option label="上午" value="上午"></el-option>
+                                            <el-option label="下午" value="下午"></el-option>
+                                        </el-select>
+                                    </el-col>
+                                </el-row>
                             </template>
                         </td>
                         <td colspan="2">
-                            
-                           <!-- disabled="disabled" -->
-                            <el-input placeholder="休假时长" @mousewheel.native.prevent type="number"  v-model="formData.day">
+
+                            <!-- disabled="disabled" -->
+                            <el-input placeholder="休假时长" v-model="formData.day">
                                 <template style="width:20px;" slot="append">天</template>
                             </el-input>
                         </td>
@@ -132,6 +150,7 @@ import cookies from 'js-cookie';
 import FilesOperate from '../FilesOperate';
 import { application } from '../application.js';
 import { publicMethods } from '../application.js';
+import { type } from 'os';
 export default {
     mixins: [publicMethods],
     name: 'leavelForm',
@@ -177,7 +196,10 @@ export default {
                 }
             ],
             formData: this.resetForm(),
-            appFlowName: 'motor-holiday_leave'
+            appFlowName: 'motor-holiday_leave',
+            dateArray: 0,
+            comparedate: 0,
+            lenthdate: 0
         };
     },
     mounted() {},
@@ -185,20 +207,125 @@ export default {
         FilesOperate
     },
     methods: {
+        getDateList(startDate, endDate) {
+            const dateList = [];
+            dateList.push(moment(startDate).format('YYYY-MM-DD'));
+            while (true) {
+                startDate.setDate(startDate.getDate() + 1);
+                if (startDate.getTime() < endDate.getTime()) {
+                    dateList.push(moment(startDate).format('YYYY-MM-DD'));
+                } else {
+                    break;
+                }
+            }
+            dateList.push(moment(endDate).format('YYYY-MM-DD'));
+            return dateList;
+        },
+        isholiday(dateArray, type) {
+            const self = this;
+            // console.log(dateArray.replace(/-/g, ''));
+            let url = 'holiday/holiday?date=' + dateArray.replace(/-/g, '');
+            axios
+                .get(url)
+                .then(res => {
+                    this.comparedate++;
+                    if (res.data.data == 0 || res.data.data == 2) {
+                        this.dateArray++;
+                    }
+                    if (this.comparedate == this.lenthdate) {
+                        console.log(this.dateArray);
+                        //  this.formData.day =String(this.dateArray);
+                        this.timePartChange();
+                    }
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '获取节假日接口失败',
+                        type: 'error'
+                    });
+                });
+        },
+        progressTime(arrayListDate) {
+            for (var i = 0; i < arrayListDate.length; i++) {
+                this.isholiday(arrayListDate[i]);
+            }
+        },
+        dateTimeChange() {
+            if (this.formData.startTime != '' && this.formData.endTime != '') {
+                this.dateArray = 0;
+                this.comparedate = 0;
+                const time1 = Date.parse(
+                    new Date(this.formData.startTime.replace(/-/g, '/'))
+                );
+                const time2 = Date.parse(
+                    new Date(this.formData.endTime.replace(/-/g, '/'))
+                );
+                if (time1 > time2) {
+                    this.$message({
+                        message: '开始日期应小于结束日期',
+                        type: 'warning'
+                    });
+                    this.formData.endTime = '';
+                    this.formData.day = '';
+                } else if (time1 == time2) {
+                    this.dateArray++;
+                    this.timePartChange();
+                } else {
+                    let startTime = new Date(this.formData.startTime);
+                    let endTime = new Date(this.formData.endTime);
+                    let arrayListDate = this.getDateList(startTime, endTime);
+                    this.lenthdate = arrayListDate.length;
+                    this.progressTime(arrayListDate);
+                    //console.log(this.dateArray);
+                }
+            }
+        },
+        timePartChange() {
+            const self = this;
+            if (
+                this.formData.startPart == '上午' &&
+                this.formData.endPart == '上午'
+            ) {
+                this.dateArray += 0.5;
+                this.formData.day = this.dateArray - 1;
+                self.$forceUpdate();
+            } else if (
+                this.formData.startPart == '下午' &&
+                this.formData.endPart == '下午'
+            ) {
+                this.dateArray += 0.5;
+                this.formData.day = this.dateArray - 1;
+                self.$forceUpdate();
+            } else if (
+                this.formData.startPart == '上午' &&
+                this.formData.endPart == '下午'
+            ) {
+                this.dateArray += 1;
+                this.formData.day = this.dateArray - 1;
+                self.$forceUpdate();
+            } else if (
+                this.formData.startPart == '下午' &&
+                this.formData.endPart == '上午'
+            ) {
+                this.dateArray += 0;
+                this.formData.day = this.dateArray - 1;
+                self.$forceUpdate();
+            }
+        },
         // 时长
-       getHour(a1, a2) {
+        getHour(a1, a2) {
             // debugger
             const $self = this;
-            if(a1 && a2){
-                 var date3 =
-                new Date(a2.replace(/-/g, '/')).getTime() -
-                new Date(a1.replace(/-/g, '/')).getTime(); //时间差的毫秒数
+            if (a1 && a2) {
+                var date3 =
+                    new Date(a2.replace(/-/g, '/')).getTime() -
+                    new Date(a1.replace(/-/g, '/')).getTime(); //时间差的毫秒数
             }
-           
+
             //计算出相差天数Math.floor
             var days = (date3 / (24 * 3600 * 1000)).toFixed(1);
             //计算出小时数
-           
+
             if (a1 == null || a2 == null || a1 == '' || a2 == '') {
                 this.formData.day = '';
             } else {
@@ -209,10 +336,10 @@ export default {
                 } else {
                     this.formData.day = days;
                 }
-                this.$forceUpdate()
+                this.$forceUpdate();
             }
             // return this.formData.day;
-          },
+        },
         getNum() {
             const self = this;
             let params = {
@@ -230,16 +357,23 @@ export default {
                     });
                 });
         },
-        setDataFromParent(data) {
-            this.formData = data;
-            for (let item of this.options) {
-                if (item.value == this.formData.type) {
-                    this.formData.type = item.label;
+        async setDataFromParent(data) {
+            const $self = this;
+            $self.url = '/api/v1/motor-holiday/get/' + data.id;
+            let response = await $self.getDetails();
+            if (response) {
+                this.formData = response.data.content;
+                for (let item of this.options) {
+                    if (item.value == this.formData.type) {
+                        this.formData.type = item.label;
+                    }
                 }
+                this.formId = data.id;
+                this.dialogFormVisible = true;
+                this.createForm_status = false;
+            } else {
+                $self.msgTips('获取表单失败', 'warning');
             }
-            this.formId = data.id;
-            this.dialogFormVisible = true;
-            this.createForm_status = false;
         },
         createForm() {
             this.formData = this.resetForm();
@@ -258,6 +392,8 @@ export default {
                 isAnnualPlan: 'true',
                 startTime: '',
                 endTime: '',
+                startPart: '上午',
+                endPart: '上午',
                 type: '事假'
             };
             return formData;

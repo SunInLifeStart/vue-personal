@@ -7,7 +7,7 @@ function resolve(dir) {
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
-    runtimeCompiler: true,//是否使用包含运行时编译器的 Vue 构建版本
+    runtimeCompiler: true, //是否使用包含运行时编译器的 Vue 构建版本
     baseUrl: '',
     productionSourceMap: false, //不在production环境使用SourceMap
     css: {
@@ -66,21 +66,20 @@ module.exports = {
     devServer: {
         port: 8889,
         proxy: {
-<<<<<<< HEAD
-            
-=======
             "/api/v1/singApproval/": {
                 target: "http://192.168.1.110:8754"
             },
->>>>>>> 8f6aa7321b281d749981f0b6faf8317fc70b4cc0
             "/api/": {
                 target: "http://116.117.157.232"
             },
+            "/holiday/": {
+                target: "http://api.goseek.cn/Tools"
+            },
             "/budget/": {
-            target: "http://116.117.157.232"
+                target: "http://116.117.157.232"
             },
             "/workflow/": {
-            target: "http://116.117.157.232:10099"
+                target: "http://116.117.157.232:10099"
             },
             "/solr": {
                 target: "http://116.117.157.232"
@@ -98,7 +97,7 @@ module.exports = {
             //     ws: true,
             //     changeOrigin: true
             // },
-            "/get":{
+            "/get": {
                 target: "http://192.168.0.253:10148",
                 ws: true,
                 changeOrigin: true
@@ -106,15 +105,13 @@ module.exports = {
         }
     },
     pages: {
-        index:
-        {
+        index: {
             template: './public/index.html',
             entry: './src/main.js',
             filename: 'index.html',
             title: '首页-中关村协同发展'
         },
-        login:
-        {
+        login: {
             template: './public/login.html',
             entry: './src/pages/login/main.js',
             filename: 'login.html',
