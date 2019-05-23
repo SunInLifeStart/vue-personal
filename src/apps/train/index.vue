@@ -61,7 +61,7 @@
                     </el-table-column>
                     <el-table-column prop="committed" label="提单时间">
                     </el-table-column>
-                    <el-table-column prop="participant" label="培训/学习(参加人员)">
+                    <el-table-column prop="trainingPrograms" label="培训/学习(项目)">
                     </el-table-column>
                     <el-table-column prop="schedule" width="250" label="日程安排"></el-table-column>
                      <el-table-column  width="100" label="单据状态">
