@@ -1,11 +1,6 @@
 <template>
     <div id="TrainDetail" >
-        <div id="stepslist">
-            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-            </el-steps>
-            <!-- assignes -->
-        </div>
+        
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -18,6 +13,11 @@
         </div>
         <br />
         <div class="formContent" style="padding: 15px 30px;overflow: scroll;">
+            <div id="stepslist">
+                <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                    <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                </el-steps>
+            </div>
             <div>
                 <el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
@@ -150,6 +150,7 @@ export default {
     name: "TrainDetail",
     data() {
         return {
+            isactive:'',
             tableData: {},
             actions: [],
             crumbs:[],
@@ -206,8 +207,7 @@ export default {
             } else {
                 $self.msgTips("获取表单失败", "warning");
             }
-            // debugger;
-            let actions = await $self.getActions();
+           let actions = await $self.getActions();
             let crumbs = await $self.getCrumbsone();
             let comments =  await $self.getComments();
             $self.actions = actions.data.types;
@@ -217,6 +217,7 @@ export default {
                 if($self.crumbs.items[i].active){
                     $self.crumbs.index = i;    
                 }
+                // $self.crumbs.items[i].active=this.isactive
             }
         }
     }
@@ -313,7 +314,7 @@ height: inherit;
     #stepslist{
         height:120px;
         width: 100%;
-        overflow: auto
+        // overflow: auto
     }
     .btnhide {
         display: none;
