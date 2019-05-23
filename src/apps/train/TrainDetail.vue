@@ -140,6 +140,14 @@ import moment from "moment";
 import Comment from "../Comment";
 import FilesOperate from "../FilesOperate";
 import { publicMethods } from "../application.js";
+import printJS from 'print-js'
+const style = '@page { margin: 0 } @media print {  }'//自定义样式
+      printJS({
+        printable: 'printContent',//要打印内容的id
+        type: 'html',
+        style: style,
+        scanStyles: false
+      })
 export default {
     mixins:[publicMethods],
     name: "TrainDetail",
