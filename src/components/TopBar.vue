@@ -30,6 +30,7 @@
                 </el-input>
             </div>
             <el-cascader
+                v-if="options.length > 0"
                 expand-trigger="hover"
                 :options="options"
                 placeholder="请选择公司或部门"
