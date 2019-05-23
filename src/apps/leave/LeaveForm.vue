@@ -103,9 +103,16 @@
                         <td colspan="2">
 
                             <!-- disabled="disabled" -->
-                            <el-input placeholder="休假时长" v-model="formData.day">
-                                <template style="width:20px;" slot="append">天</template>
-                            </el-input>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-input placeholder="休假时长" v-model="formData.day">
+                                        <template style="width:20px;" slot="append">天</template>
+                                    </el-input>
+                                </el-col>
+                                <el-col :span="12">
+                                    <span style='color:red;'>若休假时长为空，需等待...</span>
+                                </el-col>
+                            </el-row>
                         </td>
                     </tr>
                     <tr>
