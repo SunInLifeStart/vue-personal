@@ -12,7 +12,7 @@
                             </el-col>
                            <el-col :span="8">
                                 <el-form-item label="所属部门">
-                                    <el-input placeholder="请输入所属部门" v-model="params.department"></el-input>
+                                    <el-input placeholder="请输入所属部门" v-model="params.organName"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">
@@ -57,7 +57,7 @@
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
                     <el-table-column prop="submitter" label="申请人">
                     </el-table-column>
-                    <el-table-column prop="department" label="所属部门">
+                    <el-table-column prop="organName" label="所属部门">
                     </el-table-column>
                     <el-table-column prop="committed" label="提单时间">
                     </el-table-column>
@@ -128,7 +128,7 @@ export default {
             params: {
                 pageNum: 1,
                 pageSize: 5,
-                department: "",
+                organName: "",
                 submitter: "",
                 total: 0,
                 committed:"",
@@ -231,11 +231,11 @@ export default {
             this.getList();
         },
         resetInput() {
-            // this.params.submitter = this.params.department = "";
+            // this.params.submitter = this.params.organName = "";
             this.params={
                 pageNum: 1,
                 pageSize: 5,
-                department: "",
+                organName: "",
                 submitter: "",
                 committed:"",
                 status:"",

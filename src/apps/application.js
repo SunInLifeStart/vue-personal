@@ -380,12 +380,14 @@ export const publicMethods = {
 
         },
         async getCrumbs() {
-            let url = `/workflow/${this.appFlowName}/${
-                this.formId
-                }/${this.$store.getters.LoginData.uid}/crumb`;
+            let url = `/workflow/${this.appFlowName}/${this.formId}/${this.$store.getters.LoginData.uid}/crumb`;
             return await this.$axios.get(url);
         },
-
+        
+        async getCrumbsone() {
+            let url = `/workflow/${this.appFlowName}/${this.formId}/historyCrumb`;
+            return await this.$axios.get(url);
+        },
         //获取动作
         async getActions() {
             let url = `/workflow/${this.appFlowName}/${

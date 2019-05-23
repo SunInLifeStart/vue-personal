@@ -16,8 +16,8 @@
                     </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                    <el-form-item label="所属部门" prop="department" label-width="120px">
-                        <el-input v-model="formData.department" placeholder="请输入所属部门"></el-input>
+                    <el-form-item label="所属部门" prop="organName" label-width="120px">
+                        <el-input v-model="formData.organName" placeholder="请输入所属部门"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -159,7 +159,7 @@ export default {
                         message: "请输入申请人"
                     }
                 ],
-                department: [
+                organName: [
                     {
                         required: true, //是否必填
                         trigger: "blur", //何事件触发
@@ -281,7 +281,6 @@ export default {
             this.floaes()
             let formData = {
                 submitter: this.$store.getters.LoginData.uname || '', //申请人
-                department: this.$store.getters.LoginData.oname || '', //所属部门
                 id: "",
                 // committed: moment(new Date()).format("YYYY-MM-DD"), //提单时间
                 committed:'',

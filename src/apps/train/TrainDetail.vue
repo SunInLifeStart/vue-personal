@@ -1,5 +1,11 @@
 <template>
     <div id="TrainDetail" >
+        <div id="stepslist">
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
+            <!-- assignes -->
+        </div>
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -17,10 +23,8 @@
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
-            <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-            </el-steps> -->
-            <el-form :model='tableData' class="formList" ref="formupdate" style="height:100%">
+            
+            <el-form :model='tableData' class="formList" ref="formupdate" style="height:150%">
                 <el-row>
                     
                     <el-col :span="8">
@@ -28,7 +32,7 @@
                     </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="所属部门：">{{tableData.department}}
+                        <el-form-item label="所属部门：">{{tableData.organName}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -140,14 +144,7 @@ import moment from "moment";
 import Comment from "../Comment";
 import FilesOperate from "../FilesOperate";
 import { publicMethods } from "../application.js";
-import printJS from 'print-js'
-const style = '@page { margin: 0 } @media print {  }'//自定义样式
-      printJS({
-        printable: 'printContent',//要打印内容的id
-        type: 'html',
-        style: style,
-        scanStyles: false
-      })
+
 export default {
     mixins:[publicMethods],
     name: "TrainDetail",
@@ -177,7 +174,6 @@ export default {
     methods: {
         async print() {
             this.$print(this.$refs.formupdate.$el);
-            
         },
         getFormDetails(formId) {
             let $self = this;
@@ -212,16 +208,16 @@ export default {
             }
             // debugger;
             let actions = await $self.getActions();
-            // let crumbs = await $self.getCrumbs();
+            let crumbs = await $self.getCrumbsone();
             let comments =  await $self.getComments();
             $self.actions = actions.data.types;
             $self.comments = comments.data;
-            // $self.crumbs =  {items: crumbs.data, index: -1};
-            // for(var i= 0; i<$self.crumbs.items.length; i++){
-            //     if($self.crumbs.items[i].active){
-            //         $self.crumbs.index = i;    
-            //     }
-            // }
+            $self.crumbs =  {items: crumbs.data, index: -1};
+            for(var i= 0; i<$self.crumbs.items.length; i++){
+                if($self.crumbs.items[i].active){
+                    $self.crumbs.index = i;    
+                }
+            }
         }
     }
 };
@@ -313,6 +309,11 @@ height: inherit;
         .btnList:hover {
             background: #c7e0f4;
         }
+    }
+    #stepslist{
+        height:120px;
+        width: 100%;
+        overflow: auto
     }
     .btnhide {
         display: none;

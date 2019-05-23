@@ -396,13 +396,7 @@ import cookies from 'js-cookie';
 import { publicMethods } from '../application.js';
 import FilesOperate from '../FilesOperate';
 import printJS from 'print-js'
-const style = '@page { margin: 0 } @media print {  }'//自定义样式
-      printJS({
-        printable: 'printContent',//要打印内容的id
-        type: 'html',
-        style: style,
-        scanStyles: false
-      })
+
 export default {
     mixins: [publicMethods],
     name: 'ReimbursementDetail',
@@ -479,6 +473,13 @@ export default {
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el);
+            const style = '@page { margin: 0 } @media print { #printContent{height: inherit;color:red;}}'//自定义样式
+            printJS({
+                printable: 'printContent',//要打印内容的id
+                type: 'html',
+                style: style,
+                scanStyles: false
+            })
             //  document.getElementById('approval').style.display = 'none';
         },
         ViewDetail(view) {
