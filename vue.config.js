@@ -72,7 +72,7 @@ module.exports = {
             "/api/": {
                 target: "http://116.117.157.232"
             },
-            "/holiday/": {
+            "/holiday": {
                 target: "http://api.goseek.cn/Tools"
             },
             "/budget/": {

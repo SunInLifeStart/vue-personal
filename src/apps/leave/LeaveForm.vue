@@ -231,7 +231,7 @@ export default {
         isholiday(dateArray, type) {
             const self = this;
             // console.log(dateArray.replace(/-/g, ''));
-            let url = 'holiday/holiday?date=' + dateArray.replace(/-/g, '');
+            let url = '/holiday?date=' + dateArray.replace(/-/g, '');
             axios
                 .get(url)
                 .then(res => {
