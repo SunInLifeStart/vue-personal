@@ -1,6 +1,5 @@
 <template>
     <div id="TrainDetail" >
-        
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -8,8 +7,7 @@
                         {{action.name}}
                     </span>
                 </div>
-                
-            </el-row>
+           </el-row>
         </div>
         <br />
         <div class="formContent" style="padding: 15px 30px;overflow: scroll;">
@@ -217,7 +215,6 @@ export default {
                 if($self.crumbs.items[i].active){
                     $self.crumbs.index = i;    
                 }
-                // $self.crumbs.items[i].active=this.isactive
             }
         }
     }
