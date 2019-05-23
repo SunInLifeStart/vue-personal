@@ -29,14 +29,14 @@
                 <el-input size="small" placeholder="请输入搜索内容" v-model="$root.searchKey" @keyup.enter.native="search()" suffix-icon="el-icon-search">
                 </el-input>
             </div>
-            <el-cascader
+            <!-- <el-cascader
                 v-if="options.length > 0"
                 expand-trigger="hover"
                 :options="options"
                 placeholder="请选择公司或部门"
                 v-model="selectedOptions"
                 @change="handleChange">
-            </el-cascader>
+            </el-cascader> -->
             <div class="info">Hello，{{$store.getters.LoginData.uname}}&nbsp;&nbsp;&nbsp;在线：{{uc}}</div>
             
             <div class="tools">
