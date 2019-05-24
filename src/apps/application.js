@@ -96,7 +96,12 @@ export const publicMethods = {
         },
 
         //保存的时候启动工作流（一次）
-        async startSignalForSave(type) {
+        async startSignalForSave() {
+            await this.emitMessage(); 
+        },
+        //提交的时候启动工作流（两次）
+        async startSignalForStart(type) {
+        
             let actions = await this.getActions();
             if (actions.data.types.length > 0) {
                 this.hasRequired(actions.data.types[0]);
@@ -104,31 +109,32 @@ export const publicMethods = {
                 this.msgTips("缺少action,流程启动失败", "warning");
                 return false;
             }
+            actions.data.types[0]["comment"] = '提交';
             let complete = await this.startSignal(actions.data.types[0]);
-            if (!type) {
-                await this.emitMessage();
-            }
-        },
-        //提交的时候启动工作流（两次）
-        async startSignalForStart(type) {
-            await this.startSignalForSave("forStart");
-            let actions2 = await this.getActions();
-            if (actions2.data.types.length > 0) {
-                actions2.data.types = actions2.data.types.filter(function(item) {
-                    return item.action == "COMMIT";
-                });
-                this.hasRequired(actions2.data.types[0]);
-            } else {
-                this.msgTips("缺少action,流程启动失败", "warning");
-                return false;
-            }
-            actions2.data.types[0]["comment"] = actions2.data.types[0].name;
-            let complete2 = await this.startSignal(actions2.data.types[0]);
             if (type) {
-                return complete2.data;
-            } else {
+                return complete.data;
+            }else{
                 await this.emitMessage();
             }
+            
+            // await this.startSignalForSave("forStart");
+            // let actions2 = await this.getActions();
+            // if (actions2.data.types.length > 0) {
+            //     actions2.data.types = actions2.data.types.filter(function(item) {
+            //         return item.action == "COMMIT";
+            //     });
+            //     this.hasRequired(actions2.data.types[0]);
+            // } else {
+            //     this.msgTips("缺少action,流程启动失败", "warning");
+            //     return false;
+            // }
+            // actions2.data.types[0]["comment"] = actions2.data.types[0].name;
+            // let complete2 = await this.startSignal(actions2.data.types[0]);
+            // if (type) {
+            //     return complete2.data;
+            // } else {
+            //     await this.emitMessage();
+            // }
             //return complete2.data;
 
         },
@@ -155,9 +161,9 @@ export const publicMethods = {
                             if(this.branchCode){
                                 options.push(key + "=" + this.branchCode);
                             }else{
-                                if(this.$store.getters.LoginData.currentRoles.length == 0 || this.$store.getters.LoginData.currentRoles.length == 1){
+                               // if(this.$store.getters.LoginData.currentRoles.length == 0 || this.$store.getters.LoginData.currentRoles.length == 1){
                                     options.push(key + "=" + this.$store.getters.LoginData.code.split("_")[0]);  
-                                }
+                               // }
                             }
 
                         } else if (key == "characterLevel") {
