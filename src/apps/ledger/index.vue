@@ -3,19 +3,19 @@
         <el-card class="box-card">
             <!-- 查询 -->
             <div id="LedgerFilter">
-                <el-form :inline="true" class="demo-form-inline" >
+                <el-form :inline="true" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="提单人：">
                                 <el-input v-model="formInline.applyName" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
-                         <el-col :span="8">
+                        <el-col :span="8">
                             <el-form-item label="项目：">
                                 <el-input v-model="formInline.project" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
-                         <el-col :span="8">
+                        <el-col :span="8">
                             <el-form-item label="部门：">
                                 <el-input v-model="formInline.dept" placeholder=""></el-input>
                             </el-form-item>
@@ -26,30 +26,22 @@
                             <el-form-item label="合同价格形势：">
                                 <!-- <el-input v-model="formInline.shape" placeholder=""></el-input> -->
                                 <el-select v-model="formInline.shape" clearable placeholder="请输入单据状态">
-                                    <el-option
-                                            v-for="item in shapeOption"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
+                                    <el-option v-for="item in shapeOption" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                       
+
                         <el-col :span="8">
                             <el-form-item label="发起时间：">
-                                 <el-date-picker v-model="formInline.initiateTime" value-format="yyyy-MM-dd" placeholder="请输入时间" style="width:100%" type="date">
-                            </el-date-picker>
+                                <el-date-picker v-model="formInline.initiateTime" value-format="yyyy-MM-dd" placeholder="请输入时间" style="width:100%" type="date">
+                                </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="formInline.status" clearable placeholder="请输入单据状态">
-                                    <el-option
-                                            v-for="item in statusOption"
-                                            :key="item.value"
-                                            :label="item.label"
-                                            :value="item.value">
+                                    <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -60,8 +52,8 @@
                             <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
                                 <!--
-                                <el-button type="primary" @click="searchList">统计</el-button>
-                                <el-button type="primary" @click="searchList">导出</el-button>-->
+                                <el-button type="primary" @click="searchList">统计</el-button>-->
+                                <el-button type="primary" @click="exportData">导出</el-button>
                                 <el-button @click="resetInput">重置</el-button>
                             </el-form-item>
                         </el-col>
@@ -74,15 +66,15 @@
                     </el-table-column>
                     <el-table-column prop="dept" label="所属部门">
                     </el-table-column>
-                     <el-table-column prop="project" label="所属项目">
+                    <el-table-column prop="project" label="所属项目">
                     </el-table-column>
                     <el-table-column prop="contractNum" label="合同编号">
                     </el-table-column>
-                    
+
                     <el-table-column prop="shape" label="合同价格形势">
                         <template slot-scope="scope">
                             {{scope.row.shape | filtershape}}
-                           
+
                         </template>
                     </el-table-column>
                     <el-table-column prop="contractName" label="合同名称" min-width='150px'>
@@ -126,36 +118,36 @@ export default {
             formDetails: {},
             formId: '',
             statusOption: [
-                    {
-                        value: '00',
-                        label: '已保存'
-                    },
-                    {
-                        value: '01',
-                        label: '审核中'
-                    },
-                    {
-                        value: '02',
-                        label: '已驳回'
-                    },
-                    {
-                        value: '04',
-                        label: '已完成'
-                    }
+                {
+                    value: '00',
+                    label: '已保存'
+                },
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
             ],
             shapeOption: [
-                    {
-                        value: '1',
-                        label: '固定总价'
-                    },
-                    {
-                        value: '2',
-                        label: '固定综合单价'
-                    },
-                    {
-                        value: '3',
-                        label: '其他'
-                    }
+                {
+                    value: '1',
+                    label: '固定总价'
+                },
+                {
+                    value: '2',
+                    label: '固定综合单价'
+                },
+                {
+                    value: '3',
+                    label: '其他'
+                }
             ],
             params: {
                 desc: true,
@@ -173,8 +165,8 @@ export default {
             formInline: {
                 applyName: '',
                 project: '',
-                initiateTime:'',
-                shape:'',
+                initiateTime: '',
+                shape: '',
                 dept: '', //申请部门
                 shape: '', //合同价格形式
                 applyDate: [],
@@ -196,7 +188,7 @@ export default {
             let xmlJson = {
                 '1': '固定总价',
                 '2': '固定综合单价',
-                '3': '其他',
+                '3': '其他'
             };
             return xmlJson[data];
         }
@@ -206,6 +198,49 @@ export default {
         LedgerDetail
     },
     methods: {
+        exportData() {
+            const self = this;
+            let applyName =
+                this.formInline.applyName != ''
+                    ? this.formInline.applyName
+                    : null;
+            let shape =
+                this.formInline.shape != '' ? this.formInline.shape : null;
+            let project =
+                this.formInline.project != '' ? this.formName.project : null;
+            let dept = this.formInline.dept != '' ? this.formInline.dept : null;
+            let status =
+                this.formInline.status != '' ? this.formInline.status : null;
+            let initiateTime =
+                this.formInline.initiateTime != ''
+                    ? this.formInline.initiateTime
+                    : null;
+            let urldata =
+                '/api/v1/contract_forms/exportByAccount?applyName=' +
+                applyName +
+                '&shape=' +
+                shape +
+                '&project=' +
+                project +
+                '&dept=' +
+                dept +
+                '&status=' +
+                status +
+                '&initiateTime=' +
+                initiateTime;
+            console.log(urldata);
+            axios
+                .get(urldata)
+                .then(res => {
+                 this.common.downloadExport(res.data);
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '导出操作失败',
+                        type: 'error'
+                    });
+                });
+        },
         //获取列表
         async getList(pageNum) {
             this.onSubmit();
@@ -239,7 +274,7 @@ export default {
                     value: this.formInline.project
                 });
             }
-            
+
             if (this.formInline.initiateTime) {
                 this.searchOptions.push({
                     field: 'initiateTime',
@@ -255,7 +290,7 @@ export default {
             //          value2: this.formInline.initiateTime
             //      });
             //  }
-          
+
             if (this.formInline.status.trim() !== '') {
                 this.searchOptions.push({
                     field: 'status',
@@ -339,9 +374,9 @@ export default {
         resetInput() {
             this.formInline.applyName = '';
             this.formInline.project = '';
-            this.formInline.initiateTime= '';
-            this.formInline.shape= '';
-            this.formInline.status= '';
+            this.formInline.initiateTime = '';
+            this.formInline.shape = '';
+            this.formInline.status = '';
             this.formInline.dept = '';
             this.formInline.shape = '';
             this.formInline.applyDate = [];
@@ -390,13 +425,13 @@ export default {
 }
 </style>
 <style scoped>
-#LedgerFilter .filterForm >>> .el-form-item__content{
-        width: calc(100% - 120px);
-    }
-    #LedgerFilter .filterForm >>> .el-select {
-        width: calc(100% - 15px);
-    }
-    #LedgerFilter .filterForm >>> .el-date-editor{
-        width: calc(100% - 0px);
-    }
+#LedgerFilter .filterForm >>> .el-form-item__content {
+    width: calc(100% - 120px);
+}
+#LedgerFilter .filterForm >>> .el-select {
+    width: calc(100% - 15px);
+}
+#LedgerFilter .filterForm >>> .el-date-editor {
+    width: calc(100% - 0px);
+}
 </style>
