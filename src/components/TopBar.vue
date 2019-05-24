@@ -29,14 +29,14 @@
                 <el-input size="small" placeholder="请输入搜索内容" v-model="$root.searchKey" @keyup.enter.native="search()" suffix-icon="el-icon-search">
                 </el-input>
             </div>
-            <!-- <el-cascader
+            <el-cascader
                 v-if="options.length > 0"
                 expand-trigger="hover"
                 :options="options"
                 placeholder="请选择公司或部门"
                 v-model="selectedOptions"
                 @change="handleChange">
-            </el-cascader> -->
+            </el-cascader>
             <div class="info">Hello，{{$store.getters.LoginData.uname}}&nbsp;&nbsp;&nbsp;在线：{{uc}}</div>
             
             <div class="tools">
@@ -109,7 +109,7 @@ export default {
                 this.$router.go(-1);
             }
         },
-        handleChange(value) {
+        async handleChange(value) {
              let $self = this;
               for(let i = 0; i<$self.options.length; i++){
                 if($self.options[i].value == value[0]){
@@ -136,21 +136,29 @@ export default {
                 // Cookies.remove("uname");
                 // Cookies.remove("username");
                 let $self = this;
-                $self.$axios
+                let departments = $self.$axios
                 .post('/api/auth/jwt/switchingDepartments',this.checkedObject)
-                .then(res => {
-                    if(res.data.status == 200) {
-                    this.$message({
-                        type:"success",
-                        message: res.data.message
-                    });
-                    } else {
-                    this.$message({
-                        type:"warning",
-                        message: '服务器异常'
-                    });
-                    }
-                })          
+                if(departments) {
+                    // if(departments.data.status == 200) {
+                        this.$message({
+                            type:"success",
+                            message: '更换成功'
+                        });
+                    // } else {
+                    //     this.$message({
+                    //         type:"warning",
+                    //         message: '服务器异常'
+                    //     });
+                    // }
+                }
+                let info = await axios.get(`/api/admin/user/userInfo1`);
+                if (info.data.status && info.data.status == 40301) {
+                    //window.location.href = 'login.html';
+                } else {
+                    info.data.uname = decodeURIComponent(info.data.uname);
+                    info.data.oname = decodeURIComponent(info.data.oname);
+                    store.commit('SET_LOGININFO', info.data);
+                }     
             }
         },
         open(data) {

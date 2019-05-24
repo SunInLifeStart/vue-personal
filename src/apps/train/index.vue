@@ -57,17 +57,17 @@
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
                     <el-table-column prop="submitter" label="申请人">
                     </el-table-column>
-                    <el-table-column prop="organName" label="所属部门">
+                    <el-table-column prop="organName" width="200" label="所属部门">
                     </el-table-column>
                     <el-table-column prop="committed" label="提单时间">
                     </el-table-column>
                     <el-table-column prop="trainingPrograms" label="培训/学习(项目)">
                     </el-table-column>
-                    <el-table-column prop="schedule" width="250" label="日程安排"></el-table-column>
+                    <el-table-column prop="schedule" width="100" label="日程安排"></el-table-column>
                      <el-table-column  width="100" label="单据状态">
                          <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                      </el-table-column>
-                     <el-table-column label="操作" width="100">
+                     <el-table-column label="操作" width="80">
                         <template slot-scope="scope">
                              
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left"

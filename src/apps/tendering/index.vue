@@ -51,6 +51,8 @@
                 </el-table-column>
                 <el-table-column prop="biddingProjectName" label="招标项目名称">
                 </el-table-column>
+                <el-table-column prop="organName" label="部门名称">
+                </el-table-column>
                 <el-table-column prop="tenderee" label="招标人">
                 </el-table-column>
                 <el-table-column prop="estimatedAmount" label="预计金额">

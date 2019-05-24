@@ -10,13 +10,15 @@
             </el-row>
         </div>
         <div class="formContent" style="padding: 15px 30px;overflow-y:auto">
-            <br />
-            <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
-            <br />
-            <!--<el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">-->
-                <!--<el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>-->
-            <!--</el-steps>-->
-            <el-form :model='tableData' class="formList">
+            
+            <div>
+                <el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button>
+            </div>
+            <br>
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
+             <el-form :model='tableData' class="formList">
                 <div >
                     <el-row>
                         <el-col :span="12">
@@ -443,7 +445,7 @@
                 }
                 // debugger;
                 let actions = await $self.getActions();
-                let crumbs = await $self.getCrumbs();
+                let crumbs = await $self.getCrumbsone();
                 let comments =  await $self.getComments();
               
                 $self.actions = actions.data.types;
@@ -544,6 +546,7 @@
                 background: #c7e0f4;
             }
         }
+        
         .btnhide {
             display: none;
         }
