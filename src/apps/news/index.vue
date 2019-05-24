@@ -57,6 +57,8 @@
                     </el-table-column>
                     <el-table-column prop="reportingOrg" label="报送单位">
                     </el-table-column>
+                    <el-table-column prop="organName" label="公司部门">
+                    </el-table-column>
                     <el-table-column prop="creatorName" label="作者">
                     </el-table-column>
                     <el-table-column prop="created" width="250" label="创建时间"></el-table-column>
