@@ -13,6 +13,9 @@
             <br />
             <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
             <br />
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
             <el-form :model='tableData' class="formList">
                 <el-row>
                     <el-col :span="8">
@@ -153,6 +156,7 @@
                     procurementScheme: {}
                 },
                 actions: [],
+                crumbs:[],
                 procurementOption: {
                     '1': '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
                     '3': '非开发建设类采购(招标方式：估算金额>=30万)',
@@ -192,6 +196,14 @@
                 let comments =  await $self.getComments();
                 $self.actions = actions.data.types;
                 $self.comments = comments.data;
+
+                let crumbs = await $self.getCrumbsone();
+                $self.crumbs =  {items: crumbs.data, index: -1};
+                for(var i= 0; i<$self.crumbs.items.length; i++){
+                    if($self.crumbs.items[i].active){
+                        $self.crumbs.index = i;    
+                    }
+                }
             }
         }
     };

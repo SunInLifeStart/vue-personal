@@ -12,13 +12,12 @@
         </div>
         <br />
         <div class="formContent"  style="padding: 15px 30px;overflow-y:auto">
-            <div id="stepslist">
-                <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                    <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-                </el-steps>
-            </div>
+            
             <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
             <br />
+             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
          <el-form :model='tableData' >
                 <el-row  v-if="tableData.wordNo && tableData.wordNo!=''">
                     <el-col :span="8">
@@ -342,11 +341,7 @@ export default {
             background: #c7e0f4;
         }
     }
-     #stepslist{
-        height:120px;
-        width: 100%;
-        // overflow: auto
-    }
+  
     .btnhide {
         display: none;
     }

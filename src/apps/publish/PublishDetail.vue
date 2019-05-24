@@ -14,9 +14,9 @@
         <div class="formContent" style="padding: 15px 30px">
             <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
             <br />
-            <!-- <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-            </el-steps> -->
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
             <el-form :model='tableData' class="formList">
                 <el-row>
                     <el-col :span="24">
@@ -163,6 +163,13 @@ export default {
             }
             $self.actions = actions.data.types;
             $self.comments = comments.data;
+            let crumbs = await $self.getCrumbsone();
+            $self.crumbs =  {items: crumbs.data, index: -1};
+            for(var i= 0; i<$self.crumbs.items.length; i++){
+                if($self.crumbs.items[i].active){
+                    $self.crumbs.index = i;    
+                }
+            }
         },
         pushItToDoor(){
             const self = this;
