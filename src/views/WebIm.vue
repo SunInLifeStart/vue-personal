@@ -60,7 +60,8 @@
                                 <i class="el-icon-plus" @click="dialogVisible = true"></i>
                             </div>
                             <div class="main-users">
-                                <div class="user dialog-user" :key="user.uid"  v-for="(user,index) in dialogList" @click="selectDialog(user)" :class="{active:toUser.id == user.id}" v-show="!user.hideCurrent" @contextmenu.prevent="deleteCurrentDialog(user,index)" v-if="user.name || user.groupName">
+                                 <!-- @contextmenu.prevent="deleteCurrentDialog(user,index)" -->
+                                <div class="user dialog-user" :key="user.uid"  v-for="(user,index) in dialogList" @click="selectDialog(user)" :class="{active:toUser.id == user.id}" v-show="!user.hideCurrent" v-if="user.name || user.groupName">
                                     <span style="display:inline-block;width:25px; height:25px; color:#FFF; font-size:13px; text-align:center;line-height:25px;background:#ccc;border-radius:50%" :class="{'onlineavatar':user.online || user.groupId}">{{user.name?user.name[0]:""}}</span>
                                     <span class="name" style="font-weight:bold;font-size:13px;" v-if="user.name">{{user.name}}</span>
                                     <span class="newMessageIcon" v-if="user.newMessageIcon">

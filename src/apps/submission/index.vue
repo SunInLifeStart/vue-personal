@@ -51,6 +51,8 @@
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
                     <el-table-column prop="submissionNo" label="呈报件编号">
                     </el-table-column>
+                    <el-table-column prop="organName" label="公司部门">
+                    </el-table-column>
                     <el-table-column prop="title" label="文件标题">
                     </el-table-column>
                     <el-table-column prop="draftUnit" label="拟稿单位">
