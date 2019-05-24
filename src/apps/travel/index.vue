@@ -49,6 +49,7 @@
                 <el-table :data="tableData" stripe @row-click="showCurrentId">
                     <el-table-column prop="submitter" label="提单人" align="center">
                     </el-table-column>
+                    <el-table-column prop="organName" label="公司部门" align="center"></el-table-column>
                     <el-table-column prop="subOrganName" label="费用承担部门" align="center">
                     </el-table-column>
                     <el-table-column prop="number" label="流水号" align="center">
