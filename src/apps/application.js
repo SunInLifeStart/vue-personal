@@ -11,17 +11,17 @@ export const publicMethods = {
         },
         //提交时判断以什么公司名义发起
         async juderCode(){
-                if(this.$store.getters.LoginData.currentRoles.length > 1){ 
-                    if(this.branchCode){
-                        await this.saveFormData();
-                    }else{
-                        this.dialogSelectCode = true;
-                        this.dialogTitle = "请选择以什么公司名义发起";
-                        this.currentRoles = this.$store.getters.LoginData.currentRoles;
-                        this.branchCode = this.currentRoles[0].code;
-                        return "returnDialog";
-                    }
-                }
+                // if(this.$store.getters.LoginData.currentRoles.length > 1){ 
+                    // if(this.branchCode){
+                    //     await this.saveFormData();
+                    // }else{
+                    //     this.dialogSelectCode = true;
+                    //     this.dialogTitle = "请选择以什么公司名义发起";
+                    //     this.currentRoles = this.$store.getters.LoginData.currentRoles;
+                    //     this.branchCode = this.currentRoles[0].code;
+                    //     return "returnDialog";
+                    // }
+                // }
                 if(this.$store.getters.LoginData.currentRoles.length == 1){
                        this.branchCode = this.$store.getters.LoginData.currentRoles[0].code;
                        await this.saveFormData();
