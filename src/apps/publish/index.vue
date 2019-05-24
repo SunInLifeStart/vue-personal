@@ -57,6 +57,8 @@
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
                     <el-table-column prop="title" label="标题">
                     </el-table-column>
+                    <el-table-column prop="organName" label="公司部门">
+                    </el-table-column>
                     <el-table-column prop="columns" label="类型">
                         <template slot-scope="scope">{{scope.row.columns == '1'? '规章制度':'通知公告'}}</template>
                     </el-table-column>
