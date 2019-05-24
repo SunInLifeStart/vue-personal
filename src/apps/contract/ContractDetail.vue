@@ -15,6 +15,9 @@
                 <el-button type="primary" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
             <el-row style="margin-bottom:10px;margin-left: 5px;">
                 <el-col :span="8" style="margin-bottom:10px;margin-left: 5px;">
                     流水号： {{tableData.number}}
@@ -408,17 +411,17 @@ export default {
                 $self.msgTips('获取表单失败', 'warning');
             }
             let actions = await $self.getActions();
-            // let crumbs = await $self.getCrumbs();
+            let crumbs = await $self.getCrumbsone();
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
 
             $self.comments = comments.data;
-            // $self.crumbs =  {items: crumbs.data, index: -1};
-            // for(var i= 0; i<$self.crumbs.items.length; i++){
-            //     if($self.crumbs.items[i].active){
-            //         $self.crumbs.index = i;
-            //     }
-            // }
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
+                }
+            }
         },
         doAction1(action) {
             this.showSpan = false;

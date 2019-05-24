@@ -15,11 +15,10 @@
                 <el-button type="primary" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
-            <!--
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList">
-                <el-step :description="item.name" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            
+            <!--
             <div style="text-align:right">
                 <el-button type="primary" @click="cope()">打 印</el-button>
             </div>
@@ -154,6 +153,7 @@ export default {
             users: [],
             actionsDialogArr: [],
             comments: [],
+            crumbs: [],
             dialogVisibleCrumb: false,
             flowNodeUrl: '',
             // qqq
@@ -209,18 +209,17 @@ export default {
             }
 
             let actions = await $self.getActions();
-            // let crumbs = await $self.getCrumbs();
+            let crumbs = await $self.getCrumbsone();
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
-            // $self.crumbs = { items: crumbs.data, index: -1 };
+            $self.crumbs = { items: crumbs.data, index: -1 };
             $self.comments = comments.data;
-            /** 
+
             for (var i = 0; i < $self.crumbs.items.length; i++) {
                 if ($self.crumbs.items[i].active) {
                     $self.crumbs.index = i;
                 }
             }
-            */
         }
     }
 };

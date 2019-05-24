@@ -49,6 +49,8 @@
                 <el-table :data="tableData" stripe @row-click="showCurrentId">
                     <el-table-column prop="borrower" label="借款人" align="left">
                     </el-table-column>
+                    <el-table-column prop="organName" label="公司部门" align="left">
+                    </el-table-column>
                     <el-table-column prop="borrowDept" label="费用承担部门" align="left" min-width="100">
                     </el-table-column>
                     <el-table-column prop="number" label="流水单号" align="left" width="150">

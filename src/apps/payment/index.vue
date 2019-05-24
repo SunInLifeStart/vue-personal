@@ -46,6 +46,7 @@
             <div id="PaymentList">
                 <el-table :data="tableData" stripe @row-click="showCurrentId">
                     <el-table-column prop="applicantName" label="提单人" min-width="80px"></el-table-column>
+                    <el-table-column prop="organName" label="公司部门" min-width="140px"></el-table-column>
                     <el-table-column prop="costUnit" label="费用承担部门" min-width="140px"></el-table-column>
                     <el-table-column prop="numericalOrder" label="单据编号" min-width="115px"></el-table-column>
                     <el-table-column prop="currency" label="币种" min-width="90px" align='center'>

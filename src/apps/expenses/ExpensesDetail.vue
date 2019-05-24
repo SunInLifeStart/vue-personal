@@ -19,6 +19,9 @@
                 <el-button style="margin-left: 25px;" type="primary" v-show="this.tableData.status && this.tableData.status == '04'" @click="print">打印</el-button>
             </div>
             <br />
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
                 <el-row style="margin-top: 25px;vertical-align: middle; line-height: 34px;">
                     <el-col :span="12" style="margin-left:5px;">
@@ -207,6 +210,7 @@ export default {
             tableData: {},
             actions: [],
             formId: '',
+            crumbs: [],
             textarea: '',
             dialogVisible: false,
             users: [],
@@ -290,16 +294,16 @@ export default {
                 $self.msgTips('获取表单失败', 'warning');
             }
             let actions = await $self.getActions();
-            // let crumbs = await $self.getCrumbs();
+            let crumbs = await $self.getCrumbsone();
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
             $self.comments = comments.data;
-            // $self.crumbs =  {items: crumbs.data, index: -1};
-            // for(var i= 0; i<$self.crumbs.items.length; i++){
-            //     if($self.crumbs.items[i].active){
-            //         $self.crumbs.index = i;
-            //     }
-            // }
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
+                }
+            }
         }
     }
 };
