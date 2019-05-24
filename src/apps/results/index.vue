@@ -48,6 +48,8 @@
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
                 <el-table-column prop="projectName" label="项目名称">
                 </el-table-column>
+                <el-table-column prop="organName" label="公司部门">
+                </el-table-column>
                 <el-table-column prop="purchaseProjectName" label="采购项目名称">
                 </el-table-column>
                 <el-table-column prop="budgetPerformance" label="目标成本/预算完成情况">

@@ -153,13 +153,13 @@ export default {
                 }
                 let info = await axios.get(`/api/admin/user/userInfo1`);
                 window.history.go(0)
-                if (info.data.status && info.data.status == 40301) {
-                    //window.location.href = 'login.html';
-                } else {
-                    info.data.uname = decodeURIComponent(info.data.uname);
-                    info.data.oname = decodeURIComponent(info.data.oname);
-                    store.commit('SET_LOGININFO', info.data);
-                }     
+                // if (info.data.status && info.data.status == 40301) {
+                //     //window.location.href = 'login.html';
+                // } else {
+                //     info.data.uname = decodeURIComponent(info.data.uname);
+                //     info.data.oname = decodeURIComponent(info.data.oname);
+                //     store.commit('SET_LOGININFO', info.data);
+                // }     
             }
         },
         open(data) {

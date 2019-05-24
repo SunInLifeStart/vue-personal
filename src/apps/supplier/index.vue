@@ -50,6 +50,8 @@
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
                 <el-table-column prop="recommendDept" label="推荐部门/个人">
                 </el-table-column>
+                <el-table-column prop="organName" label="公司部门">
+                </el-table-column>
                 <el-table-column prop="supplierName" label="供应商名称">
                 </el-table-column>
                 <el-table-column prop="recommendProject" label="推荐参与项目">
