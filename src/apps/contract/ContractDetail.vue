@@ -261,7 +261,7 @@
                     <tr>
                         <td colspan="2">
                             合同价格形势
-                            
+
                         </td>
                         <td colspan="6">
                             <el-radio-group v-model="tableData.shape" disabled>
@@ -324,6 +324,7 @@
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
+                    <span style='color: red;font-size:20px;' v-show="this.showSpan">驳回请慎重!</span>
                     <el-form-item label="审批意见">
                         <el-input type="textarea" placeholder="请输入审批意见" v-model="textarea" :autosize="{ minRows: 10, maxRows: 30}">
                         </el-input>
@@ -361,6 +362,7 @@ export default {
             actions: [],
             crumbs: [],
             formId: '',
+            showSpan: false,
             textarea: '',
             dialogVisible: false,
             users: [],
@@ -387,7 +389,7 @@ export default {
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
-           if (response) {
+            if (response) {
                 $self.tableData = response.data;
                 if (this.tableData.contractType == '合同签订') {
                     this.tableData.contractType = '合同签订(土地出让合同外)';
@@ -419,6 +421,7 @@ export default {
             // }
         },
         doAction1(action) {
+            this.showSpan = false;
             if (
                 action.name == '上传签字盖章合同' ||
                 action.name == '上传合同及校审表' ||
@@ -426,6 +429,9 @@ export default {
             ) {
                 this.reEditForm(action.name);
             } else {
+                if (action.name == '驳回') {
+                    this.showSpan = true;
+                }
                 this.doAction(action);
             }
         },
