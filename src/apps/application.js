@@ -22,10 +22,11 @@ export const publicMethods = {
                     //     return "returnDialog";
                     // }
                 // }
-                if(this.$store.getters.LoginData.currentRoles.length == 1){
-                       this.branchCode = this.$store.getters.LoginData.currentRoles[0].code;
-                       await this.saveFormData();
-                }
+                // if(this.$store.getters.LoginData.currentRoles.length == 1){
+                //        this.branchCode = this.$store.getters.LoginData.currentRoles[0].code;
+                //        await this.saveFormData();
+                // }
+                return true;
         },
         //获取表单详情
         async getDetails() {
@@ -162,7 +163,7 @@ export const publicMethods = {
                                 options.push(key + "=" + this.branchCode);
                             }else{
                                // if(this.$store.getters.LoginData.currentRoles.length == 0 || this.$store.getters.LoginData.currentRoles.length == 1){
-                                    options.push(key + "=" + this.$store.getters.LoginData.code.split("_")[0]);  
+                                    options.push(key + "=" + this.$store.getters.LoginData.code.split("_")[0]);
                                // }
                             }
 
@@ -206,7 +207,7 @@ export const publicMethods = {
                     }
                 };
                 if (data.options && data.options.length > 0) {
-                    data.options.concat(options);
+                    data.options =  data.options.concat(options);
                 } else {
                     if (options) {
                         data.options = options;
@@ -245,22 +246,6 @@ export const publicMethods = {
                     labelName: "selContents"
                 });
             }
-            // if($self.appFlowName == "inspect-form_inspect" && action.assigneeListTos && action.assigneeListTos.indexOf("assigneeListVarable") > -1){
-
-            //     let type = this.$store.getters.LoginData.code.split('_')[0];
-            //     $self.$axios
-            //     .get("/api/v1/users/role/"+ type +"_deptManager")
-            //     .then(res => {
-            //         for(var i = 0; i<res.data.length; i++){
-            //             if(res.data[i].id == $self.tableData.inspector){
-            //                action.assigneeList.push({"name":res.data[i].name,"id":$self.tableData.inspector});
-            //             }
-            //         };
-            //     }) 
-            // }else{
-               
-            // }
-
             if (action.assigneeList && action.assigneeList.length > 0) {
                 $self.actionsDialogArr.push({
                     seletList: action.assigneeList,
