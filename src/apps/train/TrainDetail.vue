@@ -17,7 +17,8 @@
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
-             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+            <!-- :style="crumbs.items.length>3?'overflow-x: auto;width: 400px':''" -->
+             <el-steps  :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                     <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
                 </el-steps>
             <el-form :model='tableData' class="formList" ref="formupdate" style="height:150%">
@@ -230,6 +231,7 @@ height: inherit;
    
     .el-step__main {
         margin-top: 10px;
+       
     }
     .audit {
         position: relative;
