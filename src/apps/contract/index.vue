@@ -38,10 +38,11 @@
             </div>
             <div id="ContractList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
-                    <el-table-column prop="contractName" label="合同名称" min-width="260"></el-table-column>
-                    <el-table-column prop="partyB" label="合同对方" min-width="260"></el-table-column>
+                    <el-table-column prop="contractName" label="合同名称" min-width="120"></el-table-column>
+                    <el-table-column prop="partyB" label="合同对方" min-width="120"></el-table-column>
                     <el-table-column prop="contractNum" label="合同编号" min-width="200"></el-table-column>
-                    <el-table-column prop="applyName" label="制单人" min-width="120"></el-table-column>
+                    <el-table-column prop="applyName" label="制单人" ></el-table-column>
+                     <el-table-column prop="organName" label="公司部门" ></el-table-column>
                     <el-table-column prop="initiateTime" label="提单时间" min-width="120"></el-table-column>
                     <el-table-column prop="status" label="状态">
                         <template slot-scope="scope">
