@@ -258,6 +258,9 @@ export default {
             }
         },
         dateTimeChange() {
+            const self = this;
+            this.formData.day = '';
+           // self.$forceUpdate();
             if (this.formData.startTime != '' && this.formData.endTime != '') {
                 this.dateArray = 0;
                 this.comparedate = 0;
