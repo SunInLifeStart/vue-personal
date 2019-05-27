@@ -299,6 +299,7 @@ export default {
                 this.dateArray += 0.5;
                 this.formData.day = this.dateArray - 1;
                 self.$forceUpdate();
+                this.formData.day = this.formData.day;
             } else if (
                 this.formData.startPart == '下午' &&
                 this.formData.endPart == '下午'
@@ -306,6 +307,7 @@ export default {
                 this.dateArray += 0.5;
                 this.formData.day = this.dateArray - 1;
                 self.$forceUpdate();
+                this.formData.day = this.formData.day;
             } else if (
                 this.formData.startPart == '上午' &&
                 this.formData.endPart == '下午'
@@ -313,6 +315,7 @@ export default {
                 this.dateArray += 1;
                 this.formData.day = this.dateArray - 1;
                 self.$forceUpdate();
+                this.formData.day = this.formData.day;
             } else if (
                 this.formData.startPart == '下午' &&
                 this.formData.endPart == '上午'
@@ -320,6 +323,7 @@ export default {
                 this.dateArray += 0;
                 this.formData.day = this.dateArray - 1;
                 self.$forceUpdate();
+                this.formData.day = this.formData.day;
             }
         },
         // 时长
