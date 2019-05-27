@@ -275,6 +275,9 @@
                     meetingTime: [
                         { required: true, message: '请输入开会时间', trigger: 'blur' }
                     ],
+                    meetingPlace: [
+                        { required: true, message: '请输入会议地点', trigger: 'blur' }
+                    ],
                     attendingDepartment: [
                         { required: true, message: '请选择参会人员', trigger: 'blur' }
                     ]
