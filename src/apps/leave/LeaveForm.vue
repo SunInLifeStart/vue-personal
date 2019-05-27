@@ -404,7 +404,8 @@ export default {
                 endTime: '',
                 startPart: '上午',
                 endPart: '上午',
-                type: '事假'
+                type: '事假',
+                day: ''
             };
             return formData;
         },
