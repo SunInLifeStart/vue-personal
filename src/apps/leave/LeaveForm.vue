@@ -110,7 +110,7 @@
                                     </el-input>
                                 </el-col>
                                 <el-col :span="12">
-                                    <span style='color:red;'>若休假时长为空，需等待...</span>
+                                    <span style='color:red;'>(可手填)若休假时长没反应，需等待...</span>
                                 </el-col>
                             </el-row>
                         </td>
@@ -260,7 +260,7 @@ export default {
         dateTimeChange() {
             const self = this;
             this.formData.day = '';
-           // self.$forceUpdate();
+            // self.$forceUpdate();
             if (this.formData.startTime != '' && this.formData.endTime != '') {
                 this.dateArray = 0;
                 this.comparedate = 0;
