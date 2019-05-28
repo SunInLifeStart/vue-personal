@@ -167,6 +167,7 @@ export default {
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
+            
              appFlowName: 'motor-cardprinting_cardprint',//固定资产流程 BusinessCard-form_fixedBusinessCard  低值易耗办公品  BusinessCard-form_lowBusinessCard 
             formName: 'cardPrinting',
             comments: [],
