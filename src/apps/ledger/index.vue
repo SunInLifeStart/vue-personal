@@ -23,9 +23,9 @@
                     </el-row>
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="合同价格形势：">
+                            <el-form-item label="合同价格形式：">
                                 <!-- <el-input v-model="formInline.shape" placeholder=""></el-input> -->
-                                <el-select v-model="formInline.shape" clearable placeholder="请输入单据状态">
+                                <el-select v-model="formInline.shape" clearable placeholder="请输入合同价格形式">
                                     <el-option v-for="item in shapeOption" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
@@ -71,7 +71,7 @@
                     <el-table-column prop="contractNum" label="合同编号">
                     </el-table-column>
 
-                    <el-table-column prop="shape" label="合同价格形势">
+                    <el-table-column prop="shape" label="合同价格形式">
                         <template slot-scope="scope">
                             {{scope.row.shape | filtershape}}
 
