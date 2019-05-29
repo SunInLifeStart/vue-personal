@@ -261,8 +261,8 @@
                             <el-input v-if="this.moneyType=='1'" v-model="formData.contract.amount" class="money" type="number" @mousewheel.native.prevent @input="getAmount('contractDetail')"></el-input>
                             <el-input v-else v-model="formData.contract.amount" class="money"></el-input>
                             -->
-                            <format-input v-if="this.moneyType=='1'" class="money" v-model="formData.contract.amount" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" @input="getAmount('contractDetail')" />
-                            <format-input v-else class="money" v-model="formData.contract.amount" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
+                            <format-input v-if="this.moneyType=='1'" separator="," :precision="2" class="money" v-model="formData.contract.amount" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" @input="getAmount('contractDetail')" />
+                            <format-input v-else separator="," :precision="2" class="money" v-model="formData.contract.amount" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td rowspan="3">
                             前期已付
@@ -272,8 +272,8 @@
                             累计已付款
                         </td>
                         <td>
-                            <format-input v-if="this.moneyType=='1'" class="money" v-model="formData.contract.payments" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" @input="getAmount('contractDetail')" />
-                            <format-input v-else class="money" v-model="formData.contract.payments" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
+                            <format-input v-if="this.moneyType=='1'" separator="," :precision="2" class="money" v-model="formData.contract.payments" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" @input="getAmount('contractDetail')" />
+                            <format-input v-else class="money" separator="," :precision="2" v-model="formData.contract.payments" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td rowspan="3">
                             <span class="span">*</span>
@@ -282,7 +282,7 @@
                         <td colspan="2" rowspan="3">
                             <el-input v-if="this.moneyType=='1'" v-model="formData.contract.unAmount" disabled class="money"></el-input>
                             <!--  <el-input v-else v-model="formData.contract.unAmount" class="money"></el-input>-->
-                            <format-input v-else class="money" v-model="formData.contract.unAmount" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
+                            <format-input v-else class="money" separator="," :precision="2" v-model="formData.contract.unAmount" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -293,7 +293,7 @@
                             <el-input v-if="this.moneyType=='1'" v-model="formData.contract.cumulativePro" disabled class="money"></el-input>
                             <!--
                             <el-input v-else v-model="formData.contract.cumulativePro" @mousewheel.native.prevent type="number" class="money" @input="getReal()"></el-input>-->
-                            <format-input v-else class="money" @input="getReal()" v-model="formData.contract.cumulativePro" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
+                            <format-input v-else class="money" separator="," :precision="2" @input="getReal()" v-model="formData.contract.cumulativePro" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                     </tr>
                     <tr class="fontBold">
@@ -303,7 +303,7 @@
                         <td>
                             <el-input v-if="this.moneyType=='1'" @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfter" disabled class="money"></el-input>
                             <!--  <el-input v-else @mousewheel.native.prevent type="number" v-model="formData.contract.cumulativeAfter" class="money" @input="getReal()"></el-input>-->
-                            <format-input v-else class="money" @input="getReal()" v-model="formData.contract.cumulativeAfter" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
+                            <format-input v-else class="money" separator="," :precision="2" @input="getReal()" v-model="formData.contract.cumulativeAfter" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                     </tr>
                     <tr>

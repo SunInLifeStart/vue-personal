@@ -75,12 +75,14 @@
                                 </el-table-column>
                                 <el-table-column prop="number" label="计划采购数量">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.number" @input="getAmount(scope.row)" @mousewheel.native.prevent type="number"></el-input>
+                                        <!--  <el-input v-model="scope.row.number" @input="getAmount(scope.row)" @mousewheel.native.prevent type="number"></el-input>-->
+                                        <format-input :precision="2" v-model="scope.row.number" @input="getAmount(scope.row)" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="price" label="计划单价">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.price" @input="getAmount(scope.row)" type="number" @mousewheel.native.prevent></el-input>
+                                        <!--  <el-input v-model="scope.row.price" @input="getAmount(scope.row)" type="number" @mousewheel.native.prevent></el-input>-->
+                                        <format-input :precision="2" v-model="scope.row.price" @input="getAmount(scope.row)" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="totalPrice" label="计划总价">
@@ -90,7 +92,8 @@
                                 </el-table-column>
                                 <el-table-column prop="inventory" label="库存数量">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.inventory" type="number" @mousewheel.native.prevent></el-input>
+                                        <!--  <el-input v-model="scope.row.inventory" type="number" @mousewheel.native.prevent></el-input>-->
+                                        <format-input :precision="2" v-model="scope.row.inventory" :max="1000000000000" :min="-10000000" empty-value="0" :minus="true" />
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="buyTime" label="要求购入时间" width="160px">
@@ -155,6 +158,7 @@ import moment from 'moment';
 import FilesOperate from '../FilesOperate';
 import { application } from '../application.js';
 import { publicMethods } from '../application.js';
+import formatInput from '@/components/formatInput';
 import axios from 'axios';
 import cookies from 'js-cookie';
 export default {
@@ -227,7 +231,8 @@ export default {
         };
     },
     components: {
-        FilesOperate
+        FilesOperate,
+        formatInput
     },
     mounted() {
         this.getUsers();
@@ -295,6 +300,7 @@ export default {
             } else {
                 this.formData.inbuget = false;
             }
+            /** 
             let compare = true;
             for (let data of this.formData.detail) {
                 console.log(JSON.stringify(data.number) == '');
@@ -308,13 +314,14 @@ export default {
                     compare = false;
                 }
             }
+            */
             this.$refs['formupdate'].validate(valid => {
                 if (valid) {
-                    if (compare) {
-                        this.saveForm(type);
-                    } else {
-                        this.msgTips('采购明细不完整，请填写完整！', 'warning');
-                    }
+                    //  if (compare) {
+                    this.saveForm(type);
+                    // } else {
+                    //     this.msgTips('采购明细不完整，请填写完整！', 'warning');
+                    // }
                 }
             });
         },
