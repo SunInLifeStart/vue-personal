@@ -238,6 +238,10 @@ export default {
                 if ($self.crumbs.items[i].active) {
                     $self.crumbs.index = i;
                 }
+               
+            }
+            if($self.crumbs.index == -1) {
+                $self.crumbs.index=$self.crumbs.items.length
             }
         }
     }
