@@ -591,12 +591,15 @@ export default {
             $self.actions = actions.data.types;
             $self.comments = comments.data;
             this.getAgree();
-             $self.crumbs =  {items: crumbs.data, index: -1};
-             for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
                     $self.crumbs.index = i;
-             }
-             }
+                }
+            }
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
+            }
         }
     }
 };

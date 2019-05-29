@@ -422,6 +422,9 @@ export default {
                     $self.crumbs.index = i;
                 }
             }
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
+            }
         },
         doAction1(action) {
             this.showSpan = false;

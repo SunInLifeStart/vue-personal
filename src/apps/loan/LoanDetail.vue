@@ -20,7 +20,7 @@
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList">
-                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.key" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
                 <h4 style="text-align: center;">借款申请单</h4>
@@ -380,10 +380,32 @@ export default {
             $self.comments = comments.data;
             this.getAgree();
             $self.crumbs = { items: crumbs.data, index: -1 };
+            /** 
+            $self.crumbs = {
+                items: [
+                    {
+                        active: false,
+                        assignes: '动物与',
+                        name: '申请人',
+                        key: 'Task_1k2t46g'
+                    },
+                    {
+                        active: false,
+                        assignes: '动物与2',
+                        name: '申请人2',
+                        key: 'Task_1k2t46g55'
+                    }
+                ],
+                index: -1
+            };
+            */
             for (var i = 0; i < $self.crumbs.items.length; i++) {
                 if ($self.crumbs.items[i].active) {
                     $self.crumbs.index = i;
                 }
+            }
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
             }
         }
     }
