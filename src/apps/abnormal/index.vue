@@ -51,6 +51,8 @@
                 </el-table-column>
                 <el-table-column prop="organName" label="公司部门">
                 </el-table-column>
+                <el-table-column prop="createTime" label="时间">
+                </el-table-column>
                 <el-table-column prop="linkman" label="联系人及电话">
                 </el-table-column>
                 <el-table-column prop="projectName" label="项目名称">
