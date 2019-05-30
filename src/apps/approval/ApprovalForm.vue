@@ -304,7 +304,12 @@ export default {
                 {
                     value: 'jingshenweizhang',
                     label: '经审委印章'
+                },
+                {
+                    value: 'caiwuzhang',
+                    label: '财务章'
                 }
+                
             ],
             typeOption: [
                 {
