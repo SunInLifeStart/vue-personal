@@ -62,7 +62,7 @@
                 <el-col :span="24">
                     <el-col :span="24">
                         <el-form-item label="发送" prop="distributes">
-                            <el-select style="width:100%;" v-model="formData.distributes" @change="changePeople" multiple placeholder="请选择分送人员">
+                            <el-select style="width:100%;" filterable v-model="formData.distributes" @change="changePeople" multiple placeholder="请选择分送人员">
                                 <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
                                 </el-option>
                             </el-select>
