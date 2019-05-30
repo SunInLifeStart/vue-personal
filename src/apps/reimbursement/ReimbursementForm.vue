@@ -837,6 +837,7 @@ export default {
             this.formData = {
                 no: '',
                 id: '',
+                isTravel: false,
                 expensesView: true,
                 expensesId: '',
                 expensesName: '',
@@ -1330,6 +1331,7 @@ export default {
             let formData = {
                 no: '',
                 id: '',
+                isTravel: false,
                 expensesView: true,
                 expensesId: '',
                 expensesName: '',
@@ -1445,9 +1447,15 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
+            this.formData.isTravel = false;
             if ($self.createForm_status) {
                 if ((await $self.juderCode()) == 'returnDialog') {
                     return false;
+                }
+            }
+            for (let data of this.formData.repayItems) {
+                if (data.min[0] == '差旅费') {
+                    this.formData.isTravel = true;
                 }
             }
             for (let data of this.formData.shares) {

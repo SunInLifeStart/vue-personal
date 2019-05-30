@@ -411,6 +411,7 @@ export default {
     data() {
         return {
             tableData: {
+                isTravel: false,
                 no: '',
                 type: '',
                 budgetSure: false,
@@ -529,6 +530,7 @@ export default {
             this.tableData = {
                 no: '',
                 type: '',
+                isTravel: false,
                 expensesView: true,
                 expensesId: '',
                 expensesName: '',
@@ -707,7 +709,7 @@ export default {
                     $self.crumbs.index = i;
                 }
             }
-             if ($self.crumbs.index == -1) {
+            if ($self.crumbs.index == -1) {
                 $self.crumbs.index = $self.crumbs.items.length;
             }
         }
