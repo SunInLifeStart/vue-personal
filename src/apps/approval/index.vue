@@ -190,7 +190,7 @@ export default {
                 gonghuizhang: '工会章',
                 yingyezhizhao: '营业执照',
                 jingshenweizhang: '经审委印章',
-               "caiwuzhang" :"财务章"
+               caiwuzhang :"财务章"
             };
             return xmlJson[data];
         },
