@@ -47,7 +47,7 @@
                 <el-button type="primary" icon="el-icon-plus" @click="cleanform">新建</el-button>
             </div>
 
-            <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
+            <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow" highlight-current-row>
                 <el-table-column prop="topicName" label="议题名称">
                 </el-table-column>
                 <el-table-column prop="creatorName" label="提单人">

@@ -3,7 +3,7 @@
     line-height: 48px;
 }
 
-.content-container{
+.content-container {
     width: 100%;
 }
 
@@ -19,48 +19,46 @@
 .el-button--text.actions {
     font-size: 16px;
 }
-.btnList{
+
+.btnList {
     font-weight: bold;
 }
-input[type=number]::-webkit-inner-spin-button,  
-input[type=number]::-webkit-outer-spin-button {  
-            -webkit-appearance: none;
-}
 
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+}
 
 @font-face {
     font-family: 'Emoji';
     src: url('../assets/seguiemj.eot');
-    src: url('../assets/seguiemj.eot?#iefix') format('embedded-opentype'),
-        url('../assets/seguiemj.ttf') format('truetype');
+    src: url('../assets/seguiemj.eot?#iefix') format('embedded-opentype'), url('../assets/seguiemj.ttf') format('truetype');
 }
 
-#PortalAppDetail{
-    .content{
-        p{
+#PortalAppDetail {
+    .content {
+        p {
             font-size: 16px;
             line-height: 2.2;
-            color:#666;
+            color: #666;
         }
     }
-   
-    img{
+    img {
         max-width: 800px;
         display: block;
         margin: 0px auto;
-        
     }
 }
 
-#ContractForm{
-    table{
-        td{
-            input{
+#ContractForm {
+    table {
+        td {
+            input {
                 border: none;
                 height: 38px;
                 text-align: left
             }
-            text{
+            text {
                 border: none;
                 text-align: left
             }
@@ -72,7 +70,6 @@ input[type=number]::-webkit-outer-spin-button {
     list-style-type: none;
     padding: 0px;
     margin: 0px;
-
     li {
         font-family: 'Segoe UI Emoji', 'Emoji';
         list-style: none;
@@ -96,7 +93,6 @@ input[type=number]::-webkit-outer-spin-button {
     background: #fff;
     left: 0px;
     right: 0px;
-
     .formContent {
         padding: 15px 30px;
         flex: 1;
@@ -106,10 +102,13 @@ input[type=number]::-webkit-outer-spin-button {
         padding: 15px 30px;
         bottom: 0px;
     }
-
     #actionList {
         padding-left: 20px;
     }
+}
+
+.el-table__body tr.current-row>td {
+    background: #87CEFA !important;
 }
 
 .el-step__icon-inner[class*=el-icon]:not(.is-status) {
@@ -139,12 +138,10 @@ input[type=number]::-webkit-outer-spin-button {
         border-radius: 2px;
         color: #303133;
     }
-
-    ::-webkit-input-placeholder {
+     ::-webkit-input-placeholder {
         color: rgb(96, 98, 102);
         font-size: 13px;
     }
-
     .el-input__icon {
         color: rgb(96, 98, 102);
     }
@@ -152,11 +149,9 @@ input[type=number]::-webkit-outer-spin-button {
 
 .uploadBtn {
     border: 1px dashed #c0c4cc !important;
-
     .el-upload {
         width: 100%;
         height: 100%;
-
         i {
             font-size: 30px !important;
         }
@@ -168,7 +163,6 @@ input[type=number]::-webkit-outer-spin-button {
     background-color: #e0e6ed;
     margin: 20px 0;
 }
-
 
 .tablePrint {
     border-left: 1px solid #ccc;
@@ -203,10 +197,8 @@ input[type=number]::-webkit-outer-spin-button {
     .upload-demo {
         width: 100%;
     }
-
     .el-upload {
         width: 100%;
-
         .el-upload-dragger {
             width: 100%;
             padding-top: 100px;
@@ -219,7 +211,6 @@ input[type=number]::-webkit-outer-spin-button {
     width: 100%;
     height: 100%;
     font-size: 14px;
-
     .item {
         display: flex;
         border-left-width: 4px;
@@ -228,31 +219,24 @@ input[type=number]::-webkit-outer-spin-button {
         padding-right: 24px;
         border-bottom: 1px solid #eaeaea;
         padding: 12px 12px 12px 0;
-
         .avatar {
             flex: 0 0 auto;
             width: 48px;
             text-align: center;
             color: #ccc;
-
         }
-
         ;
-
         .content {
             // display: flex;
             flex-flow: column nowrap;
             flex: 1 1 auto;
             overflow: hidden;
             line-height: 20px;
-
             .from {
                 display: flex;
-
                 .from-title {
                     flex: 1 1 auto;
                 }
-
                 .from-type {
                     flex: 0 0 auto;
                     width: 100px;
@@ -261,52 +245,39 @@ input[type=number]::-webkit-outer-spin-button {
                     padding-right: 10px;
                 }
             }
-
             .title.readed {
                 color: #0078d7;
             }
-
             ;
-
             .readed {
                 font-weight: 600;
             }
-
             .title.todo {
                 color: #0078d7;
             }
-
             .todo {
                 font-weight: 600;
             }
-
             .title.readed {
                 color: #2c3e50;
             }
-
             .readed {
                 font-weight: normal;
             }
-
             ;
-
             .describe {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 color: #666666;
             }
-
             ;
         }
-
         ;
-
         &:hover:not(.active) {
             background: #eaeaea;
         }
     }
-
     .active {
         background: #c7e0f4;
     }
@@ -318,12 +289,10 @@ input[type=number]::-webkit-outer-spin-button {
     height: 48px;
     justify-content: center;
     align-items: center;
-
     .icon {
         text-align: center;
         cursor: pointer;
     }
-
     .panel {
         display: flex;
         width: 100%;
@@ -332,13 +301,11 @@ input[type=number]::-webkit-outer-spin-button {
         align-items: center;
         font-size: 21px;
         justify-content: space-between;
-
         .title {
             flex-flow: row nowrap;
             flex: 1;
             font-weight: 100;
         }
-
         .close {
             display: flex;
             justify-content: flex-end;
@@ -347,7 +314,6 @@ input[type=number]::-webkit-outer-spin-button {
             color: #ccc;
         }
     }
-
     &:hover {
         background: #004578;
     }

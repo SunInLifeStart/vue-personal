@@ -50,7 +50,7 @@
                 <el-button type="primary" @click="excel()">导出</el-button>
             </div>
             <div id="ConductList">
-                <el-table :data="tableData " stripe style="width: 100%; cursor:pointer " @row-click="showCurrentId">
+                <el-table :data="tableData " stripe style="width: 100%; cursor:pointer " @row-click="showCurrentId" highlight-current-row>
                     <!--
                     <el-table-column type="selection" :reserve-selection="true"></el-table-column>-->
                     <el-table-column prop="uname" label="提单人" align="left" min-width="100">

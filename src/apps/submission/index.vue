@@ -48,7 +48,7 @@
                     <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
                 </div>
                 <div id="SubmissionList">
-                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
+                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="submissionNo" label="呈报件编号">
                     </el-table-column>
                     <el-table-column prop="organName" label="公司部门">

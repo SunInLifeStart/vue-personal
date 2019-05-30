@@ -44,7 +44,7 @@
                 <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
             </div>
             <div id="PaymentList">
-                <el-table :data="tableData" stripe @row-click="showCurrentId">
+                <el-table :data="tableData" stripe @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="applicantName" label="提单人" min-width="80px"></el-table-column>
                     <el-table-column prop="organName" label="公司部门" min-width="140px"></el-table-column>
                     <el-table-column prop="costUnit" label="费用承担部门" min-width="140px"></el-table-column>

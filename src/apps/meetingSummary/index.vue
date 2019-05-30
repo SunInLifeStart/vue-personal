@@ -54,7 +54,7 @@
                     <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
                 </div>
                 <div id="MeetingSummaryList">
-                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
+                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="numbers" label="总办会编号">
                     </el-table-column>
                     <el-table-column prop="draftUnit" label="拟稿单位">

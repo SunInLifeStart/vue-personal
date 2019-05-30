@@ -24,11 +24,7 @@
                     <el-col :span="8">
                         <el-form-item label="单据状态">
                             <el-select v-model="params.status" placeholder="请输入单据状态">
-                                <el-option
-                                        v-for="item in statusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -47,7 +43,7 @@
                 <el-button type="primary" icon="el-icon-plus" @click="cleanform">新建</el-button>
             </div>
 
-            <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow">
+            <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow" highlight-current-row>
                 <el-table-column prop="recommendDept" label="推荐部门/个人">
                 </el-table-column>
                 <el-table-column prop="organName" label="公司部门">
@@ -83,18 +79,18 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <SupplierDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="SupplierDetail" @reloadList = "reloadList"></SupplierDetail>
+            <SupplierDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="SupplierDetail" @reloadList="reloadList"></SupplierDetail>
         </el-card>
-        <SupplierForm  ref="SupplierForm" @reloadList = "reloadList"></SupplierForm>
+        <SupplierForm ref="SupplierForm" @reloadList="reloadList"></SupplierForm>
     </div>
 </template>
 <script>
 import SupplierForm from './SupplierForm';
 import SupplierDetail from './SupplierDetail';
-import {publicMethods} from "../application.js";
+import { publicMethods } from '../application.js';
 import axios from 'axios';
 export default {
-    mixins:[publicMethods],
+    mixins: [publicMethods],
     name: 'Supplier',
     data() {
         return {
@@ -128,8 +124,8 @@ export default {
                 }
             ],
             operationBoardType: 'create',
-            formName:"motor-supplier",
-            appFlowName:'motor-supplier_supplier',
+            formName: 'motor-supplier',
+            appFlowName: 'motor-supplier_supplier',
             statusNews: ''
         };
     },
@@ -140,11 +136,11 @@ export default {
     filters: {
         filterStatus: function(data) {
             let xmlJson = {
-                "00":"已保存",
-                "01":"审核中",
-                "02" :"已驳回",
-                "03" :"已撤销",
-                "04" :"已完成"
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '03': '已撤销',
+                '04': '已完成'
             };
             return xmlJson[data];
         }
@@ -154,7 +150,7 @@ export default {
     },
     methods: {
         reloadList(params) {
-            if (params == "reload") {
+            if (params == 'reload') {
                 this.params.pageNum = 1;
                 this.getList();
             } else {
@@ -166,7 +162,7 @@ export default {
         },
         async getList() {
             const $self = this;
-            $self.url = "/api/v1/motor-supplier/query";
+            $self.url = '/api/v1/motor-supplier/query';
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {
@@ -176,7 +172,7 @@ export default {
                 $self.tableData = response.data.content.list;
                 $self.params.total = response.data.content.total;
             } else {
-                $self.msgTips("获取列表失败", "warning");
+                $self.msgTips('获取列表失败', 'warning');
             }
         },
         clickTableRow(row) {
@@ -197,7 +193,7 @@ export default {
             this.params = {
                 pageNum: 1,
                 pageSize: 5
-            }
+            };
             this.onSubmit();
         },
         onSubmit() {
@@ -213,20 +209,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-    #Supplier {
-        .el-select {
-            width: 100%;
-        }
-        .card_margin_10 {
-            margin-top: 10px;
-        }
-        .el-form-item--small.el-form-item{
-            width: 100%;
-        }
+#Supplier {
+    .el-select {
+        width: 100%;
     }
+    .card_margin_10 {
+        margin-top: 10px;
+    }
+    .el-form-item--small.el-form-item {
+        width: 100%;
+    }
+}
 </style>
 <style scoped>
-    #Supplier .filterForm >>> .el-form-item__content{
-        width: calc(100% - 110px);
-    }
+#Supplier .filterForm >>> .el-form-item__content {
+    width: calc(100% - 110px);
+}
 </style>

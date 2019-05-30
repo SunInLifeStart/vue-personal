@@ -46,7 +46,7 @@
                 <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
             </div>
             <div id="ExpensesList">
-                <el-table :data="tableData" stripe @row-click="showCurrentId">
+                <el-table :data="tableData" stripe @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="creatorName" label="提单人" align="left">
                     </el-table-column>
                     <el-table-column prop="organName" label="所属部门" align="left" min-width="100">

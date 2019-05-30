@@ -52,7 +52,7 @@
                     <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
                 </div>
                 <div id="NewsList">
-                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId">
+                <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="title" label="标题">
                     </el-table-column>
                     <el-table-column prop="reportingOrg" label="报送单位">
