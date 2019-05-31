@@ -85,7 +85,7 @@ export const publicMethods = {
                     let detailsData = $self.tableData ? $self.tableData : $self.formData;
                     for(var i = 0; i<res.data.length; i++){
                         if(res.data[i].id == detailsData.inspector){
-                           actions.assigneeList.push({"name":res.data[i].name,"id":detailsData.inspector});
+                            nowActins.assigneeList.push({"name":res.data[i].name,"id":detailsData.inspector});
                         }
                     };
                 }
