@@ -294,6 +294,9 @@ export const publicMethods = {
                 if ($self.printerFormName == "incoming_forms") {
                     url = "/api/v1/incoming_forms/print/" + $self.tableData.id
                 }
+                if ($self.formName == "motor-procresult") {
+                    url = "/api/v1/motor-procresult/print/" + $self.tableData.id
+                }
 
                 if ($self.formName == "issuesReported") {
                     url = "/api/v1/issuesReported/print"

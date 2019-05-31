@@ -12,11 +12,12 @@
         <div class="formContent">
             <br />
             <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
+                <el-button style="margin-left: 25px;" type="primary" v-show="this.tableData.status && this.tableData.status == '04'" @click="print">打印</el-button>
             <br />
            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData' class="formList">
+            <el-form :model='tableData'  id='queryTable' class="demo-form-inline" ref="formupdate" style="height:150%">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号：">{{tableData.number}}
@@ -328,6 +329,11 @@
             FilesOperate
         },
         methods: {
+            async print() {
+                // document.getElementById('approval').style.display = 'table-row';
+                this.$print(this.$refs.formupdate.$el);
+                //  document.getElementById('approval').style.display = 'none';
+            },
             async saveMeetingDelay() {
                 if(!this.tableData.meetingDelayTime) {
                     this.msgTips("请填写延期时间", "warning");
@@ -545,6 +551,20 @@
         }
     };
 </script>
+<style>
+@media print {
+    html,
+    body {
+        height: inherit;
+    }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
+}
+</style>
 <style lang="scss">
     #ApplyMeetingDetail {
         .el-step__main {
