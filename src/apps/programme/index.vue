@@ -52,8 +52,6 @@
                 </el-table-column>
                 <el-table-column prop="organName" label="公司部门">
                 </el-table-column>
-                <el-table-column prop="created" label="时间">
-                </el-table-column>
                 <el-table-column prop="purchaseProjectName" label="采购项目名称">
                 </el-table-column>
                 <el-table-column prop="purchaseSignSketch" label="采购标的简述">
