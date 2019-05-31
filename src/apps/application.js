@@ -1,3 +1,4 @@
+import { debug } from "util";
 
 
 export const publicMethods = {
@@ -80,14 +81,20 @@ export const publicMethods = {
             //督办特殊情况特殊处理
             if($self.appFlowName == "inspect-form_inspect" && nowActins.assigneeListTos && nowActins.assigneeListTos.indexOf("assigneeListVarable") > -1){
                 let type = this.$store.getters.LoginData.code.split('_')[0];
+                let uid = this.$store.getters.LoginData.uid;
                 let res =   await $self.getCommonType("/api/v1/users/role/"+ type +"_deptManager");
+                let currentUserDept =   await $self.getCommonType("/api/v1/users/"+uid+"/organ/role/"+  type +"_deptManager");
                 if(res){
                     let detailsData = $self.tableData ? $self.tableData : $self.formData;
-                    for(var i = 0; i<res.data.length; i++){
+                    for(var i = 0; i<res.data.length; i++){ //得到当前选中的督办人
                         if(res.data[i].id == detailsData.inspector){
                             nowActins.assigneeList.push({"name":res.data[i].name,"id":detailsData.inspector});
                         }
                     };
+                }
+
+                if(currentUserDept && currentUserDept.data){
+                    nowActins.assigneeList.push({"name":currentUserDept.data.name,"id":currentUserDept.data.id});
                 }
             }
             let url = `/workflow/${this.appFlowName}/${
@@ -101,8 +108,7 @@ export const publicMethods = {
             await this.emitMessage(); 
         },
         //提交的时候启动工作流（两次）
-        async startSignalForStart(type) {
-        
+        async startSignalForStart(type) {   
             let actions = await this.getActions();
             if (actions.data.types.length > 0) {
                 this.hasRequired(actions.data.types[0]);
