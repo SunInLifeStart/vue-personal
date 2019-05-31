@@ -52,6 +52,8 @@
                 </el-table-column>
                 <el-table-column prop="purchaseProjectName" label="采购项目名称">
                 </el-table-column>
+                <el-table-column prop="createTime" label="时间">
+                </el-table-column>
                 <el-table-column prop="budgetPerformance" label="目标成本/预算完成情况">
                 </el-table-column>
                 <el-table-column prop="proContent" label="采购内容摘要">

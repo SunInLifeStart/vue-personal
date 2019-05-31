@@ -117,7 +117,7 @@
                                         ></el-cascader>
                                     </td>
                                     <td colspan="4">
-                                        <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
+                                        <el-select filterable  style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
                                             <el-option
                                                     v-for="i in item.personOptions"
                                                     :key="i.id"
@@ -157,7 +157,7 @@
                                         ></el-cascader>
                                     </td>
                                     <td colspan="4">
-                                        <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
+                                        <el-select filterable  style="width: 100%" v-model="item.people" multiple @change="changePeople" placeholder="请选择人员">
                                             <el-option
                                                     v-for="i in item.personOptions"
                                                     :key="i.id"

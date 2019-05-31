@@ -179,9 +179,11 @@ export default {
             $self.comments = comments.data;
              let crumbs = await $self.getCrumbsone();
             $self.crumbs =  {items: crumbs.data, index: -1};
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;    
+            let boolean = false;
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active && boolean == false) {
+                    $self.crumbs.index = i;
+                    boolean = true;
                 }
             }
             if($self.crumbs.index == -1) {

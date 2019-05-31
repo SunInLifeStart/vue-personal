@@ -10,7 +10,9 @@
                             <el-col :span="24">
                                 <el-upload class="upload-demo" drag name="files" ref="upload" accept=".pdf,.PDF,.doc,.docx,.xls,.xlsx,.txt" action="/api/v1/files/upload" :on-success="handleSuccess" :on-remove="handleRemove" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-upload"></i>
-                                    <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                                    <div class="el-upload__text">将文件拖到此处，或
+                                        <em>点击上传</em>
+                                    </div>
                                 </el-upload>
                             </el-col>
                             <el-col :span="24">
@@ -40,7 +42,7 @@
                     <div class="pointer">
                         <el-row>
                             <el-col class="doc" :span="4" :key="doc.id" v-for="(doc,index) in lasts" v-if="index <=15">
-                                 <FilesOperate :item="doc" :options="{preview:true,download:true,del:currrentUserId == doc.uid}" @getId="getId"></FilesOperate>
+                                <FilesOperate :item="doc" :options="{preview:true,download:true,del:currrentUserId == doc.uid}" @getId="getId"></FilesOperate>
                             </el-col>
                         </el-row>
                     </div>
@@ -54,7 +56,7 @@
                                     <li @click="getCurrentTagData('all')" v-bind:class="{tagActive: currentTagActive == -1}">
                                         <el-tag size="30">所有</el-tag>
                                     </li>
-                                    <li v-for="(item,index) in  allTags" :key="index"  @click="getCurrentTagData(item.value,index)" v-bind:class="{tagActive: currentTagActive == index}">
+                                    <li v-for="(item,index) in  allTags" :key="index" @click="getCurrentTagData(item.value,index)" v-bind:class="{tagActive: currentTagActive == index}">
                                         <el-tag size="30">{{item.value}}</el-tag>
                                     </li>
 
@@ -94,7 +96,7 @@
                                         </div>
                                     </el-popover>
                                 </div> -->
-                                 <FilesOperate :item="doc" :options="{preview:true,download:true,del:currrentUserId == doc.uid}" @getId="getId"></FilesOperate>
+                                <FilesOperate :item="doc" :options="{preview:true,download:true,del:currrentUserId == doc.uid}" @getId="getId"></FilesOperate>
                             </el-col>
                         </el-row>
                         <br />
@@ -109,12 +111,12 @@
 </template>
 
 <script>
-import TopBar from "@/components/TopBar.vue";
-import { mapGetters } from "vuex";
-import axios from "axios";
-import FilesOperate from "../apps/FilesOperate";
+import TopBar from '@/components/TopBar.vue';
+import { mapGetters } from 'vuex';
+import axios from 'axios';
+import FilesOperate from '../apps/FilesOperate';
 export default {
-    name: "Library",
+    name: 'Library',
     data() {
         return {
             currentTagActive: -1, //当前标签选中的索引
@@ -126,21 +128,21 @@ export default {
                 docPowerList: [
                     {
                         value: 0,
-                        label: "仅自己可见"
+                        label: '仅自己可见'
                     },
                     {
                         value: 1,
-                        label: "所有人可见"
+                        label: '所有人可见'
                     },
                     {
                         value: 2,
-                        label: "指定用户可见"
+                        label: '指定用户可见'
                     }
                 ],
                 solrAllShow: 0,
                 solrShowUserIds: []
             },
-            currrentUserId:"",
+            currrentUserId: '',
             allUsers: [],
             //   requestTime: 0, //第一次请求获取最新文档
             lasts: [], //最新文档
@@ -152,30 +154,30 @@ export default {
                 total: 0, //总数
                 pageSize: 35, //当前页面条数
                 currentPage: 1, //当前页面索引,
-                value: "all"
+                value: 'all'
             }
         };
     },
     computed: {
-        ...mapGetters(["LoginData"])
+        ...mapGetters(['LoginData'])
     },
     components: {
         TopBar,
         FilesOperate
     },
     methods: {
-        uploadFile(f){
+        uploadFile(f) {
             var formdata = new FormData(); //创建form对象
-            formdata.append("files", f.file); //通过append向form对象添加数据
-            formdata.append("personal", true);
+            formdata.append('files', f.file); //通过append向form对象添加数据
+            formdata.append('personal', true);
             // formdata.append("token", new Date().getTime()); //通过append向form对象添加数据
             let config = {
-                headers: { "Content-Type": "multipart/form-data" }
-            }; 
+                headers: { 'Content-Type': 'multipart/form-data' }
+            };
             axios
                 .post(f.action, formdata, config) //上传图片
                 .then(response => {
-                      for (let file of response.data) {
+                    for (let file of response.data) {
                         this.formData.forms.push({
                             iconUrl: file.iconUrl,
                             id: file.id,
@@ -191,25 +193,23 @@ export default {
                     }
                 });
         },
-       getId(id) {
+        getId(id) {
             let self = this;
-            self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
+            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 self.lasts.forEach(function(value, index) {
                     if (value.id == id) {
-                        axios
-                            .get("/api/v1/share/delete/"+id)
-                            .then(res => {
-                                self.lasts.splice(index, 1);
-                            });
+                        axios.get('/api/v1/share/delete/' + id).then(res => {
+                            self.lasts.splice(index, 1);
+                        });
                     }
                 });
             });
         },
         downloadFile(url) {
-           this.common.download(url);
+            this.common.download(url);
         },
-        previewFile(item){
-           this.common.preview(item);
+        previewFile(item) {
+            this.common.preview(item);
         },
         handleSuccess(response, file) {
             for (let file of response) {
@@ -230,9 +230,9 @@ export default {
         handleRemove(response, file) {},
         share() {
             if (this.formData.forms.length > 0) {
-                this.formData.tags = this.formData.tags.join(",");
+                this.formData.tags = this.formData.tags.join(',');
                 axios
-                    .post("/api/v1/share/save", {
+                    .post('/api/v1/share/save', {
                         tags: this.formData.tags,
                         forms: this.formData.forms
                     })
@@ -255,13 +255,13 @@ export default {
                                 url: file.url
                             });
                         }
-                        this.formData.tags = this.formData.tags.split(",");
+                        this.formData.tags = this.formData.tags.split(',');
                         this.addOneSolr(res.data);
                     });
             } else {
                 this.$message({
-                    message: "请先上传文档！",
-                    type: "error"
+                    message: '请先上传文档！',
+                    type: 'error'
                 });
             }
         },
@@ -272,7 +272,7 @@ export default {
             let self = this;
             for (let doc of data) {
                 let obj = {
-                    solrType: "document",
+                    solrType: 'document',
                     solrTitle: doc.name,
                     solrLink: doc.iconUrl,
                     solrFileAddress: doc.url,
@@ -283,10 +283,10 @@ export default {
                     self.formData.solrShowUserIds.length > 0
                 ) {
                     obj.solrShowUserIds = self.formData.solrShowUserIds.join(
-                        ","
+                        ','
                     );
                 }
-                axios.post("/solr/addOneSolr", obj).then(res => {});
+                axios.post('/solr/addOneSolr', obj).then(res => {});
             }
         },
         currentPage(pageNum) {
@@ -302,7 +302,7 @@ export default {
         },
         getCurrentTagData(tagValue, index) {
             //获取当前tag是数据
-            if (tagValue == "all") {
+            if (tagValue == 'all') {
                 this.currentTagActive = -1;
                 this.getData();
             } else {
@@ -313,22 +313,22 @@ export default {
         getData(tagValue) {
             //获取总数居
             axios
-                .post("/api/v1/share/list", {
+                .post('/api/v1/share/list', {
                     page: this.params.currentPage,
                     pageSize: this.params.pageSize,
                     desc: true,
-                    orderBy: "created",
+                    orderBy: 'created',
                     options: [
                         {
-                            field: "tags",
-                            filter: "LIKE",
-                           // filter:  tagValue ? tagValue : this.params.value
-                            value: tagValue || ""
+                            field: 'tags',
+                            filter: 'LIKE',
+                            // filter:  tagValue ? tagValue : this.params.value
+                            value: tagValue || ''
                         }
                     ]
                 })
                 .then(res => {
-                    if (tagValue == "") {
+                    if (tagValue == '') {
                         this.lasts = res.data.forms;
                         // if(res.data.forms.length > 16){
                         //     this.lasts = this.lasts.splice(0,15);
@@ -341,7 +341,7 @@ export default {
                     //             filterArr.push(item);
                     //         }
 
-                    //     } 
+                    //     }
                     //     res.data.forms = filterArr;
                     // }
                     this.all = res.data.forms;
@@ -354,24 +354,28 @@ export default {
             // axios.get("/api/v1/share/tags").then(res => {});
             this.allTags = [
                 {
-                    value: "公文",
-                    label: "公文"
+                    value: '公文',
+                    label: '公文'
                 },
                 {
-                    value: "金融",
-                    label: "金融"
+                    value: '金融',
+                    label: '金融'
                 },
                 {
-                    value: "科技",
-                    label: "科技"
+                    value: '科技',
+                    label: '科技'
                 },
                 {
-                    value: "人文",
-                    label: "人文"
+                    value: '人文',
+                    label: '人文'
                 },
                 {
-                    value: "地理",
-                    label: "地理"
+                    value: '地理',
+                    label: '地理'
+                },
+                {
+                    value: '制度',
+                    label: '制度'
                 }
             ];
         },
@@ -380,42 +384,42 @@ export default {
             this.dialogVisible1 = true;
             this.hotTags = [
                 {
-                    value: "公文",
-                    label: "公文"
+                    value: '公文',
+                    label: '公文'
                 },
                 {
-                    value: "金融",
-                    label: "金融"
+                    value: '金融',
+                    label: '金融'
                 },
                 {
-                    value: "科技",
-                    label: "科技"
+                    value: '科技',
+                    label: '科技'
                 },
                 {
-                    value: "人文",
-                    label: "人文"
+                    value: '人文',
+                    label: '人文'
                 },
                 {
-                    value: "地理",
-                    label: "地理"
+                    value: '地理',
+                    label: '地理'
                 }
             ];
             if (this.hotTags.length == 0) {
-                axios.get("/api/v1/share/hot/10").then(res => {
+                axios.get('/api/v1/share/hot/10').then(res => {
                     //    this.
                 });
             }
         },
         getAllUsers() {
-            axios.get("/api/v1/users").then(res => {
+            axios.get('/api/v1/users').then(res => {
                 this.allUsers = res.data;
             });
         }
     },
     mounted() {
-        this.currrentUserId =  this.$store.getters.LoginData.uid;
+        this.currrentUserId = this.$store.getters.LoginData.uid;
         this.getTags();
-        this.getData("");
+        this.getData('');
         this.getAllUsers();
     }
 };
