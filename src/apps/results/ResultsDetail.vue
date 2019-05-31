@@ -12,6 +12,7 @@
         <div class="formContent">
             <br />
             <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
+                <el-button style="margin-left: 25px;" type="primary" v-show="this.tableData.status && this.tableData.status == '04'" @click="print">打印</el-button>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
@@ -209,6 +210,22 @@ export default {
         FilesOperate
     },
     methods: {
+        print() {
+            let $self = this
+            let url = "/api/v1/motor-procresult/print/" + $self.tableData.id
+            $self.$axios
+                .get(url)
+                .then(res => {
+                    if (process.env.NODE_ENV === 'production') {
+                        $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
+                    } else {
+                        $self.openUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&"
+                    }
+                    ntkoBrowser.openWindow(
+                        $self.openUrl + "url=" + res.data
+                    );
+                });
+        },
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
