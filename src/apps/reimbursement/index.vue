@@ -2,7 +2,7 @@
     <div id="Reimbursement">
         <el-card class="box-card">
             <div id="ReimbursementFilter">
-                <el-form :inline="true" label-width="60px" label-position="left" class="demo-form-inline">
+                <el-form :inline="true" label-width="70px" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="提单人">
@@ -26,6 +26,11 @@
                         </el-col>
                     </el-row>
                     <el-row class="filterForm">
+                        <el-col :span="8">
+                            <el-form-item label="单据编号">
+                                <el-input v-model="formInline.no" placeholder="单据编号"></el-input>
+                            </el-form-item>
+                        </el-col>
                         <!--
                         <el-col :span="8">
                             <el-form-item label="日期" label-width="60px;">
@@ -107,7 +112,8 @@ export default {
                 creatorName: '',
                 organName: '',
                 created: [],
-                status: ''
+                status: '',
+                no: ''
             },
             params: {
                 page: 1,
@@ -217,6 +223,13 @@ export default {
                     value: this.formInline.status
                 });
             }
+            if (this.formInline.no.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'no',
+                    filter: 'LIKE',
+                    value: this.formInline.no
+                });
+            }
             if (this.formInline.created && this.formInline.created.length > 0) {
                 this.searchOptions.push({
                     field: 'created',
@@ -236,6 +249,7 @@ export default {
             this.formInline.organName = '';
             this.formInline.created = [];
             this.formInline.status = '';
+            this.formInline.no = '';
             this.searchOptions = [];
             this.params.page = 1;
             this.getList();

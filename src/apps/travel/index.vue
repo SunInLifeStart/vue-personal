@@ -2,7 +2,7 @@
     <div id='Travel'>
         <el-card class="box-card">
             <div id="TravelFilter">
-                <el-form :inline="true" class="demo-form-inline" label-width="60px;">
+                <el-form :inline="true" class="demo-form-inline" label-width="70px;">
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="提单人">
@@ -33,6 +33,11 @@
                             </el-form-item>
                         </el-col>
                         -->
+                        <el-col :span="8">
+                            <el-form-item label="单据编号">
+                                <el-input v-model="formInline.number" placeholder="单据编号"></el-input>
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="8">
                             <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -106,7 +111,8 @@ export default {
             formInline: {
                 submitter: '',
                 subOrganName: '',
-                status: ''
+                status: '',
+                number: ''
             },
             params: {
                 page: 1,
@@ -149,6 +155,13 @@ export default {
                     field: 'subOrganName',
                     filter: 'LIKE',
                     value: this.formInline.subOrganName
+                });
+            }
+            if (this.formInline.number.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'number',
+                    filter: 'LIKE',
+                    value: this.formInline.number
                 });
             }
             if (this.formInline.status.trim() !== '') {
@@ -220,7 +233,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.formInline.submitter = this.formInline.subOrganName = this.formInline.status =
+            this.formInline.submitter = this.formInline.subOrganName = this.formInline.status = this.formInline.number =
                 '';
             this.params.page = 1;
             this.getList();
