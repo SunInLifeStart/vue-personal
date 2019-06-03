@@ -10,7 +10,9 @@ export default new Vuex.Store({
     newTodoMessage: 0,
     newMessage: 0,
     loginData: Object,
-    menus:[]
+    menus:[],
+    conversation:Object,
+    historymessage:[]
   },
   getters: {
     LoginData(state) {
@@ -28,7 +30,13 @@ export default new Vuex.Store({
     getMenusByType:(state) => (type) => {
       let result = state.menus.find(item => item.code === type);
       return result?result.children:false;
-    }
+    },
+    getUserConversation(state) {
+      return state.conversation;
+    },
+    getHistoryMessage(state) {
+        return state.historymessage;
+    },
   },
   mutations: {
     SET_LOGININFO(state, data) {
@@ -42,7 +50,14 @@ export default new Vuex.Store({
     },
     NEW_MESSAGE(state, data) {
       state.newMessage = data;
-    }
+    },
+    setUserConversation(state,data){
+      console.log(12121211212);
+      state.conversation = data;
+   },
+    setHistoryMessage(state,data){
+        state.historymessage = data;
+    } 
   },
   actions: {
     Login(context, data) {

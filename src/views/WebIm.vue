@@ -24,30 +24,25 @@
                             </div>
                             <div class="main-users">
                                 <div v-if="searchNameResult.length == 0">
-                                    <el-tree :data="users" :props="defaultProps" @node-click="selectUser">
-                                        <span class="custom-tree-node" slot-scope="{ node, data }">
-                                            <span v-if="!data.type" style="display:inline-block;width:22px;height:22px; text-align:center; line-height:22px; font-size:12px; background:#ccc;border-radius:50%;color:#FFF" :class="{'onlineavatar':data.online}">{{node.label[0]}}</span>
-                                            <span style="font-size:13px;font-weight:bold;color:#666">{{ node.label }}</span>
-                                        </span>
-                                    </el-tree>
-                                    <!--<div :key="organ.id" v-for="organ in users" style="position:relative" >-->
-                                    <!--<div class="organname" @click="setUserShow(organ)">{{organ.name}}-->
-                                        <!--<i class="el-icon-arrow-left" v-show="!organ.status" style="float:right;color:rgb(0, 90, 158)"></i>-->
-                                        <!--<i class="el-icon-arrow-down" v-show="organ.status" style="float:right;color:rgb(0, 90, 158)"></i></div>-->
-                                    <!--<el-collapse-transition>-->
-                                        <!--<div v-show="organ.status">-->
-                                            <!--<div class="transition-box user" :key="user.id" :class="{active:toUser.id==user.id}" v-show="!user.hideCurrent" v-for="user in organ.users" @click="selectUser(user)" style="position:relative">-->
-                                                <!--<span style="display:inline-block;width:22px;height:22px; text-align:center; line-height:22px; font-size:12px; background:#ccc;border-radius:50%;color:#FFF" :class="{'onlineavatar':user.online}">{{user.name[0]}}</span>-->
-                                                <!--<span class="name" style="font-size:13px;font-weight:bold;color:#666">{{user.name}}</span>-->
-                                            <!--</div>-->
-                                        <!--</div>-->
-                                    <!--</el-collapse-transition>-->
-                                <!--</div>-->
+                                    <div :key="organ.id" v-for="organ in users" style="position:relative" >
+                                        <div class="organname" @click="setUserShow(organ)">{{organ.name}}
+                                            <i class="el-icon-arrow-left" v-show="!organ.status" style="float:right;color:rgb(0, 90, 158)"></i>
+                                            <i class="el-icon-arrow-down" v-show="organ.status" style="float:right;color:rgb(0, 90, 158)"></i></div>
+                                        <el-collapse-transition>
+                                            <div v-show="organ.status">
+                                                <div class="transition-box user" :key="user.id" :class="{active:(index+user.id) == userIndex}" v-show="!user.hideCurrent" v-for="(user,index) in organ.users" @click="selectUser(user,index)" style="position:relative">
+                                                    <span class="avatar" :class="{'onlineavatar':user.online}">{{user.name[0]}}</span>
+                                                    <span class="name">{{user.name}}</span>
+                                                </div>
+                                            </div>
+                                        </el-collapse-transition>
+                                    </div>
                                 </div>
+                                <!-- //搜索出的人员列表 -->
                                 <div  v-if="searchNameResult.length > 0">
                                 <div class="user" :key="user.id" v-for="user in searchNameResult" @click="selectUser(user)" style="position:relative">
-                                    <span style="display:inline-block;width:22px;height:22px; text-align:center; line-height:22px; font-size:12px; background:#ccc;border-radius:50%;color:#FFF" :class="{'onlineavatar':user.online}">{{user.name[0]}}</span>
-                                    <span class="name" style="font-size:13px;font-weight:bold;color:#666">{{user.name}}</span>
+                                    <span  class="avatar" :class="{'onlineavatar':user.online}">{{user.name[0]}}</span>
+                                    <span class="name">{{user.name}}</span>
                                 </div>
                                 </div>
                             </div>
@@ -57,129 +52,134 @@
                             <div class="main-search">
                                 <el-input size="small" placeholder="请输入对话人姓名" v-model.trim="dialogName" v-on:input="searchDialogName()" prefix-icon="el-icon-search">
                                 </el-input>
-                                <i class="el-icon-plus" @click="dialogVisible = true"></i>
+                                <i class="el-icon-plus" @click="showAddGroup" title="创建群组"></i>
                             </div>
                             <div class="main-users">
-                                 <!-- @contextmenu.prevent="deleteCurrentDialog(user,index)" -->
-                                <div class="user dialog-user" :key="user.uid"  v-for="(user,index) in dialogList" @click="selectDialog(user)" :class="{active:toUser.id == user.id}" v-show="!user.hideCurrent" v-if="user.name || user.groupName">
-                                    <span style="display:inline-block;width:25px; height:25px; color:#FFF; font-size:13px; text-align:center;line-height:25px;background:#ccc;border-radius:50%" :class="{'onlineavatar':user.online || user.groupId}">{{user.name?user.name[0]:""}}</span>
-                                    <span class="name" style="font-weight:bold;font-size:13px;" v-if="user.name">{{user.name}}</span>
-                                    <span class="newMessageIcon" v-if="user.newMessageIcon">
-                                        <i class="iconfont el-icon-dian"></i>
-                                    </span>
-                                     <!-- <span class="newMessageIcon">
-                                        <i class="el-icon-error"></i>
-                                    </span> -->
-                                </div>
-                                <div v-show="dialogList.length == 0" class="emptytips">
-                                    当前对话列表为空！
+                                <div class="user dialog-user" :key="index"  v-for="(user,index) in getUserConversation.conversations" @click="selectDialog(user,index)" v-if="!user.hideCurrentDialog" :class="{active:index == userDialogIndex}">
+                                    <p style="margin:0" v-if="!user.gid" @contextmenu.prevent="upDataUserConversations(user)">
+                                        <!-- {{user.unread_msg_count}} -->
+                                        <span class="avatar">{{user.nickName ? user.nickName[0]:""}}</span>
+                                        <span class="name"  v-if="user.nickName">{{user.nickName}}</span>
+                                        <span class="onlineavatar" v-if="user.unread_msg_count > 0">
+                                            {{user.unread_msg_count}}
+                                        </span>
+                                    </p>
+                                    <!--新建群组时候像对话框添加群组 -->
+                                    <p style="margin:0" v-if="user.gid">
+                                        <span class="avatar" style="background:#005a9e;color:#FFF">群</span>
+                                        <span class="name">{{user.name}}</span>
+                                        <span class="onlineavatar" v-if="user.unread_msg_count > 0">
+                                            {{user.unread_msg_count}}
+                                        </span>
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
 
+
+
+
                     <!-- 右侧对话框 -->
-                    <div class="main-messages" v-if="toUser">
-                        <div class="nomessages" v-show="dialogList.length == 0">
-                            <i class="iconfont el-icon-duihua"></i>
-                        </div>
-                        <div class="top" v-show="dialogList.length > 0">
-                            <div class="topmsg">
-                                <span style="display:inline-block;width:25px;height:25px;background:#ccc; text-align:center; line-height:25px; color:#FFF; font-size:13px; border-radius:50%" :class="{'onlineavatar':toUser.online || toUser.groupId}" v-if="toUser.name">{{toUser.name[0]}}</span>
-                                <span class="name" style="font-weight:bold;font-size:13px;">{{toUser.name}}</span>
-                                <span class="name" style="font-size:13px;" v-if="toUser.groupMembers">{{toUser.groupMembers}}</span>
-                                <span class="name" style="font-size:13px;" v-if="toUser.uidList">{{toUser.uidList | filterName(arrGroupUsers)}}</span>
+                    <div class="main-messages">
+                            <div class="nomessages" v-if="!toUser">
+                                <i class="iconfont el-icon-duihua"></i>
                             </div>
-                        </div>
-                        <div class="messages" id="messages" v-show="dialogList.length > 0">
-                            <div v-for="item in msgList" :key="item.id" style="margin-top:10px;">
-                                <el-row v-if="item.from != currentUserId">
-                                    <el-col :span="1">
-                                        <div class="grid-content bg-purple">
-                                            <div style="text-align:center;position:relative">
-                                               
-                                                <span style="display:inline-block;width:25px;height:25px; color:#FFF; font-size:13px; line-height:25px;background:#ccc;border-radius:50%" :class="{'onlineavatar':toUser.online || toUser.groupId}" v-if="item.from_info && !item.groupId">{{item.from_info.name[0]}}</span>
-                                                <span style="display:inline-block;width:38px;height:38px;  color:#FFF; font-size:12px; line-height:38px;background:#ccc;border-radius:50%" :class="{'onlineavatar':toUser.online || toUser.groupId}" v-if="item.from_info && item.groupId">{{item.from_info.name}}</span>
-                                                <!-- {{item}} -->
+                            <div class="top"  v-if="toUser">
+                                <div class="topmsg" :class="{avatarActive:true}" v-cloak>
+                                    <span class="avatar">{{toUser.gid ? '群' : toUser.nickName[0]}}</span>
+                                    <span class="name">{{toUser.nickName}}</span>
+                                    <el-popover v-if="toUser.gid"
+                                    style="position:absolute;right:0px;top:3px"
+                                        placement="bottom"
+                                        width="160"
+                                        trigger="click"
+                                        >
+                                        <div  class="groupMembers">
+                                             <div v-for="(user,index) in groupMembers" :key="index" class="members">
+                                                 {{user.nickName}} <span v-if="user.flag == 1" style="font-size；12px">(群主)</span>  <i class="icon-name el-icon-delete" title="删除成员" v-if="loginUserHasGroup == '1' && user.flag == 0" @click="deleteGroupUser(user,index)"></i>
+                                                <i class="icon-name el-icon-plus" title="添加成员" v-if="loginUserHasGroup == '1' && user.flag == 1" @click="addNewGroupMerbers()"></i>
                                             </div>
                                         </div>
-                                    </el-col>
-                                    <el-col :span="18">
-                                        <div class="grid-content bg-purple" style="padding-left:15px; position:relative">
-                                            <i class="el-icon-caret-left" style="position:absolute; left:5px;color:#ebdbdb; margin-top:10px; font-size:14px;margin-right:-5px;"></i>
-                                            <div class="dusslist" v-if="item.type == 'word' || !item.type">
-                                                {{item.msg}}
-                                            </div>
-                                           
-                                            <div class="dusslist" v-if="item.type == 'doc'" style="padding-top:15px; padding-left:15px;height:162px">
-                                               <FilesOperate  :item="JSON.parse(item.msg)" :options="{preview:true,download:true}"></FilesOperate>
-                                            </div>
-                                            <div class="msgtime">
-                                                <div>{{item.time | reInitTime}}</div>
-                                            </div>
-                                        </div>
-                                    </el-col>
-                                </el-row>
-                                <el-row type="flex" justify="end" v-if="item.from == currentUserId" :key="item.id">
-                                    <el-col :span="18">
-                                        <div class="grid-content bg-purple" style="padding-right:10px;position:relative; text-align:right">
-                                            
-                                            <i class="el-icon-caret-right" style=" position:absolute; right:2px; color:#ebdbdb; font-size:14px; color:#c7e0f4;  margin-top:10px"></i>
-                                            <div class="dusslist fromme"  v-if="item.type == 'word' || !item.type"> 
-                                               <span style="text-align:left;display:inline-block"> {{item.msg}}</span>
-                                            </div>
-                                            <div class="dusslist fromme"  v-if="item.type == 'doc'" style="padding-top:15px;padding-left:15px;height:162px">
-                                                    <FilesOperate  :item="JSON.parse(item.msg)" :options="{preview:true,download:true}"></FilesOperate>
-                                            </div>
-                                             <div class="msgtime msgtime_right">
-                                                <div>{{item.time | reInitTime}}</div>
-                                            </div>
-                                        </div>
-                                    </el-col>
-                                    <el-col :span="1">
-                                        <div class="grid-content bg-purple">
-                                            <div style="text-align:center;position:relative">
-                                                <span style="display:inline-block;width:25px;height:25px;text-align:center; color:#FFF; line-height:25px; font-size:13px; background:#ccc;border-radius:50%" :class="{'onlineavatar':true}" v-if="item.from_info && !item.groupId">{{item.from_info.name[0]}}</span>
-                                                 <span style="display:inline-block;width:38px;height:38px;  color:#FFF; font-size:12px; line-height:38px;background:#ccc;border-radius:50%" :class="{'onlineavatar':toUser.online || toUser.groupId}" v-if="item.from_info && item.groupId">{{item.from_info.name}}</span>
-                                            </div>
-                                        </div>
-                                    </el-col>
-                                </el-row>
+                                         
+                                        <el-button slot="reference" type="mini">群成员</el-button>
+                                    </el-popover>
+                                    <el-button slot="reference" type="mini" style="position:absolute;right:80px;top:3px" v-if="loginUserHasGroup == '1'" @click="dissolveGroup()">解散群</el-button>
+                                     <el-button slot="reference" type="mini" style="position:absolute;right:80px;top:3px" v-if="loginUserHasGroup == '2'" @click="exitGroup()">退出群</el-button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="textarea" v-show="dialogList.length > 0">
-                            <div style="padding:5px;">
-                                <el-upload  name="files" style="display:inline" ref="upload" :on-success="handleSuccess"  :on-progress="previewAttach" action="/api/v1/files/upload" multiple :with-credentials="true" :show-file-list="false">
+                            <div class="messages" id="messages"  v-if="toUser">
+                                <div v-for="item in msgList" :key="item.msg_id">
+                                     <div class="fromeMe moveLeft" v-if="item.content.from_id != currentUserId" :class="{groupAvatarLeft:toUser.gid}">
+                                        <div class="wordcontent">
+                                            <span v-if="!item.content.msg_body.extras" v-html="item.content.msg_body.text" class="wordwz"></span>
+                                            <div v-if="item.content.msg_body.extras" class="attach">
+                                                <FilesOperate :item="item" :options="{preview:true,download:true}" v-for="item in item.content.msg_body.extras" :key="item.id"></FilesOperate>
+                                            </div>
+                                        </div>
+                                        <div style="font-size:12px;color:#c0bdbd;padding-top:3px">{{item.content.create_time | reInitTime}}</div>
+                                        <div class="avatar">
+                                                <span v-if="!toUser.gid">
+                                                    {{item.content.from_name ? item.content.from_name[0] : currentUserName[0] }}
+                                                </span>
+                                                <span v-if="toUser.gid">
+                                                    {{item.content.from_name ? item.content.from_name : currentUserName }}
+                                                </span>
+                                                <i  class="el-icon-caret-left"></i>
+                                        </div>
+                                      </div>
+
+                                      <div class="fromeMe moveRight" v-if="item.content.from_id == currentUserId" :class="{groupAvatarRight:toUser.gid}">
+                                          <div class="wordcontent">
+                                            <span v-if="!item.content.msg_body.extras" v-html="item.content.msg_body.text" class="wordwz"></span>
+                                            <div v-if="item.content.msg_body.extras" class="attach">
+                                                 <FilesOperate :item="item" :options="{preview:true,download:true}" v-for="item in item.content.msg_body.extras" :key="item.id"></FilesOperate>
+                                            </div>
+                                          </div>
+                                          <div style="font-size:12px;color:#c0bdbd;padding-top:3px">{{item.content.create_time | reInitTime}}</div>
+                                        <div class="avatar">
+                                            <span v-if="!toUser.gid">
+                                                {{item.content.from_name ? item.content.from_name[0] : currentUserName[0] }}
+                                            </span>
+                                            <span v-if="toUser.gid">
+                                                {{item.content.from_name ? item.content.from_name : currentUserName }}
+                                            </span>
+                                            <i  class="el-icon-caret-right"></i>
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+                            <div style="padding:30px 30px 5px 30px"  v-if="toUser">
+                                  <el-popover placement="top" width="360">
+                                    <div class="emoji" >
+                                        <ul>
+                                            <li v-for="item in emoji" :key="item" @click="addemoji(transferEmoji(item))"  v-html="transferEmoji(item)">
+                                             </li>
+                                        </ul>
+                                    </div>
+                                     <i slot="reference" class="iconfont el-icon-Ovalx"  @click="resetEmoji()" style="font-size:16px"></i>
+                                    </el-popover>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;
+                                <el-upload  name="files" style="display:inline" ref="upload" :on-success="handleSuccess" action="/api/v1/files/upload" multiple :with-credentials="true" :show-file-list="false">
                                      <i class="el-icon-picture" style="font-size:18px"></i>
                                 </el-upload>
-                                    &nbsp;
-                                  <el-popover
-                                    placement="top"
-                                    width="260"
-                                >
-
-                                    <div class="emoji">
-                                        <ul>
-                                            <li v-for="item in emoji" :key="item" @click="addemoji(item)">
-                                                {{item}}
-                                            </li>
-                                        </ul>
-                                       
-                                    </div>
-                                     <i slot="reference" class="iconfont el-icon-Ovalx" style="font-size:16px"></i>
-                                    </el-popover>
                             </div>
-                            <el-input type="textarea" v-model.trim="content" :rows="2" @keyup.enter.native="onSubmit"></el-input>
-                            <el-button type="primary" @click="onSubmit" style="margin-top:10px;width:100px;">发送</el-button>
-                        </div>
+                            <div class="textarea"  v-if="toUser">
+                                <!-- <el-input type="textarea" v-model.trim="content" :rows="2" @keyup.enter.native="onSubmit"></el-input> -->
+                                <div class="userTextarea" contenteditable="true" v-html="content" ref="userTextarea" @keyup.enter="onSubmit">
+
+                                </div>
+                                <el-button type="primary" @click="onSubmit" style="margin-top:10px;width:100px;">发送</el-button>
+                            </div>
                     </div>
                 </div>
             </div>
         </div>
-        <el-dialog title="新建组" :visible.sync="dialogVisible" align="left" :close-on-click-modal="false" width="700px">
 
+        <!-- //新建群组 -->
+        <el-dialog :title="addGroupTitle" :visible.sync="dialogVisible" align="left" :close-on-click-modal="false" width="700px">
             <div style="padding-left:35px;">
-                <el-form :model="rows" :rules="rules" ref="formsubmit">
+                <el-form :model="rows" :rules="rules" ref="formsubmit" v-if="addGroupTitle == '新建组'">
                     <el-row>
                         <el-col :span="22">
                             <el-form-item prop="groupName">
@@ -188,14 +188,17 @@
                         </el-col>
                     </el-row>
                 </el-form>
+                <div  v-if="addGroupTitle != '新建组'" style="padding-left:35px;font-size:13px;color:#ae3d3d">*选择您想要新添加的群组成员</div>
             </div>
             <br />
+             
             <template>
-                <el-transfer filterable :titles="['人员列表', '已选列表']" :props="{  key: 'id',label: 'name'}" filter-placeholder="请输入姓名" v-model="groupUsers" :data="arrGroupUsers" style="width:500px;margin:auto">
+                <el-transfer filterable :titles="['人员列表', '已选列表']" :props="{key: 'username',label: 'name'}" filter-placeholder="请输入姓名" v-model="groupUsers" :data="arrGroupUsers" style="width:500px;margin:auto">
                 </el-transfer>
             </template>
             <div slot="footer" class="dialog-footer">
-                <el-button type="primary" @click="saveFormValidate()">确定</el-button>
+                <el-button type="primary" @click="saveFormValidate()"   v-if="addGroupTitle == '新建组'" >确定</el-button>
+                <el-button type="primary" @click="addGroupMembers()"  v-if="addGroupTitle != '新建组'">添加</el-button>
             </div>
         </el-dialog>
     </div>
@@ -206,6 +209,7 @@ import Aside from "@/components/Aside.vue";
 import TopBar from "@/components/TopBar.vue";
 import axios from "@/plugins/axios";
 import FilesOperate from "@/apps/FilesOperate.vue";
+import { mapGetters, mapMutations } from "vuex";
 import { Loading } from "element-ui";
 import moment from "moment";
 
@@ -213,26 +217,28 @@ export default {
     name: "webim",
     data() {
         return {
-            defaultProps: {
-                children: 'children',
-                label: 'name'
-            },
+            addGroupTitle:"新建组",
+            groupMembers: [],
             msgList: [],
             dialogList: [],
             content: "",
             users: [],
-            toUser: {},
+            toUser: "",
             userList: false,
             dialogVisible: false,
             arrGroupUsers: [],
             groupUsers: [],
             createGroup_id: "",
             searchName: "",
+            emoji:[],
             searchNameResult: [],
             dialogName: "",
+            loginUserHasGroup: '0',
+            currentUserName: "",
             currentPage: 0,
             countpage: 1,
-            emoji:['😃','😄','👿','😉','😊','😌','😍','😏','😒','😓','😔','😖','😘','😚','😜','😝','😞','😠','😡','😢','😣','😥','😨','😪','😭','😰','😱','😲','😳','😷'],
+            userIndex: -1,
+            userDialogIndex: -1,
             rows: {
                 groupName: ""
             },
@@ -252,145 +258,160 @@ export default {
         TopBar,
         FilesOperate
     },
-    // sockets: {
-    //     connect() {
-    //         console.log("soket connect... ");
-    //     },
-    //     message(value) {
-    //         console.log(value);
-    //         //离线消息
-    //         let self = this;
-    //         if (Array.isArray(value)) {
-    //             for (let item of value) {
-    //                 self.addDussList(item, "fromMessage");
-    //                 self.addMessageToMsgList(item);
-    //             }
-    //         } else {
-    //              console.log(this.dialogList);
-    //              if(this.dialogList.length > 0){
-    //                 self.addMessageToMsgList(value);
-    //              }
-    //              self.addDussList(value, "fromMessage");
-    //             // if (value.from != this.$store.getters.LoginData.uid) {
-    //             //     this.open(value);
-    //             // }
-    //         }
-    //     },
-    //     receiveMsg(data) {
-    //         this.createGroupObj = data;
-    //     },
-    //     groupList(data) {
-    //         console.log(data);
-    //     },
-    //     online(message) {
-    //         let self = this;
-    //         if(message){
-    //         setTimeout(function() {
-    //             if (typeof message == "string") {
-    //                 self.compareDialogUserOnline(message, true);
-    //             } else {
-    //                 for (let id of message) {
-    //                     self.compareDialogUserOnline(id, true);
-    //                 }
-    //             }
-    //         }, 1000);
-    //         }
-    //     },
-    //     offline(id) {
-    //         this.compareDialogUserOnline(id);
-    //     }
-    // },
-    filters: {
-        filterName: function(ids, users) {
-            if (users && ids) {
-                var arr = [];
-                for (let user of users) {
-                    for (let id of ids) {
-                        if (user.id == id) {
-                            arr.push(user.name);
-                        }
-                    }
-                }
-                if (arr.length > 10) {
-                    arr = arr.splice(0, 10);
-                }
-                return "(" + arr.join(",") + ")";
-            }
-        },
-        filterDocument: function(data) {
-            if (data.indexOf("isSendDoc") > -1) {
-                return JSON.parse(data);
-            } else {
-                return data;
-            }
-        },
-        reInitTime: function(data) {
-            
-           if(moment(new Date()).format('YYYY-MM-DD') == moment(data).format('YYYY-MM-DD')){
-               return "今天 " +  moment(data).format('HH:mm')
-           }else if(moment(new Date()).add(-1, 'days').format('YYYY-MM-DD') == moment(data).format('YYYY-MM-DD')){
-                return "昨天 " +  moment(data).format('HH:mm')
-           }else{
-                return moment(data).format('MM-DD HH:mm');
-           }
-        }
-    },
-    methods: {
-        addemoji(data){
-            this.content =  this.content + data;
-        },
-        deleteCurrentDialog(data,index) {
-            let self = this;
-            self.$confirm("确定要删除该对话框吗?", "提示", {
-                type: "warning"
-            }).then(() => {
-                axios
-                    .get("/api/v1/im/dialoguser/delete/"+data.id)
-                    .then(res => {
-                       if(res.data.error == 0){
-                           this.dialogList.splice(index,1);
-                            self.$message({
-                                message: "删除成功",
-                                type: "success"
-                            });
-                       }
-                      
-                    })
-                    .catch(function(res) {
-                        self.$message({
-                            message: "操作失败",
-                            type: "error"
-                        });
-                    });
+    watch: {
+        msgList() {
+            let $self = this;
+            $self.$nextTick(() => {
+                var messages = $self.$el.querySelector("#messages");
+                messages.scrollTop = messages.scrollHeight;
             });
         },
-        handleSuccess(data, file, fileList) {
-            this.content = JSON.stringify(data[0]);
-            this.onSubmit();
-            // this.$confirm("是否要发送此文件?", "提示", {
-            //     type: "warning"
-            // }).then(() => {
-            //     this.content = JSON.stringify(data[0]);
-            //     this.onSubmit();
-            // });
+        toUser(data) {
+            let $self = this;
+            if (data.gid) {
+                JIM.getGroupMembers({
+                    gid: data.gid
+                })
+                    .onSuccess(function(data) {
+                         let  arr =  data.member_list.filter(item => $self.currentUserId == item.username);
+                         if(arr[0].flag == 1){
+                           $self.loginUserHasGroup = '1'; //群组
+                         }else{
+                           $self.loginUserHasGroup = '2'; //普通成员
+                         }
+
+                        $self.groupMembers = data.member_list;
+                    })
+                    .onFail(function(data) {
+                        //data.code 返回码
+                        //data.message 描述
+                    });
+            }
+        }
+    },
+    filters: {
+        //生成时间标识
+        reInitTime: function(data) {
+            if (
+                moment(new Date()).format("YYYY-MM-DD") ==
+                moment(data).format("YYYY-MM-DD")
+            ) {
+                return "今天 " + moment(data).format("HH:mm");
+            } else if (
+                moment(new Date())
+                    .add(-1, "days")
+                    .format("YYYY-MM-DD") == moment(data).format("YYYY-MM-DD")
+            ) {
+                return "昨天 " + moment(data).format("HH:mm");
+            } else {
+                return moment(data).format("MM-DD HH:mm");
+            }
         },
-        previewAttach(data) {
-              console.log(data);
+       
+    },
+
+    computed: {
+        ...mapGetters(["getUserConversation", "getHistoryMessage"]),
+        filterGroupMember: function() {},
+         transferEmoji(){
+             return function (data) {
+                  return this.imemoji.Emoji.emoji(data);
+              } 
+        }
+        
+    },
+
+    methods: {
+        ...mapMutations(["setUserConversation"]),
+
+        upDataUserConversations(user){
+              JIM.updateConversation({
+                'extras' : {}
+                });
+        },  
+
+        showAddGroup(){
+            this.dialogVisible = true;
+            this.addGroupTitle = "新建组";
         },
 
-        
-        
-        // open(data) {
-        //     const h = this.$createElement;
-        //     let type = data.groupId ? "群" : "个人";
-        //     let message = data.from_info.name + "发来的" + type + "消息";
-        //     this.$notify({
-        //         title: message,
-        //         type: "success",
-        //         duration: "2000",
-        //         message: h("i", { style: "color: teal" }, data.msg)
-        //     });
-        // },
+        //展开树组织结构
+         addemoji(data){
+            this.content =  this.$refs.userTextarea.innerHTML + data;
+        },
+
+        resetEmoji(){
+            this.emoji = ['😄','😆','😉','😊','😋','😌','😍','😏','😒','😓','😔','😖','😘','😚','😜','😝','😕','😯','😞','😠','😢','😣','😥','😨','😪','😭','😰','😱','😲','😳','😷'
+             ,'😇','😺','😸','😹','😼','😽','🙀','😿','😾','👏','👍','👎','✊','👈','👉','👆','👇'
+            ];
+        },
+  
+
+        handleSuccess(data, file, fileList) {
+            let $self = this;
+            if (data.length > 0) {
+                 $self.sendSingleFiles(data);
+            }
+        },
+        sendSingleFiles(data) {
+            let $self = this;
+            if ($self.toUser.gid) {
+                JIM.sendGroupMsg({
+                    target_gid: $self.toUser.gid,
+                    msg_body: {
+                        text: data[0].name,
+                        extras: data
+                    }
+                })
+                    .onSuccess(function(data, msg) {
+                        if ($self.msgList.length == 0) {
+                            $self.getHistoryMessage.push({
+                                key: msg.target_gid,
+                                msgs: [msg]
+                            });
+                            $self.msgList.push(msg);
+                            $self.selectDialog($self.toUser);
+                        } else {
+                            $self.msgList.push(msg);
+                        }
+                        $self.content = "";
+                    })
+                    .onFail(function(data) {
+                        //同发送单聊文本
+                    });
+            } else {
+                JIM.sendSingleMsg({
+                    target_username: $self.toUser.name,
+                    msg_body: {
+                        text: data[0].name,
+                        extras: data
+                    } // 可以直接从已有消息体里面获取msg_body
+                })
+                    .onSuccess(function(data, msg) {
+                        if ($self.msgList.length == 0) {
+                            data.nickName = $self.toUser.nickName;
+                            $self.getUserConversation.conversations.push(data);
+                            $self.getHistoryMessage.push({
+                                key: data.key,
+                                msgs: [msg]
+                            });
+                            $self.msgList.push(msg);
+                            $self.toUser.key = data.key;
+                            $self.selectDialog($self.toUser);
+                        } else {
+                            $self.msgList.push(msg);
+                        }
+                        // console.log('success:' + JSON.stringify(data));
+                        // console.log('successssssss:' + JSON.stringify(msg));
+                    })
+                    .onFail(function(data) {
+                        console.log("error:" + JSON.stringify(data));
+                    });
+            }
+        },
+        previewAttach(data) {
+            console.log(data);
+        },
         setUserShow(organ) {
             if (organ.status) {
                 this.$set(organ, "status", false);
@@ -398,6 +419,8 @@ export default {
                 this.$set(organ, "status", true);
             }
         },
+
+        //选择群组验证
         saveFormValidate() {
             this.$refs["formsubmit"].validate(valid => {
                 if (valid) {
@@ -412,6 +435,8 @@ export default {
                 }
             });
         },
+
+        // 过滤人员
         search() {
             if (this.searchName) {
                 let user_arr = [];
@@ -431,414 +456,365 @@ export default {
                 this.searchNameResult = [];
             }
         },
+
+        //过滤对话框列表
         searchDialogName() {
             if (this.dialogName) {
+                this.dialogList = this.getUserConversation.conversations;
                 for (let item of this.dialogList) {
-                    if (item.name.indexOf(this.dialogName) > -1) {
-                        this.$set(item, "hideCurrent", false);
+                    if (
+                        (item.name &&
+                            item.name.indexOf(this.dialogName) > -1) ||
+                        (item.nickName &&
+                            item.nickName.indexOf(this.dialogName) > -1)
+                    ) {
+                        this.$set(item, "hideCurrentDialog", false);
                     } else {
-                        this.$set(item, "hideCurrent", true);
+                        this.$set(item, "hideCurrentDialog", true);
                     }
                 }
             } else {
                 for (let item of this.dialogList) {
-                    this.$set(item, "hideCurrent", false);
+                    this.$set(item, "hideCurrentDialog", false);
                 }
             }
         },
-        compareDialogUserOnline(id, status) {
-            if (id) {
-                for (let item of this.users) {
-                    for (let user of item.users) {
-                        if (user.id == id) {
-                            if (status) {
-                                this.$set(user, "online", true);
-                            } else {
-                                this.$set(user, "online", false);
-                            }
-                        }
-                    }
-                }
-            }
-            if (this.dialogList.length > 0) {
-                let self = this;
-                for (let item of self.dialogList) {
-                    if (item.uid == id) {
-                        if (status) {
-                            self.$set(item, "online", true);
-                        } else {
-                            self.$set(item, "online", false);
-                        }
-                    }
-                }
-            }
-        },
+
+        //创建群组
         createGroup() {
-            let self = this;
-            self.groupUsers.push(parseInt(self.$store.getters.LoginData.uid));
-            self.groupUsers = Array.from(new Set(self.groupUsers));
-            self.socket.emit("addgroup", {
-                groups: self.groupUsers.join(","),
-                groupName: self.rows.groupName
-            });
-            setTimeout(function() {
-                if (self.createGroupObj) {
-                    //给id为了匹配toUser
-                    self.createGroupObj.id = self.createGroupObj.groupId;
-                    self.createGroupObj.name = self.rows.groupName;
-                    //self.toUser = self.createGroupObj;
-                    self.createGroupObj.uid = self.createGroupObj.id;
-                    self.addDussList(self.createGroupObj);
-                    self.rows.groupName = "";
-                }
-            }, 200);
-            self.dialogVisible = false;
-        },
-        addMessageToMsgList(message) {
-            if (this.toUser.uid == message.from && !message.groupId) {
-                if (message.msg.indexOf("isSendDoc") > -1) {
-                    message["isSendDoc"] = JSON.parse(message.msg).isSendDoc;
-                    message.msg = "";
-                }
-                this.msgList.push(message);
-            }
-
-            if (
-                message.from == this.$store.getters.LoginData.uid ||
-                this.toUser.uid == message.groupId
-            ) {
-                if (message.msg.indexOf("isSendDoc") > -1) {
-                    message["isSendDoc"] = JSON.parse(message.msg).isSendDoc;
-                    message.msg = "";
-                }
-                console.log(this.dialogList);
-                this.msgList.push(message);
-            }
-            for (let item of this.dialogList) {
-                if (item.uid == message.from && !message.groupId) {
-                    this.$set(item, "newMessageIcon", true);
-                }
-                if (item.uid == message.groupId) {
-                    this.$set(item, "newMessageIcon", true);
-                }
-            }
-            this.$nextTick(() => {
-                var messages = this.$el.querySelector("#messages");
-                messages.scrollTop = messages.scrollHeight;
-            });
-        },
-        selectUser(user) {
-            if(!user.type){
-                user.uid = user.id;
-                this.toUser = user;
-                this.currentPage = 0;
-                this.countpage = 1;
-                this.msgList = [];
-                this.getPerDialogHistory({ uid: user.id });
-                this.addDussList(this.toUser);
-            }
-        },
-        selectDialog(user) {
-            this.$set(user, "newMessageIcon", false);
-            user.id = user.uid;
-            this.toUser = user;
-            this.currentPage = 0;
-            this.countpage = 1;
-            this.msgList = [];
-            this.getPerDialogHistory(user);
-        },
-        addDussList(user, fromMessage) {
-            if (fromMessage) {
-                let canPush = true;
-                if (this.dialogList.length > 0) {
-                    for (let item of this.dialogList) {
-                        if (user.groupId) {
-                            if (item.uid == user.groupId) {
-                                canPush = false;
-                            }
-                        } else {
-                            if (item.uid == user.from) {
-                                canPush = false;
-                            }
-                        }
-                    }
-                    if (canPush) {
-                        if (user.groupId) {
-                            user.name = user.groupName;
-                            user.uid = user.id = user.groupId;
-                            this.$set(user, "newMessageIcon", true);
-                            this.$set(user, "online", true);
-                            this.dialogList.push(user);
-                        } else {
-                            if (
-                                user.from != this.$store.getters.LoginData.uid
-                            ) {
-                                user.name = user.from_info.name;
-                                user.uid = user.id = user.from;
-                                this.$set(user, "newMessageIcon", true);
-                                this.$set(user, "online", true);
-                                this.dialogList.push(user);
-                            }
-                        }
-                    }
-                } else {
-                    user.name = user.from_info.name;
-                    user.uid = user.id = user.from;
-                    this.$set(user, "newMessageIcon", true);
-                    this.$set(user, "online", true);
-                    this.toUser = user;
-                    this.getPerDialogHistory(user);
-                    this.dialogList.push(user);
-                }
-            } else {
-                let canPush = true;
-                if (this.dialogList.length > 0) {
-                    for (let item of this.dialogList) {
-                        if (item.uid == user.uid) {
-                            canPush = false;
-                        }
-                    }
-                }
-                if (canPush) {
-                    this.dialogList.push(user);
-                    if (this.dialogList.length == 1 && user.groupId) {
-                        this.selectDialog(user);
-                    }
-                }
-            }
-        },
-
-        onSubmit() {
-            if (this.content.replace(/\s+/g, "")) {
-                this.$nextTick(() => {
-                    var messages = this.$el.querySelector("#messages");
-                    messages.scrollTop = messages.scrollHeight;
+            let $self = this;
+            JIM.createGroup({
+                group_name: $self.rows.groupName
+                // 'is_limit':true
+            })
+                .onSuccess(function(data) {
+                    data.name = data.group_name;
+                    data.key = data.gid;
+                    $self.getUserConversation.conversations.push(data);
+                    $self.addGroupMembers(data.gid);
+                    $self.dialogVisible = false;
+                })
+                .onFail(function(data) {
+                    console.log("error:" + JSON.stringify(data));
                 });
-                if (this.toUser.id.toString().indexOf("group") > -1) {
-                    this.socket.emit("send", {
-                        msg: this.content,
-                        to: 0,
-                        from: this.$store.getters.LoginData.uid,
-                        groupId: this.toUser.id,
-                        type:
-                            this.content.indexOf("iconUrl") > -1
-                                ? "doc"
-                                : "word"
-                    });
-                } else {
-                    this.socket.emit("send", {
-                        msg: this.content,
-                        to: this.toUser.id,
-                        from: this.$store.getters.LoginData.uid,
-                        type:
-                            this.content.indexOf("iconUrl") > -1
-                                ? "doc"
-                                : "word"
-                    });
+        },
+
+        //添加组成员
+        addGroupMembers(gid) {
+            let members = [];
+            let $self = this;
+            for (let i = 0; i < $self.groupUsers.length; i++) {
+                if (
+                    $self.groupUsers[i] != 'im_' +
+                    $self.$store.getters.LoginData.username
+                ) {
+                    members.push({ username:'im_' + $self.groupUsers[i]});
                 }
-                this.content = "";
+            }
+            JIM.addGroupMembers({ gid: gid || $self.toUser.gid, member_usernames: members})
+                .onSuccess(function(data) {
+                    $self.dialogVisible = false;
+                    $self.rows.groupName = "";
+                    if(gid){
+                     $self.$message({
+                        message:$self.rows.groupName + '群组创建成功！',
+                        type: 'success'
+                     });
+                    }else{
+                         for(var i = 0; i<members.length; i++){
+                            for(var j = 0;j<$self.arrGroupUsers.length; j++){
+                                if($self.arrGroupUsers[j].username == members[i].username){
+                                    $self.arrGroupUsers[j].flag = 0;
+                                    $self.arrGroupUsers[j].nickName = $self.arrGroupUsers[j].nickname;
+                                    $self.groupMembers.push($self.arrGroupUsers[j]);
+                                }
+                            };
+                        };
+                    }
+                 
+                })
+                .onFail(function(data) {
+                    console.log("error:" + JSON.stringify(data));
+                    if(data.code == 880607){
+                         $self.$message({
+                        message: '成员已在群组列表里，请不要重复添加',
+                        type: 'warning'
+                     });
+                    }
+                });
+        },
+        
+        // 新加组成员
+        addNewGroupMerbers(){
+            this.dialogVisible = true;
+            this.addGroupTitle = this.toUser.nickName;
+        },
+        //删除组成员
+        deleteGroupUser(user,index){
+            let $self = this;
+            $self.$confirm('删除后该成员将收不到群消息，要删除吗？', '提示', {
+              confirmButtonText: '确定',
+              cancelButtonText: '取消',
+              type: 'warning'
+            }).then(() => {
+                 JIM.delGroupMembers({
+                  'gid' :  $self.toUser.gid,
+                 'member_usernames' : [{'username':user.username}]
+               }).onSuccess(function(data) {
+                   $self.groupMembers.splice(index,1);
+                   $self.$message({
+                    message: "群成员删除成功",
+                    type: "success"
+                });
+               }).onFail(function(data) {
+                console.log(data);
+               });
+            }).catch(() => {
+            });
+        },
+
+        //退出群
+        exitGroup(){
+                let $self = this;
+                if($self.toUser.gid){
+                    $self.$confirm('退出后将收不到该群消息，确定要退出吗？', '提示', {
+                        confirmButtonText: '确定',
+                        cancelButtonText: '取消',
+                        type: 'warning'
+                        }).then(() => {
+                           JIM.exitGroup({
+                                'gid' : $self.toUser.gid
+                            }).onSuccess(function(data) {
+                             for(var i = 0; i<$self.getUserConversation.conversations.length; i++){
+                                if($self.getUserConversation.conversations[i].gid && $self.getUserConversation.conversations[i].gid == $self.toUser.gid){
+                                    $self.getUserConversation.conversations.splice(i,1)
+                                }
+                            };
+                             $self.$message({
+                                    message: ' 退群成功！',
+                                    type: 'success'
+                             });
+                             $self.toUser = "";
+                            }).onFail(function(data) {
+                                   
+                            }); 
+                            
+                        })
+                }  
+        },
+        //解散群
+        dissolveGroup(){
+            let $self = this;
+            if($self.toUser.gid){
+                $self.$confirm('解散后将不能恢复，确定要解散该群组吗？', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+                }).then(() => {
+                        JIM.dissolveGroup({
+                            'gid' : $self.toUser.gid
+                        }).onSuccess(function(data) {   
+                            for(var i = 0; i<$self.getUserConversation.conversations.length; i++){
+                            if($self.getUserConversation.conversations[i].gid && $self.getUserConversation.conversations[i].gid == $self.toUser.gid){
+                                $self.getUserConversation.conversations.splice(i,1)
+                            }
+                            };
+                             $self.$message({
+                                    message: '群组解散成功！',
+                                    type: 'success'
+                             });
+                             $self.toUser = "";
+
+                        }).onFail(function(data) {
+                            console.log();
+                        });
+                    
+                })
+     
             }
         },
+
+        //人员列表选人
+        selectUser(user, index) {
+            this.userIndex = index + user.id;
+            this.loginUserHasGroup = "0";
+            this.toUser = {
+                name: "im_" + user.username,
+                avatar: "",
+                nickName: user.name
+            };
+            let data = this.getHistoryMessage.filter(
+                item => this.toUser.name == item.from_username
+            );
+            if (data && data[0] && data[0].msgs) {
+                this.msgList = data[0].msgs;
+            } else {
+                this.msgList = [];
+            }
+        },
+
+        //对话列表选人
+        selectDialog(user, index) {
+            let $self = this;
+            user.activeMark = false;
+            $self.userDialogIndex = index;
+            $self.toUser = user;
+            $self.loginUserHasGroup = "0";
+            if (user.gid) {
+                user.nickName = user.name;
+                JIM.resetUnreadCount({
+                            'gid' : $self.toUser.gid
+                 });
+                 $self.toUser.unread_msg_count = 0;
+            }else{
+                  JIM.resetUnreadCount({
+                        'username' : $self.toUser.name
+                });
+                 $self.toUser.unread_msg_count = 0;
+            }
+        
+            let data = $self.getHistoryMessage.filter(
+                item => $self.toUser.key == item.key
+            );
+            if (data && data[0] && data[0].msgs) {
+                $self.msgList = data[0].msgs;
+            } else {
+                $self.msgList = [];
+            }
+        },
+
+        //发送消息
+        onSubmit() {
+            let $self = this;
+            $self.content = $self.$refs.userTextarea.innerHTML.replace(/<\/?div[^>]*>/gi,'');
+            $self.content = $self.content.replace(/<\/?br[^>]*>/gi,'');
+             console.log('isConnect:'+JIM.isConnect());
+             console.log('isLogin:'+JIM.isLogin());
+            console.log('isInit:'+JIM.isInit());
+            if(!JIM.isLogin()){
+                $self.$message({
+                        message: 'webIm链接已断开，请刷新页面',
+                        type: 'warning'
+                });
+                return false;
+            }
+            if ($self.content) {
+                // debugger;
+                //群组消息
+                if ($self.toUser.gid) {
+                    JIM.sendGroupMsg({
+                        target_gid: $self.toUser.gid,
+                        content: $self.content
+                    })
+                        .onSuccess(function(data, msg) {
+                            if ($self.msgList.length == 0) {
+                                $self.getHistoryMessage.push({
+                                    key: msg.target_gid,
+                                    msgs: [msg]
+                                });
+                                $self.msgList.push(msg);
+                                //重新绑定下 要不然新建组发来的消息收不到
+                                let data = $self.getHistoryMessage.filter(
+                                    item => $self.toUser.key == item.key
+                                );
+                                if (data && data[0] && data[0].msgs) {
+                                    $self.msgList = data[0].msgs;
+                                }
+                            } else {
+                                $self.msgList.push(msg);
+                            }
+                            $self.content = "";
+                        })
+                        .onFail(function(data) {
+                            //同发送单聊文本
+                        });
+                } else {
+                    JIM.sendSingleMsg({
+                        target_username:
+                            $self.toUser.name.indexOf("im") > -1
+                                ? $self.toUser.name
+                                : "im_" + $self.toUser.name,
+                        content: $self.content,
+                        target_name: $self.toUser.name
+                    })
+                        .onSuccess(function(data, msg) {
+                            if ($self.msgList.length == 0) {
+                                data.nickName = $self.toUser.nickName;
+                                $self.getUserConversation.conversations.push(
+                                    data
+                                );
+                                $self.getHistoryMessage.push({
+                                    key: data.key,
+                                    msgs: [msg]
+                                });
+                                $self.msgList.push(msg);
+                                $self.toUser.key = data.key;
+                                $self.selectDialog($self.toUser);
+                            } else {
+                                $self.msgList.push(msg);
+                            }
+                            $self.content = "";
+                        })
+                        .onFail(function(data) {
+                            console.log("error:" + JSON.stringify(data));
+                        });
+                }
+            }else{
+                // this.$message({
+                //         message: '请输入对话内容',
+                //         type: 'warning'
+                //     });
+            }
+        },
+        //获取树桩人员列表
         getUsers() {
             axios.get("/api/v1/users").then(res => {
                 this.arrGroupUsers = res.data;
             });
-
-            axios.get("/api/v1/users/list/organs").then(res => {
+            ///api/v1/users/im/organs
+            //api/v1/users/im/organs
+            axios.get("/api/v1/users/list/organ").then(res => {
                 this.users = res.data;
             });
         },
-        getUserName(id, currentItem) {
-            if (currentItem[0].groupId) {
-                return currentItem[0].groupName;
-            } else {
-                for (let item of this.arrGroupUsers) {
-                    if (item.id == id) {
-                        return item.name;
-                    }
+        onDrag: function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+        },
+        onDrop: function (e) {
+            if(this.toUser){
+                e.stopPropagation();
+                e.preventDefault();
+                var dt = e.dataTransfer;
+                let formData = new FormData();
+                for (var i = 0; i !== dt.files.length; i++) {
+                    formData.append("files", dt.files[i]);
                 }
+                this.uploadFile(formData);
             }
         },
-        getPerDialogHistory(user) {
-            let self = this;
-            let data = {};
-            self.currentPage++;
-            if (user.groupId) {
-                data = { groupId: user.groupId, page: self.currentPage };
-            } else {
-                data = { to: user.uid, page: self.currentPage };
-            }
-
-            if (self.countpage < self.currentPage) {
-                return false;
-            }
-            let messages = this.$el.querySelector("#messages");
-            let loadingDialog = Loading.service({ target: messages });
-            if (data.groupId || data.to) {
-                axios
-                    .post("/api/v1/im/message/list", data)
-                    .then(res => {
-                        self.countpage = res.data.count;
-                        for (let item of res.data.chatRecords) {
-                            if (item.msg.indexOf("isSendDoc") > -1) {
-                                item["isSendDoc"] = JSON.parse(
-                                    item.msg
-                                ).isSendDoc;
-                                item.msg = "";
-                            }
-                        }
-                        self.msgList = res.data.chatRecords.concat(
-                            self.msgList
-                        );
-                        self.$nextTick(() => {
-                            loadingDialog.close();
-                            messages.scrollTop = "100";
-                        });
-                    })
-                    .catch(function() {
-                        self.$message({
-                            message: "获取消息失败",
-                            type: "error"
-                        });
-                    });
-            }
-        },
-        getDialogUser() {
-            let self = this;
-            axios
-                .post("/api/v1/im/messages/users")
-                .then(res => {
-                    if (res.data.userList.length > 0) {
-                        // let hash = {};
-                        // res.data.userList = res.data.userList.reduce((preVal, curVal) => {
-                        //     hash[curVal.uid]
-                        //         ? ""
-                        //         : (hash[curVal.uid] =
-                        //               true && preVal.push(curVal));
-                        //     return preVal;
-                        // }, []);
-                        for (let item of res.data.userList) {
-                            if (item.groupId) {
-                                item.name = item.groupName;
-                                item.id = item.uid = item.groupId;
-                                this.getGroupMembers(item);
-                            } else {
-                                item.id = item.uid;
-                            }
-                        }
-                        self.toUser = res.data.userList[0];
-                        self.getPerDialogHistory(res.data.userList[0]);
-                        self.dialogList = res.data.userList;
-                    }
+        uploadFile(formData){
+                let $self = this;
+                axios.post('/api/v1/files/upload', formData,{headers: { "Content-Type": "multipart/form-data" }}).then(res => {
+                        $self.sendSingleFiles(res.data);
                 })
-                .catch(function() {
-                    self.$message({
-                        message: "获取对话列表失败",
-                        type: "error"
-                    });
-                });
-        },
-
-        getGroupMembers(item) {
-            axios
-                .post("/api/v1/im/group/info", { groupId: item.groupId })
-                .then(res => {
-                    let arr = [], boole = false;
-                    if(res.data.data.groups.length > 15){
-                         boole = true;
-                         res.data.data.groups = res.data.data.groups.slice(0,15);
-                    }
-                    for (let item of res.data.data.groups) {
-                        arr.push(item.name);
-                    }
-                    item.groupMembers = boole ? "(" + arr.join(",") + "...)" : "(" + arr.join(",") + ")" ;
-                })
-                .catch(function() {});
         }
     },
 
     mounted() {
-        this.getUsers();
-        this.getDialogUser();
-        this.currentUserId = this.$store.getters.LoginData.uid;
-        // this.$socket.emit("offLine");
-        // this.$socket.emit("join", this.$store.getters.LoginData.uid);
-        // let url = "http://172.16.3.17";
-        // if (process.env.NODE_ENV === 'production') {
-        //     url = 'http://172.16.3.17';
-        // } else {
-        //     url = 'http://192.168.1.29:10988';
-        //    // url = "http://59.110.172.228:10988";
-        // }
-        // this.socket = io(url);
-        // this.socket.on('connect',data=>{
-        //     console.log('soket connect...');
-        // });
-        //this.socket.emit("offLine");
-        //this.socket.emit("join", this.$store.getters.LoginData.uid);
-        this.socket.emit("offLine");
-        this.socket.emit("join", this.$store.getters.LoginData.uid);
-        this.socket.on("message", value => {
-            console.log(value);
-            let self = this;
-            if (Array.isArray(value)) {
-                for (let item of value) {
-                    self.addDussList(item, "fromMessage");
-                    self.addMessageToMsgList(item);
-                }
-            } else {
-                if (self.dialogList.length > 0) {
-                    self.addMessageToMsgList(value);
-                }
-                self.addDussList(value, "fromMessage");
-                // if (value.from != this.$store.getters.LoginData.uid) {
-                //     this.open(value);
-                // }
-            }
-        });
-
-        this.socket.on("receiveMsg", data => {
-            this.createGroupObj = data;
-        });
-        this.socket.on("groupList", data => {
-            console.log(data);
-        });
-
-        this.socket.on("online", message => {
-            let self = this;
-            if (message) {
-                setTimeout(function() {
-                    if (typeof message == "string") {
-                        self.compareDialogUserOnline(message, true);
-                    } else {
-                        if (message.length > 0) {
-                            for (let id of message) {
-                                self.compareDialogUserOnline(id, true);
-                            }
-                        }
-                    }
-                }, 1000);
-            }
-        });
-
-        this.socket.on("offline", id => {
-            this.compareDialogUserOnline(id);
-        });
-
         let self = this;
-        let messages = this.$el.querySelector("#messages");
-        messages.addEventListener("scroll", function() {
-            if (messages.scrollTop == 0) {
-                self.getPerDialogHistory(self.toUser);
-            }
-        });
+        self.getUsers();
+        this.currentUserName = this.$store.getters.LoginData.uname;
+        this.currentUserId = "im_" + this.$store.getters.LoginData.username;
+        var dropbox = document.querySelector('.main-messages');
+        dropbox.addEventListener('dragenter', this.onDrag, false);
+        dropbox.addEventListener('dragover', this.onDrag, false);
+        dropbox.addEventListener('drop', this.onDrop, false);
     }
 };
 </script>
 
 <style lang="scss" scoped>
-
-
 .main {
     display: flex;
     flex-grow: 1;
@@ -890,8 +866,11 @@ export default {
             height: 57px;
             border-bottom: 1px solid #dfdddd;
             .el-input {
-                margin: 10px;
+                margin: 10px 5px 10px 10px;
                 width: 210px;
+            }
+            i{
+                cursor: pointer;
             }
         }
         .main-users {
@@ -899,7 +878,7 @@ export default {
             overflow: auto;
             -webkit-box-flex: 1;
             height: 100%;
-            padding-bottom: 50px;
+            padding-bottom:50px;
             .emptytips {
                 text-align: center;
                 line-height: 200px;
@@ -912,9 +891,7 @@ export default {
                 cursor: pointer;
                 font-size: 13px;
             }
-            .onlineavatar {
-                background: #3b97dd !important;
-            }
+
             .user {
                 // display: flex;
                 justify-content: flex-start;
@@ -924,11 +901,38 @@ export default {
                 padding: 5px 0px 5px 20px;
                 border-bottom: 1px solid #f9f1f1;
                 cursor: pointer;
+                .avatar {
+                    display: inline-block;
+                    width: 25px;
+                    height: 25px;
+                    color: #fff;
+                    font-size: 13px;
+                    text-align: center;
+                    line-height: 25px;
+                    background: #ccc;
+                    border-radius: 50%;
+                    background: rgb(0, 90, 158);
+                    color:#FFF;
+                }
                 .name {
                     margin-left: 10px;
+                    font-weight: bold;
+                    font-size: 13px;
+                    color: #666;
                 }
                 .onlineavatar {
-                    background: #3b97dd !important;
+                    float: right;
+                    background: #f3efef;
+                    font-size: 12px;
+                    margin-right: 10px;
+                    width:20px;
+                    height:20px;
+                    border-radius: 50%;
+                    border:1px solid #ccc;
+                    text-align:center;
+                    line-height: 20px;
+                    color:#df1313;
+
                 }
             }
             .dialog-user {
@@ -1004,6 +1008,117 @@ export default {
                 }
             }
 
+            .fromeMe {
+                position: relative;
+                padding: 6px 35px;
+                .avatar {
+                    top: 10px;
+                    display: inline-block;
+                    width: 25px;
+                    height: 25px;
+                    background: rgb(204, 204, 204);
+                    text-align: center;
+                    line-height: 25px;
+                    color: rgb(255, 255, 255);
+                    font-size: 13px;
+                    border-radius: 50%;
+                    position: absolute;
+                    right: 0px;
+                }
+                .wordcontent {
+                    padding: 5px;
+                    display: inline-block;
+                    border-radius: 3px;
+                    min-width: 50px;
+                    span{
+                        text-align: left;
+                        display: inherit;
+                        line-height: 1.5;
+                    }
+                    .attach{
+                        .imgsqu{
+                            border: 1px solid red;
+                            line-height: 1.8;
+                            min-height:150px;
+                        }
+                      
+                    }
+                    .attachments {
+                        border: 1px solid red;
+                        margin-right: 0px;
+                    }
+                    overflow:inherit;
+                }
+            }
+
+            .moveLeft {
+                .avatar {
+                    left: 0px;
+                    background: rgb(0, 90, 158);
+                    color:#FFF;
+                }
+                .wordcontent {
+                    background: #ebdbdb;
+                    padding: 8px 7px;
+                }
+                i {
+                    position: absolute;
+                    right: 26px;
+                    color: #ebdbdb;
+                    font-size: 14px;
+                    top: 8px;
+                    left: 26px;
+                }
+            }
+
+            .moveRight {
+                 .avatar {
+                    background: rgb(0, 90, 158);
+                    color:#FFF;
+                }
+                .wordcontent {
+                    background: #c7e0f4;
+                    padding: 8px 7px;
+                }
+                text-align: right;
+                i {
+                    position: absolute;
+                    right: 26px;
+                    color: rgb(199, 224, 244);
+                    font-size: 14px;
+                    top: 8px;
+                }
+            }
+
+            .groupAvatarLeft {
+                padding: 10px 55px;
+                .avatar {
+                    width: 42px;
+                    height: 42px;
+                    line-height: 42px;
+                    background: rgb(0, 90, 158);
+                    color: #FFF;
+                }
+                i {
+                    top: 13px;
+                    left: 45px;
+                }
+            }
+            .groupAvatarRight {
+                padding: 10px 55px;
+                .avatar {
+                    width: 42px;
+                    height: 42px;
+                    line-height: 42px;
+                    background: rgb(0, 90, 158);
+                    color: #FFF;
+                }
+                i {
+                    top: 13px;
+                    right: 46px;
+                }
+            }
+
             .messages {
                 flex: 1 1 auto;
                 padding: 5px 23px 0px 23px;
@@ -1013,33 +1128,38 @@ export default {
                 .onlineavatar {
                     background: #3b97dd !important;
                 }
-                .msgtime{
-                    div{
+                .msgtime {
+                    div {
                         -webkit-transform: scale(0.9);
                         -webkit-transform-origin: left top;
-                         font-size: 11px;
-                         color: #a7a4a4;
-                         margin-top: 2px;
+                        font-size: 11px;
+                        color: #a7a4a4;
+                        margin-top: 2px;
                     }
                 }
-                .msgtime_right{
-                    div{
+                .msgtime_right {
+                    div {
                         -webkit-transform-origin: right top;
-                    }  
+                    }
                 }
             }
             .textarea {
                 flex: 0 0 auto;
                 height: 150px;
                 padding: 0 30px;
-                margin-top: 20px;
-                font-family: "Emoji"
-                
+                margin-top: 5px;
+                font-family: "Emoji";
+                .userTextarea{
+                    height:60px;
+                    border: 1px solid #ece8e8;
+                    padding:5px;
+                    line-height: 18px;
+                }
             }
             .top {
                 flex: 0 0 auto;
                 height: 55px;
-                padding: 0 30px;
+                padding: 0 20px;
                 border-bottom: 1px solid #ededed;
                 .topmsg {
                     height: 35px;
@@ -1062,6 +1182,23 @@ export default {
                         word-break: keep-all;
                         white-space: nowrap;
                         text-overflow: ellipsis;
+                    }
+                    .avatar {
+                        display: inline-block;
+                        width: 25px;
+                        height: 25px;
+                        background: rgb(204, 204, 204);
+                        text-align: center;
+                        line-height: 25px;
+                        color: rgb(255, 255, 255);
+                        font-size: 13px;
+                        border-radius: 50%;
+                    }
+                }
+                .avatarActive {
+                    .avatar {
+                        background: rgb(0, 90, 158);
+                        color: #fff;
                     }
                 }
             }

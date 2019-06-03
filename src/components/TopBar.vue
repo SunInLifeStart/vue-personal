@@ -162,25 +162,25 @@ export default {
                 // }     
             }
         },
-        open(data) {
-            const h = this.$createElement;
-            let type = data.groupId ? "群" : "个人";
-            let message = data.from_info.name + "发来的" + type + "消息";
-            let msg = "";
-            if(data.type){
-                    msg = data.type == "word" ? data.msg : JSON.parse(data.msg).name;
-            }else{
-                    msg = data.msg;
-            }
+        // open(data) {
+        //     const h = this.$createElement;
+        //     let type = data.groupId ? "群" : "个人";
+        //     let message = data.from_info.name + "发来的" + type + "消息";
+        //     let msg = "";
+        //     if(data.type){
+        //             msg = data.type == "word" ? data.msg : JSON.parse(data.msg).name;
+        //     }else{
+        //             msg = data.msg;
+        //     }
          
-            this.$notify({
-                title: message,
-                type: "success",
-                duration: "0",
-                offset: 1,
-                message: h("i", { style: "color: teal" },msg)
-            });
-        }
+        //     this.$notify({
+        //         title: message,
+        //         type: "success",
+        //         duration: "0",
+        //         offset: 1,
+        //         message: h("i", { style: "color: teal" },msg)
+        //     });
+        // }
     },
     // sockets: {
     //     connect() {
@@ -199,26 +199,26 @@ export default {
 
     // },
     mounted() {
-        let url = "";
-        if (process.env.NODE_ENV === "production") {
-            url = "/";
-        } else {
-            url = "http://116.117.157.232:10088";
-        }
-        if (!Vue.prototype.socket) {
-            Vue.prototype.socket = io(url);
-            this.socket.on("connect", data => {});
-            this.socket.emit("join", this.$store.getters.LoginData.uid);
-            this.socket.on("message", value => {
-                if (Array.isArray(value)) {
-                    this.open(value[0]);
-                } else {
-                    if (value.from != this.$store.getters.LoginData.uid) {
-                        this.open(value);
-                    }
-                }
-            });
-        }
+        // let url = "";
+        // if (process.env.NODE_ENV === "production") {
+        //     url = "/";
+        // } else {
+        //     url = "http://116.117.157.232:10088";
+        // }
+        // if (!Vue.prototype.socket) {
+        //     Vue.prototype.socket = io(url);
+        //     this.socket.on("connect", data => {});
+        //     this.socket.emit("join", this.$store.getters.LoginData.uid);
+        //     this.socket.on("message", value => {
+        //         if (Array.isArray(value)) {
+        //             this.open(value[0]);
+        //         } else {
+        //             if (value.from != this.$store.getters.LoginData.uid) {
+        //                 this.open(value);
+        //             }
+        //         }
+        //     });
+        // }
         axios.get('/api/v1/portal/uc').then(res => {
             this.uc = res.data;
         })
