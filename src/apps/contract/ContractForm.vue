@@ -209,11 +209,9 @@
                                 <el-row>
                                     <el-col :span="24">
                                         <el-radio label="1">
-                                            <el-date-picker v-model="formData.effectiveStart" type="date" placeholder="开始日期"
-                                             value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
+                                            <el-date-picker v-model="formData.effectiveStart" type="date" placeholder="开始日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
                                             </el-date-picker>至
-                                            <el-date-picker v-model="formData.effectiveEnd" type="date" placeholder="结束日期" 
-                                            value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
+                                            <el-date-picker v-model="formData.effectiveEnd" type="date" placeholder="结束日期" value-format="yyyy-MM-dd HH:mm:ss" :disabled="formData.terminationPeople!='1' ||this.showSubmit == 'false'">
                                             </el-date-picker>
                                         </el-radio>
                                     </el-col>
@@ -449,12 +447,10 @@ export default {
                     this.formData.contractAmount = '0';
                 }
             } else if (type == 'dateRadio') {
-               
                 if (this.formData.terminationPeople == '2') {
                     this.formData.effectiveStart = '';
                     this.formData.effectiveEnd = '';
                 }
-               
             } else {
             }
         },
@@ -560,7 +556,10 @@ export default {
         setDataFromParent(data, type, name) {
             this.actionName = '';
             this.formData = data;
-            this.formData.tpxzId = this.formData.tpxzName.split(',');
+            this.formData.tpxzId =
+                this.formData.tpxzName != null && this.formData.tpxzName != ''
+                    ? this.formData.tpxzName.split(',')
+                    : [];
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
@@ -764,9 +763,11 @@ export default {
                     message: '合同内容摘要为必输项，请输入',
                     type: 'error'
                 });
-            } else if (this.formData.terminationPeople == '1' && this.formData.effectiveStart == '' &&
-                     this.formData.effectiveEnd == '')
-             {
+            } else if (
+                this.formData.terminationPeople == '1' &&
+                this.formData.effectiveStart == '' &&
+                this.formData.effectiveEnd == ''
+            ) {
                 ruleHint = false;
                 this.$message({
                     message: '合同期限为必输项，请输入开始结束时间',
