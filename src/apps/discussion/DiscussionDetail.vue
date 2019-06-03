@@ -195,8 +195,27 @@ export default {
     // },
     methods: {
         async print() {
+            let $self = this
+            let url = "/api/v1/issuesReported/print"
+            let jsonData = {
+                id: $self.tableData.id,
+                organId: $self.tableData.organId,
+                organName: $self.tableData.organName
+            }
+            $self.$axios
+                .post(url,jsonData)
+                .then(res => {
+                    if (process.env.NODE_ENV === 'production') {
+                        $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
+                    } else {
+                        $self.openUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&"
+                    }
+                    ntkoBrowser.openWindow(
+                        $self.openUrl + "url=" + res.data
+                    );
+            });
             // document.getElementById('approval').style.display = 'table-row';
-            this.$print(this.$refs.formupdate.$el);
+            // this.$print(this.$refs.formupdate.$el);
         },
         async getDiscussionUser() {
             let a = await axios.get('/api/v1/users/list/organs');
