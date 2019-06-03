@@ -52,7 +52,6 @@ export default new Vuex.Store({
       state.newMessage = data;
     },
     setUserConversation(state,data){
-      console.log(12121211212);
       state.conversation = data;
    },
     setHistoryMessage(state,data){

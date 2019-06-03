@@ -505,8 +505,8 @@ export default {
             let $self = this;
             for (let i = 0; i < $self.groupUsers.length; i++) {
                 if (
-                    $self.groupUsers[i] != 'im_' +
-                    $self.$store.getters.LoginData.username
+                    $self.groupUsers[i] !=
+                     $self.$store.getters.LoginData.username
                 ) {
                     members.push({ username:'im_' + $self.groupUsers[i]});
                 }
