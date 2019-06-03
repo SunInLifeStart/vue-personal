@@ -50,6 +50,31 @@ input[type=number]::-webkit-outer-spin-button {
     }
 }
 
+
+.groupMembers{
+    border-bottom: 1px solid #ededed;
+   .members{
+       border: 1px solid #ededed;
+       border-bottom: 0px;
+       font-size:13px;
+       padding:5px 15px 5px 50px;
+       text-align: left;
+       position: relative;
+       font-size: 13px;
+       i{
+           color:#c01616;
+           float:right;
+           cursor: pointer;
+           position: absolute;
+           right:12px;
+           top:8px;
+           
+       }
+   }
+   max-height: 400px;
+   overflow-y: scroll;
+}
+
 #ContractForm {
     table {
         td {
@@ -76,9 +101,22 @@ input[type=number]::-webkit-outer-spin-button {
         width: 28px;
         height: 28px;
         float: left;
-        font-size: 16px;
+        font-size: 20px;
+        padding: 7px;
+        img{
+            width: 24px;
+        }
+    }
+
+}
+
+
+.wordcontent{
+    .attachments{
+      margin-right: 0px !important;
     }
 }
+
 
 .el-notification {
     top: 17px !important;

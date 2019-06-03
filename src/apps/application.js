@@ -303,41 +303,19 @@ export const publicMethods = {
                 if ($self.formName == "motor-procresult") {
                     url = "/api/v1/motor-procresult/print/" + $self.tableData.id
                 }
-
-                if ($self.formName == "issuesReported") {
-                    url = "/api/v1/issuesReported/print"
-                    let jsonData = {
-                        id: $self.tableData.id,
-                        organId: $self.tableData.organId,
-                        organName: $self.tableData.organName
-                    }
-                    $self.$axios
-                        .post(url,jsonData)
-                        .then(res => {
-                            if (process.env.NODE_ENV === 'production') {
-                                $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
-                            } else {
-                                $self.openUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&"
-                            }
-                            ntkoBrowser.openWindow(
-                                $self.openUrl + "url=" + res.data
-                            );
-                        });
-
-                } else {
-                    $self.$axios
-                        .get(url)
-                        .then(res => {
-                            if (process.env.NODE_ENV === 'production') {
-                                $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
-                            } else {
-                                $self.openUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&"
-                            }
-                            ntkoBrowser.openWindow(
-                                $self.openUrl + "url=" + res.data
-                            );
-                        });
-                }
+                $self.$axios
+                    .get(url)
+                    .then(res => {
+                        if (process.env.NODE_ENV === 'production') {
+                            $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
+                        } else {
+                            $self.openUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&"
+                        }
+                        ntkoBrowser.openWindow(
+                            $self.openUrl + "url=" + res.data
+                        );
+                    });
+                
             } else {
                 $self.dialogVisible = true;
             }

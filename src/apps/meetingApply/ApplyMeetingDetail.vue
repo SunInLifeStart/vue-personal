@@ -67,15 +67,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="关联议题：">
-                            <tr v-for="item in tableData.discussionContent">
-                                <td><a href="javacript:void(0);" @click="common.open('#/apps/discussion/' + item.discussionId);">{{ item.discussionName }}</a></td>
-                            </tr>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
                 <table class="tableNoBorder">
                     <el-row>
                         <el-col :span="24">
@@ -118,6 +109,17 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
+                </table>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="关联议题：">
+                            <tr v-for="item in tableData.discussionContent">
+                                <td><a href="javacript:void(0);" @click="common.open('#/apps/discussion/' + item.discussionId);">{{ item.discussionName }}</a></td>
+                            </tr>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <table class="tableNoBorder">
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="列席人员" prop="phone">
@@ -206,7 +208,6 @@
                         </div>
                     </el-col>
                 </el-row>
-
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
@@ -471,11 +472,16 @@
                             if (item.department) {
                                 item.department = item.department.split(',')
                             }
-                            for (let i = 0; i<item.department.length; i++) {
-                                item.department[i] = parseInt(item.department[i])
+                            if (item.department) {
+                                for (let i = 0; i<item.department.length; i++) {
+                                    item.department[i] = parseInt(item.department[i])
+                                }
+                                this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
+                                item.personOptions = this.person
+                            } else {
+                                item.department = []
+                                item.personOptions = []
                             }
-                            this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
-                            item.personOptions = this.person
                             // 处理人员
                             if (item.people){
                                 for (let i = 0; i<item.people.length; i++) {
@@ -493,16 +499,21 @@
                             if (item.department) {
                                 item.department = item.department.split(',')
                             }
-                            for (let i = 0; i<item.department.length; i++) {
-                                item.department[i] = parseInt(item.department[i])
+                            if (item.department) {
+                                for (let i = 0; i<item.department.length; i++) {
+                                    item.department[i] = parseInt(item.department[i])
+                                }
+                                this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
+                                item.personOptions = this.person
+                            } else {
+                                item.department = []
+                                item.personOptions = []
                             }
-                            this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
-                            item.personOptions = this.person
                             // 处理人员
                             if (item.people)
                                 for (let i = 0; i<item.people.length; i++) {
                                     item.people[i] = parseInt(item.people[i])
-                                }
+                            }
                         })
                     }
                     $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});

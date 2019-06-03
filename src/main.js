@@ -7,6 +7,7 @@ import store from './store'
 import moment from 'moment'
 import common from './plugins/common.js'
 import Print from './plugins/print.js'
+import emoji from'./plugins/emoji.js'
 import application from './apps/application.js'
 import './assets/animate.css'
 import './assets/normalize.css'
@@ -24,6 +25,8 @@ Vue.use(Print);
 Vue.prototype.common = common;
 Vue.prototype.$axios = axios;
 Vue.prototype.$application = application;
+Vue.prototype.imemoji = emoji;
+
 
 Vue.config.productionTip = false;
 moment.locale('zh-cn');

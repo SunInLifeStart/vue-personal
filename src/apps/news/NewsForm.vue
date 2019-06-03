@@ -72,7 +72,7 @@
         </el-dialog>
     <div slot="footer" class="dialog-footer">
         <el-button type="default" @click="saveFormValidate()">保存</el-button>
-        <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+        <el-button type="primary" @click="saveFormValidate(true)" v-if="!isFromDetailsEdit && !isFromDetailsEdits">提交</el-button>
     </div>
     </el-dialog>
 </template>
@@ -181,6 +181,13 @@ export default {
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
             this.branchCode = "";
+        },
+        setDataFromParent(data,status) {
+            this.formData = data;
+            this.formId = data.id;
+            this.dialogFormVisible = true;
+            this.createForm_status = false;
+            this.isFromDetailsEdit = status;
         },
         saveFormValidate(type) {
             this.$refs["formupdate"].validate(valid => {

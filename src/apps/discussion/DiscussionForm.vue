@@ -385,11 +385,13 @@ export default {
             }
                 this.formData.sendMessage = []
             $self.formData.attendingDepartment.forEach(item => {
-                if (item.people) {
+                if (item.department) {
                     item.department = item.department.join(',')
-                    item.person = item.people.join(',')
                 }
-                this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
+                if (item.people) {
+                    item.person = item.people.join(',')
+                    this.formData.sendMessage = this.formData.sendMessage.concat(item.people)
+                }
             })
             this.formData.sendMessage = this.formData.sendMessage.join(',')
             let response = await $self.saveFormData(

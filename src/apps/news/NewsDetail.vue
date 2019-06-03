@@ -100,6 +100,7 @@
                 </el-form>
             </el-dialog>
         </div>
+         <NewsForm  ref="newsForm"></NewsForm>
     </div>
 </template>
 <script>
@@ -107,6 +108,7 @@ import moment from "moment";
 import Comment from "../Comment";
 import FilesOperate from "../FilesOperate";
 import { publicMethods } from "../application.js";
+import NewsForm from "./NewsForm";
 export default {
     mixins:[publicMethods],
     name: "newsDetail",
@@ -139,6 +141,10 @@ export default {
             $self.formId = formId;
             $self.url= "/api/v1/"+$self.formName+"/" + $self.formId;
             $self.getFormDetailsData();
+        },
+        reEditForm(){
+            let $self = this;
+            $self.$refs.newsForm.setDataFromParent(this.tableData,true);
         },
         async getFormDetailsData() {
             let $self = this;

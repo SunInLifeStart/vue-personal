@@ -83,7 +83,7 @@ export default {
       this.outerVisible = false;
     },
     logout() {
-      this.socket.emit("offLine");
+      // this.socket.emit("offLine");
       this.$store.dispatch("Logout").then(() => {
         Cookies.remove("Role");
         Cookies.remove("deptType");
