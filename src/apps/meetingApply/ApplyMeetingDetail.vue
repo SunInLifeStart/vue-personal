@@ -67,15 +67,6 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="关联议题：">
-                            <tr v-for="item in tableData.discussionContent">
-                                <td><a href="javacript:void(0);" @click="common.open('#/apps/discussion/' + item.discussionId);">{{ item.discussionName }}</a></td>
-                            </tr>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
                 <table class="tableNoBorder">
                     <el-row>
                         <el-col :span="24">
@@ -118,6 +109,17 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
+                </div>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="关联议题：">
+                            <tr v-for="item in tableData.discussionContent">
+                                <td><a href="javacript:void(0);" @click="common.open('#/apps/discussion/' + item.discussionId);">{{ item.discussionName }}</a></td>
+                            </tr>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <table class="tableNoBorder">
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="列席人员" prop="phone">
