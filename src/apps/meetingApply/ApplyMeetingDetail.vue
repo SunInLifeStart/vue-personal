@@ -109,7 +109,7 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                </div>
+                </table>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="关联议题：">
@@ -208,7 +208,6 @@
                         </div>
                     </el-col>
                 </el-row>
-
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
