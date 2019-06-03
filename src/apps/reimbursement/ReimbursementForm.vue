@@ -865,7 +865,7 @@ export default {
                 total: this.common.toDecimal2(0),
                 budget: {
                     est: false,
-                    fundPlan: false
+                    fundPlan: true
                 },
                 attachments: [],
                 borrow: {
@@ -1359,10 +1359,10 @@ export default {
                 total: this.common.toDecimal2(0),
                 budget: {
                     est: false,
-                    fundPlan: false
+                    fundPlan: true
                 },
                 est: false,
-                fundPlan: false,
+                fundPlan: true,
                 attachments: [],
                 borrow: {
                     bor: false,

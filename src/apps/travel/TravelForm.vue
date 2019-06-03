@@ -812,7 +812,7 @@ export default {
                 travelType: '',
                 submissionId: '',
                 est: false,
-                fundPlan: false,
+                fundPlan: true,
                 submissionName: '',
                 submitter: cookies.get('uname'),
                 subOrganName: cookies.get('oname'),

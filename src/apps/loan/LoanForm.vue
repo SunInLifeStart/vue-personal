@@ -658,7 +658,7 @@ export default {
                 busId: '',
                 busNo: '',
                 dx: '',
-                fundPlan: false,
+                fundPlan: true,
                 est: false,
                 number: '',
                 borrowDept: cookies.get('oname'),

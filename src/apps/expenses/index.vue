@@ -124,6 +124,7 @@ export default {
         }
     },
     mounted() {
+        console.log(this.$store.getters.LoginData.Role);
         this.getList();
     },
     methods: {
