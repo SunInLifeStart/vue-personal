@@ -287,20 +287,25 @@ export default {
                             if (item.department) {
                                 item.department = item.department.split(',');
                             }
-                            for (let i = 0; i < item.department.length; i++) {
-                                item.department[i] = parseInt(
-                                    item.department[i]
-                                );
+                            if (item.department) {
+                                for (let i = 0; i < item.department.length; i++) {
+                                    item.department[i] = parseInt(
+                                        item.department[i]
+                                    );
+                                }
+                                let flag =
+                                    item.department[item.department.length - 1];
+                                $self.searchPersonOptions($self.dataOptions, flag);
+                                item.personOptions = this.person;
+                            } else {
+                                item.department = []
+                                item.personOptions = []
                             }
-                            let flag =
-                                item.department[item.department.length - 1];
-                            $self.searchPersonOptions($self.dataOptions, flag);
-                            item.personOptions = this.person;
                             // 处理人员
                             if (item.people)
                                 for (let i = 0; i < item.people.length; i++) {
                                     item.people[i] = parseInt(item.people[i]);
-                                }
+                            }
                         }
                     );
                 }
