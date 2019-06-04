@@ -66,7 +66,7 @@
                     </el-col>
                 </el-row>
                 <el-row >
-                    <el-table :data="tableData.usingApproval" border style="margin-top: 5px; width:700px;" >
+                    <el-table :data="tableData.usingApproval" border style="padding: 20px 5px; width:700px;" >
                                 <el-table-column prop="fileName" label="用印文件名称" >
                                         <template slot-scope="scope">
                                             {{scope.row.fileName}}
@@ -83,12 +83,12 @@
                                             {{scope.row.fileNum}}
                                     </template>
                                     </el-table-column>
-                                    <!-- width="190" -->
-                                    <el-table-column  label="附件" align="center" >
+                                    
+                                    <el-table-column  label="附件" align="center" style="margin:20px 0">
                                         <template slot-scope="scope" >
                                             <el-form-item label="" v-if="scope.row.attachments && scope.row.attachments.length > 0" disabled>
-                                                <div v-for="item in scope.row.attachments" :key="item.id">
-                                                    <FilesOperate :item="item" :options="{preview:true,download:true}" ></FilesOperate>
+                                                <div v-for="item in scope.row.attachments" :key="item.id" >
+                                                    <FilesOperate :item="item"  :options="{preview:true,download:true}" ></FilesOperate>
                                                 </div>
                                             </el-form-item>
                                         </template>
