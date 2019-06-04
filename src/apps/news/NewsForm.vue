@@ -95,6 +95,8 @@ export default {
             dialogFormVisible: false,
             formData: this.resetForm(),
             users: [],
+            isFromDetailsEdit:false,
+            isFromDetailsEdits:false,
             loading: false,
             appFlowName: "news-form_news",
             rules: {

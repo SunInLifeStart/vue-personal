@@ -273,6 +273,8 @@ export const publicMethods = {
                 $self.deleteCurrentLine($self.tableData.id, "CANCEL");
             } else if ($self.currentAction.name == "编辑") {
                 $self.reEditForm();
+            } else if ($self.currentAction.name == "编辑新闻") {
+                $self.reEditNewForm();
             }
             else if ($self.currentAction.name == "定岗定薪") {
                 $self.salaryEditForm();

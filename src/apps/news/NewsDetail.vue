@@ -100,7 +100,7 @@
                 </el-form>
             </el-dialog>
         </div>
-         <NewsForm  ref="newsForm"></NewsForm>
+         <NewsForm ref="newsForm"></NewsForm>
     </div>
 </template>
 <script>
@@ -133,6 +133,7 @@ export default {
     },
     components: {
         Comment,
+        NewsForm,
         FilesOperate
     },
     methods: {
@@ -142,7 +143,7 @@ export default {
             $self.url= "/api/v1/"+$self.formName+"/" + $self.formId;
             $self.getFormDetailsData();
         },
-        reEditForm(){
+        reEditNewForm(){
             let $self = this;
             $self.$refs.newsForm.setDataFromParent(this.tableData,true);
         },
