@@ -23,6 +23,7 @@
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
+                <h4 style="text-align: center;">招待费审批单({{tableData.organName}})</h4>
                 <el-row style="margin-top: 25px;vertical-align: middle; line-height: 34px;">
                     <el-col :span="12" style="margin-left:5px;">
                         <span class="bolder">流水单号</span> ：{{tableData.number}}
@@ -304,7 +305,7 @@ export default {
                     $self.crumbs.index = i;
                 }
             }
-              if ($self.crumbs.index == -1) {
+            if ($self.crumbs.index == -1) {
                 $self.crumbs.index = $self.crumbs.items.length;
             }
         }

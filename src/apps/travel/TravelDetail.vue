@@ -23,7 +23,7 @@
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
-                <h4 style="text-align: center;">出差审批单</h4>
+                <h4 style="text-align: center;">出差审批单({{tableData.organName}})</h4>
                 <el-row style="margin-top: 25px;">
                     <el-col :span="12">
                         <el-form-item label="流水单号：" style="margin-left:5px;">{{tableData.number}}
