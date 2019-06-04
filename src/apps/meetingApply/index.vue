@@ -48,6 +48,9 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow" highlight-current-row>
+                <el-table-column  label="会议类型">
+                    <template slot-scope="scope">{{scope.row.branchlineTo | filtermeetingType}}</template>
+                </el-table-column>
                 <el-table-column prop="conferenceTitle" label="会议名称">
                 </el-table-column>
                 <el-table-column prop="creatorName" label="提单人">
@@ -143,6 +146,17 @@
                     "03" :"已撤销",
                     "04" :"已完成"
                 };
+                return xmlJson[data];
+            },
+            filtermeetingType: function(data) {
+                let xmlJson = {
+                "specMeeting":"专题会", 
+                "communMeeting":"班子沟通会",
+                "gmoMeeting" :"总办会",
+                "partyMeeting" :"党支委会",
+                "recruMeeting" :"招采委员会"
+                };
+               
                 return xmlJson[data];
             }
         },

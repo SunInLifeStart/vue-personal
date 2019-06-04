@@ -6,8 +6,8 @@
                     <el-form :inline="true"  label-width="90px"  label-position="left"  class="demo-form-inline">
                         <el-row class="filterForm">
                             <el-col :span="8">
-                                <el-form-item label="总办会编号">
-                                    <el-input v-model="params.numbers" placeholder="编号"></el-input>
+                                <el-form-item label="会议编号">
+                                    <el-input v-model="params.numbers" placeholder="会议编号"></el-input>
                                 </el-form-item>
                             </el-col>
                             <el-col :span="8">
@@ -55,7 +55,11 @@
                 </div>
                 <div id="MeetingSummaryList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
-                    <el-table-column prop="numbers" label="总办会编号">
+                   
+                    <el-table-column  label="会议类型">
+                         <template slot-scope="scope">{{scope.row.meetingType | filtermeetingType}}</template>
+                     </el-table-column>
+                    <el-table-column prop="numbers" label="会议编号">
                     </el-table-column>
                     <el-table-column prop="draftUnit" label="拟稿单位">
                     </el-table-column>
@@ -150,6 +154,7 @@ export default {
                 orderBy:"created",
                 desc:true,
                 page: 1,
+                numbers:'',
                 pageSize: 5,
                 total: 0,
                 options: []
@@ -171,6 +176,17 @@ export default {
                "04" :"已完成"
             };
             return xmlJson[data];
+        },
+        filtermeetingType: function(data) {
+            let xmlJson = {
+               "specMeeting":"专题会", 
+               "communMeeting":"班子沟通会",
+               "gmoMeeting" :"总办会",
+               "partyMeeting" :"党支委会",
+               "recruMeeting" :"招采委员会"
+            };
+            
+            return xmlJson[data];
         }
     },
     methods: {
@@ -178,10 +194,11 @@ export default {
          async getList(pageNum) {
             let $self = this;
              this.searchOptions = [];
-             if (this.params.numbers && this.params.numbers.trim() !== '') {
+            //  this.params.numbers && 
+             if ( this.params.numbers && this.params.numbers.trim() !== '') {
                  this.searchOptions.push({
                      field: 'numbers',
-                     filter: 'EQUAL',
+                     filter: 'LIKE',
                      value: this.params.numbers
                  });
              }
@@ -202,7 +219,7 @@ export default {
              if (this.params.status && this.params.status.trim() !== '') {
                  this.searchOptions.push({
                      field: 'status',
-                     filter: 'EQUAL',
+                     filter: 'LIKE',
                      value: this.params.status
                  });
              }

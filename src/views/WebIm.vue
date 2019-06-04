@@ -1145,7 +1145,7 @@ export default {
             }
             .textarea {
                 flex: 0 0 auto;
-                height: 150px;
+                height: 200px;
                 padding: 0 30px;
                 margin-top: 5px;
                 font-family: "Emoji";
