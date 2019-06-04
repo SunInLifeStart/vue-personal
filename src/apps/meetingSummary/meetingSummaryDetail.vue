@@ -187,7 +187,7 @@ export default {
     methods: {
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
-            this.$print(this.$refs.formupdate.$el);
+            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName + '（会议申请）'});
         },
         getFormDetails(formId) {
             let $self = this;

@@ -332,7 +332,7 @@
         methods: {
             async print() {
                 // document.getElementById('approval').style.display = 'table-row';
-                this.$print(this.$refs.formupdate.$el,{printTitle:'会议的自己组织结构'});
+                this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName + '（会议申请）'});
                 //  document.getElementById('approval').style.display = 'none';
             },
             async saveMeetingDelay() {
