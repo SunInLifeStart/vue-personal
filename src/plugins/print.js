@@ -78,8 +78,9 @@ Print.prototype = {
         }
       }
     }
-
-    return this.dom.outerHTML;
+    console.log(this.options.printTitle);
+   let addPrintTtitle  = "<div style='color:red;font-size:12px;text-align:center'>"+this.options.printTitle+"</div><br />" + this.dom.outerHTML;
+    return addPrintTtitle;
   },
 
   writeIframe: function (content) {
