@@ -79,7 +79,7 @@ Print.prototype = {
       }
     }
     console.log(this.options.printTitle);
-   let addPrintTtitle  = "<div style='color:red;font-size:12px;text-align:center'>"+this.options.printTitle+"</div><br />" + this.dom.outerHTML;
+   let addPrintTtitle  = "<div style='font-size:12px;text-align:center'>"+this.options.printTitle+"</div><br />" + this.dom.outerHTML;
     return addPrintTtitle;
   },
 
