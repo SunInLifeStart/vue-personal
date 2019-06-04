@@ -12,12 +12,16 @@
         <br />
         <div class="formContent" style="padding: 15px 30px;overflow-y:auto">
             
-            <div><el-button type="primary" v-if="tableData.status != '04'"   @click="getFlowNode" >查看流程</el-button></div>
+            <div>
+                <el-button type="primary" v-if="tableData.status != '04'"   @click="getFlowNode" >查看流程</el-button>
+                <!-- v-show="this.tableData.status && this.tableData.status == '04'" -->
+                <el-button style="margin-left: 25px;" type="primary" @click="print" >打印</el-button>
+           </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                     <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
                 </el-steps>
-            <el-form :model='tableData' class="formList">
+            <el-form :model='tableData' class="formList" ref="formupdate" style="height:150%">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.creatorName}}
@@ -211,6 +215,9 @@ export default {
         FilesOperate
     },
     methods: {
+        async print() {
+            this.$print(this.$refs.formupdate.$el);
+        },
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
@@ -253,6 +260,13 @@ export default {
     }
 };
 </script>
+<style>
+@media print {
+html, body {
+height: inherit;
+}
+}
+</style>
 <style lang="scss" scoped>
 #ApprovalDetail {
     .el-step__main {
