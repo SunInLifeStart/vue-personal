@@ -270,10 +270,12 @@ export default {
             axios
                     .get("/api/v1/portal/statistics")
                     .then(res => {
-                        self.totalAssets = parseInt( res.data.data.totalAssets);
-                        self.fundedProjects = parseInt(res.data.data.fundedProjects) ;
-                        self.serviceFirm = parseInt(res.data.data.serviceFirm) ;
-                        self.construction = parseInt(res.data.data.construction);
+                        if(res.data.data){
+                            self.totalAssets = parseInt( res.data.data.totalAssets);
+                            self.fundedProjects = parseInt(res.data.data.fundedProjects) ;
+                            self.serviceFirm = parseInt(res.data.data.serviceFirm) ;
+                            self.construction = parseInt(res.data.data.construction);
+                        }
                     });
 
 
