@@ -108,12 +108,12 @@
                                     </template>
                                 </el-table-column>
 
-                                <el-table-column prop="fileNum" width="110" label="用印份数">
+                                <el-table-column prop="fileNum" width="150" label="用印份数">
                                     <template slot-scope="scope">
                                         <el-input v-model="scope.row.fileNum"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column label="附件" width="150" align="center">
+                                <el-table-column label="附件" width="190" align="center">
                                     <template slot-scope="scope">
                                         <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" accept="" :auto-upload="true" :with-credentials="true">
                                             <i class="el-icon-plus"></i>

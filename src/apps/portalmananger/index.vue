@@ -36,9 +36,9 @@
                 <!-- <el-tab-pane label="会表管理" name="eleven">
                     <PortalApp :type="'集团会表'"></PortalApp>
                 </el-tab-pane> -->
-                <el-tab-pane label="app版本管理" name="seventh">
+                <!-- <el-tab-pane label="app版本管理" name="seventh">
                      <PortalMobile></PortalMobile>
-                </el-tab-pane>
+                </el-tab-pane> -->
             </el-tabs>
         </div>
     </div>

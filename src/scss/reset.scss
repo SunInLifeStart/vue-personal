@@ -49,7 +49,11 @@ input[type=number]::-webkit-outer-spin-button {
         margin: 0px auto;
     }
 }
-
+// @page 
+// {
+//     size: auto;   /* auto is the initial value */
+//     margin-top: -5px;  /* this affects the margin in the printer settings */
+// }
 
 .groupMembers{
     border-bottom: 1px solid #ededed;

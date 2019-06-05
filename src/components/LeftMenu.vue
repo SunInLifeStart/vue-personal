@@ -380,7 +380,6 @@ export default {
                     for (let sub_app of app.children) {
                         if (this.isVist(sub_app.to)) {
                             this.items.push(sub_app);
-                            console.log(sub_app);
                             sub_app.isVist = true;
                         }
                     }
