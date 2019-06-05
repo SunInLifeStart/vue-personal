@@ -239,8 +239,7 @@ export default {
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el, {
-                printTitle:
-                    this.tableData.organName.split('-')[0] + '（招待费审批单）'
+                printTitle: ''
             });
             //  document.getElementById('approval').style.display = 'none';
         },

@@ -74,7 +74,7 @@
                         <template slot-scope="scope">
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left"
                              v-if="scope.row.status == '00' || scope.row.status == '02'" >
-                                <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
+                                <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row,$event)"></el-button>
                             </el-tooltip>
                             <el-tooltip class="item" effect="dark" content="删除" placement="left"
                              v-if="scope.row.status == '00' || scope.row.status == '02'">
@@ -260,8 +260,8 @@ export default {
             this.$refs.MeetingSummaryForm.createForm();
         },
 
-        //编辑
-        editForm(data) {
+        editForm(data,event) {
+            event.stopPropagation();
             this.$refs.MeetingSummaryForm.setDataFromParent(data);
         },
         reloadList(params) {
