@@ -9,9 +9,9 @@
                 <PortalAppList ref="PortalAppList" @formId="getFormId" @editForm="editForm" :searchOptions="searchOptions"  :type="type" ></PortalAppList>
             </el-card>
             <br>
-            <el-card class="box-card">
+            <!-- <el-card class="box-card">
                 <PortalAppDetail ref="PortalAppDetail" :formId="formId"></PortalAppDetail>
-            </el-card>
+            </el-card> -->
         </div>
         <el-dialog title="数据详情" :visible.sync="dialogFormVisible" max-width="1280px" width="80%" :close-on-click-modal="false">
             <PortalAppForm ref="PortalAppForm" @saveStatus="saveStatus" @refreshData="refreshData" :formId="dialogFormId" :type="type" :operationType="operationType"></PortalAppForm>
@@ -27,7 +27,7 @@
 import PortalAppForm from './PortalAppForm';
 import PortalAppFilter from './PortalAppFilter';
 import PortalAppList from './PortalAppList';
-import PortalAppDetail from './PortalAppDetail';
+// import PortalAppDetail from './PortalAppDetail';
 export default {
     name: 'PortalApp',
     mounted() {},
@@ -45,7 +45,7 @@ export default {
         PortalAppForm,
         PortalAppFilter,
         PortalAppList,
-        PortalAppDetail
+        // PortalAppDetail
     },
     methods: {
         getSearchOptions(searchOptions) {
@@ -56,7 +56,7 @@ export default {
         },
         saveStatus(status) {
             this.dialogFormVisible = status;
-            this.$refs.PortalAppDetail.getForm(); 
+            // this.$refs.PortalAppDetail.getForm(); 
             this.$refs.PortalAppList.getList(); 
         },
          createForm () {
