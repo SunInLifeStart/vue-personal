@@ -64,7 +64,7 @@
                 <el-table-column label="操作" width="200">
                     <template slot-scope="scope">
                         <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status === '00' || scope.row.status === '02'">
-                            <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
+                            <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row,$event)"></el-button>
                         </el-tooltip>
                         <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status === '00' || scope.row.status === '02'">
                             <el-button type="text" icon="el-icon-delete" @click="deleteCurrentLine(scope.row.id)"></el-button>
@@ -183,7 +183,8 @@ export default {
         clickTableRow(row) {
             this.$refs.DiscussionDetail.getFormDetails(row.id);
         },
-        editForm(data) {
+        editForm(data,event) {
+            event.stopPropagation();
             this.$refs.DiscussionForm.setDataFromParent(data);
         },
         currentChange(pageNum) {
