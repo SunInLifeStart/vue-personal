@@ -22,7 +22,7 @@
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
-                <h4 style="text-align: center;">付款审批单({{tableData.organName}})</h4>
+                <h4 style="text-align: center;">付款审批单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
                 <el-row>
                     <el-col :span="7">
                         <el-form-item label="单据编号：" style="margin-left:5px;">
@@ -448,7 +448,10 @@ export default {
     methods: {
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
-            this.$print(this.$refs.formupdate.$el);
+            this.$print(this.$refs.formupdate.$el, {
+                printTitle:
+                    this.tableData.organName.split('-')[0] + '（付款申请单）'
+            });
             //  document.getElementById('approval').style.display = 'none';
         },
         ViewDetail() {

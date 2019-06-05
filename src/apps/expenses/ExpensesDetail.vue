@@ -16,14 +16,14 @@
         <div class="formContent">
             <div>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" v-show="this.tableData.status && this.tableData.status == '04'" @click="print">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
-                <h4 style="text-align: center;">招待费审批单({{tableData.organName}})</h4>
+                <h4 style="text-align: center;">招待费审批单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
                 <el-row style="margin-top: 25px;vertical-align: middle; line-height: 34px;">
                     <el-col :span="12" style="margin-left:5px;">
                         <span class="bolder">流水单号</span> ：{{tableData.number}}
@@ -238,7 +238,10 @@ export default {
     methods: {
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
-            this.$print(this.$refs.formupdate.$el);
+            this.$print(this.$refs.formupdate.$el, {
+                printTitle:
+                    this.tableData.organName.split('-')[0] + '（招待费审批单）'
+            });
             //  document.getElementById('approval').style.display = 'none';
         },
         ViewDetail(view) {
