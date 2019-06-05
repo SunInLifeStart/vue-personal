@@ -485,7 +485,7 @@ export default {
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el, {
                 printTitle:
-                    this.tableData.organName.split('-')[0] + '（报销审批单）'
+                   ''
             });
         },
         ViewDetail(view) {

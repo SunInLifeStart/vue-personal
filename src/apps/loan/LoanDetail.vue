@@ -284,7 +284,7 @@ export default {
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el, {
                 printTitle:
-                    this.tableData.organName.split('-')[0] + '（借款申请单）'
+                    ''
             });
             //  document.getElementById('approval').style.display = 'none';
         },
