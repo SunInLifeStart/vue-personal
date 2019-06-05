@@ -14,9 +14,21 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="24">
+                <el-col :span="12">
                     <el-form-item label="文件标题" prop="title">
                         <el-input v-model="formData.title"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="12">
+                    <el-form-item label="部门呈报类型" prop="submissionType">
+                        <el-select v-model="formData.submissionType" placeholder="请选择部门呈报类型">
+                            <el-option
+                                    v-for="item in submissionOption"
+                                    :key="item.value"
+                                    :label="item.label"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -130,6 +142,24 @@ export default {
             appFlowName: "submission-form_submission",
             dialogFormVisible: false,
             isFromDetailsEdit:false,
+            submissionOption: [
+                {
+                    value: 'report',
+                    label: '请示报告类'
+                },
+                {
+                    value: 'branch',
+                    label: '党支委类'
+                },
+                {
+                    value: 'union',
+                    label: '工会类'
+                },
+                {
+                    value: 'financial',
+                    label: '财务类'
+                }
+            ],
             rules: {
                 submissionNo: [
                     {
@@ -156,6 +186,13 @@ export default {
                     {
                         required: true,
                         message: '拟稿时间不能为空',
+                        trigger: 'blur'
+                    }
+                ],
+                submissionType: [
+                    {
+                        required: true,
+                        message: '部门呈报类型不能为空',
                         trigger: 'blur'
                     }
                 ],
@@ -303,6 +340,7 @@ export default {
                 generalManagement: false,
                 commonUser: '',
                 remarks: '',
+                submissionType: '',
                 content: '',
                 attachments: [],
                 text:{name:""},
@@ -318,6 +356,9 @@ export default {
 <style lang="scss" scoped>
 #SubmissionForm {
 
+    .el-select {
+        width: 100%;
+    }
       .textcreate {
         font-size: 16px;
         color: #327dca;
