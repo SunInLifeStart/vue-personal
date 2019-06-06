@@ -136,21 +136,34 @@ export default {
              $self.$axios
             .get('/api/v1/organ/checkDepartment/' + name)
             .then(res => {
-                if(res.data.length == 1){
-                    if(res.data[0].children.length == 1){
-                        $self.options = $self.selectedOptions = [];
-                        $self.checkedObject = res.data[0].children[0];
-                        if(fromLogin){
-                            this.login();
+                if(res.data){
+                 if(res.data.length == 1){
+                        if(res.data[0].children.length == 1){
+                            $self.options = $self.selectedOptions = [];
+                            $self.checkedObject = res.data[0].children[0];
+                            if(fromLogin){
+                                this.login();
+                            }
+                        }else{
+                            $self.options = res.data;             
                         }
-                    }else{
-                        $self.options = res.data;             
                     }
+                    if(res.data.length > 1){
+                        $self.options = res.data;            
+                    }
+                }else{
+                    $self.$message({
+                        message: '您输入的用户名不存在',
+                        type: 'error'
+                    });
                 }
-                 if(res.data.length > 1){
-                     $self.options = res.data;            
-                }
-            })          
+      
+            }).catch(error => {
+                $self.$message({
+                    message: '用户名或密码错误',
+                    type: 'error'
+                });
+            });   
         },
      handleChange(value) {
              let $self = this;

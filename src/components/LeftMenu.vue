@@ -15,6 +15,10 @@
                             <i outside=true class="iconfont" :class="item.icon" size="24" />
                             <div outside=true class="name">{{item.name}}</div>
                         </router-link>
+                         <router-link :target="item.id" v-if="hasPowerForHb && item.id =='commonly_12'" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
+                            <i outside=true class="iconfont" :class="item.icon" size="24" />
+                            <div outside=true class="name">{{item.name}}</div>
+                        </router-link>
                         <a :href="item.href" target="_blank" class="app" v-if="item.target && item.isVist" :key="item.id" v-for="item in items.children">
                             <i outside=true class="iconfont" :class="item.icon" size="24" />
                             <div outside=true class="name">{{item.name}}</div>
@@ -57,6 +61,7 @@ export default {
             searchKey: '',
             items: [],
             result_items: [],
+            hasPowerForHb:false,
             apps: [
                 {
                     type: '常用办公',
@@ -131,6 +136,12 @@ export default {
                             name: '信息发布',
                             icon: 'el-icon-publish',
                             to:'publish'
+                        },
+                         {
+                            id: "commonly_12",
+                            name: '会表发布',
+                            icon: 'el-icon-publish',
+                            to:'portalmananger',
                         }
                         
                     ]
@@ -397,6 +408,9 @@ export default {
         }
     },
     mounted() {
+        if(['chihm','gehao','tangyc','zhaozs'].includes(this.$store.getters.LoginData.username)){
+                        this.hasPowerForHb = true;
+        }
         this.initMenus();
     }
 };

@@ -38,6 +38,7 @@
                         <div v-for="item in attachments" :key="item.id" style="float:left">
                             <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getIdAttach"></FilesOperate>
                         </div>
+                        <p style="clear:both;color:#b50707">*附文件建议红色上传Word，Excel等格式</p>
                 </el-form-item>
               
                 <el-form-item label="内容"  v-if="type == '新闻中心' || type == '工会活动' || type == 'partyBuilding'">

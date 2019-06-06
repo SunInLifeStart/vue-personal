@@ -38,7 +38,7 @@
                 @change="handleChange">
             </el-cascader>
             <!-- <div class="info">Hello，{{$store.getters.LoginData.uname}}&nbsp;&nbsp;&nbsp;在线：{{uc}}</div> -->
-            <div class="info">Hello，{{$store.getters.LoginData.uname}}&nbsp;&nbsp;&nbsp;在线：{{uc}}</div>
+            <div class="info">Hello，{{$store.getters.LoginData.uname}}</div>
             <div class="tools">
                 <Link />
                 <User />

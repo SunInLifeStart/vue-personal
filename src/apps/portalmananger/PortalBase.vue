@@ -145,10 +145,12 @@ export default {
             axios
                 .get("/api/v1/portal/statistics")
                 .then(res => {
-                    self.totalAssets = res.data.data.totalAssets;
-                    self.fundedProjects = res.data.data.fundedProjects;
-                    self.serviceFirm = res.data.data.serviceFirm;
-                    self.construction = res.data.data.construction;
+                    if(res.data.data){
+                        self.totalAssets = res.data.data.totalAssets;
+                        self.fundedProjects = res.data.data.fundedProjects;
+                        self.serviceFirm = res.data.data.serviceFirm;
+                        self.construction = res.data.data.construction;
+                    }
                 })
                 .catch(function() {
                     self.$message({
