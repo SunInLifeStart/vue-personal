@@ -21,7 +21,7 @@
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
+            <el-form :model='tableData' class="demo-form-inline" ref="formupdate" id='queryTable' style="height:150%">
                 <h4 style="text-align: center;">付款审批单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
                 <el-row>
                     <el-col :span="7">
@@ -449,8 +449,7 @@ export default {
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el, {
-                printTitle:
-                   ''
+                printTitle: ''
             });
             //  document.getElementById('approval').style.display = 'none';
         },
@@ -613,13 +612,36 @@ export default {
     body {
         height: inherit;
     }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
 }
 </style>
 <style lang="scss" scope>
 #PaymentDetail {
+    html,
+    body {
+        height: inherit;
+    }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
     .titlename {
         color: #1c47f3;
         text-decoration: underline;
+    }
+    .formContent {
+        flex: 1;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 15px 30px;
     }
     .audit {
         position: relative;

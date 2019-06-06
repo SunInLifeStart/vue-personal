@@ -22,7 +22,7 @@
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.key" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData' class="demo-form-inline" ref="formupdate" style="height:100%">
+            <el-form :model='tableData' class="demo-form-inline" ref="formupdate" id='queryTable' style="height:150%">
                 <h4 style="text-align: center;">借款申请单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
                 <el-row style="margin-top: 25px;vertical-align: middle; line-height: 34px;">
                     <el-col :span="9">
@@ -283,8 +283,7 @@ export default {
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el, {
-                printTitle:
-                    ''
+                printTitle: ''
             });
             //  document.getElementById('approval').style.display = 'none';
         },
@@ -420,13 +419,36 @@ export default {
     body {
         height: inherit;
     }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
 }
 </style>
 <style lang="scss" scope>
 #LoanDetail {
+    html,
+    body {
+        height: inherit;
+    }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
     .titlename {
         color: #1c47f3;
         text-decoration: underline;
+    }
+    .formContent {
+        flex: 1;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 15px 30px;
     }
     .audit {
         position: relative;
