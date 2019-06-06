@@ -12,7 +12,7 @@
         <br />
         <div class="formContent">
             <div>
-                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
+                <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">

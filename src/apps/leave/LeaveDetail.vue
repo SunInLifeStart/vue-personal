@@ -12,7 +12,7 @@
         <div class="formContent" style="padding:10px;">
             <br>
             <div>
-                <el-button type="primary" @click="getFlowNode">查看流程</el-button>
+                <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList">
@@ -220,7 +220,7 @@ export default {
                     $self.crumbs.index = i;
                 }
             }
-              if ($self.crumbs.index == -1) {
+            if ($self.crumbs.index == -1) {
                 $self.crumbs.index = $self.crumbs.items.length;
             }
         }
