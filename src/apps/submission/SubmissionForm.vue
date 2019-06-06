@@ -227,7 +227,9 @@ export default {
             self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 self.formData.attachments.forEach(function(value, index) {
                     if (value.id == id) {
-                        self.formData.attachments.splice(index, 1);
+                        axios.get(`/api/v1/submission_forms/deleteAttachment/${id}`).then(res => {
+                            if (res) self.formData.attachments.splice(index, 1)
+                        })
                     }
                 });
             });
