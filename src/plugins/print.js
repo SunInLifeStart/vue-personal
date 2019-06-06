@@ -79,6 +79,7 @@ Print.prototype = {
       }
     }
     // document.title = null;
+    document.title='\u200E';
     let addPrintTtitle  = "<div style='font-size:12px;text-align:center'>"+this.options.printTitle+"</div><br />" + this.dom.outerHTML;
     return addPrintTtitle;
   },
