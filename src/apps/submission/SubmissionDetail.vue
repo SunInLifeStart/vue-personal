@@ -11,7 +11,7 @@
             </el-row>
         </div>
         <br />
-        <div class="formContent">
+        <div class="formContent" >
             <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
@@ -198,7 +198,7 @@ export default {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 #SubmissionDetail {
     .el-step__main {
         margin-top: 10px;
