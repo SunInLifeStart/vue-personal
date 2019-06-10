@@ -254,11 +254,11 @@ export default {
                 self.formData.attachments.forEach(function(value, index) {
                     if (value.id == id) {
                         axios
-                            .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
+                            .get('/api/v1/meeting_forms/deleteAtt/' + id)
                             .then(res => {
                                 self.formData.attachments.splice(index, 1);
                             });
-                        self.formData.attachments.splice(index, 1);
+                      //  self.formData.attachments.splice(index, 1);
                     }
                 });
             });
