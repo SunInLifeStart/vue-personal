@@ -26,7 +26,7 @@ export default {
 </script>
 <style lang="scss" scope>
 #APPROVE {
-    height: 100%;
+    height: 90%;
     #SubmissionDetail {
         height: 100%;
         width: 100%;
