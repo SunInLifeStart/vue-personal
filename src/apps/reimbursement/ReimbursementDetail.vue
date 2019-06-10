@@ -51,7 +51,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <table class="tablePrint" style="width: 99%; height: 100%; table-layout: fixed; word-break: break-all;margin-top:5px;">
+                <table class="tablePrint" >
                     <col style="width: 10%" />
                     <col style="width: 10%" />
                     <col style="width: 10%" />
