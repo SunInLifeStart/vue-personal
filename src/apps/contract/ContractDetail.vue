@@ -24,7 +24,7 @@
                 </el-col>
             </el-row>
             <el-form :model='tableData' class="formList">
-                <table style="width: 99%; height: 100%;margin-top: 5px; table-layout: fixed; word-break: break-all;">
+                <table style="width: 99%; height: 90%;margin-top: 5px; table-layout: fixed; word-break: break-all;">
                     <col style="width: 9%" />
                     <col style="width: 11%" />
                     <col style="width: 11%" />
@@ -424,6 +424,7 @@ export default {
             $self.actions = actions.data.types;
 
             $self.comments = comments.data;
+            console.log(this.comments);
             $self.crumbs = { items: crumbs.data, index: -1 };
             let boolean = false;
             for (var i = 0; i < $self.crumbs.items.length; i++) {
@@ -461,7 +462,7 @@ export default {
     }
 };
 </script>
-<style lang="scss">
+<style lang="scss" scope>
 #ContractDetail {
     table {
         border-collapse: collapse;
