@@ -243,7 +243,7 @@ export default {
                 self.formData.attachments.forEach(function(value, index) {
                     if (value.id == id) {
                         axios
-                            .get('/api/v1/attachment/attachment/' + id)
+                            .get('/api/v1/inspect_forms/attachment/' + id)
                             .then(res => {
                                 self.formData.attachments.splice(index, 1);
                             });
