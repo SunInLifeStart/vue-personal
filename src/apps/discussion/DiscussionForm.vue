@@ -290,11 +290,11 @@ export default {
             self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 self.formData.attachments.forEach(function(value, index) {
                     if (value.id == id) {
-                        axios
-                            .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
-                            .then(res => {
-                                self.formData.attachments.splice(index, 1);
-                            });
+                        // axios
+                        //     .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
+                        //     .then(res => {
+                        //         self.formData.attachments.splice(index, 1);
+                        //     });
                         self.formData.attachments.splice(index, 1);
                     }
                 });
