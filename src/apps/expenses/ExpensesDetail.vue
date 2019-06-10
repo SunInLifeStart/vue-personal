@@ -33,7 +33,7 @@
                         <span :class="{titlename:tableData.subView}" @click="ViewDetail('chengbao')">{{tableData.subNo}}</span>
                     </el-col>
                 </el-row>
-                <table class="tablePrint" style="width: 99%; height: 100%; table-layout: fixed; word-break: break-all;margin-top:10px;">
+                <table class="tablePrint" >
                     <col style="width: 10%" />
                     <col style="width: 10%" />
                     <col style="width: 10%" />
