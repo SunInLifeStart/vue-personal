@@ -284,6 +284,14 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            合同备注
+                        </td>
+                        <td colspan="6">
+                            {{tableData.remark}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
                             合同内容摘要
                         </td>
                         <td colspan="6">

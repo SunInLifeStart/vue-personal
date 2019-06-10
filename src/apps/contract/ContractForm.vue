@@ -340,6 +340,14 @@
                     </tr>
                     <tr>
                         <td colspan="2">
+                            合同备注
+                        </td>
+                        <td colspan="6">
+                            <el-input type="textarea" :disabled="this.showSubmit == 'false'" :autosize="{minRows: 2}" v-model="formData.remark"></el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
                             <span class="span">*</span>
                             合同内容摘要
                         </td>
@@ -603,7 +611,8 @@ export default {
                 partyB: '', //  乙方
                 otherParty: '',
                 datecontractTime: '',
-                type: 1
+                type: 1,
+                remark: ''
             };
             return formData;
         },
