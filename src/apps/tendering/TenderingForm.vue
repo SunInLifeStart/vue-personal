@@ -56,7 +56,7 @@
                     <el-col :span="24">
                         <el-form-item label="采购业务类别" style="text-align: left" prop="procurementType">
                             <el-radio-group v-model="formData.procurementType">
-                                <div v-for="item in radioOption">
+                                <div v-for="(item,index) in radioOption" :key="index">
                                     <el-radio
                                             :key="item.value"
                                             :label="item.value">
