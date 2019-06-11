@@ -191,6 +191,10 @@ export default {
                 {
                     id: '03',
                     name: '低值易耗品'
+                },
+                {
+                    id: '04',
+                    name: '图书采购'
                 }
             ],
             cookie_uname: '',
@@ -246,6 +250,8 @@ export default {
                 this.formData.supplyCode = 'fixed';
             } else if (val == '低值易耗品') {
                 this.formData.supplyCode = 'low';
+            } else if (val == '图书采购') {
+                this.formData.supplyCode = 'tushu';
             }
         },
         setDataFromParent(data) {
