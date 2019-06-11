@@ -55,7 +55,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-table :data="tableData.detail" border style="width:700px;; margin-top: 5px;">
+                            <el-table :data="tableData.detail" border style="width:700px; margin-top: 5px;">
                                 <el-table-column prop="name" label="物品名称" >
                                     <template slot-scope="scope">
                                         {{scope.row.name}}
@@ -262,7 +262,13 @@ export default {
     }
 }
 </style>
-<style lang="scss" scope>
+<style scoped>
+#AssetDetail >>> .el-table .cell.el-tooltip {
+    white-space: normal
+}
+</style>
+
+<style lang="scss" scoped>
 #AssetDetail {
     html,
     body {
@@ -372,7 +378,7 @@ body .el-table th.gutter {
     position: fixed;
     top: 0px;
     z-index: 10;
-    background: #fff;
+    background: rgb(214, 172, 172);
     left: 0px;
     right: 0px;
 }
