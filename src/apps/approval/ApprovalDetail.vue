@@ -191,7 +191,7 @@ export default {
     },
     methods: {
         async print() {
-            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName + '（用印审批）'});
+            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（用印审批）'});
         },
         getFormDetails(formId) {
             let $self = this;

@@ -210,7 +210,7 @@ export default {
     },
     methods: {
         async print() {
-            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName + '（文件印刷）'});
+            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（文件印刷）'});
         },
         fomutype(row, column) {
             let state;

@@ -200,7 +200,7 @@ export default {
     },
     methods: {
         async print() {
-            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName + '（名片印刷）'});
+            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（名片印刷）'});
         },
         getFormDetails(formId) {
             let $self = this;

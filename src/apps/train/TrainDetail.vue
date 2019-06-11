@@ -171,7 +171,7 @@ export default {
     },
     methods: {
         async print() {
-            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName + '（培训审批）'});
+            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（培训审批）'});
         },
         getFormDetails(formId) {
             let $self = this;
