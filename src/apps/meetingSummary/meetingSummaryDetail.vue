@@ -186,8 +186,7 @@ export default {
     },
     methods: {
         async print() {
-            // document.getElementById('approval').style.display = 'table-row';
-            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（会议纪要）'});
+            this.$print(this.$refs.formupdate.$el,{printTitle:`会议纪要(${this.tableData.organName.split('-')[0]})`});
         },
         getFormDetails(formId) {
             let $self = this;
