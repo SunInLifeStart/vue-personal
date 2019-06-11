@@ -12,42 +12,50 @@
         <br />
         <div class="formContent">
             <div>
+                <!--v-show="this.tableData.status && this.tableData.status == '04'"-->
                 <el-button type="primary" v-show="this.tableData.status && this.tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print">打印</el-button>
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model="tableData" class="formList">
-                <el-row>
-                    <el-col :span="8">
-                        <el-form-item label="申请人：">{{tableData.proposer}}</el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="申请部门：">{{tableData.applyDept}}</el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="申请日期：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="资产类型：">{{tableData.assetsType}}</el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="是否年度预算内:">
-                            {{this.tableData.budget ? '是': '否'}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="12">
-                        <el-form-item label="是否月度资金计划内:">
-                            {{this.tableData.plan ? '是': '否'}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="备注：">{{tableData.remark}}</el-form-item>
-                    </el-col>
-                    <el-col :span="24">
-                        <el-form-item label="采购明细：">
-                            <el-table :data="tableData.detail" border style="width: 100%; margin-top: 5px;">
+            <el-form :model="tableData" id='queryTable' class="demo-form-inline" ref="formupdate" style="height:150%;">
+                <div style="margin-left:20px;">
+                    <h4 style="text-align: center;">资产采购审批单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="申请人：">{{tableData.proposer}}</el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="申请部门：">{{tableData.applyDept}}</el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="申请日期：">{{tableData.applyDate | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        </el-col>
+                        <el-col :span="24">
+                            <el-form-item label="资产类型：">{{tableData.assetsType}}</el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="是否年度预算内:">
+                                {{this.tableData.budget ? '是': '否'}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="12">
+                            <el-form-item label="是否月度资金计划内:">
+                                {{this.tableData.plan ? '是': '否'}}
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="24">
+                            <el-form-item label="备注：">{{tableData.remark}}</el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-form-item label="采购明细："></el-form-item>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-table :data="tableData.detail" border style="width: 800px;; margin-top: 5px;">
                                 <el-table-column prop="name" label="物品名称">
                                     <template slot-scope="scope">
                                         {{scope.row.name}}
@@ -89,34 +97,34 @@
                                     </template>
                                 </el-table-column>
                             </el-table>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row>
-                    <el-col :span="24">
-                        <el-form-item label="附件：">
-                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
-                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
-                            </div>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row v-if="comments && comments.length > 0">
-                    <el-col :span="24">
-                        <h3>审批意见</h3>
-                        <div class="items">
-                            <div class="item" v-for="item in comments" :key="item.id">
-                                <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
-                                <div class="info">
-                                    <div class="creator">
-                                        <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="附件：">
+                                <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row v-if="comments && comments.length > 0">
+                        <el-col :span="24">
+                            <h3>审批意见</h3>
+                            <div class="items">
+                                <div class="item" v-for="item in comments" :key="item.id">
+                                    <div class="avatar"><img src="img/avatar.1176c00a.png" alt="" width="30px"></div>
+                                    <div class="info">
+                                        <div class="creator">
+                                            <span href="#">{{item.userName}}</span> &nbsp; ({{item.times | dateformat}})
+                                        </div>
+                                        <div class="content">{{item.fullMessage}}</div>
                                     </div>
-                                    <div class="content">{{item.fullMessage}}</div>
                                 </div>
                             </div>
-                        </div>
-                    </el-col>
-                </el-row>
+                        </el-col>
+                    </el-row>
+                </div>
             </el-form>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
@@ -192,6 +200,12 @@ export default {
     },
     mounted() {},
     methods: {
+        async print() {
+            // document.getElementById('approval').style.display = 'table-row';
+            this.$print(this.$refs.formupdate.$el, {
+                printTitle: ''
+            });
+        },
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
@@ -226,15 +240,46 @@ export default {
                     $self.crumbs.index = i;
                 }
             }
-              if ($self.crumbs.index == -1) {
+            if ($self.crumbs.index == -1) {
                 $self.crumbs.index = $self.crumbs.items.length;
             }
         }
     }
 };
 </script>
-<style lang="scss">
+<style>
+@media print {
+    html,
+    body {
+        height: inherit;
+    }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
+}
+</style>
+<style lang="scss" scope>
 #AssetDetail {
+    html,
+    body {
+        height: inherit;
+    }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
+    .formContent {
+        flex: 1;
+        height: 100%;
+        overflow-x: hidden;
+        overflow-y: auto;
+        padding: 15px 30px;
+    }
     .el-step__main {
         margin-top: 10px;
     }
