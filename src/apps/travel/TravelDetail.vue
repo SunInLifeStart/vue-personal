@@ -184,6 +184,7 @@
                             </div>
                         </td>
                     </tr>
+                    <!--
                     <tr>
                         <td colspan="2">
                             审批意见
@@ -200,6 +201,7 @@
                             </div>
                         </td>
                     </tr>
+                    -->
                 </table>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">

@@ -346,6 +346,7 @@
                             </div>
                         </td>
                     </tr>
+                    <!--
                     <tr id="approval">
                         <td colspan="2" class="fontBold">领导审批</td>
                         <td colspan="6" style="text-align: left;">
@@ -360,6 +361,7 @@
                             </div>
                         </td>
                     </tr>
+                    -->
                 </table>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">

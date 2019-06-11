@@ -51,7 +51,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <table class="tablePrint" >
+                <table class="tablePrint">
                     <col style="width: 10%" />
                     <col style="width: 10%" />
                     <col style="width: 10%" />
@@ -339,6 +339,7 @@
                             </div>
                         </td>
                     </tr>
+                    <!--
                     <tr>
                         <td colspan="2">
                             审批意见
@@ -355,6 +356,7 @@
                             </div>
                         </td>
                     </tr>
+                    -->
                 </table>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
@@ -484,8 +486,7 @@ export default {
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el, {
-                printTitle:
-                   ''
+                printTitle: ''
             });
         },
         ViewDetail(view) {

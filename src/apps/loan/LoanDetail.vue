@@ -167,6 +167,7 @@
                             </div>
                         </td>
                     </tr>
+                    <!--
                     <tr>
                         <td class="bolder" colspan="2">领导审批</td>
                         <td colspan="6" style="text-align: left;">
@@ -180,7 +181,7 @@
                                 </div>
                             </div>
                         </td>
-                    </tr>
+                    </tr>-->
                 </table>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
