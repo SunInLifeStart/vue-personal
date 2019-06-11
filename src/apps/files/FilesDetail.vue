@@ -14,12 +14,13 @@
             
             <div>
                 <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
-            </div>
+                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                     <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
                 </el-steps>
-            <el-form :model="tableData" class="formList">
+            <el-form :model="tableData" ref="formupdate" class="formList" style="height:100%">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.creatorName}}</el-form-item>
@@ -208,6 +209,9 @@ export default {
        },
     },
     methods: {
+        async print() {
+            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName + '（文件印刷）'});
+        },
         fomutype(row, column) {
             let state;
             //0已保存1审核中2驳回3撤销4完成
@@ -269,6 +273,13 @@ export default {
     }
 };
 </script>
+<style>
+@media print {
+html, body {
+height: inherit;
+}
+}
+</style>
 <style lang="scss" scoped>
 #FilesDetail {
   .el-step__main {
