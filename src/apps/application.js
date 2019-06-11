@@ -288,6 +288,9 @@ export const publicMethods = {
             else if ($self.currentAction.name == "编写会议纪要") {
                 $self.editMeetingSummary();
             }
+            else if ($self.currentAction.name == "编辑会议附件") {
+                $self.editMeetingAttachment();
+            }
             else if ($self.currentAction.name == "延期") {
                 $self.delayMeeting();
             }

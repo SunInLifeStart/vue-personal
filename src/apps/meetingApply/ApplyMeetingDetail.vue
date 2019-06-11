@@ -248,6 +248,26 @@
                     <el-button type="primary" @click="saveMeetingApply">确 定</el-button>
                 </span>
             </el-dialog>
+            <el-dialog :visible.sync="dialogVisibleAttachment" width="40%">
+                <el-form>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="编辑附件">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getAttachmentId"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleAttachment = false">取 消</el-button>
+                    <el-button type="primary" @click="saveMeetingApply">确 定</el-button>
+                </span>
+            </el-dialog>
 
             <el-dialog :visible.sync="dialogVisibleDelay" width="31%">
                 <el-form>
@@ -312,6 +332,7 @@
                 dialogVisible: false,
                 dialogVisibleSummary: false,
                 dialogVisibleDelay: false,
+                dialogVisibleAttachment: false,
                 appFlowName:'motor-meetingApply_application-meeting',
                 discussionOption: {
                     specMeeting: '专题会',
@@ -335,6 +356,9 @@
                 this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（会议申请）'});
                 //  document.getElementById('approval').style.display = 'none';
             },
+            editMeetingAttachment() {
+                this.dialogVisibleAttachment = true
+            },
             async saveMeetingDelay() {
                 if(!this.tableData.meetingDelayTime) {
                     this.msgTips("请填写延期时间", "warning");
@@ -352,6 +376,7 @@
             async saveMeetingApply(flag) {
                 const $self = this;
                 this.dialogVisibleSummary = false
+                this.dialogVisibleAttachment = false
                 this.tableData.sendMessage = []
                 $self.tableData.attendingDepartment.forEach(item => {
                     if (item.people && item.department) {
@@ -376,7 +401,7 @@
                     $self.tableData
                 );
                 if (response) {
-                    if(flag) {
+                    if(flag == 'delay') {
                         let demo = await this.startSignal()
                     }
                     $self.getFormDetailsData();
@@ -398,6 +423,16 @@
                     });
                 });
             },
+            getAttachmentId(id) {
+                let self = this;
+                self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                    self.tableData.attachments.forEach(function(value, index) {
+                        if (value.id == id) {
+                            self.tableData.attachments.splice(index, 1);
+                        }
+                    });
+                });
+            },
             handleSuccess(response, file) {
                 const self = this;
                 if (!self.tableData.summaryAttachments) {
@@ -411,6 +446,20 @@
                     });
                 }
                 this.$refs.uploadOther.clearFiles();
+            },
+            handleAttachmentSuccess(response, file) {
+                const self = this;
+                if (!self.tableData.attachments) {
+                    self.tableData.attachments = []
+                }
+                if (response.length > 0) {
+                    response.forEach(function(item) {
+                        item.attachmentType = 'attachments'
+                        self.tableData.attachments.push(item);
+                        self.$forceUpdate()
+                    });
+                }
+                this.$refs.uploadAttachmentOther.clearFiles();
             },
             async getDiscussionUser() {
                 let a = await axios.get("/api/v1/users/list/organs")
@@ -578,6 +627,26 @@
 </style>
 <style lang="scss">
     #ApplyMeetingDetail {
+        .uploadBtn {
+            margin-right: 10px;
+            width: 100px;
+            height: 130px;
+            text-align: center;
+            float: left;
+            border: 1px solid #c0c4cc;
+            border-radius: 2px;
+            cursor: pointer;
+
+            .el-upload {
+                width: 100%;
+                height: 100%;
+
+                i {
+                    font-size: 50px;
+                    margin-top: 35px;
+                }
+            }
+        }
         .el-step__main {
             margin-top: 10px;
         }

@@ -52,8 +52,12 @@
                         <el-form-item label="共同发起人：">{{tableData.commonUser}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="16">
+                    <el-col :span="8">
                         <el-form-item label="备注：">{{tableData.remarks}}
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="部门呈报类型：">{{submissionOption[tableData.submissionType]}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -134,6 +138,12 @@ export default {
             textarea: "",
             dialogVisible: false,
             users: [],
+            submissionOption: {
+                'report': '请示报告类',
+                'union': '工会类',
+                'financial': '财务类',
+                'branch': '党支委类'
+            },
             actionsDialogArr: [],
             appFlowName:'submission-form_submission',
             formName:'submission_forms',

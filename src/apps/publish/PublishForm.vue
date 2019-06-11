@@ -111,7 +111,12 @@ export default {
             self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 self.formData.attachments.forEach(function(value, index) {
                     if (value.id == id) {
-                        self.formData.attachments.splice(index, 1);
+                        axios
+                            .delete('/api/v1/publish_forms/deleteAtt?id=' + id)
+                            .then(res => {
+                                self.formData.attachments.splice(index, 1);
+                            });
+                        // self.formData.attachments.splice(index, 1);
                     }
                 });
             });
