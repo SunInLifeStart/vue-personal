@@ -248,7 +248,7 @@
                     <el-button type="primary" @click="saveMeetingApply">确 定</el-button>
                 </span>
             </el-dialog>
-            <el-dialog :visible.sync="dialogVisibleAttachment" width="31%">
+            <el-dialog :visible.sync="dialogVisibleAttachment" width="40%">
                 <el-form>
                     <el-row>
                         <el-col :span="24">
@@ -256,10 +256,8 @@
                                 <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
-                                <div style="margin-left: 5px">
-                                    <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
-                                        <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getAttachmentId"></FilesOperate>
-                                    </div>
+                                <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getAttachmentId"></FilesOperate>
                                 </div>
                             </el-form-item>
                         </el-col>
@@ -629,6 +627,26 @@
 </style>
 <style lang="scss">
     #ApplyMeetingDetail {
+        .uploadBtn {
+            margin-right: 10px;
+            width: 100px;
+            height: 130px;
+            text-align: center;
+            float: left;
+            border: 1px solid #c0c4cc;
+            border-radius: 2px;
+            cursor: pointer;
+
+            .el-upload {
+                width: 100%;
+                height: 100%;
+
+                i {
+                    font-size: 50px;
+                    margin-top: 35px;
+                }
+            }
+        }
         .el-step__main {
             margin-top: 10px;
         }
