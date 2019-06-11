@@ -21,7 +21,8 @@
                     <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
                 </el-steps>
             <el-form :model="tableData" ref="formupdate" class="formList" style="height:100%">
-                <el-row>
+                 <h4 style="text-align: center;">文件印刷申请单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
+                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.creatorName}}</el-form-item>
                     </el-col>
@@ -41,30 +42,30 @@
                     <el-col :span="8">
                         <el-form-item label="总印刷数量(套)：">{{tableData.allPrintNumber}}</el-form-item>
                     </el-col>
-                    <el-col :span="24">
+                    <el-col :span="22">
                         <el-form-item label="文件印刷明细：">
-                            <el-table :data="tableData.cardPrinting" border style="width: 100%; margin-top: 5px;">
-                                <el-table-column prop="fileName" label="文件姓名">
+                            <el-table :data="tableData.cardPrinting" border style="width: 750px; margin-top: 5px;">
+                                <el-table-column prop="fileName" label="文件姓名" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.fileName}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="printingPicture" label="印刷幅面">
+                                <el-table-column prop="printingPicture" label="印刷幅面" width="90px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.printingPicture}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="printNumber" label="印刷数量（套）">
+                                <el-table-column prop="printNumber" label="印刷数量（套）" width="70px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.printNumber}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="colourType" label="印刷色彩">
+                                <el-table-column prop="colourType" label="印刷色彩" width="70px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.colourType | numFilter}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="demand" label="其他需求">
+                                <el-table-column prop="demand" label="其他需求" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.demand}}
                                     </template>
@@ -210,7 +211,7 @@ export default {
     },
     methods: {
         async print() {
-            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（文件印刷）'});
+            this.$print(this.$refs.formupdate.$el,{printTitle:''});
         },
         fomutype(row, column) {
             let state;

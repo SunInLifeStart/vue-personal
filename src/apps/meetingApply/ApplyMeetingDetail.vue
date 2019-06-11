@@ -353,7 +353,7 @@
         methods: {
             async print() {
                 // document.getElementById('approval').style.display = 'table-row';
-                this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（会议申请）'});
+                this.$print(this.$refs.formupdate.$el,{printTitle:`会议申请(${this.tableData.organName.split('-')[0]})`});
                 //  document.getElementById('approval').style.display = 'none';
             },
             editMeetingAttachment() {

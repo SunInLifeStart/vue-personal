@@ -21,6 +21,8 @@
                     <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
                 </el-steps>
             <el-form :model="tableData" ref="formupdate" class="formList" style="height:100%">
+                 <h4 style="text-align: center;">名片印刷申请单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
+                
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.creatorName}}</el-form-item>
@@ -200,7 +202,7 @@ export default {
     },
     methods: {
         async print() {
-            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（名片印刷）'});
+            this.$print(this.$refs.formupdate.$el,{printTitle:''});
         },
         getFormDetails(formId) {
             let $self = this;
