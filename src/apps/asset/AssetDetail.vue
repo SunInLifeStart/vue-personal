@@ -14,7 +14,7 @@
             <div>
                 <!--v-show="this.tableData.status && this.tableData.status == '04'"-->
                 <el-button type="primary" v-show="this.tableData.status && this.tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print" >打印</el-button>
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
@@ -55,43 +55,44 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-table :data="tableData.detail" border style="width: 800px;; margin-top: 5px;">
-                                <el-table-column prop="name" label="物品名称">
+                            <el-table :data="tableData.detail" border style="width:700px;; margin-top: 5px;">
+                                <el-table-column prop="name" label="物品名称" >
                                     <template slot-scope="scope">
                                         {{scope.row.name}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="specification" label="规格说明">
+                                <el-table-column prop="specification" label="规格说明"  width="100px">
                                     <template slot-scope="scope">
                                         {{scope.row.specification}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="number" label="计划采购数量">
+                                <el-table-column prop="number" label="计划采购数量" width="60px">
                                     <template slot-scope="scope">
                                         {{scope.row.number}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="price" label="计划单价">
+                                <el-table-column prop="price" label="计划单价" width="60px">
                                     <template slot-scope="scope">
                                         {{scope.row.price |numFilter}}
+                                        
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="totalPrice" label="计划总价">
+                                <el-table-column prop="totalPrice" label="计划总价" width="60px">
                                     <template slot-scope="scope">
                                         {{scope.row.totalPrice}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="inventory" label="库存数量">
+                                <el-table-column prop="inventory" label="库存数量" width="60px">
                                     <template slot-scope="scope">
                                         {{scope.row.inventory}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="buyTime" label="要求购入时间" width="160px">
+                                <el-table-column prop="buyTime" label="要求购入时间" width="140px">
                                     <template slot-scope="scope">
                                         {{scope.row.buyTime}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="reason" label="用途及申购原因" show-overflow-tooltip>
+                                <el-table-column prop="reason" label="用途及申购原因"  show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.reason}}
                                     </template>
@@ -99,7 +100,7 @@
                             </el-table>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row style="margin-top:20px">
                         <el-col :span="24">
                             <el-form-item label="附件：">
                                 <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
