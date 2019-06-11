@@ -14,12 +14,13 @@
             
             <div>
                 <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
-            </div>
+                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                     <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
                 </el-steps>
-            <el-form :model="tableData" class="formList">
+            <el-form :model="tableData" ref="formupdate" class="formList" style="height:100%">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.creatorName}}</el-form-item>
@@ -41,59 +42,59 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="印刷明细：">
-                            <el-table :data="tableData.cardPrinting" border style="width: 100%; margin: 5px;">
-                                <el-table-column prop="uname" label="姓名" show-overflow-tooltip>
+                            <el-table :data="tableData.cardPrinting" border style="width: 900px; margin: 5px;">
+                                <el-table-column prop="uname" label="姓名"  width="70px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.uname}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="organ" label="部门" show-overflow-tooltip>
+                                <el-table-column prop="organ" label="部门"  width="70px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.organ}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="duty" label="职务" show-overflow-tooltip>
+                                <el-table-column prop="duty" label="职务"  width="60px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.duty}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="quantity" label="数量（盒）" width="70px" show-overflow-tooltip>
+                                <el-table-column prop="quantity" label="数量（盒）" width="50px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.quantity}}
                                         <!-- |numFilter -->
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="phone" label="电话" width="70px" show-overflow-tooltip>
+                                <el-table-column prop="phone" label="电话" width="60px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.phone}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="telephone" label="座机号" width="70px" show-overflow-tooltip>
+                                <el-table-column prop="telephone" label="座机号" width="60px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.telephone}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="mailbox" label="邮箱" show-overflow-tooltip>
+                                <el-table-column prop="mailbox" label="邮箱" width="50px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.mailbox}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="company" label="公司名称" show-overflow-tooltip>
+                                <el-table-column prop="company" label="公司名称" width="70px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.company}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="mailingAddress" label="通讯地址" show-overflow-tooltip>
+                                <el-table-column prop="mailingAddress" label="通讯地址" width="70px" show-overflow-tooltip>
                                     <template slot-scope="scope">
                                         {{scope.row.mailingAddress}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="postcode" label="邮编" show-overflow-tooltip >
+                                <el-table-column prop="postcode" label="邮编" width="60px" show-overflow-tooltip >
                                     <template slot-scope="scope">
                                         {{scope.row.postcode}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="buyTime" label="附件" >
+                                <el-table-column prop="buyTime" label="附件"  >
                                     <template slot-scope="scope">
                                         <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
                                            <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
@@ -198,6 +199,9 @@ export default {
     mounted() {
     },
     methods: {
+        async print() {
+            this.$print(this.$refs.formupdate.$el,{printTitle:this.tableData.organName.split('-')[0] + '（名片印刷）'});
+        },
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
@@ -247,6 +251,13 @@ export default {
     }
 };
 </script>
+<style>
+@media print {
+html, body {
+height: inherit;
+}
+}
+</style>
 <style lang="scss" scoped>
 #BusinessCardDetail {
   .el-step__main {
