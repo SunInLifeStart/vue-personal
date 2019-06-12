@@ -22,7 +22,7 @@
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData' class="demo-form-inline" id='queryTable' ref="formupdate" style="height:150%">
+            <el-form :model='tableData' class="demo-form-inline" id='queryTable' ref="formupdate" style="height:100%">
                 <h4 style="text-align: center;">招待费审批单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
                 <el-row style="margin-top: 25px;vertical-align: middle; line-height: 34px;">
                     <el-col :span="12" style="margin-left:5px;">

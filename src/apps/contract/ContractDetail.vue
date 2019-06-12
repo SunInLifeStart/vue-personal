@@ -20,7 +20,7 @@
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData' id='queryTable' class="demo-form-inline" ref="formupdate" style="height:150%;">
+            <el-form :model='tableData' id='queryTable' class="demo-form-inline" ref="formupdate" style="height:100%;">
                 <div style="margin-left: 10px;">
                     <h4 style="text-align: center;">合同审批单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
                     <el-row style="margin-bottom:10px;margin-left: 5px;">
