@@ -41,12 +41,12 @@
                     </el-col>
                 </el-row>
                 <table class="tablePrint">
-                    <col style="width: 9%" />
+                    <col style="width: 6%" />
                     <col style="width: 11%" />
                     <col style="width: 11%" />
-                    <col style="width: 10%" />
-                    <col style="width: 10%" />
-                    <col style="width: 10%" />
+                    <col style="width: 13%" />
+                    <col style="width: 8%" />
+                    <col style="width: 12%" />
                     <col style="width: 11%" />
                     <col style="width: 10%" />
                     <tr>
@@ -288,7 +288,7 @@
                         <td colspan="2" class="fontBold">
                             支付金额
                         </td>
-                        <td>
+                        <td colspan="2">
                             <el-row>
                                 <el-col :span="2" align="left" style="margin-left:2px;text-align:center;">{{this.tableData.contract.symbol}}</el-col>
                                 <el-col :span="21" align="right" style="margin-right:2px">
@@ -299,7 +299,7 @@
                         <td class="fontBold">
                             金额大写
                         </td>
-                        <td colspan="4">
+                        <td colspan="3">
                             （{{ this.tableData.details.length > 0 ? this.tableData.details[0].currency : '人民币'}}：&nbsp;&nbsp;&nbsp;{{tableData.contract.amountCap}}&nbsp;&nbsp;&nbsp;）
                         </td>
                     </tr>
@@ -733,6 +733,10 @@ export default {
         border-color: #e4e7ed;
         color: #85888e;
         cursor: not-allowed;
+    }
+    .el-input.is-disabled .el-input__inner {
+        color: #40516f;
+        text-align: center;
     }
 }
 </style>

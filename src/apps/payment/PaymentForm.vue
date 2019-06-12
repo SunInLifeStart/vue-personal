@@ -38,10 +38,10 @@
                     </el-col>
                 </el-row>
                 <table style="width: 99%; height: 100%;margin-top: 5px; table-layout: fixed; word-break: break-all;">
-                    <col style="width: 9%" />
+                    <col style="width: 6%" />
                     <col style="width: 11%" />
                     <col style="width: 11%" />
-                    <col style="width: 10%" />
+                    <col style="width: 13%" />
                     <col style="width: 10%" />
                     <col style="width: 10%" />
                     <col style="width: 11%" />
@@ -310,7 +310,7 @@
                         <td colspan="2" class="fontBold">
                             支付金额
                         </td>
-                        <td>
+                        <td colspan="2">
                             <!-- <el-input v-model="selectItem.contract.payAmount" disabled></el-input> -->
                             <el-row>
                                 <el-col :span="3" align="left" style="text-align:center;">{{formData.contract.symbol}}</el-col>
@@ -322,7 +322,7 @@
                         <td class="fontBold">
                             金额大写
                         </td>
-                        <td colspan="4">
+                        <td colspan="3">
                             （{{this.formData.details.length > 0 ? this.formData.details[0].currency : '人民币'}}：&nbsp;&nbsp;&nbsp;{{formData.contract.amountCap}}&nbsp;&nbsp;&nbsp;）
                         </td>
                     </tr>
