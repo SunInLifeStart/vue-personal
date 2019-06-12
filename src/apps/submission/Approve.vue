@@ -28,7 +28,7 @@ export default {
 #APPROVE {
     height: 90%;
     #SubmissionDetail {
-        height: 100%;
+        height: 85%;
         width: 100%;
       //  display: flex;
         flex-direction: column;
