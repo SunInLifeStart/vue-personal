@@ -17,13 +17,13 @@
             <!--v-show="this.tableData.status && this.tableData.status == '04'"-->
             <div>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print">打印</el-button>
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData' id='queryTable' class="demo-form-inline" ref="formupdate" style="height:150%">
+            <el-form :model='tableData' id='queryTable' class="demo-form-inline" ref="formupdate" style="height:100%">
                 <h4 style="text-align: center;">报销审批单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
                 <el-row style="margin-top: 10px;">
                     <el-col :span="7">
@@ -44,14 +44,14 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
+                <el-row style="margin-left: 5px;">
                     <el-col :span="8">
                         <el-form-item label="招待费审批单：">
                             <span style="font-size:10px" @click="ViewDetail('expenses')" :class="{'titlename':this.tableData.expensesView}"> {{tableData.expensesName}}</span>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <table class="tablePrint">
+                <table class="tablePrint" style="width: 99%;">
                     <col style="width: 10%" />
                     <col style="width: 10%" />
                     <col style="width: 10%" />
