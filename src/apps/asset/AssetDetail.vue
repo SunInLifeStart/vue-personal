@@ -92,7 +92,7 @@
                                         {{scope.row.buyTime}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="reason" label="用途及申购原因"  show-overflow-tooltip>
+                                <el-table-column prop="reason" label="用途及申购原因">
                                     <template slot-scope="scope">
                                         {{scope.row.reason}}
                                     </template>
@@ -263,9 +263,9 @@ export default {
 }
 </style>
 <style scoped>
-#AssetDetail >>> .el-table .cell.el-tooltip {
+/* #AssetDetail >>> .el-table .cell.el-tooltip {
     white-space: normal
-}
+} */
 </style>
 
 <style lang="scss" scoped>

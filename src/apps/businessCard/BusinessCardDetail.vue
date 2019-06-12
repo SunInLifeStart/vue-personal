@@ -45,53 +45,53 @@
                     <el-col :span="24">
                         <el-form-item label="印刷明细：">
                             <el-table :data="tableData.cardPrinting" border style="width: 900px; margin: 5px;">
-                                <el-table-column prop="uname" label="姓名"  width="70px" show-overflow-tooltip>
+                                <el-table-column prop="uname" label="姓名"  width="70px" >
                                     <template slot-scope="scope">
                                         {{scope.row.uname}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="organ" label="部门"  width="70px" show-overflow-tooltip>
+                                <el-table-column prop="organ" label="部门"  width="70px" >
                                     <template slot-scope="scope">
                                         {{scope.row.organ}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="duty" label="职务"  width="60px" show-overflow-tooltip>
+                                <el-table-column prop="duty" label="职务"  width="60px" >
                                     <template slot-scope="scope">
                                         {{scope.row.duty}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="quantity" label="数量（盒）" width="50px" show-overflow-tooltip>
+                                <el-table-column prop="quantity" label="数量（盒）" width="50px" >
                                     <template slot-scope="scope">
                                         {{scope.row.quantity}}
                                         <!-- |numFilter -->
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="phone" label="电话" width="60px" show-overflow-tooltip>
+                                <el-table-column prop="phone" label="电话" width="60px" >
                                     <template slot-scope="scope">
                                         {{scope.row.phone}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="telephone" label="座机号" width="60px" show-overflow-tooltip>
+                                <el-table-column prop="telephone" label="座机号" width="60px" >
                                     <template slot-scope="scope">
                                         {{scope.row.telephone}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="mailbox" label="邮箱" width="50px" show-overflow-tooltip>
+                                <el-table-column prop="mailbox" label="邮箱" width="50px" >
                                     <template slot-scope="scope">
                                         {{scope.row.mailbox}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="company" label="公司名称" width="70px" show-overflow-tooltip>
+                                <el-table-column prop="company" label="公司名称" width="70px" >
                                     <template slot-scope="scope">
                                         {{scope.row.company}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="mailingAddress" label="通讯地址" width="70px" show-overflow-tooltip>
+                                <el-table-column prop="mailingAddress" label="通讯地址" width="70px" >
                                     <template slot-scope="scope">
                                         {{scope.row.mailingAddress}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="postcode" label="邮编" width="60px" show-overflow-tooltip >
+                                <el-table-column prop="postcode" label="邮编" width="60px"  >
                                     <template slot-scope="scope">
                                         {{scope.row.postcode}}
                                     </template>
