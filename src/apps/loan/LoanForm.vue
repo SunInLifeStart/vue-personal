@@ -599,7 +599,9 @@ export default {
                 sum += parseFloat(data.loanAmount);
             }
             this.formData.total = this.common.toDecimal2(sum);
-            this.formData.moneyUpper = this.common.DX(this.formData.total);
+            this.formData.moneyUpper = this.convertCurrency(
+                this.formData.total
+            );
         },
         setDataFromParent(data) {
             // this.getClass();

@@ -695,7 +695,7 @@ export default {
                                     this.formData.total = this.common.toDecimal2(
                                         0
                                     );
-                                    this.formData.upper = this.common.DX(
+                                    this.formData.upper = this.convertCurrency(
                                         '0.00'
                                     );
                                     this.changeTotal = this.formData.total;
@@ -713,7 +713,7 @@ export default {
                         this.formData.repayItems.splice(index, 1);
                         if (this.formData.repayItems.length <= 0) {
                             this.formData.total = this.common.toDecimal2(0);
-                            this.formData.upper = this.common.DX('0.00');
+                            this.formData.upper = this.convertCurrency('0.00');
                             this.changeTotal = this.formData.total;
                         } else {
                             this.totalSalary();
@@ -1039,14 +1039,14 @@ export default {
                 this.shareRadio();
             } else {
                 item.shareRatio = this.common.toDecimal2(0);
-                item.upper = this.common.DX(this.common.toDecimal2(0));
+                item.upper = this.convertCurrency(this.common.toDecimal2(0));
             }
         },
         //分摊情况下，根据输入的分摊金额计算分摊比例
         shareRadio() {
             if (parseInt(this.formData.total) > 0) {
                 for (let data of this.formData.shares) {
-                    data.upper = this.common.DX(
+                    data.upper = this.convertCurrency(
                         this.common.toDecimal2(data.bearSum)
                     ); //字符串
                     data.shareRatio = this.common.toDecimal2(
@@ -1057,7 +1057,7 @@ export default {
                 }
             } else {
                 for (let data of this.formData.shares) {
-                    data.upper = this.common.DX(
+                    data.upper = this.convertCurrency(
                         this.common.toDecimal2(data.bearSum)
                     ); //字符串
                     data.shareRatio = this.common.toDecimal2(0);
@@ -1073,7 +1073,7 @@ export default {
                 }
             }
             this.formData.total = this.common.toDecimal2(sum);
-            this.formData.upper = this.common.DX(this.formData.total);
+            this.formData.upper = this.convertCurrency(this.formData.total);
             this.changeTotal = this.common.toDecimal2(sum);
         },
         //根据uid获取部门呈报件
@@ -1275,7 +1275,7 @@ export default {
                     this.formData.borrow.verify = 0;
                     this.formData.borrow.sendDack = false;
                     this.formData.borrow.shouldBack = this.common.toDecimal2(0);
-                    this.formData.borrow.upperSum = this.common.DX(
+                    this.formData.borrow.upperSum = this.convertCurrency(
                         this.formData.borrow.payAble
                     );
                 } else {
@@ -1293,13 +1293,13 @@ export default {
             if (compare == 0) {
                 this.formData.borrow.payAble = this.common.toDecimal2(0);
                 this.formData.borrow.shouldBack = this.common.toDecimal2(0);
-                this.formData.borrow.upperSum = this.common.DX(
+                this.formData.borrow.upperSum = this.convertCurrency(
                     this.formData.borrow.payAble
                 );
             } else if (compare > 0) {
                 this.formData.borrow.payAble = this.common.toDecimal2(compare);
                 this.formData.borrow.shouldBack = this.common.toDecimal2(0);
-                this.formData.borrow.upperSum = this.common.DX(
+                this.formData.borrow.upperSum = this.convertCurrency(
                     this.formData.borrow.payAble
                 );
             } else if (compare < 0) {
@@ -1311,7 +1311,7 @@ export default {
                 this.formData.borrow.shouldBack = this.common.toDecimal2(
                     compareSendBack
                 );
-                this.formData.borrow.upperSum = this.common.DX(
+                this.formData.borrow.upperSum = this.convertCurrency(
                     this.formData.borrow.shouldBack
                 );
             }

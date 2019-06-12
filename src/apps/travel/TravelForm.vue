@@ -761,7 +761,7 @@ export default {
                 sum += parseFloat(data.subtotal);
             }
             this.formData.total = sum;
-            this.formData.upper = this.common.DX(this.formData.total);
+            this.formData.upper = this.convertCurrency(this.formData.total);
         },
         setDataFromParent(data) {
             this.getUsers();

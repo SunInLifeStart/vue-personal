@@ -248,7 +248,7 @@ export default {
     },
     methods: {
         moneyChange() {
-            this.formData.amountInWords = this.common.DX(
+            this.formData.amountInWords = this.convertCurrency(
                 this.formData.amountInFigures
             );
         },

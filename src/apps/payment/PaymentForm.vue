@@ -853,7 +853,7 @@ export default {
                 let allSum = parseFloat(this.formData.contract.payAmount);
                 for (let data2 of this.formData.allocationDetails) {
                     if (data2.amount) {
-                        data2.amountCap = this.common.DX(data2.amount);
+                        data2.amountCap = this.convertCurrency(data2.amount);
                         let ftbl = data2.amount / allSum * 100;
                         data2.proportion = this.common.toDecimal2(ftbl);
                     } else {
@@ -908,7 +908,7 @@ export default {
                 sum += parseFloat(data.amount);
             }
             this.formData.contract.payAmount = this.common.toDecimal2(sum);
-            this.formData.contract.amountCap = this.common.DX(sum);
+            this.formData.contract.amountCap = this.convertCurrency(sum);
             if (this.formData.allocationDetails[0].amount) {
                 this.getAmount('shareDetail');
             }
