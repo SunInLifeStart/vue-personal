@@ -209,7 +209,7 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model="item.money" oninput="if(value.length>9) value=value.slice(0,9)" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
+                            <el-input v-model="item.money" oninput="if(value.length>13) value=value.slice(0,13)" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
                         </td>
                         <td>
                             <el-input v-model="item.estRate" type="number" @mousewheel.native.prevent @input="loseFocus(item,index,'money')"></el-input>
@@ -218,10 +218,10 @@
                             <el-input v-model="item.estSum" type="number" @mousewheel.native.prevent></el-input>
                         </td>
                         <td>
-                            <el-input v-model="item.noTax" oninput="if(value.length>9) value=value.slice(0,9)" @mousewheel.native.prevent @input="loseFocus(item,index,'money','notax')"></el-input>
+                            <el-input v-model="item.noTax" oninput="if(value.length>13) value=value.slice(0,13)" @mousewheel.native.prevent @input="loseFocus(item,index,'money','notax')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model="item.tax" oninput="if(value.length>9) value=value.slice(0,9)" @mousewheel.native.prevent @input="loseFocus(item,index,'money', 'tax')"></el-input>
+                            <el-input v-model="item.tax" oninput="if(value.length>13) value=value.slice(0,13)" @mousewheel.native.prevent @input="loseFocus(item,index,'money', 'tax')"></el-input>
                         </td>
                     </tr>
                     <tr>
