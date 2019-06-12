@@ -181,7 +181,7 @@
                             </el-select>
                         </td>
                         <td>
-                            <el-input v-model="payItem.amount" type="number" oninput="if(value.length>9) value=value.slice(0,9)" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
+                            <el-input v-model="payItem.amount" type="number" oninput="if(value.length>13) value=value.slice(0,13)" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
                         </td>
                         <td>
                             <el-input v-model="payItem.rate" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem)"></el-input>
@@ -190,10 +190,10 @@
                             <el-input v-model="payItem.localAmount" disabled class="money"></el-input>
                         </td>
                         <td>
-                            <el-input v-model="payItem.noTax" oninput="if(value.length>9) value=value.slice(0,9)" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'notax')"></el-input>
+                            <el-input v-model="payItem.noTax" oninput="if(value.length>13) value=value.slice(0,13)" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'notax')"></el-input>
                         </td>
                         <td>
-                            <el-input v-model="payItem.tax" oninput="if(value.length>9) value=value.slice(0,9)" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'tax')"></el-input>
+                            <el-input v-model="payItem.tax" oninput="if(value.length>13) value=value.slice(0,13)" type="number" @mousewheel.native.prevent @input="getAmount('payDetail',payItem,'tax')"></el-input>
                         </td>
                     </tr>
                     <tr>
@@ -313,8 +313,10 @@
                         <td>
                             <!-- <el-input v-model="selectItem.contract.payAmount" disabled></el-input> -->
                             <el-row>
-                                <el-col :span="8" align="left">{{formData.contract.symbol}}</el-col>
-                                <el-col :span="16" align="right">{{formData.contract.payAmount | numFilter}}</el-col>
+                                <el-col :span="3" align="left" style="text-align:center;">{{formData.contract.symbol}}</el-col>
+                                <el-col :span="21" align="right">
+                                    <format-input class="money" separator="," :precision="2" v-model="formData.contract.payAmount" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
+                                </el-col>
                             </el-row>
                         </td>
                         <td class="fontBold">

@@ -160,13 +160,13 @@
 
                         </td>
                         <td class="money">
-                            {{payItem.amount|numFilter}}
+                            <format-input separator="," :precision="2" v-model="payItem.amount" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td>
                             {{payItem.rate}}
                         </td>
                         <td class="money">
-                            {{payItem.localAmount|numFilter}}
+                            <format-input separator="," :precision="2" v-model="payItem.localAmount" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td>
                             {{payItem.noTax}}
@@ -217,7 +217,7 @@
                         </td>
                         <td rowspan="3" class="money">
                             <div v-if="this.moneyType">
-                                {{tableData.contract.amount | numFilter}}
+                                <format-input separator="," :precision="2" v-model="tableData.contract.amount" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                             </div>
                             <div v-else>
                                 {{tableData.contract.amount}}
@@ -230,14 +230,14 @@
                             累计已付款
                         </td>
                         <td class="money">
-                            {{tableData.contract.payments|numFilter}}
+                            <format-input separator="," :precision="2" v-model="tableData.contract.payments" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td rowspan="3" class="fontBold">
                             未付金额
                         </td>
                         <td colspan="2" rowspan="3" class="money">
                             <div v-if="this.moneyType2">
-                                {{tableData.contract.unAmount | numFilter}}
+                                <format-input separator="," :precision="2" v-model="tableData.contract.unAmount" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                             </div>
                             <div v-else>
                                 {{tableData.contract.unAmount}}
@@ -290,8 +290,10 @@
                         </td>
                         <td>
                             <el-row>
-                                <el-col :span="4" align="left" style="margin-left:5px">{{this.tableData.contract.symbol}}</el-col>
-                                <el-col :span="18" align="right" style="margin-right:5px">{{tableData.contract.payAmount|numFilter}}</el-col>
+                                <el-col :span="2" align="left" style="margin-left:2px;text-align:center;">{{this.tableData.contract.symbol}}</el-col>
+                                <el-col :span="21" align="right" style="margin-right:2px">
+                                    <format-input separator="," :precision="2" v-model="tableData.contract.payAmount" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
+                                </el-col>
                             </el-row>
                         </td>
                         <td class="fontBold">
@@ -324,7 +326,7 @@
                             {{shareItem.project}}
                         </td>
                         <td>
-                            {{shareItem.amount|numFilter}}
+                            <format-input separator="," :precision="2" v-model="shareItem.amount" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td colspan="2">
                             {{shareItem.amountCap}}
@@ -411,6 +413,7 @@ import axios from 'axios';
 import Comment from '../Comment';
 import { publicMethods } from '../application.js';
 import FilesOperate from '../FilesOperate';
+import formatInput from '@/components/formatInput';
 export default {
     mixins: [publicMethods],
     name: 'PaymentDetail',
@@ -445,7 +448,8 @@ export default {
     },
     components: {
         Comment,
-        FilesOperate
+        FilesOperate,
+        formatInput
     },
     methods: {
         async print() {
