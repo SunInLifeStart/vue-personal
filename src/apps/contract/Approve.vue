@@ -4,6 +4,7 @@
         <!-- :formId="formId" -->
     </div>
 </template>
+
 <script>
 import axios from 'axios';
 import ContractDetail from './ContractDetail';
@@ -24,20 +25,24 @@ export default {
     methods: {}
 };
 </script>
-<style lang="scss" scope>
+
+<style lang="scss">
 #APPROVE {
     height: 90%;
     #ContractDetail {
-        height: 100%;
+        height: 90%;
         width: 100%;
         //  display: flex;
         flex-direction: column;
+
         #actionList {
             padding-left: 20px;
         }
+
         .btnhide {
             display: block;
         }
+
         .formContent {
             flex: 1;
             height: 100%;
