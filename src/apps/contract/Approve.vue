@@ -26,11 +26,11 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scope>
 #APPROVE {
     height: 90%;
     #ContractDetail {
-        height: 90%;
+        height: 85%;
         width: 100%;
         //  display: flex;
         flex-direction: column;
