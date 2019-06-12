@@ -773,7 +773,8 @@ export default {
             });
             ///api/v1/users/im/organs
             //api/v1/users/im/organs
-            axios.get("/api/v1/users/list/organ").then(res => {
+            axios.get("/api/v1/users/list/organs").then(res => {
+                res.data =  res.data.filter(item => item.name != '合肥中关村协同产业发展有限公司' &&   item.name != '石家庄中关村协同发展有限公司' && item.name != '天津京津中关村科技城发展有限公司')
                 this.users = res.data;
             });
         },
