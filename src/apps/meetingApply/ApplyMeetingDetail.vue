@@ -11,13 +11,16 @@
         </div>
         <div class="formContent">
             <br />
-            <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" v-show="this.tableData.status && this.tableData.status == '04'" @click="print">打印</el-button>
+            </div>
+
             <br />
-           <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData'  id='queryTable' class="demo-form-inline" ref="formupdate" style="height:150%">
+            <el-form :model='tableData' id='queryTable' class="demo-form-inline" ref="formupdate" style="height:100%;margin-left:15px;">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号：">{{tableData.number}}
@@ -49,7 +52,7 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="会议类型：">
-                         <span  v-html="discussionOption[tableData.branchlineTo]" ></span>
+                            <span v-html="discussionOption[tableData.branchlineTo]"></span>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -81,30 +84,19 @@
                                         <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
                                         <!--</el-option>-->
                                         <!--</el-select>-->
-                                        <el-cascader
-                                                disabled
-                                                @change="changePersonOptions(item)"
-                                                :show-all-levels="false"
-                                                :props="props"
-                                                :options="options"
-                                                v-model="item.department"
-                                        ></el-cascader>
+                                        <el-cascader disabled @change="changePersonOptions(item)" :show-all-levels="false" :props="props" :options="options" v-model="item.department"></el-cascader>
                                     </td>
                                     <td colspan="4">
                                         <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" disabled>
-                                            <el-option
-                                                    v-for="i in item.personOptions"
-                                                    :key="i.id"
-                                                    :label="i.name"
-                                                    :value="i.id">
+                                            <el-option v-for="i in item.personOptions" :key="i.id" :label="i.name" :value="i.id">
                                             </el-option>
                                         </el-select>
                                     </td>
                                 </tr>
                                 <!--<tr>-->
-                                    <!--<td colspan="8" style="height: 30px;">-->
-                                        <!--<span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>-->
-                                    <!--</td>-->
+                                <!--<td colspan="8" style="height: 30px;">-->
+                                <!--<span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>-->
+                                <!--</td>-->
                                 <!--</tr>-->
                             </el-form-item>
                         </el-col>
@@ -114,7 +106,9 @@
                     <el-col :span="24">
                         <el-form-item label="关联议题：">
                             <tr v-for="item in tableData.discussionContent">
-                                <td><a href="javacript:void(0);" @click="common.open('#/apps/discussion/' + item.discussionId);">{{ item.discussionName }}</a></td>
+                                <td>
+                                    <a href="javacript:void(0);" @click="common.open('#/apps/discussion/' + item.discussionId);">{{ item.discussionName }}</a>
+                                </td>
                             </tr>
                         </el-form-item>
                     </el-col>
@@ -133,31 +127,20 @@
                                         <!--&lt;!&ndash;:value="{value:i.value, label: i.label}">&ndash;&gt;-->
                                         <!--</el-option>-->
                                         <!--</el-select>-->
-                                        <el-cascader
-                                                disabled
-                                                @change="changePersonOptions(item)"
-                                                :show-all-levels="false"
-                                                :props="props"
-                                                :options="options"
-                                                v-model="item.department"
-                                        ></el-cascader>
+                                        <el-cascader disabled @change="changePersonOptions(item)" :show-all-levels="false" :props="props" :options="options" v-model="item.department"></el-cascader>
                                     </td>
                                     <td colspan="4">
                                         <el-select style="width: 100%" v-model="item.people" multiple @change="changePeople" disabled>
-                                            <el-option
-                                                    v-for="i in item.personOptions"
-                                                    :key="i.id"
-                                                    :label="i.name"
-                                                    :value="i.id">
+                                            <el-option v-for="i in item.personOptions" :key="i.id" :label="i.name" :value="i.id">
                                                 {{i.name}}
                                             </el-option>
                                         </el-select>
                                     </td>
                                 </tr>
                                 <!--<tr>-->
-                                    <!--<td colspan="8" style="height: 30px;">-->
-                                        <!--<span @click="addItem('sitIn')"><i class="el-icon-circle-plus-outline"></i> 插入</span>-->
-                                    <!--</td>-->
+                                <!--<td colspan="8" style="height: 30px;">-->
+                                <!--<span @click="addItem('sitIn')"><i class="el-icon-circle-plus-outline"></i> 插入</span>-->
+                                <!--</td>-->
                                 <!--</tr>-->
                             </el-form-item>
                         </el-col>
@@ -212,7 +195,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -302,314 +285,371 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
-    import moment from 'moment';
-    import Comment from '../Comment';
-    import FilesOperate from '../FilesOperate';
-    import { publicMethods } from "../application.js";
-    export default {
-        mixins:[publicMethods],
-        name: 'ApplyMeetingDetail',
-        data() {
-            return {
-                props: {
-                    value: 'id',
-                    label: 'name',
-                    children: 'children'
-                },
-                tableData: {
-                    discussionContent: {}
-                },
-                actions: [],
-                actionsDialogArr: [],
-                users: [],
-                formId: "",
-                crumbs: [],
-                comments: [],
-                options: [],
-                dataOptions: [],
-                textarea: '',
-                dialogVisible: false,
-                dialogVisibleSummary: false,
-                dialogVisibleDelay: false,
-                dialogVisibleAttachment: false,
-                appFlowName:'motor-meetingApply_application-meeting',
-                discussionOption: {
-                    specMeeting: '专题会',
-                    gmoMeeting: '总办会',
-                    partyMeeting: '党支委会',
-                    recruMeeting: '招采委员会',
-                    communMeeting: '班子沟通会'
-                },
-                formName:'meetingApply',
-                dialogVisibleCrumb:false,
-                flowNodeUrl:"",
-            };
+import axios from 'axios';
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
+export default {
+    mixins: [publicMethods],
+    name: 'ApplyMeetingDetail',
+    data() {
+        return {
+            props: {
+                value: 'id',
+                label: 'name',
+                children: 'children'
+            },
+            tableData: {
+                discussionContent: {}
+            },
+            actions: [],
+            actionsDialogArr: [],
+            users: [],
+            formId: '',
+            crumbs: [],
+            comments: [],
+            options: [],
+            dataOptions: [],
+            textarea: '',
+            dialogVisible: false,
+            dialogVisibleSummary: false,
+            dialogVisibleDelay: false,
+            dialogVisibleAttachment: false,
+            appFlowName: 'motor-meetingApply_application-meeting',
+            discussionOption: {
+                specMeeting: '专题会',
+                gmoMeeting: '总办会',
+                partyMeeting: '党支委会',
+                recruMeeting: '招采委员会',
+                communMeeting: '班子沟通会'
+            },
+            formName: 'meetingApply',
+            dialogVisibleCrumb: false,
+            flowNodeUrl: ''
+        };
+    },
+    components: {
+        Comment,
+        FilesOperate
+    },
+    methods: {
+        async print() {
+            // document.getElementById('approval').style.display = 'table-row';
+            this.$print(this.$refs.formupdate.$el, {
+                printTitle: `会议申请(${
+                    this.tableData.organName.split('-')[0]
+                })`
+            });
+            //  document.getElementById('approval').style.display = 'none';
         },
-        components: {
-            Comment,
-            FilesOperate
+        editMeetingAttachment() {
+            this.dialogVisibleAttachment = true;
         },
-        methods: {
-            async print() {
-                // document.getElementById('approval').style.display = 'table-row';
-                this.$print(this.$refs.formupdate.$el,{printTitle:`会议申请(${this.tableData.organName.split('-')[0]})`});
-                //  document.getElementById('approval').style.display = 'none';
-            },
-            editMeetingAttachment() {
-                this.dialogVisibleAttachment = true
-            },
-            async saveMeetingDelay() {
-                if(!this.tableData.meetingDelayTime) {
-                    this.msgTips("请填写延期时间", "warning");
-                    return false
+        async saveMeetingDelay() {
+            if (!this.tableData.meetingDelayTime) {
+                this.msgTips('请填写延期时间', 'warning');
+                return false;
+            }
+            if (!this.tableData.delayReason) {
+                this.msgTips('请填写延期原因', 'warning');
+                return false;
+            }
+            this.dialogVisibleDelay = false;
+            this.tableData.meetingTime = JSON.parse(
+                JSON.stringify(this.tableData.meetingDelayTime)
+            );
+            let a = await this.saveMeetingApply('delay');
+        },
+        async saveMeetingApply(flag) {
+            const $self = this;
+            this.dialogVisibleSummary = false;
+            this.dialogVisibleAttachment = false;
+            this.tableData.sendMessage = [];
+            $self.tableData.attendingDepartment.forEach(item => {
+                if (item.people && item.department) {
+                    item.department = item.department.join(',');
+                    item.person = item.people.join(',');
+                    this.tableData.sendMessage = this.tableData.sendMessage.concat(
+                        item.people
+                    );
                 }
-                if(!this.tableData.delayReason) {
-                    this.msgTips("请填写延期原因", "warning");
-                    return false
+            });
+            $self.tableData.sitIn.forEach(item => {
+                if (item.people && item.department) {
+                    item.department = item.department.join(',');
+                    item.person = item.people.join(',');
+                    this.tableData.sendMessage = this.tableData.sendMessage.concat(
+                        item.people
+                    );
                 }
-                this.dialogVisibleDelay = false
-                this.tableData.meetingTime = JSON.parse(JSON.stringify(this.tableData.meetingDelayTime))
-                let a = await this.saveMeetingApply('delay')
-
-            },
-            async saveMeetingApply(flag) {
-                const $self = this;
-                this.dialogVisibleSummary = false
-                this.dialogVisibleAttachment = false
-                this.tableData.sendMessage = []
-                $self.tableData.attendingDepartment.forEach(item => {
-                    if (item.people && item.department) {
-                        item.department = item.department.join(',')
-                        item.person = item.people.join(',')
-                        this.tableData.sendMessage = this.tableData.sendMessage.concat(item.people)
-                    }
-                })
-                $self.tableData.sitIn.forEach(item => {
-                    if (item.people && item.department) {
-                        item.department = item.department.join(',')
-                        item.person = item.people.join(',')
-                        this.tableData.sendMessage = this.tableData.sendMessage.concat(item.people)
-                    }
-                })
-                this.tableData.sendMessage = this.tableData.sendMessage.join(',')
-                if (this.tableData.sendMessage &&this.tableData.sendMessage.length <= 0) {
-                    delete this.tableData.sendMessage
+            });
+            this.tableData.sendMessage = this.tableData.sendMessage.join(',');
+            if (
+                this.tableData.sendMessage &&
+                this.tableData.sendMessage.length <= 0
+            ) {
+                delete this.tableData.sendMessage;
+            }
+            let response = await $self.saveFormData(
+                '/api/v1/meetingApply/save',
+                $self.tableData
+            );
+            if (response) {
+                if (flag == 'delay') {
+                    let demo = await this.startSignal();
                 }
-                let response = await $self.saveFormData(
-                    "/api/v1/meetingApply/save",
-                    $self.tableData
-                );
-                if (response) {
-                    if(flag == 'delay') {
-                        let demo = await this.startSignal()
-                    }
-                    $self.getFormDetailsData();
-                }
-            },
-            editMeetingSummary() {
-                this.dialogVisibleSummary = true
-            },
-            delayMeeting() {
-                this.dialogVisibleDelay = true
-            },
-            getId(id) {
-                let self = this;
-                self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                    self.tableData.summaryAttachments.forEach(function(value, index) {
-                        if (value.id == id) {
-                            self.tableData.summaryAttachments.splice(index, 1);
-                        }
-                    });
-                });
-            },
-            getAttachmentId(id) {
-                let self = this;
-                self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                    self.tableData.attachments.forEach(function(value, index) {
-                        if (value.id == id) {
-                            self.tableData.attachments.splice(index, 1);
-                        }
-                    });
-                });
-            },
-            handleSuccess(response, file) {
-                const self = this;
-                if (!self.tableData.summaryAttachments) {
-                    self.tableData.summaryAttachments = []
-                }
-                if (response.length > 0) {
-                    response.forEach(function(item) {
-                        item.attachmentType = 'summaryAttachments'
-                        self.tableData.summaryAttachments.push(item);
-                        self.$forceUpdate()
-                    });
-                }
-                this.$refs.uploadOther.clearFiles();
-            },
-            handleAttachmentSuccess(response, file) {
-                const self = this;
-                if (!self.tableData.attachments) {
-                    self.tableData.attachments = []
-                }
-                if (response.length > 0) {
-                    response.forEach(function(item) {
-                        item.attachmentType = 'attachments'
-                        self.tableData.attachments.push(item);
-                        self.$forceUpdate()
-                    });
-                }
-                this.$refs.uploadAttachmentOther.clearFiles();
-            },
-            async getDiscussionUser() {
-                let a = await axios.get("/api/v1/users/list/organs")
-                if (a) this.dataOptions = a.data || []
-                this.options = JSON.parse(JSON.stringify(this.dataOptions))
-                this.deleteChildren(this.options)
-            },
-            deleteChildren(array) {
-                array.forEach(item => {
-                    if (item.children.length === 0) {
-                        delete item.children
-                    }
-                    if (item.children) {
-                        if (item.children[0]) {
-                            if (!item.children[0].type) {
-                                delete item.children
-                            }
-                        }
-                    }
-                    if (item.children && item.children.length > 0) {
-                        this.deleteChildren(item.children)
-                    }
-                })
-            },
-            changePeople() {
-                this.$forceUpdate()
-            },
-            getFormDetails(formId) {
-                let $self = this;
-                $self.formId = formId;
-                $self.url= "/api/v1/meetingApply/detail/" + $self.formId;
                 $self.getFormDetailsData();
-            },
-            searchPersonOptions(array, value) {
-                array.forEach(item => {
-                    if (item.id === value && item.type) {
-                        this.person = item.children;
-                    }
-                    if (item.children && item.children.length > 0) {
-                        this.searchPersonOptions(item.children, value)
+            }
+        },
+        editMeetingSummary() {
+            this.dialogVisibleSummary = true;
+        },
+        delayMeeting() {
+            this.dialogVisibleDelay = true;
+        },
+        getId(id) {
+            let self = this;
+            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                self.tableData.summaryAttachments.forEach(function(
+                    value,
+                    index
+                ) {
+                    if (value.id == id) {
+                        self.tableData.summaryAttachments.splice(index, 1);
                     }
                 });
-            },
-            async getFormDetailsData() {
-                 let $self = this;
-                let response = await $self.getDetails();
-                let a = await $self.getDiscussionUser();
-                if (response) {
-                    $self.tableData = response.data.content;
-                    if (!$self.tableData.discussionContent) {
-                        $self.tableData.discussionContent = []
+            });
+        },
+        getAttachmentId(id) {
+            let self = this;
+            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                self.tableData.attachments.forEach(function(value, index) {
+                    if (value.id == id) {
+                        self.tableData.attachments.splice(index, 1);
                     }
-                    if ($self.tableData.sitIn) {
-                        $self.tableData.sitIn.forEach((item,index) => {
+                });
+            });
+        },
+        handleSuccess(response, file) {
+            const self = this;
+            if (!self.tableData.summaryAttachments) {
+                self.tableData.summaryAttachments = [];
+            }
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    item.attachmentType = 'summaryAttachments';
+                    self.tableData.summaryAttachments.push(item);
+                    self.$forceUpdate();
+                });
+            }
+            this.$refs.uploadOther.clearFiles();
+        },
+        handleAttachmentSuccess(response, file) {
+            const self = this;
+            if (!self.tableData.attachments) {
+                self.tableData.attachments = [];
+            }
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    item.attachmentType = 'attachments';
+                    self.tableData.attachments.push(item);
+                    self.$forceUpdate();
+                });
+            }
+            this.$refs.uploadAttachmentOther.clearFiles();
+        },
+        async getDiscussionUser() {
+            let a = await axios.get('/api/v1/users/list/organs');
+            if (a) this.dataOptions = a.data || [];
+            this.options = JSON.parse(JSON.stringify(this.dataOptions));
+            this.deleteChildren(this.options);
+        },
+        deleteChildren(array) {
+            array.forEach(item => {
+                if (item.children.length === 0) {
+                    delete item.children;
+                }
+                if (item.children) {
+                    if (item.children[0]) {
+                        if (!item.children[0].type) {
+                            delete item.children;
+                        }
+                    }
+                }
+                if (item.children && item.children.length > 0) {
+                    this.deleteChildren(item.children);
+                }
+            });
+        },
+        changePeople() {
+            this.$forceUpdate();
+        },
+        getFormDetails(formId) {
+            let $self = this;
+            $self.formId = formId;
+            $self.url = '/api/v1/meetingApply/detail/' + $self.formId;
+            $self.getFormDetailsData();
+        },
+        searchPersonOptions(array, value) {
+            array.forEach(item => {
+                if (item.id === value && item.type) {
+                    this.person = item.children;
+                }
+                if (item.children && item.children.length > 0) {
+                    this.searchPersonOptions(item.children, value);
+                }
+            });
+        },
+        async getFormDetailsData() {
+            let $self = this;
+            let response = await $self.getDetails();
+            let a = await $self.getDiscussionUser();
+            if (response) {
+                $self.tableData = response.data.content;
+                if (!$self.tableData.discussionContent) {
+                    $self.tableData.discussionContent = [];
+                }
+                if ($self.tableData.sitIn) {
+                    $self.tableData.sitIn.forEach((item, index) => {
+                        // 处理部门
+                        if (item.person) {
+                            item.people = item.person.split(',');
+                        }
+                        if (item.department) {
+                            item.department = item.department.split(',');
+                        }
+                        if (item.department) {
+                            for (let i = 0; i < item.department.length; i++) {
+                                item.department[i] = parseInt(
+                                    item.department[i]
+                                );
+                            }
+                            this.searchPersonOptions(
+                                this.dataOptions,
+                                item.department[item.department.length - 1]
+                            );
+                            item.personOptions = this.person;
+                        } else {
+                            item.department = [];
+                            item.personOptions = [];
+                        }
+                        // 处理人员
+                        if (item.people) {
+                            for (let i = 0; i < item.people.length; i++) {
+                                item.people[i] = parseInt(item.people[i]);
+                            }
+                        }
+                    });
+                }
+                if ($self.tableData.attendingDepartment) {
+                    $self.tableData.attendingDepartment.forEach(
+                        (item, index) => {
                             // 处理部门
                             if (item.person) {
-                                item.people = item.person.split(',')
+                                item.people = item.person.split(',');
                             }
                             if (item.department) {
-                                item.department = item.department.split(',')
+                                item.department = item.department.split(',');
                             }
                             if (item.department) {
-                                for (let i = 0; i<item.department.length; i++) {
-                                    item.department[i] = parseInt(item.department[i])
+                                for (
+                                    let i = 0;
+                                    i < item.department.length;
+                                    i++
+                                ) {
+                                    item.department[i] = parseInt(
+                                        item.department[i]
+                                    );
                                 }
-                                this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
-                                item.personOptions = this.person
+                                this.searchPersonOptions(
+                                    this.dataOptions,
+                                    item.department[item.department.length - 1]
+                                );
+                                item.personOptions = this.person;
                             } else {
-                                item.department = []
-                                item.personOptions = []
-                            }
-                            // 处理人员
-                            if (item.people){
-                                for (let i = 0; i<item.people.length; i++) {
-                                    item.people[i] = parseInt(item.people[i])
-                                }
-                            }
-                        })
-                    }
-                    if ($self.tableData.attendingDepartment) {
-                        $self.tableData.attendingDepartment.forEach((item,index) => {
-                            // 处理部门
-                            if (item.person) {
-                                item.people = item.person.split(',')
-                            }
-                            if (item.department) {
-                                item.department = item.department.split(',')
-                            }
-                            if (item.department) {
-                                for (let i = 0; i<item.department.length; i++) {
-                                    item.department[i] = parseInt(item.department[i])
-                                }
-                                this.searchPersonOptions(this.dataOptions, item.department[item.department.length - 1])
-                                item.personOptions = this.person
-                            } else {
-                                item.department = []
-                                item.personOptions = []
+                                item.department = [];
+                                item.personOptions = [];
                             }
                             // 处理人员
                             if (item.people)
-                                for (let i = 0; i<item.people.length; i++) {
-                                    item.people[i] = parseInt(item.people[i])
+                                for (let i = 0; i < item.people.length; i++) {
+                                    item.people[i] = parseInt(item.people[i]);
+                                }
+                        }
+                    );
+                }
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
+            } else {
+                $self.msgTips('获取表单失败', 'warning');
+            }
+            let actions = await $self.getActions();
+            // let crumbs = await $self.getCrumbs();
+            let comments = await $self.getComments();
+            $self.comments = comments.data;
+            for (let i = 0; i < actions.data.types.length; i++) {
+                if (
+                    actions.data.types[i].required &&
+                    JSON.stringify(actions.data.types[i].required).indexOf(
+                        'filterButton'
+                    ) > -1
+                ) {
+                    for (
+                        let j = 0;
+                        j < actions.data.types[i].required.length;
+                        j++
+                    ) {
+                        if (
+                            actions.data.types[i].required[j].indexOf(
+                                'filterButton'
+                            ) > -1
+                        ) {
+                            if (
+                                actions.data.types[i].required[j].indexOf(
+                                    '=='
+                                ) > -1
+                            ) {
+                                let a = actions.data.types[i].required[j];
+                                let key_a = a.split('==')[0].split(':')[1];
+                                let value = a.split('==')[1];
+                                if (
+                                    '"' + $self.tableData[key_a] + '"' !=
+                                    value
+                                ) {
+                                    actions.data.types[i].hideCurrent = true;
+                                }
+                            } else {
+                                let a = actions.data.types[i].required[j];
+                                let key_a = a.split('!=')[0].split(':')[1];
+                                let value = a.split('!=')[1];
+                                if (
+                                    '"' + $self.tableData[key_a] + '"' ==
+                                    value
+                                ) {
+                                    actions.data.types[i].hideCurrent = true;
+                                }
                             }
-                        })
+                        }
                     }
-                    $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
-                } else {
-                    $self.msgTips("获取表单失败", "warning");
-                }
-                let actions = await $self.getActions();
-                // let crumbs = await $self.getCrumbs();
-                let comments =  await $self.getComments();
-                $self.comments = comments.data;
-                for(let i = 0; i < actions.data.types.length; i++){
-                   if(actions.data.types[i].required && JSON.stringify(actions.data.types[i].required).indexOf("filterButton") > -1){
-                       for(let j = 0; j<actions.data.types[i].required.length; j++){
-                           if(actions.data.types[i].required[j].indexOf("filterButton") > -1){
-                              if(actions.data.types[i].required[j].indexOf("==") > -1){
-                                 let a = actions.data.types[i].required[j];
-                                 let key_a = a.split("==")[0].split(":")[1];
-                                 let value = a.split("==")[1];
-                                 if('"'+$self.tableData[key_a]+'"' !=  value){
-                                   actions.data.types[i].hideCurrent = true;
-                                 }
-                              }else{
-                                  let a = actions.data.types[i].required[j];
-                                  let key_a = a.split("!=")[0].split(":")[1];
-                                  let value = a.split("!=")[1];
-                                    if('"'+$self.tableData[key_a]+'"' ==  value){
-                                        actions.data.types[i].hideCurrent = true;
-                                    }
-                              }
-                           }
-                       }
-                   }
-                };
-                $self.actions = actions.data.types;
-                let crumbs = await $self.getCrumbsone();
-                $self.crumbs =  {items: crumbs.data, index: -1};
-                for(var i= 0; i<$self.crumbs.items.length; i++){
-                    if($self.crumbs.items[i].active){
-                        $self.crumbs.index = i;    
-                    }
-                }
-                if($self.crumbs.index == -1) {
-                    $self.crumbs.index=$self.crumbs.items.length
                 }
             }
+            $self.actions = actions.data.types;
+            let crumbs = await $self.getCrumbsone();
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
+                }
+            }
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
+            }
         }
-    };
+    }
+};
 </script>
 <style>
 @media print {
@@ -626,117 +666,117 @@
 }
 </style>
 <style lang="scss">
-    #ApplyMeetingDetail {
-        .uploadBtn {
-            margin-right: 10px;
-            width: 100px;
-            height: 130px;
-            text-align: center;
-            float: left;
-            border: 1px solid #c0c4cc;
-            border-radius: 2px;
-            cursor: pointer;
+#ApplyMeetingDetail {
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
 
-            .el-upload {
-                width: 100%;
-                height: 100%;
+        .el-upload {
+            width: 100%;
+            height: 100%;
 
-                i {
-                    font-size: 50px;
-                    margin-top: 35px;
-                }
+            i {
+                font-size: 50px;
+                margin-top: 35px;
             }
         }
-        .el-step__main {
-            margin-top: 10px;
-        }
-        .audit {
-            position: relative;
-            margin-bottom: 10px;
-            font-size: 14px;
-            box-shadow: none;
-            border: 0;
-            font-weight: bold;
-            .avatar {
-                position: absolute;
-                left: 5px;
-                top: 5px;
+    }
+    .el-step__main {
+        margin-top: 10px;
+    }
+    .audit {
+        position: relative;
+        margin-bottom: 10px;
+        font-size: 14px;
+        box-shadow: none;
+        border: 0;
+        font-weight: bold;
+        .avatar {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 36px;
+            height: 36px;
+            img {
                 width: 36px;
                 height: 36px;
-                img {
-                    width: 36px;
-                    height: 36px;
-                    border: 1px solid #dddddd;
-                    border-radius: 50%;
+                border: 1px solid #dddddd;
+                border-radius: 50%;
+            }
+        }
+        .info {
+            margin-left: 60px;
+            display: inline-block;
+            width: calc(100% - 60px);
+            .creator {
+                height: 32px;
+                line-height: 32px;
+                a {
+                    color: #4a6495;
+                    text-decoration-line: none;
                 }
             }
-            .info {
-                margin-left: 60px;
-                display: inline-block;
-                width: calc(100% - 60px);
-                .creator {
-                    height: 32px;
-                    line-height: 32px;
-                    a {
-                        color: #4a6495;
-                        text-decoration-line: none;
-                    }
-                }
-                .content {
-                    min-height: 32px;
-                }
+            .content {
+                min-height: 32px;
             }
-        }
-        .input-with-select {
-            width: 0px;
-            margin-right: 10px;
-            .el-input-group__prepend {
-                background-color: #409eff;
-                border-color: #409eff;
-                color: #ffffff;
-                border-radius: 4px;
-            }
-            &.reject .el-input-group__prepend {
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-            }
-            .el-input__inner {
-                width: 0;
-                padding: 0;
-                border: 0;
-            }
-            .el-input__suffix {
-                left: 8px;
-            }
-        }
-        #actionList {
-            background: #f4f4f4;
-            border-bottom: 1px solid #eaeaea;
-            height: 40px;
-            width: 100%;
-            z-index: 10;
-            .btnList {
-                line-height: 40px;
-                padding: 12px 10px;
-                cursor: pointer;
-            }
-            .btnList:hover {
-                background: #c7e0f4;
-            }
-        }
-        .btnhide {
-            display: none;
-        }
-        .crumbList {
-            margin: 15px 0px;
         }
     }
-    .fullScreen {
-        position: fixed;
-        top: 0px;
+    .input-with-select {
+        width: 0px;
+        margin-right: 10px;
+        .el-input-group__prepend {
+            background-color: #409eff;
+            border-color: #409eff;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+        &.reject .el-input-group__prepend {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .el-input__inner {
+            width: 0;
+            padding: 0;
+            border: 0;
+        }
+        .el-input__suffix {
+            left: 8px;
+        }
+    }
+    #actionList {
+        background: #f4f4f4;
+        border-bottom: 1px solid #eaeaea;
+        height: 40px;
+        width: 100%;
         z-index: 10;
-        background: #fff;
-        left: 0px;
-        right: 0px;
+        .btnList {
+            line-height: 40px;
+            padding: 12px 10px;
+            cursor: pointer;
+        }
+        .btnList:hover {
+            background: #c7e0f4;
+        }
     }
+    .btnhide {
+        display: none;
+    }
+    .crumbList {
+        margin: 15px 0px;
+    }
+}
+.fullScreen {
+    position: fixed;
+    top: 0px;
+    z-index: 10;
+    background: #fff;
+    left: 0px;
+    right: 0px;
+}
 </style>

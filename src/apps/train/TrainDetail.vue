@@ -1,5 +1,5 @@
 <template>
-    <div id="TrainDetail" >
+    <div id="TrainDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -7,27 +7,27 @@
                         {{action.name}}
                     </span>
                 </div>
-           </el-row>
+            </el-row>
         </div>
         <br />
         <div class="formContent" style="padding: 15px 30px;overflow: scroll;">
-            
+
             <div>
-                <el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button>
+                <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
             <!-- :style="crumbs.items.length>3?'overflow-x: auto;width: 400px':''" -->
-             <el-steps  :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                    <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-                </el-steps>
-            <el-form :model='tableData' class="formList" ref="formupdate" style="height:150%">
-                 <h4 style="text-align: center;">培训审批申请单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
-                
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
+            <el-form :model='tableData' class="formList" ref="formupdate" id='queryTable' style="height:100%">
+                <h4 style="text-align: center;">培训审批申请单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
+
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.submitter}}
-                    </el-form-item>
+                        </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="所属部门：">{{tableData.organName}}
@@ -38,7 +38,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                 <el-row>
+                <el-row>
                     <el-col :span="8">
                         <el-form-item label="是否资金计划内：">{{typeJuder}}
                         </el-form-item>
@@ -63,7 +63,7 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                     <el-col :span="24">
+                    <el-col :span="24">
                         <el-form-item label="流水号：">{{tableData.number}}
                         </el-form-item>
                     </el-col>
@@ -115,7 +115,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -138,33 +138,33 @@
     </div>
 </template>
 <script>
-import moment from "moment";
-import Comment from "../Comment";
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 
 export default {
-    mixins:[publicMethods],
-    name: "TrainDetail",
+    mixins: [publicMethods],
+    name: 'TrainDetail',
     data() {
         return {
-            isactive:'',
+            isactive: '',
             tableData: {},
             actions: [],
-            crumbs:[],
-            formId: "",
-            textarea: "",
+            crumbs: [],
+            formId: '',
+            textarea: '',
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'motor-trainingapplication_train',
-            formName:'trainingApplication',
-            comments:[],
-            dialogVisibleCrumb:false,
-            flowNodeUrl:"",
-            typeJuder:"",
-            isAnnualPlanone:""
-                    };
+            appFlowName: 'motor-trainingapplication_train',
+            formName: 'trainingApplication',
+            comments: [],
+            dialogVisibleCrumb: false,
+            flowNodeUrl: '',
+            typeJuder: '',
+            isAnnualPlanone: ''
+        };
     },
     components: {
         Comment,
@@ -172,12 +172,12 @@ export default {
     },
     methods: {
         async print() {
-            this.$print(this.$refs.formupdate.$el,{printTitle:''});
+            this.$print(this.$refs.formupdate.$el, { printTitle: '' });
         },
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/"+$self.formName+"/detail/" + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/detail/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -185,40 +185,39 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
-                   if($self.tableData.type=="true"){
-                        $self.typeJuder='是'
-                        
-                    }
-                    if($self.tableData.isAnnualPlan=="true"){
-                        $self.isAnnualPlanone='是'
-                    }
-                    if($self.tableData.type=="false"){
-                        $self.typeJuder='否'
-                    }
-                    if($self.tableData.isAnnualPlan=="false"){
-                        
-                        $self.isAnnualPlanone='否'
-                    }
-               
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
+                if ($self.tableData.type == 'true') {
+                    $self.typeJuder = '是';
+                }
+                if ($self.tableData.isAnnualPlan == 'true') {
+                    $self.isAnnualPlanone = '是';
+                }
+                if ($self.tableData.type == 'false') {
+                    $self.typeJuder = '否';
+                }
+                if ($self.tableData.isAnnualPlan == 'false') {
+                    $self.isAnnualPlanone = '否';
+                }
 
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             } else {
-                $self.msgTips("获取表单失败", "warning");
+                $self.msgTips('获取表单失败', 'warning');
             }
-           let actions = await $self.getActions();
+            let actions = await $self.getActions();
             let crumbs = await $self.getCrumbsone();
-            let comments =  await $self.getComments();
+            let comments = await $self.getComments();
             $self.actions = actions.data.types;
             $self.comments = comments.data;
-            $self.crumbs =  {items: crumbs.data, index: -1};
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                     $self.crumbs.index = i;    
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
                 }
-                
             }
-            if($self.crumbs.index == -1) {
-                $self.crumbs.index=$self.crumbs.items.length
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
             }
         }
     }
@@ -226,17 +225,32 @@ export default {
 </script>
 <style>
 @media print {
-html, body {
-height: inherit;
-}
+    html,
+    body {
+        height: inherit;
+    }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
 }
 </style>
 <style lang="scss" scoped>
 #TrainDetail {
-   
+    html,
+    body {
+        height: inherit;
+    }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
     .el-step__main {
         margin-top: 10px;
-       
     }
     .audit {
         position: relative;
@@ -298,7 +312,7 @@ height: inherit;
         }
     }
     #actionList {
-         padding-left: 20px;
+        padding-left: 20px;
         background: #f4f4f4;
         border-bottom: 1px solid #eaeaea;
         height: 40px;
@@ -313,7 +327,7 @@ height: inherit;
             background: #c7e0f4;
         }
     }
-    
+
     .btnhide {
         display: none;
     }
