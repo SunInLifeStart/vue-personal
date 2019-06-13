@@ -428,7 +428,7 @@ export default {
                     status: $self.tableData.status
                 });
             } else {
-                $self.msgTips('获取表单失败', 'warning');
+               // $self.msgTips('获取表单失败', 'warning');
             }
             let actions = await $self.getActions();
             let crumbs = await $self.getCrumbsone();

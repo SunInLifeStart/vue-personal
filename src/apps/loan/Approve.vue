@@ -30,7 +30,7 @@ export default {
     #LoanDetail {
         height: 90%;
         width: 100%;
-       // display: flex;
+        // display: flex;
         flex-direction: column;
         #actionList {
             padding-left: 20px;
