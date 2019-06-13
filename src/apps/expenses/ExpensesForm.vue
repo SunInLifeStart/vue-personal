@@ -162,6 +162,17 @@
                         </td>
                     </tr>
                     <tr>
+                        <td>
+                            是否资金计划内
+                        </td>
+                        <td colspan="7">
+                            <el-radio-group v-model="formData.fundPlan">
+                                <el-radio :label="true">是</el-radio>
+                                <el-radio :label="false">否</el-radio>
+                            </el-radio-group>
+                        </td>
+                    </tr>
+                    <tr>
                         <td colspan="8" style="font-weight:bold;">附件</td>
                     </tr>
                     <tr>
@@ -430,7 +441,8 @@ export default {
                 amountInFigures: '',
                 amountInWords: '',
                 utype: '是',
-                attachments: []
+                attachments: [],
+                fundPlan: true
             };
             return formData;
         },

@@ -33,7 +33,7 @@
                         <span :class="{titlename:tableData.subView}" @click="ViewDetail('chengbao')">{{tableData.subNo}}</span>
                     </el-col>
                 </el-row>
-                <table class="tablePrint" >
+                <table class="tablePrint">
                     <col style="width: 10%" />
                     <col style="width: 10%" />
                     <col style="width: 10%" />
@@ -140,6 +140,14 @@
                         </td>
                         <td colspan="7">
                             {{tableData.utype}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            是否资金计划内
+                        </td>
+                        <td colspan="7">
+                            {{tableData.fundPlan ? '是': '否'}}
                         </td>
                     </tr>
                     <tr>
