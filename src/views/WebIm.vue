@@ -24,13 +24,13 @@
                             </div>
                             <div class="main-users">
                                 <div v-if="searchNameResult.length == 0">
-                                    <div :key="organ.id" v-for="organ in users" style="position:relative" >
+                                    <div :key="index" v-for="(organ,index) in users" style="position:relative" >
                                         <div class="organname" @click="setUserShow(organ)">{{organ.name}}
                                             <i class="el-icon-arrow-left" v-show="!organ.status" style="float:right;color:rgb(0, 90, 158)"></i>
                                             <i class="el-icon-arrow-down" v-show="organ.status" style="float:right;color:rgb(0, 90, 158)"></i></div>
                                         <el-collapse-transition>
                                             <div v-show="organ.status">
-                                                <div class="transition-box user" :key="user.id" :class="{active:(index+user.id) == userIndex}" v-show="!user.hideCurrent" v-for="(user,index) in organ.users" @click="selectUser(user,index)" style="position:relative">
+                                                <div class="transition-box user" :key="index" :class="{active:(index+user.id) == userIndex}" v-show="!user.hideCurrent" v-for="(user,index) in organ.users" @click="selectUser(user,index)" style="position:relative">
                                                     <span class="avatar" :class="{'onlineavatar':user.online}">{{user.name[0]}}</span>
                                                     <span class="name">{{user.name}}</span>
                                                 </div>
@@ -239,6 +239,7 @@ export default {
             countpage: 1,
             userIndex: -1,
             userDialogIndex: -1,
+            fiterOrganUsers:[],
             rows: {
                 groupName: ""
             },
@@ -401,8 +402,6 @@ export default {
                         } else {
                             $self.msgList.push(msg);
                         }
-                        // console.log('success:' + JSON.stringify(data));
-                        // console.log('successssssss:' + JSON.stringify(msg));
                     })
                     .onFail(function(data) {
                         console.log("error:" + JSON.stringify(data));
@@ -759,11 +758,6 @@ export default {
                             console.log("error:" + JSON.stringify(data));
                         });
                 }
-            }else{
-                // this.$message({
-                //         message: '请输入对话内容',
-                //         type: 'warning'
-                //     });
             }
         },
         //获取树桩人员列表
@@ -774,10 +768,40 @@ export default {
             ///api/v1/users/im/organs
             //api/v1/users/im/organs
             axios.get("/api/v1/users/list/organs").then(res => {
-                res.data =  res.data.filter(item => item.name != '合肥中关村协同产业发展有限公司' &&   item.name != '石家庄中关村协同发展有限公司' && item.name != '天津京津中关村科技城发展有限公司')
-                this.users = res.data;
+              //  res.data =  res.data.filter(item => item.name != '合肥中关村协同产业发展有限公司' &&   item.name != '石家庄中关村协同发展有限公司' && item.name != '天津京津中关村科技城发展有限公司')
+                this.filterOrgansUsers(res.data);
             });
         },
+        filterOrgansUsers(organs){
+            let $self = this;
+            organs.forEach(function(value, index) {
+                if(value.users && value.users.length == 0){
+                    let list = {},arr = [];
+                    arr = $self.getRecursionUser(value);
+                    arr = arr.reduce(function(item, next) {
+                    list[next.id] ? '' : list[next.id] = true && item.push(next);
+                    return item;
+                }, []);
+                    value.children = value.users  = arr;
+                    $self.fiterOrganUsers = [];
+                }
+            });
+            this.users = organs;
+        },
+        getRecursionUser(data){
+            let $self = this;
+            if(data.users && data.users.length == 0){
+                 data.children.forEach(function(value, index) {
+                        if(value.users && value.users.length == 0){
+                            $self.getRecursionUser(value);
+                        }else{
+                            $self.fiterOrganUsers = $self.fiterOrganUsers.concat(value.users);
+                        }
+                 });
+            };
+            return $self.fiterOrganUsers;
+        },
+
         onDrag: function (e) {
             e.stopPropagation();
             e.preventDefault();
