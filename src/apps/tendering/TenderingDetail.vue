@@ -189,8 +189,6 @@
                 let response = await $self.getDetails();
                 if (response) {
                     $self.tableData = response.data.content;
-                } else {
-                    $self.msgTips("获取表单失败", "warning");
                 }
                 let actions = await $self.getActions();
                 let comments =  await $self.getComments();
