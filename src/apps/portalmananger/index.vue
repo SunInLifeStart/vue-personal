@@ -52,11 +52,11 @@ export default {
         handleClick() {}
     },
     mounted(){
-          if(['dongwy','gehao','tangyc','zhaozs'].includes(this.$store.getters.LoginData.username)){
+          if(['gehao','tangyc','zhaozs','chihm'].includes(this.$store.getters.LoginData.username)){
                     this.first = this.second =  this.third_2 = this.fourth = this.eighth = false;
                     this.activeName =  'fifth';
             }
-    }
+         }
 };
 </script>
 <style lang="scss" scoped>

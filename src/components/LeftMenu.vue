@@ -15,7 +15,11 @@
                             <i outside=true class="iconfont" :class="item.icon" size="24" />
                             <div outside=true class="name">{{item.name}}</div>
                         </router-link>
-                         <router-link :target="item.id" v-if="hasPowerForHb && item.id =='commonly_12'" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
+                         <router-link :target="item.id" v-if="hasPowerForHb == '1' && item.id =='commonly_12'" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
+                            <i outside=true class="iconfont" :class="item.icon" size="24" />
+                            <div outside=true class="name">{{item.name}}</div>
+                        </router-link>
+                        <router-link :target="item.id" v-if="hasPowerForHb =='2' && item.id =='commonly_133'" outside=true @click="closeLeftMenu" class="app" :key="item.id" v-for="item in items.children" :to="{ path: '/apps/'+item.to}">
                             <i outside=true class="iconfont" :class="item.icon" size="24" />
                             <div outside=true class="name">{{item.name}}</div>
                         </router-link>
@@ -61,7 +65,7 @@ export default {
             searchKey: '',
             items: [],
             result_items: [],
-            hasPowerForHb:false,
+            hasPowerForHb:'0',
             apps: [
                 {
                     type: '常用办公',
@@ -140,6 +144,12 @@ export default {
                          {
                             id: "commonly_12",
                             name: '会表发布',
+                            icon: 'el-icon-publish',
+                            to:'portalmananger',
+                        },
+                          {
+                            id: "commonly_133",
+                            name: '后台管理',
                             icon: 'el-icon-publish',
                             to:'portalmananger',
                         }
@@ -409,7 +419,10 @@ export default {
     },
     mounted() {
         if(['chihm','gehao','tangyc','zhaozs'].includes(this.$store.getters.LoginData.username)){
-                        this.hasPowerForHb = true;
+                        this.hasPowerForHb = '1';
+        }
+         if(['dongwy'].includes(this.$store.getters.LoginData.username)){
+                        this.hasPowerForHb = '2';
         }
         this.initMenus();
     }
