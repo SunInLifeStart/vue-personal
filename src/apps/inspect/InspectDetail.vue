@@ -203,8 +203,6 @@ export default {
                 $self.tableData = response.data;
                 $self.tableData.inspector = parseInt($self.tableData.inspector);
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
-            } else {
-                $self.msgTips("获取表单失败", "warning");
             }
             // debugger;
             let actions = await $self.getActions();

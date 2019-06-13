@@ -151,8 +151,6 @@ export default {
                 $self.tableData = response.data;
                 $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
 
-            } else {
-                $self.msgTips("获取表单失败", "warning");
             }
             let actions = await $self.getActions();
             let comments =  await $self.getComments();

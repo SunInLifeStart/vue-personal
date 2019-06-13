@@ -314,8 +314,6 @@ export default {
                     id: $self.tableData.id,
                     status: $self.tableData.status
                 });
-            } else {
-                $self.msgTips('获取表单失败', 'warning');
             }
             for (let i = 0; i < actions.data.types.length; i++) {
                 if (

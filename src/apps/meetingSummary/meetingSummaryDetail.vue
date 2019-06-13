@@ -224,8 +224,6 @@ export default {
                     id: $self.tableData.id,
                     status: $self.tableData.status
                 });
-            } else {
-                $self.msgTips('获取表单失败', 'warning');
             }
             let actions = await $self.getActions();
             let comments = await $self.getComments();
