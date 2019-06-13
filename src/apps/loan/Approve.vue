@@ -28,7 +28,7 @@ export default {
 #APPROVE {
     height: 100%;
     #LoanDetail {
-        height: 100%;
+        height: 90%;
         width: 100%;
        // display: flex;
         flex-direction: column;
