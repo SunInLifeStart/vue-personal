@@ -542,9 +542,6 @@ export const publicMethods = {
                 clearInterval($self.timer);
             }
         },
-
-
-
         //金额阿拉伯数字转大写金额
         convertCurrency(money) {
             //汉字的数字  
