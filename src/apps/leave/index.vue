@@ -125,7 +125,7 @@ export default {
                 console.log($self.tableData);
                 $self.params.total = response.data.content.total;
             } else {
-                $self.msgTips('获取列表失败', 'warning');
+              //  $self.msgTips('获取列表失败', 'warning');
             }
         },
         //选择行
