@@ -176,8 +176,6 @@ export default {
                 }
                 $self.tableData = response.data.content.list;
                 $self.params.total = response.data.content.total;
-            } else {
-                $self.msgTips("获取列表失败", "warning");
             }
         },
         clickTableRow(row) {

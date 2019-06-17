@@ -202,8 +202,6 @@ export default {
                 }
                 $self.tableData = response.data.forms;
                 $self.total = response.data.totalCount;
-            } else {
-                $self.msgTips('获取列表失败', 'warning');
             }
         },
 

@@ -231,8 +231,6 @@ export default {
           if ($self.tableData.length > 0)
           this.$refs.InspectDetail.getFormDetails($self.tableData[0].id);
           $self.params.total = response.data.totalCount;
-      } else {
-        $self.msgTips("获取列表失败", "warning");
       }
     },
     deleteCurrentLine(id, params) {
