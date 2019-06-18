@@ -1161,7 +1161,11 @@ export default {
         },
         //查看选择的部门呈报件（点击小眼睛）
         submissionDetail() {
-            if (this.submission && this.submission != null && this.subView) {
+            if (
+                this.submission &&
+                this.submission != null &&
+                this.formData.subView
+            ) {
                 this.common.open('#/apps/submission/' + this.submission);
             }
         },
@@ -1201,7 +1205,7 @@ export default {
             if (
                 this.travelPeople &&
                 this.travelPeople != null &&
-                this.travelView
+                this.formData.travelView
             ) {
                 this.common.open('#/apps/travel/' + this.travelPeople);
             }
