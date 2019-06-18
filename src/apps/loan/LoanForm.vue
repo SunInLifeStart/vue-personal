@@ -391,9 +391,10 @@ export default {
         travelDetail() {
             if (
                 this.formData.travelPeople &&
-                this.formData.travelPeople != null
+                this.formData.travelPeople != null &&
+                this.formData.travelView
             ) {
-                this.common.open('#/apps/travel/' + this.formData.busId);
+                this.common.open('#/apps/travel/' + this.formData.travelPeople);
             }
         },
         //根据uid获取部门呈报件
@@ -428,6 +429,7 @@ export default {
                 }
             }
             this.formData.subView = boolean;
+
             /** 
             this.formData.subView = true;
             let boolean = false;
@@ -442,8 +444,14 @@ export default {
             */
         },
         submissionDetail() {
-            if (this.formData.submission && this.formData.submission != null) {
-                this.common.open('#/apps/submission/' + this.formData.subId);
+            if (
+                this.formData.submission &&
+                this.formData.submission != null &&
+                this.formData.subView
+            ) {
+                this.common.open(
+                    '#/apps/submission/' + this.formData.submission
+                );
             }
         },
         currencyChange2(item, index) {
