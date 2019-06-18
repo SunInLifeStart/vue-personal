@@ -32,14 +32,15 @@ axios.interceptors.request.use(config => {
 axios.interceptors.response.use(data => {// 响应成功关闭loading
   return data
 }, error => {
-  if(error.response.status == '429'){
-    Message.warning({
-      message: '请求次数太频繁，请稍后再试！'
-    })
-  }else if(error.response.status == "404"){
-    Message.warning({
-      message: '获取表单失败！'
-    })
+  // if(error.response.status == '429'){
+  //   Message.warning({
+  //     message: '请求次数太频繁，请稍后再试！'
+  //   })
+  // }else
+  if(error.response.status == "404"){
+  Message.warning({
+    message: '获取表单失败！'
+  })
   }else if(error.response.status == "502"){
     Message.warning({
       message: '网关代理错误！'
