@@ -347,8 +347,14 @@ export default {
             */
         },
         submissionDetail() {
-            if (this.formData.submission && this.formData.submission != null) {
-                this.common.open('#/apps/submission/' + this.formData.subId);
+            if (
+                this.formData.submission &&
+                this.formData.submission != null &&
+                this.formData.subView
+            ) {
+                this.common.open(
+                    '#/apps/submission/' + this.formData.submission
+                );
             }
         },
         organs() {
