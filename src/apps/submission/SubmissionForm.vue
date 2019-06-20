@@ -2,7 +2,7 @@
     <el-dialog title="部门呈报" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">
         <div id="SubmissionForm">
             <el-form ref="formupdate" :model="formData" label-width="130px" :rules="rules">
-                <el-row>
+                <el-row  v-if="isFromDetailsEdit">
                     <el-col :span="18">
                         <el-form-item label="呈报件编号" prop="submissionNo">
                             <el-input v-model="formData.submissionNo" type="input" placeholder="请选择自动生成或是手动生成" style="margin-left:0px; height: 16px;" :disabled="selectNumber!=='handNumber'"></el-input>
@@ -149,13 +149,13 @@ export default {
                 }
             ],
             rules: {
-                submissionNo: [
-                    {
-                        required: true,
-                        message: '呈报件编号不能为空',
-                        trigger: 'blur'
-                    }
-                ],
+                // submissionNo: [
+                //     {
+                //         required: true,
+                //         message: '呈报件编号不能为空',
+                //         trigger: 'blur'
+                //     }
+                // ],
                 title: [
                     {
                         required: true,
