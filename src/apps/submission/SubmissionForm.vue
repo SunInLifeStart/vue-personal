@@ -320,7 +320,7 @@ export default {
                     .get(
                         // '/api/v1/submission_forms/getNo?dept=' + encodeURI(this.cookie_oname),
                         '/api/v1/submission_forms/getNo?companyName=' +
-                            decodeURI(this.$store.getters.LoginData.companyName)
+                            this.$store.getters.LoginData.companyName
                     )
                     .then(res => {
                         self.formData.submissionNo = res.data;
