@@ -319,8 +319,7 @@ export default {
                 axios
                     .get(
                         // '/api/v1/submission_forms/getNo?dept=' + encodeURI(this.cookie_oname),
-                        '/api/v1/submission_forms/getNo?companyName=' +
-                            this.$store.getters.LoginData.companyName
+                        `/api/v1/submission_forms/getNo/${this.formData.id}`
                     )
                     .then(res => {
                         self.formData.submissionNo = res.data;
