@@ -55,7 +55,9 @@
                     <el-table-column type="selection" :reserve-selection="true"></el-table-column>-->
                     <el-table-column prop="uname" label="提单人" align="left" min-width="100">
                     </el-table-column>
-                    <el-table-column prop="oname" label="费用承担部门" align="left" min-width="150">
+                    <el-table-column prop="oname" label="公司部门" align="left" min-width="150">
+                    </el-table-column>
+                    <el-table-column prop="borrowDept" label="费用承担部门" align="left" min-width="150">
                     </el-table-column>
                     <el-table-column prop="numbers" label="单据编号" align="left" min-width="130">
                     </el-table-column>
