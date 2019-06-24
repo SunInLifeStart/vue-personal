@@ -382,7 +382,31 @@ export default {
             axios
                 .post('/synergy-common/serialNumber/getByTableCode', params)
                 .then(res => {
-                    this.formData.number = res.data.content.serialNumber;
+                    axios
+                        .get(
+                            '/api/v1/entertainmentExpense/verifyNmber/' +
+                                res.data.content.serialNumber
+                        )
+                        .then(res => {
+                            this.formData.number = res.data;
+                        })
+                        .catch(function(e) {
+                            if (e.response.data.message == '该流水号已被占用') {
+                                axios
+                                    .post(
+                                        '/synergy-common/serialNumber/getByTableCode',
+                                        params
+                                    )
+                                    .then(ress => {
+                                        self.formData.number =
+                                            ress.data.content.serialNumber;
+                                        console.log(
+                                            ress.data.content.serialNumber
+                                        );
+                                    })
+                                    .catch(function() {});
+                            }
+                        });
                 })
                 .catch(function() {
                     self.$message({
