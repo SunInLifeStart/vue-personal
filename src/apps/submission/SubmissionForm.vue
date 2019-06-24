@@ -268,6 +268,7 @@ export default {
                     }
                 } else {
                     $self.msgTips('保存成功', 'success');
+                    this.$emit('getFormDetails', $self.formId)
                     if (this.createForm_status) {
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
@@ -319,8 +320,7 @@ export default {
                 axios
                     .get(
                         // '/api/v1/submission_forms/getNo?dept=' + encodeURI(this.cookie_oname),
-                        '/api/v1/submission_forms/getNo?companyName=' +
-                            this.$store.getters.LoginData.companyName
+                        `/api/v1/submission_forms/getNo/${this.formData.id}`
                     )
                     .then(res => {
                         self.formData.submissionNo = res.data;
