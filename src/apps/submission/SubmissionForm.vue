@@ -268,6 +268,7 @@ export default {
                     }
                 } else {
                     $self.msgTips('保存成功', 'success');
+                    this.$emit('getFormDetails', $self.formId)
                     if (this.createForm_status) {
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {

@@ -117,7 +117,7 @@
                 </el-form>
             </el-dialog>
         </div>
-         <SubmissionForm  ref="SubmissionForm"></SubmissionForm>
+         <SubmissionForm @getFormDetails="getFormDetails" ref="SubmissionForm"></SubmissionForm>
     </div>
 </template>
 <script>
