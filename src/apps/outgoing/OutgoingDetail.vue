@@ -143,7 +143,7 @@
                 </el-form>
             </el-dialog>
         </div>
-         <OutgoingForm  ref="outgoingForm"></OutgoingForm>
+         <OutgoingForm  @getFormDetails="getFormDetails" ref="outgoingForm"></OutgoingForm>
     </div>
 </template>
 <script>
