@@ -114,14 +114,14 @@ export default {
                 JIM.onEventNotification(function (data) {
                     if (data.event_type == 1) {
                         self.$message({
-                            message: 'webIm链接已断开，请刷新页面',
+                            message: '您的账号在其他地方登陆，可能影响即时通讯的使用',
                             type: 'warning'
                         });
                     }
                 });
                 JIM.onDisconnect(function (data) {
                     self.$message({
-                        message: 'webIm链接已断开了，请刷新页面',
+                        message: '您的账号在其他地方登陆，可能影响即时通讯的使用',
                         type: 'warning'
                     });
                     self.loginIm();

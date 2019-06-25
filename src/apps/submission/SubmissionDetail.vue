@@ -200,7 +200,7 @@ export default {
         },
         reEditForm(){
             let $self = this;
-            $self.$refs.SubmissionForm.setDataFromParent(this.tableData,true);
+            $self.$refs.SubmissionForm.setDataFromParent(JSON.parse(JSON.stringify(this.tableData)),true);
         }
         
     }

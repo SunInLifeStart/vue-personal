@@ -692,7 +692,7 @@ export default {
             console.log('isInit:'+JIM.isInit());
             if(!JIM.isLogin()){
                 $self.$message({
-                        message: 'webIm链接已断开，请刷新页面',
+                        message: '您的账号在其他地方登陆，可能影响即时通讯的使用',
                         type: 'warning'
                 });
                 return false;

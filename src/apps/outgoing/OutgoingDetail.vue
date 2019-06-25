@@ -143,7 +143,7 @@
                 </el-form>
             </el-dialog>
         </div>
-         <OutgoingForm  ref="outgoingForm"></OutgoingForm>
+         <OutgoingForm  @getFormDetails="getFormDetails" ref="outgoingForm"></OutgoingForm>
     </div>
 </template>
 <script>
@@ -255,11 +255,11 @@ export default {
         },
         reEditForm(){
             let $self = this;
-            $self.$refs.outgoingForm.setDataFromParent(this.tableData,true);
+            $self.$refs.outgoingForm.setDataFromParent(JSON.parse(JSON.stringify(this.tableData)),true);
         },
         symbolEditForm(){
             let $self = this;
-            $self.$refs.outgoingForm.setDataFromParents(this.tableData,true);
+            $self.$refs.outgoingForm.setDataFromParents(JSON.parse(JSON.stringify(this.tableData)),true);
         },
         
     }
