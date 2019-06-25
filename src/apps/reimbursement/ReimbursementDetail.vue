@@ -17,7 +17,7 @@
             <!--v-show="this.tableData.status && this.tableData.status == '04'"-->
             <div>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print">打印</el-button>
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
@@ -700,7 +700,7 @@ export default {
                     status: $self.tableData.status
                 });
             } else {
-               // $self.msgTips('获取表单失败', 'warning');
+                // $self.msgTips('获取表单失败', 'warning');
             }
             let actions = await $self.getActions();
             let crumbs = await $self.getCrumbsone();
