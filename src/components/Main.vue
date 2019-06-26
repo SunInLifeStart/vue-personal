@@ -2,13 +2,7 @@
   <div class="main">
     <div class="main-container">
       <Aside/>
-      <split-pane
-        class="container"
-        v-on:resize="resize"
-        :min-percent="20"
-        :default-percent="30"
-        split="vertical"
-      >
+      <split-pane class="container" v-on:resize="resize" :min-percent="20" :default-percent="30" split="vertical">
         <template slot="paneL">
           <div slot="left" class="split-pane-left">
             <div class="main-top">
@@ -29,34 +23,19 @@
               <el-alert title type="success" center class="alert" v-if="getNewTodo > 0">
                 <a @click="loadNew">有新的待办事项</a>
               </el-alert>
-              <div
-                class="item"
-                :class="{active:messageId==item.id}"
-                @click="openContent(item)"
-                :key="item.id"
-                v-show="!item.hide"
-                v-for="item in items"
-              >
+              <div class="item" :class="{active:messageId==item.id}" @click="openContent(item)" :key="item.id" v-show="!item.hide" v-for="item in items">
                 <div class="avatar">
                   <img src="@/assets/avatar.png" width="30" alt>
                 </div>
                 <div class="content">
-                  <div
-                    class="from"
-                    :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}"
-                  >
-                    <div
-                      class="from-title"
-                    >{{item.from.name}} - {{item.from.title}} - 「{{item.businessType.cn}}」</div>
+                  <div class="from" :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}">
+                    <div class="from-title">{{item.from.name}} - {{item.from.title}} - 「{{item.businessType.cn}}」</div>
                     <div class="from-type">{{item.time|dateFromNow}}</div>
-                    <div class="from-delete" @click.stop="deleteTodo(item)">
+                    <div class="from-delete" @click.stop="deleteTodo(item)" v-if="type != 'todo'">
                       <el-button type="text" icon="el-icon-delete"></el-button>
                     </div>
                   </div>
-                  <div
-                    class="title"
-                    :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}"
-                  >{{item.body.title}}</div>
+                  <div class="title" :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}">{{item.body.title}}</div>
                   <div class="describe" style="display:none;">{{item.body.content}}</div>
                 </div>
               </div>
@@ -87,259 +66,264 @@
 </template>
 
 <script>
-import Aside from "@/components/Aside.vue";
-import axios from "axios";
-import { mapGetters, mapActions } from "vuex";
+import Aside from '@/components/Aside.vue';
+import axios from 'axios';
+import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  props: ["type"],
-  data() {
-    return {
-      items: [],
-      actions: [],
-      types: ["全部"],
-      command: "全部",
-      crumb: {
-        items: []
-      },
-      comment: "",
-      currentView: "",
-      newsView: "",
-      editView: "",
-      formId: "",
-      messageId: "",
-      dialogFormVisible: false,
-      dialogFormNews: false,
-      businessType: "",
-      attachments: undefined
-    };
-  },
-  directives: {},
-  components: {
-    Aside
-  },
-  computed: {
-    ...mapGetters(["LoginData", "getNewTodo", "getNewMessage"])
-  },
-  methods: {
-    loadNew() {
-      this.getWorkFlow();
-      this.$store.dispatch("addTodo", 0);
+    props: ['type'],
+    data() {
+        return {
+            items: [],
+            actions: [],
+            types: ['全部'],
+            command: '全部',
+            crumb: {
+                items: []
+            },
+            comment: '',
+            currentView: '',
+            newsView: '',
+            editView: '',
+            formId: '',
+            messageId: '',
+            dialogFormVisible: false,
+            dialogFormNews: false,
+            businessType: '',
+            attachments: undefined
+        };
     },
-    openContent(item) {
-      this.businessType = item.businessType;
-      this.formId = "";
-      if (this.businessType.en.indexOf("-") > -1) {
-        this.businessType = item.businessType.en.replace("-", "");
-        this.currentView = () =>
-          import(`@/apps/${this.businessType}/Approve.vue`);
-      } else {
-        this.currentView = () =>
-          import(`@/apps/${this.businessType.en}/Approve.vue`);
-      }
-
-      this.formId = item.body.businessKey;
-      this.messageId = item.id;
-
-      if ((this.type == "todo" || this.type == "reading") && !item.readed) {
-        axios
-          .get(
-            `/api/v1/push/${this.LoginData.uid}/messages/${
-              item.id
-            }/read?type=${this.type}`
-          )
-          .then(res => {
-            if (res.data.status == 200) {
-              // item.unreaded = true;
-              this.$set(item, "readed", true);
+    directives: {},
+    components: {
+        Aside
+    },
+    computed: {
+        ...mapGetters(['LoginData', 'getNewTodo', 'getNewMessage'])
+    },
+    methods: {
+        loadNew() {
+            this.getWorkFlow();
+            this.$store.dispatch('addTodo', 0);
+        },
+        openContent(item) {
+            this.businessType = item.businessType;
+            this.formId = '';
+            if (this.businessType.en.indexOf('-') > -1) {
+                this.businessType = item.businessType.en.replace('-', '');
+                this.currentView = () =>
+                    import(`@/apps/${this.businessType}/Approve.vue`);
+            } else {
+                this.currentView = () =>
+                    import(`@/apps/${this.businessType.en}/Approve.vue`);
             }
-          });
-      }
-    },
-    handleType(command) {
-      for (let item of this.items) {
-        if (command == "全部" || item.businessType.cn == command) {
-          this.$set(item, "hide", false);
-        } else {
-          this.$set(item, "hide", true);
-        }
-      }
-      this.command = command;
-    },
-    getWorkFlow() {
-      axios
-        .get(`/api/v1/push/${this.$store.getters.LoginData.uid}/list`, {
-          params: {
-            type: this.type,
-            business: "",
-            page: 1,
-            pageSize: 10000
-          }
-        })
-        .then(res => {
-          this.items = res.data.content;
-          // this.items.todo =  this.type == "todo" ? true : false;
-          this.$root.formId = "";
-          this.messageId = "";
-          this.command = "全部";
-          for (let item of this.items) {
-            if (!this.types.includes(item.businessType.cn)) {
-              this.types.push(item.businessType.cn);
+
+            this.formId = item.body.businessKey;
+            this.messageId = item.id;
+
+            if (
+                (this.type == 'todo' || this.type == 'reading') &&
+                !item.readed
+            ) {
+                axios
+                    .get(
+                        `/api/v1/push/${this.LoginData.uid}/messages/${
+                            item.id
+                        }/read?type=${this.type}`
+                    )
+                    .then(res => {
+                        if (res.data.status == 200) {
+                            // item.unreaded = true;
+                            this.$set(item, 'readed', true);
+                        }
+                    });
             }
-          }
-        });
-    },
-    resize() {},
-    deleteTodo(_item) {
-      this.$confirm("此操作将删除该数据, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-           axios
-          .get(
-            `/api/v1/push/${this.LoginData.uid}/messages/${
-              _item.body.businessKey
-            }/remove/${this.type}`
-          )
-          .then(res => {
-            this.items.splice(this.items.findIndex(item => item.id === _item.id), 1);
-            this.$message({
-                type: "success",
-                message: "删除成功!"
+        },
+        handleType(command) {
+            for (let item of this.items) {
+                if (command == '全部' || item.businessType.cn == command) {
+                    this.$set(item, 'hide', false);
+                } else {
+                    this.$set(item, 'hide', true);
+                }
+            }
+            this.command = command;
+        },
+        getWorkFlow() {
+            axios
+                .get(`/api/v1/push/${this.$store.getters.LoginData.uid}/list`, {
+                    params: {
+                        type: this.type,
+                        business: '',
+                        page: 1,
+                        pageSize: 10000
+                    }
+                })
+                .then(res => {
+                    this.items = res.data.content;
+                    // this.items.todo =  this.type == "todo" ? true : false;
+                    this.$root.formId = '';
+                    this.messageId = '';
+                    this.command = '全部';
+                    for (let item of this.items) {
+                        if (!this.types.includes(item.businessType.cn)) {
+                            this.types.push(item.businessType.cn);
+                        }
+                    }
+                });
+        },
+        resize() {},
+        deleteTodo(_item) {
+            this.$confirm('此操作将删除该数据, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            }).then(() => {
+                axios
+                    .get(
+                        `/api/v1/push/${this.LoginData.uid}/messages/${
+                            _item.body.businessKey
+                        }/remove/${this.type}`
+                    )
+                    .then(res => {
+                        this.items.splice(
+                            this.items.findIndex(item => item.id === _item.id),
+                            1
+                        );
+                        this.$message({
+                            type: 'success',
+                            message: '删除成功!'
+                        });
+                    });
             });
-          });
+        }
+    },
 
-        })
+    watch: {
+        getLoginData() {
+            this.getWorkFlow();
+        },
+        $route(to, from) {
+            this.getWorkFlow();
+        },
+        '$root.formId'() {
+            this.formId = this.$root.formId;
+        },
+        '$root.currentView'() {
+            this.currentView = this.$root.currentView;
+        }
+    },
+    created() {
+        this.getWorkFlow();
     }
-  },
-
-  watch: {
-    getLoginData() {
-      this.getWorkFlow();
-    },
-    $route(to, from) {
-      this.getWorkFlow();
-    },
-    "$root.formId"() {
-      this.formId = this.$root.formId;
-    },
-    "$root.currentView"() {
-      this.currentView = this.$root.currentView;
-    }
-  },
-  created() {
-    this.getWorkFlow();
-  }
 };
 </script>
 
 <style lang="scss">
 .main {
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  width: 100%;
-  height: 100%;
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
 }
 
 .main-top {
-  display: flex;
-  flex: 0 0 auto;
-  background: #f4f4f4;
-  height: 40px;
-  border-bottom: 1px solid #eaeaea;
-  padding-left: 10px;
-  .main-top-left {
-    flex: 1;
-  }
-  .main-top-right {
-    flex: 1;
-    text-align: right;
-  }
+    display: flex;
+    flex: 0 0 auto;
+    background: #f4f4f4;
+    height: 40px;
+    border-bottom: 1px solid #eaeaea;
+    padding-left: 10px;
+    .main-top-left {
+        flex: 1;
+    }
+    .main-top-right {
+        flex: 1;
+        text-align: right;
+    }
 }
 
 .main-container {
-  height: 100%;
-  display: flex;
-  flex: 1 1 auto;
-  border-top: 1px solid #eaeaea;
-  .alert {
-    width: auto;
-    margin: 10px;
-  }
-  .container {
+    height: 100%;
+    display: flex;
     flex: 1 1 auto;
-  }
+    border-top: 1px solid #eaeaea;
+    .alert {
+        width: auto;
+        margin: 10px;
+    }
+    .container {
+        flex: 1 1 auto;
+    }
 }
 
 .split-pane-left {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  flex: 0 0 auto;
-  overflow-y: auto;
-  overflow-x: hidden;
-  .from-delete {
-    position:absolute;
-    display: none;
-    right:10px;
-    bottom:0px;
-    cursor: pointer;
-  }
-  .items {
-    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    flex: 0 0 auto;
     overflow-y: auto;
-    .item{
-      position:relative;
-    }:hover {
-      .from-delete {
-        display: block;
-      }
+    overflow-x: hidden;
+    .from-delete {
+        position: absolute;
+        display: none;
+        right: 10px;
+        bottom: 0px;
+        cursor: pointer;
     }
-  }
+    .items {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        .item {
+            position: relative;
+        }
+        :hover {
+            .from-delete {
+                display: block;
+            }
+        }
+    }
 }
 
 .split-pane-right {
-  background: #f4f4f4;
-  display: flex;
-  flex-direction: column;
-  flex: 1 1 auto;
-  height: 100%;
-  overflow-x: hidde;
-  overflow-y: auto;
-  .main-top {
-    text-align: left;
-    padding-right: 20px;
-    button {
-      margin: 0 10px;
-    }
-  }
-  .split-pane-right-bottom {
-    background: #fff;
+    background: #f4f4f4;
+    display: flex;
+    flex-direction: column;
     flex: 1 1 auto;
-    overflow-y: hidden;
-    overflow-x: hidden;
-    border-left: 1px solid #eaeaea;
     height: 100%;
-    .forms {
-      flex: 0 0 auto;
-      background: #fff; // padding: 0px 30px 30px 0px;
-      height: 100%;
+    overflow-x: hidde;
+    overflow-y: auto;
+    .main-top {
+        text-align: left;
+        padding-right: 20px;
+        button {
+            margin: 0 10px;
+        }
     }
-  }
+    .split-pane-right-bottom {
+        background: #fff;
+        flex: 1 1 auto;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        border-left: 1px solid #eaeaea;
+        height: 100%;
+        .forms {
+            flex: 0 0 auto;
+            background: #fff; // padding: 0px 30px 30px 0px;
+            height: 100%;
+        }
+    }
 }
 .splitter-pane-resizer {
-  margin-top: 41px;
+    margin-top: 41px;
 }
 .empty-data {
-  margin: 0 auto;
-  margin-top: 200px;
-  text-align: center;
+    margin: 0 auto;
+    margin-top: 200px;
+    text-align: center;
 }
 
 .el-form-item__label {
-  font-weight: 600;
+    font-weight: 600;
 }
 </style>
