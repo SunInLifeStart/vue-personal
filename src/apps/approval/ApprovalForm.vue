@@ -50,17 +50,17 @@
                     <!-- {{formData.useItems}} -->
                     <el-col :span="12">
                         <el-form-item label="印章种类" prop="useItems">
-                            <el-select style="width:100%;" clearable v-model="formData.useItems" placeholder="请选择印章种类"  @change="selectPrint(formData.useItems)">
+                            <el-select style="width:100%;" clearable v-model="formData.useItems" placeholder="请选择印章种类" @change="selectPrint(formData.useItems)">
                                 <el-option v-for="item in onOption" :key="item.value" :label="item.label" :value="item.value" :disabled=" item.label == '党支部章' && formData.organName !='综合管理部' ">
                                 </el-option>
-                               
+
                             </el-select>
                         </el-form-item>
                     </el-col>
                     <!-- :style="{display:(formData.useItems=='公章'?'black':'none')}"  -->
                     <el-col :span="12">
-                        <el-form-item label="类型" hide-required-asterisk = 'false'>
-                            <el-select style="width:100%;" clearable v-model="formData.sealType" placeholder="请选择类型" :disabled="formData.useItems=='gongzhang'?false:true" >
+                        <el-form-item label="类型" hide-required-asterisk='false'>
+                            <el-select style="width:100%;" clearable v-model="formData.sealType" placeholder="请选择类型" :disabled="formData.useItems=='gongzhang'?false:true">
                                 <el-option v-for="item in typeOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
@@ -99,12 +99,12 @@
                                 <el-table-column type="selection"></el-table-column>
                                 <el-table-column prop="fileName" label="用印文件名称">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.fileName"></el-input>
+                                        <el-input v-model="scope.row.fileName" type="textarea" :autosize="{minRows: 1}"></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="useReason" width="250" label="使用事由">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.useReason"></el-input>
+                                        <el-input v-model="scope.row.useReason" type="textarea" :autosize="{minRows: 1}"></el-input>
                                     </template>
                                 </el-table-column>
 
@@ -119,7 +119,7 @@
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
                                         <div v-for="(item,index) in scope.row.attachments" :key="index" class="opertes">
-                                           <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,scope.row.attachments)"></FilesOperate>
+                                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,scope.row.attachments)"></FilesOperate>
                                         </div>
                                     </template>
                                 </el-table-column>
@@ -309,7 +309,6 @@ export default {
                     value: 'caiwuzhang',
                     label: '财务章'
                 }
-                
             ],
             typeOption: [
                 {
@@ -340,15 +339,15 @@ export default {
         FilesOperate
     },
     methods: {
-        selectPrint(data){
-          if(data != 'gongzhang'){
-              this.formData.sealType = '';
-          }
+        selectPrint(data) {
+            if (data != 'gongzhang') {
+                this.formData.sealType = '';
+            }
         },
         // 时长
         getHour(a1, a2) {
             const $self = this;
-            if(a1 && a2){
+            if (a1 && a2) {
                 var date3 =
                     new Date(a2.replace(/-/g, '/')).getTime() -
                     new Date(a1.replace(/-/g, '/')).getTime(); //时间差的毫秒数
@@ -512,13 +511,18 @@ export default {
         async saveForm(params) {
             const $self = this;
 
-            if($self.formData.useItems == "gongzhang" &&  !$self.formData.sealType){  //公章类型必选
-                $self.msgTips('请选择公章类型','warning');
+            if (
+                $self.formData.useItems == 'gongzhang' &&
+                !$self.formData.sealType
+            ) {
+                //公章类型必选
+                $self.msgTips('请选择公章类型', 'warning');
                 return false;
             }
 
-            if($self.formData.useItems != "gongzhang"){ // 其他章不要sealtype
-                 $self.formData.sealType="";
+            if ($self.formData.useItems != 'gongzhang') {
+                // 其他章不要sealtype
+                $self.formData.sealType = '';
             }
 
             if ($self.createForm_status) {
@@ -585,8 +589,7 @@ export default {
             const aaa = self.uploadImageType;
             if (response.length > 0) {
                 response.forEach(function(item, index) {
-                   self.formData.usingApproval[aaa].attachments.push(item);
-                    
+                    self.formData.usingApproval[aaa].attachments.push(item);
                 });
             }
             // this.$refs.upload.clearFiles();
