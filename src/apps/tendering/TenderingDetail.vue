@@ -11,10 +11,12 @@
         </div>
         <div class="formContent">
             <br />
-            <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button>
+            </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="formList">
                 <el-row>
@@ -119,7 +121,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -142,165 +144,170 @@
     </div>
 </template>
 <script>
-    import axios from 'axios';
-    import moment from 'moment';
-    import Comment from '../Comment';
-    import FilesOperate from '../FilesOperate';
-    import { publicMethods } from "../application.js";
-    export default {
-        mixins:[publicMethods],
-        name: 'TenderingDetail',
-        data() {
-            return {
-                tableData: {
-                    procurementScheme: {}
-                },
-                actions: [],
-                crumbs:[],
-                procurementOption: {
-                    '1': '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
-                    '3': '非开发建设类采购(招标方式：估算金额>=30万)',
-                    '5': '行政非业务类采购(招标方式：估算金额>=30万)'
-                },
-                actionsDialogArr: [],
-                dialogVisibleCrumb:false,
-                users: [],
-                comments: [],
-                formId: "",
-                flowNodeUrl: "",
-                textarea: '',
-                dialogVisible: false,
-                appFlowName:'motor-biddocument_biddocument',
-            };
-        },
-        components: {
-            Comment,
-            FilesOperate
-        },
-        methods: {
-            getFormDetails(formId) {
-                let $self = this;
-                $self.formId = formId;
-                $self.url= "/api/v1/motor-biddocument/detail/" + $self.formId;
-                $self.getFormDetailsData();
+import axios from 'axios';
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
+export default {
+    mixins: [publicMethods],
+    name: 'TenderingDetail',
+    data() {
+        return {
+            tableData: {
+                procurementScheme: {}
             },
-            async getFormDetailsData() {
-                let $self = this;
-                let response = await $self.getDetails();
-                if (response) {
-                    $self.tableData = response.data.content;
-                }
-                let actions = await $self.getActions();
-                let comments =  await $self.getComments();
-                $self.actions = actions.data.types;
-                $self.comments = comments.data;
+            actions: [],
+            crumbs: [],
+            procurementOption: {
+                '1':
+                    '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
+                '3': '非开发建设类采购(招标方式：估算金额>=30万)',
+                '5': '行政非业务类采购(招标方式：估算金额>=30万)'
+            },
+            actionsDialogArr: [],
+            dialogVisibleCrumb: false,
+            users: [],
+            comments: [],
+            formId: '',
+            flowNodeUrl: '',
+            textarea: '',
+            dialogVisible: false,
+            appFlowName: 'motor-biddocument_biddocument'
+        };
+    },
+    components: {
+        Comment,
+        FilesOperate
+    },
+    methods: {
+        getFormDetails(formId) {
+            let $self = this;
+            $self.formId = formId;
+            $self.url = '/api/v1/motor-biddocument/detail/' + $self.formId;
+            $self.getFormDetailsData();
+        },
+        async getFormDetailsData() {
+            let $self = this;
+            let response = await $self.getDetails();
+            if (response) {
+                $self.tableData = response.data.content;
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
+            }
+            let actions = await $self.getActions();
+            let comments = await $self.getComments();
+            $self.actions = actions.data.types;
+            $self.comments = comments.data;
 
-                let crumbs = await $self.getCrumbsone();
-                $self.crumbs =  {items: crumbs.data, index: -1};
-                for(var i= 0; i<$self.crumbs.items.length; i++){
-                    if($self.crumbs.items[i].active){
-                        $self.crumbs.index = i;    
-                    }
-                }
-                if($self.crumbs.index == -1) {
-                    $self.crumbs.index=$self.crumbs.items.length
+            let crumbs = await $self.getCrumbsone();
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
                 }
             }
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
+            }
         }
-    };
+    }
+};
 </script>
 <style lang="scss">
-    #TenderingDetail {
-        .el-step__main {
-            margin-top: 10px;
-        }
-        .audit {
-            position: relative;
-            margin-bottom: 10px;
-            font-size: 14px;
-            box-shadow: none;
-            border: 0;
-            font-weight: bold;
-            .avatar {
-                position: absolute;
-                left: 5px;
-                top: 5px;
+#TenderingDetail {
+    .el-step__main {
+        margin-top: 10px;
+    }
+    .audit {
+        position: relative;
+        margin-bottom: 10px;
+        font-size: 14px;
+        box-shadow: none;
+        border: 0;
+        font-weight: bold;
+        .avatar {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 36px;
+            height: 36px;
+            img {
                 width: 36px;
                 height: 36px;
-                img {
-                    width: 36px;
-                    height: 36px;
-                    border: 1px solid #dddddd;
-                    border-radius: 50%;
+                border: 1px solid #dddddd;
+                border-radius: 50%;
+            }
+        }
+        .info {
+            margin-left: 60px;
+            display: inline-block;
+            width: calc(100% - 60px);
+            .creator {
+                height: 32px;
+                line-height: 32px;
+                a {
+                    color: #4a6495;
+                    text-decoration-line: none;
                 }
             }
-            .info {
-                margin-left: 60px;
-                display: inline-block;
-                width: calc(100% - 60px);
-                .creator {
-                    height: 32px;
-                    line-height: 32px;
-                    a {
-                        color: #4a6495;
-                        text-decoration-line: none;
-                    }
-                }
-                .content {
-                    min-height: 32px;
-                }
+            .content {
+                min-height: 32px;
             }
-        }
-        .input-with-select {
-            width: 0px;
-            margin-right: 10px;
-            .el-input-group__prepend {
-                background-color: #409eff;
-                border-color: #409eff;
-                color: #ffffff;
-                border-radius: 4px;
-            }
-            &.reject .el-input-group__prepend {
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-            }
-            .el-input__inner {
-                width: 0;
-                padding: 0;
-                border: 0;
-            }
-            .el-input__suffix {
-                left: 8px;
-            }
-        }
-        #actionList {
-            background: #f4f4f4;
-            border-bottom: 1px solid #eaeaea;
-            height: 40px;
-            width: 100%;
-            z-index: 10;
-            .btnList {
-                line-height: 40px;
-                padding: 12px 10px;
-                cursor: pointer;
-            }
-            .btnList:hover {
-                background: #c7e0f4;
-            }
-        }
-        .btnhide {
-            display: none;
-        }
-        .crumbList {
-            margin: 15px 0px;
         }
     }
-    .fullScreen {
-        position: fixed;
-        top: 0px;
+    .input-with-select {
+        width: 0px;
+        margin-right: 10px;
+        .el-input-group__prepend {
+            background-color: #409eff;
+            border-color: #409eff;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+        &.reject .el-input-group__prepend {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .el-input__inner {
+            width: 0;
+            padding: 0;
+            border: 0;
+        }
+        .el-input__suffix {
+            left: 8px;
+        }
+    }
+    #actionList {
+        background: #f4f4f4;
+        border-bottom: 1px solid #eaeaea;
+        height: 40px;
+        width: 100%;
         z-index: 10;
-        background: #fff;
-        left: 0px;
-        right: 0px;
+        .btnList {
+            line-height: 40px;
+            padding: 12px 10px;
+            cursor: pointer;
+        }
+        .btnList:hover {
+            background: #c7e0f4;
+        }
     }
+    .btnhide {
+        display: none;
+    }
+    .crumbList {
+        margin: 15px 0px;
+    }
+}
+.fullScreen {
+    position: fixed;
+    top: 0px;
+    z-index: 10;
+    background: #fff;
+    left: 0px;
+    right: 0px;
+}
 </style>

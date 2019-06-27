@@ -1,7 +1,7 @@
 <template>
     <div id="Tendering">
         <el-card class="box-card">
-            <el-form :inline="true" label-width="100px"  label-position="left" :model="params" class="demo-form-inline">
+            <el-form :inline="true" label-width="100px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="项目名称">
@@ -23,11 +23,7 @@
                     <el-col :span="8">
                         <el-form-item label="单据状态">
                             <el-select v-model="params.status" placeholder="请输入单据状态">
-                                <el-option
-                                        v-for="item in statusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -80,148 +76,156 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <TenderingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="TenderingDetail" @reloadList = "reloadList"></TenderingDetail>
+            <TenderingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="TenderingDetail" @resetStatus="resetStatus" @reloadList="reloadList"></TenderingDetail>
         </el-card>
-        <TenderingForm  ref="TenderingForm" @reloadList = "reloadList"></TenderingForm>
+        <TenderingForm ref="TenderingForm" @reloadList="reloadList"></TenderingForm>
     </div>
 </template>
 <script>
-    import TenderingForm from './TenderingForm';
-    import TenderingDetail from './TenderingDetail';
-    import {publicMethods} from "../application.js";
-    import axios from 'axios';
-    export default {
-        mixins:[publicMethods],
-        name: 'Tendering',
-        data() {
-            return {
-                tableData: [],
-                params: {
-                    pageNum: 1,
-                    pageSize: 5,
-                    total: 0
+import TenderingForm from './TenderingForm';
+import TenderingDetail from './TenderingDetail';
+import { publicMethods } from '../application.js';
+import axios from 'axios';
+export default {
+    mixins: [publicMethods],
+    name: 'Tendering',
+    data() {
+        return {
+            tableData: [],
+            params: {
+                pageNum: 1,
+                pageSize: 5,
+                total: 0
+            },
+            dialogFormVisibleTendering: false,
+            searchBoardOptions: [],
+            formBoardId: '',
+            statusOption: [
+                {
+                    value: '00',
+                    label: '已保存'
                 },
-                dialogFormVisibleTendering: false,
-                searchBoardOptions: [],
-                formBoardId: '',
-                statusOption: [
-                    {
-                        value: '00',
-                        label: '已保存'
-                    },
-                    {
-                        value: '01',
-                        label: '审核中'
-                    },
-                    {
-                        value: '02',
-                        label: '已驳回'
-                    },
-                    {
-                        value: '04',
-                        label: '已完成'
-                    }
-                ],
-                dialogBoardFormId: '',
-                operationBoardType: 'create',
-                formName:"motor-biddocument",
-                statusNews: ''
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ],
+            dialogBoardFormId: '',
+            operationBoardType: 'create',
+            formName: 'motor-biddocument',
+            statusNews: ''
+        };
+    },
+    components: {
+        TenderingForm,
+        TenderingDetail
+    },
+    mounted() {
+        this.getList();
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '03': '已撤销',
+                '04': '已完成'
             };
+            return xmlJson[data];
+        }
+    },
+    methods: {
+        reloadList(params) {
+            if (params == 'reload') {
+                this.params.pageNum = 1;
+                this.getList();
+            } else {
+                this.$refs.TenderingDetail.getFormDetails(params.id);
+            }
         },
-        components: {
-            TenderingForm,
-            TenderingDetail
-        },
-        mounted() {
+        searchList() {
             this.getList();
         },
-        filters: {
-            filterStatus: function(data) {
-                let xmlJson = {
-                    "00":"已保存",
-                    "01":"审核中",
-                    "02" :"已驳回",
-                    "03" :"已撤销",
-                    "04" :"已完成"
-                };
-                return xmlJson[data];
+        resetStatus(data) {
+            let $self = this;
+            for (let item of $self.tableData) {
+                if (data.id == item.id) {
+                    item.status = data.status;
+                }
             }
         },
-        methods: {
-            reloadList(params) {
-                if (params == "reload") {
-                    this.params.pageNum = 1;
-                    this.getList();
-                } else {
-                    this.$refs.TenderingDetail.getFormDetails(params.id);
+        async getList() {
+            const $self = this;
+            $self.url = '/api/v1/motor-biddocument/queryList';
+            let response = await $self.getQueryList();
+            if (response) {
+                if (response.data.content.list.length > 0) {
+                    let formId = response.data.content.list[0].id;
+                    $self.$refs.TenderingDetail.getFormDetails(formId);
                 }
-            },
-            searchList() {
-                this.getList();
-            },
-            async getList() {
-                const $self = this;
-                $self.url = "/api/v1/motor-biddocument/queryList";
-                let response = await $self.getQueryList();
-                if (response) {
-                    if (response.data.content.list.length > 0) {
-                        let formId = response.data.content.list[0].id;
-                        $self.$refs.TenderingDetail.getFormDetails(formId);
-                    }
-                    $self.tableData = response.data.content.list;
-                    $self.params.total = response.data.content.total;
-                }
-            },
-            clickTableRow(row) {
-                this.$refs.TenderingDetail.getFormDetails(row.id);
-            },
-            editForm(data) {
-                this.$refs.TenderingForm.setDataFromParent(data);
-            },
-            currentChange(pageNum) {
-                this.params.pageNum = pageNum;
-                this.getList();
-            },
-            sizeChange(pageSize) {
-                this.params.pageSize = pageSize;
-                this.getList();
-            },
-            onReset() {
-                this.params = {
-                    pageNum: 1,
-                    pageSize: 5,
-                    total: 0
-                }
-                this.onSubmit();
-            },
-            onSubmit() {
-                this.getList();
-            },
-            cleanform() {
-                this.$refs.TenderingForm.createForm();
-                this.$refs.TenderingForm.getTableCode();
-            },
-            refreshBoardData() {
-                this.getList();
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
             }
+        },
+        clickTableRow(row) {
+            this.$refs.TenderingDetail.getFormDetails(row.id);
+        },
+        editForm(data) {
+            this.$refs.TenderingForm.setDataFromParent(data);
+        },
+        currentChange(pageNum) {
+            this.params.pageNum = pageNum;
+            this.getList();
+        },
+        sizeChange(pageSize) {
+            this.params.pageSize = pageSize;
+            this.getList();
+        },
+        onReset() {
+            this.params = {
+                pageNum: 1,
+                pageSize: 5,
+                total: 0
+            };
+            this.onSubmit();
+        },
+        onSubmit() {
+            this.getList();
+        },
+        cleanform() {
+            this.$refs.TenderingForm.createForm();
+            this.$refs.TenderingForm.getTableCode();
+        },
+        refreshBoardData() {
+            this.getList();
         }
-    };
+    }
+};
 </script>
 <style lang="scss" scoped>
-    #Tendering {
-        .el-select {
-            width: 100%;
-        }
-        .card_margin_10 {
-            margin-top: 10px;
-        }
-        .el-form-item--small.el-form-item{
-            width: 100%;
-        }
+#Tendering {
+    .el-select {
+        width: 100%;
     }
+    .card_margin_10 {
+        margin-top: 10px;
+    }
+    .el-form-item--small.el-form-item {
+        width: 100%;
+    }
+}
 </style>
 <style scoped>
-    #Tendering .filterForm >>> .el-form-item__content{
-        width: calc(100% - 110px);
-    }
+#Tendering .filterForm >>> .el-form-item__content {
+    width: calc(100% - 110px);
+}
 </style>
