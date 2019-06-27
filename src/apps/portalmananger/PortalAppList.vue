@@ -3,6 +3,8 @@
         <el-table :data="tableData" stripe @row-click="clickTableRow" :highlight-current-row='true'>
             <el-table-column prop="title" label="标题" min-width="160px"></el-table-column>
             <el-table-column prop="time" label="时间" min-width="160px"></el-table-column>
+            <el-table-column prop="publisher" label="发布人" min-width="160px"></el-table-column>
+            <el-table-column prop="source" label="发布部门" min-width="160px"></el-table-column>
             <el-table-column label="操作" min-width="90px" fixed='right'>
                 <template slot-scope="scope">
                     <el-tooltip class="item" effect="dark" content="编辑" placement="left">
