@@ -864,7 +864,7 @@ export default {
                 share: false,
                 total: this.common.toDecimal2(0),
                 budget: {
-                    est: false,
+                    est: true,
                     fundPlan: true
                 },
                 attachments: [],
@@ -1362,7 +1362,7 @@ export default {
                 share: false,
                 total: this.common.toDecimal2(0),
                 budget: {
-                    est: false,
+                    est: true,
                     fundPlan: true
                 },
                 est: false,

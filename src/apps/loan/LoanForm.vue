@@ -669,7 +669,7 @@ export default {
                 busNo: '',
                 dx: '',
                 fundPlan: true,
-                est: false,
+                est: true,
                 number: '',
                 borrowDept: cookies.get('oname'),
                 creatorName: cookies.get('uname'),
