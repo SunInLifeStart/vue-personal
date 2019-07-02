@@ -11,17 +11,20 @@
         </div>
         <br />
         <div class="formContent">
-            <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="printForm" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+            </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                    <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-                </el-steps>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
             <el-form :model='tableData' class="formList">
                 <el-row>
-                    
+
                     <el-col :span="8">
                         <el-form-item label="来文机关：">{{tableData.organ}}
-                    </el-form-item>
+                        </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="来文字号：">{{tableData.wordNo}}
@@ -52,8 +55,8 @@
                         </el-form-item>
                     </el-col>
                     <!--<el-col :span="8">-->
-                        <!--<el-form-item label="便签：">{{tableData.memo}}-->
-                        <!--</el-form-item>-->
+                    <!--<el-form-item label="便签：">{{tableData.memo}}-->
+                    <!--</el-form-item>-->
                     <!--</el-col>-->
                 </el-row>
                 <el-row>
@@ -106,7 +109,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -129,30 +132,30 @@
     </div>
 </template>
 <script>
-import Comment from "../Comment";
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 import moment from 'moment';
 import axios from 'axios';
 export default {
-    mixins:[publicMethods],
-    name: "IncomingDetail",
+    mixins: [publicMethods],
+    name: 'IncomingDetail',
     data() {
         return {
             tableData: {},
             actions: [],
-            crumbs:[],
-            formId: "",
-            textarea: "",
-            flowNodeUrl: "",
+            crumbs: [],
+            formId: '',
+            textarea: '',
+            flowNodeUrl: '',
             dialogVisible: false,
             dialogVisibleAttachment: false,
             actionsDialogArr: [],
-            appFlowName:'incoming-form_incoming',
-            formName:'incoming_forms',
-            printerFormName:'incoming_forms',
-            comments:[],
-            dialogVisibleCrumb:false,
+            appFlowName: 'incoming-form_incoming',
+            formName: 'incoming_forms',
+            printerFormName: 'incoming_forms',
+            comments: [],
+            dialogVisibleCrumb: false
         };
     },
     components: {
@@ -160,41 +163,48 @@ export default {
         FilesOperate
     },
     methods: {
+        printForm() {
+            let action = {
+                name: '打印',
+                required: null
+            };
+            this.doAction(action);
+        },
         handleAttachmentSuccess(response, file) {
             const self = this;
             if (!self.tableData.attachments) {
-                self.tableData.attachments = []
+                self.tableData.attachments = [];
             }
             if (response.length > 0) {
                 response.forEach(function(item) {
-                    item.attachmentType = 'attachments'
+                    item.attachmentType = 'attachments';
                     self.tableData.attachments.push(item);
-                    self.$forceUpdate()
+                    self.$forceUpdate();
                 });
             }
             this.$refs.uploadAttachmentOther.clearFiles();
         },
         async saveIncomingApply() {
             if (this.tableData.receiptDate) {
-                this.tableData.receiptDate = moment(this.tableData.receiptDate).format(
-                    'YYYY-MM-DD hh:mm:ss'
-                );
+                this.tableData.receiptDate = moment(
+                    this.tableData.receiptDate
+                ).format('YYYY-MM-DD hh:mm:ss');
             } else {
                 this.tableData.receiptDate = moment(new Date()).format(
                     'YYYY-MM-DD hh:mm:ss'
                 );
             }
             let response = await this.saveFormData(
-                "/api/v1/incoming_forms/save",
+                '/api/v1/incoming_forms/save',
                 this.tableData
-            )
+            );
 
             if (response) {
-                this.dialogVisibleAttachment = false
+                this.dialogVisibleAttachment = false;
             }
         },
         editIncomingAttachment() {
-            this.dialogVisibleAttachment = true
+            this.dialogVisibleAttachment = true;
         },
         getAttachmentId(id) {
             let self = this;
@@ -213,7 +223,7 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/"+$self.formName+"/" + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -221,22 +231,24 @@ export default {
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data;
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
-
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             }
             let actions = await $self.getActions();
-            let comments =  await $self.getComments();
+            let comments = await $self.getComments();
             $self.actions = actions.data.types;
             $self.comments = comments.data;
-             let crumbs = await $self.getCrumbsone();
-            $self.crumbs =  {items: crumbs.data, index: -1};
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;    
+            let crumbs = await $self.getCrumbsone();
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
                 }
             }
-            if($self.crumbs.index == -1) {
-                $self.crumbs.index=$self.crumbs.items.length
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
             }
         }
     }
@@ -341,7 +353,7 @@ export default {
             background: #c7e0f4;
         }
     }
-    
+
     .btnhide {
         display: none;
     }
