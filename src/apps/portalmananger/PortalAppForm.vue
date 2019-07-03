@@ -265,6 +265,10 @@ export default {
         },
         saveData() {
             let self = this;
+            console.log(self.tableData.data);
+            if(!self.tableData.data.id){
+                self.tableData.data.id = self.tableData.data.articleId;
+            }
             axios
                 .post("/api/v1/portal/article/upd", self.tableData.data)
                 .then(res => {
