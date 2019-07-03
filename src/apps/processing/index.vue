@@ -1,7 +1,7 @@
 <template>
     <div id="Processing">
         <el-card class="box-card">
-            <el-form :inline="true" label-width="70px"  label-position="left"  :model="params" class="demo-form-inline">
+            <el-form :inline="true" label-width="70px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="姓名">
@@ -16,16 +16,12 @@
                     <el-col :span="8">
                         <el-form-item label="单据状态">
                             <el-select v-model="params.status" placeholder="请输入单据状态">
-                                <el-option
-                                        v-for="item in statusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
-                   
+
                 </el-row>
                 <el-row class="filterForm">
                     <el-col :span="8" class="searchBtn">
@@ -43,11 +39,11 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow" highlight-current-row>
-                 <el-table-column prop="applyPosition" label="申请岗位">
+                <el-table-column prop="applyPosition" label="申请岗位">
                 </el-table-column>
                 <el-table-column prop="organName" label="公司部门">
-                    </el-table-column>
-                 <el-table-column prop="fillingTime" label="填表日期">
+                </el-table-column>
+                <el-table-column prop="fillingTime" label="填表日期">
                 </el-table-column>
                 <el-table-column prop="uname" label="姓名">
                 </el-table-column>
@@ -60,7 +56,7 @@
                 <el-table-column prop="nativePlace" label="电子邮箱">
                 </el-table-column>
                 <!-- prop="maritalStatus" -->
-                <el-table-column  label="婚姻状况">
+                <el-table-column label="婚姻状况">
                     <template slot-scope="scope">{{scope.row.maritalStatus | filtermaritalStatus}}</template>
                 </el-table-column>
                 <el-table-column prop="phone" label="手机/家庭电话">
@@ -70,14 +66,12 @@
                 <el-table-column label="单据状态">
                     <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                 </el-table-column>
-                <el-table-column label="操作" >
+                <el-table-column label="操作">
                     <template slot-scope="scope">
-                        <el-tooltip class="item" effect="dark" content="编辑" placement="left" 
-                        v-if="scope.row.status == '00' || scope.row.status == '02'">
+                        <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
                             <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                         </el-tooltip>
-                        <el-tooltip class="item" effect="dark" content="删除" placement="left"
-                        v-if="scope.row.status == '00' || scope.row.status == '02'">
+                        <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00' ">
                             <el-button type="text" icon="el-icon-delete" @click="deleteCurrentLine(scope.row.id)"></el-button>
                         </el-tooltip>
                     </template>
@@ -88,177 +82,179 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <ProcessingDetail @resetStatus = "resetStatus" :formId="formBoardId" @refreshData="refreshBoardData" ref="ProcessingDetail"></ProcessingDetail>
+            <ProcessingDetail @resetStatus="resetStatus" :formId="formBoardId" @refreshData="refreshBoardData" ref="ProcessingDetail"></ProcessingDetail>
         </el-card>
-        <ProcessingForm  ref="ProcessingForm" @reloadList = "reloadList"></ProcessingForm>
+        <ProcessingForm ref="ProcessingForm" @reloadList="reloadList"></ProcessingForm>
     </div>
 </template>
 <script>
-    import ProcessingForm from './ProcessingForm';
-    import ProcessingDetail from './ProcessingDetail';
-    import {publicMethods} from "../application.js";
-    import axios from 'axios';
-    export default {
-        mixins:[publicMethods],
-        name: 'Processing',
-        data() {
-            return {
-                tableData: [],
-                params: {
-                    pageNum: 1,
-                    pageSize: 5,
-                    uname: '',
-                    applyPosition: '',
-                    status: '',
-                    total: 0
+import ProcessingForm from './ProcessingForm';
+import ProcessingDetail from './ProcessingDetail';
+import { publicMethods } from '../application.js';
+import axios from 'axios';
+export default {
+    mixins: [publicMethods],
+    name: 'Processing',
+    data() {
+        return {
+            tableData: [],
+            params: {
+                pageNum: 1,
+                pageSize: 5,
+                uname: '',
+                applyPosition: '',
+                status: '',
+                total: 0
+            },
+            dialogFormVisibleProcessing: false,
+            searchBoardOptions: [],
+            formBoardId: '',
+            dialogBoardFormId: '',
+            operationBoardType: 'create',
+            formName: 'examinationApproval',
+            statusNews: '',
+            statusOption: [
+                {
+                    value: '00',
+                    label: '已保存'
                 },
-                dialogFormVisibleProcessing: false,
-                searchBoardOptions: [],
-                formBoardId: '',
-                dialogBoardFormId: '',
-                operationBoardType: 'create',
-                formName:"examinationApproval",
-                statusNews: '',
-                statusOption: [
-                    {
-                        value: '00',
-                        label: '已保存'
-                    },
-                    {
-                        value: '01',
-                        label: '审核中'
-                    },
-                    {
-                        value: '02',
-                        label: '已驳回'
-                    },
-                    {
-                        value: '04',
-                        label: '已完成'
-                    }
-                ]
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ]
+        };
+    },
+    components: {
+        ProcessingForm,
+        ProcessingDetail
+    },
+    mounted() {
+        this.getList();
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '04': '已完成'
             };
+            return xmlJson[data];
         },
-        components: {
-            ProcessingForm,
-            ProcessingDetail
+        filtermaritalStatus: function(data) {
+            let xmlJson = {
+                '0': '未婚',
+                '1': '已婚',
+                '2': '离异'
+            };
+            return xmlJson[data];
+        }
+    },
+    methods: {
+        resetStatus(data) {
+            let $self = this;
+            for (let item of $self.tableData) {
+                if (data.id == item.id) {
+                    item.status = data.status;
+                }
+            }
         },
-        mounted() {
+        reloadList(params) {
+            if (params == 'reload') {
+                this.params.pageNum = 1;
+                this.getList();
+            } else {
+                this.$refs.ProcessingDetail.getFormDetails(params.id);
+            }
+        },
+        searchList() {
             this.getList();
         },
-        filters: {
-            filterStatus: function(data) {
-                let xmlJson = {
-                    "00":"已保存",
-                    "01":"审核中",
-                    "02" :"已驳回",
-                    "04" :"已完成"
-                };
-                return xmlJson[data];
-            },
-            filtermaritalStatus: function(data) {
-                let xmlJson = {
-                     "0":"未婚",
-                    "1":"已婚",
-                    "2" :"离异",
-                };
-                return xmlJson[data];
-            },
-        },
-        methods: {
-            resetStatus(data){
-                let $self = this;
-                for(let item of $self.tableData){
-                if(data.id == item.id){
-                item.status = data.status;
+        async getList() {
+            const $self = this;
+            $self.url = '/api/v1/examinationApproval/queryList';
+            let response = await $self.getQueryList();
+            if (response) {
+                if (
+                    response.data.content.list &&
+                    response.data.content.list.length > 0
+                ) {
+                    let formId = response.data.content.list[0].id;
+                    $self.$refs.ProcessingDetail.getFormDetails(formId);
                 }
-                }
-            },
-            reloadList(params) {
-                if (params == "reload") {
-                    this.params.pageNum = 1;
-                    this.getList();
-                } else {
-                    this.$refs.ProcessingDetail.getFormDetails(params.id);
-                }
-            },
-            searchList() {
-                this.getList();
-            },
-            async getList() {
-                const $self = this;
-                $self.url = "/api/v1/examinationApproval/queryList";
-                let response = await $self.getQueryList();
-                if (response) {
-                    if (response.data.content.list && response.data.content.list.length > 0) {
-                        let formId = response.data.content.list[0].id;
-                        $self.$refs.ProcessingDetail.getFormDetails(formId);
-                    }
-                    $self.tableData = response.data.content.list;
-                    $self.params.total = response.data.content.total;
-                } else {
-                   // $self.msgTips("获取列表失败", "warning");
-                }
-            },
-            clickTableRow(row) {
-                this.$refs.ProcessingDetail.getFormDetails(row.id);
-            },
-            editForm(data) {
-                this.$refs.ProcessingForm.setDataFromParent(data);
-            },
-            currentChange(pageNum) {
-                this.params.pageNum = pageNum;
-                this.getList();
-            },
-            sizeChange(pageSize) {
-                this.params.pageSize = pageSize;
-                this.getList();
-            },
-            onReset() {
-                this.params={
-                    pageNum: 1,
-                    pageSize: 5,
-                    uname: '',
-                    applyPosition: '',
-                    status: '',
-                }
-                this.getList();
-            },
-            onSubmit() {
-                this.getList();
-            },
-            cleanform() {
-                this.$refs.ProcessingForm.createForm();
-                // this.$refs.ApprovalForm.createForm();
-            },
-            refreshBoardData() {
-                this.getList();
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
+            } else {
+                // $self.msgTips("获取列表失败", "warning");
             }
+        },
+        clickTableRow(row) {
+            this.$refs.ProcessingDetail.getFormDetails(row.id);
+        },
+        editForm(data) {
+            this.$refs.ProcessingForm.setDataFromParent(data);
+        },
+        currentChange(pageNum) {
+            this.params.pageNum = pageNum;
+            this.getList();
+        },
+        sizeChange(pageSize) {
+            this.params.pageSize = pageSize;
+            this.getList();
+        },
+        onReset() {
+            this.params = {
+                pageNum: 1,
+                pageSize: 5,
+                uname: '',
+                applyPosition: '',
+                status: ''
+            };
+            this.getList();
+        },
+        onSubmit() {
+            this.getList();
+        },
+        cleanform() {
+            this.$refs.ProcessingForm.createForm();
+            // this.$refs.ApprovalForm.createForm();
+        },
+        refreshBoardData() {
+            this.getList();
         }
-    };
+    }
+};
 </script>
 <style lang="scss" scoped>
-    #Processing
-     {
-        .searchBtn {
-            padding-right: 10px;
-            // .positionBtn{
-            //     // text-align: right;
-            // }
-        }
-        .el-select {
-            width: 100%;
-        }
-        .card_margin_10 {
-            margin-top: 10px;
-        }
-        .el-form-item--small.el-form-item{
-            width: 100%;
-        }
+#Processing {
+    .searchBtn {
+        padding-right: 10px;
+        // .positionBtn{
+        //     // text-align: right;
+        // }
     }
+    .el-select {
+        width: 100%;
+    }
+    .card_margin_10 {
+        margin-top: 10px;
+    }
+    .el-form-item--small.el-form-item {
+        width: 100%;
+    }
+}
 </style>
 <style scoped>
-    #Processing .filterForm >>> .el-form-item__content{
-        width: calc(100% - 80px);
-    }
+#Processing .filterForm >>> .el-form-item__content {
+    width: calc(100% - 80px);
+}
 </style>
