@@ -10,7 +10,7 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="招标项目名称">
-                            <el-input v-model="params.biddingProjectName" placeholder="请输入采购项目名称"></el-input>
+                            <el-input v-model="params.biddingProjectName" placeholder="请输入招标项目名称"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">

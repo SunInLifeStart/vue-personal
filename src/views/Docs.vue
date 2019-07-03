@@ -272,7 +272,7 @@ export default {
             let self = this;
             for (let doc of data) {
                 let obj = {
-                    solrType: 'document',
+                    solrType: doc.type,
                     solrTitle: doc.name,
                     solrLink: doc.iconUrl,
                     solrFileAddress: doc.url,
