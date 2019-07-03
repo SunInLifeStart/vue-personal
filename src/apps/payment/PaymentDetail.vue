@@ -40,7 +40,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <table class="tablePrint">
+                <table class="tablePrint" style="width: 99%;">
                     <col style="width: 6%" />
                     <col style="width: 11%" />
                     <col style="width: 11%" />
@@ -591,7 +591,7 @@ export default {
                     status: $self.tableData.status
                 });
             } else {
-              //  $self.msgTips('获取表单失败', 'warning');
+                //  $self.msgTips('获取表单失败', 'warning');
             }
             let actions = await $self.getActions();
             let crumbs = await $self.getCrumbsone();
@@ -649,6 +649,16 @@ export default {
         overflow-y: auto;
         padding: 15px 30px;
     }
+    .tablePrint td,
+    .tablePrint th {
+        padding: 0px;
+        margin: 0px;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-size: 13px;
+        height: 35px;
+        text-align: center;
+    }
     .audit {
         position: relative;
         margin-bottom: 10px;
@@ -684,16 +694,6 @@ export default {
                 min-height: 32px;
             }
         }
-    }
-    .tablePrint td,
-    .tablePrint th {
-        padding: 0px;
-        margin: 0px;
-        border-top: 1px solid #ccc;
-        border-right: 1px solid #ccc;
-        font-size: 13px;
-        height: 35px;
-        text-align: center;
     }
     #moneyright {
         text-align: right;
