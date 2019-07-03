@@ -11,7 +11,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="申请部门：">
+                            <el-form-item label="公司部门：">
                                 <el-input v-model="formInline.applyDept" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
@@ -25,6 +25,14 @@
                         </el-col>
                     </el-row>
                     <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="资产类型：" prop="assetsType">
+                                <el-select v-model="formInline.assetsType" style="width:100%" filterable>
+                                    <el-option v-for="item in assetTypes" :key="item.id" :label="item.name" :value="item.name">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="16">
                             <el-form-item label="申请时间：">
                                 <div>
@@ -33,6 +41,9 @@
                                 </div>
                             </el-form-item>
                         </el-col>
+
+                    </el-row>
+                    <el-row>
                         <el-col :span="8">
                             <el-form-item class="">
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -51,7 +62,7 @@
                 <el-table :data="tableData" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
                     <el-table-column prop="proposer" label="申请人">
                     </el-table-column>
-                    <el-table-column prop="organName" label="申请部门" min-width='150px'>
+                    <el-table-column prop="organName" label="公司部门" min-width='150px'>
                     </el-table-column>
                     <el-table-column prop="assetsType" label="资产类型" min-width='120px'>
                     </el-table-column>
@@ -98,6 +109,24 @@ export default {
         return {
             statusAll: CONFIG['status'],
             tableData: [],
+            assetTypes: [
+                {
+                    id: '01',
+                    name: '租赁资产'
+                },
+                {
+                    id: '02',
+                    name: '固定资产'
+                },
+                {
+                    id: '03',
+                    name: '低值易耗品'
+                },
+                {
+                    id: '04',
+                    name: '图书采购'
+                }
+            ],
             formDetails: {},
             formId: '',
             params: {
@@ -117,7 +146,8 @@ export default {
                 proposer: '',
                 applyDept: '',
                 applyDate: [],
-                status: ''
+                status: '',
+                assetsType: ''
             }
         };
     },
@@ -140,7 +170,7 @@ export default {
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
             } else {
-               // $self.msgTips('获取列表失败', 'warning');
+                // $self.msgTips('获取列表失败', 'warning');
             }
         },
         onSubmit() {
@@ -152,9 +182,16 @@ export default {
                     value: this.formInline.proposer
                 });
             }
+            if (this.formInline.assetsType.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'assetsType',
+                    filter: 'LIKE',
+                    value: this.formInline.assetsType
+                });
+            }
             if (this.formInline.applyDept.trim() !== '') {
                 this.searchOptions.push({
-                    field: 'applyDept',
+                    field: 'organName',
                     filter: 'LIKE',
                     value: this.formInline.applyDept
                 });
@@ -230,6 +267,7 @@ export default {
             this.formInline.applyDept = '';
             this.formInline.applyDate = [];
             this.formInline.status = '';
+            this.formInline.assetsType = '';
             this.getList();
         },
         fomatterStatus(row, column) {
