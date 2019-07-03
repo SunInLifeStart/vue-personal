@@ -77,7 +77,7 @@
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '02' || scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="right" v-if="scope.row.status == '02' || scope.row.status == '00'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="right" v-if="scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -156,7 +156,7 @@ export default {
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
             } else {
-               // $self.msgTips('获取列表失败', 'warning');
+                // $self.msgTips('获取列表失败', 'warning');
             }
         },
 

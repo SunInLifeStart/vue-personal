@@ -10,7 +10,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="所属部门">
+                            <el-form-item label="公司部门">
                                 <el-input placeholder="请输入所属部门" v-model="params.dept"></el-input>
                             </el-form-item>
                         </el-col>
@@ -64,7 +64,7 @@
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '02' || scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="right" v-if="scope.row.status == '02' || scope.row.status == '00'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="right" v-if="scope.row.status == '00'">
                                 <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
                             </el-tooltip>
                         </template>
@@ -154,7 +154,7 @@ export default {
                 $self.tableData = response.data.content.list;
                 $self.params.total = response.data.content.total;
             } else {
-              //  $self.msgTips('获取列表失败', 'warning');
+                //  $self.msgTips('获取列表失败', 'warning');
             }
         },
 
