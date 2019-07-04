@@ -65,7 +65,7 @@
                     <el-table-column prop="contractNum" label="合同编号" min-width="200"></el-table-column>
                     <el-table-column prop="applyName" label="制单人"></el-table-column>
                     <el-table-column prop="organName" label="公司部门"></el-table-column>
-                    <el-table-column prop="initiateTime" label="提单时间" min-width="120"></el-table-column>
+                    <el-table-column prop="created" label="提单时间" min-width="120"></el-table-column>
                     <el-table-column prop="status" label="状态">
                         <template slot-scope="scope">
                             {{scope.row.status | filterStatus}}
@@ -145,7 +145,7 @@ export default {
                 status: '',
                 applyName: '',
                 organName: '',
-                applyDate: ''
+                applyDate: []
             }
         };
     },
@@ -204,7 +204,7 @@ export default {
                 this.formInline.applyDate.length > 0
             ) {
                 this.searchOptions.push({
-                    field: 'initiateTime',
+                    field: 'created',
                     filter: 'BETWEEN',
                     value: moment(this.formInline.applyDate[0]).format(
                         'YYYY-MM-DD'
