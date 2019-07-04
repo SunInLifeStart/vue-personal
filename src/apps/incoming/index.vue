@@ -23,6 +23,11 @@
                     </el-row>
                     <el-row class="filterForm">
                         <el-col :span="8">
+                            <el-form-item label="公司部门">
+                                <el-input v-model="params.organName" placeholder="公司部门"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="params.status" placeholder="请选择">
                                     <el-option v-for="item in s_status" :key="item.value" :label="item.label" :value="item.value">
@@ -35,6 +40,8 @@
                                 <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" type="date"></el-date-picker>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item>
                                 <el-button type="primary" @click="getList">查询</el-button>
@@ -125,7 +132,8 @@ export default {
                 pageSize: 5,
                 options: [],
                 orderBy: 'created',
-                desc: true
+                desc: true,
+                organName: ''
             },
             formName: 'incoming_forms'
         };
@@ -163,6 +171,13 @@ export default {
                     field: 'organ',
                     filter: 'LIKE',
                     value: this.params.organ
+                });
+            }
+            if (this.params.organName && this.params.organName.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'organName',
+                    filter: 'LIKE',
+                    value: this.params.organName
                 });
             }
             if (this.params.wordNo && this.params.wordNo.trim() !== '') {
@@ -247,7 +262,8 @@ export default {
                 pageSize: 5,
                 options: [],
                 orderBy: 'created',
-                desc: true
+                desc: true,
+                organName: ''
             };
         }
     },
