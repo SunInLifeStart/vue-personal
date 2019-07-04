@@ -12,6 +12,11 @@
 
                         </el-col>
                         <el-col :span="8">
+                            <el-form-item label="公司部门">
+                                <el-input placeholder="" v-model="params.organName"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="params.status" clearable placeholder="请选择">
                                     <el-option v-for="item in s_status" :key="item.value" :label="item.label" :value="item.value">
@@ -20,8 +25,25 @@
                             </el-form-item>
 
                         </el-col>
-                        <el-col :span="8" class="searchBtn">
-                            <el-form-item class="positionBtn">
+                    </el-row>
+                    <el-row class="filterForm">
+                        <el-col :span="8">
+                            <el-form-item label="申请人">
+                                <el-input placeholder="请输入申请人" v-model="params.creatorName"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="16">
+                            <el-form-item label="申请时间">
+                                <div>
+                                    <el-date-picker style="width:100%" v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
+                        <el-col :span="8">
+                            <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
                                 <el-button @click="resetInput">重置</el-button>
                             </el-form-item>
@@ -76,6 +98,7 @@
     </div>
 </template>
 <script>
+import moment from 'moment';
 import axios from 'axios';
 import OutgoingForm from './OutgoingForm';
 import OutgoingDetail from './OutgoingDetail';
@@ -112,8 +135,11 @@ export default {
                 pageSize: 5,
                 department: '',
                 title: '',
+                creatorName: '',
+                organName: '',
                 total: 0,
                 committed: '',
+                created: [],
                 status: '',
                 // outgoingingTime:[],
                 // startTime:"",
@@ -222,11 +248,33 @@ export default {
         },
         searchList() {
             this.searchOptions = [];
+            if (this.params.creatorName.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'creatorName',
+                    filter: 'LIKE',
+                    value: this.params.creatorName
+                });
+            }
             if (this.params.title.trim() !== '') {
                 this.searchOptions.push({
                     field: 'title',
                     filter: 'LIKE',
                     value: this.params.title
+                });
+            }
+            if (this.params.organName.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'organName',
+                    filter: 'LIKE',
+                    value: this.params.organName
+                });
+            }
+            if (this.params.created && this.params.created.length > 0) {
+                this.searchOptions.push({
+                    field: 'created',
+                    filter: 'BETWEEN',
+                    value: moment(this.params.created[0]).format('YYYY-MM-DD'),
+                    value2: moment(this.params.created[1]).format('YYYY-MM-DD')
                 });
             }
             if (this.params.status.trim() !== '') {
@@ -244,10 +292,13 @@ export default {
                 page: 1,
                 pageSize: 5,
                 department: '',
+                creatorName: '',
                 title: '',
                 total: 0,
+                created: [],
                 committed: '',
                 status: '',
+                organName: '',
                 // outgoingingTime:[],
                 // startTime:"",
                 // endTime:"",
