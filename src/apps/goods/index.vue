@@ -11,7 +11,7 @@
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="公司部门">
-                                <el-input placeholder="请输入所属部门" v-model="params.dept"></el-input>
+                                <el-input placeholder="请输入所属部门" v-model="params.oname"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -23,7 +23,13 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
+                    <el-row class="filterForm">
+                        <el-col :span="8">
+                            <el-form-item label="申请时间">
+                                <el-date-picker v-model="params.applyTime" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="8">
                             <el-form-item class="">
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -115,7 +121,8 @@ export default {
                 pageNum: 1,
                 pageSize: 5,
                 applyUser: '',
-                dept: '',
+                oname: '',
+                applyTime: '',
                 status: null
             },
             formName: 'motor-receive'
@@ -202,7 +209,8 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.applyUser = this.params.dept = '';
+            this.params.applyUser = this.params.oname = this.params.applyTime =
+                '';
             this.params.status = null;
             this.params.pageNum = 1;
             this.getList();

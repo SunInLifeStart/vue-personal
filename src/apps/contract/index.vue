@@ -10,9 +10,16 @@
                                 <el-input placeholder="" v-model="formInline.contractName"></el-input>
                             </el-form-item>
                         </el-col>
+                        <!--
                         <el-col :span="8">
                             <el-form-item label="合同对方">
                                 <el-input placeholder="" v-model="formInline.partyB"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        -->
+                        <el-col :span="8">
+                            <el-form-item label="公司部门">
+                                <el-input placeholder="" v-model="formInline.organName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -21,6 +28,21 @@
                                     <el-option v-for="item in statusAll" :key="item.id" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
+                        <el-col :span="8">
+                            <el-form-item label="提单人">
+                                <el-input placeholder="" v-model="formInline.applyName" style="margin-left:14px;"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="16">
+                            <el-form-item label="申请时间">
+                                <div>
+                                    <el-date-picker style="width:100%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -77,6 +99,7 @@
     </div>
 </template>
 <script>
+import moment from 'moment';
 import ContractForm from './ContractForm';
 import ContractDetail from './ContractDetail';
 import { publicMethods } from '../application.js';
@@ -119,7 +142,10 @@ export default {
             formInline: {
                 contractName: '',
                 partyB: '',
-                status: ''
+                status: '',
+                applyName: '',
+                organName: '',
+                applyDate: ''
             }
         };
     },
@@ -154,7 +180,7 @@ export default {
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
             } else {
-               // $self.msgTips('获取列表失败', 'warning');
+                // $self.msgTips('获取列表失败', 'warning');
             }
         },
         onSubmit() {
@@ -164,6 +190,35 @@ export default {
                     field: 'contractName',
                     filter: 'LIKE',
                     value: this.formInline.contractName
+                });
+            }
+            if (this.formInline.organName.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'organName',
+                    filter: 'LIKE',
+                    value: this.formInline.organName
+                });
+            }
+            if (
+                this.formInline.applyDate &&
+                this.formInline.applyDate.length > 0
+            ) {
+                this.searchOptions.push({
+                    field: 'initiateTime',
+                    filter: 'BETWEEN',
+                    value: moment(this.formInline.applyDate[0]).format(
+                        'YYYY-MM-DD'
+                    ),
+                    value2: moment(this.formInline.applyDate[1]).format(
+                        'YYYY-MM-DD'
+                    )
+                });
+            }
+            if (this.formInline.applyName.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'applyName',
+                    filter: 'LIKE',
+                    value: this.formInline.applyName
                 });
             }
             if (this.formInline.partyB.trim() !== '') {
@@ -219,7 +274,8 @@ export default {
         },
         resetInput() {
             this.params.page = 1;
-            this.formInline.contractName = '';
+            this.formInline.contractName = this.formInline.applyName = this.formInline.organName = this.formInline.applyDate =
+                '';
             this.formInline.partyB = '';
             this.formInline.status = '';
             this.getList();

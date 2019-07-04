@@ -27,6 +27,12 @@
 
                     </el-row>
                     <el-row class="filterForm">
+                        <el-col :span="8">
+                            <el-form-item label="申请时间">
+                                <el-date-picker v-model="params.applyTime" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
+                                </el-date-picker>
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="8" class="">
                             <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -104,6 +110,7 @@ export default {
                 uname: '',
                 oname: '',
                 status: null,
+                applyTime: '',
                 total: 0
             },
             formName: 'motor-holiday'
@@ -174,7 +181,7 @@ export default {
         resetInput() {
             this.params = {};
             this.params.total = 0;
-            this.params.uname = this.params.oname = '';
+            this.params.uname = this.params.oname = this.params.applyTime = '';
             this.status = '';
             this.params.pageNum = 1;
             this.params.pageSize = 5;
