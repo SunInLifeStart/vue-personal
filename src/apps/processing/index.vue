@@ -21,11 +21,22 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-
                 </el-row>
                 <el-row class="filterForm">
-                    <el-col :span="8" class="searchBtn">
-                        <el-form-item class="positionBtn">
+                    <el-col :span="8">
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="填表时间">
+                            <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
+                            <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" style="width:100%" type="date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item>
                             <el-button type="primary" @click="onSubmit">查询</el-button>
                             <el-button @click="onReset">重置</el-button>
                         </el-form-item>
@@ -43,7 +54,7 @@
                 </el-table-column>
                 <el-table-column prop="organName" label="公司部门">
                 </el-table-column>
-                <el-table-column prop="fillingTime" label="填表日期">
+                <el-table-column prop="created" label="填表日期">
                 </el-table-column>
                 <el-table-column prop="uname" label="姓名">
                 </el-table-column>
@@ -103,7 +114,9 @@ export default {
                 pageSize: 5,
                 uname: '',
                 applyPosition: '',
+                organName: '',
                 status: '',
+                created: '',
                 total: 0
             },
             dialogFormVisibleProcessing: false,
@@ -217,7 +230,9 @@ export default {
                 pageSize: 5,
                 uname: '',
                 applyPosition: '',
-                status: ''
+                status: '',
+                organName: '',
+                created: ''
             };
             this.getList();
         },
