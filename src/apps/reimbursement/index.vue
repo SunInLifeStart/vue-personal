@@ -10,8 +10,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="部门">
-                                <el-input v-model="formInline.organName" placeholder="部门"></el-input>
+                            <el-form-item label="公司部门">
+                                <el-input v-model="formInline.organName" placeholder="公司部门"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -39,6 +39,16 @@
                         </el-col>
                         -->
                         <el-col :span="16">
+                            <el-form-item label="申请时间">
+                                <div>
+                                    <el-date-picker style="width:100%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
+                        <el-col :span="8">
                             <el-form-item class="">
                                 <el-button type="primary" @click="searchList">查询</el-button>
                                 <el-button @click="resetInput">重置</el-button>
@@ -113,7 +123,8 @@ export default {
                 organName: '',
                 created: [],
                 status: '',
-                no: ''
+                no: '',
+                applyDate: ''
             },
             params: {
                 page: 1,
@@ -223,6 +234,21 @@ export default {
                     value: this.formInline.status
                 });
             }
+            if (
+                this.formInline.applyDate &&
+                this.formInline.applyDate.length > 0
+            ) {
+                this.searchOptions.push({
+                    field: 'created',
+                    filter: 'BETWEEN',
+                    value: moment(this.formInline.applyDate[0]).format(
+                        'YYYY-MM-DD'
+                    ),
+                    value2: moment(this.formInline.applyDate[1]).format(
+                        'YYYY-MM-DD'
+                    )
+                });
+            }
             if (this.formInline.no.trim() !== '') {
                 this.searchOptions.push({
                     field: 'no',
@@ -246,7 +272,7 @@ export default {
         },
         resetInput() {
             this.formInline.creatorName = '';
-            this.formInline.organName = '';
+            this.formInline.organName = this.formInline.applyDate = '';
             this.formInline.created = [];
             this.formInline.status = '';
             this.formInline.no = '';

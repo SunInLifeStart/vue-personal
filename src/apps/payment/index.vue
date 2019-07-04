@@ -5,17 +5,17 @@
                 <el-form :inline="true" class="demo-form-inline" label-width="60px;">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="部门：">
+                            <el-form-item label="公司部门">
                                 <el-input v-model="formInline.organ"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="提单人：">
+                            <el-form-item label="提单人">
                                 <el-input v-model="formInline.applicantName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="状态：">
+                            <el-form-item label="状态">
                                 <el-select v-model="formInline.status" placeholder="请选择">
                                     <el-option label="已保存" value="00"></el-option>
                                     <el-option label="审核中" value="01"></el-option>
@@ -27,10 +27,20 @@
                     </el-row>
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="单据编号：">
+                            <el-form-item label="单据编号">
                                 <el-input v-model="formInline.numericalOrder"></el-input>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="16">
+                            <el-form-item label="申请时间">
+                                <div>
+                                    <el-date-picker style="width:96%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -85,6 +95,7 @@
     </div>
 </template>
 <script>
+import moment from 'moment';
 import PaymentForm from './PaymentForm';
 import PaymentDetail from './PaymentDetail';
 import { publicMethods } from '../application.js';
@@ -100,7 +111,8 @@ export default {
                 applicantName: '',
                 numericalOrder: '',
                 organ: '',
-                status: ''
+                status: '',
+                applyDate: ''
             },
             params: {
                 page: 1,
@@ -146,9 +158,24 @@ export default {
             }
             if (this.formInline.organ.trim() !== '') {
                 this.searchOptions.push({
-                    field: 'organ',
+                    field: 'organName',
                     filter: 'LIKE',
                     value: this.formInline.organ
+                });
+            }
+            if (
+                this.formInline.applyDate &&
+                this.formInline.applyDate.length > 0
+            ) {
+                this.searchOptions.push({
+                    field: 'applicantTime',
+                    filter: 'BETWEEN',
+                    value: moment(this.formInline.applyDate[0]).format(
+                        'YYYY-MM-DD'
+                    ),
+                    value2: moment(this.formInline.applyDate[1]).format(
+                        'YYYY-MM-DD'
+                    )
                 });
             }
             if (this.formInline.numericalOrder.trim() !== '') {
@@ -173,7 +200,7 @@ export default {
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
             } else {
-              //  $self.msgTips('获取列表失败', 'warning');
+                //  $self.msgTips('获取列表失败', 'warning');
             }
         },
         resetStatus(data) {
@@ -220,7 +247,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.formInline.applicantName = this.formInline.organ = this.formInline.status = this.formInline.numericalOrder =
+            this.formInline.applicantName = this.formInline.organ = this.formInline.status = this.formInline.numericalOrder = this.formInline.applyDate =
                 '';
             this.params.page = 1;
             this.getList();
