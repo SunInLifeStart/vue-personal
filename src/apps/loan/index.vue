@@ -10,8 +10,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="费用承担部门">
-                                <el-input v-model="formInline.borrowDept" placeholder="费用承担部门"></el-input>
+                            <el-form-item label="公司部门">
+                                <el-input v-model="formInline.borrowDept" placeholder="公司部门"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -38,6 +38,16 @@
                                 <el-input v-model="formInline.number" placeholder="单据编号"></el-input>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="16">
+                            <el-form-item label="申请时间">
+                                <div>
+                                    <el-date-picker style="width:96%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -108,6 +118,7 @@
 </template>
 <script>
 import LoanForm from './LoanForm';
+import moment from 'moment';
 import LoanDetail from './LoanDetail';
 import { publicMethods } from '../application.js';
 export default {
@@ -122,7 +133,8 @@ export default {
                 borrower: '',
                 borrowDept: '',
                 status: '',
-                number: ''
+                number: '',
+                applyDate: ''
             },
             params: {
                 page: 1,
@@ -161,7 +173,7 @@ export default {
             }
             if (this.formInline.borrowDept.trim() !== '') {
                 this.searchOptions.push({
-                    field: 'borrowDept',
+                    field: 'organName',
                     filter: 'LIKE',
                     value: this.formInline.borrowDept
                 });
@@ -171,6 +183,21 @@ export default {
                     field: 'number',
                     filter: 'LIKE',
                     value: this.formInline.number
+                });
+            }
+            if (
+                this.formInline.applyDate &&
+                this.formInline.applyDate.length > 0
+            ) {
+                this.searchOptions.push({
+                    field: 'borrowTime',
+                    filter: 'BETWEEN',
+                    value: moment(this.formInline.applyDate[0]).format(
+                        'YYYY-MM-DD'
+                    ),
+                    value2: moment(this.formInline.applyDate[1]).format(
+                        'YYYY-MM-DD'
+                    )
                 });
             }
             if (this.formInline.status.trim() !== '') {
@@ -195,7 +222,7 @@ export default {
                 $self.tableData = response.data.forms;
                 $self.params.total = response.data.totalCount;
             } else {
-               // $self.msgTips('获取列表失败', 'warning');
+                // $self.msgTips('获取列表失败', 'warning');
             }
         },
         resetStatus(data) {
@@ -242,7 +269,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.formInline.borrower = this.formInline.borrowDept = this.formInline.status = this.formInline.number =
+            this.formInline.borrower = this.formInline.borrowDept = this.formInline.status = this.formInline.number = this.formInline.applyDate =
                 '';
             this.params.page = 1;
             this.getList();
