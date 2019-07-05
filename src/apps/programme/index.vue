@@ -1,7 +1,7 @@
 <template>
     <div id="Programme">
         <el-card class="box-card">
-            <el-form :inline="true" label-width="100px"  label-position="left" :model="params" class="demo-form-inline">
+            <el-form :inline="true" label-width="100px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="项目名称">
@@ -24,15 +24,23 @@
                     <el-col :span="8">
                         <el-form-item label="单据状态">
                             <el-select v-model="params.status" placeholder="请输入单据状态">
-                                <el-option
-                                        v-for="item in statusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="提单人">
+                            <el-input v-model="params.creatorName" placeholder="请输入提单人"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -49,6 +57,8 @@
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow" highlight-current-row>
                 <el-table-column prop="projectName" label="项目名称">
+                </el-table-column>
+                <el-table-column prop="creatorName" label="提单人">
                 </el-table-column>
                 <el-table-column prop="organName" label="公司部门">
                 </el-table-column>
@@ -80,155 +90,155 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <ProgrammeDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ProgrammeDetail" @reloadList = "reloadList"></ProgrammeDetail>
+            <ProgrammeDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ProgrammeDetail" @reloadList="reloadList"></ProgrammeDetail>
         </el-card>
-        <ProgrammeForm  ref="ProgrammeForm" @reloadList = "reloadList"></ProgrammeForm>
+        <ProgrammeForm ref="ProgrammeForm" @reloadList="reloadList"></ProgrammeForm>
     </div>
 </template>
 <script>
-    import ProgrammeForm from './ProgrammeForm';
-    import ProgrammeDetail from './ProgrammeDetail';
-    import {publicMethods} from "../application.js";
-    import axios from 'axios';
-    export default {
-        mixins:[publicMethods],
-        name: 'Programme',
-        data() {
-            return {
-                tableData: [],
-                params: {
-                    pageNum: 1,
-                    pageSize: 5,
-                    total: 0
+import ProgrammeForm from './ProgrammeForm';
+import ProgrammeDetail from './ProgrammeDetail';
+import { publicMethods } from '../application.js';
+import axios from 'axios';
+export default {
+    mixins: [publicMethods],
+    name: 'Programme',
+    data() {
+        return {
+            tableData: [],
+            params: {
+                pageNum: 1,
+                pageSize: 5,
+                total: 0
+            },
+            statusOption: [
+                {
+                    value: '00',
+                    label: '已保存'
                 },
-                statusOption: [
-                    {
-                        value: '00',
-                        label: '已保存'
-                    },
-                    {
-                        value: '01',
-                        label: '审核中'
-                    },
-                    {
-                        value: '02',
-                        label: '已驳回'
-                    },
-                    {
-                        value: '04',
-                        label: '已完成'
-                    }
-                ],
-                dialogFormVisibleProgramme: false,
-                searchBoardOptions: [],
-                formBoardId: '',
-                dialogBoardFormId: '',
-                operationBoardType: 'create',
-                formName:"motor-procscheme",
-                statusNews: ''
+                {
+                    value: '01',
+                    label: '审核中'
+                },
+                {
+                    value: '02',
+                    label: '已驳回'
+                },
+                {
+                    value: '04',
+                    label: '已完成'
+                }
+            ],
+            dialogFormVisibleProgramme: false,
+            searchBoardOptions: [],
+            formBoardId: '',
+            dialogBoardFormId: '',
+            operationBoardType: 'create',
+            formName: 'motor-procscheme',
+            statusNews: ''
+        };
+    },
+    components: {
+        ProgrammeForm,
+        ProgrammeDetail
+    },
+    mounted() {
+        this.getList();
+        // this.getOrgans();
+    },
+    filters: {
+        filterStatus: function(data) {
+            let xmlJson = {
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '03': '已撤销',
+                '04': '已完成'
             };
+            return xmlJson[data];
         },
-        components: {
-            ProgrammeForm,
-            ProgrammeDetail
-        },
-        mounted() {
-            this.getList();
-            // this.getOrgans();
-        },
-        filters: {
-            filterStatus: function(data) {
-                let xmlJson = {
-                    "00":"已保存",
-                    "01":"审核中",
-                    "02" :"已驳回",
-                    "03" :"已撤销",
-                    "04" :"已完成"
-                };
-                return xmlJson[data];
-            },
-            filterSchemeSign: function(data) {
-                let xmlJson = {
-                    "1":"是",
-                    "2":"否"
-                };
-                return xmlJson[data];
-            }
-        },
-        methods: {
-            reloadList(params) {
-                if (params == "reload") {
-                    this.params.pageNum = 1;
-                    this.getList();
-                } else {
-                    this.$refs.ProgrammeDetail.getFormDetails(params.id);
-                }
-            },
-            searchList() {
-                this.getList();
-            },
-            async getList() {
-                const $self = this;
-                $self.url = "/api/v1/motor-procscheme/query";
-                let response = await $self.getQueryList();
-                if (response) {
-                    if (response.data.content.list.length > 0) {
-                        let formId = response.data.content.list[0].id;
-                        $self.$refs.ProgrammeDetail.getFormDetails(formId);
-                    }
-                    $self.tableData = response.data.content.list;
-                    $self.params.total = response.data.content.total;
-                }
-            },
-            clickTableRow(row) {
-                this.$refs.ProgrammeDetail.getFormDetails(row.id);
-            },
-            editForm(data) {
-                this.$refs.ProgrammeForm.setDataFromParent(data);
-            },
-            currentChange(pageNum) {
-                this.params.pageNum = pageNum;
-                this.getList();
-            },
-            sizeChange(pageSize) {
-                this.params.pageSize = pageSize;
-                this.getList();
-            },
-            onReset() {
-                this.params = {
-                    pageNum: 1,
-                    pageSize: 5
-                }
-                this.onSubmit();
-            },
-            onSubmit() {
-                this.getList();
-            },
-            cleanform() {
-                this.$refs.ProgrammeForm.createForm();
-                this.$refs.ProgrammeForm.getTableCode();
-            },
-            refreshBoardData() {
-                this.getList();
-            }
+        filterSchemeSign: function(data) {
+            let xmlJson = {
+                '1': '是',
+                '2': '否'
+            };
+            return xmlJson[data];
         }
-    };
+    },
+    methods: {
+        reloadList(params) {
+            if (params == 'reload') {
+                this.params.pageNum = 1;
+                this.getList();
+            } else {
+                this.$refs.ProgrammeDetail.getFormDetails(params.id);
+            }
+        },
+        searchList() {
+            this.getList();
+        },
+        async getList() {
+            const $self = this;
+            $self.url = '/api/v1/motor-procscheme/query';
+            let response = await $self.getQueryList();
+            if (response) {
+                if (response.data.content.list.length > 0) {
+                    let formId = response.data.content.list[0].id;
+                    $self.$refs.ProgrammeDetail.getFormDetails(formId);
+                }
+                $self.tableData = response.data.content.list;
+                $self.params.total = response.data.content.total;
+            }
+        },
+        clickTableRow(row) {
+            this.$refs.ProgrammeDetail.getFormDetails(row.id);
+        },
+        editForm(data) {
+            this.$refs.ProgrammeForm.setDataFromParent(data);
+        },
+        currentChange(pageNum) {
+            this.params.pageNum = pageNum;
+            this.getList();
+        },
+        sizeChange(pageSize) {
+            this.params.pageSize = pageSize;
+            this.getList();
+        },
+        onReset() {
+            this.params = {
+                pageNum: 1,
+                pageSize: 5
+            };
+            this.onSubmit();
+        },
+        onSubmit() {
+            this.getList();
+        },
+        cleanform() {
+            this.$refs.ProgrammeForm.createForm();
+            this.$refs.ProgrammeForm.getTableCode();
+        },
+        refreshBoardData() {
+            this.getList();
+        }
+    }
+};
 </script>
 <style lang="scss" scoped>
-    #Programme {
-        .el-select {
-            width: 100%;
-        }
-        .card_margin_10 {
-            margin-top: 10px;
-        }
-        .el-form-item--small.el-form-item{
-            width: 100%;
-        }
+#Programme {
+    .el-select {
+        width: 100%;
     }
+    .card_margin_10 {
+        margin-top: 10px;
+    }
+    .el-form-item--small.el-form-item {
+        width: 100%;
+    }
+}
 </style>
 <style scoped>
-    #Programme .filterForm >>> .el-form-item__content{
-        width: calc(100% - 110px);
-    }
+#Programme .filterForm >>> .el-form-item__content {
+    width: calc(100% - 110px);
+}
 </style>
