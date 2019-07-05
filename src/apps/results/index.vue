@@ -21,15 +21,30 @@
                 </el-row>
                 <el-row class="filterForm">
                     <el-col :span="8">
+                        <el-form-item label="提单人">
+                            <el-input v-model="params.creatorName" placeholder="请输入提单人" style="margin-left:11px;"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门" style="margin-left:25px;"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item label="单据状态">
-                            <el-select v-model="params.status" placeholder="请输入单据状态">
-                                <el-option
-                                        v-for="item in statusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                            <el-select v-model="params.status" placeholder="请输入单据状态" style="margin-left:25px;">
+                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
+                        </el-form-item>
+                    </el-col>
+
+                </el-row>
+                <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="申请时间">
+                            <el-date-picker v-model="params.createTime" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
+                            </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -79,18 +94,18 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <ResultsDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ResultsDetail" @reloadList = "reloadList"></ResultsDetail>
+            <ResultsDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ResultsDetail" @reloadList="reloadList"></ResultsDetail>
         </el-card>
-        <ResultsForm  ref="ResultsForm" @reloadList = "reloadList"></ResultsForm>
+        <ResultsForm ref="ResultsForm" @reloadList="reloadList"></ResultsForm>
     </div>
 </template>
 <script>
 import ResultsForm from './ResultsForm';
 import ResultsDetail from './ResultsDetail';
-import {publicMethods} from "../application.js";
+import { publicMethods } from '../application.js';
 import axios from 'axios';
 export default {
-    mixins:[publicMethods],
+    mixins: [publicMethods],
     name: 'Results',
     data() {
         return {
@@ -123,8 +138,8 @@ export default {
             formBoardId: '',
             dialogBoardFormId: '',
             operationBoardType: 'create',
-            formName:"motor-procresult",
-            appFlowName:'motor-procresult_procresult',
+            formName: 'motor-procresult',
+            appFlowName: 'motor-procresult_procresult',
             statusNews: ''
         };
     },
@@ -138,18 +153,18 @@ export default {
     filters: {
         filterStatus: function(data) {
             let xmlJson = {
-                "00":"已保存",
-                "01":"审核中",
-                "02" :"已驳回",
-                "03" :"已撤销",
-                "04" :"已完成"
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '03': '已撤销',
+                '04': '已完成'
             };
             return xmlJson[data];
         }
     },
     methods: {
         reloadList(params) {
-            if (params == "reload") {
+            if (params == 'reload') {
                 this.params.pageNum = 1;
                 this.getList();
             } else {
@@ -161,7 +176,7 @@ export default {
         },
         async getList() {
             const $self = this;
-            $self.url = "/api/v1/motor-procresult/query";
+            $self.url = '/api/v1/motor-procresult/query';
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {
@@ -190,7 +205,7 @@ export default {
             this.params = {
                 pageNum: 1,
                 pageSize: 5
-            }
+            };
             this.onSubmit();
         },
         onSubmit() {
@@ -207,20 +222,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-    #Results {
-        .el-select {
-            width: 100%;
-        }
-        .card_margin_10 {
-            margin-top: 10px;
-        }
-        .el-form-item--small.el-form-item{
-            width: 100%;
-        }
+#Results {
+    .el-select {
+        width: 100%;
     }
+    .card_margin_10 {
+        margin-top: 10px;
+    }
+    .el-form-item--small.el-form-item {
+        width: 100%;
+    }
+}
 </style>
 <style scoped>
-    #Results .filterForm >>> .el-form-item__content{
-        width: calc(100% - 110px);
-    }
+#Results .filterForm >>> .el-form-item__content {
+    width: calc(100% - 110px);
+}
 </style>
