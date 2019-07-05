@@ -811,7 +811,7 @@ export default {
                 day: '',
                 travelType: '',
                 submissionId: '',
-                est: false,
+                est: true,
                 fundPlan: true,
                 submissionName: '',
                 submitter: cookies.get('uname'),
