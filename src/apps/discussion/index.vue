@@ -1,7 +1,7 @@
 <template>
     <div id="Discussion">
         <el-card class="box-card">
-            <el-form :inline="true" label-width="70px"  label-position="left" :model="params" class="demo-form-inline">
+            <el-form :inline="true" label-width="70px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="议题名称">
@@ -24,13 +24,14 @@
                     <el-col :span="8">
                         <el-form-item label="单据状态">
                             <el-select v-model="params.status" placeholder="请输入单据状态">
-                                <el-option
-                                        v-for="item in statusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -77,18 +78,18 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <DiscussionDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="DiscussionDetail" @resetStatus = "resetStatus" @reloadList = "reloadList"></DiscussionDetail>
+            <DiscussionDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="DiscussionDetail" @resetStatus="resetStatus" @reloadList="reloadList"></DiscussionDetail>
         </el-card>
-        <DiscussionForm  ref="DiscussionForm" @reloadList = "reloadList"></DiscussionForm>
+        <DiscussionForm ref="DiscussionForm" @reloadList="reloadList"></DiscussionForm>
     </div>
 </template>
 <script>
 import DiscussionForm from './DiscussionForm';
 import DiscussionDetail from './DiscussionDetail';
-import {publicMethods} from "../application.js";
+import { publicMethods } from '../application.js';
 import axios from 'axios';
 export default {
-    mixins:[publicMethods],
+    mixins: [publicMethods],
     name: 'Discussion',
     data() {
         return {
@@ -121,8 +122,8 @@ export default {
             formBoardId: '',
             dialogBoardFormId: '',
             operationBoardType: 'create',
-            formName:"issuesReported",
-            appFlowName:'motor-issuesreported_party-agendasheet',
+            formName: 'issuesReported',
+            appFlowName: 'motor-issuesreported_party-agendasheet',
             statusNews: ''
         };
     },
@@ -136,28 +137,28 @@ export default {
     filters: {
         filterStatus: function(data) {
             let xmlJson = {
-                "00":"已保存",
-                "01":"审核中",
-                "02" :"已驳回",
-                "03" :"已撤销",
-                "04" :"已完成"
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '03': '已撤销',
+                '04': '已完成'
             };
             return xmlJson[data];
         }
     },
     methods: {
         reloadList(params) {
-            if (params == "reload") {
+            if (params == 'reload') {
                 this.params.pageNum = 1;
                 this.getList();
             } else {
                 this.$refs.DiscussionDetail.getFormDetails(params.id);
             }
         },
-        resetStatus(data){
+        resetStatus(data) {
             let $self = this;
-            for(let item of $self.tableData){
-                if(data.id == item.id){
+            for (let item of $self.tableData) {
+                if (data.id == item.id) {
                     item.status = data.status;
                 }
             }
@@ -167,7 +168,7 @@ export default {
         },
         async getList() {
             const $self = this;
-            $self.url = "/api/v1/issuesReported/queryList";
+            $self.url = '/api/v1/issuesReported/queryList';
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {
@@ -181,7 +182,7 @@ export default {
         clickTableRow(row) {
             this.$refs.DiscussionDetail.getFormDetails(row.id);
         },
-        editForm(data,event) {
+        editForm(data, event) {
             event.stopPropagation();
             this.$refs.DiscussionForm.setDataFromParent(data);
         },
@@ -198,7 +199,7 @@ export default {
                 pageNum: 1,
                 pageSize: 5,
                 total: 0
-            }
+            };
             this.onSubmit();
         },
         onSubmit() {
@@ -215,20 +216,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-    #Discussion {
-        .el-select {
-            width: 100%;
-        }
-        .card_margin_10 {
-            margin-top: 10px;
-        }
-        .el-form-item--small.el-form-item{
-            width: 100%;
-        }
+#Discussion {
+    .el-select {
+        width: 100%;
     }
+    .card_margin_10 {
+        margin-top: 10px;
+    }
+    .el-form-item--small.el-form-item {
+        width: 100%;
+    }
+}
 </style>
 <style scoped>
-    #Discussion .filterForm >>> .el-form-item__content{
-        width: calc(100% - 80px);
-    }
+#Discussion .filterForm >>> .el-form-item__content {
+    width: calc(100% - 80px);
+}
 </style>

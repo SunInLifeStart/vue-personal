@@ -14,14 +14,10 @@
                                 <el-input v-model="params.organName" placeholder="所属部门"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="状态">
-                                <el-select v-model="params.status" placeholder="请选择">
-                                    <el-option label="已保存" value="00"></el-option>
-                                    <el-option label="审核中" value="01"></el-option>
-                                    <el-option label="已驳回" value="02"></el-option>
-                                    <el-option label="已完成" value="04"></el-option>
-                                </el-select>
+                         <el-col :span="8">
+                            <el-form-item label="申请时间">
+                                <el-date-picker v-model="params.created" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
+                                </el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -33,6 +29,16 @@
                             </el-form-item>
                         </el-col>
                         -->
+                         <el-col :span="8">
+                            <el-form-item label="状态">
+                                <el-select v-model="params.status" placeholder="请选择" style="margin-left:15px;">
+                                    <el-option label="已保存" value="00"></el-option>
+                                    <el-option label="审核中" value="01"></el-option>
+                                    <el-option label="已驳回" value="02"></el-option>
+                                    <el-option label="已完成" value="04"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="8">
                             <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -104,6 +110,7 @@ export default {
             params: {
                 creatorName: '',
                 organName: '',
+                created: '',
                 status: '',
                 pageNum: 1,
                 pageSize: 5
@@ -166,7 +173,7 @@ export default {
                 $self.tableData = response.data.content.list;
                 $self.params.total = response.data.content.total;
             } else {
-               // $self.msgTips('获取列表失败', 'warning');
+                // $self.msgTips('获取列表失败', 'warning');
             }
         },
         resetStatus(data) {
@@ -213,7 +220,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.params.creatorName = this.params.organName = this.params.status =
+            this.params.creatorName = this.params.organName = this.params.status = this.params.created =
                 '';
             this.params.pageNum = 1;
             this.getList();
