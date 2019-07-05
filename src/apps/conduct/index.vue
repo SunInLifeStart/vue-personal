@@ -37,6 +37,16 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="申请时间">
+                                <div>
+                                    <el-date-picker style="width:100%" v-model="formInline.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8 ">
                             <el-form-item class=" ">
                                 <el-button type="primary " @click="searchList">查询</el-button>
@@ -98,6 +108,7 @@
 </template>
 <script>
 import { publicMethods } from '../application.js';
+import moment from 'moment';
 import LoanDetail from './LoanDetail';
 import PaymentDetail from './PaymentDetail';
 import TravelDetail from './TravelDetail';
@@ -144,7 +155,8 @@ export default {
                 numbers: '',
                 dtype: '全部',
                 organName: '',
-                status: ''
+                status: '',
+                created: []
             },
             params: {
                 page: 1,
@@ -224,6 +236,18 @@ export default {
                     field: 'organName',
                     filter: 'LIKE',
                     value: this.formInline.organName
+                });
+            }
+            if (this.formInline.created && this.formInline.created.length > 0) {
+                this.searchOptions.push({
+                    field: 'created',
+                    filter: 'BETWEEN',
+                    value: moment(this.formInline.created[0]).format(
+                        'YYYY-MM-DD'
+                    ),
+                    value2: moment(this.formInline.created[1]).format(
+                        'YYYY-MM-DD'
+                    )
                 });
             }
             /** 
@@ -312,6 +336,7 @@ export default {
         resetInput() {
             this.formInline.creatorName = this.formInline.organName = this.formInline.numbers =
                 '';
+            this.formInline.created = [];
             this.formInline.dtype = '全部';
             this.formInline.status = '';
             this.params.pege = 1;
