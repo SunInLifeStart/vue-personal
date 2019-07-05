@@ -1,7 +1,7 @@
 <template>
     <div id="Abnormal">
         <el-card class="box-card">
-            <el-form :inline="true" label-width="100px"  label-position="left" :model="params" class="demo-form-inline">
+            <el-form :inline="true" label-width="100px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="招标人">
@@ -23,15 +23,24 @@
                     <el-col :span="8">
                         <el-form-item label="单据状态">
                             <el-select v-model="params.status" placeholder="请输入单据状态">
-                                <el-option
-                                        v-for="item in statusOption"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value">
+                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="公司名称">
+                            <el-input v-model="params.organName" placeholder="请输入公司名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="申请时间">
+                            <el-date-picker v-model="params.createTime" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -80,16 +89,16 @@
         <el-card class="box-card card_margin_10">
             <AbnormalDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="AbnormalDetail"></AbnormalDetail>
         </el-card>
-        <AbnormalForm  ref="AbnormalForm" @reloadList = "reloadList"></AbnormalForm>
+        <AbnormalForm ref="AbnormalForm" @reloadList="reloadList"></AbnormalForm>
     </div>
 </template>
 <script>
 import AbnormalForm from './AbnormalForm';
 import AbnormalDetail from './AbnormalDetail';
-import {publicMethods} from "../application.js";
+import { publicMethods } from '../application.js';
 import axios from 'axios';
 export default {
-    mixins:[publicMethods],
+    mixins: [publicMethods],
     name: 'Abnormal',
     data() {
         return {
@@ -118,8 +127,8 @@ export default {
                 }
             ],
             formBoardId: '',
-            formName:"motor-bidanomaly",
-            appFlowName:'motor-bidanomaly_bidanomaly'
+            formName: 'motor-bidanomaly',
+            appFlowName: 'motor-bidanomaly_bidanomaly'
         };
     },
     components: {
@@ -132,18 +141,18 @@ export default {
     filters: {
         filterStatus: function(data) {
             let xmlJson = {
-                "00":"已保存",
-                "01":"审核中",
-                "02" :"已驳回",
-                "03" :"已撤销",
-                "04" :"已完成"
+                '00': '已保存',
+                '01': '审核中',
+                '02': '已驳回',
+                '03': '已撤销',
+                '04': '已完成'
             };
             return xmlJson[data];
         }
     },
     methods: {
         reloadList(params) {
-            if (params == "reload") {
+            if (params == 'reload') {
                 this.params.pageNum = 1;
                 this.getList();
             } else {
@@ -155,7 +164,7 @@ export default {
         },
         async getList() {
             const $self = this;
-            $self.url = "/api/v1/motor-bidanomaly/query";
+            $self.url = '/api/v1/motor-bidanomaly/query';
             let response = await $self.getQueryList();
             if (response) {
                 if (response.data.content.list.length > 0) {
@@ -185,7 +194,7 @@ export default {
                 pageNum: 1,
                 pageSize: 5,
                 total: 0
-            }
+            };
             this.onSubmit();
         },
         onSubmit() {
@@ -201,20 +210,20 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-    #Abnormal {
-        .el-select {
-            width: 100%;
-        }
-        .card_margin_10 {
-            margin-top: 10px;
-        }
-        .el-form-item--small.el-form-item{
-            width: 100%;
-        }
+#Abnormal {
+    .el-select {
+        width: 100%;
     }
+    .card_margin_10 {
+        margin-top: 10px;
+    }
+    .el-form-item--small.el-form-item {
+        width: 100%;
+    }
+}
 </style>
 <style scoped>
-    #Abnormal .filterForm >>> .el-form-item__content{
-        width: calc(100% - 110px);
-    }
+#Abnormal .filterForm >>> .el-form-item__content {
+    width: calc(100% - 110px);
+}
 </style>
