@@ -30,7 +30,7 @@ export default {
     #PaymentDetail {
         height: 100%;
         width: 100%;
-        //  display: flex;
+        display: flex;
         flex-direction: column;
         #actionList {
             padding-left: 20px;
