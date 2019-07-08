@@ -335,11 +335,7 @@
                             {{shareItem.proportion}}
                         </td>
                     </tr>
-                    <tr v-show="tableData.allocation == '是'">
-                        <td colspan="8">
-
-                        </td>
-                    </tr>
+                    <!--
                     <tr>
                         <td colspan="2" class="fontBold">附件上传</td>
                         <td colspan="6" style="padding:10px;">
@@ -348,22 +344,17 @@
                             </div>
                         </td>
                     </tr>
-                    <!--
-                    <tr id="approval">
-                        <td colspan="2" class="fontBold">领导审批</td>
-                        <td colspan="6" style="text-align: left;">
-                            <div class="audit" v-for="item in this.array" :key="item.id">
-                                <div class="info">
-                                    <div class="creator">
-                                        <a href="#">{{item.userName}}</a> {{item.times | dateformat}}
-                                    </div>
-                                    <span style="color: #0c21e8;">【同意】</span>
-                                    <span class="content">{{item.fullMessage}}</span>
-                                </div>
+                    -->
+                </table>
+                <table class="tablePrint" style="width: 99%;">
+                    <tr>
+                        <td class="fontBold" style="width:100px;">附件信息</td>
+                        <td style="padding: 10px;">
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </td>
                     </tr>
-                    -->
                 </table>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
