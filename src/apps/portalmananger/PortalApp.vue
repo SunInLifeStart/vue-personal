@@ -4,7 +4,7 @@
             <el-card class="box-card">
                 <PortalAppFilter @searchList="getSearchOptions"></PortalAppFilter>
                  <div class="toolbar">
-                    <el-button type="primary" icon="el-icon-plus" @click="createForm">新建</el-button>
+                    <el-button type="primary" icon="el-icon-plus" @click="cleanForm">新建</el-button>
                  </div>
                 <PortalAppList ref="PortalAppList" @formId="getFormId" @editForm="editForm" :searchOptions="searchOptions"  :type="type" ></PortalAppList>
             </el-card>
@@ -13,7 +13,7 @@
                 <PortalAppDetail ref="PortalAppDetail" :formId="formId"></PortalAppDetail>
             </el-card> -->
         </div>
-        <el-dialog title="数据详情" :visible.sync="dialogFormVisible" max-width="1280px" width="80%" :close-on-click-modal="false">
+        <el-dialog :title="type" :visible.sync="dialogFormVisible" max-width="1280px" width="80%" :close-on-click-modal="false">
             <PortalAppForm ref="PortalAppForm" @saveStatus="saveStatus" @refreshData="refreshData" :formId="dialogFormId" :type="type" :operationType="operationType"></PortalAppForm>
             <div slot="footer" class="dialog-footer">
                 <el-button type="primary" @click="saveForm">保存</el-button>
@@ -58,10 +58,6 @@ export default {
             this.dialogFormVisible = status;
             // this.$refs.PortalAppDetail.getForm(); 
             this.$refs.PortalAppList.getList(); 
-        },
-         createForm () {
-            this.dialogFormVisible = true;
-            this.operationType = 'create';
         },
         editForm(id) {
             this.dialogFormId = id;

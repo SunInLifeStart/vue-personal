@@ -123,7 +123,7 @@
             </el-row>
             <el-row>
                 <el-col :span="8">
-                    <el-form-item label="采购结果是否是规定情形" prop="proResultYes">
+                    <el-form-item label="是否存在‘规定情形’中规定的情况" prop="proResultYes">
                         <el-radio-group v-model="formData.proResultYes">
                             <el-radio key="1" label="1">是</el-radio>
                             <el-radio key="2" label="2">否</el-radio>

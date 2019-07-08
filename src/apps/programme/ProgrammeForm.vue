@@ -42,7 +42,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="采购方案是否是规定情形" prop="purchaseSchemeSign">
+                        <el-form-item label="是否存在‘规定情形’中规定的情况" prop="purchaseSchemeSign">
                             <el-radio-group v-model="formData.purchaseSchemeSign">
                                 <el-radio key="1" label="1">是</el-radio>
                                 <el-radio key="2" label="2">否</el-radio>

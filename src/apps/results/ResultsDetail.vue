@@ -73,7 +73,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购结果是否是规定情形：">{{tableData.proResultYes == '1' ? '是': '否'}}
+                        <el-form-item label="是否存在‘规定情形’中规定的情况：">{{tableData.proResultYes == '1' ? '是': '否'}}
                         </el-form-item>
                     </el-col>
                 </el-row>

@@ -41,7 +41,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="采购方案是否是规定情形：">{{SignOption[tableData.purchaseSchemeSign]}}
+                        <el-form-item label="是否存在‘规定情形’中规定的情况：">{{SignOption[tableData.purchaseSchemeSign]}}
                         </el-form-item>
                     </el-col>
                 </el-row>

@@ -14,7 +14,7 @@
                   <el-tab-pane label="通知公告" name="fourth" v-if="fourth">
                     <PortalApp :type="'通知公告'"></PortalApp>
                 </el-tab-pane>
-                <el-tab-pane label="通讯录/会表" name="fifth" v-if="fifth">
+                <el-tab-pane label="通讯录" name="fifth" v-if="fifth">
                     <PortalApp :type="'通讯录'"></PortalApp>
                 </el-tab-pane>
                 <el-tab-pane label="公司发文" name="eighth" v-if="eighth">
