@@ -20,12 +20,12 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="项目名称" prop="projectName">
                             <el-input v-model="formData.projectName"></el-input>
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="招标项目名称" prop="biddingProjectName">
                             <el-input v-model="formData.biddingProjectName"></el-input>
                         </el-form-item>

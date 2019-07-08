@@ -24,11 +24,11 @@
                         <el-form-item label="流水号：">{{tableData.number}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="项目名称：">{{tableData.projectName}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="招标项目名称：">{{tableData.biddingProjectName}}
                         </el-form-item>
                     </el-col>
