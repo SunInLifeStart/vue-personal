@@ -14,7 +14,7 @@
                         <el-input v-model="formData.recommendDept"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="24">
                     <el-form-item label="供应商名称" prop="supplierName">
                         <el-input v-model="formData.supplierName"></el-input>
                     </el-form-item>
@@ -32,17 +32,17 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="8">
+                <el-col :span="24">
                     <el-form-item label="推荐参与项目" prop="recommendProject">
                         <el-input v-model="formData.recommendProject" placeholder="请输入推荐参与项目"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="24">
                     <el-form-item label="推荐参与采购项目" prop="recommendPurProject">
                         <el-input v-model="formData.recommendPurProject" placeholder="请输入推荐参与采购项目"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="24">
                     <el-form-item label="供应商所在地" prop="supplieLocation">
                         <el-input v-model="formData.supplieLocation"></el-input>
                     </el-form-item>
@@ -103,14 +103,14 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="8">
+                <el-col :span="24">
                     <el-form-item label="供应商基本情况" prop="supplierBasic">
-                        <el-input v-model="formData.supplierBasic" placeholder="请输入供应商基本情况"></el-input>
+                        <el-input v-model="formData.supplierBasic" placeholder="请输入供应商基本情况" type="textarea"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="24">
                     <el-form-item label="考察评估情况" prop="inspectSituation">
-                        <el-input v-model="formData.inspectSituation" placeholder="请输入考察评估情况"></el-input>
+                        <el-input v-model="formData.inspectSituation" placeholder="请输入考察评估情况" type="textarea"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">

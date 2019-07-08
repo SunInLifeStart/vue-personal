@@ -1,5 +1,5 @@
 <template>
-    <el-dialog title="名片印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="95%" style="text-align: center;">
+    <el-dialog title="名片印刷" :visible.sync="dialogFormVisible" :close-on-click-modal="false" width="98%" style="text-align: center;">
         <div id="BusinessCardForm">
             <el-form ref="formupdate" :model="formData" :rules="rules" label-width="90px">
                 <el-row>
@@ -52,7 +52,7 @@
                              :row-class-name="tableRowClassName"
                             @row-click='show'>
                                <el-table-column type="selection" width="40px"></el-table-column>
-                                <el-table-column label="姓名">
+                                <el-table-column label="姓名" width="110">
                                     <template slot-scope="scope">
                                          <el-select v-model="scope.row.uname" placeholder="请选择" @change="payeeChange" clearable filterable
                                           allow-create default-first-option>
@@ -61,7 +61,7 @@
                                             </el-select>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="organ" label="部门">
+                                <el-table-column prop="organ" label="部门" width="135">
                                     <template slot-scope="scope">
                                        <el-select v-model="scope.row.organ" placeholder="请选择" clearable filterable
                                        allow-create default-first-option>
@@ -96,12 +96,12 @@
                                         <el-input v-model="scope.row.mailbox" ></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="company" label="公司名称">
+                                <el-table-column prop="company" label="公司名称" width="120">
                                     <template slot-scope="scope">
                                         <el-input v-model="scope.row.company"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="mailingAddress" label="通讯地址">
+                                <el-table-column prop="mailingAddress" label="通讯地址" width="120">
                                     <template slot-scope="scope">
                                         <el-input v-model="scope.row.mailingAddress" ></el-input>
                                     </template>

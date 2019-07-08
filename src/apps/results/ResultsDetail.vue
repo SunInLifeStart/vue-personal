@@ -58,17 +58,17 @@
                         <el-form-item label="采购起止时间：">{{tableData.proTimeStart}}至{{tableData.proTimeEnd}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="采购内容摘要：">{{tableData.proContent}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="采购过程简述：">{{tableData.proProcess}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="采购结果：">{{tableData.proResult}}
                         </el-form-item>
                     </el-col>

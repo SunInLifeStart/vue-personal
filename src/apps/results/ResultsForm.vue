@@ -101,19 +101,23 @@
                 </el-col>
             </el-row>
             <el-row>
-                <el-col :span="8">
+                <el-col :span="24">
                     <el-form-item label="采购内容摘要" prop="proContent">
                         <el-input v-model="formData.proContent"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+            </el-row>
+            <el-row>
+                <el-col :span="24">
                     <el-form-item label="采购过程简述" prop="proProcess">
                         <el-input v-model="formData.proProcess"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+            </el-row>
+            <el-row>
+                <el-col :span="24">
                     <el-form-item label="采购结果" prop="proResult">
-                        <el-input v-model="formData.proResult"></el-input>
+                        <el-input v-model="formData.proResult"  type="textarea"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>

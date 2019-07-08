@@ -27,18 +27,18 @@
                         <el-form-item label="联系人及电话：">{{tableData.linkman}}
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="采购业务类别：">{{tableData.purchaseType}}
+                        </el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="项目名称：">{{tableData.projectName}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="招标情况说明：">{{tableData.bidCondition}}
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="采购业务类别：">{{tableData.purchaseType}}
                         </el-form-item>
                     </el-col>
                 </el-row>

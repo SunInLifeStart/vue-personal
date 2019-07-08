@@ -27,21 +27,21 @@
                         <el-form-item label="推荐部门/个人：">{{tableData.recommendDept}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="供应商名称：">{{tableData.supplierName}}
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="推荐参与项目：">{{tableData.recommendProject}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="推荐参与采购项目：">{{tableData.recommendPurProject}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="供应商所在地：">{{tableData.supplieLocation}}
                         </el-form-item>
                     </el-col>
@@ -80,11 +80,11 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="供应商基本情况：">{{tableData.supplierBasic}}
                         </el-form-item>
                     </el-col>
-                    <el-col :span="8">
+                    <el-col :span="24">
                         <el-form-item label="考察评估情况：">{{tableData.inspectSituation}}
                         </el-form-item>
                     </el-col>
