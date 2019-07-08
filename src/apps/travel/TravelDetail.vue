@@ -17,7 +17,7 @@
             <!--   v-show="this.tableData.status && this.tableData.status == '04'"-->
             <div>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print">打印</el-button>
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
@@ -36,7 +36,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <table class="tablePrint" style=" width: 100%;">
+                <table class="tablePrint" style="width: 99%;">
                     <col style="width: 12%" />
                     <col style="width: 12%" />
                     <col style="width: 14%" />
@@ -73,7 +73,7 @@
                         <td colspan="2">
                             出差事由
                         </td>
-                        <td colspan="6" style="text-align: left; padding-left: 10px;">
+                        <td colspan="6" style="text-align: left;padding-left: 10px;">
                             {{tableData.reason}}
                         </td>
                     </tr>
@@ -149,59 +149,39 @@
                         </td>
 
                     </tr>
+
+                </table>
+                <table class="tablePrint" style="width: 99%;">
                     <tr>
-                        <td colspan="8" style="font-weight:bold;">预算、资金计划信息</td>
-                    </tr>
-                    <tr>
-                        <td>
+                        <td style="width:100px;">
                             是否资金计划内
                         </td>
-                        <td colspan="3">
+                        <td>
                             {{tableData.fundPlan ? '是': '否'}}
                         </td>
-                        <td>
+                    </tr>
+                    <tr>
+                        <td style="width:100px;">
                             是否预算内
                         </td>
-                        <td colspan="3">
+                        <td>
                             {{tableData.est ? '是': '否'}}
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">合计金额</td>
-                        <td colspan="6">
+                        <td style="width:100px;">合计金额</td>
+                        <td>
                             {{this.tableData.estimate.length ==0 ? '￥': this.tableData.estimate[0].currency.curValue}}: &nbsp; {{tableData.total}}（金额大写:【{{this.tableData.estimate.length ==0 ? '人民币': this.tableData.estimate[0].currency.label}} 】: {{this.tableData.upper}})
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="2">
-                            <!-- <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false"> -->
-                            <span>附件上传</span>
-                            <!-- </el-upload> -->
-                        </td>
-                        <td colspan="6" style="padding:10px;">
+                        <td class="fontBold" style="width:100px;">附件信息</td>
+                        <td style="padding: 10px;">
                             <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
                                 <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                             </div>
                         </td>
                     </tr>
-                    <!--
-                    <tr>
-                        <td colspan="2">
-                            审批意见
-                        </td>
-                        <td colspan="6" style="text-align: left;">
-                            <div class="audit" v-for="item in this.array" :key="item.index">
-                                <div class="info">
-                                    <div class="creator">
-                                        <a href="#">{{item.userName}}</a> {{item.times | dateformat}}
-                                    </div>
-                                    <span>【同意】</span>
-                                    <span class="content">{{item.fullMessage}}</span>
-                                </div>
-                            </div>
-                        </td>
-                    </tr>
-                    -->
                 </table>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
@@ -400,7 +380,7 @@ export default {
             let comments = await $self.getComments();
             $self.actions = actions.data.types;
             $self.comments = comments.data;
-            this.getAgree();
+            //  this.getAgree();
             $self.crumbs = { items: crumbs.data, index: -1 };
             for (var i = 0; i < $self.crumbs.items.length; i++) {
                 if ($self.crumbs.items[i].active) {
