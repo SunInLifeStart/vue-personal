@@ -60,8 +60,9 @@
 
                 <el-table :data="tableData" stripe style="margin-bottom: 10px;" @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="title" label="标题"></el-table-column>
-                    <el-table-column prop="creatorName" label="拟稿人" width="200"></el-table-column>
                     <el-table-column prop="organName" label="拟稿单位" width="200"></el-table-column>
+                    <el-table-column prop="creatorName" label="拟稿人" width="200"></el-table-column>
+
                     <el-table-column prop="created" label="创建时间" width="150" sortable>
                         <template slot-scope="scope">
                             {{scope.row.created | dateformat}}

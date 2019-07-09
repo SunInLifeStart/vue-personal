@@ -62,9 +62,9 @@
             </div>
             <div id="LedgerList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
-                    <el-table-column prop="applyName" label="提单人">
-                    </el-table-column>
                     <el-table-column prop="organName" label="公司部门">
+                    </el-table-column>
+                    <el-table-column prop="applyName" label="提单人">
                     </el-table-column>
                     <el-table-column prop="project" label="所属项目">
                     </el-table-column>
