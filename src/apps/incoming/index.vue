@@ -67,11 +67,11 @@
                     </el-table-column>
                     <el-table-column prop="creatorName" label="拟稿人">
                     </el-table-column>
-                    <el-table-column width="100" label="单据状态">
-                        <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
-                    </el-table-column>
                     <el-table-column prop="receiptDate" label="收文日期">
                         <template slot-scope="scope">{{scope.row.receiptDate.substring(0, 10)}}</template>
+                    </el-table-column>
+                    <el-table-column width="100" label="单据状态">
+                        <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                     </el-table-column>
                     <el-table-column label="操作" width="100">
                         <template slot-scope="scope">
