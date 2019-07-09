@@ -662,7 +662,7 @@ export default {
             const self = this;
             if (cookies.get('uid') != '') {
                 axios
-                    .get('/api/v1/travel_forms/findDone/' + cookies.get('uid'))
+                    .get('/api/v1/payment_forms/getTravels')
                     .then(res => {
                         self.travelSelections = res.data;
                     })
