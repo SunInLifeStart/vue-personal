@@ -56,7 +56,7 @@
                 </el-table-column>
                 <el-table-column prop="uname" label="姓名">
                 </el-table-column>
-                <el-table-column prop="sex" label="性别">
+                <el-table-column prop="sex" label="性别" >
                 </el-table-column>
                 <el-table-column prop="nation" label="民族">
                 </el-table-column>
