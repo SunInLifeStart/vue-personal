@@ -246,10 +246,12 @@ export default {
                     }
                 })
                 .catch(function() {
+                    /** 
                     self.$message({
                         message: '获取节假日接口失败',
                         type: 'error'
                     });
+                    */
                 });
         },
         progressTime(arrayListDate) {
