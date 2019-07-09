@@ -29,8 +29,8 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="公司名称">
-                            <el-input v-model="params.organName" placeholder="请输入公司名称"></el-input>
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
