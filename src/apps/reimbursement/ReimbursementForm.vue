@@ -129,7 +129,7 @@
                         </td>
                         <td colspan="2">
                             <el-select v-model="formData.expenseDep" placeholder="请选择" style="width:100%;">
-                                <el-option v-for="item in combinedUnit" :key="item.id" :label="item.name" :value="item.id">
+                                <el-option v-for="item in combinedUnit" :key="item.id" :label="item.name" :value="item.name">
                                 </el-option>
                             </el-select>
                         </td>
