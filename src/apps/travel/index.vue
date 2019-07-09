@@ -5,23 +5,18 @@
                 <el-form :inline="true" class="demo-form-inline" label-width="70px;">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="提单人">
-                                <el-input v-model="formInline.submitter" placeholder="提单人"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
                             <el-form-item label="公司部门">
                                 <el-input v-model="formInline.subOrganName" placeholder="公司部门"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="状态">
-                                <el-select v-model="formInline.status" placeholder="请选择">
-                                    <el-option label="已保存" value="00"></el-option>
-                                    <el-option label="审核中" value="01"></el-option>
-                                    <el-option label="已驳回" value="02"></el-option>
-                                    <el-option label="已完成" value="04"></el-option>
-                                </el-select>
+                            <el-form-item label="提单人">
+                                <el-input v-model="formInline.submitter" placeholder="提单人"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="单据编号">
+                                <el-input v-model="formInline.number" placeholder="单据编号"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -33,17 +28,22 @@
                             </el-form-item>
                         </el-col>
                         -->
-                        <el-col :span="8">
-                            <el-form-item label="单据编号">
-                                <el-input v-model="formInline.number" placeholder="单据编号"></el-input>
-                            </el-form-item>
-                        </el-col>
                         <el-col :span="16">
                             <el-form-item label="申请时间">
                                 <div>
-                                    <el-date-picker style="width:96%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    <el-date-picker style="width:98%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                                     </el-date-picker>
                                 </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="状态" label-width="68px">
+                                <el-select v-model="formInline.status" placeholder="请选择">
+                                    <el-option label="已保存" value="00"></el-option>
+                                    <el-option label="审核中" value="01"></el-option>
+                                    <el-option label="已驳回" value="02"></el-option>
+                                    <el-option label="已完成" value="04"></el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>

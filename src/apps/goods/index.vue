@@ -5,29 +5,29 @@
                 <el-form :inline="true" label-width="70px" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
+                            <el-form-item label="公司部门">
+                                <el-input placeholder="请输入所属部门" v-model="params.oname"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
                             <el-form-item label="申请人">
                                 <el-input placeholder="请输入申请人" v-model="params.applyUser"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="公司部门">
-                                <el-input placeholder="请输入所属部门" v-model="params.oname"></el-input>
+                            <el-form-item label="申请时间">
+                                <el-date-picker v-model="params.applyTime" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
+                                </el-date-picker>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="params.status" placeholder="请选择">
                                     <el-option v-for="item in statusOpertions" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row class="filterForm">
-                        <el-col :span="8">
-                            <el-form-item label="申请时间">
-                                <el-date-picker v-model="params.applyTime" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
-                                </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">

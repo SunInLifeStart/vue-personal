@@ -6,19 +6,19 @@
                 <el-form :inline="true" label-width="100px" label-position="left" class="demo-form-inline">
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="申请人：">
-                                <el-input v-model="formInline.proposer" placeholder="" style="width:100%"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
                             <el-form-item label="公司部门：">
                                 <el-input v-model="formInline.applyDept" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="单据状态：" prop="status">
-                                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
-                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.code">
+                            <el-form-item label="申请人：">
+                                <el-input v-model="formInline.proposer" placeholder="" style="width:100%"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="资产类型：" prop="assetsType">
+                                <el-select v-model="formInline.assetsType" style="width:90%" filterable>
+                                    <el-option v-for="item in assetTypes" :key="item.id" :label="item.name" :value="item.name">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -26,9 +26,9 @@
                     </el-row>
                     <el-row>
                         <el-col :span="8">
-                            <el-form-item label="资产类型：" prop="assetsType">
-                                <el-select v-model="formInline.assetsType" style="width:100%" filterable>
-                                    <el-option v-for="item in assetTypes" :key="item.id" :label="item.name" :value="item.name">
+                            <el-form-item label="单据状态：" prop="status">
+                                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
+                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.code">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -300,6 +300,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 #AssetFilter .el-form-item--small.el-form-item {
-    width: 100%;
+  //  width: 100%;
 }
 </style>
