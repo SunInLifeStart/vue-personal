@@ -60,9 +60,9 @@
             </div>
             <div id="AssetList">
                 <el-table :data="tableData" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
-                    <el-table-column prop="proposer" label="申请人">
-                    </el-table-column>
                     <el-table-column prop="organName" label="公司部门" min-width='150px'>
+                    </el-table-column>
+                    <el-table-column prop="proposer" label="申请人">
                     </el-table-column>
                     <el-table-column prop="assetsType" label="资产类型" min-width='120px'>
                     </el-table-column>

@@ -45,9 +45,9 @@
             </div>
             <div id="GoodsList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
-                    <el-table-column prop="applyUser" label="申请人">
-                    </el-table-column>
                     <el-table-column prop="oname" label="申请部门">
+                    </el-table-column>
+                    <el-table-column prop="applyUser" label="申请人">
                     </el-table-column>
                     <el-table-column prop="applyTime" label="申请时间">
                         <template slot-scope="scope">

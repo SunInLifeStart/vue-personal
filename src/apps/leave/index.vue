@@ -47,9 +47,9 @@
             </div>
             <div id="LeaveList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
-                    <el-table-column prop="uname" label="提单人" align="center">
-                    </el-table-column>
                     <el-table-column prop="oname" label="所属部门" align="center">
+                    </el-table-column>
+                    <el-table-column prop="uname" label="提单人" align="center">
                     </el-table-column>
                     <el-table-column prop="no" label="流水号" align="center">
                     </el-table-column>

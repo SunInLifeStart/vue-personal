@@ -62,9 +62,9 @@
             </div>
             <div id="LoanList">
                 <el-table :data="tableData" stripe @row-click="showCurrentId" highlight-current-row>
-                    <el-table-column prop="borrower" label="借款人" align="left">
-                    </el-table-column>
                     <el-table-column prop="organName" label="公司部门" align="left">
+                    </el-table-column>
+                    <el-table-column prop="borrower" label="借款人" align="left">
                     </el-table-column>
                     <el-table-column prop="borrowDept" label="费用承担部门" align="left" min-width="100">
                     </el-table-column>
@@ -80,17 +80,17 @@
                             {{scope.row.borrows.length > 0 ? scope.row.borrows[0].currency : '人民币'}}
                         </template>
                     </el-table-column>
+                    <el-table-column prop="borrowTime" label="借款时间" align="left" min-width="100">
+                        <template slot-scope="scope">
+                            {{scope.row.borrowTime | dateformat}}
+                        </template>
+                    </el-table-column>
                     <el-table-column prop="status" label="单据状态" align="left">
                         <template slot-scope="scope">
                             {{scope.row.status | filterStatus}}
                             <!--
                             {{scope.row.status == '00'? '已保存' :scope.row.status == '01' ? '审核中': scope.row.status == '02' ? '已驳回': scope.row.status == '03' ? '已撤销': scope.row.status == '04'? '已完成': ''}}
                         -->
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="borrowTime" label="借款时间" align="left" min-width="100">
-                        <template slot-scope="scope">
-                            {{scope.row.borrowTime | dateformat}}
                         </template>
                     </el-table-column>
                     <el-table-column label="操作">

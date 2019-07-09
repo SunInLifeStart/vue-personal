@@ -63,9 +63,9 @@
             </div>
             <div id="ExpenseList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
-                    <el-table-column prop="creatorName" label="提单人">
-                    </el-table-column>
                     <el-table-column prop="organName" label="部门">
+                    </el-table-column>
+                    <el-table-column prop="creatorName" label="提单人">
                     </el-table-column>
                     <el-table-column prop="no" label="单据编号">
                     </el-table-column>

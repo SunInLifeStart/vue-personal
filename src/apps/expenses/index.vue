@@ -14,7 +14,7 @@
                                 <el-input v-model="params.organName" placeholder="所属部门"></el-input>
                             </el-form-item>
                         </el-col>
-                         <el-col :span="8">
+                        <el-col :span="8">
                             <el-form-item label="申请时间">
                                 <el-date-picker v-model="params.created" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
                                 </el-date-picker>
@@ -29,7 +29,7 @@
                             </el-form-item>
                         </el-col>
                         -->
-                         <el-col :span="8">
+                        <el-col :span="8">
                             <el-form-item label="状态">
                                 <el-select v-model="params.status" placeholder="请选择" style="margin-left:15px;">
                                     <el-option label="已保存" value="00"></el-option>
@@ -53,11 +53,16 @@
             </div>
             <div id="ExpensesList">
                 <el-table :data="tableData" stripe @row-click="showCurrentId" highlight-current-row>
-                    <el-table-column prop="creatorName" label="提单人" align="left">
-                    </el-table-column>
                     <el-table-column prop="organName" label="所属部门" align="left" min-width="100">
                     </el-table-column>
+                    <el-table-column prop="creatorName" label="提单人" align="left">
+                    </el-table-column>
                     <el-table-column prop="number" label="流水单号" align="left" width="150">
+                    </el-table-column>
+                    <el-table-column prop="created" label="提单时间" align="left" min-width="100">
+                        <template slot-scope="scope">
+                            {{scope.row.created | dateformat}}
+                        </template>
                     </el-table-column>
                     <el-table-column prop="status" label="单据状态" align="left">
                         <template slot-scope="scope">
@@ -67,11 +72,7 @@
                         -->
                         </template>
                     </el-table-column>
-                    <el-table-column prop="created" label="提单时间" align="left" min-width="100">
-                        <template slot-scope="scope">
-                            {{scope.row.created | dateformat}}
-                        </template>
-                    </el-table-column>
+
                     <el-table-column label="操作">
                         <template slot-scope="scope">
                             <!--v-if="scope.row.status == '00' || scope.row.status == '02'"-->
