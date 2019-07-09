@@ -78,8 +78,8 @@ export default {
         cleanForm() {
             this.dialogFormVisible = true;
             this.operationType = 'create';
-            if (this.$refs.foreignoutform) {
-                this.$refs.foreignoutform.cleanForm();
+            if (this.$refs.PortalAppForm) {
+                this.$refs.PortalAppForm.cleanForm();
             }
         }
     }
