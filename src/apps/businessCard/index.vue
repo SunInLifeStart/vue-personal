@@ -63,9 +63,9 @@
             </div>
             <div id="BusinessCardList">
                 <el-table :data="tableData" align="center" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
-                    <el-table-column prop="creatorName" label="申请人">
-                    </el-table-column>
                     <el-table-column prop="organName" width="200" label="公司部门">
+                    </el-table-column>
+                    <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
                     <el-table-column prop="committed" label="申请日期" sortable>
                         <template slot-scope="scope">

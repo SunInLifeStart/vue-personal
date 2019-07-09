@@ -54,8 +54,6 @@
                 </el-table-column>
                 <el-table-column prop="organName" label="公司部门">
                 </el-table-column>
-                <el-table-column prop="created" label="填表日期">
-                </el-table-column>
                 <el-table-column prop="uname" label="姓名">
                 </el-table-column>
                 <el-table-column prop="sex" label="性别">
@@ -73,6 +71,8 @@
                 <el-table-column prop="phone" label="手机/家庭电话">
                 </el-table-column>
                 <el-table-column prop="highestEducation" label="最高学历">
+                </el-table-column>
+                <el-table-column prop="created" label="填表日期">
                 </el-table-column>
                 <el-table-column label="单据状态">
                     <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>

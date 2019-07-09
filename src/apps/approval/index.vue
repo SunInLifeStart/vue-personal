@@ -61,11 +61,11 @@
                     <el-table-column label="印章种类">
                         <template slot-scope="scope">{{scope.row.useItems | useItemsfilter}}</template>
                     </el-table-column>
-                    <el-table-column prop="created" label="申请时间">
+                    <el-table-column prop="organName" label="申请部门">
                     </el-table-column>
                     <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
-                    <el-table-column prop="organName" label="申请部门">
+                    <el-table-column prop="created" label="申请时间">
                     </el-table-column>
                     <el-table-column prop="recipientsTime" label="领用时间">
                     </el-table-column>
@@ -190,7 +190,7 @@ export default {
                 gonghuizhang: '工会章',
                 yingyezhizhao: '营业执照',
                 jingshenweizhang: '经审委印章',
-               caiwuzhang :"财务章"
+                caiwuzhang: '财务章'
             };
             return xmlJson[data];
         },
@@ -229,7 +229,7 @@ export default {
                 $self.tableData = response.data.content.list;
                 $self.params.total = response.data.content.total;
             } else {
-               // $self.msgTips('获取列表失败', 'warning');
+                // $self.msgTips('获取列表失败', 'warning');
             }
         },
 

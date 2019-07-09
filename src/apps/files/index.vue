@@ -70,9 +70,9 @@
             </div>
             <div id="FilesList">
                 <el-table :data="tableData" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
-                    <el-table-column prop="creatorName" label="申请人">
-                    </el-table-column>
                     <el-table-column prop="organName" label="申请部门">
+                    </el-table-column>
+                    <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
                     <el-table-column prop="created" label="申请日期" sortable>
                         <template slot-scope="scope">
