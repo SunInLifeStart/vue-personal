@@ -3,13 +3,25 @@
         <el-card class="box-card">
             <!-- 查询 -->
             <div id="IncomingFilter">
-                <el-form :inline="true" class="demo-form-inline">
+                <el-form :inline="true" label-width="70px" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
+                        <el-col :span="8">
+                            <el-form-item label="公司部门">
+                                <el-input v-model="params.organName" placeholder="公司部门"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="拟稿人">
+                                <el-input placeholder="请输入拟稿人" v-model="params.creatorName"></el-input>
+                            </el-form-item>
+                        </el-col>
                         <el-col :span="8">
                             <el-form-item label="公文标题">
                                 <el-input placeholder="请输入公文标题" v-model="params.title"></el-input>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="来文机关">
                                 <el-input placeholder="请输入来文机关" v-model="params.organ"></el-input>
@@ -20,13 +32,14 @@
                                 <el-input v-model="params.wordNo" placeholder="来文字号"></el-input>
                             </el-form-item>
                         </el-col>
-                    </el-row>
-                    <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="公司部门">
-                                <el-input v-model="params.organName" placeholder="公司部门"></el-input>
+                            <el-form-item label="收文日期">
+                                <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" type="date"></el-date-picker>
                             </el-form-item>
                         </el-col>
+
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="params.status" placeholder="请选择">
@@ -35,13 +48,6 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="收文日期">
-                                <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" type="date"></el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item>
                                 <el-button type="primary" @click="getList">查询</el-button>
@@ -166,6 +172,16 @@ export default {
                     value: this.params.title
                 });
             }
+            if (
+                this.params.creatorName &&
+                this.params.creatorName.trim() !== ''
+            ) {
+                this.searchOptions.push({
+                    field: 'creatorName',
+                    filter: 'LIKE',
+                    value: this.params.creatorName
+                });
+            }
             if (this.params.organ && this.params.organ.trim() !== '') {
                 this.searchOptions.push({
                     field: 'organ',
@@ -265,6 +281,7 @@ export default {
                 desc: true,
                 organName: ''
             };
+            this.getList();
         }
     },
     mounted() {
