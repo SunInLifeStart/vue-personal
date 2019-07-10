@@ -67,9 +67,9 @@
                     </el-table-column>
                     <el-table-column prop="subOrganName" label="费用承担部门" align="center">
                     </el-table-column>
-                    <el-table-column prop="number" label="流水号" align="center">
+                    <el-table-column prop="number" label="单据编号" align="center">
                     </el-table-column>
-                    <el-table-column prop="submitted" label="提单时间" align="center">
+                    <el-table-column prop="submitted" label="申请时间" align="center">
                     </el-table-column>
                     <el-table-column prop="status" label="状态" align="center">
                         <template slot-scope="scope">

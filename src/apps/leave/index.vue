@@ -15,7 +15,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="申请时间">
+                            <el-form-item label="提单时间">
                                 <el-date-picker v-model="params.applyTime" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
                                 </el-date-picker>
                             </el-form-item>

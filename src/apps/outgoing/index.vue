@@ -17,6 +17,21 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
+                            <el-form-item label="拟稿人">
+                                <el-input placeholder="请输入拟稿人" v-model="params.creatorName"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
+                        <el-col :span="16">
+                            <el-form-item label="创建时间">
+                                <div>
+                                    <el-date-picker style="width:100%" v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="params.status" clearable placeholder="请选择">
                                     <el-option v-for="item in s_status" :key="item.value" :label="item.label" :value="item.value">
@@ -24,21 +39,6 @@
                                 </el-select>
                             </el-form-item>
 
-                        </el-col>
-                    </el-row>
-                    <el-row class="filterForm">
-                        <el-col :span="8">
-                            <el-form-item label="申请人">
-                                <el-input placeholder="请输入申请人" v-model="params.creatorName"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="16">
-                            <el-form-item label="申请时间">
-                                <div>
-                                    <el-date-picker style="width:100%" v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                                    </el-date-picker>
-                                </div>
-                            </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row class="filterForm">
@@ -60,7 +60,7 @@
 
                 <el-table :data="tableData" stripe style="margin-bottom: 10px;" @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="title" label="标题"></el-table-column>
-                    <el-table-column prop="organName" label="拟稿单位" width="200"></el-table-column>
+                    <el-table-column prop="organName" label="公司部门" width="200"></el-table-column>
                     <el-table-column prop="creatorName" label="拟稿人" width="200"></el-table-column>
 
                     <el-table-column prop="created" label="创建时间" width="150" sortable>

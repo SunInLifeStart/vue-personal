@@ -10,12 +10,12 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="所属部门">
-                                <el-input v-model="params.organName" placeholder="所属部门"></el-input>
+                            <el-form-item label="公司部门">
+                                <el-input v-model="params.organName" placeholder="公司部门"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="申请时间">
+                            <el-form-item label="提单时间">
                                 <el-date-picker v-model="params.created" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
                                 </el-date-picker>
                             </el-form-item>
@@ -53,7 +53,7 @@
             </div>
             <div id="ExpensesList">
                 <el-table :data="tableData" stripe @row-click="showCurrentId" highlight-current-row>
-                    <el-table-column prop="organName" label="所属部门" align="left" min-width="100">
+                    <el-table-column prop="organName" label="公司部门" align="left" min-width="100">
                     </el-table-column>
                     <el-table-column prop="creatorName" label="提单人" align="left">
                     </el-table-column>
@@ -64,7 +64,7 @@
                             {{scope.row.created | dateformat}}
                         </template>
                     </el-table-column>
-                    <el-table-column prop="status" label="单据状态" align="left">
+                    <el-table-column prop="status" label="状态" align="left">
                         <template slot-scope="scope">
                             {{scope.row.status | filterStatus}}
                             <!--

@@ -34,7 +34,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="16">
-                            <el-form-item label="申请时间：">
+                            <el-form-item label="申请日期：">
                                 <div>
                                     <el-date-picker style="width:141%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                                     </el-date-picker>
@@ -300,6 +300,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 #AssetFilter .el-form-item--small.el-form-item {
-  //  width: 100%;
+    //  width: 100%;
 }
 </style>

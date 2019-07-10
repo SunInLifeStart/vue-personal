@@ -6,18 +6,18 @@
                 <el-form :inline="true" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="提单人：">
-                                <el-input v-model="formInline.applyName" placeholder=""></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
                             <el-form-item label="项目：">
                                 <el-input v-model="formInline.project" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="部门：">
+                            <el-form-item label="公司部门：">
                                 <el-input v-model="formInline.dept" placeholder=""></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="提单人：">
+                                <el-input v-model="formInline.applyName" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -33,7 +33,7 @@
                         </el-col>
 
                         <el-col :span="8">
-                            <el-form-item label="发起时间：">
+                            <el-form-item label="提单时间：">
                                 <el-date-picker v-model="formInline.initiateTime" value-format="yyyy-MM-dd" placeholder="请输入时间" style="width:100%" type="date">
                                 </el-date-picker>
                             </el-form-item>
@@ -81,7 +81,7 @@
                     </el-table-column>
                     <el-table-column prop="initiateTime" label="提单时间">
                     </el-table-column>
-                    <el-table-column prop="status" label="状态">
+                    <el-table-column prop="status" label="单据状态">
                         <template slot-scope="scope">
                             {{scope.row.status | filterStatus}}
                             <!--

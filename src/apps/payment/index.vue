@@ -32,7 +32,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="16">
-                            <el-form-item label="申请时间">
+                            <el-form-item label="提单时间">
                                 <div>
                                     <el-date-picker style="width:96%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                                     </el-date-picker>

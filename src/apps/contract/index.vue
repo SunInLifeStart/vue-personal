@@ -23,6 +23,13 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
+                            <el-form-item label="提单人">
+                                <el-input placeholder="" v-model="formInline.applyName" style="margin-left:14px;"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
+                        <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
                                     <el-option v-for="item in statusAll" :key="item.id" :label="item.label" :value="item.value">
@@ -30,15 +37,8 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                    </el-row>
-                    <el-row class="filterForm">
-                        <el-col :span="8">
-                            <el-form-item label="提单人">
-                                <el-input placeholder="" v-model="formInline.applyName" style="margin-left:14px;"></el-input>
-                            </el-form-item>
-                        </el-col>
                         <el-col :span="16">
-                            <el-form-item label="申请时间">
+                            <el-form-item label="提单时间">
                                 <div>
                                     <el-date-picker style="width:100%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                                     </el-date-picker>
@@ -64,9 +64,9 @@
                     <el-table-column prop="partyB" label="合同对方" min-width="120"></el-table-column>
                     <el-table-column prop="contractNum" label="合同编号" min-width="200"></el-table-column>
                     <el-table-column prop="organName" label="公司部门"></el-table-column>
-                    <el-table-column prop="applyName" label="制单人"></el-table-column>
+                    <el-table-column prop="applyName" label="提单人"></el-table-column>
                     <el-table-column prop="created" label="提单时间" min-width="120"></el-table-column>
-                    <el-table-column prop="status" label="状态">
+                    <el-table-column prop="status" label="单据状态">
                         <template slot-scope="scope">
                             {{scope.row.status | filterStatus}}
                             <!--

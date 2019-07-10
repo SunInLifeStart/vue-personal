@@ -24,11 +24,6 @@
                         </el-col>
                     </el-row>
                     <el-row class="filterForm">
-                        <el-col :span="8">
-                            <el-form-item label="费用承担部门">
-                                <el-input v-model="formInline.organName" placeholder="费用承担部门"></el-input>
-                            </el-form-item>
-                        </el-col>
                         <el-col :span="8 ">
                             <el-form-item label="单据状态 ">
                                 <el-select v-model="formInline.status " placeholder="请选择">
@@ -38,11 +33,16 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="申请时间">
+                            <el-form-item label="提单时间">
                                 <div>
                                     <el-date-picker style="width:100%" v-model="formInline.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                                     </el-date-picker>
                                 </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="费用承担部门">
+                                <el-input v-model="formInline.organName" placeholder="费用承担部门"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -80,7 +80,7 @@
                     </el-table-column>
                     <el-table-column prop="dtype" label="单据类别" align="left" min-width="110">
                     </el-table-column>
-                    <el-table-column prop="type" label="审核状态" align="left">
+                    <el-table-column prop="type" label="单据状态" align="left">
                         <template slot-scope="scope">
                             {{scope.row.type | filterStatus}}
                         </template>

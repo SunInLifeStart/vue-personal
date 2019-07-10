@@ -39,7 +39,7 @@
                         </el-col>
                         -->
                         <el-col :span="16">
-                            <el-form-item label="申请时间">
+                            <el-form-item label="提单时间">
                                 <div>
                                     <el-date-picker style="width:100%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                                     </el-date-picker>
@@ -63,7 +63,7 @@
             </div>
             <div id="ExpenseList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
-                    <el-table-column prop="organName" label="部门">
+                    <el-table-column prop="organName" label="公司部门">
                     </el-table-column>
                     <el-table-column prop="creatorName" label="提单人">
                     </el-table-column>
