@@ -22,11 +22,6 @@
                 </el-row>
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="报送单位">
-                            <el-input v-model="params.reportingOrg" placeholder="报送单位"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
                         <el-form-item label="创建时间">
                             <el-date-picker v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
                         </el-form-item>
@@ -39,9 +34,6 @@
                             </el-select>
                         </el-form-item>
                     </el-col>
-
-                </el-row>
-                <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item>
                             <el-button type="primary" @click="searchList">查询</el-button>
@@ -49,6 +41,7 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
+
             </el-form>
 
             <!-- 新建 -->
@@ -58,8 +51,6 @@
             <div id="NewsList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="title" label="标题">
-                    </el-table-column>
-                    <el-table-column prop="reportingOrg" label="报送单位">
                     </el-table-column>
                     <el-table-column prop="organName" label="公司部门">
                     </el-table-column>
