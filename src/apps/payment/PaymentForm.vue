@@ -142,14 +142,16 @@
                         <td>
                             支出说明
                         </td>
-                        <td colspan="4">
-                            <el-input type="textarea" v-model="formData.paymentExplain" :autosize="{minRows: 5}"></el-input>
+                        <td colspan="7">
+                            <el-input type="textarea" v-model="formData.paymentExplain" :autosize="{minRows: 10}"></el-input>
                         </td>
+                    </tr>
+                    <tr>
                         <td>
                             费用归属项目
                         </td>
-                        <td colspan="2">
-                            <el-input type="textarea" v-model="formData.project" :autosize="{minRows: 5}"></el-input>
+                        <td colspan="7">
+                            <el-input type="textarea" v-model="formData.project" :autosize="{minRows: 10}"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
