@@ -5,8 +5,8 @@
             <el-form :inline="true" label-width="70px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="标题">
-                            <el-input v-model="params.title" placeholder="标题"></el-input>
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="公司部门"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -15,28 +15,28 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="报送单位">
-                            <el-input v-model="params.reportingOrg" placeholder="报送单位"></el-input>
+                        <el-form-item label="标题">
+                            <el-input v-model="params.title" placeholder="标题"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="公司部门">
-                            <el-input v-model="params.organName" placeholder="公司部门"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="状态">
-                            <el-select v-model="params.status" placeholder="请选择">
-                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
+                        <el-form-item label="报送单位">
+                            <el-input v-model="params.reportingOrg" placeholder="报送单位"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="创建时间">
                             <el-date-picker v-model="params.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="单据状态">
+                            <el-select v-model="params.status" placeholder="请选择">
+                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
                         </el-form-item>
                     </el-col>
 
