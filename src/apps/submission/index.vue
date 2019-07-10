@@ -6,30 +6,25 @@
                 <el-form :inline="true" label-width="90px" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="呈报件编号">
-                                <el-input placeholder="请输入呈报件编号" v-model="params.submissionNo"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
                             <el-form-item label="文件标题">
                                 <el-input placeholder="请输入文件标题" v-model="params.title"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="拟稿时间">
-                                <el-date-picker placeholder="请输入拟稿时间" v-model="params.draftTime" type="date" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                            <el-form-item label="公司部门">
+                                <el-input placeholder="请输入公司部门" v-model="params.organName"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="拟稿人">
+                                <el-input placeholder="" v-model="params.draftUser"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="提单人">
-                                <el-input placeholder="" v-model="params.draftUser"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="公司部门">
-                                <el-input placeholder="请输入呈报件编号" v-model="params.organName"></el-input>
+                            <el-form-item label="拟稿时间">
+                                <el-date-picker placeholder="请输入拟稿时间" v-model="params.draftTime" type="date" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -40,9 +35,6 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-
-                    </el-row>
-                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -61,15 +53,15 @@
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
                     <!--                    <el-table-column prop="submissionNo" label="呈报件编号">-->
                     <!--                    </el-table-column>-->
-                    <el-table-column prop="organName" label="公司部门">
-                    </el-table-column>
                     <el-table-column prop="title" label="文件标题">
                     </el-table-column>
+                    <el-table-column prop="organName" label="公司部门">
+                    </el-table-column>
+                    <el-table-column prop="draftUser" width="250" label="拟稿人"></el-table-column>
                     <el-table-column prop="draftUnit" label="拟稿单位">
                     </el-table-column>
                     <el-table-column prop="draftTime" label="拟稿时间">
                     </el-table-column>
-                    <el-table-column prop="draftUser" width="250" label="拟稿人"></el-table-column>
                     <el-table-column width="100" label="单据状态">
                         <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                     </el-table-column>
