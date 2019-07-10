@@ -1,28 +1,26 @@
 <template>
-  <div id="Inspect">
-    <el-card class="box-card">
-      <!-- 查询 -->
-      <div id="InspectFilter">
-        <el-form :inline="true" class="demo-form-inline" label-width="90px" label-position="left" :model="formInline">
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="标题：" prop="title">
-                <el-input v-model="formInline.title"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="立项人：" prop="definer">
-                <el-input v-model="formInline.definer"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="8">
-              <el-form-item label="单据状态：" prop="status">
-                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
-                  <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.code"></el-option>
-                </el-select>
-              </el-form-item>
-            </el-col>
-            <!--
+    <div id="Inspect">
+        <el-card class="box-card">
+            <!-- 查询 -->
+            <div id="InspectFilter">
+                <el-form :inline="true" class="demo-form-inline" label-width="90px" label-position="left" :model="formInline">
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item label="公司部门：" prop="organName">
+                                <el-input v-model="formInline.organName"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="立项人：" prop="definer">
+                                <el-input v-model="formInline.definer"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="标题：" prop="title">
+                                <el-input v-model="formInline.title"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <!--
             <el-col :span="8">
               <el-form-item label="被督办部门负责人：" prop="inspector">
                 <el-select v-model="formInline.inspector" filterable placeholder="请选择" style="width:100%">
@@ -32,72 +30,74 @@
               
             </el-col>
             -->
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item label="公司部门：" prop="organName">
-                <el-input v-model="formInline.organName"></el-input>
-              </el-form-item>
-            </el-col>
-            <el-col :span="16">
-              <el-form-item label="申请时间">
-                <div>
-                  <el-date-picker style="width:100%" v-model="formInline.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
-                  </el-date-picker>
-                </div>
-              </el-form-item>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <el-form-item>
-                <!-- <el-button type="primary" @click="onSubmit">查询</el-button>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="16">
+                            <el-form-item label="创建时间">
+                                <div>
+                                    <el-date-picker style="width:100%" v-model="formInline.created" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    </el-date-picker>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="单据状态：" prop="status">
+                                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
+                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.code"></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="8">
+                            <el-form-item>
+                                <!-- <el-button type="primary" @click="onSubmit">查询</el-button>
                 <el-button type="primary" @click="onReset">重置</el-button>-->
-                <el-button type="primary" @click="searchList">查询</el-button>
-                <el-button @click="resetInput">重置</el-button>
-              </el-form-item>
-            </el-col>
-          </el-row>
-        </el-form>
-      </div>
+                                <el-button type="primary" @click="searchList">查询</el-button>
+                                <el-button @click="resetInput">重置</el-button>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+            </div>
 
-      <!-- 新建 -->
-      <div class="toolbar">
-        <!-- <el-button type="primary" icon="el-icon-plus" @click="creatForm">新建</el-button> -->
-        <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
-      </div>
-      <div id="InspectList">
-        <el-table :data="tableData" style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
-          <el-table-column prop="title" label="标题" min-width="150px" align="center"></el-table-column>
-          <el-table-column prop="organName" label="公司部门" min-width="150px" align="center"></el-table-column>
-          <el-table-column prop="definer" label="立项人" min-width="150px" align="center"></el-table-column>
-          <!--<el-table-column prop="inspector" label="被督办部门负责人" min-width="150px" align="center"></el-table-column>-->
-          <el-table-column prop="created" label="创建时间" min-width="150px" align="center"></el-table-column>
-          <el-table-column prop="deadline" label="截至日期" min-width="150px" to="/index" align="center"></el-table-column>
-          <el-table-column prop="status" label="单据状态" min-width="100px" align="center" :formatter="stateFormatter"></el-table-column>
-          <el-table-column label="操作" width="100" align="center">
-            <template slot-scope="scope">
-              <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
-                <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
-              </el-tooltip>
-              <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00'">
-                <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
-              </el-tooltip>
-            </template>
-          </el-table-column>
-        </el-table>
+            <!-- 新建 -->
+            <div class="toolbar">
+                <!-- <el-button type="primary" icon="el-icon-plus" @click="creatForm">新建</el-button> -->
+                <el-button type="primary" icon="el-icon-plus" @click="createNewForm">新建</el-button>
+            </div>
+            <div id="InspectList">
+                <el-table :data="tableData" style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
+                    <el-table-column prop="title" label="标题" min-width="150px" align="center"></el-table-column>
+                    <el-table-column prop="organName" label="公司部门" min-width="150px" align="center"></el-table-column>
+                    <el-table-column prop="definer" label="立项人" min-width="150px" align="center"></el-table-column>
+                    <!--<el-table-column prop="inspector" label="被督办部门负责人" min-width="150px" align="center"></el-table-column>-->
+                    <el-table-column prop="created" label="创建时间" min-width="150px" align="center"></el-table-column>
+                    <el-table-column prop="deadline" label="截至日期" min-width="150px" to="/index" align="center"></el-table-column>
+                    <el-table-column prop="status" label="单据状态" min-width="100px" align="center" :formatter="stateFormatter"></el-table-column>
+                    <el-table-column label="操作" width="100" align="center">
+                        <template slot-scope="scope">
+                            <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
+                                <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
+                            </el-tooltip>
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00'">
+                                <el-button type="text" icon="el-icon-delete" @click.stop="deleteCurrentLine(scope.row.id)"></el-button>
+                            </el-tooltip>
+                        </template>
+                    </el-table-column>
+                </el-table>
+                <br>
+                <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
+            </div>
+        </el-card>
         <br>
-        <el-pagination @size-change="sizeChange" @current-change="currentChange" :current-page="params.pageNum" :page-sizes="[5, 10, 30, 50]" :page-size="params.pageSize" layout="total, sizes, prev, pager, next, jumper" :total="params.total"></el-pagination>
-      </div>
-    </el-card>
-    <br>
-    <el-card class="box-card">
-      <InspectDetail :formId="formId" ref="InspectDetail" @reloadList="reloadList" @resetStatus="resetStatus"></InspectDetail>
-      <!-- :formId="formId" -->
-    </el-card>
-    <InspectForm ref="InspectForm" @reloadList="reloadList"></InspectForm>
-    <!-- :formDataFromIndex="formDataFromIndex"  -->
-  </div>
+        <el-card class="box-card">
+            <InspectDetail :formId="formId" ref="InspectDetail" @reloadList="reloadList" @resetStatus="resetStatus"></InspectDetail>
+            <!-- :formId="formId" -->
+        </el-card>
+        <InspectForm ref="InspectForm" @reloadList="reloadList"></InspectForm>
+        <!-- :formDataFromIndex="formDataFromIndex"  -->
+    </div>
 </template>
 <script>
 import axios from 'axios';

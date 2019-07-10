@@ -6,10 +6,22 @@
                 <el-form :inline="true" label-width="80px" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
+                            <el-form-item label="公司部门" prop="organName">
+                                <el-input v-model="params.organName" placeholder="公司部门" style="width:96%"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="提单人" prop="creatorName">
+                                <el-input v-model="params.creatorName" placeholder="提单人"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
                             <el-form-item label="标题" prop="notice_person">
                                 <el-input v-model="params.title" placeholder="标题"></el-input>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="信息类型" style="padding-right: 0px;">
                                 <el-select v-model="params.type" placeholder="请选择信息类型">
@@ -21,31 +33,18 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="单据状态" style="padding-right: 0px;">
+                            <el-form-item label="时间" prop="created">
+                                <el-date-picker v-model="params.created" type="daterange" style="width:96%" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="单据状态">
                                 <el-select v-model="params.status" placeholder="请选择状态">
                                     <el-option v-for="item in s_status" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                    </el-row>
-                    <el-row class="filterForm">
-                        <el-col :span="8">
-                            <el-form-item label="提单人" prop="creatorName">
-                                <el-input v-model="params.creatorName" placeholder="提单人"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="公司部门" prop="organName">
-                                <el-input v-model="params.organName" placeholder="公司部门" style="width:96%"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="时间:" prop="created">
-                                <el-date-picker v-model="params.created" type="daterange" style="width:96%" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-                            </el-form-item>
-                        </el-col>
-
                     </el-row>
                     <el-row class="filterForm">
                         <el-col :span="8">
@@ -66,11 +65,11 @@
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="title" label="标题">
                     </el-table-column>
-                    <el-table-column prop="creatorName" label="提单人">
-                    </el-table-column>
                     <el-table-column prop="organName" label="公司部门">
                     </el-table-column>
-                    <el-table-column prop="columns" label="类型">
+                    <el-table-column prop="creatorName" label="提单人">
+                    </el-table-column>
+                    <el-table-column prop="columns" label="信息类型">
                         <template slot-scope="scope">{{scope.row.columns == '1'? '规章制度':'通知公告'}}</template>
                     </el-table-column>
                     <el-table-column prop="created" label="时间">
