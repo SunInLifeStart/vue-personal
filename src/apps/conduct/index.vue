@@ -5,6 +5,11 @@
                 <el-form :inline="true" label-width="70px" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
+                            <el-form-item label="费用承担部门">
+                                <el-input v-model="formInline.organName" placeholder="费用承担部门"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
                             <el-form-item label="提单人">
                                 <el-input placeholder="请输入提单人" v-model="formInline.creatorName"></el-input>
                             </el-form-item>
@@ -14,20 +19,13 @@
                                 <el-input placeholder=" 请输入单据编号 " v-model="formInline.numbers"></el-input>
                             </el-form-item>
                         </el-col>
+
+                    </el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="单据类别">
                                 <el-select v-model="formInline.dtype" clearable placeholder="请选择">
                                     <el-option v-for="item in options1" :key="item.index" :label="item" :value="item">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row class="filterForm">
-                        <el-col :span="8 ">
-                            <el-form-item label="单据状态 ">
-                                <el-select v-model="formInline.status " placeholder="请选择">
-                                    <el-option v-for="item in statusOpertions " :key="item.value " :label="item.label " :value="item.value ">
                                     </el-option>
                                 </el-select>
                             </el-form-item>
@@ -40,9 +38,12 @@
                                 </div>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="费用承担部门">
-                                <el-input v-model="formInline.organName" placeholder="费用承担部门"></el-input>
+                        <el-col :span="8 ">
+                            <el-form-item label="单据状态 ">
+                                <el-select v-model="formInline.status " placeholder="请选择">
+                                    <el-option v-for="item in statusOpertions " :key="item.value " :label="item.label " :value="item.value ">
+                                    </el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -80,14 +81,14 @@
                     </el-table-column>
                     <el-table-column prop="dtype" label="单据类别" align="left" min-width="110">
                     </el-table-column>
-                    <el-table-column prop="type" label="单据状态" align="left">
-                        <template slot-scope="scope">
-                            {{scope.row.type | filterStatus}}
-                        </template>
-                    </el-table-column>
                     <el-table-column prop="created" label="提单时间" align="left" min-width="150">
                         <template slot-scope="scope">
                             {{scope.row.created | dateformat('YYYY-MM-DD HH:mm:ss')}}
+                        </template>
+                    </el-table-column>
+                    <el-table-column prop="type" label="单据状态" align="left">
+                        <template slot-scope="scope">
+                            {{scope.row.type | filterStatus}}
                         </template>
                     </el-table-column>
                 </el-table>
@@ -156,7 +157,8 @@ export default {
                 dtype: '全部',
                 organName: '',
                 status: '',
-                created: []
+                created: [],
+                oname: ''
             },
             params: {
                 page: 1,
@@ -236,6 +238,13 @@ export default {
                     field: 'organName',
                     filter: 'LIKE',
                     value: this.formInline.organName
+                });
+            }
+            if (this.formInline.oname.trim() !== '') {
+                this.searchOptions.push({
+                    field: 'oname',
+                    filter: 'LIKE',
+                    value: this.formInline.oname
                 });
             }
             if (this.formInline.created && this.formInline.created.length > 0) {
@@ -334,7 +343,7 @@ export default {
             this.getList();
         },
         resetInput() {
-            this.formInline.creatorName = this.formInline.organName = this.formInline.numbers =
+            this.formInline.creatorName = this.formInline.organName = this.formInline.numbers = this.formInline.oname =
                 '';
             this.formInline.created = [];
             this.formInline.dtype = '全部';
