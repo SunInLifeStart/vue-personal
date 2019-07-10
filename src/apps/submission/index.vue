@@ -6,11 +6,6 @@
                 <el-form :inline="true" label-width="90px" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="文件标题">
-                                <el-input placeholder="请输入文件标题" v-model="params.title"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
                             <el-form-item label="公司部门">
                                 <el-input placeholder="请输入公司部门" v-model="params.organName"></el-input>
                             </el-form-item>
@@ -18,6 +13,11 @@
                         <el-col :span="8">
                             <el-form-item label="拟稿人">
                                 <el-input placeholder="" v-model="params.draftUser"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="文件标题">
+                                <el-input placeholder="请输入文件标题" v-model="params.title"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
