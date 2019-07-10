@@ -6,19 +6,17 @@
                 <el-form :inline="true" label-width="100px" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="申请人：">
+                            <el-form-item label="公司部门">
+                                <el-input v-model="params.organName" placeholder=""></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="申请人">
                                 <el-input v-model="params.creatorName" placeholder="" style="width:100%"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="申请时间：">
-                                <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
-                                <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" style="width:100%" type="date">
-                                </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="所属月份：">
+                            <el-form-item label="所属月份">
                                 <el-select v-model="params.umonth" clearable style="width:100%" filterable placeholder="全部">
                                     <el-option v-for="item in onOption" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
@@ -33,14 +31,16 @@
                             </el-form-item>
                         </el-col> -->
                         <el-col :span="8">
-                            <el-form-item label="是否属于年度预算内:">
+                            <el-form-item label="是否属于年度预算内">
                                 <el-radio v-model="params.utype" label="true">是</el-radio>
                                 <el-radio v-model="params.utype" label="false">否</el-radio>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="公司部门">
-                                <el-input v-model="params.organName" placeholder=""></el-input>
+                            <el-form-item label="申请日期">
+                                <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
+                                <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" style="width:100%" type="date">
+                                </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -70,7 +70,7 @@
             </div>
             <div id="FilesList">
                 <el-table :data="tableData" style="width: 100%; cursor:pointer" highlight-current-row @row-click="showCurrentId">
-                    <el-table-column prop="organName" label="申请部门">
+                    <el-table-column prop="organName" label="公司部门">
                     </el-table-column>
                     <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
@@ -81,7 +81,7 @@
                     </el-table-column>
                     <el-table-column prop="utype" label="是否属于年度预算内" :formatter="fomutype">
                     </el-table-column>
-                    <el-table-column prop="umonth" label="资金计划所属月份">
+                    <el-table-column prop="umonth" label="所属月份">
                     </el-table-column>
                     <el-table-column prop="allPrintNumber" label="总印刷数量">
                     </el-table-column>

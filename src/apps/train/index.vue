@@ -6,13 +6,13 @@
                 <el-form :inline="true" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="申请人">
-                                <el-input placeholder="请输入申请人" v-model="params.submitter"></el-input>
+                            <el-form-item label="公司部门">
+                                <el-input placeholder="请输入公司部门" v-model="params.organName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="所属部门">
-                                <el-input placeholder="请输入所属部门" v-model="params.organName"></el-input>
+                            <el-form-item label="申请人">
+                                <el-input placeholder="请输入申请人" v-model="params.submitter"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -23,6 +23,11 @@
                     </el-row>
                     <el-row class="filterForm">
                         <el-col :span="8">
+                            <el-form-item label="提单时间">
+                                <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd" type="date"></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
                             <el-form-item label="单据状态">
                                 <el-select v-model="params.status" clearable placeholder="请选择">
                                     <el-option v-for="item in s_status" :key="item.value" :label="item.label" :value="item.value">
@@ -31,12 +36,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="提单时间">
-                                <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd" type="date"></el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8" class="searchBtn">
-                            <el-form-item class="positionBtn">
+                            <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
                                 <el-button @click="resetInput">重置</el-button>
                             </el-form-item>

@@ -4,6 +4,11 @@
             <el-form :inline="true" label-width="70px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
                         <el-form-item label="姓名">
                             <el-input v-model="params.uname" placeholder="请输入姓名"></el-input>
                         </el-form-item>
@@ -13,26 +18,21 @@
                             <el-input v-model="params.applyPosition" placeholder="请输入申请岗位"></el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="填表日期">
+                            <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
+                            <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" style="width:100%" type="date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="单据状态">
                             <el-select v-model="params.status" placeholder="请输入单据状态">
                                 <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row class="filterForm">
-                    <el-col :span="8">
-                        <el-form-item label="公司部门">
-                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="填表时间">
-                            <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
-                            <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" style="width:100%" type="date">
-                            </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -56,7 +56,7 @@
                 </el-table-column>
                 <el-table-column prop="uname" label="姓名">
                 </el-table-column>
-                <el-table-column prop="sex" label="性别" >
+                <el-table-column prop="sex" label="性别">
                 </el-table-column>
                 <el-table-column prop="nation" label="民族">
                 </el-table-column>

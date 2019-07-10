@@ -6,15 +6,13 @@
                 <el-form :inline="true" label-position="left" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="姓名">
-                                <el-input v-model="params.creatorName" placeholder=""></el-input>
+                            <el-form-item label="公司部门">
+                                <el-input v-model="params.organName" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="申请时间">
-                                <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
-                                <el-date-picker v-model="params.created" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
-                                </el-date-picker>
+                            <el-form-item label="申请人">
+                                <el-input v-model="params.creatorName" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -34,8 +32,10 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="公司部门">
-                                <el-input v-model="params.organName" placeholder=""></el-input>
+                            <el-form-item label="申请日期">
+                                <!-- <el-input v-model="params.applyDept" placeholder=""></el-input> -->
+                                <el-date-picker v-model="params.created" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
+                                </el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">

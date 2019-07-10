@@ -7,12 +7,8 @@
                     <el-row class="filterForm">
                         <!-- 印章种类、申请日期、申请人、申请部门 -->
                         <el-col :span="8">
-                            <el-form-item label="印章种类">
-                                <!-- <el-input placeholder="请输入印章种类" v-model="params.useItems"></el-input> -->
-                                <el-select style="width:100%;" clearable v-model="params.useItems" placeholder="请选择印章种类">
-                                    <el-option v-for="item in onOption" :key="item.value" :label="item.label" :value="item.value">
-                                    </el-option>
-                                </el-select>
+                            <el-form-item label="公司部门">
+                                <el-input placeholder="请输入公司部门" v-model="params.organName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -21,17 +17,22 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
+                            <el-form-item label="印章种类">
+                                <!-- <el-input placeholder="请输入印章种类" v-model="params.useItems"></el-input> -->
+                                <el-select style="width:100%;" clearable v-model="params.useItems" placeholder="请选择印章种类">
+                                    <el-option v-for="item in onOption" :key="item.value" :label="item.label" :value="item.value">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+
+                    </el-row>
+                    <el-row class="filterForm">
+                        <el-col :span="8">
                             <el-form-item label="申请时间">
                                 <!-- <el-input placeholder="请输入申请时间" v-model="params.created"></el-input> -->
                                 <el-date-picker v-model="params.created" value-format="yyyy-MM-dd" style="width:100%" type="date">
                                 </el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row class="filterForm">
-                        <el-col :span="8">
-                            <el-form-item label="申请部门">
-                                <el-input placeholder="请输入申请部门" v-model="params.organName"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
@@ -42,8 +43,8 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8" class="searchBtn">
-                            <el-form-item class="positionBtn">
+                        <el-col :span="8" >
+                            <el-form-item >
                                 <el-button type="primary" @click="searchList">查询</el-button>
                                 <el-button @click="resetInput">重置</el-button>
                             </el-form-item>
@@ -61,7 +62,7 @@
                     <el-table-column label="印章种类">
                         <template slot-scope="scope">{{scope.row.useItems | useItemsfilter}}</template>
                     </el-table-column>
-                    <el-table-column prop="organName" label="申请部门">
+                    <el-table-column prop="organName" label="公司部门">
                     </el-table-column>
                     <el-table-column prop="creatorName" label="申请人">
                     </el-table-column>
@@ -74,7 +75,7 @@
                     <!-- <el-table-column prop="fileName" label="用印文件名称">
                     </el-table-column>
                     <el-table-column prop="fileNum" width="250" label="用印份数"></el-table-column> -->
-                    <el-table-column label="状态">
+                    <el-table-column label="单据状态">
                         <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                     </el-table-column>
 
