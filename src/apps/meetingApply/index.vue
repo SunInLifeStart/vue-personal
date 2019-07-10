@@ -4,8 +4,8 @@
             <el-form :inline="true" label-width="70px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="会议名称">
-                            <el-input v-model="params.conferenceTitle" placeholder="请输入会议名称"></el-input>
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -14,16 +14,16 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="提单时间">
-                            <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd 00:00:00" placeholder="请输入提单时间" style="width:100%" type="date">
-                            </el-date-picker>
+                        <el-form-item label="会议名称">
+                            <el-input v-model="params.conferenceTitle" placeholder="请输入会议名称"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="公司部门">
-                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
+                        <el-form-item label="提单时间">
+                            <el-date-picker v-model="params.committed" value-format="yyyy-MM-dd 00:00:00" placeholder="请输入提单时间" style="width:100%" type="date">
+                            </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -54,9 +54,9 @@
                 </el-table-column>
                 <el-table-column prop="conferenceTitle" label="会议名称">
                 </el-table-column>
-                <el-table-column prop="creatorName" label="提单人">
+                <el-table-column prop="organName" label="公司部门">
                 </el-table-column>
-                <el-table-column prop="organName" label="所属部门">
+                <el-table-column prop="creatorName" label="提单人">
                 </el-table-column>
                 <el-table-column prop="committed" label="提单时间">
                 </el-table-column>
