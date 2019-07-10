@@ -3,27 +3,27 @@
         <el-card class="box-card">
             <!-- 查询 -->
             <div id="LedgerFilter">
-                <el-form :inline="true" class="demo-form-inline">
+                <el-form :inline="true" class="demo-form-inline" label-width="100px" label-position="left">
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="项目：">
-                                <el-input v-model="formInline.project" placeholder=""></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="8">
-                            <el-form-item label="公司部门：">
+                            <el-form-item label="公司部门">
                                 <el-input v-model="formInline.dept" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="提单人：">
+                            <el-form-item label="提单人">
                                 <el-input v-model="formInline.applyName" placeholder=""></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="8">
+                            <el-form-item label="项目">
+                                <el-input v-model="formInline.project" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
                     <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="合同价格形式：">
+                            <el-form-item label="合同价格形式">
                                 <!-- <el-input v-model="formInline.shape" placeholder=""></el-input> -->
                                 <el-select v-model="formInline.shape" clearable placeholder="请输入合同价格形式">
                                     <el-option v-for="item in shapeOption" :key="item.value" :label="item.label" :value="item.value">
@@ -33,7 +33,7 @@
                         </el-col>
 
                         <el-col :span="8">
-                            <el-form-item label="提单时间：">
+                            <el-form-item label="提单时间">
                                 <el-date-picker v-model="formInline.initiateTime" value-format="yyyy-MM-dd" placeholder="请输入时间" style="width:100%" type="date">
                                 </el-date-picker>
                             </el-form-item>
@@ -66,7 +66,7 @@
                     </el-table-column>
                     <el-table-column prop="applyName" label="提单人">
                     </el-table-column>
-                    <el-table-column prop="project" label="所属项目">
+                    <el-table-column prop="project" label="项目">
                     </el-table-column>
                     <el-table-column prop="contractNum" label="合同编号">
                     </el-table-column>
@@ -412,7 +412,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-#LedgerFilter .el-form-item--small.el-form-item {
+#LedgerFilter .el-input--small .el-input__inner {
     width: 100%;
 }
 #Ledger {
@@ -433,5 +433,10 @@ export default {
 }
 #LedgerFilter .filterForm >>> .el-date-editor {
     width: calc(100% - 0px);
+}
+#LedgerFilter .filterForm >>> .el-input--small .el-input__inner {
+    height: 32px;
+    line-height: 32px;
+    width: 260px;
 }
 </style>
