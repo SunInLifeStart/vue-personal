@@ -3,7 +3,7 @@
         <el-card class="box-card">
             <!-- 查询 -->
             <div id="BusinessCardFilter">
-                <el-form :inline="true" label-position="left" class="demo-form-inline">
+                <el-form :inline="true" label-position="left" label-width="80px" class="demo-form-inline">
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="公司部门">

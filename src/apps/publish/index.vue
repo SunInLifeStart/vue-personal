@@ -306,5 +306,10 @@ export default {
 #PublishFilter .filterForm >>> .el-date-editor {
     width: calc(100% - 0px);
 }
+#PublishFilter .filterForm >>> .el-input--small .el-input__inner {
+    height: 32px;
+    line-height: 32px;
+    width: 300px;
+}
 </style>
 

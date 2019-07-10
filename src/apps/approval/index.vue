@@ -3,7 +3,7 @@
         <el-card class="box-card">
             <!-- 查询 -->
             <div id="ApprovalFilter">
-                <el-form :inline="true" label-position="left" class="demo-form-inline">
+                <el-form :inline="true" label-position="left" label-width="80px" class="demo-form-inline">
                     <el-row class="filterForm">
                         <!-- 印章种类、申请日期、申请人、申请部门 -->
                         <el-col :span="8">
@@ -19,7 +19,7 @@
                         <el-col :span="8">
                             <el-form-item label="印章种类">
                                 <!-- <el-input placeholder="请输入印章种类" v-model="params.useItems"></el-input> -->
-                                <el-select style="width:100%;" clearable v-model="params.useItems" placeholder="请选择印章种类">
+                                <el-select clearable v-model="params.useItems" placeholder="请选择印章种类">
                                     <el-option v-for="item in onOption" :key="item.value" :label="item.label" :value="item.value">
                                     </el-option>
                                 </el-select>
@@ -43,8 +43,8 @@
                                 </el-select>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="8" >
-                            <el-form-item >
+                        <el-col :span="8">
+                            <el-form-item>
                                 <el-button type="primary" @click="searchList">查询</el-button>
                                 <el-button @click="resetInput">重置</el-button>
                             </el-form-item>
@@ -293,6 +293,11 @@ export default {
 }
 #ApprovalFilter .filterForm >>> .el-date-editor {
     width: calc(100% - 0px);
+}
+#ApprovalFilter .filterForm >>> .el-input--small .el-input__inner {
+    height: 32px;
+    line-height: 32px;
+    width: 300px;
 }
 </style>
 <style lang="scss" scoped>

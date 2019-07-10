@@ -2,7 +2,7 @@
     <div id='Payment'>
         <el-card class="box-card">
             <div id="PaymentFilter">
-                <el-form :inline="true" class="demo-form-inline" label-width="60px;">
+                <el-form :inline="true" class="demo-form-inline" label-width="60px;" label-position="left">
                     <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item label="公司部门">

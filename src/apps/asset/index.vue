@@ -3,20 +3,20 @@
         <el-card class="box-card">
             <!-- 查询 -->
             <div id="AssetFilter">
-                <el-form :inline="true" label-width="100px" label-position="left" class="demo-form-inline">
-                    <el-row>
+                <el-form :inline="true" label-width="80px" label-position="left" class="demo-form-inline">
+                    <el-row class="filterForm">
                         <el-col :span="8">
-                            <el-form-item label="公司部门：">
+                            <el-form-item label="公司部门">
                                 <el-input v-model="formInline.applyDept" placeholder=""></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="申请人：">
+                            <el-form-item label="申请人">
                                 <el-input v-model="formInline.proposer" placeholder="" style="width:100%"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8">
-                            <el-form-item label="资产类型：" prop="assetsType">
+                            <el-form-item label="资产类型" prop="assetsType">
                                 <el-select v-model="formInline.assetsType" style="width:90%" filterable>
                                     <el-option v-for="item in assetTypes" :key="item.id" :label="item.name" :value="item.name">
                                     </el-option>
@@ -24,26 +24,27 @@
                             </el-form-item>
                         </el-col>
                     </el-row>
-                    <el-row>
-                        <el-col :span="8">
-                            <el-form-item label="单据状态：" prop="status">
-                                <el-select v-model="formInline.status" style="width:100%" filterable placeholder="全部">
-                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.code">
-                                    </el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
+                    <el-row class="filterForm">
                         <el-col :span="16">
-                            <el-form-item label="申请日期：">
+                            <el-form-item label="申请日期">
                                 <div>
-                                    <el-date-picker style="width:141%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+                                    <el-date-picker style="width:100%" v-model="formInline.applyDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
                                     </el-date-picker>
                                 </div>
                             </el-form-item>
                         </el-col>
 
+                        <el-col :span="8">
+                            <el-form-item label="单据状态" prop="status">
+                                <el-select v-model="formInline.status" style="width:90%" filterable placeholder="">
+                                    <el-option v-for="item in statusAll" :key="item.id" :label="item.name" :value="item.code">
+                                    </el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+
                     </el-row>
-                    <el-row>
+                    <el-row class="filterForm">
                         <el-col :span="8">
                             <el-form-item class="">
                                 <el-button type="primary" @click="searchList">查询</el-button>
@@ -300,6 +301,21 @@ export default {
 </script>
 <style lang="scss" scoped>
 #AssetFilter .el-form-item--small.el-form-item {
-    //  width: 100%;
+    width: 100%;
+}
+</style>
+<style scoped>
+#AssetFilter .el-form-item--small.el-form-item {
+    width: 100%;
+}
+#AssetFilter .filterForm >>> .el-form-item__content {
+    width: calc(100% - 80px);
+}
+
+#AssetFilter .filterForm >>> .el-select {
+    width: calc(100% - 15px);
+}
+#AssetFilter .filterForm >>> .el-date-editor {
+    width: calc(100% - 0px);
 }
 </style>
