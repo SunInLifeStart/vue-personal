@@ -136,7 +136,7 @@
                             费用归属项目
                         </td>
                         <td colspan="7">
-                            <el-input type="textarea" v-model="tableData.project" disabled :autosize="{minRows: 10}"></el-input>
+                            <el-input type="textarea" v-model="tableData.project" disabled :autosize="{minRows: 3}"></el-input>
                         </td>
                     </tr>
                     <tr class="fontBold">
