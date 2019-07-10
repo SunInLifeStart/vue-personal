@@ -4,13 +4,8 @@
             <el-form :inline="true" label-width="100px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="项目名称">
-                            <el-input v-model="params.projectName" placeholder="请输入项目名称"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="招标项目名称">
-                            <el-input v-model="params.biddingProjectName" placeholder="请输入招标项目名称"></el-input>
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -18,11 +13,17 @@
                             <el-input v-model="params.tenderee" placeholder="请输入招标人"></el-input>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="项目名称">
+                            <el-input v-model="params.projectName" placeholder="请输入项目名称"></el-input>
+                        </el-form-item>
+                    </el-col>
+
                 </el-row>
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="公司部门">
-                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
+                        <el-form-item label="招标项目名称">
+                            <el-input v-model="params.biddingProjectName" placeholder="请输入招标项目名称"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -61,11 +62,11 @@
                 </el-table-column>
                 <el-table-column prop="biddingProjectName" label="招标项目名称">
                 </el-table-column>
-                <el-table-column prop="organName" label="部门名称">
-                </el-table-column>
-                <el-table-column prop="created" label="时间">
+                <el-table-column prop="organName" label="公司部门">
                 </el-table-column>
                 <el-table-column prop="tenderee" label="招标人">
+                </el-table-column>
+                <el-table-column prop="created" label="申请时间">
                 </el-table-column>
                 <el-table-column prop="estimatedAmount" label="预计金额">
                 </el-table-column>

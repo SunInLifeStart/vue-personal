@@ -4,6 +4,18 @@
             <el-form :inline="true" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门" style="margin-left:25px;"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <!--
+                    <el-col :span="8">
+                        <el-form-item label="提单人">
+                            <el-input v-model="params.creatorName" placeholder="请输入提单人" style="margin-left:11px;"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    -->
+                    <el-col :span="8">
                         <el-form-item label="项目名称">
                             <el-input v-model="params.projectName" placeholder="请输入项目名称"></el-input>
                         </el-form-item>
@@ -13,21 +25,17 @@
                             <el-input v-model="params.purchaseProjectName" placeholder="请输入采购项目名称"></el-input>
                         </el-form-item>
                     </el-col>
+                </el-row>
+                <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="采购内容摘要">
                             <el-input v-model="params.proContent" placeholder="请输入采购内容摘要"></el-input>
                         </el-form-item>
                     </el-col>
-                </el-row>
-                <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="提单人">
-                            <el-input v-model="params.creatorName" placeholder="请输入提单人" style="margin-left:11px;"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="公司部门">
-                            <el-input v-model="params.organName" placeholder="请输入公司部门" style="margin-left:25px;"></el-input>
+                        <el-form-item label="申请时间">
+                            <el-date-picker v-model="params.createTime" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
+                            </el-date-picker>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -41,12 +49,6 @@
 
                 </el-row>
                 <el-row class="filterForm">
-                    <el-col :span="8">
-                        <el-form-item label="申请时间">
-                            <el-date-picker v-model="params.createTime" clearable style="width:100%" value-format="yyyy-MM-dd" type="date">
-                            </el-date-picker>
-                        </el-form-item>
-                    </el-col>
                     <el-col :span="8">
                         <el-form-item>
                             <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -67,7 +69,7 @@
                 </el-table-column>
                 <el-table-column prop="purchaseProjectName" label="采购项目名称">
                 </el-table-column>
-                <el-table-column prop="createTime" label="时间">
+                <el-table-column prop="createTime" label="申请时间">
                 </el-table-column>
                 <el-table-column prop="budgetPerformance" label="目标成本/预算完成情况">
                 </el-table-column>

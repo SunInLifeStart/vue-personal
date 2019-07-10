@@ -4,13 +4,13 @@
             <el-form :inline="true" label-width="100px" label-position="left" :model="params" class="demo-form-inline">
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="招标人">
-                            <el-input v-model="params.tenderee" placeholder="请输入招标人"></el-input>
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="联系人及电话">
-                            <el-input v-model="params.linkman" placeholder="请输入联系人及电话"></el-input>
+                        <el-form-item label="招标人">
+                            <el-input v-model="params.tenderee" placeholder="请输入招标人"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -21,16 +21,8 @@
                 </el-row>
                 <el-row class="filterForm">
                     <el-col :span="8">
-                        <el-form-item label="单据状态">
-                            <el-select v-model="params.status" placeholder="请输入单据状态">
-                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
-                                </el-option>
-                            </el-select>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="公司部门">
-                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
+                        <el-form-item label="联系人及电话">
+                            <el-input v-model="params.linkman" placeholder="请输入联系人及电话"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -39,6 +31,15 @@
                             </el-date-picker>
                         </el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="单据状态">
+                            <el-select v-model="params.status" placeholder="请输入单据状态">
+                                <el-option v-for="item in statusOption" :key="item.value" :label="item.label" :value="item.value">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+
                 </el-row>
                 <el-row class="filterForm">
                     <el-col :span="8">
@@ -56,11 +57,11 @@
             </div>
 
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow" highlight-current-row>
-                <el-table-column prop="tenderee" label="招标人">
-                </el-table-column>
                 <el-table-column prop="organName" label="公司部门">
                 </el-table-column>
-                <el-table-column prop="createTime" label="时间">
+                <el-table-column prop="tenderee" label="招标人">
+                </el-table-column>
+                <el-table-column prop="createTime" label="申请时间">
                 </el-table-column>
                 <el-table-column prop="linkman" label="联系人及电话">
                 </el-table-column>

@@ -1,13 +1,26 @@
 <template>
     <div id="Supplier">
         <el-card class="box-card">
-            <el-form :inline="true" :model="params" label-width="100px" class="demo-form-inline">
+            <el-form :inline="true" :model="params" label-position="left" label-width="100px" class="demo-form-inline">
                 <el-row class="filterForm">
+                    <el-col :span="8">
+                        <el-form-item label="公司部门">
+                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="提单人">
+                            <el-input v-model="params.creatorName" placeholder="请输入提单人"></el-input>
+                        </el-form-item>
+                    </el-col>
                     <el-col :span="8">
                         <el-form-item label="供应商名称">
                             <el-input v-model="params.supplierName" placeholder="请输入供应商名称"></el-input>
                         </el-form-item>
                     </el-col>
+
+                </el-row>
+                <el-row class="filterForm">
                     <el-col :span="8">
                         <el-form-item label="推荐参与项目">
                             <el-input v-model="params.recommendProject" placeholder="请输入推荐参与项目"></el-input>
@@ -17,18 +30,6 @@
                         <el-form-item label="推荐时间">
                             <el-date-picker v-model="params.recommendTime" value-format="yyyy-MM-dd" placeholder="请输入采购发起时间" style="width:100%" type="date">
                             </el-date-picker>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
-                <el-row class="filterForm">
-                    <el-col :span="8">
-                        <el-form-item label="提单人">
-                            <el-input v-model="params.creatorName" placeholder="请输入提单人"></el-input>
-                        </el-form-item>
-                    </el-col>
-                    <el-col :span="8">
-                        <el-form-item label="公司部门">
-                            <el-input v-model="params.organName" placeholder="请输入公司部门"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -59,9 +60,9 @@
             <el-table :data="tableData" stripe style="width: 100%" @row-click="clickTableRow" highlight-current-row>
                 <el-table-column prop="recommendDept" label="推荐部门/个人">
                 </el-table-column>
-                <el-table-column prop="creatorName" label="提单人">
-                </el-table-column>
                 <el-table-column prop="organName" label="公司部门">
+                </el-table-column>
+                <el-table-column prop="creatorName" label="提单人">
                 </el-table-column>
                 <el-table-column prop="supplierName" label="供应商名称">
                 </el-table-column>
