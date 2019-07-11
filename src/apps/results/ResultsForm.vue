@@ -8,12 +8,12 @@
                         {{formData.number}}
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="24">
                     <el-form-item label="项目名称" prop="projectName">
                         <el-input v-model="formData.projectName"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
+                <el-col :span="24">
                     <el-form-item label="采购项目名称" prop="projectName">
                         <el-input v-model="formData.purchaseProjectName"></el-input>
                     </el-form-item>

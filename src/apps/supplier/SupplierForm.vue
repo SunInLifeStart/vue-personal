@@ -105,12 +105,12 @@
             <el-row>
                 <el-col :span="24">
                     <el-form-item label="供应商基本情况" prop="supplierBasic">
-                        <el-input v-model="formData.supplierBasic" placeholder="请输入供应商基本情况" type="textarea"></el-input>
+                        <el-input v-model="formData.supplierBasic" autosize placeholder="请输入供应商基本情况" type="textarea"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="24">
                     <el-form-item label="考察评估情况" prop="inspectSituation">
-                        <el-input v-model="formData.inspectSituation" placeholder="请输入考察评估情况" type="textarea"></el-input>
+                        <el-input v-model="formData.inspectSituation" autosize placeholder="请输入考察评估情况" type="textarea"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
