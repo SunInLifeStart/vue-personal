@@ -140,7 +140,7 @@ export default {
                 page: 1,
                 pageSize: 5,
                 options: [],
-                orderBy: 'id',
+                orderBy: 'created',
                 desc: true
             },
             formName: 'loan_forms'
