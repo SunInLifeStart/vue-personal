@@ -79,13 +79,13 @@
                             </template>
                         </el-table-column>
 
-                        <el-table-column prop="fileNum" label="用印份数">
+                        <el-table-column prop="fileNum" label="用印份数" width="200px">
                             <template slot-scope="scope">
                                 {{scope.row.fileNum}}
                             </template>
                         </el-table-column>
 
-                        <el-table-column label="附件" align="center" style="margin:20px 0">
+                        <el-table-column label="附件" align="center" width="150px" style="margin:20px 0">
                             <template slot-scope="scope">
                                 <el-form-item label="" v-if="scope.row.attachments && scope.row.attachments.length > 0" disabled>
                                     <div v-for="item in scope.row.attachments" :key="item.id">
