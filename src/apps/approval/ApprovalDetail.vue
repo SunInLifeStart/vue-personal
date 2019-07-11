@@ -67,7 +67,7 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-table :data="tableData.usingApproval" border style="padding: 20px 5px; width:700px;">
+                    <el-table :data="tableData.usingApproval" border style="padding: 10px 5px; width:100%;">
                         <el-table-column prop="fileName" label="用印文件名称">
                             <template slot-scope="scope">
                                 {{scope.row.fileName}}
