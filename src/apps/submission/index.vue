@@ -125,7 +125,7 @@ export default {
                 pageSize: 5,
                 desc: true,
                 options: [],
-                orderBy: 'created',
+                orderBy: 'id',
                 draftUser: '',
                 organName: ''
             },
@@ -280,7 +280,7 @@ export default {
                 pageSize: 5,
                 desc: true,
                 options: [],
-                orderBy: 'created',
+                orderBy: 'id',
                 draftUser: '',
                 organName: ''
             };
