@@ -31,7 +31,7 @@
                   <div class="from" :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}">
                     <div class="from-title">{{item.from.name}} - {{item.from.title}} - 「{{item.businessType.cn}}」</div>
                     <div class="from-type">{{item.time|dateFromNow}}</div>
-                    <div class="from-delete" @click.stop="deleteTodo(item)" v-if="type != 'todo'">
+                    <div class="from-delete" @click.stop="deleteTodo(item)" v-if="type != 'reading'">
                       <el-button type="text" icon="el-icon-delete"></el-button>
                     </div>
                   </div>
