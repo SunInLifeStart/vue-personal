@@ -67,34 +67,26 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <el-table :data="tableData.usingApproval" border style="padding: 10px 5px; width: 700px;">
-                        <el-table-column prop="fileName" label="用印文件名称">
-                            <template slot-scope="scope">
-                                {{scope.row.fileName}}
-                            </template>
-                        </el-table-column>
-                        <el-table-column prop="useReason" label="使用事由">
-                            <template slot-scope="scope">
-                                {{scope.row.useReason}}
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column prop="fileNum" label="用印份数" width="200px">
-                            <template slot-scope="scope">
-                                {{scope.row.fileNum}}
-                            </template>
-                        </el-table-column>
-
-                        <el-table-column label="附件" align="center" width="150px" style="margin:20px 0">
-                            <template slot-scope="scope">
-                                <el-form-item label="" v-if="scope.row.attachments && scope.row.attachments.length > 0" disabled>
-                                    <div v-for="item in scope.row.attachments" :key="item.id">
-                                        <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
-                                    </div>
-                                </el-form-item>
-                            </template>
-                        </el-table-column>
-                    </el-table>
+                    <table  class="tablePrint" style="width: 99%">
+                        <tr>
+                            <th style="width: 30%">用印文件名称</th>
+                            <th style="width: 40%">使用事由</th>
+                            <th style="width: 10%">用印份数</th>
+                            <th style="width: 20%">附件</th>
+                        </tr>
+                        <tr v-for="row in tableData.usingApproval">
+                            <td>{{row.fileName}}</td>
+                            <td>{{row.useReason}}</td>
+                            <td>{{row.fileNum}}</td>
+                            <td>
+<!--                                <el-form-item label="" v-if="scope.row.attachments && scope.row.attachments.length > 0" disabled>-->
+                                <div v-for="item in row.attachments" :key="item.id">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                                </div>
+<!--                                </el-form-item>-->
+                            </td>
+                        </tr>
+                    </table>
                 </el-row>
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
@@ -267,6 +259,17 @@ export default {
     }
     .el-step__main {
         margin-top: 10px;
+    }
+
+    .tablePrint td,
+    .tablePrint th {
+        padding: 0px;
+        margin: 0px;
+        border-top: 1px solid #ccc;
+        border-right: 1px solid #ccc;
+        font-size: 13px;
+        height: 35px;
+        text-align: center;
     }
     .audit {
         position: relative;
