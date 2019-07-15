@@ -235,7 +235,7 @@ export default {
                 }
             }
             $self.formData.text = JSON.stringify($self.formData.text);
-            if ($self.formData.draftUnit === '综合管理部') {
+            if (this.$store.getters.LoginData.oid == '426') {
                 $self.formData.generalManagement = true;
             } else {
                 $self.formData.generalManagement = false;

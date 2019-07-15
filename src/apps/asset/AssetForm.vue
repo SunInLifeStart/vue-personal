@@ -293,7 +293,7 @@ export default {
                 budget: true,
                 inbuget: true,
                 generalManagement:
-                    this.$store.getters.LoginData.oname == '综合管理部'
+                    this.$store.getters.LoginData.oid == '426'
                         ? true
                         : false
             };

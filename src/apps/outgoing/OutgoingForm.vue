@@ -438,7 +438,7 @@ export default {
                 let copyto = $self.formData.copyto_1.slice(0);
                 $self.formData.copyto = copyto.join(",");
             }
-            if ($self.formData.organName === '综合管理部') {
+            if (this.$store.getters.LoginData.oid == '426') {
                     $self.formData.generalManagement = true
                     // $self.formData.branchlineTo
                 }

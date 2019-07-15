@@ -168,7 +168,7 @@ export default {
             $self.formData.text = JSON.stringify($self.formData.text);
             $self.formData.pushAddr = $self.formData.columns;
             $self.formData.organName = $self.$store.getters.LoginData.oname;
-            if (this.$store.getters.LoginData.oname === '综合管理部') {
+            if (this.$store.getters.LoginData.oid == '426') {
                 $self.formData.generalManagement = true
             }
             let response = await $self.saveFormData(
