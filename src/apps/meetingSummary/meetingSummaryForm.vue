@@ -375,7 +375,7 @@ export default {
     },
     mounted() {
         this.getUsers();
-        if (this.$store.getters.LoginData.oname === '综合管理部') {
+        if (this.$store.getters.LoginData.oid == '426') {
             this.discussionOption[2].disabled = false
             this.discussionOption[3].disabled = false
         }

@@ -627,7 +627,7 @@ export default {
             if (business.length > 0)
                 this.formData.businessType =
                     business[0].value + '_' + business[0].label;
-            if ($self.formData.organName === '综合管理部') {
+            if (this.$store.getters.LoginData.oid == '426') {
                 $self.formData.generalManagement = true;
             }
 

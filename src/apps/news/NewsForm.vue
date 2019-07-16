@@ -216,7 +216,7 @@ export default {
                     return false;
                 }
             }
-            if (this.$store.getters.LoginData.oname === '综合管理部') {
+            if (this.$store.getters.LoginData.oid == '426') {
                 $self.formData.generalManagement = true
             }
             $self.formData.pushAddr = []
