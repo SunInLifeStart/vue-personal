@@ -1,5 +1,5 @@
 <template>
-    <div id="newsDetail" >
+    <div id="newsDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -7,43 +7,47 @@
                         {{action.name}}
                     </span>
                 </div>
-                
+
             </el-row>
         </div>
         <br />
         <div class="formContent" style="padding: 15px 30px">
-            <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
+            </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="formList">
-                 <el-row>
+                <el-row>
                     <el-col :span="24">
                         <el-form-item label="标题：">{{tableData.title}}
                         </el-form-item>
                     </el-col>
                 </el-row>
-      
+
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="简介：">{{tableData.brief}}
                         </el-form-item>
                     </el-col>
                 </el-row>
- 
+
                 <el-row>
-                     <el-col :span="24">
+                    <el-col :span="24">
                         <el-form-item label="信息内容：">
                             <div v-html="tableData.content" class="newsContent"></div>
                         </el-form-item>
                     </el-col>
                 </el-row>
-                    <el-row>
+                <el-row>
                     <el-form-item label="发布到：">
+                        <!--
                         <el-col :span="5">
                             <el-checkbox label="公司网站" v-model="tableData.toSite" disabled="disabled"></el-checkbox>
                         </el-col>
+                        -->
                         <el-col :span="5">
                             <el-checkbox label="公司门户" v-model="tableData.toPortal" disabled="disabled"></el-checkbox>
                         </el-col>
@@ -59,7 +63,6 @@
                     </el-col>
                 </el-row>
 
-                
                 <el-row v-if="comments && comments.length > 0">
                     <el-col :span="24">
                         <h3>审批意见</h3>
@@ -80,7 +83,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -100,36 +103,36 @@
                 </el-form>
             </el-dialog>
         </div>
-         <NewsForm ref="newsForm"></NewsForm>
+        <NewsForm ref="newsForm"></NewsForm>
     </div>
 </template>
 <script>
-import moment from "moment";
-import Comment from "../Comment";
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
-import NewsForm from "./NewsForm";
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
+import NewsForm from './NewsForm';
 export default {
-    mixins:[publicMethods],
-    name: "newsDetail",
+    mixins: [publicMethods],
+    name: 'newsDetail',
     data() {
         return {
             tableData: {},
             actions: [],
-            crumbs:[],
-            formId: "",
-            textarea: "",
+            crumbs: [],
+            formId: '',
+            textarea: '',
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'news-form_news',
-            formName:'news_forms',
-            comments:[],
-            dialogVisibleCrumb:false,
-            flowNodeUrl:"",
-            typeJuder:"",
-            isAnnualPlanone:""
-    };
+            appFlowName: 'news-form_news',
+            formName: 'news_forms',
+            comments: [],
+            dialogVisibleCrumb: false,
+            flowNodeUrl: '',
+            typeJuder: '',
+            isAnnualPlanone: ''
+        };
     },
     components: {
         Comment,
@@ -140,35 +143,37 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/"+$self.formName+"/" + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/' + $self.formId;
             $self.getFormDetailsData();
         },
-        reEditNewForm(){
+        reEditNewForm() {
             let $self = this;
-            $self.$refs.newsForm.setDataFromParent(this.tableData,true);
+            $self.$refs.newsForm.setDataFromParent(this.tableData, true);
         },
         async getFormDetailsData() {
             let $self = this;
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data;
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
-
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             }
             let actions = await $self.getActions();
-            let comments =  await $self.getComments();
+            let comments = await $self.getComments();
             $self.actions = actions.data.types;
             $self.comments = comments.data;
 
             let crumbs = await $self.getCrumbsone();
-            $self.crumbs =  {items: crumbs.data, index: -1};
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;    
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
                 }
             }
-            if($self.crumbs.index == -1) {
-                $self.crumbs.index=$self.crumbs.items.length
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
             }
         }
     }
@@ -239,7 +244,7 @@ export default {
         }
     }
     #actionList {
-         padding-left: 20px;
+        padding-left: 20px;
         background: #f4f4f4;
         border-bottom: 1px solid #eaeaea;
         height: 40px;
@@ -271,7 +276,7 @@ export default {
 }
 </style>
 <style scoped>
-    .newsContent >>> img {
-        width: 100%;
-    }
+.newsContent >>> img {
+    width: 100%;
+}
 </style>
