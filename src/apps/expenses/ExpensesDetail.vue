@@ -64,7 +64,7 @@
                             申请时间
                         </td>
                         <td colspan="2">
-                            {{tableData.treatTime}}
+                            {{tableData.created}}
                         </td>
                     </tr>
                     <tr>
