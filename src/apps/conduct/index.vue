@@ -288,7 +288,10 @@ export default {
             $self.url = '/api/v1/reim/stat';
             let response = await $self.getQueryList();
             if (response) {
-                if (response.data.forms.length > 0) {
+                if (
+                    response.data.forms != null &&
+                    response.data.forms.length > 0
+                ) {
                     let formId = response.data.forms[0].id;
                     this.showDetailsPay(response.data.forms[0]);
                 }
