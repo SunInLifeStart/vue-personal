@@ -41,18 +41,18 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-                <el-row>
-                    <el-form-item label="发布到：">
+<!--                <el-row>-->
+<!--                    <el-form-item label="发布到：">-->
                         <!--
                         <el-col :span="5">
                             <el-checkbox label="公司网站" v-model="tableData.toSite" disabled="disabled"></el-checkbox>
                         </el-col>
                         -->
-                        <el-col :span="5">
-                            <el-checkbox label="公司门户" v-model="tableData.toPortal" disabled="disabled"></el-checkbox>
-                        </el-col>
-                    </el-form-item>
-                </el-row>
+<!--                        <el-col :span="5">-->
+<!--                            <el-checkbox label="公司门户" v-model="tableData.toPortal" disabled="disabled"></el-checkbox>-->
+<!--                        </el-col>-->
+<!--                    </el-form-item>-->
+<!--                </el-row>-->
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：">
