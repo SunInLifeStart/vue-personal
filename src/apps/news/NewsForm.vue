@@ -212,7 +212,7 @@ export default {
                     return false;
                 }
             }
-            if (this.$store.getters.LoginData.oid == '426') {
+            if (this.$store.getters.LoginData.code.split("_")[1] == 'generalManagementDepartment') {
                 $self.formData.generalManagement = true;
             }
             $self.formData.pushAddr = [];
