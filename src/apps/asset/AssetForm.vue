@@ -293,7 +293,7 @@ export default {
                 budget: true,
                 inbuget: true,
                 generalManagement:
-                    this.$store.getters.LoginData.oid == '426'
+                    this.$store.getters.LoginData.code.split("_")[1] == 'generalManagementDepartment'
                         ? true
                         : false
             };

@@ -235,7 +235,7 @@ export default {
                 }
             }
             $self.formData.text = JSON.stringify($self.formData.text);
-            if (this.$store.getters.LoginData.oid == '426') {
+            if (this.$store.getters.LoginData.code.split("_")[1] == 'generalManagementDepartment') {
                 $self.formData.generalManagement = true;
             } else {
                 $self.formData.generalManagement = false;

@@ -375,7 +375,7 @@ export default {
     },
     mounted() {
         this.getUsers();
-        if (this.$store.getters.LoginData.oid == '426') {
+        if (this.$store.getters.LoginData.code.split("_")[1] == 'generalManagementDepartment') {
             this.discussionOption[2].disabled = false
             this.discussionOption[3].disabled = false
         }

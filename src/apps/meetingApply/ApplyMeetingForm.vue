@@ -627,7 +627,7 @@ export default {
             if (business.length > 0)
                 this.formData.businessType =
                     business[0].value + '_' + business[0].label;
-            if (this.$store.getters.LoginData.oid == '426') {
+            if (this.$store.getters.LoginData.code.split("_")[1] == 'generalManagementDepartment') {
                 $self.formData.generalManagement = true;
             }
 
