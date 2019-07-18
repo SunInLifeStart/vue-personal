@@ -61,7 +61,8 @@
             <div id="ContractList">
                 <el-table :data="tableData" stripe style="width: 100%; cursor:pointer" @row-click="showCurrentId" highlight-current-row>
                     <el-table-column prop="contractName" label="合同名称" min-width="120"></el-table-column>
-                    <el-table-column prop="partyB" label="合同对方" min-width="120"></el-table-column>
+                    <el-table-column prop="partyA" label="甲方" min-width="120"></el-table-column>
+                    <el-table-column prop="partyB" label="乙方" min-width="120"></el-table-column>
                     <el-table-column prop="contractNum" label="合同编号" min-width="200"></el-table-column>
                     <el-table-column prop="organName" label="公司部门"></el-table-column>
                     <el-table-column prop="applyName" label="提单人"></el-table-column>
