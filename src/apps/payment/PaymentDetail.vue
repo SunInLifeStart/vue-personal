@@ -377,6 +377,26 @@
             </el-form>
 
         </div>
+        <el-dialog :visible.sync="dialogVisibleAttachment" width="40%">
+            <el-form>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="编辑附件">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" accept="" :auto-upload="true" :with-credentials="true">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                            <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getAttachmentId"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="dialogVisibleAttachment = false">取 消</el-button>
+                <el-button type="primary" @click="saveIncomingApply">确 定</el-button>
+            </span>
+        </el-dialog>
         <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
             <el-form>
                 <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
@@ -435,6 +455,7 @@ export default {
             formName: 'payment_forms',
             comments: [],
             dialogVisibleCrumb: false,
+            dialogVisibleAttachment: false,
             flowNodeUrl: '',
             array: []
         };
@@ -445,6 +466,45 @@ export default {
         formatInput
     },
     methods: {
+        attahmentsUplode() {
+            this.dialogVisibleAttachment = true;
+        },
+        handleAttachmentSuccess(response, file) {
+            const self = this;
+            if (!self.tableData.attachments) {
+                self.tableData.attachments = [];
+            }
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.tableData.attachments.push(item);
+                    // self.$forceUpdate();
+                });
+            }
+            this.$refs.uploadAttachmentOther.clearFiles();
+        },
+        async saveIncomingApply() {
+            let response = await this.saveFormData(
+                '/api/v1/payment_forms/save',
+                this.tableData
+            );
+            if (response) {
+                this.dialogVisibleAttachment = false;
+            }
+        },
+        getAttachmentId(id) {
+            let self = this;
+            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                self.tableData.attachments.forEach(function(value, index) {
+                    if (value.id == id) {
+                        axios
+                            .get('/api/v1/payment_forms/deleteAtt/' + id)
+                            .then(res => {
+                                self.tableData.attachments.splice(index, 1);
+                            });
+                    }
+                });
+            });
+        },
         async print() {
             // document.getElementById('approval').style.display = 'table-row';
             this.$print(this.$refs.formupdate.$el, {
@@ -651,6 +711,26 @@ export default {
         font-size: 13px;
         height: 35px;
         text-align: center;
+    }
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
+
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
+            }
+        }
     }
     .audit {
         position: relative;

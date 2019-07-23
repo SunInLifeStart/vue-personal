@@ -8,26 +8,26 @@ export const publicMethods = {
                 return await this.$axios.post(url, data);
             } catch (err) {
                 return false;
-            }     
+            }
         },
         //提交时判断以什么公司名义发起
-        async juderCode(){
-                // if(this.$store.getters.LoginData.currentRoles.length > 1){ 
-                    // if(this.branchCode){
-                    //     await this.saveFormData();
-                    // }else{
-                    //     this.dialogSelectCode = true;
-                    //     this.dialogTitle = "请选择以什么公司名义发起";
-                    //     this.currentRoles = this.$store.getters.LoginData.currentRoles;
-                    //     this.branchCode = this.currentRoles[0].code;
-                    //     return "returnDialog";
-                    // }
-                // }
-                // if(this.$store.getters.LoginData.currentRoles.length == 1){
-                //        this.branchCode = this.$store.getters.LoginData.currentRoles[0].code;
-                //        await this.saveFormData();
-                // }
-                return true;
+        async juderCode() {
+            // if(this.$store.getters.LoginData.currentRoles.length > 1){ 
+            // if(this.branchCode){
+            //     await this.saveFormData();
+            // }else{
+            //     this.dialogSelectCode = true;
+            //     this.dialogTitle = "请选择以什么公司名义发起";
+            //     this.currentRoles = this.$store.getters.LoginData.currentRoles;
+            //     this.branchCode = this.currentRoles[0].code;
+            //     return "returnDialog";
+            // }
+            // }
+            // if(this.$store.getters.LoginData.currentRoles.length == 1){
+            //        this.branchCode = this.$store.getters.LoginData.currentRoles[0].code;
+            //        await this.saveFormData();
+            // }
+            return true;
         },
         //获取表单详情
         async getDetails() {
@@ -79,22 +79,22 @@ export const publicMethods = {
             }
 
             //督办特殊情况特殊处理
-            if($self.appFlowName == "inspect-form_inspect" && nowActins.assigneeListTos && nowActins.assigneeListTos.indexOf("assigneeListVarable") > -1){
+            if ($self.appFlowName == "inspect-form_inspect" && nowActins.assigneeListTos && nowActins.assigneeListTos.indexOf("assigneeListVarable") > -1) {
                 let type = this.$store.getters.LoginData.code.split('_')[0];
                 let uid = this.$store.getters.LoginData.uid;
-                let res =   await $self.getCommonType("/api/v1/users/role/"+ type +"_deptManager");
-                let currentUserDept =   await $self.getCommonType("/api/v1/users/"+uid+"/organ/role/"+  type +"_deptManager");
-                if(res){
+                let res = await $self.getCommonType("/api/v1/users/role/" + type + "_deptManager");
+                let currentUserDept = await $self.getCommonType("/api/v1/users/" + uid + "/organ/role/" + type + "_deptManager");
+                if (res) {
                     let detailsData = $self.tableData ? $self.tableData : $self.formData;
-                    for(var i = 0; i<res.data.length; i++){ //得到当前选中的督办人
-                        if(res.data[i].id == detailsData.inspector){
-                            nowActins.assigneeList.push({"name":res.data[i].name,"id":detailsData.inspector});
+                    for (var i = 0; i < res.data.length; i++) { //得到当前选中的督办人
+                        if (res.data[i].id == detailsData.inspector) {
+                            nowActins.assigneeList.push({ "name": res.data[i].name, "id": detailsData.inspector });
                         }
                     };
                 }
 
-                if(currentUserDept && currentUserDept.data){
-                    nowActins.assigneeList.push({"name":currentUserDept.data.name,"id":currentUserDept.data.id});
+                if (currentUserDept && currentUserDept.data) {
+                    nowActins.assigneeList.push({ "name": currentUserDept.data.name, "id": currentUserDept.data.id });
                 }
             }
             let url = `/workflow/${this.appFlowName}/${
@@ -105,10 +105,10 @@ export const publicMethods = {
 
         //保存的时候启动工作流（一次）
         async startSignalForSave() {
-            await this.emitMessage(); 
+            await this.emitMessage();
         },
         //提交的时候启动工作流（两次）
-        async startSignalForStart(type) {   
+        async startSignalForStart(type) {
             let actions = await this.getActions();
             if (actions.data.types.length > 0) {
                 this.hasRequired(actions.data.types[0]);
@@ -120,10 +120,10 @@ export const publicMethods = {
             let complete = await this.startSignal(actions.data.types[0]);
             if (type) {
                 return complete.data;
-            }else{
+            } else {
                 await this.emitMessage();
             }
-            
+
             // await this.startSignalForSave("forStart");
             // let actions2 = await this.getActions();
             // if (actions2.data.types.length > 0) {
@@ -165,12 +165,12 @@ export const publicMethods = {
                         if (key == "oid") {
                             options.push(key + "=" + this.$store.getters.LoginData.oid);
                         } else if (key == "code") {
-                            if(this.branchCode){
+                            if (this.branchCode) {
                                 options.push(key + "=" + this.branchCode);
-                            }else{
-                               // if(this.$store.getters.LoginData.currentRoles.length == 0 || this.$store.getters.LoginData.currentRoles.length == 1){
-                                    options.push(key + "=" + this.$store.getters.LoginData.code.split("_")[0]);
-                               // }
+                            } else {
+                                // if(this.$store.getters.LoginData.currentRoles.length == 0 || this.$store.getters.LoginData.currentRoles.length == 1){
+                                options.push(key + "=" + this.$store.getters.LoginData.code.split("_")[0]);
+                                // }
                             }
 
                         } else if (key == "characterLevel") {
@@ -196,10 +196,10 @@ export const publicMethods = {
                                 }
                             }
                         } else if (key == "role" && detailsData.appFlowName != "travel-form_travel") {
-                         
-                            if(this.$store.getters.LoginData.Role){
+
+                            if (this.$store.getters.LoginData.Role) {
                                 options.push("role=" + this.$store.getters.LoginData.Role);
-                            }else{
+                            } else {
                                 options.push("role=''");
                             }
                         } else {
@@ -213,7 +213,7 @@ export const publicMethods = {
                     }
                 };
                 if (data.options && data.options.length > 0) {
-                    data.options =  data.options.concat(options);
+                    data.options = data.options.concat(options);
                 } else {
                     if (options) {
                         data.options = options;
@@ -275,29 +275,24 @@ export const publicMethods = {
                 $self.reEditForm();
             } else if ($self.currentAction.name == "编辑新闻") {
                 $self.reEditNewForm();
-            }
-            else if ($self.currentAction.name == "定岗定薪") {
+            } else if ($self.currentAction.name == "定岗定薪") {
                 $self.salaryEditForm();
-            }
-            else if ($self.currentAction.name == "编辑文案号") {
+            } else if ($self.currentAction.name == "编辑文案号") {
                 $self.symbolEditForm();
-            }
-            else if ($self.currentAction.name == "发布到公司门户") {
+            } else if ($self.currentAction.name == "发布到公司门户") {
                 $self.pushItToDoor();
-              }
-            else if ($self.currentAction.name == "编写会议纪要") {
+            } else if ($self.currentAction.name == "编写会议纪要") {
                 $self.editMeetingSummary();
-            }
-            else if ($self.currentAction.name == "编辑会议附件") {
+            } else if ($self.currentAction.name == "编辑会议附件") {
                 $self.editMeetingAttachment();
-            }
-            else if ($self.currentAction.name == "编辑收文附件") {
+            } else if ($self.currentAction.name == "编辑收文附件") {
                 $self.editIncomingAttachment();
-            }
-            else if ($self.currentAction.name == "延期") {
+            } else if ($self.currentAction.name == "延期") {
                 $self.delayMeeting();
-            }
-             else if ($self.currentAction.name == "打印") {
+            } else if ($self.currentAction.name == "附件上传") {
+
+                $self.attahmentsUplode();
+            } else if ($self.currentAction.name == "打印") {
                 let url;
                 if ($self.printerFormName == "outgoing_forms") {
                     url = "/api/v1/" + $self.printerFormName + "/getForm/" + $self.tableData.id;
@@ -323,7 +318,7 @@ export const publicMethods = {
                             $self.openUrl + "url=" + res.data
                         );
                     });
-                
+
             } else {
                 $self.dialogVisible = true;
             }
@@ -333,7 +328,7 @@ export const publicMethods = {
         //提交表单
         async submitForm() {
             let $self = this;
-            if($self.currentAction.action !="START"){
+            if ($self.currentAction.action != "START") {
                 $self.currentAction["comment"] = $self.textarea ? $self.textarea : $self.currentAction.name;
             }
             $self.hasRequired($self.currentAction);
@@ -346,7 +341,7 @@ export const publicMethods = {
                                     $self.currentAction.options.splice(i, 1);
                                 }
                             };
-                            $self.currentAction.options.push($self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value);                                                                                                     
+                            $self.currentAction.options.push($self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value);
                         } else {
                             $self.currentAction.options = [$self.currentAction[item.labelName][0].code + "=" + item.checkedValue.value];
                         }
@@ -360,12 +355,12 @@ export const publicMethods = {
                 $self.msgTips($self.currentAction.name + "成功", "success");
             } else {
                 if ($self.currentAction.assigneeList && $self.currentAction.assigneeList.length > 0) {
-                    if($self.appFlowName == "inspect-form_inspect"){
+                    if ($self.appFlowName == "inspect-form_inspect") {
                         await $self.startSignal();
                         $self.getFormDetailsData();
                         $self.dialogVisible = false;
                         $self.msgTips($self.currentAction.name + "成功", "success");
-                    }else{
+                    } else {
                         $self.msgTips($self.currentAction.assigneeListLabel, "warning");
                         return false;
                     }
@@ -388,7 +383,7 @@ export const publicMethods = {
             let url = `/workflow/${this.appFlowName}/${this.formId}/${this.$store.getters.LoginData.uid}/crumb`;
             return await this.$axios.get(url);
         },
-        
+
         async getCrumbsone() {
             let url = `/workflow/${this.appFlowName}/${this.formId}/historyCrumb`;
             return await this.$axios.get(url);
@@ -432,7 +427,7 @@ export const publicMethods = {
             let $self = this;
             let url = `/workflow/${$self.appFlowName}/${$self.formId}/processContent`;
             let currentNodeUrl = `/workflow/${$self.appFlowName}/${$self.formId}/curActions`;
-            let nodeNameURl =  `/workflow/${$self.appFlowName}/${$self.formId}/historyActions`;  
+            let nodeNameURl = `/workflow/${$self.appFlowName}/${$self.formId}/historyActions`;
             let bpmnData = await this.$axios.get(url);
             let bpmnDataCurrent = await this.$axios.get(currentNodeUrl);
             // let nodeName = await this.$axios.get(nodeNameURl);
@@ -449,25 +444,25 @@ export const publicMethods = {
         },
 
         //删除附件
-        deleteAttachments(index,attachments,url,type) {
+        deleteAttachments(index, attachments, url, type) {
             let $self = this;
             $self.$confirm("是否删除?", "提示", { type: "warning" }).then(() => {
-                if(url){
-                    if(type == 'delete'){
+                if (url) {
+                    if (type == 'delete') {
                         $self.$axios
-                        .delete(url)
-                        .then(res => {
-                            attachments.splice(index, 1);    
-                        });
+                            .delete(url)
+                            .then(res => {
+                                attachments.splice(index, 1);
+                            });
                     }
-                    if(type == 'get'){
+                    if (type == 'get') {
                         $self.$axios
-                        .get(url)
-                        .then(res => {
-                            attachments.splice(index, 1);    
-                        });
+                            .get(url)
+                            .then(res => {
+                                attachments.splice(index, 1);
+                            });
                     }
-                }else{
+                } else {
                     attachments.splice(index, 1);
                 }
             });
