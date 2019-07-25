@@ -487,10 +487,17 @@ export default {
                             arr.includes(typee + '_' + 'generalManager')) &&
                         parseFloat(this.formData.amountInFigures) <= 2000
                     ) {
-                        $self.msgTips(
-                            '申请额度需要大于2000元可提单',
-                            'warning'
-                        );
+                        if (
+                            arr.includes(typee + '_' + 'generalManager') &&
+                            typee == 'tjzkcljfdckf'
+                        ) {
+                            this.saveForm(type);
+                        } else {
+                            $self.msgTips(
+                                '申请额度需要大于2000元可提单',
+                                'warning'
+                            );
+                        }
                     } else if (
                         (arr.includes(
                             typee + '_' + 'generalManagerAssistant'
