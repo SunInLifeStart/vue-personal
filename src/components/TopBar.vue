@@ -26,7 +26,8 @@
                 </el-menu>
             </div>
             <div class="search">
-                <el-input size="small" placeholder="请输入搜索内容" v-model="$root.searchKey" @keyup.enter.native="search()" suffix-icon="el-icon-search">
+                <el-input size="small" placeholder="请输入搜索内容" v-model="$root.searchKey" @keyup.enter.native="search()">
+                    <i slot="suffix" @click="search" class="el-input__icon el-icon-search"></i>
                 </el-input>
             </div>
             <el-cascader
@@ -106,7 +107,10 @@ export default {
                 //this.$router.push({ path: "/search/"+this.$root.searchKey });
                 //}
             } else {
-                this.$router.go(-1);
+                // this.$router.go(-1);
+                this.$router.replace({
+                    path: "/search/" + ''
+                });
             }
         },
         async handleChange(value) {
