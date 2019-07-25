@@ -391,6 +391,8 @@ export default {
     data() {
         return {
             tableData: {
+                organ: '',
+                undeOrgan: '',
                 isTravel: false,
                 no: '',
                 type: '',
@@ -510,6 +512,8 @@ export default {
         },
         clearForm() {
             this.tableData = {
+                organ: '',
+                undeOrgan: '',
                 no: '',
                 type: '',
                 isTravel: false,

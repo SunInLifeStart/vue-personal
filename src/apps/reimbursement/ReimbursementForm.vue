@@ -661,12 +661,6 @@ export default {
         getOgans() {
             axios.get('/api/v1/users/list/organss').then(res => {
                 this.combinedUnit = [];
-                for (let data of res.data) {
-                    this.combinedUnit.push({
-                        id: data.id,
-                        name: data.name
-                    });
-                }
                 this.combinedUnit = res.data;
             });
         },
@@ -835,6 +829,8 @@ export default {
             // this.getTravelList();
             // this.getSubmissionlList();
             this.formData = {
+                organ: '',
+                undeOrgan: '',
                 no: '',
                 id: '',
                 isTravel: false,
@@ -848,9 +844,9 @@ export default {
                 budgetSure: false,
                 submissionId: '',
                 submissionName: '',
-                creatorName: cookies.get('uname'),
-                organName: cookies.get('oname'),
-                created: moment().format('YYYY-MM-DD HH:mm:ss'),
+                creatorName: '',
+                organName: '',
+                created: '',
                 payee: '',
                 payeeId: '',
                 expenseId: cookies.get('oid'),
@@ -1333,6 +1329,8 @@ export default {
         },
         resetForm() {
             let formData = {
+                organ: this.$store.getters.LoginData.code,
+                undeOrgan: '',
                 no: '',
                 id: '',
                 isTravel: false,
@@ -1528,6 +1526,11 @@ export default {
                 }
                 if (this.formData.expensesView == false) {
                     this.formData.expensesName = this.formData.expensesId;
+                }
+            }
+            for (let item of this.combinedUnit) {
+                if (item.name == this.formData.expenseDep) {
+                    this.formData.undeOrgan = item.code;
                 }
             }
             let response = await $self.saveFormData(
