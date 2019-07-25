@@ -1,5 +1,5 @@
 <template>
-    <router-view >
+    <router-view :key="key">
     
     </router-view>
 </template>
@@ -20,7 +20,10 @@ export default {
     computed: {
         ...mapGetters([
             'getLoginData'
-        ])
+        ]),
+        key() {
+            return this.$route.name !== undefined? this.$route.name + +new Date(): this.$route + +new Date()
+        }
     },
     methods: {
             initIM() {
