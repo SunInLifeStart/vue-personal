@@ -391,6 +391,7 @@ export default {
     data() {
         return {
             tableData: {
+                appointOid: '',
                 organ: '',
                 undeOrgan: '',
                 isTravel: false,

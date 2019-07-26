@@ -129,7 +129,7 @@
                         </td>
                         <td colspan="2">
                             <el-select v-model="formData.expenseDep" placeholder="请选择" style="width:100%;">
-                                <el-option v-for="item in combinedUnit" :key="item.id" :label="item.name" :value="item.name">
+                                <el-option v-for="item in combinedUnit" :key="item.id" :label="item.name" :value="item.name" :disabled="item.showTrue">
                                 </el-option>
                             </el-select>
                         </td>
@@ -661,7 +661,22 @@ export default {
         getOgans() {
             axios.get('/api/v1/users/list/organss').then(res => {
                 this.combinedUnit = [];
-                this.combinedUnit = res.data;
+                for (let data of res.data) {
+                    data.showTrue = false;
+                }
+                let code = this.$store.getters.LoginData.code.split('_');
+                if (code[1]) {
+                    if (code[1] != 'company') {
+                        for (let item of res.data) {
+                            if (item.name == '公司领导') {
+                                item.showTrue = true;
+                            }
+                        }
+                    }
+                    this.combinedUnit = res.data;
+                } else {
+                    this.combinedUnit = res.data;
+                }
             });
         },
         //报销明细和分摊明细鼠标右键删除方法
@@ -829,6 +844,7 @@ export default {
             // this.getTravelList();
             // this.getSubmissionlList();
             this.formData = {
+                appointOid: '',
                 organ: '',
                 undeOrgan: '',
                 no: '',
@@ -1331,6 +1347,7 @@ export default {
             let formData = {
                 organ: this.$store.getters.LoginData.code,
                 undeOrgan: '',
+                appointOid: '',
                 no: '',
                 id: '',
                 isTravel: false,
@@ -1531,6 +1548,7 @@ export default {
             for (let item of this.combinedUnit) {
                 if (item.name == this.formData.expenseDep) {
                     this.formData.undeOrgan = item.code;
+                    this.formData.appointOid = item.id;
                 }
             }
             let response = await $self.saveFormData(
@@ -1625,8 +1643,8 @@ export default {
         handleRemove() {}
     },
     mounted() {
-        this.getUsers();
-        this.getOgans();
+        // this.getUsers();
+        // this.getOgans();
         // this.getTravelList();
         // this.getSubmissionlList();
     }
