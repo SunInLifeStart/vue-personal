@@ -140,6 +140,17 @@
                     </tr>
                     <tr>
                         <td>
+                            付款事项
+                        </td>
+                        <td colspan="7">
+                            <el-select v-model="formData.paymentMatters" placeholder="请选择" style="width:100%;" :disabled="decodeURI(this.$store.getters.LoginData.companyName) != '天津京津中关村科技城发展有限公司' && decodeURI(this.$store.getters.LoginData.companyName) != '天津中科城乐居房地产开发有限公司' && decodeURI(this.$store.getters.LoginData.companyName) != '天津京津中关村孵化器有限公司'">
+                                <el-option v-for="item in paymentMatters" :key="item.id" :label="item.name" :value="item.id">
+                                </el-option>
+                            </el-select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
                             支出说明
                         </td>
                         <td colspan="7">
@@ -427,6 +438,20 @@ export default {
             branchCode: '',
             isMoney: '',
             moneyType: '2',
+            paymentMatters: [
+                {
+                    id: '1',
+                    name: '工程类'
+                },
+                {
+                    id: '2',
+                    name: '招商营销类'
+                },
+                {
+                    id: '3',
+                    name: '财务行政类'
+                }
+            ],
             clearing_method: [
                 '网银',
                 '电汇',
@@ -1197,6 +1222,7 @@ export default {
         },
         resetForm() {
             let formData = {
+                paymentMatters: '',
                 travelId: '', //选择的出差申请单
                 type: '',
                 paymentExplain: '',

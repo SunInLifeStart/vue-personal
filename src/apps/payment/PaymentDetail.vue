@@ -14,6 +14,7 @@
         </div>
         <div class="formContent">
             <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
@@ -121,6 +122,14 @@
                     <tr class="fontBold">
                         <td colspan="8">
                             付款明细
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            付款事项
+                        </td>
+                        <td colspan="7">
+                            {{tableData.paymentMatters ? this.getParameters(tableData.paymentMatters): ''}}
                         </td>
                     </tr>
                     <tr>
@@ -466,6 +475,14 @@ export default {
         formatInput
     },
     methods: {
+        getParameters(x) {
+            let xmlJson = {
+                '1': '工程类',
+                '2': '招商营销类',
+                '3': '财务行政类'
+            };
+            return xmlJson[x];
+        },
         attahmentsUplode() {
             this.dialogVisibleAttachment = true;
         },
@@ -613,6 +630,7 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data;
@@ -646,12 +664,15 @@ export default {
             } else {
                 //  $self.msgTips('获取表单失败', 'warning');
             }
-            let actions = await $self.getActions();
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
+
             let crumbs = await $self.getCrumbsone();
             let comments = await $self.getComments();
-            $self.actions = actions.data.types;
             $self.comments = comments.data;
-            this.getAgree();
+            // this.getAgree();
             $self.crumbs = { items: crumbs.data, index: -1 };
             for (var i = 0; i < $self.crumbs.items.length; i++) {
                 if ($self.crumbs.items[i].active) {
