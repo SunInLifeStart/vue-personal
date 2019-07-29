@@ -647,7 +647,18 @@ export default {
                         self.msgTips('请输入' + this.actionName, 'error');
                     }
                 } else {
-                    this.saveForm(type);
+                    if (
+                        decodeURI(this.$store.getters.LoginData.companyName) !=
+                        '中关村协同发展投资有限公司'
+                    ) {
+                        if (this.formData.contractType != '') {
+                            this.saveForm(type);
+                        } else {
+                            self.msgTips('请输入合同类型', 'error');
+                        }
+                    } else {
+                        this.saveForm(type);
+                    }
                 }
             }
         },
