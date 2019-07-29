@@ -13,6 +13,7 @@
         <div class="formContent">
             <div>
                 <!--v-show="this.tableData.status && this.tableData.status == '04'"-->
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" v-show="this.tableData.status && this.tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
@@ -56,12 +57,12 @@
                     <el-row>
                         <el-col :span="24">
                             <el-table :data="tableData.detail" border style="width:700px; margin-top: 5px;">
-                                <el-table-column prop="name" label="物品名称" >
+                                <el-table-column prop="name" label="物品名称">
                                     <template slot-scope="scope">
                                         {{scope.row.name}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="specification" label="规格说明"  width="100px">
+                                <el-table-column prop="specification" label="规格说明" width="100px">
                                     <template slot-scope="scope">
                                         {{scope.row.specification}}
                                     </template>
@@ -74,7 +75,7 @@
                                 <el-table-column prop="price" label="计划单价" width="60px">
                                     <template slot-scope="scope">
                                         {{scope.row.price |numFilter}}
-                                        
+
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="totalPrice" label="计划总价" width="60px">
@@ -216,6 +217,7 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             // let url = `/workflow/${this.appFlowName}/processContent`;
             // $self.$axios.get(url).then(res => {
             //     console.log(res);
@@ -228,12 +230,14 @@ export default {
                     status: $self.tableData.status
                 });
             } else {
-               // $self.msgTips('获取表单失败', 'warning');
+                // $self.msgTips('获取表单失败', 'warning');
             }
-            let actions = await $self.getActions();
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
             let crumbs = await $self.getCrumbsone();
             let comments = await $self.getComments();
-            $self.actions = actions.data.types;
             $self.crumbs = { items: crumbs.data, index: -1 };
             $self.comments = comments.data;
             for (var i = 0; i < $self.crumbs.items.length; i++) {

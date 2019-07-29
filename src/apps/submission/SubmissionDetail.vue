@@ -7,22 +7,25 @@
                         {{action.name}}
                     </span>
                 </div>
-                
+
             </el-row>
         </div>
         <br />
-        <div class="formContent" >
-            <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
+        <div class="formContent">
+            <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
+                <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
+            </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="formList">
                 <el-row>
-                    
+
                     <el-col :span="8">
                         <el-form-item label="呈报件编号：">{{tableData.submissionNo}}
-                    </el-form-item>
+                        </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="文件标题：">{{tableData.title}}
@@ -61,13 +64,13 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="正文：">
-                         <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true}"></FilesOperate>
-                    </el-form-item>
-                </el-col>
-            </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="正文：">
+                            <FilesOperate v-if="tableData.text.name" :item="tableData.text" :options="{preview:true,download:true}"></FilesOperate>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：">
@@ -97,7 +100,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -117,41 +120,41 @@
                 </el-form>
             </el-dialog>
         </div>
-         <SubmissionForm @getFormDetails="getFormDetails" ref="SubmissionForm"></SubmissionForm>
+        <SubmissionForm @getFormDetails="getFormDetails" ref="SubmissionForm"></SubmissionForm>
     </div>
 </template>
 <script>
-import moment from "moment";
-import Comment from "../Comment";
-import SubmissionForm from "./SubmissionForm";
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
+import moment from 'moment';
+import Comment from '../Comment';
+import SubmissionForm from './SubmissionForm';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 export default {
-    mixins:[publicMethods],
-    name: "SubmissionDetail",
+    mixins: [publicMethods],
+    name: 'SubmissionDetail',
     data() {
         return {
-            tableData: {text:{name:""}},
+            tableData: { text: { name: '' } },
             actions: [],
-            crumbs:[],
-            formId: "",
-            textarea: "",
+            crumbs: [],
+            formId: '',
+            textarea: '',
             dialogVisible: false,
             users: [],
             submissionOption: {
-                'report': '请示报告类',
-                'union': '工会类',
-                'financial': '财务类',
-                'branch': '党支委类'
+                report: '请示报告类',
+                union: '工会类',
+                financial: '财务类',
+                branch: '党支委类'
             },
             actionsDialogArr: [],
-            appFlowName:'submission-form_submission',
-            formName:'submission_forms',
-            printerFormName:'submission_forms',
-            comments:[],
-            dialogVisibleCrumb:false,
-            flowNodeUrl:"",
-                    };
+            appFlowName: 'submission-form_submission',
+            formName: 'submission_forms',
+            printerFormName: 'submission_forms',
+            comments: [],
+            dialogVisibleCrumb: false,
+            flowNodeUrl: ''
+        };
     },
     components: {
         Comment,
@@ -162,31 +165,38 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/"+$self.formName+"/" + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
-            if(response.data.text && JSON.parse(response.data.text).name){
-                response.data.text = JSON.parse(response.data.text);
-             }
-            $self.tableData = response.data;
-            $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
+                if (response.data.text && JSON.parse(response.data.text).name) {
+                    response.data.text = JSON.parse(response.data.text);
+                }
+                $self.tableData = response.data;
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             }
             // debugger;
-            let actions = await $self.getActions();
-            $self.actions = actions.data.types;
-            if($self.tableData.status == "04"){
-               $self.actions.push({
-                   name:"打印"
-               }); 
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
             }
-            let comments =  await $self.getComments();
+
+            if ($self.tableData.status == '04') {
+                $self.actions.push({
+                    name: '打印'
+                });
+            }
+            let comments = await $self.getComments();
             $self.comments = comments.data;
-             let crumbs = await $self.getCrumbsone();
-            $self.crumbs =  {items: crumbs.data, index: -1};
+            let crumbs = await $self.getCrumbsone();
+            $self.crumbs = { items: crumbs.data, index: -1 };
             let boolean = false;
             for (var i = 0; i < $self.crumbs.items.length; i++) {
                 if ($self.crumbs.items[i].active && boolean == false) {
@@ -194,15 +204,17 @@ export default {
                     boolean = true;
                 }
             }
-            if($self.crumbs.index == -1) {
-                $self.crumbs.index=$self.crumbs.items.length
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
             }
         },
-        reEditForm(){
+        reEditForm() {
             let $self = this;
-            $self.$refs.SubmissionForm.setDataFromParent(JSON.parse(JSON.stringify(this.tableData)),true);
+            $self.$refs.SubmissionForm.setDataFromParent(
+                JSON.parse(JSON.stringify(this.tableData)),
+                true
+            );
         }
-        
     }
 };
 </script>

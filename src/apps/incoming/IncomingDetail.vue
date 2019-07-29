@@ -12,6 +12,7 @@
         <br />
         <div class="formContent">
             <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="printForm" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
@@ -106,6 +107,26 @@
                     <el-button type="primary" @click="saveIncomingApply">确 定</el-button>
                 </span>
             </el-dialog>
+            <el-dialog :visible.sync="dialogVisibleAttachmentTwo" width="40%">
+                <el-form>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="编辑附件">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getAttachmentId"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleAttachmentTwo = false">取 消</el-button>
+                    <el-button type="primary" @click="saveIncomingApplyTwo">确 定</el-button>
+                </span>
+            </el-dialog>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
@@ -143,6 +164,7 @@ export default {
     data() {
         return {
             tableData: {},
+            dialogVisibleAttachmentTwo: false,
             actions: [],
             crumbs: [],
             formId: '',
@@ -170,6 +192,9 @@ export default {
             };
             this.doAction(action);
         },
+        attahmentsUplode() {
+            this.dialogVisibleAttachmentTwo = true;
+        },
         handleAttachmentSuccess(response, file) {
             const self = this;
             if (!self.tableData.attachments) {
@@ -183,6 +208,25 @@ export default {
                 });
             }
             this.$refs.uploadAttachmentOther.clearFiles();
+        },
+        async saveIncomingApplyTwo() {
+            if (this.tableData.receiptDate) {
+                this.tableData.receiptDate = moment(
+                    this.tableData.receiptDate
+                ).format('YYYY-MM-DD hh:mm:ss');
+            } else {
+                this.tableData.receiptDate = moment(new Date()).format(
+                    'YYYY-MM-DD hh:mm:ss'
+                );
+            }
+            let response = await this.saveFormData(
+                '/api/v1/incoming_forms/save',
+                this.tableData
+            );
+
+            if (response) {
+                this.dialogVisibleAttachmentTwo = false;
+            }
         },
         async saveIncomingApply() {
             if (this.tableData.receiptDate) {
@@ -228,6 +272,7 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data;
@@ -236,9 +281,11 @@ export default {
                     status: $self.tableData.status
                 });
             }
-            let actions = await $self.getActions();
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
             let comments = await $self.getComments();
-            $self.actions = actions.data.types;
             $self.comments = comments.data;
             let crumbs = await $self.getCrumbsone();
             $self.crumbs = { items: crumbs.data, index: -1 };
