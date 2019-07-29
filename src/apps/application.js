@@ -222,8 +222,10 @@ export const publicMethods = {
             };
         },
         async commitDetail() {
+            let $self = this;
             let newActions = await this.getActions();
-            this.doAction(newActions.data.types[0]);
+            $self.currentAction = newActions.data.types[0];
+            this.submitForm();
         },
         //点击审批动作
         async doAction(action) {
