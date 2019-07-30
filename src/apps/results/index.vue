@@ -96,7 +96,7 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <ResultsDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ResultsDetail" @reloadList="reloadList"></ResultsDetail>
+            <ResultsDetail :formId="formBoardId" @refreshData="refreshBoardData" @resetStatus="resetStatus" ref="ResultsDetail" @reloadList="reloadList"></ResultsDetail>
         </el-card>
         <ResultsForm ref="ResultsForm" @reloadList="reloadList"></ResultsForm>
     </div>
@@ -171,6 +171,14 @@ export default {
                 this.getList();
             } else {
                 this.$refs.ResultsDetail.getFormDetails(params.id);
+            }
+        },
+        resetStatus(data) {
+            let $self = this;
+            for (let item of $self.tableData) {
+                if (data.id == item.id) {
+                    item.status = data.status;
+                }
             }
         },
         searchList() {

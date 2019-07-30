@@ -3,7 +3,7 @@
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
-                    <span v-for="(action, index) in actions" :key="action.index" class="btnList" @click="doAction(action)">
+                    <span v-for="(action, index) in actions" :key="index" class="btnList" @click="doAction(action)">
                         {{action.name}}
                     </span>
                 </div>
@@ -11,13 +11,16 @@
         </div>
         <div class="formContent">
             <br />
-            <div><el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
+                <el-button type="primary" @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button>
+            </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="formList">
-               
+
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="招标人：">{{tableData.tenderee}}
@@ -72,7 +75,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -99,9 +102,9 @@ import axios from 'axios';
 import moment from 'moment';
 import Comment from '../Comment';
 import FilesOperate from '../FilesOperate';
-import { publicMethods } from "../application.js";
+import { publicMethods } from '../application.js';
 export default {
-    mixins:[publicMethods],
+    mixins: [publicMethods],
     name: 'AbnormalDetail',
     data() {
         return {
@@ -113,10 +116,10 @@ export default {
             comments: [],
             textarea: '',
             dialogVisible: false,
-            appFlowName:'motor-bidanomaly_bidanomaly',
-            formName:'motor-bidanomaly',
-            dialogVisibleCrumb:false,
-            flowNodeUrl:"",
+            appFlowName: 'motor-bidanomaly_bidanomaly',
+            formName: 'motor-bidanomaly',
+            dialogVisibleCrumb: false,
+            flowNodeUrl: ''
         };
     },
     components: {
@@ -127,29 +130,37 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/motor-bidanomaly/get/" + $self.formId;
+            $self.url = '/api/v1/motor-bidanomaly/get/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             }
-            let actions = await $self.getActions();
-            let comments =  await $self.getComments();
-            $self.actions = actions.data.types;
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
+
+            let comments = await $self.getComments();
             $self.comments = comments.data;
 
-             let crumbs = await $self.getCrumbsone();
-                $self.crumbs =  {items: crumbs.data, index: -1};
-                for(var i= 0; i<$self.crumbs.items.length; i++){
-                    if($self.crumbs.items[i].active){
-                        $self.crumbs.index = i;    
-                    }
+            let crumbs = await $self.getCrumbsone();
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
                 }
-            if($self.crumbs.index == -1) {
-                $self.crumbs.index=$self.crumbs.items.length
+            }
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
             }
         }
     }

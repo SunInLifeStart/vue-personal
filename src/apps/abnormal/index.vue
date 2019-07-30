@@ -88,7 +88,7 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <AbnormalDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="AbnormalDetail"></AbnormalDetail>
+            <AbnormalDetail :formId="formBoardId" @refreshData="refreshBoardData" @resetStatus="resetStatus" ref="AbnormalDetail"></AbnormalDetail>
         </el-card>
         <AbnormalForm ref="AbnormalForm" @reloadList="reloadList"></AbnormalForm>
     </div>
@@ -158,6 +158,14 @@ export default {
                 this.getList();
             } else {
                 this.$refs.AbnormalDetail.getFormDetails(params.id);
+            }
+        },
+        resetStatus(data) {
+            let $self = this;
+            for (let item of $self.tableData) {
+                if (data.id == item.id) {
+                    item.status = data.status;
+                }
             }
         },
         searchList() {
