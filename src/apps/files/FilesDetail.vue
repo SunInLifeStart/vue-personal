@@ -11,18 +11,19 @@
         </div>
         <br />
         <div class="formContent" style="padding: 15px 30px;overflow-y:auto">
-            
+
             <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
-             </div>
+            </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                    <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
-                </el-steps>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            </el-steps>
             <el-form :model="tableData" ref="formupdate" class="formList" style="height:100%">
-                 <h4 style="text-align: center;">文件印刷申请单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
-                 <el-row>
+                <h4 style="text-align: center;">文件印刷申请单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
+                <el-row>
                     <el-col :span="8">
                         <el-form-item label="申请人：">{{tableData.creatorName}}</el-form-item>
                     </el-col>
@@ -30,10 +31,10 @@
                         <el-form-item label="申请部门：">{{tableData.organName}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="申请日期：" >{{tableData.created | dateformat('YYYY-MM-DD')}}</el-form-item>
+                        <el-form-item label="申请日期：">{{tableData.created | dateformat('YYYY-MM-DD')}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
-                         <!-- | fomumonth -->
+                        <!-- | fomumonth -->
                         <el-form-item label="所属月份：">{{tableData.umonth}}</el-form-item>
                     </el-col>
                     <el-col :span="8">
@@ -45,35 +46,35 @@
                     <el-col :span="22">
                         <el-form-item label="文件印刷明细：">
                             <el-table :data="tableData.cardPrinting" border style="width: 750px; margin-top: 5px;">
-                                <el-table-column prop="fileName" label="文件姓名" >
+                                <el-table-column prop="fileName" label="文件姓名">
                                     <template slot-scope="scope">
                                         {{scope.row.fileName}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="printingPicture" label="印刷幅面" width="90px" >
+                                <el-table-column prop="printingPicture" label="印刷幅面" width="90px">
                                     <template slot-scope="scope">
                                         {{scope.row.printingPicture}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="printNumber" label="印刷数量（套）" width="70px" >
+                                <el-table-column prop="printNumber" label="印刷数量（套）" width="70px">
                                     <template slot-scope="scope">
                                         {{scope.row.printNumber}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="colourType" label="印刷色彩" width="70px" >
+                                <el-table-column prop="colourType" label="印刷色彩" width="70px">
                                     <template slot-scope="scope">
                                         {{scope.row.colourType | numFilter}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="demand" label="其他需求" >
+                                <el-table-column prop="demand" label="其他需求">
                                     <template slot-scope="scope">
                                         {{scope.row.demand}}
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="buyTime" label="附件" >
+                                <el-table-column prop="buyTime" label="附件">
                                     <template slot-scope="scope">
                                         <div v-for="item in scope.row.attachments" :key="item.id" class="opertes">
-                                           <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
+                                            <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                                         </div>
                                     </template>
                                 </el-table-column>
@@ -134,34 +135,34 @@
 </template>
 <script>
 import axios from 'axios';
-import moment from "moment";
-import Comment from "../Comment";
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 export default {
     mixins: [publicMethods],
-    name: "FilesDetail",
+    name: 'FilesDetail',
     data() {
         return {
             tableData: {},
             actions: [],
             crumbs: [],
-            formId: "",
-            textarea: "",
+            formId: '',
+            textarea: '',
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName: 'motor-documentprinting_documentprint',//固定资产流程 Files-form_fixedFiles  低值易耗办公品  Files-form_lowFiles 
+            appFlowName: 'motor-documentprinting_documentprint', //固定资产流程 Files-form_fixedFiles  低值易耗办公品  Files-form_lowFiles
             formName: 'documentPrinting',
             comments: [],
             dialogVisibleCrumb: false,
-            flowNodeUrl: "",
-             crumb: { items: [] },
+            flowNodeUrl: '',
+            crumb: { items: [] },
             tabledata: {
                 cardPrinting: []
             },
             pageType: 'show',
-            utypeone:'',
+            utypeone: '',
             actions_status: false,
             rejectTarget: '',
             rejectList: [],
@@ -179,59 +180,55 @@ export default {
         Comment,
         FilesOperate
     },
-    mounted() {
-    },
-     filters: {
-         numFilter: function(data) {
-             let xmlJson = {
-                "0":"白色",
-                "1":"彩色",
-               
+    mounted() {},
+    filters: {
+        numFilter: function(data) {
+            let xmlJson = {
+                '0': '白色',
+                '1': '彩色'
             };
             return xmlJson[data];
-       },
-       fomumonth: function(data) {
-             let xmlJson = {
-                "yiyue":"一月",
-                "eryue":"二月",
-                 "sanyue":"三月",
-                "siyue":"四月",
-                 "wuyue":"五月",
-                "liuyue":"六月",
-                 "qiyue":"七月",
-                "bayue":"八月",
-                 "jiuyue":"九月",
-                "shiyue":"十月",
-                 "shiyiyue":"十一月",
-                "shieryue":"十二月",
-               
+        },
+        fomumonth: function(data) {
+            let xmlJson = {
+                yiyue: '一月',
+                eryue: '二月',
+                sanyue: '三月',
+                siyue: '四月',
+                wuyue: '五月',
+                liuyue: '六月',
+                qiyue: '七月',
+                bayue: '八月',
+                jiuyue: '九月',
+                shiyue: '十月',
+                shiyiyue: '十一月',
+                shieryue: '十二月'
             };
             return xmlJson[data];
-       },
+        }
     },
     methods: {
         async print() {
-            this.$print(this.$refs.formupdate.$el,{printTitle:''});
+            this.$print(this.$refs.formupdate.$el, { printTitle: '' });
         },
         fomutype(row, column) {
             let state;
             //0已保存1审核中2驳回3撤销4完成
             switch (row.utype) {
                 case 'true':
-                    state = "是";
+                    state = '是';
                     break;
                 case 'false':
-                    state = "否";
+                    state = '否';
                     break;
             }
             return state;
         },
         getFormDetails(formId) {
-
             let $self = this;
             $self.formId = formId;
-            $self.url = "/api/v1/documentPrinting/detail/" + $self.formId;
-            console.log('DetailUrl', $self.url)
+            $self.url = '/api/v1/documentPrinting/detail/' + $self.formId;
+            console.log('DetailUrl', $self.url);
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
@@ -240,35 +237,40 @@ export default {
             // $self.$axios.get(url).then(res => {
             //     console.log(res);
             // });
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
-                if($self.tableData.utype=='true'){
-                        this.utypeone='是'
+                if ($self.tableData.utype == 'true') {
+                    this.utypeone = '是';
+                } else {
+                    this.utypeone = '否';
                 }
-                else{
-                    this.utypeone='否'
-                }
-               
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
+
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             } else {
-               // $self.msgTips("获取表单失败", "warning");
+                // $self.msgTips("获取表单失败", "warning");
             }
             // debugger;
-            let actions = await $self.getActions();
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
+
             let crumbs = await $self.getCrumbsone();
             let comments = await $self.getComments();
-            $self.actions = actions.data.types;
             $self.crumbs = { items: crumbs.data, index: -1 };
             $self.comments = comments.data;
             for (var i = 0; i < $self.crumbs.items.length; i++) {
                 if ($self.crumbs.items[i].active) {
                     $self.crumbs.index = i;
                 }
-               
             }
-            if($self.crumbs.index == -1) {
-                $self.crumbs.index=$self.crumbs.items.length
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
             }
         }
     }
@@ -276,113 +278,114 @@ export default {
 </script>
 <style>
 @media print {
-html, body {
-height: inherit;
-}
+    html,
+    body {
+        height: inherit;
+    }
 }
 </style>
 <style lang="scss" scoped>
 #FilesDetail {
-  .el-step__main {
-    margin-top: 10px;
-  }
-  .audit {
-    position: relative;
-    margin-bottom: 10px;
-    font-size: 14px;
-    box-shadow: none;
-    border: 0;
-    font-weight: bold;
-    .avatar {
-      position: absolute;
-      left: 5px;
-      top: 5px;
-      width: 36px;
-      height: 36px;
-      img {
-        width: 36px;
-        height: 36px;
-        border: 1px solid #dddddd;
-        border-radius: 50%;
-      }
+    .el-step__main {
+        margin-top: 10px;
     }
-    .info {
-      margin-left: 60px;
-      display: inline-block;
-      width: calc(100% - 60px);
-      .creator {
-        height: 32px;
-        line-height: 32px;
-        a {
-          color: #4a6495;
-          text-decoration-line: none;
+    .audit {
+        position: relative;
+        margin-bottom: 10px;
+        font-size: 14px;
+        box-shadow: none;
+        border: 0;
+        font-weight: bold;
+        .avatar {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 36px;
+            height: 36px;
+            img {
+                width: 36px;
+                height: 36px;
+                border: 1px solid #dddddd;
+                border-radius: 50%;
+            }
         }
-      }
-      .content {
-        min-height: 32px;
-      }
+        .info {
+            margin-left: 60px;
+            display: inline-block;
+            width: calc(100% - 60px);
+            .creator {
+                height: 32px;
+                line-height: 32px;
+                a {
+                    color: #4a6495;
+                    text-decoration-line: none;
+                }
+            }
+            .content {
+                min-height: 32px;
+            }
+        }
     }
-  }
-  .input-with-select {
-    width: 0px;
-    margin-right: 10px;
-    .el-input-group__prepend {
-      background-color: #409eff;
-      border-color: #409eff;
-      color: #ffffff;
-      border-radius: 4px;
+    .input-with-select {
+        width: 0px;
+        margin-right: 10px;
+        .el-input-group__prepend {
+            background-color: #409eff;
+            border-color: #409eff;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+        &.reject .el-input-group__prepend {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .el-input__inner {
+            width: 0;
+            padding: 0;
+            border: 0;
+        }
+        .el-input__suffix {
+            left: 8px;
+        }
     }
-    &.reject .el-input-group__prepend {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
+    #actionList {
+        padding-left: 20px;
+        background: #f4f4f4;
+        border-bottom: 1px solid #eaeaea;
+        height: 40px;
+        width: 100%;
+        z-index: 10;
+        .btnList {
+            line-height: 40px;
+            padding: 12px 10px;
+            cursor: pointer;
+        }
+        .btnList:hover {
+            background: #c7e0f4;
+        }
     }
-    .el-input__inner {
-      width: 0;
-      padding: 0;
-      border: 0;
+
+    .btnhide {
+        display: none;
     }
-    .el-input__suffix {
-      left: 8px;
+    .crumbList {
+        margin: 15px 0px;
     }
-  }
-  #actionList {
-      padding-left: 20px;
-    background: #f4f4f4;
-    border-bottom: 1px solid #eaeaea;
-    height: 40px;
-    width: 100%;
-    z-index: 10;
-    .btnList {
-      line-height: 40px;
-      padding: 12px 10px;
-      cursor: pointer;
-    }
-    .btnList:hover {
-      background: #c7e0f4;
-    }
-  }
- 
-  .btnhide {
-    display: none;
-  }
-  .crumbList {
-    margin: 15px 0px;
-  }
 }
 body .el-table th.gutter {
-  display: table-cell !important;
+    display: table-cell !important;
 }
 .fullScreen {
-  position: fixed;
-  top: 0px;
-  z-index: 10;
-  background: #fff;
-  left: 0px;
-  right: 0px;
+    position: fixed;
+    top: 0px;
+    z-index: 10;
+    background: #fff;
+    left: 0px;
+    right: 0px;
 }
 </style>
 <style scoped>
-.blockcolor >>> .el-input__inner{
-    color: black
+.blockcolor >>> .el-input__inner {
+    color: black;
 }
 </style>
