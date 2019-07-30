@@ -31,8 +31,7 @@
                         <el-form-item label="采购业务类别" style="text-align: left" prop="purchaseBusinessType">
                             <el-radio-group v-model="formData.purchaseBusinessType">
                                 <div v-for="(item,index) in radioOption" :key="index">
-                                    <el-radio   :key="item.value"
-                                                :label="item.value">
+                                    <el-radio :key="item.value" :label="item.value">
                                         {{item.label}}
                                     </el-radio>
                                 </div>
@@ -57,14 +56,8 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="采购主责部门" prop="purchaseDeptNames">
-                            <el-select
-                                    value-key="id"
-                                    v-model="formData.purchaseDeptNames">
-                                <el-option
-                                        v-for="item in organsOptions"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="{id: item.id, name: item.name}">
+                            <el-select value-key="id" v-model="formData.purchaseDeptNames">
+                                <el-option v-for="item in organsOptions" :key="item.id" :label="item.name" :value="{id: item.id, name: item.name}">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -73,12 +66,12 @@
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="采购预估金额(元)" prop="estimatedAmount">
-                            <format-input separator="," :precision="2" v-model="formData.estimatedAmount" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
+                            <format-input separator="," :precision="2" v-model="formData.estimatedAmount" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true" />
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="目标成本/预算金融(元)" prop="budgetAmount">
-                            <format-input separator="," :precision="2" v-model="formData.budgetAmount" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
+                            <format-input separator="," :precision="2" v-model="formData.budgetAmount" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true" />
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -95,7 +88,7 @@
                                     <th colspan="2">名称</th>
                                     <th colspan="2">企业性质</th>
                                     <th colspan="2">注册资金</th>
-                                    <th colspan="2">  </th>
+                                    <th colspan="2"> </th>
                                 </tr>
                                 <tr v-for="(item,index) in formData.provider" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
                                     <td colspan="2" style="width: 50px;">
@@ -108,7 +101,7 @@
                                         <el-input v-model="item.enterpriseNature" placeholder="请输入企业性质"></el-input>
                                     </td>
                                     <td colspan="2">
-                                        <format-input separator="," :precision="2" v-model="item.registeredFund" placeholder="请输入注册资金(元)" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true"/>
+                                        <format-input separator="," :precision="2" v-model="item.registeredFund" placeholder="请输入注册资金(元)" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true" />
                                     </td>
                                     <td colspan="2">
                                         <el-input v-model="item.inspectConclusion" placeholder="请输入考察结论"></el-input>
@@ -116,7 +109,8 @@
                                 </tr>
                                 <tr>
                                     <td colspan="10" style="height: 30px;">
-                                        <span @click="addItem('message')"><i class="el-icon-circle-plus-outline"></i> 插入</span>
+                                        <span @click="addItem('message')">
+                                            <i class="el-icon-circle-plus-outline"></i> 插入</span>
                                     </td>
                                 </tr>
                             </el-form-item>
@@ -169,30 +163,14 @@
                         <el-form-item label="评审/谈判名单" prop="negotiateLeaders">
                             <el-row>
                                 <el-col :span="8">
-                                    <el-select
-                                            value-key="id"
-                                            v-model="formData.negotiateLeaders">
-                                        <el-option
-                                                v-for="item in userOptions"
-                                                :key="item.id"
-                                                :label="item.name"
-                                                :value="{id: item.id, name: item.name}">
+                                    <el-select value-key="id" v-model="formData.negotiateLeaders">
+                                        <el-option v-for="item in userOptions" :key="item.id" :label="item.name" :value="{id: item.id, name: item.name}">
                                         </el-option>
                                     </el-select>
                                 </el-col>
                                 <el-col :span="16">
-                                    <el-select
-                                            v-model="formData.negotiatePersonnels"
-                                            multiple
-                                            filterable
-                                            allow-create
-                                            value-key="id"
-                                            default-first-option>
-                                        <el-option
-                                                v-for="item in userOptions"
-                                                :key="item.id"
-                                                :label="item.name"
-                                                :value="{id: item.id, name: item.name}">
+                                    <el-select v-model="formData.negotiatePersonnels" multiple filterable allow-create value-key="id" default-first-option>
+                                        <el-option v-for="item in userOptions" :key="item.id" :label="item.name" :value="{id: item.id, name: item.name}">
                                         </el-option>
                                     </el-select>
                                 </el-col>
@@ -262,23 +240,15 @@
                 </el-row>
             </el-form>
         </div>
-        <el-dialog
-                :title="dialogTitle"
-                :visible.sync="dialogSelectCode"
-                width="30%"  append-to-body
-                center>
+        <el-dialog :title="dialogTitle" :visible.sync="dialogSelectCode" width="30%" append-to-body center>
             <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
-                <el-option
-                        v-for="item in currentRoles"
-                        :key="item.code"
-                        :label="item.name"
-                        :value="item.code">
+                <el-option v-for="item in currentRoles" :key="item.code" :label="item.name" :value="item.code">
                 </el-option>
             </el-select>
             <span slot="footer" class="dialog-footer">
-                   <el-button type="default" @click="saveFormValidate()">保存</el-button>
-                   <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
-                </span>
+                <el-button type="default" @click="saveFormValidate()">保存</el-button>
+                <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+            </span>
         </el-dialog>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
@@ -287,388 +257,455 @@
     </el-dialog>
 </template>
 <script>
-    /* eslint-disable */
-    import axios from 'axios';
-    import moment from 'moment';
-    import formatInput from '@/components/formatInput'
-    import FilesOperate from '../FilesOperate';
-    import { application } from "../application.js";
-    import { publicMethods } from "../application.js";
-    export default {
-        mixins: [publicMethods],
-        name: 'ProgrammeForm',
-        data() {
-            return {
-                dialogTitle:"",
-                dialogSelectCode:false,
-                currentRoles:[],
-                branchCode:"",
-                dialogFormVisible: false,
-                rules: {
-                    projectName: [
-                        { required: true, message: '请输入项目名称', trigger: 'blur' }
-                    ],
-                    purchaseProjectName: [
-                        { required: true, message: '请输入采购项目名称', trigger: 'blur' }
-                    ],
-                    purchaseSignSketch: [
-                        { required: true, message: '请输入采购标的简述', trigger: 'blur' }
-                    ],
-                    purchaseBusinessType: [
-                        { required: true, message: '请输入采购业务类别', trigger: 'blur' }
-                    ],
-                    purchaseSchemeSign: [
-                        { required: true, message: '请输入采购方案是否是规定情形', trigger: 'blur' }
-                    ],
-                    // purchaseStartTime: [
-                    //     { type: 'date', required: true, message: '请输入采购发起时间', trigger: 'blur' }
-                    // ],
-                    purchaseDeptNames: [
-                        { required: true, message: '请输入采购主责部门', trigger: 'change' }
-                    ],
-                    estimatedAmount: [
-                        { required: true, message: '请输入采购预估金额'},
-                        { type: 'number', message: '金额必须为数字值'}
-                    ],
-                    budgetAmount: [
-                        { required: true, message: '请输入目标成本/预算金融'},
-                        // { type: 'number', message: '年龄必须为数字值'}
-                    ],
-                    purchaseWay: [
-                        { required: true, message: '请输入采购方式', trigger: 'blur' }
-                    ],
-                    executor: [
-                        { required: true, message: '请输入实施主体', trigger: 'blur' }
-                    ],
-                    negotiateAgent: [
-                        { required: true, message: '请输入评审/谈判机构', trigger: 'blur' }
-                    ],
-                    reviewWay: [
-                        { required: true, message: '请输入评审办法', trigger: 'blur' }
-                    ],
-                    attachmentsAnno: [
-                        { type: 'array', required: true, message: '请输入征集公告附件', trigger: 'blur' }
-                    ],
-                    attachmentsIns: [
-                        { type: 'array', required: true, message: '请输入考察报告附件', trigger: 'blur' }
-                    ],
-                    provider: [
-                        { type: 'array', required: true, message: '请输入供应商入围情况', trigger: 'blur' }
-                    ],
-                },
-                radioOption: [
+/* eslint-disable */
+import axios from 'axios';
+import moment from 'moment';
+import formatInput from '@/components/formatInput';
+import FilesOperate from '../FilesOperate';
+import { application } from '../application.js';
+import { publicMethods } from '../application.js';
+export default {
+    mixins: [publicMethods],
+    name: 'ProgrammeForm',
+    data() {
+        return {
+            dialogTitle: '',
+            dialogSelectCode: false,
+            currentRoles: [],
+            branchCode: '',
+            dialogFormVisible: false,
+            rules: {
+                projectName: [
                     {
-                        value: '1',
-                        label: '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)'
-                    },
-                    {
-                        value: '2',
-                        label: '开发建设类采购(竞价谈判方式：100万>工程类>=20万、50万>货物类>=10万、30万>服务类>=10万)'
-                    },
-                    {
-                        value: '3',
-                        label: '非开发建设类采购(招标方式：估算金额>=30万)'
-                    },
-                    {
-                        value: '4',
-                        label: '非开发建设类采购(竞价谈判方式：30万>估算金额>=10万)'
-                    },
-                    {
-                        value: '5',
-                        label: '行政非业务类采购(招标方式：估算金额>=30万)'
-                    },
-                    {
-                        value: '6',
-                        label: '行政非业务类采购(竞价谈判方式：30万>估算金额>=1万)'
+                        required: true,
+                        message: '请输入项目名称',
+                        trigger: 'blur'
                     }
                 ],
-                formData: this.resetForm(),
-                users: [],
-                userOptions: [],
-                organsOptions: [],
-                appFlowName: "motor-procscheme_procscheme",
-            };
-        },
-        components: {
-            FilesOperate,
-            formatInput
-        },
-        mounted() {
-            this.getUser()
-            this.getOrgans()
-        },
-        methods: {
-            changeNegotiateAgent() {
-                this.formData.negotiateAgentOther = ''
-            },
-            changePurchaseWay() {
-                this.formData.purchaseOther = ''
-            },
-            getOrgans() {
-                axios.get("/api/v1/users/list/organss").then(res => {
-                    this.organsOptions = res.data
-                });
-            },
-            async getUser() {
-                let user = await this.getUsers("/api/v1/users")
-                if (user) this.userOptions = user.data
-            },
-            async getTableCode() {
-                let user = await this.getCommonData("/synergy-common/serialNumber/getByTableCode", { code: 'motor-procscheme' })
-                if (user) this.formData.number = user.data.content.serialNumber
-                this.changePeople()
-            },
-            changePeople() {
-                this.$forceUpdate()
-            },
-            deleteItem(item, index, type) {
-                this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                    if (type == 'message') {
-                        if (item.id) {
-                            this.formData.provider.splice(index, 1);
-                        } else {
-                            this.formData.provider.splice(index, 1);
-                        }
+                purchaseProjectName: [
+                    {
+                        required: true,
+                        message: '请输入采购项目名称',
+                        trigger: 'blur'
                     }
-                });
+                ],
+                purchaseSignSketch: [
+                    {
+                        required: true,
+                        message: '请输入采购标的简述',
+                        trigger: 'blur'
+                    }
+                ],
+                purchaseBusinessType: [
+                    {
+                        required: true,
+                        message: '请输入采购业务类别',
+                        trigger: 'blur'
+                    }
+                ],
+                purchaseSchemeSign: [
+                    {
+                        required: true,
+                        message: '请输入采购方案是否是规定情形',
+                        trigger: 'blur'
+                    }
+                ],
+                // purchaseStartTime: [
+                //     { type: 'date', required: true, message: '请输入采购发起时间', trigger: 'blur' }
+                // ],
+                purchaseDeptNames: [
+                    {
+                        required: true,
+                        message: '请输入采购主责部门',
+                        trigger: 'change'
+                    }
+                ],
+                estimatedAmount: [
+                    { required: true, message: '请输入采购预估金额' },
+                    { type: 'number', message: '金额必须为数字值' }
+                ],
+                budgetAmount: [
+                    { required: true, message: '请输入目标成本/预算金融' }
+                    // { type: 'number', message: '年龄必须为数字值'}
+                ],
+                purchaseWay: [
+                    {
+                        required: true,
+                        message: '请输入采购方式',
+                        trigger: 'blur'
+                    }
+                ],
+                executor: [
+                    {
+                        required: true,
+                        message: '请输入实施主体',
+                        trigger: 'blur'
+                    }
+                ],
+                negotiateAgent: [
+                    {
+                        required: true,
+                        message: '请输入评审/谈判机构',
+                        trigger: 'blur'
+                    }
+                ],
+                reviewWay: [
+                    {
+                        required: true,
+                        message: '请输入评审办法',
+                        trigger: 'blur'
+                    }
+                ],
+                attachmentsAnno: [
+                    {
+                        type: 'array',
+                        required: true,
+                        message: '请输入征集公告附件',
+                        trigger: 'blur'
+                    }
+                ],
+                attachmentsIns: [
+                    {
+                        type: 'array',
+                        required: true,
+                        message: '请输入考察报告附件',
+                        trigger: 'blur'
+                    }
+                ],
+                provider: [
+                    {
+                        type: 'array',
+                        required: true,
+                        message: '请输入供应商入围情况',
+                        trigger: 'blur'
+                    }
+                ]
             },
-            addItem(type) {
+            radioOption: [
+                {
+                    value: '1',
+                    label:
+                        '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)'
+                },
+                {
+                    value: '2',
+                    label:
+                        '开发建设类采购(竞价谈判方式：100万>工程类>=20万、50万>货物类>=10万、30万>服务类>=10万)'
+                },
+                {
+                    value: '3',
+                    label: '非开发建设类采购(招标方式：估算金额>=30万)'
+                },
+                {
+                    value: '4',
+                    label: '非开发建设类采购(竞价谈判方式：30万>估算金额>=10万)'
+                },
+                {
+                    value: '5',
+                    label: '行政非业务类采购(招标方式：估算金额>=30万)'
+                },
+                {
+                    value: '6',
+                    label: '行政非业务类采购(竞价谈判方式：30万>估算金额>=1万)'
+                }
+            ],
+            formData: this.resetForm(),
+            users: [],
+            userOptions: [],
+            organsOptions: [],
+            appFlowName: 'motor-procscheme_procscheme'
+        };
+    },
+    components: {
+        FilesOperate,
+        formatInput
+    },
+    mounted() {
+        this.getUser();
+        this.getOrgans();
+    },
+    methods: {
+        changeNegotiateAgent() {
+            this.formData.negotiateAgentOther = '';
+        },
+        changePurchaseWay() {
+            this.formData.purchaseOther = '';
+        },
+        getOrgans() {
+            axios.get('/api/v1/users/list/organss').then(res => {
+                this.organsOptions = res.data;
+            });
+        },
+        async getUser() {
+            let user = await this.getUsers('/api/v1/users');
+            if (user) this.userOptions = user.data;
+        },
+        async getTableCode() {
+            let user = await this.getCommonData(
+                '/synergy-common/serialNumber/getByTableCode',
+                { code: 'motor-procscheme' }
+            );
+            if (user) this.formData.number = user.data.content.serialNumber;
+            this.changePeople();
+        },
+        changePeople() {
+            this.$forceUpdate();
+        },
+        deleteItem(item, index, type) {
+            this.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 if (type == 'message') {
-                    this.formData.provider.push({});
+                    if (item.id) {
+                        this.formData.provider.splice(index, 1);
+                    } else {
+                        this.formData.provider.splice(index, 1);
+                    }
                 }
-            },
-            getId(id, type) {
-                let self = this;
-                self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
-                    self.formData[type].forEach(function(value, index) {
-                        if (value.id == id) {
-                            // axios
-                            //     .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
-                            //     .then(res => {
-                            //         self.formData[type].splice(index, 1);
-                            //     });
-                            self.formData[type].splice(index, 1);
-                        }
-                    });
+            });
+        },
+        addItem(type) {
+            if (type == 'message') {
+                this.formData.provider.push({});
+            }
+        },
+        getId(id, type) {
+            let self = this;
+            self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
+                self.formData[type].forEach(function(value, index) {
+                    if (value.id == id) {
+                        // axios
+                        //     .get('/api/v1/board_meeting_forms/deleteAtt/' + id)
+                        //     .then(res => {
+                        //         self.formData[type].splice(index, 1);
+                        //     });
+                        self.formData[type].splice(index, 1);
+                    }
                 });
-            },
-            resetForm() {
-                let formData =  {
-                    projectName: '',
-                    purchaseProjectName: '',
-                    purchaseSignSketch: '',
-                    purchaseBusinessType: '1',
-                    purchaseSchemeSign: '1',
-                    purchaseStartTime: '',
-                    estimatedAmount: 0,
-                    budgetAmount: 0,
-                    provider: [{}],
-                    purchaseWay: '公开招标',
-                    purchaseOther: '',
-                    executor: '自主实施',
-                    negotiateAgent: '评标委员会',
-                    negotiateAgentOther: '',
-                    negotiateLeaders: {},
-                    negotiatePersonnels: [],
-                    reviewWay: '',
-                    otherCase: '',
-                    attachmentsAnno: [],
-                    attachmentsIns: [],
-                    attachmentsMan: [],
-                    attachmentsOth: []
-                }
-                return formData
-            },
-            getForm() {
-                const self = this;
-                if (this.formId != '') {
-                    axios
-                        .get('/api/v1/motor-procscheme/get/' + this.formId)
-                        .then(res => {
-                            self.formData = res.data.content;
-                        })
-                        .catch(function() {
-                            self.$message({
-                                message: '操作失败',
-                                type: 'error'
-                            });
+            });
+        },
+        resetForm() {
+            let formData = {
+                projectName: '',
+                purchaseProjectName: '',
+                purchaseSignSketch: '',
+                purchaseBusinessType: '1',
+                purchaseSchemeSign: '1',
+                purchaseStartTime: '',
+                estimatedAmount: 0,
+                budgetAmount: 0,
+                provider: [{}],
+                purchaseWay: '公开招标',
+                purchaseOther: '',
+                executor: '自主实施',
+                negotiateAgent: '评标委员会',
+                negotiateAgentOther: '',
+                negotiateLeaders: {},
+                negotiatePersonnels: [],
+                reviewWay: '',
+                otherCase: '',
+                attachmentsAnno: [],
+                attachmentsIns: [],
+                attachmentsMan: [],
+                attachmentsOth: []
+            };
+            return formData;
+        },
+        getForm() {
+            const self = this;
+            if (this.formId != '') {
+                axios
+                    .get('/api/v1/motor-procscheme/get/' + this.formId)
+                    .then(res => {
+                        self.formData = res.data.content;
+                    })
+                    .catch(function() {
+                        self.$message({
+                            message: '操作失败',
+                            type: 'error'
                         });
+                    });
+            }
+        },
+        setDataFromParent(data) {
+            this.formId = data.id;
+            this.getForm();
+            this.dialogFormVisible = true;
+            this.createForm_status = false;
+        },
+        createForm() {
+            this.formData = this.resetForm();
+            this.dialogFormVisible = this.createForm_status = true;
+            this.branchCode = '';
+        },
+        saveFormValidate(type) {
+            this.$refs['formupdate'].validate(valid => {
+                if (valid) {
+                    this.saveForm(type);
                 }
-            },
-            setDataFromParent(data) {
-                this.formId = data.id;
-                this.getForm()
-                this.dialogFormVisible = true;
-                this.createForm_status = false;
-            },
-            createForm() {
-                this.formData = this.resetForm();
-                this.dialogFormVisible = this.createForm_status = true;
-                this.branchCode = "";
-            },
-            saveFormValidate(type) {
-                this.$refs['formupdate'].validate(valid => {
-                    if (valid) {
-                        this.saveForm(type);
-                    }
-                });
-            },
-            async saveForm(params) {
-                const $self = this;
-                if($self.createForm_status){
-                    if(await $self.juderCode() == "returnDialog"){
-                        return false;
-                    }
+            });
+        },
+        async saveForm(params) {
+            const $self = this;
+            if ($self.createForm_status) {
+                if ((await $self.juderCode()) == 'returnDialog') {
+                    return false;
                 }
-                if ($self.formData.provider && $self.formData.provider.length > 0) {
-                    if ($self.formData.provider[0].providerName && $self.formData.provider[0].providerName.length > 0) {
-
+            }
+            if ($self.formData.provider && $self.formData.provider.length > 0) {
+                if (
+                    $self.formData.provider[0].providerName &&
+                    $self.formData.provider[0].providerName.length > 0
+                ) {
+                } else {
+                    $self.msgTips('请填写运营商入围情况名称', 'error');
+                    return false;
+                }
+            }
+            let response = await $self.saveFormData(
+                '/api/v1/motor-procscheme/save',
+                $self.formData
+            );
+            if (response) {
+                $self.formId = response.data.content.id;
+                $self.dialogFormVisible = $self.dialogSelectCode = false;
+                if (params) {
+                    $self.msgTips('提交成功', 'success');
+                    if (this.createForm_status) {
+                        $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {
-                        $self.msgTips("请填写运营商入围情况名称", "error");
-                        return false;
-                    }
-                }
-                let response = await $self.saveFormData(
-                    "/api/v1/motor-procscheme/save",
-                    $self.formData
-                );
-                if (response) {
-                    $self.formId = response.data.content.id;
-                    $self.dialogFormVisible = $self.dialogSelectCode =  false;
-                    if (params) {
-                        $self.msgTips("提交成功", "success");
-                        if (this.createForm_status) {
-                            $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
-                        } else {
-                            let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-                            actions.data.types = actions.data.types.filter(
-                                function(item) {
-                                    return item.action == "COMMIT";
-                                }
-                            );
-                            await $self.startSignal(actions.data.types[0]);
-                            $self.emitMessage();
-                        }
-                    } else {
-                        $self.msgTips("保存成功", "success");
-                        if (this.createForm_status) {
-                            $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
-                        } else {
-                            $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
-                        }
+                        let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
+                        actions.data.types = actions.data.types.filter(function(
+                            item
+                        ) {
+                            return item.action == 'COMMIT';
+                        });
+                        actions.data.types[0]['comment'] =
+                            actions.data.types[0].name;
+                        await $self.startSignal(
+                            actions.data.types[0],
+                            'fromeEdit'
+                        );
+                        $self.emitMessage();
                     }
                 } else {
-                    if (params) {
-                        if(!this.dialogSelectCode){
-                            $self.msgTips("提交失败", "warning");
-                        }
+                    $self.msgTips('保存成功', 'success');
+                    if (this.createForm_status) {
+                        $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
-                        if(!this.dialogSelectCode){
-                            $self.msgTips("保存失败", "warning");
-                        }
+                        $self.emitMessage(); //如果是 "编辑保存" 不启动工作流（不调用）
                     }
                 }
-            },
-            handleSuccessAnno(response, file) {
-                const self = this;
-                if (response.length > 0) {
-                    response.forEach(function(item) {
-                        self.formData.attachmentsAnno.push(item);
-                    });
+            } else {
+                if (params) {
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('提交失败', 'warning');
+                    }
+                } else {
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('保存失败', 'warning');
+                    }
                 }
-                this.$refs.uploadAnno.clearFiles();
-            },
-            handleSuccessMan(response, file) {
-                const self = this;
-                if (response.length > 0) {
-                    response.forEach(function(item) {
-                        self.formData.attachmentsMan.push(item);
-                    });
-                }
-                this.$refs.uploadMan.clearFiles();
-            },
-            handleSuccessIns(response, file) {
-                const self = this;
-                if (response.length > 0) {
-                    response.forEach(function(item) {
-                        self.formData.attachmentsIns.push(item);
-                    });
-                }
-                this.$refs.uploadIns.clearFiles();
-            },
-            handleSuccessOth(response, file) {
-                const self = this;
-                if (response.length > 0) {
-                    response.forEach(function(item) {
-                        self.formData.attachmentsOth.push(item);
-                    });
-                }
-                this.$refs.uploadOth.clearFiles();
-            },
-            submitUpload() {
-                this.$refs.upload.submit();
             }
+        },
+        handleSuccessAnno(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.formData.attachmentsAnno.push(item);
+                });
+            }
+            this.$refs.uploadAnno.clearFiles();
+        },
+        handleSuccessMan(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.formData.attachmentsMan.push(item);
+                });
+            }
+            this.$refs.uploadMan.clearFiles();
+        },
+        handleSuccessIns(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.formData.attachmentsIns.push(item);
+                });
+            }
+            this.$refs.uploadIns.clearFiles();
+        },
+        handleSuccessOth(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.formData.attachmentsOth.push(item);
+                });
+            }
+            this.$refs.uploadOth.clearFiles();
+        },
+        submitUpload() {
+            this.$refs.upload.submit();
         }
-    };
+    }
+};
 </script>
 <style lang="scss" scoped>
-    #ProgrammeForm {
-        .el-select {
-            width: 100%;
+#ProgrammeForm {
+    .el-select {
+        width: 100%;
+    }
+    .tableNoBorder {
+        width: 100%;
+        table-layout: fixed;
+        word-break: break-all;
+        border-collapse: collapse;
+    }
+    table td,
+    table th {
+        border: 1px solid #dbdfe6;
+        color: #000;
+        height: 35px;
+        vertical-align: middle;
+        .span1 {
+            color: red;
+            margin-right: 5px;
         }
-        .tableNoBorder {
-            width: 100%;
-            table-layout: fixed;
-            word-break: break-all;
-            border-collapse: collapse;
-        }
-        table td,
-        table th {
-            border: 1px solid #DBDFE6;
-            color: #000;
-            height: 35px;
-            vertical-align: middle;
-            .span1{
-                color:red;
-                margin-right: 5px;
-            }
-        }
-        table thead th {
-            background-color: #cce8eb;
-        }
-        table tr:nth-child(odd) {
-            background: #fff;
-        }
-        table tr:nth-child(even) {
-            background: #fff;
-        }
-        .uploadBtn {
-            margin-right: 10px;
-            width: 100px;
-            height: 130px;
-            text-align: center;
-            float: left;
-            border: 1px solid #c0c4cc;
-            border-radius: 2px;
-            cursor: pointer;
+    }
+    table thead th {
+        background-color: #cce8eb;
+    }
+    table tr:nth-child(odd) {
+        background: #fff;
+    }
+    table tr:nth-child(even) {
+        background: #fff;
+    }
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
 
-            .el-upload {
-                width: 100%;
-                height: 100%;
+        .el-upload {
+            width: 100%;
+            height: 100%;
 
-                i {
-                    font-size: 50px;
-                    margin-top: 35px;
-                }
+            i {
+                font-size: 50px;
+                margin-top: 35px;
             }
         }
     }
+}
 </style>
 <style scoped>
-    .tableNoBorder >>> .el-input--small .el-input__inner{
-        border: none;
-    }
-    #ProgrammeForm >>> .el-form-item__content{
-        width: calc(100% - 140px);
-    }
+.tableNoBorder >>> .el-input--small .el-input__inner {
+    border: none;
+}
+#ProgrammeForm >>> .el-form-item__content {
+    width: calc(100% - 140px);
+}
 </style>
