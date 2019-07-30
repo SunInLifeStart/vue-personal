@@ -12,6 +12,7 @@
         <div class="formContent">
             <br />
             <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
@@ -195,24 +196,22 @@ export default {
     // },
     methods: {
         async print() {
-            let $self = this
-            let url = "/api/v1/issuesReported/print"
+            let $self = this;
+            let url = '/api/v1/issuesReported/print';
             let jsonData = {
                 id: $self.tableData.id,
                 organId: $self.tableData.organId,
                 organName: $self.tableData.organName
-            }
-            $self.$axios
-                .post(url,jsonData)
-                .then(res => {
-                    if (process.env.NODE_ENV === 'production') {
-                        $self.openUrl = "http://124.205.31.66:2097/static/edit.html?removeBar=true&"
-                    } else {
-                        $self.openUrl = "http://static1.yxpe.com.cn/edit.html?removeBar=true&"
-                    }
-                    ntkoBrowser.openWindow(
-                        $self.openUrl + "url=" + res.data
-                    );
+            };
+            $self.$axios.post(url, jsonData).then(res => {
+                if (process.env.NODE_ENV === 'production') {
+                    $self.openUrl =
+                        'http://124.205.31.66:2097/static/edit.html?removeBar=true&';
+                } else {
+                    $self.openUrl =
+                        'http://static1.yxpe.com.cn/edit.html?removeBar=true&';
+                }
+                ntkoBrowser.openWindow($self.openUrl + 'url=' + res.data);
             });
             // document.getElementById('approval').style.display = 'table-row';
             // this.$print(this.$refs.formupdate.$el);
@@ -269,9 +268,9 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             let a = await $self.getDiscussionUser();
-            let actions = await $self.getActions();
             let comments = await $self.getComments();
             $self.comments = comments.data;
             if (response) {
@@ -288,24 +287,31 @@ export default {
                                 item.department = item.department.split(',');
                             }
                             if (item.department) {
-                                for (let i = 0; i < item.department.length; i++) {
+                                for (
+                                    let i = 0;
+                                    i < item.department.length;
+                                    i++
+                                ) {
                                     item.department[i] = parseInt(
                                         item.department[i]
                                     );
                                 }
                                 let flag =
                                     item.department[item.department.length - 1];
-                                $self.searchPersonOptions($self.dataOptions, flag);
+                                $self.searchPersonOptions(
+                                    $self.dataOptions,
+                                    flag
+                                );
                                 item.personOptions = this.person;
                             } else {
-                                item.department = []
-                                item.personOptions = []
+                                item.department = [];
+                                item.personOptions = [];
                             }
                             // 处理人员
                             if (item.people)
                                 for (let i = 0; i < item.people.length; i++) {
                                     item.people[i] = parseInt(item.people[i]);
-                            }
+                                }
                         }
                     );
                 }
@@ -315,47 +321,54 @@ export default {
                     status: $self.tableData.status
                 });
             }
-            for (let i = 0; i < actions.data.types.length; i++) {
-                if (
-                    actions.data.types[i].required &&
-                    JSON.stringify(actions.data.types[i].required).indexOf(
-                        'filterButton'
-                    ) > -1
-                ) {
-                    for (
-                        let j = 0;
-                        j < actions.data.types[i].required.length;
-                        j++
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                for (let i = 0; i < actions.data.types.length; i++) {
+                    if (
+                        actions.data.types[i].required &&
+                        JSON.stringify(actions.data.types[i].required).indexOf(
+                            'filterButton'
+                        ) > -1
                     ) {
-                        if (
-                            actions.data.types[i].required[j].indexOf(
-                                'filterButton'
-                            ) > -1
+                        for (
+                            let j = 0;
+                            j < actions.data.types[i].required.length;
+                            j++
                         ) {
                             if (
                                 actions.data.types[i].required[j].indexOf(
-                                    '=='
+                                    'filterButton'
                                 ) > -1
                             ) {
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split('==')[0].split(':')[1];
-                                let value = a.split('==')[1];
-                                if ($self.tableData[key_a] != value) {
-                                    actions.data.types[i].hideCurrent = true;
-                                }
-                            } else {
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split('!=')[0].split(':')[1];
-                                let value = a.split('!=')[1];
-                                if ($self.tableData[key_a] == value) {
-                                    actions.data.types[i].hideCurrent = true;
+                                if (
+                                    actions.data.types[i].required[j].indexOf(
+                                        '=='
+                                    ) > -1
+                                ) {
+                                    let a = actions.data.types[i].required[j];
+                                    let key_a = a.split('==')[0].split(':')[1];
+                                    let value = a.split('==')[1];
+                                    if ($self.tableData[key_a] != value) {
+                                        actions.data.types[
+                                            i
+                                        ].hideCurrent = true;
+                                    }
+                                } else {
+                                    let a = actions.data.types[i].required[j];
+                                    let key_a = a.split('!=')[0].split(':')[1];
+                                    let value = a.split('!=')[1];
+                                    if ($self.tableData[key_a] == value) {
+                                        actions.data.types[
+                                            i
+                                        ].hideCurrent = true;
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                $self.actions = actions.data.types;
             }
-            $self.actions = actions.data.types;
 
             let crumbs = await $self.getCrumbsone();
             $self.crumbs = { items: crumbs.data, index: -1 };

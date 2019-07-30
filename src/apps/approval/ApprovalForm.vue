@@ -404,7 +404,7 @@ export default {
                             // } else {
                             axios
                                 .get(
-                                    '/api/v1/singApproval/delete/' +
+                                    '/api/v1/singApproval/deleteChild/' +
                                         self.formData.id +
                                         '/' +
                                         oData.index,

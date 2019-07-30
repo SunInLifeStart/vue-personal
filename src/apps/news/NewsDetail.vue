@@ -13,6 +13,7 @@
         <br />
         <div class="formContent" style="padding: 15px 30px">
             <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
             </div>
             <br />
@@ -41,18 +42,18 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-<!--                <el-row>-->
-<!--                    <el-form-item label="发布到：">-->
-                        <!--
+                <!--                <el-row>-->
+                <!--                    <el-form-item label="发布到：">-->
+                <!--
                         <el-col :span="5">
                             <el-checkbox label="公司网站" v-model="tableData.toSite" disabled="disabled"></el-checkbox>
                         </el-col>
                         -->
-<!--                        <el-col :span="5">-->
-<!--                            <el-checkbox label="公司门户" v-model="tableData.toPortal" disabled="disabled"></el-checkbox>-->
-<!--                        </el-col>-->
-<!--                    </el-form-item>-->
-<!--                </el-row>-->
+                <!--                        <el-col :span="5">-->
+                <!--                            <el-checkbox label="公司门户" v-model="tableData.toPortal" disabled="disabled"></el-checkbox>-->
+                <!--                        </el-col>-->
+                <!--                    </el-form-item>-->
+                <!--                </el-row>-->
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件：">
@@ -152,6 +153,7 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data;
@@ -160,9 +162,11 @@ export default {
                     status: $self.tableData.status
                 });
             }
-            let actions = await $self.getActions();
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
             let comments = await $self.getComments();
-            $self.actions = actions.data.types;
             $self.comments = comments.data;
 
             let crumbs = await $self.getCrumbsone();

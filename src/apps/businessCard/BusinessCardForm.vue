@@ -10,25 +10,22 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="部门" prop="organName">
-                           <el-input v-model="formData.organName" placeholder="请输入部门" :disabled="true"></el-input>
+                            <el-input v-model="formData.organName" placeholder="请输入部门" :disabled="true"></el-input>
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="申请日期" prop="committed">
                             <!-- <el-date-picker v-model="formData.committed" type="date"></el-date-picker> -->
-                             <el-input v-model="formData.committed" placeholder="请输入申请时间" :disabled="true"></el-input>
-                         </el-form-item>
+                            <el-input v-model="formData.committed" placeholder="请输入申请时间" :disabled="true"></el-input>
+                        </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="资金计划所属月份" >
-                             <!-- @change="payeeChange" -->
+                        <el-form-item label="资金计划所属月份">
+                            <!-- @change="payeeChange" -->
                             <el-select v-model="formData.umonth" placeholder="请选择月份" clearable filterable>
-                                <el-option v-for="item in onOption"
-                                    :key="item.value"
-                                    :label="item.label"
-                                    :value="item.value">
+                                <el-option v-for="item in onOption" :key="item.value" :label="item.label" :value="item.value">
                                 </el-option>
                             </el-select>
                         </el-form-item>
@@ -36,35 +33,30 @@
                     <el-col :span="8">
                         <el-form-item label="是否属于年度预算内" label-width="140px" style="margin-left:40px">
                             <el-radio v-model="formData.utype" label='1'>是</el-radio>
-                             <el-radio v-model="formData.utype" label='0'>否</el-radio>
+                            <el-radio v-model="formData.utype" label='0'>否</el-radio>
                         </el-form-item>
                     </el-col>
-                 </el-row>
-                 <el-row>
+                </el-row>
+                <el-row>
                     <el-col :span="24">
                         <el-form-item label="名片印刷明细" label-width="100px" :rules="rulesform" :model="formData">
                             <div style="float: right;">
                                 <el-button type="primary" size="mini" icon="el-icon-plus" @click="addItem()" style="margin-right: 5px;"></el-button>
                                 <el-button type="primary" size="mini" icon="el-icon-delete" @click="deleteItem()"></el-button>
                             </div>
-                            <el-table :data="formData.cardPrinting" border style="width: 100%; margin-top: 5px;" 
-                            @selection-change="handleSelectionChange"
-                             :row-class-name="tableRowClassName"
-                            @row-click='show'>
-                               <el-table-column type="selection" width="40px"></el-table-column>
+                            <el-table :data="formData.cardPrinting" border style="width: 100%; margin-top: 5px;" @selection-change="handleSelectionChange" :row-class-name="tableRowClassName" @row-click='show'>
+                                <el-table-column type="selection" width="40px"></el-table-column>
                                 <el-table-column label="姓名" width="110">
                                     <template slot-scope="scope">
-                                         <el-select v-model="scope.row.uname" placeholder="请选择" @change="payeeChange" clearable filterable
-                                          allow-create default-first-option>
-                                                <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
-                                                </el-option>
-                                            </el-select>
+                                        <el-select v-model="scope.row.uname" placeholder="请选择" @change="payeeChange" clearable filterable allow-create default-first-option>
+                                            <el-option v-for="item in payeePeople" :key="item.id" :label="item.name" :value="item.name">
+                                            </el-option>
+                                        </el-select>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="organ" label="部门" width="135">
                                     <template slot-scope="scope">
-                                       <el-select v-model="scope.row.organ" placeholder="请选择" clearable filterable
-                                       allow-create default-first-option>
+                                        <el-select v-model="scope.row.organ" placeholder="请选择" clearable filterable allow-create default-first-option>
                                             <el-option v-for="item in payeeOrgan" :key="item.id" :label="item.name" :value="item.name">
                                             </el-option>
                                         </el-select>
@@ -82,18 +74,18 @@
                                 </el-table-column>
                                 <el-table-column prop="phone" label="电话">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.phone" ></el-input>
+                                        <el-input v-model="scope.row.phone"></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="telephone" label="座机号">
                                     <template slot-scope="scope">
-                                         <!-- @mousewheel.native.prevent -->
+                                        <!-- @mousewheel.native.prevent -->
                                         <el-input v-model="scope.row.telephone" type="number"></el-input>
                                     </template>
                                 </el-table-column>
-                                <el-table-column prop="mailbox" label="邮箱" >
+                                <el-table-column prop="mailbox" label="邮箱">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.mailbox" ></el-input>
+                                        <el-input v-model="scope.row.mailbox"></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="company" label="公司名称" width="120">
@@ -103,7 +95,7 @@
                                 </el-table-column>
                                 <el-table-column prop="mailingAddress" label="通讯地址" width="120">
                                     <template slot-scope="scope">
-                                        <el-input v-model="scope.row.mailingAddress" ></el-input>
+                                        <el-input v-model="scope.row.mailingAddress"></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="postcode" label="邮编">
@@ -111,18 +103,16 @@
                                         <el-input v-model="scope.row.postcode"></el-input>
                                     </template>
                                 </el-table-column>
-                                 <el-table-column prop="" label="附件">
+                                <el-table-column prop="" label="附件">
                                     <template slot-scope="scope">
-                                        <el-upload  name="files" class="upload-demo uploadBtn" style="width:70px;height:110px" ref="upload" action="/api/v1/files/upload" 
-                                        :on-success="handleSuccess"
-                                        :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                                        <el-upload name="files" class="upload-demo uploadBtn" style="width:70px;height:110px" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
                                         <div v-for="(item,index) in scope.row.attachments" :key="index" class="opertes">
-                                           <FilesOperate  :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,scope.row.attachments)"></FilesOperate>
+                                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="deleteAttachments(index,scope.row.attachments)"></FilesOperate>
                                         </div>
                                     </template>
-                                     
+
                                 </el-table-column>
                             </el-table>
                         </el-form-item>
@@ -130,8 +120,8 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="总印刷数量" >
-                            <el-input v-model="formData.totlenumbers" :disabled="true"  placeholder="印刷数量"></el-input>
+                        <el-form-item label="总印刷数量">
+                            <el-input v-model="formData.totlenumbers" :disabled="true" placeholder="印刷数量"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -148,23 +138,15 @@
                 </div>
             </el-dialog> -->
         </div>
-        <el-dialog
-                :title="dialogTitle"
-                :visible.sync="dialogSelectCode"
-                width="30%"  append-to-body
-                center>
-                  <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
-                    <el-option
-                    v-for="item in currentRoles"
-                    :key="item.code"
-                    :label="item.name"
-                    :value="item.code">
-                    </el-option>
-                </el-select>
-                <span slot="footer" class="dialog-footer">
-                   <el-button type="default" @click="saveFormValidate()">保存</el-button>
-                   <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
-                </span>
+        <el-dialog :title="dialogTitle" :visible.sync="dialogSelectCode" width="30%" append-to-body center>
+            <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
+                <el-option v-for="item in currentRoles" :key="item.code" :label="item.name" :value="item.code">
+                </el-option>
+            </el-select>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="default" @click="saveFormValidate()">保存</el-button>
+                <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+            </span>
         </el-dialog>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
@@ -175,10 +157,10 @@
 </template>
 <script>
 /* eslint-disable */
-import moment from "moment";
-import FilesOperate from "../FilesOperate";
-import { application } from "../application.js";
-import { publicMethods } from "../application.js";
+import moment from 'moment';
+import FilesOperate from '../FilesOperate';
+import { application } from '../application.js';
+import { publicMethods } from '../application.js';
 import axios from 'axios';
 import cookies from 'js-cookie';
 export default {
@@ -186,17 +168,17 @@ export default {
     name: 'BusinessCardForm',
     data() {
         return {
-            dialogTitle:"",
-            dialogSelectCode:false,
-            currentRoles:[],
-            branchCode:"",
-            appFlowName: "motor-cardprinting_cardprint",
+            dialogTitle: '',
+            dialogSelectCode: false,
+            currentRoles: [],
+            branchCode: '',
+            appFlowName: 'motor-cardprinting_cardprint',
             counts: 0,
             dialogFormVisible: false,
             purposeDialog: false,
             resonindex: -1,
             inputreason: '',
-            uploadImageType:'',
+            uploadImageType: '',
             formData: this.resetForm(),
             payeePeople: [],
             payeeOrgan: [],
@@ -248,69 +230,68 @@ export default {
                 {
                     value: '十二月',
                     label: '十二月'
-                },
+                }
             ],
             cookie_uname: '',
             cookie_oname: '',
             selectionItems: [],
-            rulesform:{
+            rulesform: {
                 name: [
                     {
                         required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入姓名"
+                        trigger: 'blur', //何事件触发
+                        message: '请输入姓名'
                     }
-                ],
+                ]
             },
             rules: {
                 creatorName: [
                     {
                         required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入姓名"
+                        trigger: 'blur', //何事件触发
+                        message: '请输入姓名'
                     }
                 ],
                 organName: [
                     {
                         required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入部门"
+                        trigger: 'blur', //何事件触发
+                        message: '请输入部门'
                     }
                 ],
                 committed: [
                     {
                         required: true, //是否必填
-                        trigger: "blur", //何事件触发
-                        message: "请输入申请日期"
+                        trigger: 'blur', //何事件触发
+                        message: '请输入申请日期'
                     }
-                ],
-               
+                ]
             }
         };
     },
     components: {
         FilesOperate
-    }, 
-    watch: {
-      'formData.lowercase'(val) {
-          this.formData.totlenumbers = val ? this.totleCurrency(val) : "";
-      }
     },
-     mounted() {
+    watch: {
+        'formData.lowercase'(val) {
+            this.formData.totlenumbers = val ? this.totleCurrency(val) : '';
+        }
+    },
+    mounted() {
         this.getUsers();
     },
     methods: {
-       // 总数量
-        totleCurrency(totle){
+        // 总数量
+        totleCurrency(totle) {
             // debugger
-            let totalCount=0;
-             for(let i=0;i<this.formData.cardPrinting.length;i++){
-                    if(this.formData.cardPrinting[i].quantity){
-                        totalCount += this.formData.cardPrinting[i].quantity;
-                    }
+            let totalCount = 0;
+            for (let i = 0; i < this.formData.cardPrinting.length; i++) {
+                if (this.formData.cardPrinting[i].quantity) {
+                    totalCount += this.formData.cardPrinting[i].quantity;
                 }
-                this.formData.totlenumbers=totalCount
-                return totalCount
+            }
+            this.formData.totlenumbers = totalCount;
+            return totalCount;
         },
         //选择资产类型
         typeChange(val) {
@@ -322,12 +303,12 @@ export default {
                 this.formData.supplyCode = 'low';
             }
         },
-        tableRowClassName ({row, rowIndex}) {
+        tableRowClassName({ row, rowIndex }) {
             //把每一行的索引放进row
             row.index = rowIndex;
         },
-        show(row, event, column){
-            this.uploadImageType=row.index
+        show(row, event, column) {
+            this.uploadImageType = row.index;
         },
         setDataFromParent(data) {
             this.formData = data;
@@ -338,7 +319,7 @@ export default {
         createForm() {
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
-            this.branchCode = "";
+            this.branchCode = '';
         },
         resetForm() {
             let formData = {
@@ -346,61 +327,64 @@ export default {
                     {
                         id: '',
                         count: 0,
-                        uname: this.$store.getters.LoginData.uname || '',//姓名
+                        uname: this.$store.getters.LoginData.uname || '', //姓名
                         organ: this.$store.getters.LoginData.oname || '',
-                        duty:'',//职务
-                        quantity:null,//数量
+                        duty: '', //职务
+                        quantity: null, //数量
                         phone: '',
-                        telephone:'',
+                        telephone: '',
                         mailbox: '',
-                        company: '',//公司
-                        mailingAddress:'',//通讯地址
-                        postcode:'',//邮编
-                        attachments: [],
+                        company: '', //公司
+                        mailingAddress: '', //通讯地址
+                        postcode: '', //邮编
+                        attachments: []
                     }
                 ],
-                totlenumbers:"",// 流水号
-                processId:'',
-                id: "",
-                status:'',
-                umonth:'',//月份
-                utype:'1',
-                
+                totlenumbers: '', // 流水号
+                processId: '',
+                id: '',
+                status: '',
+                umonth: '', //月份
+                utype: '1',
+
                 creatorName: this.$store.getters.LoginData.uname || '', //申请人
                 organName: this.$store.getters.LoginData.oname || '',
                 creatorId: this.$store.getters.LoginData.uid || '',
-                organId:this.$store.getters.LoginData.oid || '',
+                organId: this.$store.getters.LoginData.oid || '',
                 committed: moment(new Date()).format('YYYY-MM-DD HH:mm:ss'),
                 proposer: cookies.get('uname'),
                 // organName: cookies.get('oname'),
-                supplyCode: '',//资产类型-流程判断
+                supplyCode: '' //资产类型-流程判断
             };
             return formData;
         },
-         saveFormValidate(type) {
-           let compare = true;
+        saveFormValidate(type) {
+            let compare = true;
             for (let data of this.formData.cardPrinting) {
                 if (
                     data.uname == '' ||
                     data.postcode == '' ||
                     data.company == '' ||
-                    data.quantity == '' || 
-                    data.mailingAddress == ''||
+                    data.quantity == '' ||
+                    data.mailingAddress == '' ||
                     data.telephone == '' ||
                     data.phone == '' ||
-                    data.duty == '' || 
-                    data.organ == ''|| 
+                    data.duty == '' ||
+                    data.organ == '' ||
                     data.mailbox == ''
                 ) {
                     compare = false;
                 }
             }
-            this.$refs["formupdate"].validate(valid => {
+            this.$refs['formupdate'].validate(valid => {
                 if (valid) {
                     if (compare) {
                         this.saveForm(type);
                     } else {
-                        this.msgTips('名片印刷明细不完整，请填写完整！', 'warning');
+                        this.msgTips(
+                            '名片印刷明细不完整，请填写完整！',
+                            'warning'
+                        );
                     }
                 }
             });
@@ -408,36 +392,43 @@ export default {
         // 提交保存
         async saveForm(params) {
             const $self = this;
-            if($self.createForm_status){
-                if(await $self.juderCode() == "returnDialog"){
+            if ($self.createForm_status) {
+                if ((await $self.juderCode()) == 'returnDialog') {
                     return false;
                 }
             }
-            let response = await $self.saveFormData("/api/v1/cardPrinting/save", $self.formData);
-            this.totleCurrency()
+            let response = await $self.saveFormData(
+                '/api/v1/cardPrinting/save',
+                $self.formData
+            );
+            this.totleCurrency();
             if (response) {
                 $self.formId = response.data.content.id;
-                $self.dialogFormVisible = $self.dialogSelectCode =  false;
+                $self.dialogFormVisible = $self.dialogSelectCode = false;
                 // $self.dialogFormVisible = false;
                 if (params) {
-                    $self.msgTips("提交成功", "success");
-                    console.log(this.createForm_status)
+                    $self.msgTips('提交成功', 'success');
+                    console.log(this.createForm_status);
                     if (this.createForm_status) {
                         $self.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {
                         let actions = await $self.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-                        console.log('actions', actions.data)
-                        actions.data.types = actions.data.types.filter(
-                            function (item) {
-                                return item.action == "COMMIT";
-                            }
+                        console.log('actions', actions.data);
+                        actions.data.types = actions.data.types.filter(function(
+                            item
+                        ) {
+                            return item.action == 'COMMIT';
+                        });
+                        actions.data.types[0]['comment'] =
+                            actions.data.types[0].name;
+                        await $self.startSignal(
+                            actions.data.types[0],
+                            'fromeEdit'
                         );
-                        actions.data.types[0]["comment"] =  actions.data.types[0].name;
-                        await $self.startSignal(actions.data.types[0],"fromeEdit");
                         $self.emitMessage();
                     }
                 } else {
-                    $self.msgTips("保存成功", "success");
+                    $self.msgTips('保存成功', 'success');
                     if (this.createForm_status) {
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
@@ -445,26 +436,24 @@ export default {
                     }
                 }
             } else {
-                 if (params) {
-                     if(!this.dialogSelectCode){
-                           $self.msgTips("提交失败", "warning");
-                   }
+                if (params) {
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('提交失败', 'warning');
+                    }
                 } else {
-                   if(!this.dialogSelectCode){
-                          $self.msgTips("保存失败", "warning");
-                   }
-                   
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('保存失败', 'warning');
+                    }
                 }
             }
         },
         handleSuccess(response, file) {
-           
-             const self = this;
-            const aaa=self.uploadImageType
-            const bbb=self.formData.cardPrinting[aaa]
+            const self = this;
+            const aaa = self.uploadImageType;
+            const bbb = self.formData.cardPrinting[aaa];
             if (response.length > 0) {
-                response.forEach(function (item,index) {
-                   self.formData.cardPrinting[aaa].attachments.push(item);
+                response.forEach(function(item, index) {
+                    self.formData.cardPrinting[aaa].attachments.push(item);
                 });
             }
             this.$refs.upload.clearFiles();
@@ -473,8 +462,8 @@ export default {
         submitUpload() {
             this.$refs.upload.submit();
         },
-        handlePreview() { },
-        handleRemove() { },
+        handlePreview() {},
+        handleRemove() {},
         //获取申请人列表
         getUsers() {
             axios.get('/api/v1/users').then(res => {
@@ -483,16 +472,18 @@ export default {
         },
         submitReason() {
             // this.purposeDialog = false;
-            this.formData.cardPrinting[this.resonindex].company = this.inputreason;
+            this.formData.cardPrinting[
+                this.resonindex
+            ].company = this.inputreason;
         },
-        
+
         //选择的人变化
         payeeChange(val) {
             // debugger
             // this.formData.organName = '';
-            this.formData.cardPrinting.forEach(item=>{
-                item.organ=''
-            })
+            this.formData.cardPrinting.forEach(item => {
+                item.organ = '';
+            });
             for (let data of this.payeePeople) {
                 if (data.name == val) {
                     this.payeeOrgan = data.organs;
@@ -500,25 +491,25 @@ export default {
             }
             if (this.payeeOrgan.length == 1) {
                 // this.formData.organName = this.payeeOrgan[0].name;
-                this.formData.cardPrinting.forEach(item=>{
-                item.organ=this.payeeOrgan[0].name;
-            })
+                this.formData.cardPrinting.forEach(item => {
+                    item.organ = this.payeeOrgan[0].name;
+                });
             }
         },
-        
+
         addItem() {
             this.formData.cardPrinting.push({
                 id: '',
-                uname: this.$store.getters.LoginData.uname || '',//姓名
+                uname: this.$store.getters.LoginData.uname || '', //姓名
                 organ: this.$store.getters.LoginData.oname || '',
-                duty:'',//职务
-                quantity:'',//数量
+                duty: '', //职务
+                quantity: '', //数量
                 phone: '',
-                telephone:'',
+                telephone: '',
                 mailbox: '',
-                mailingAddress:'',
+                mailingAddress: '',
                 company: '',
-                postcode:'',
+                postcode: '',
                 attachments: [],
                 count: ++this.counts
             });
@@ -530,7 +521,7 @@ export default {
                 self
                     .$confirm('是否删除?', '提示', { type: 'warning' })
                     .then(() => {
-                        self.selectionItems.forEach(function (oData) {
+                        self.selectionItems.forEach(function(oData) {
                             // debugger
                             // if (oData.id == '') {
                             //     self.formData.cardPrinting.forEach(function (
@@ -542,41 +533,42 @@ export default {
                             //         }
                             //     });
                             // } else {
-                                axios
-                                    .get(
-                                        '/api/v1/cardPrinting/delete/' + self.formData.id+'/'+oData.index,
-                                        '',
-                                        {
-                                            headers: {
-                                                'Content-type':
-                                                    'application/json'
-                                            }
+                            axios
+                                .get(
+                                    '/api/v1/cardPrinting/deleteChild/' +
+                                        self.formData.id +
+                                        '/' +
+                                        oData.index,
+                                    '',
+                                    {
+                                        headers: {
+                                            'Content-type': 'application/json'
                                         }
-                                    )
-                                    .then(res => {
-                                        self.formData.cardPrinting.forEach(function (
-                                            item,
-                                            index
-                                        ) {
-                                            if (item.index == oData.index) {
-                                                self.formData.cardPrinting.splice(
-                                                    index,
-                                                    1
-                                                );
-                                                 self.$message({
-                                                    message: '删除成功',
-                                                    type: 'success'
-                                                });
-                                            }
-                                        });
-                                       
-                                    })
-                                    .catch(function () {
-                                        self.$message({
-                                            message: '操作失败',
-                                            type: 'error'
-                                        });
+                                    }
+                                )
+                                .then(res => {
+                                    self.formData.cardPrinting.forEach(function(
+                                        item,
+                                        index
+                                    ) {
+                                        if (item.index == oData.index) {
+                                            self.formData.cardPrinting.splice(
+                                                index,
+                                                1
+                                            );
+                                            self.$message({
+                                                message: '删除成功',
+                                                type: 'success'
+                                            });
+                                        }
                                     });
+                                })
+                                .catch(function() {
+                                    self.$message({
+                                        message: '操作失败',
+                                        type: 'error'
+                                    });
+                                });
                             // }
                         });
                     });
@@ -604,7 +596,7 @@ export default {
                                 }
                             )
                             .then(res => {
-                                self.formData.attachments.forEach(function (
+                                self.formData.attachments.forEach(function(
                                     item,
                                     index
                                 ) {
@@ -616,7 +608,7 @@ export default {
                                     }
                                 });
                             })
-                            .catch(function () {
+                            .catch(function() {
                                 self.$message({
                                     message: '操作失败',
                                     type: 'error'
@@ -625,52 +617,52 @@ export default {
                     }
                 );
             }
-        },
+        }
     },
     watch: {
         'formData.lowercase'(val) {
-            this.formData.upper = val ? this.convertCurrency(val) : "";
+            this.formData.upper = val ? this.convertCurrency(val) : '';
         }
     }
 };
 </script>
 <style scoped>
-#BusinessCardForm  >>> .el-select{
-        width: calc(100% - 0px);
-    }
-     #BusinessCardForm >>> .el-form-item__content{
-        width: calc(100% - 80px);
-    }
-     #BusinessCardForm >>> .el-checkbox{
-         width: 30px;
-    }
+#BusinessCardForm >>> .el-select {
+    width: calc(100% - 0px);
+}
+#BusinessCardForm >>> .el-form-item__content {
+    width: calc(100% - 80px);
+}
+#BusinessCardForm >>> .el-checkbox {
+    width: 30px;
+}
 </style>
 
 <style lang="scss" scoped>
 #BusinessCardForm {
-  .uploadBtn {
-    margin-right: 10px;
-    width: 100px;
-    height: 130px;
-    text-align: center;
-    float: left;
-    border: 1px solid #c0c4cc;
-    border-radius: 2px;
-    cursor: pointer;
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
 
-    .el-upload {
-      width: 100%;
-      height: 100%;
+        .el-upload {
+            width: 100%;
+            height: 100%;
 
-      i {
-        font-size: 50px;
-        margin-top: 35px;
-      }
+            i {
+                font-size: 50px;
+                margin-top: 35px;
+            }
+        }
     }
-  }
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
-    -webkit-appearance: none;
-  }
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+    }
 }
 </style>

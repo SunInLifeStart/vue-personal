@@ -1,5 +1,5 @@
 <template>
-    <div id="PublishDetail" >
+    <div id="PublishDetail">
         <div id="actionList" :class="{btnhide:actions.length == 0}">
             <el-row>
                 <div>
@@ -7,15 +7,18 @@
                         {{action.name}}
                     </span>
                 </div>
-                
+
             </el-row>
         </div>
         <br />
         <div class="formContent" style="padding: 15px 30px">
-            <div><el-button type="primary" v-if="tableData.status != '04'"  @click="getFlowNode">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
+                <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
+            </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="formList">
                 <el-row>
@@ -34,21 +37,21 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="正文：">
-                                <FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true}"></FilesOperate>
+                            <FilesOperate v-if="tableData.text.name" :item="tableData.text" :options="{preview:true,download:true}"></FilesOperate>
                         </el-form-item>
                     </el-col>
                 </el-row>
                 <!--<el-row>-->
-                    <!--<el-col :span="24">-->
-                        <!--<el-form-item label="正文：" >-->
-                            <!--&lt;!&ndash;-->
-                            <!--<el-input v-model="tableData.content" type="textarea" disabled :autosize="{minRows: 8}">-->
-                            <!--</el-input>-->
-                            <!--&ndash;&gt;-->
-                            <!--<FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true}"></FilesOperate>-->
-                            <!--&lt;!&ndash; {{tableData.content}} &ndash;&gt;-->
-                        <!--</el-form-item>-->
-                    <!--</el-col>-->
+                <!--<el-col :span="24">-->
+                <!--<el-form-item label="正文：" >-->
+                <!--&lt;!&ndash;-->
+                <!--<el-input v-model="tableData.content" type="textarea" disabled :autosize="{minRows: 8}">-->
+                <!--</el-input>-->
+                <!--&ndash;&gt;-->
+                <!--<FilesOperate v-if="tableData.text.name"  :item="tableData.text" :options="{preview:true,download:true}"></FilesOperate>-->
+                <!--&lt;!&ndash; {{tableData.content}} &ndash;&gt;-->
+                <!--</el-form-item>-->
+                <!--</el-col>-->
                 <!--</el-row>-->
                 <el-row>
                     <el-col :span="24">
@@ -79,7 +82,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -102,33 +105,33 @@
     </div>
 </template>
 <script>
-import moment from "moment";
-import Comment from "../Comment";
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 export default {
-    mixins:[publicMethods],
-    name: "PublishDetail",
+    mixins: [publicMethods],
+    name: 'PublishDetail',
     data() {
         return {
             tableData: {
-                text: {name:""}
+                text: { name: '' }
             },
             actions: [],
-            crumbs:[],
-            formId: "",
-            textarea: "",
+            crumbs: [],
+            formId: '',
+            textarea: '',
             dialogVisible: false,
             users: [],
             actionsDialogArr: [],
-            appFlowName:'publish-form_publish',
-            formName:'publish_forms',
-            comments:[],
-            dialogVisibleCrumb:false,
-            flowNodeUrl:"",
-            typeJuder:"",
-            isAnnualPlanone:""
-                    };
+            appFlowName: 'publish-form_publish',
+            formName: 'publish_forms',
+            comments: [],
+            dialogVisibleCrumb: false,
+            flowNodeUrl: '',
+            typeJuder: '',
+            isAnnualPlanone: ''
+        };
     },
     components: {
         Comment,
@@ -138,45 +141,54 @@ export default {
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/"+$self.formName+"/" + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
-                if(response.data.text && JSON.parse(response.data.text).name){
+                if (response.data.text && JSON.parse(response.data.text).name) {
                     response.data.text = JSON.parse(response.data.text);
                 }
                 $self.tableData = response.data;
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
-
-            }
-            let actions = await $self.getActions();
-            let comments =  await $self.getComments();
-            if(actions.data.types.length == 0 && $self.tableData.status == "04"){
-                actions.data.types.push({
-                    name:"发布到公司门户"
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
                 });
             }
-            $self.actions = actions.data.types;
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                if (
+                    actions.data.types.length == 0 &&
+                    $self.tableData.status == '04'
+                ) {
+                    actions.data.types.push({
+                        name: '发布到公司门户'
+                    });
+                }
+                $self.actions = actions.data.types;
+            }
+
+            let comments = await $self.getComments();
             $self.comments = comments.data;
             let crumbs = await $self.getCrumbsone();
-            $self.crumbs =  {items: crumbs.data, index: -1};
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;    
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
                 }
             }
-            if($self.crumbs.index == -1) {
-                $self.crumbs.index=$self.crumbs.items.length
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
             }
         },
-        pushItToDoor(){
+        pushItToDoor() {
             const self = this;
             let arrurl = [];
-            if(this.tableData.text && typeof(this.tableData.text) == "object"){
-                this.tableData.text.type = "doc";
+            if (this.tableData.text && typeof this.tableData.text == 'object') {
+                this.tableData.text.type = 'doc';
                 arrurl.push(this.tableData.text);
             }
             for (let data of this.tableData.attachments) {
@@ -204,16 +216,15 @@ export default {
                         ? this.tableData.organName
                         : null,
                 abstract: null,
-                tags: this.tableData.columns == '1'? '规章制度':'通知公告',
+                tags: this.tableData.columns == '1' ? '规章制度' : '通知公告',
                 url: arrurl,
                 img: [],
                 about: null
             };
-           self.$axios
-                .post('/api/v1/portal/article', params, {
-                })
+            self.$axios
+                .post('/api/v1/portal/article', params, {})
                 .then(res => {
-                    self.msgTips("发布成功", "success");
+                    self.msgTips('发布成功', 'success');
                 })
                 .catch(function() {
                     self.$message({
@@ -221,13 +232,12 @@ export default {
                         type: 'error'
                     });
                 });
-        },
+        }
     }
 };
 </script>
 <style lang="scss" scoped>
 #PublishDetail {
-   
     .el-step__main {
         margin-top: 10px;
     }
@@ -291,7 +301,7 @@ export default {
         }
     }
     #actionList {
-         padding-left: 20px;
+        padding-left: 20px;
         background: #f4f4f4;
         border-bottom: 1px solid #eaeaea;
         height: 40px;

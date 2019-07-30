@@ -13,6 +13,7 @@
         <div class="formContent" style="padding: 15px 30px;overflow-y:auto">
             <!--v-show="this.tableData.status && this.tableData.status == '04'"-->
             <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
@@ -67,7 +68,7 @@
                     </el-col>
                 </el-row>
                 <el-row>
-                    <table  class="tablePrint" style="width: 99%">
+                    <table class="tablePrint" style="width: 99%">
                         <tr>
                             <th style="width: 30%">用印文件名称</th>
                             <th style="width: 40%">使用事由</th>
@@ -79,11 +80,11 @@
                             <td>{{row.useReason}}</td>
                             <td>{{row.fileNum}}</td>
                             <td>
-<!--                                <el-form-item label="" v-if="scope.row.attachments && scope.row.attachments.length > 0" disabled>-->
+                                <!--                                <el-form-item label="" v-if="scope.row.attachments && scope.row.attachments.length > 0" disabled>-->
                                 <div v-for="item in row.attachments" :key="item.id">
                                     <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                                 </div>
-<!--                                </el-form-item>-->
+                                <!--                                </el-form-item>-->
                             </td>
                         </tr>
                     </table>
@@ -195,6 +196,7 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
@@ -210,13 +212,16 @@ export default {
                     status: $self.tableData.status
                 });
             } else {
-              //  $self.msgTips('获取表单失败', 'warning');
+                //  $self.msgTips('获取表单失败', 'warning');
             }
             // debugger;
-            let actions = await $self.getActions();
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
+
             let crumbs = await $self.getCrumbsone();
             let comments = await $self.getComments();
-            $self.actions = actions.data.types;
             $self.comments = comments.data;
             $self.crumbs = { items: crumbs.data, index: -1 };
             for (var i = 0; i < $self.crumbs.items.length; i++) {

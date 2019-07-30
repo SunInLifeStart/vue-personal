@@ -11,10 +11,13 @@
         </div>
         <br />
         <div class="formContent">
-            <div><el-button type="primary"  @click="getFlowNode"  v-if="tableData.status != '04'">查看流程</el-button></div>
+            <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
+                <el-button type="primary" @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button>
+            </div>
             <br />
-             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+            <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
             <el-form :model='tableData' class="formList">
                 <el-row>
@@ -34,20 +37,10 @@
                     </el-col>
                     <el-col :span="8">
                         <el-form-item label="被督办部门负责人：">
-                            <el-select
-                                    disabled
-                                    v-model="tableData.inspector"
-                                    filterable
-                                    placeholder="请选择"
-                                    style="width:60%"
-                            >
-                                <el-option
-                                        v-for="item in inspectors"
-                                        :key="item.id"
-                                        :label="item.name"
-                                        :value="item.id"
-                                ></el-option>
-                            </el-select></el-form-item>
+                            <el-select disabled v-model="tableData.inspector" filterable placeholder="请选择" style="width:60%">
+                                <el-option v-for="item in inspectors" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
                     </el-col>
                 </el-row>
                 <el-row>
@@ -70,11 +63,11 @@
                         </el-form-item>
                     </el-col>
                     <!--<el-col :span="24">-->
-                        <!--<el-form-item label="反馈内容：" v-if="tableData.attachments && tableData.attachments.length > 0">-->
-                            <!--<div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">-->
-                                <!--<FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>-->
-                            <!--</div>-->
-                        <!--</el-form-item>-->
+                    <!--<el-form-item label="反馈内容：" v-if="tableData.attachments && tableData.attachments.length > 0">-->
+                    <!--<div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">-->
+                    <!--<FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>-->
+                    <!--</div>-->
+                    <!--</el-form-item>-->
                     <!--</el-col>-->
                 </el-row>
                 <el-row v-if="comments && comments.length > 0">
@@ -97,7 +90,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -121,13 +114,13 @@
 </template>
 <script>
 import axios from 'axios';
-import moment from "moment";
-import Comment from "../Comment";
-import FilesOperate from "../FilesOperate";
-import { publicMethods } from "../application.js";
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 export default {
-    mixins:[publicMethods],
-    name: "InspectDetail",
+    mixins: [publicMethods],
+    name: 'InspectDetail',
     data() {
         return {
             attType: '',
@@ -135,7 +128,7 @@ export default {
             budgetCheck: [],
             auditSituationChecked: '',
             created: '',
-            crumbs:[],
+            crumbs: [],
             actions_status: false,
             crumb: { items: [] },
             isEdit: false,
@@ -154,16 +147,16 @@ export default {
             nodename: '',
             tableData: {},
             actions: [],
-            formId: "",
-            textarea: "",
+            formId: '',
+            textarea: '',
             inspectors: [],
             users: [],
             actionsDialogArr: [],
-            appFlowName:'inspect-form_inspect',
-            formName:'inspect_forms',
-            comments:[],
-            dialogVisibleCrumb:false,
-            flowNodeUrl:"",
+            appFlowName: 'inspect-form_inspect',
+            formName: 'inspect_forms',
+            comments: [],
+            dialogVisibleCrumb: false,
+            flowNodeUrl: ''
         };
     },
     components: {
@@ -185,39 +178,45 @@ export default {
                 })
                 .catch(function() {
                     self.$message({
-                        message: "操作失败",
-                        type: "error"
+                        message: '操作失败',
+                        type: 'error'
                     });
                 });
         },
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
-            $self.url= "/api/v1/"+$self.formName+"/get/" + $self.formId;
+            $self.url = '/api/v1/' + $self.formName + '/get/' + $self.formId;
             $self.getFormDetailsData();
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data;
                 $self.tableData.inspector = parseInt($self.tableData.inspector);
-                $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
             }
             // debugger;
-            let actions = await $self.getActions();
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
             let crumbs = await $self.getCrumbsone();
-            let comments =  await $self.getComments();
-            $self.actions = actions.data.types;
+            let comments = await $self.getComments();
             $self.comments = comments.data;
-            $self.crumbs =  {items: crumbs.data, index: -1};
-            for(var i= 0; i<$self.crumbs.items.length; i++){
-                if($self.crumbs.items[i].active){
-                    $self.crumbs.index = i;    
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
                 }
             }
-            if($self.crumbs.index == -1) {
-                $self.crumbs.index=$self.crumbs.items.length
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
             }
         }
     }

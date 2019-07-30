@@ -10,16 +10,17 @@
             </el-row>
         </div>
         <div class="formContent" style="padding: 15px 30px;overflow-y:auto">
-            
+
             <div>
-                <el-button type="primary"  @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
+                <el-button type="primary" @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button>
             </div>
             <br>
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step  :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-             <el-form :model='tableData' class="formList">
-                <div >
+            <el-form :model='tableData' class="formList">
+                <div>
                     <el-row>
                         <el-col :span="12">
                             <el-form-item label="员工级别：">{{tableData.positions}}
@@ -85,7 +86,7 @@
                     <el-row>
                         <el-col :span="8">
                             <el-form-item label="外语水平：">{{tableData.languageLevel}}
-                        </el-form-item>
+                            </el-form-item>
                         </el-col>
                         <el-col :span="8">
                             <el-form-item label="职称/职业资格：">{{tableData.technicalTitle}}
@@ -119,7 +120,7 @@
                             <el-form-item label="紧急联系人及电话：">{{tableData.contacts}}
                             </el-form-item>
                         </el-col>
-                        
+
                     </el-row>
                     <el-row>
                         <el-col :span="8">
@@ -130,13 +131,13 @@
                             <el-form-item label="手机/家庭电话：">{{tableData.phone}}
                             </el-form-item>
                         </el-col>
-                        
+
                     </el-row>
                     <table class="tableNoBorders">
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="学习及培训经历" prop="">
-                                     <el-table :data="tableData.studyExperience" border style="width: 100%; margin-top: 5px;" >
+                                    <el-table :data="tableData.studyExperience" border style="width: 100%; margin-top: 5px;">
                                         <el-table-column prop="" label="起止时间(年月)">
                                             <template slot-scope="scope">
                                                 {{scope.row.fromTo}}
@@ -147,15 +148,15 @@
                                                 {{scope.row.graduateTnstitution}}
                                             </template>
                                         </el-table-column>
-                                    
+
                                         <el-table-column prop="" label="所学专业/培训项目">
                                             <template slot-scope="scope">
-                                               {{scope.row.major}}
+                                                {{scope.row.major}}
                                             </template>
                                         </el-table-column>
                                         <el-table-column prop="" label="所得学历">
                                             <template slot-scope="scope">
-                                               {{scope.row.educationBackground}}
+                                                {{scope.row.educationBackground}}
                                             </template>
                                         </el-table-column>
                                         <el-table-column prop="" label="所得学位">
@@ -175,19 +176,19 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="工作经历" prop="">
-                                  <el-table :data="tableData.workExperience" border style="width: 100%; margin-top: 5px;" >
+                                    <el-table :data="tableData.workExperience" border style="width: 100%; margin-top: 5px;">
                                         <el-table-column prop="" label="起止时间">
                                             <template slot-scope="scope">
                                                 <!-- <el-input v-model="scope.row.fromTo" disabled></el-input> -->
-                                            {{scope.row.fromTo}}
+                                                {{scope.row.fromTo}}
                                             </template>
                                         </el-table-column>
                                         <el-table-column prop="" label="公司名称">
                                             <template slot-scope="scope">
-                                               {{scope.row.companyName}}
+                                                {{scope.row.companyName}}
                                             </template>
                                         </el-table-column>
-                                    
+
                                         <el-table-column prop="" label="职位名称">
                                             <template slot-scope="scope">
                                                 {{scope.row.jobTitle}}
@@ -195,7 +196,7 @@
                                         </el-table-column>
                                         <el-table-column prop="" label="离职原因">
                                             <template slot-scope="scope">
-                                                 {{scope.row.reasonToLeave}}
+                                                {{scope.row.reasonToLeave}}
                                             </template>
                                         </el-table-column>
                                         <el-table-column prop="" label="证明人及联系电话">
@@ -205,7 +206,7 @@
                                         </el-table-column>
                                         <el-table-column prop="" label="职责简述">
                                             <template slot-scope="scope">
-                                            {{scope.row.jobDescription}}
+                                                {{scope.row.jobDescription}}
                                             </template>
                                         </el-table-column>
                                     </el-table>
@@ -221,10 +222,10 @@
                         <el-row>
                             <el-col :span="24">
                                 <el-form-item label="家庭关系" prop="">
-                                    <el-table :data="tableData.familyTies" border style="width: 100%; margin-top: 5px;" >
+                                    <el-table :data="tableData.familyTies" border style="width: 100%; margin-top: 5px;">
                                         <el-table-column prop="" label="称谓">
                                             <template slot-scope="scope">
-                                                 {{scope.row.appellation}}
+                                                {{scope.row.appellation}}
                                             </template>
                                         </el-table-column>
                                         <el-table-column prop="" label="姓名">
@@ -237,7 +238,7 @@
                                                 {{scope.row.birthday}}
                                             </template>
                                         </el-table-column>
-                                    
+
                                         <el-table-column prop="" label="居住地">
                                             <template slot-scope="scope">
                                                 {{scope.row.placeOfAbode}}
@@ -245,7 +246,7 @@
                                         </el-table-column>
                                         <el-table-column prop="" label="工作单位">
                                             <template slot-scope="scope">
-                                                 {{scope.row.workUnit}}
+                                                {{scope.row.workUnit}}
                                             </template>
                                         </el-table-column>
                                         <el-table-column prop="" label="联系电话">
@@ -255,7 +256,7 @@
                                         </el-table-column>
                                         <el-table-column prop="" label="备注">
                                             <template slot-scope="scope">
-                                            {{scope.row.remark}}
+                                                {{scope.row.remark}}
                                             </template>
                                         </el-table-column>
                                     </el-table>
@@ -273,49 +274,49 @@
                         </el-col>
                     </el-row>
                 </div>
-                 <el-row v-if="tableData.positionsWage && tableData.positionsWage.remuneration!=''" >
-                     <el-col :span="24">
-                         <h1 style="text-align:center">拟聘人员信息</h1>
+                <el-row v-if="tableData.positionsWage && tableData.positionsWage.remuneration!=''">
+                    <el-col :span="24">
+                        <h1 style="text-align:center">拟聘人员信息</h1>
                     </el-col>
                     <el-col :span="12">
-                        <el-form-item label="姓名:" >
-                           {{tableData.positionsWage.name}}
+                        <el-form-item label="姓名:">
+                            {{tableData.positionsWage.name}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
                         <el-form-item label="性别:">
-                           {{tableData.positionsWage.sex}}
+                            {{tableData.positionsWage.sex}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="定岗:">
-                           {{tableData.positionsWage.determinePosts}}
+                        <el-form-item label="定岗:">
+                            {{tableData.positionsWage.determinePosts}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="部门:">
-                           {{tableData.positionsWage.department}}
+                        <el-form-item label="部门:">
+                            {{tableData.positionsWage.department}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="职级:">
-                           {{tableData.positionsWage.rank}}
+                        <el-form-item label="职级:">
+                            {{tableData.positionsWage.rank}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="薪酬:">
-                           {{tableData.positionsWage.remuneration}}
+                        <el-form-item label="薪酬:">
+                            {{tableData.positionsWage.remuneration}}
                         </el-form-item>
                     </el-col>
-                   
+
                     <el-col :span="12">
-                       <el-form-item label="试用期(月):">
-                           {{tableData.positionsWage.probationPeriod}}
+                        <el-form-item label="试用期(月):">
+                            {{tableData.positionsWage.probationPeriod}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="12">
-                       <el-form-item label="试用期薪酬标准(%):">
-                           {{tableData.positionsWage.percentage}}
+                        <el-form-item label="试用期薪酬标准(%):">
+                            {{tableData.positionsWage.percentage}}
                         </el-form-item>
                     </el-col>
                 </el-row>
@@ -340,7 +341,7 @@
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
-                        <el-select v-model="item.checkedValue" filterable :multiple = "item.multiple" style="width:100%;" value-key="id">
+                        <el-select v-model="item.checkedValue" filterable :multiple="item.multiple" style="width:100%;" value-key="id">
                             <el-option v-for="user in item.seletList" :key="user.id" :label="user.name" :value="user"></el-option>
                         </el-select>
                     </el-form-item>
@@ -360,219 +361,224 @@
                 </el-form>
             </el-dialog>
         </div>
-        <ProcessingForm  ref="processingForm"></ProcessingForm>
+        <ProcessingForm ref="processingForm"></ProcessingForm>
     </div>
 </template>
 <script>
-    import axios from 'axios';
-    import moment from 'moment';
-    import Comment from '../Comment';
-    import FilesOperate from '../FilesOperate';
-    import ProcessingForm from "./ProcessingForm";
-    import { publicMethods } from "../application.js";
-    export default {
-        mixins:[publicMethods],
-        name: 'ProcessingDetail',
-        data() {
-            return {
-                isFromDetailsEdit:false,
-                isKeyone:'',
-                tableData: {},
-                actions: [],
-                actionsDialogArr: [],
-                users: [],
-                formId: "",
-                crumbs: [],
-                comments: [],
-                textarea: '',
-                dialogVisible: false,
-                appFlowName:'motor-examinationapproval_examinationapproval',
-                formName:'examinationApproval',
-                dialogVisibleCrumb:false,
-                flowNodeUrl:"",
+import axios from 'axios';
+import moment from 'moment';
+import Comment from '../Comment';
+import FilesOperate from '../FilesOperate';
+import ProcessingForm from './ProcessingForm';
+import { publicMethods } from '../application.js';
+export default {
+    mixins: [publicMethods],
+    name: 'ProcessingDetail',
+    data() {
+        return {
+            isFromDetailsEdit: false,
+            isKeyone: '',
+            tableData: {},
+            actions: [],
+            actionsDialogArr: [],
+            users: [],
+            formId: '',
+            crumbs: [],
+            comments: [],
+            textarea: '',
+            dialogVisible: false,
+            appFlowName: 'motor-examinationapproval_examinationapproval',
+            formName: 'examinationApproval',
+            dialogVisibleCrumb: false,
+            flowNodeUrl: ''
+        };
+    },
+    components: {
+        Comment,
+        FilesOperate,
+        ProcessingForm
+    },
+    filters: {
+        maritalStatusone: function(data) {
+            let xmlJson = {
+                '0': '未婚',
+                '1': '已婚',
+                '2': '离异'
             };
+            return xmlJson[data];
         },
-        components: {
-            Comment,
-            FilesOperate,
-            ProcessingForm
+        byPreptwo: function(data) {
+            let xmlJson = {
+                '1': '公共交通',
+                '2': '自驾'
+            };
+            return xmlJson[data];
         },
-        filters: {
-            maritalStatusone: function(data) {
-                let xmlJson = {
-                    "0":"未婚",
-                    "1":"已婚",
-                    "2" :"离异",
-                };
-                return xmlJson[data];
-            },
-            byPreptwo: function(data) {
-                    let xmlJson = {
-                        "1":"公共交通",
-                        "2" :"自驾",
-                    };
-                    return xmlJson[data];
-            },
-            studyingWayone: function(data) {
-                    let xmlJson = {
-                        1:"自费",
-                        0 :"统招",
-                    };
-                    return xmlJson[data];
-            },
-        },
-        methods: {
-            getFormDetails(formId) {
-                let $self = this;
-                $self.formId = formId;
-                $self.url= "/api/v1/examinationApproval/detail/" + $self.formId;
-                $self.getFormDetailsData();
-            },
-            async getFormDetailsData() {
-                 let $self = this;
-                let response = await $self.getDetails();
-                if (response) {
-                    $self.tableData = response.data.content;
-                    if($self.tableData.isKey=='是'){
-                        this.isKeyone="关键岗位"
-                    }
-                    else{
-                        this.isKeyone="非关键岗位"
-                    }
-                    $self.$emit("resetStatus", {id:$self.tableData.id,status:$self.tableData.status});
-                } else {
-                   // $self.msgTips("获取表单失败", "warning");
-                }
-                // debugger;
-                let actions = await $self.getActions();
-                let crumbs = await $self.getCrumbsone();
-                let comments =  await $self.getComments();
-              
-                $self.actions = actions.data.types;
-                $self.crumbs =  {items: crumbs.data, index: -1};
-                $self.comments = comments.data;
-                for(var i= 0; i<$self.crumbs.items.length; i++){
-                    if($self.crumbs.items[i].active){
-                        $self.crumbs.index = i;
-                    }
-                   
-                }
-                if($self.crumbs.index == -1) {
-                    $self.crumbs.index=$self.crumbs.items.length
-                }
-
-            },
-             salaryEditForm(){
-                let $self = this;
-                 this.isFromDetailsEdit = true
-                $self.$refs.processingForm.setDataFromParentone(this.tableData,true);
-            }
+        studyingWayone: function(data) {
+            let xmlJson = {
+                1: '自费',
+                0: '统招'
+            };
+            return xmlJson[data];
         }
-    };
+    },
+    methods: {
+        getFormDetails(formId) {
+            let $self = this;
+            $self.formId = formId;
+            $self.url = '/api/v1/examinationApproval/detail/' + $self.formId;
+            $self.getFormDetailsData();
+        },
+        async getFormDetailsData() {
+            let $self = this;
+            $self.actions = [];
+            let response = await $self.getDetails();
+            if (response) {
+                $self.tableData = response.data.content;
+                if ($self.tableData.isKey == '是') {
+                    this.isKeyone = '关键岗位';
+                } else {
+                    this.isKeyone = '非关键岗位';
+                }
+                $self.$emit('resetStatus', {
+                    id: $self.tableData.id,
+                    status: $self.tableData.status
+                });
+            } else {
+                // $self.msgTips("获取表单失败", "warning");
+            }
+            // debugger;
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
+            let crumbs = await $self.getCrumbsone();
+            let comments = await $self.getComments();
+            $self.crumbs = { items: crumbs.data, index: -1 };
+            $self.comments = comments.data;
+            for (var i = 0; i < $self.crumbs.items.length; i++) {
+                if ($self.crumbs.items[i].active) {
+                    $self.crumbs.index = i;
+                }
+            }
+            if ($self.crumbs.index == -1) {
+                $self.crumbs.index = $self.crumbs.items.length;
+            }
+        },
+        salaryEditForm() {
+            let $self = this;
+            this.isFromDetailsEdit = true;
+            $self.$refs.processingForm.setDataFromParentone(
+                this.tableData,
+                true
+            );
+        }
+    }
+};
 </script>
 <style lang="scss" scoped>
-    #ProcessingDetail {
-        .el-step__main {
-            margin-top: 10px;
-        }
-        .audit {
-            position: relative;
-            margin-bottom: 10px;
-            font-size: 14px;
-            box-shadow: none;
-            border: 0;
-            font-weight: bold;
-            .avatar {
-                position: absolute;
-                left: 5px;
-                top: 5px;
+#ProcessingDetail {
+    .el-step__main {
+        margin-top: 10px;
+    }
+    .audit {
+        position: relative;
+        margin-bottom: 10px;
+        font-size: 14px;
+        box-shadow: none;
+        border: 0;
+        font-weight: bold;
+        .avatar {
+            position: absolute;
+            left: 5px;
+            top: 5px;
+            width: 36px;
+            height: 36px;
+            img {
                 width: 36px;
                 height: 36px;
-                img {
-                    width: 36px;
-                    height: 36px;
-                    border: 1px solid #dddddd;
-                    border-radius: 50%;
+                border: 1px solid #dddddd;
+                border-radius: 50%;
+            }
+        }
+        .info {
+            margin-left: 60px;
+            display: inline-block;
+            width: calc(100% - 60px);
+            .creator {
+                height: 32px;
+                line-height: 32px;
+                a {
+                    color: #4a6495;
+                    text-decoration-line: none;
                 }
             }
-            .info {
-                margin-left: 60px;
-                display: inline-block;
-                width: calc(100% - 60px);
-                .creator {
-                    height: 32px;
-                    line-height: 32px;
-                    a {
-                        color: #4a6495;
-                        text-decoration-line: none;
-                    }
-                }
-                .content {
-                    min-height: 32px;
-                }
+            .content {
+                min-height: 32px;
             }
-        }
-        .input-with-select {
-            width: 0px;
-            margin-right: 10px;
-            .el-input-group__prepend {
-                background-color: #409eff;
-                border-color: #409eff;
-                color: #ffffff;
-                border-radius: 4px;
-            }
-            &.reject .el-input-group__prepend {
-                border-top-right-radius: 0;
-                border-bottom-right-radius: 0;
-            }
-            .el-input__inner {
-                width: 0;
-                padding: 0;
-                border: 0;
-            }
-            .el-input__suffix {
-                left: 8px;
-            }
-        }
-        #actionList {
-             padding-left: 20px;
-            background: #f4f4f4;
-            border-bottom: 1px solid #eaeaea;
-            height: 40px;
-            width: 100%;
-            z-index: 10;
-            .btnList {
-                line-height: 40px;
-                padding: 12px 10px;
-                cursor: pointer;
-            }
-            .btnList:hover {
-                background: #c7e0f4;
-            }
-        }
-        
-        .btnhide {
-            display: none;
-        }
-        .crumbList {
-            margin: 15px 0px;
         }
     }
-    .tableNoBorders{
-        width: 1100px;
-        max-width: 1100px;
+    .input-with-select {
+        width: 0px;
+        margin-right: 10px;
+        .el-input-group__prepend {
+            background-color: #409eff;
+            border-color: #409eff;
+            color: #ffffff;
+            border-radius: 4px;
+        }
+        &.reject .el-input-group__prepend {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .el-input__inner {
+            width: 0;
+            padding: 0;
+            border: 0;
+        }
+        .el-input__suffix {
+            left: 8px;
+        }
     }
-    .fullScreen {
-        position: fixed;
-        top: 0px;
+    #actionList {
+        padding-left: 20px;
+        background: #f4f4f4;
+        border-bottom: 1px solid #eaeaea;
+        height: 40px;
+        width: 100%;
         z-index: 10;
-        background: #fff;
-        left: 0px;
-        right: 0px;
+        .btnList {
+            line-height: 40px;
+            padding: 12px 10px;
+            cursor: pointer;
+        }
+        .btnList:hover {
+            background: #c7e0f4;
+        }
     }
+
+    .btnhide {
+        display: none;
+    }
+    .crumbList {
+        margin: 15px 0px;
+    }
+}
+.tableNoBorders {
+    width: 1100px;
+    max-width: 1100px;
+}
+.fullScreen {
+    position: fixed;
+    top: 0px;
+    z-index: 10;
+    background: #fff;
+    left: 0px;
+    right: 0px;
+}
 </style>
 <style scoped>
-.blockcolor >>> .el-input__inner{
-    color: black
+.blockcolor >>> .el-input__inner {
+    color: black;
 }
 </style>

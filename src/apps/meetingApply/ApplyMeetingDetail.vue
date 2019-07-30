@@ -12,6 +12,7 @@
         <div class="formContent">
             <br />
             <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" @click="getFlowNode" v-if="tableData.status != '04'">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" v-show="this.tableData.status && this.tableData.status == '04'" @click="print">打印</el-button>
             </div>
@@ -503,6 +504,7 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             let a = await $self.getDiscussionUser();
             if (response) {
@@ -584,57 +586,65 @@ export default {
                     status: $self.tableData.status
                 });
             }
-            let actions = await $self.getActions();
-            // let crumbs = await $self.getCrumbs();
-            let comments = await $self.getComments();
-            $self.comments = comments.data;
-            for (let i = 0; i < actions.data.types.length; i++) {
-                if (
-                    actions.data.types[i].required &&
-                    JSON.stringify(actions.data.types[i].required).indexOf(
-                        'filterButton'
-                    ) > -1
-                ) {
-                    for (
-                        let j = 0;
-                        j < actions.data.types[i].required.length;
-                        j++
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                for (let i = 0; i < actions.data.types.length; i++) {
+                    if (
+                        actions.data.types[i].required &&
+                        JSON.stringify(actions.data.types[i].required).indexOf(
+                            'filterButton'
+                        ) > -1
                     ) {
-                        if (
-                            actions.data.types[i].required[j].indexOf(
-                                'filterButton'
-                            ) > -1
+                        for (
+                            let j = 0;
+                            j < actions.data.types[i].required.length;
+                            j++
                         ) {
                             if (
                                 actions.data.types[i].required[j].indexOf(
-                                    '=='
+                                    'filterButton'
                                 ) > -1
                             ) {
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split('==')[0].split(':')[1];
-                                let value = a.split('==')[1];
                                 if (
-                                    '"' + $self.tableData[key_a] + '"' !=
-                                    value
+                                    actions.data.types[i].required[j].indexOf(
+                                        '=='
+                                    ) > -1
                                 ) {
-                                    actions.data.types[i].hideCurrent = true;
-                                }
-                            } else {
-                                let a = actions.data.types[i].required[j];
-                                let key_a = a.split('!=')[0].split(':')[1];
-                                let value = a.split('!=')[1];
-                                if (
-                                    '"' + $self.tableData[key_a] + '"' ==
-                                    value
-                                ) {
-                                    actions.data.types[i].hideCurrent = true;
+                                    let a = actions.data.types[i].required[j];
+                                    let key_a = a.split('==')[0].split(':')[1];
+                                    let value = a.split('==')[1];
+                                    if (
+                                        '"' + $self.tableData[key_a] + '"' !=
+                                        value
+                                    ) {
+                                        actions.data.types[
+                                            i
+                                        ].hideCurrent = true;
+                                    }
+                                } else {
+                                    let a = actions.data.types[i].required[j];
+                                    let key_a = a.split('!=')[0].split(':')[1];
+                                    let value = a.split('!=')[1];
+                                    if (
+                                        '"' + $self.tableData[key_a] + '"' ==
+                                        value
+                                    ) {
+                                        actions.data.types[
+                                            i
+                                        ].hideCurrent = true;
+                                    }
                                 }
                             }
                         }
                     }
                 }
+                $self.actions = actions.data.types;
             }
-            $self.actions = actions.data.types;
+
+            // let crumbs = await $self.getCrumbs();
+            let comments = await $self.getComments();
+            $self.comments = comments.data;
+
             let crumbs = await $self.getCrumbsone();
             $self.crumbs = { items: crumbs.data, index: -1 };
             for (var i = 0; i < $self.crumbs.items.length; i++) {

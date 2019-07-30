@@ -15,6 +15,7 @@
         </div>
         <div class="formContent">
             <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
@@ -294,6 +295,7 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
                 $self.tableData = response.data.content;
@@ -304,10 +306,12 @@ export default {
             } else {
                 // $self.msgTips('获取表单失败', 'warning');
             }
-            let actions = await $self.getActions();
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
             let crumbs = await $self.getCrumbsone();
             let comments = await $self.getComments();
-            $self.actions = actions.data.types;
             $self.comments = comments.data;
             $self.crumbs = { items: crumbs.data, index: -1 };
             for (var i = 0; i < $self.crumbs.items.length; i++) {

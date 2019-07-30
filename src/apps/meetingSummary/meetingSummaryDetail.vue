@@ -13,8 +13,9 @@
         <br />
         <div class="formContent" style="padding: 15px 30px">
             <div>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" v-if="tableData.status != '04'" @click="getFlowNode">查看流程</el-button>
-                <el-button style="margin-left: 25px;" type="primary" @click="print"  v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
+                <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
@@ -186,7 +187,11 @@ export default {
     },
     methods: {
         async print() {
-            this.$print(this.$refs.formupdate.$el,{printTitle:`会议纪要(${this.tableData.organName.split('-')[0]})`});
+            this.$print(this.$refs.formupdate.$el, {
+                printTitle: `会议纪要(${
+                    this.tableData.organName.split('-')[0]
+                })`
+            });
         },
         getFormDetails(formId) {
             let $self = this;
@@ -206,6 +211,7 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
                 if (response.data.text && JSON.parse(response.data.text).name) {
@@ -225,9 +231,11 @@ export default {
                     status: $self.tableData.status
                 });
             }
-            let actions = await $self.getActions();
+            if ($self.tableData.status != '00') {
+                let actions = await $self.getActions();
+                $self.actions = actions.data.types;
+            }
             let comments = await $self.getComments();
-            $self.actions = actions.data.types;
             $self.comments = comments.data;
 
             let crumbs = await $self.getCrumbsone();
