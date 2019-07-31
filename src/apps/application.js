@@ -487,7 +487,7 @@ export const publicMethods = {
             if (process.env.NODE_ENV === 'production') {
                 $self.openUrl = "http://124.205.31.66:2097/static/edit.html?"
             } else {
-                $self.openUrl = "http://static1.yxpe.com.cn/edit.html?"
+                $self.openUrl = "http://116.117.157.232/static/edit.html?"
             }
 
             if ($self.timer) {
