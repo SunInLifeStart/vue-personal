@@ -128,7 +128,7 @@ export default {
                     if (process.env.NODE_ENV === 'production') {
                             url = "http://124.205.31.66:2097/static/edit.html?removeBar=true&url=" + item.url;
                         }else{
-                            url = "http://static1.yxpe.com.cn/edit.html?removeBar=true&url=" + item.url;
+                            url = "http://116.117.157.232/static/edit.html?removeBar=true&url=" + item.url;
                     }
 
                 ntkoBrowser.openWindow(url);
