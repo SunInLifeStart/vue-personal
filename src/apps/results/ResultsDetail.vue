@@ -143,6 +143,62 @@
                 </el-row>
 
             </el-form>
+            <el-dialog :visible.sync="dialogVisibleAttachment" width="40%">
+                <el-form label-width="140px">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="经审批采购方案的附审资料">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsAnno" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="采购报告(评标报告)的附审资料">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadRep" action="/api/v1/files/upload" :on-success="handleSuccessRep" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsRep" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="招标采购管理委员会会议纪要附件">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadMan" action="/api/v1/files/upload" :on-success="handleSuccessMan" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsMan" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="其他">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsOth" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleAttachment = false">取 消</el-button>
+                    <el-button type="primary" @click="saveIncomingApply">确 定</el-button>
+                </span>
+            </el-dialog>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
@@ -183,6 +239,7 @@ export default {
                 procschemeNos: {},
                 biddocumentNos: {}
             },
+            dialogVisibleAttachment: false,
             proTypeOption: {
                 '1':
                     '开发建设类采购(招标方式；工程类>=100万，货物类>=50万，服务费>=30万)',
@@ -215,6 +272,60 @@ export default {
         FilesOperate
     },
     methods: {
+        attahmentsUplode() {
+            this.dialogVisibleAttachment = true;
+        },
+        handleSuccessAnno(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    item.attachmentType = 'attachmentsAnno';
+                    self.tableData.attachmentsAnno.push(item);
+                });
+            }
+            this.$refs.uploadAnno.clearFiles();
+        },
+        handleSuccessMan(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.tableData.attachmentsMan.push(item);
+                });
+            }
+            this.$refs.uploadMan.clearFiles();
+        },
+        handleSuccessRep(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    item.attachmentType = 'attachmentsRep';
+                    self.tableData.attachmentsRep.push(item);
+                });
+            }
+            this.$refs.uploadRep.clearFiles();
+        },
+        handleSuccessOth(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    item.attachmentType = 'attachmentsOth';
+                    self.tableData.attachmentsOth.push(item);
+                });
+            }
+            this.$refs.uploadOth.clearFiles();
+        },
+        async saveIncomingApply() {
+            const $self = this;
+            let response = await this.saveFormData(
+                '/api/v1/motor-procresult/save',
+                this.tableData
+            );
+            if (response) {
+                this.dialogVisibleAttachment = false;
+                $self.msgTips('编辑附件成功', 'success');
+            }
+        },
+        getId() {},
         print() {
             let $self = this;
             let url = '/api/v1/motor-procresult/print/' + $self.tableData.id;
@@ -305,6 +416,26 @@ export default {
             }
             .content {
                 min-height: 32px;
+            }
+        }
+    }
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
+
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
             }
         }
     }

@@ -19,7 +19,7 @@
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData' class="formList">
+            <el-form :model='tableData' class="formList" label-width="140px">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号：">{{tableData.number}}
@@ -200,6 +200,62 @@
                 </el-row>
 
             </el-form>
+            <el-dialog :visible.sync="dialogVisibleAttachment" width="40%">
+                <el-form label-width="140px">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="征集公告附件" prop="">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsAnno" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="考察报告附件" prop="">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsIns" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="招标采购管理委员会会议纪要附件">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadMan" action="/api/v1/files/upload" :on-success="handleSuccessMan" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsMan" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="其他附件">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsOth" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleAttachment = false">取 消</el-button>
+                    <el-button type="primary" @click="saveIncomingApply">确 定</el-button>
+                </span>
+            </el-dialog>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
@@ -240,6 +296,7 @@ export default {
             options: [],
             dataOptions: [],
             dialogVisibleCrumb: false,
+            dialogVisibleAttachment: false,
             tableData: {
                 status: '',
                 purchaseDeptNames: {}
@@ -279,6 +336,57 @@ export default {
         // this.getOrgans()
     },
     methods: {
+        attahmentsUplode() {
+            this.dialogVisibleAttachment = true;
+        },
+        handleSuccessAnno(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.tableData.attachmentsAnno.push(item);
+                });
+            }
+            this.$refs.uploadAnno.clearFiles();
+        },
+        handleSuccessMan(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.tableData.attachmentsMan.push(item);
+                });
+            }
+            this.$refs.uploadMan.clearFiles();
+        },
+        handleSuccessIns(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.tableData.attachmentsIns.push(item);
+                });
+            }
+            this.$refs.uploadIns.clearFiles();
+        },
+        handleSuccessOth(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.tableData.attachmentsOth.push(item);
+                });
+            }
+            this.$refs.uploadOth.clearFiles();
+        },
+        async saveIncomingApply() {
+            const $self = this;
+            let response = await this.saveFormData(
+                '/api/v1/motor-procscheme/save',
+                this.tableData
+            );
+            if (response) {
+                this.dialogVisibleAttachment = false;
+                $self.msgTips('编辑附件成功', 'success');
+            }
+        },
+        getId() {},
         async getUser() {
             let user = await this.getUsers('/api/v1/users');
             if (user) this.userOptions = user.data;
@@ -384,6 +492,26 @@ export default {
         }
         .el-input__suffix {
             left: 8px;
+        }
+    }
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
+
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
+            }
         }
     }
     #actionList {

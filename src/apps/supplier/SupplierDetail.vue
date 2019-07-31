@@ -138,6 +138,38 @@
                 </el-row>
 
             </el-form>
+            <el-dialog :visible.sync="dialogVisibleAttachment" width="40%">
+                <el-form label-width="140px">
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="供应商入库申请表附件" prop="">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadSto" action="/api/v1/files/upload" :on-success="handleSuccessSto" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsSto" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="考察报告附件">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachmentsIns" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getId()"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleAttachment = false">取 消</el-button>
+                    <el-button type="primary" @click="saveIncomingApply">确 定</el-button>
+                </span>
+            </el-dialog>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
@@ -175,6 +207,7 @@ export default {
     data() {
         return {
             tableData: {},
+            dialogVisibleAttachment: false,
             sourceOption: {
                 '1': '采购主责部门推荐/股东方供应商库项目引入模式',
                 '2': '常规引入',
@@ -199,6 +232,39 @@ export default {
         FilesOperate
     },
     methods: {
+        attahmentsUplode() {
+            this.dialogVisibleAttachment = true;
+        },
+        handleSuccessSto(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.tableData.attachmentsSto.push(item);
+                });
+            }
+            this.$refs.uploadSto.clearFiles();
+        },
+        handleSuccessIns(response, file) {
+            const self = this;
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.tableData.attachmentsIns.push(item);
+                });
+            }
+            this.$refs.uploadIns.clearFiles();
+        },
+        async saveIncomingApply() {
+            const $self = this;
+            let response = await this.saveFormData(
+                '/api/v1/motor-supplier/save',
+                this.tableData
+            );
+            if (response) {
+                this.dialogVisibleAttachment = false;
+                $self.msgTips('编辑附件成功', 'success');
+            }
+        },
+        getId() {},
         getFormDetails(formId) {
             let $self = this;
             $self.formId = formId;
@@ -242,6 +308,26 @@ export default {
 #SupplierDetail {
     .el-step__main {
         margin-top: 10px;
+    }
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
+
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
+            }
+        }
     }
     .audit {
         position: relative;
