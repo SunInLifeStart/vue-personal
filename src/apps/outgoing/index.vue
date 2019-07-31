@@ -79,7 +79,7 @@
                             <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
                             </el-tooltip>
-                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00'">
+                            <el-tooltip class="item" effect="dark" content="删除" placement="left" v-if="scope.row.status == '00' || scope.row.status == '02'">
                                 <el-button type="text" icon="el-icon-delete" @click="deleteForm(scope.row)"></el-button>
                             </el-tooltip>
                         </template>
@@ -177,9 +177,7 @@ export default {
             }).then(() => {
                 console.log(row.id);
                 axios
-                    .delete('/api/v1/outgoing_forms/deleteForm', {
-                        data: [row.id]
-                    })
+                    .delete('/api/v1/outgoing_forms/delete/' + row.id)
                     .then(res => {
                         this.getList();
                         this.$message({
