@@ -53,12 +53,12 @@
                     </el-col>
                 </el-row>
                 <table class="tablePrint" style="width: 99%;">
-                    <col style="width: 10%" />
-                    <col style="width: 10%" />
-                    <col style="width: 10%" />
-                    <col style="width: 10%" />
-                    <col style="width: 10%" />
-                    <col style="width: 10%" />
+                    <col style="width: 8%" />
+                    <col style="width: 6%" />
+                    <col style="width: 14%" />
+                    <col style="width: 15%" />
+                    <col style="width: 5%" />
+                    <col style="width: 12%" />
                     <col style="width: 10%" />
                     <col style="width: 10%" />
                     <tr>
@@ -180,19 +180,19 @@
                             {{item.currency.label}}
                         </td>
                         <td>
-                            {{item.money}}
+                            <format-input separator="," :precision="2" v-model="item.money" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td>
                             {{item.estRate}}
                         </td>
                         <td>
-                            {{item.estSum}}
+                            <format-input separator="," :precision="2" v-model="item.estSum" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td>
-                            {{item.noTax}}
+                            <format-input separator="," :precision="2" v-model="item.noTax" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td>
-                            {{item.tax}}
+                            <format-input separator="," :precision="2" v-model="item.tax" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                     </tr>
                     <tr>
@@ -204,8 +204,10 @@
                             金额合计
                         </td>
                         <td>
-                            <span style="float:left;"> {{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}}</span>
-                            <span style="float:right;">{{parseFloat(this.tableData.total).toLocaleString()}}</span>
+                            <span style="float:left;margin-top:10px;"> {{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}}</span>
+                            <span style="float:right;width:180px;">
+                                <format-input separator="," :precision="2" v-model="tableData.total" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
+                            </span>
                         </td>
                         <td class="fontBold">
                             金额大写
@@ -259,10 +261,10 @@
                             <span @click="ViewDetail('borrow')" class="titlename"> {{tableData.borrow.borrowOdd}}</span>
                         </td>
                         <td>
-                            {{parseFloat(this.tableData.borrow.noVerify).toLocaleString()}}
+                            <format-input separator="," :precision="2" v-model="tableData.borrow.noVerify" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td colspan="2">
-                            {{parseFloat(this.tableData.borrow.verify).toLocaleString()}}
+                            <format-input separator="," :precision="2" v-model="tableData.borrow.verify" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td colspan="2">
                             {{tableData.borrow.sendDack? '是' : '否'}}
@@ -271,11 +273,11 @@
                     <tr>
                         <td class="fontBold">应付金额({{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}})</td>
                         <td colspan="3">
-                            {{parseFloat(this.tableData.borrow.payAble).toLocaleString()}}
+                            <format-input separator="," :precision="2" v-model="tableData.borrow.payAble" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td class="fontBold">应退金额({{this.tableData.repayItems.length ==0 ? '￥': this.tableData.repayItems[0].currency.curValue}})</td>
                         <td colspan="3">
-                            {{parseFloat(this.tableData.borrow.shouldBack).toLocaleString()}}
+                            <format-input separator="," :precision="2" v-model="tableData.borrow.shouldBack" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                     </tr>
                     <tr>
@@ -316,7 +318,7 @@
                             {{item.bearDep}}
                         </td>
                         <td>
-                            {{item.bearSum.toLocaleString()}}
+                            <format-input separator="," :precision="2" v-model="item.bearSum" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td colspan="3">
                             {{item.upper}}
@@ -386,6 +388,7 @@ import moment from 'moment';
 import cookies from 'js-cookie';
 import { publicMethods } from '../application.js';
 import FilesOperate from '../FilesOperate';
+import formatInput from '@/components/formatInput';
 export default {
     mixins: [publicMethods],
     name: 'ReimbursementDetail',
@@ -453,7 +456,8 @@ export default {
     },
     components: {
         Comment,
-        FilesOperate
+        FilesOperate,
+        formatInput
     },
     // mounted() {
     //     // this.getAgree()

@@ -180,10 +180,10 @@
                             <format-input separator="," :precision="2" v-model="payItem.localAmount" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td>
-                            {{payItem.noTax}}
+                            <format-input separator="," :precision="2" v-model="payItem.noTax" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                         <td>
-                            {{payItem.tax}}
+                            <format-input separator="," :precision="2" v-model="payItem.tax" :max="100000000000000" read-only :min="-10000000" empty-value="0" :minus="true" />
                         </td>
                     </tr>
                     <tr>
