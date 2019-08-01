@@ -140,6 +140,12 @@
                     </tr>
                     <tr>
                         <td>
+                            <span class="span" v-show="decodeURI(this.$store.getters.LoginData.companyName) ==
+                            '天津京津中关村科技城发展有限公司' ||
+                        decodeURI(this.$store.getters.LoginData.companyName) ==
+                            '天津中科城乐居房地产开发有限公司' ||
+                        decodeURI(this.$store.getters.LoginData.companyName) ==
+                            '天津京津中关村孵化器有限公司'">*</span>
                             付款事项
                         </td>
                         <td colspan="7">
@@ -1370,18 +1376,48 @@ export default {
                         type: 'error'
                     });
                 } else {
-                    if (this.addxtnht == false && type) {
-                        this.$confirm(
-                            '合同信息为系统外合同,是否添加?',
-                            '提示',
-                            {
-                                type: 'warning'
+                    if (
+                        decodeURI(this.$store.getters.LoginData.companyName) ==
+                            '天津京津中关村科技城发展有限公司' ||
+                        decodeURI(this.$store.getters.LoginData.companyName) ==
+                            '天津中科城乐居房地产开发有限公司' ||
+                        decodeURI(this.$store.getters.LoginData.companyName) ==
+                            '天津京津中关村孵化器有限公司'
+                    ) {
+                        if (this.formData.paymentMatters == '') {
+                            self.$message({
+                                message: '请输入必填项',
+                                type: 'error'
+                            });
+                        } else {
+                            if (this.addxtnht == false && type) {
+                                this.$confirm(
+                                    '合同信息为系统外合同,是否添加?',
+                                    '提示',
+                                    {
+                                        type: 'warning'
+                                    }
+                                ).then(() => {
+                                    this.saveForm(type);
+                                });
+                            } else {
+                                this.saveForm(type);
                             }
-                        ).then(() => {
-                            this.saveForm(type);
-                        });
+                        }
                     } else {
-                        this.saveForm(type);
+                        if (this.addxtnht == false && type) {
+                            this.$confirm(
+                                '合同信息为系统外合同,是否添加?',
+                                '提示',
+                                {
+                                    type: 'warning'
+                                }
+                            ).then(() => {
+                                this.saveForm(type);
+                            });
+                        } else {
+                            this.saveForm(type);
+                        }
                     }
                 }
             }
