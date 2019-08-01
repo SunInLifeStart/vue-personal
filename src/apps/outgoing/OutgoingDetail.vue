@@ -38,6 +38,9 @@
                     <el-col :span="8">
                         <el-form-item label="行文方向：">{{tableData.direction}}</el-form-item>
                     </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="是否需要领导签批：">{{leaderApprove[tableData.branchlineTo] || '否'}}</el-form-item>
+                    </el-col>
                 </el-row>
                 <el-row>
                     <el-col :span="8">
@@ -158,7 +161,7 @@
                 </el-form>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="dialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="submitForm()">确 定</el-button>
+                    <el-button type="primary" @click="saveForm()">确 定</el-button>
                 </span>
             </el-dialog>
             <el-dialog :visible.sync="dialogVisibleCrumb" center width="90%" height="600px" append-to-body>
@@ -191,6 +194,10 @@ export default {
             dialogVisibleAttachment: false,
             crumbs: [],
             formId: '',
+            leaderApprove: {
+                2: '总经理',
+                3: '总经理、董事长',
+            },
             textarea: '',
             dialogVisible: false,
             users: [],
@@ -237,6 +244,14 @@ export default {
         OutgoingForm
     },
     methods: {
+        saveForm() {
+            this.tableData.text = JSON.stringify(this.tableData.text);
+            this.saveFormData(
+                "/api/v1/outgoing_forms/save",
+                this.tableData
+            );
+            this.submitForm()
+        },
         attahmentsUplode() {
             this.dialogVisibleAttachment = true;
         },
