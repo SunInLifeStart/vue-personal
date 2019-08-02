@@ -217,7 +217,7 @@ export default {
     // },
     methods: {
         attahmentsUplode() {
-            this.dialogVisibleAttachmentTwo = true;
+            this.dialogVisibleAttachment = true;
         },
         handleAttachmentSuccess(response, file) {
             const self = this;
@@ -237,17 +237,10 @@ export default {
             const $self = this;
             this.tableData.sendMessage = [];
             $self.tableData.attendingDepartment.forEach(item => {
-                if (item.people && item.department) {
+                if (item.department) {
                     item.department = item.department.join(',');
-                    item.person = item.people.join(',');
-                    this.tableData.sendMessage = this.tableData.sendMessage.concat(
-                        item.people
-                    );
                 }
-            });
-            $self.tableData.sitIn.forEach(item => {
-                if (item.people && item.department) {
-                    item.department = item.department.join(',');
+                if (item.people) {
                     item.person = item.people.join(',');
                     this.tableData.sendMessage = this.tableData.sendMessage.concat(
                         item.people
@@ -255,19 +248,14 @@ export default {
                 }
             });
             this.tableData.sendMessage = this.tableData.sendMessage.join(',');
-            if (
-                this.tableData.sendMessage &&
-                this.tableData.sendMessage.length <= 0
-            ) {
-                delete this.tableData.sendMessage;
-            }
             let response = await $self.saveFormData(
                 '/api/v1/issuesReported/save',
                 $self.tableData
             );
             if (response) {
-                this.dialogVisibleAttachmentTwo = false;
+                this.dialogVisibleAttachment = false;
                 $self.msgTips('编辑附件成功', 'success');
+                this.getFormDetails(this.formId);
             }
         },
         async print() {

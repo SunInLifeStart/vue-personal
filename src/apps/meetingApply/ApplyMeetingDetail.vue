@@ -421,6 +421,7 @@ export default {
             if (response) {
                 this.dialogVisibleAttachmentTwo = false;
                 $self.msgTips('编辑附件成功', 'success');
+                this.getFormDetails(this.formId);
             }
         },
         async saveMeetingApply(flag) {
