@@ -252,6 +252,26 @@
                     <el-button type="primary" @click="saveMeetingApply">确 定</el-button>
                 </span>
             </el-dialog>
+            <el-dialog :visible.sync="dialogVisibleAttachmentTwo" width="40%">
+                <el-form>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="编辑附件">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getAttachmentId"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleAttachmentTwo = false">取 消</el-button>
+                    <el-button type="primary" @click="saveMeetingApplyTwo">确 定</el-button>
+                </span>
+            </el-dialog>
 
             <el-dialog :visible.sync="dialogVisibleDelay" width="31%">
                 <el-form>
@@ -304,6 +324,7 @@ export default {
             tableData: {
                 discussionContent: {}
             },
+            dialogVisibleAttachmentTwo: false,
             actions: [],
             actionsDialogArr: [],
             users: [],
@@ -344,6 +365,9 @@ export default {
             });
             //  document.getElementById('approval').style.display = 'none';
         },
+        attahmentsUplode() {
+            this.dialogVisibleAttachmentTwo = true;
+        },
         editMeetingAttachment() {
             this.dialogVisibleAttachment = true;
         },
@@ -361,6 +385,43 @@ export default {
                 JSON.stringify(this.tableData.meetingDelayTime)
             );
             let a = await this.saveMeetingApply('delay');
+        },
+        async saveMeetingApplyTwo() {
+            const $self = this;
+            this.tableData.sendMessage = [];
+            $self.tableData.attendingDepartment.forEach(item => {
+                if (item.people && item.department) {
+                    item.department = item.department.join(',');
+                    item.person = item.people.join(',');
+                    this.tableData.sendMessage = this.tableData.sendMessage.concat(
+                        item.people
+                    );
+                }
+            });
+            $self.tableData.sitIn.forEach(item => {
+                if (item.people && item.department) {
+                    item.department = item.department.join(',');
+                    item.person = item.people.join(',');
+                    this.tableData.sendMessage = this.tableData.sendMessage.concat(
+                        item.people
+                    );
+                }
+            });
+            this.tableData.sendMessage = this.tableData.sendMessage.join(',');
+            if (
+                this.tableData.sendMessage &&
+                this.tableData.sendMessage.length <= 0
+            ) {
+                delete this.tableData.sendMessage;
+            }
+            let response = await $self.saveFormData(
+                '/api/v1/meetingApply/save',
+                $self.tableData
+            );
+            if (response) {
+                this.dialogVisibleAttachmentTwo = false;
+                $self.msgTips('编辑附件成功', 'success');
+            }
         },
         async saveMeetingApply(flag) {
             const $self = this;

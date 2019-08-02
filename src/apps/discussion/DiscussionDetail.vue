@@ -125,6 +125,26 @@
                 </el-row>
 
             </el-form>
+            <el-dialog :visible.sync="dialogVisibleAttachment" width="40%">
+                <el-form>
+                    <el-row>
+                        <el-col :span="24">
+                            <el-form-item label="编辑附件">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" accept="" :auto-upload="true" :with-credentials="true">
+                                    <i class="el-icon-plus"></i>
+                                </el-upload>
+                                <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
+                                    <FilesOperate :item="item" :options="{preview:true,download:true}" @getId="getAttachmentId"></FilesOperate>
+                                </div>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="dialogVisibleAttachment = false">取 消</el-button>
+                    <el-button type="primary" @click="saveMeetingApply">确 定</el-button>
+                </span>
+            </el-dialog>
             <el-dialog :visible.sync="dialogVisible" center width="30%" append-to-body>
                 <el-form>
                     <el-form-item :label="item.label" v-for="(item,index) in actionsDialogArr" :key="index">
@@ -162,6 +182,7 @@ export default {
     data() {
         return {
             tableData: {},
+            dialogVisibleAttachment: false,
             actions: [],
             actionsDialogArr: [],
             users: [],
@@ -195,6 +216,60 @@ export default {
     //     this.getDiscussionUser()
     // },
     methods: {
+        attahmentsUplode() {
+            this.dialogVisibleAttachmentTwo = true;
+        },
+        handleAttachmentSuccess(response, file) {
+            const self = this;
+            if (!self.tableData.attachments) {
+                self.tableData.attachments = [];
+            }
+            if (response.length > 0) {
+                response.forEach(function(item) {
+                    self.tableData.attachments.push(item);
+                    self.$forceUpdate();
+                });
+            }
+            this.$refs.uploadAttachmentOther.clearFiles();
+        },
+        getAttachmentId() {},
+        async saveMeetingApply() {
+            const $self = this;
+            this.tableData.sendMessage = [];
+            $self.tableData.attendingDepartment.forEach(item => {
+                if (item.people && item.department) {
+                    item.department = item.department.join(',');
+                    item.person = item.people.join(',');
+                    this.tableData.sendMessage = this.tableData.sendMessage.concat(
+                        item.people
+                    );
+                }
+            });
+            $self.tableData.sitIn.forEach(item => {
+                if (item.people && item.department) {
+                    item.department = item.department.join(',');
+                    item.person = item.people.join(',');
+                    this.tableData.sendMessage = this.tableData.sendMessage.concat(
+                        item.people
+                    );
+                }
+            });
+            this.tableData.sendMessage = this.tableData.sendMessage.join(',');
+            if (
+                this.tableData.sendMessage &&
+                this.tableData.sendMessage.length <= 0
+            ) {
+                delete this.tableData.sendMessage;
+            }
+            let response = await $self.saveFormData(
+                '/api/v1/issuesReported/save',
+                $self.tableData
+            );
+            if (response) {
+                this.dialogVisibleAttachmentTwo = false;
+                $self.msgTips('编辑附件成功', 'success');
+            }
+        },
         async print() {
             let $self = this;
             let url = '/api/v1/issuesReported/print';
@@ -470,6 +545,26 @@ export default {
         }
         .el-input__suffix {
             left: 8px;
+        }
+    }
+    .uploadBtn {
+        margin-right: 10px;
+        width: 100px;
+        height: 130px;
+        text-align: center;
+        float: left;
+        border: 1px solid #c0c4cc;
+        border-radius: 2px;
+        cursor: pointer;
+
+        .el-upload {
+            width: 100%;
+            height: 100%;
+
+            i {
+                font-size: 50px;
+                margin-top: 35px;
+            }
         }
     }
     #actionList {
