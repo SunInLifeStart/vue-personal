@@ -234,6 +234,7 @@ export default {
             if (response) {
                 this.dialogVisibleAttachment = false;
                 $self.msgTips('编辑附件成功', 'success');
+                this.getFormDetails(this.formId);
             }
         },
         getAttachmentId() {},
@@ -332,7 +333,7 @@ export default {
     .el-step__main {
         margin-top: 10px;
     }
-     .el-tag--mini {
+    .el-tag--mini {
         height: 20px;
         padding: 0 5px;
         line-height: 19px;
