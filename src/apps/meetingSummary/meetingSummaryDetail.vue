@@ -317,7 +317,7 @@ export default {
     }
 }
 </style>
-<style lang="scss" scoped>
+<style lang="scss" >
 #MeetingSummaryDetail {
     html,
     body {
@@ -331,6 +331,12 @@ export default {
     }
     .el-step__main {
         margin-top: 10px;
+    }
+     .el-tag--mini {
+        height: 20px;
+        padding: 0 5px;
+        line-height: 19px;
+        color: black;
     }
     .audit {
         position: relative;

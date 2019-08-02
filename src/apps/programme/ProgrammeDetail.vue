@@ -429,6 +429,12 @@ export default {
     .el-step__main {
         margin-top: 10px;
     }
+    .el-tag--mini {
+        height: 20px;
+        padding: 0 5px;
+        line-height: 19px;
+        color: black;
+    }
     .tableNoBorder {
         width: 100%;
         table-layout: fixed;

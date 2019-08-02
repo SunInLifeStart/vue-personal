@@ -20,6 +20,13 @@
     font-size: 16px;
 }
 
+.el-input.is-disabled .el-input__inner {
+    background-color: rgba(31, 5, 19, 0);
+    border-color: #e4e7ed;
+    color: #1a1a1b;
+    cursor: not-allowed;
+}
+
 .btnList {
     font-weight: bold;
 }
@@ -49,34 +56,33 @@ input[type=number]::-webkit-outer-spin-button {
         margin: 0px auto;
     }
 }
+
 // @page 
 // {
 //     size: auto;   /* auto is the initial value */
 //     margin-top: -5px;  /* this affects the margin in the printer settings */
 // }
-
-.groupMembers{
+.groupMembers {
     border-bottom: 1px solid #ededed;
-   .members{
-       border: 1px solid #ededed;
-       border-bottom: 0px;
-       font-size:13px;
-       padding:5px 15px 5px 50px;
-       text-align: left;
-       position: relative;
-       font-size: 13px;
-       i{
-           color:#c01616;
-           float:right;
-           cursor: pointer;
-           position: absolute;
-           right:12px;
-           top:8px;
-           
-       }
-   }
-   max-height: 400px;
-   overflow-y: scroll;
+    .members {
+        border: 1px solid #ededed;
+        border-bottom: 0px;
+        font-size: 13px;
+        padding: 5px 15px 5px 50px;
+        text-align: left;
+        position: relative;
+        font-size: 13px;
+        i {
+            color: #c01616;
+            float: right;
+            cursor: pointer;
+            position: absolute;
+            right: 12px;
+            top: 8px;
+        }
+    }
+    max-height: 400px;
+    overflow-y: scroll;
 }
 
 #ContractForm {
@@ -107,20 +113,17 @@ input[type=number]::-webkit-outer-spin-button {
         float: left;
         font-size: 20px;
         padding: 7px;
-        img{
+        img {
             width: 24px;
         }
     }
-
 }
 
-
-.wordcontent{
-    .attachments{
-      margin-right: 0px !important;
+.wordcontent {
+    .attachments {
+        margin-right: 0px !important;
     }
 }
-
 
 .el-notification {
     top: 17px !important;

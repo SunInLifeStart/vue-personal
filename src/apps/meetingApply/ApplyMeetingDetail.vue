@@ -720,7 +720,7 @@ export default {
     }
 };
 </script>
-<style>
+<style lang="scss">
 @media print {
     html,
     body {
@@ -755,6 +755,16 @@ export default {
                 margin-top: 35px;
             }
         }
+    }
+    .el-tag--mini {
+        height: 20px;
+        padding: 0 5px;
+        line-height: 19px;
+        color: black;
+    }
+    .el-cascader.is-disabled .el-cascader__label {
+        z-index: 2;
+        color: #151414;
     }
     .el-step__main {
         margin-top: 10px;

@@ -488,6 +488,16 @@ export default {
     .el-step__main {
         margin-top: 10px;
     }
+    .el-tag--mini {
+        height: 20px;
+        padding: 0 5px;
+        line-height: 19px;
+        color: black;
+    }
+    .el-cascader.is-disabled .el-cascader__label {
+        z-index: 2;
+        color: #151414;
+    }
     .audit {
         position: relative;
         margin-bottom: 10px;
