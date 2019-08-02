@@ -437,12 +437,22 @@ export default {
             this.$refs.uploadAttachmentOther.clearFiles();
         },
         async saveIncomingApply() {
+            if (this.tableData.contractType == '合同签订(土地出让合同外)') {
+                this.tableData.contractType = '合同签订';
+            } else if (
+                this.tableData.contractType ==
+                '超出招采委审批条款的合同审批(合同调整审批)'
+            ) {
+                this.tableData.contractType = '超出招采委审批条款的合同审批';
+            }
             let response = await this.saveFormData(
                 '/api/v1/contract_forms/save',
                 this.tableData
             );
             if (response) {
                 this.dialogVisibleAttachment = false;
+                $self.msgTips('编辑附件成功', 'success');
+                this.getFormDetails(this.formId);
             }
         },
         async print() {
