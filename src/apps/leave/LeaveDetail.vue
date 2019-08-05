@@ -313,6 +313,7 @@ export default {
     .el-input--small .el-input__inner {
         height: 33px;
         line-height: 33px;
+        color: black;
     }
     .audit {
         position: relative;

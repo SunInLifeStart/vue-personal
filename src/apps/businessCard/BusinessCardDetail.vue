@@ -45,7 +45,7 @@
                     </el-col>
                     <el-col :span="24">
                         <el-form-item label="印刷明细：">
-                            <el-table :data="tableData.cardPrinting" border style="width: 900px; margin: 5px;">
+                            <el-table :data="tableData.cardPrinting" border style="width: 900px; margin: 5px;" :header-cell-style="{color:'#000'}">
                                 <el-table-column prop="uname" label="姓名" width="70px">
                                     <template slot-scope="scope">
                                         {{scope.row.uname}}

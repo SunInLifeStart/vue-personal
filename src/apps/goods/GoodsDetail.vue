@@ -64,7 +64,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-table ref="table" :data="tableData.supplies" border style="width: 780px; margin-top: 5px;">
+                            <el-table ref="table" :data="tableData.supplies" border style="width: 780px; margin-top: 5px;" :header-cell-style="{color:'#000'}">
                                 <el-table-column prop="supplyName" label="物品名">
                                 </el-table-column>
                                 <el-table-column prop="specification" label="规格/型号">

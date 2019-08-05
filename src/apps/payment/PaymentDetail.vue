@@ -827,6 +827,7 @@ export default {
         border-color: #e4e7ed;
         color: #85888e;
         cursor: not-allowed;
+        color: black;
     }
     .el-input.is-disabled .el-input__inner {
         color: #40516f;

@@ -56,7 +56,7 @@
                     </el-row>
                     <el-row>
                         <el-col :span="24">
-                            <el-table :data="tableData.detail" border style="width:700px; margin-top: 5px;">
+                            <el-table :data="tableData.detail" border style="width:700px; margin-top: 5px;color:black;" :header-cell-style="{color:'#000'}">
                                 <el-table-column prop="name" label="物品名称">
                                     <template slot-scope="scope">
                                         {{scope.row.name}}
@@ -342,6 +342,18 @@ export default {
     }
     .el-step__main {
         margin-top: 10px;
+    }
+    .has-gutter .el-table .cell {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        word-break: break-all;
+        line-height: 23px;
+        padding-left: 10px;
+        padding-right: 10px;
+        color: black;
     }
     .audit {
         position: relative;
