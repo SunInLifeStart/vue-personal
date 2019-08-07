@@ -11,7 +11,7 @@ export default {
     },
     preview(file) {
         //let src = "59.110.172.228:8012";
-        let src2 = "http://xietong.yxpe.com.cn";
+        let src2 = "http://116.117.157.232";
         if (process.env.NODE_ENV === 'production') {
             src2 = "http://124.205.31.66:2097";
         }
