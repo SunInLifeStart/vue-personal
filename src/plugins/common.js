@@ -11,18 +11,18 @@ export default {
     },
     preview(file) {
         //let src = "59.110.172.228:8012";
-        let src2 = "http://116.117.157.232";
+        let src2 = "http://xietong.yxpe.com.cn";
         if (process.env.NODE_ENV === 'production') {
-             src2 = "http://124.205.31.66:2097";
+            src2 = "http://124.205.31.66:2097";
         }
-        if(!file.type){
-            file.type = file.url.substring(file.url.lastIndexOf('.')+1,file.url.length).toUpperCase();
+        if (!file.type) {
+            file.type = file.url.substring(file.url.lastIndexOf('.') + 1, file.url.length).toUpperCase();
         }
-        
-        let url='';
-        if('DOC,DOCX,PPT,PPTX,XLS,XLSX,PDF'.includes(file.type.toUpperCase())){
-         url = src2 + file.url;
-        }else{
+
+        let url = '';
+        if ('DOC,DOCX,PPT,PPTX,XLS,XLSX,PDF'.includes(file.type.toUpperCase())) {
+            url = src2 + file.url;
+        } else {
             url = src2 + file.url;
         }
 
