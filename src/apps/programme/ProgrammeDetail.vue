@@ -435,6 +435,12 @@ export default {
         line-height: 19px;
         color: black;
     }
+    .el-tag--mini {
+        height: 20px;
+        padding: 0 5px;
+        line-height: 19px;
+        color: black;
+    }
     .tableNoBorder {
         width: 100%;
         table-layout: fixed;
@@ -558,5 +564,11 @@ export default {
 }
 #seles >>> .el-select {
     width: calc(100% - 180px);
+}
+#ProgrammeDetail >>> .el-tag--mini {
+    height: 20px;
+    padding: 0 5px;
+    line-height: 19px;
+    color: black;
 }
 </style>
