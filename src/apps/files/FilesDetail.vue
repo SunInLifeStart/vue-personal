@@ -388,4 +388,16 @@ body .el-table th.gutter {
 .blockcolor >>> .el-input__inner {
     color: black;
 }
+#FilesDetail >>> .el-table .cell {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 23px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: black;
+}
 </style>

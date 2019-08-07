@@ -329,6 +329,18 @@ export default {
             left: 8px;
         }
     }
+    .el-table .cell {
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: normal;
+        word-break: break-all;
+        line-height: 23px;
+        padding-left: 10px;
+        padding-right: 10px;
+        color: black;
+    }
     #actionList {
         padding-left: 20px;
         background: #f4f4f4;
@@ -368,6 +380,18 @@ body .el-table th.gutter {
 <style scoped>
 #BusinessCardDetail >>> .el-table__header {
     width: 0px;
+}
+#BusinessCardDetail >>> .el-table .cell {
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+    word-break: break-all;
+    line-height: 23px;
+    padding-left: 10px;
+    padding-right: 10px;
+    color: black;
 }
 </style>
 
