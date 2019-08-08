@@ -54,7 +54,7 @@
                             提单人
                         </td>
                         <td colspan="1">
-                            {{tableData.creatorName}}
+                            {{tableData.submitter}}
                         </td>
                         <td colspan="1">
                             费用承担部门
