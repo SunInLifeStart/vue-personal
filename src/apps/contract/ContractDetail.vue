@@ -82,7 +82,7 @@
                                 {{tableData.contractNum}}
                             </td>
                         </tr>
-                        <tr v-show="decodeURI(this.$store.getters.LoginData.companyName) != '中关村协同发展投资有限公司'">
+                        <tr>
                             <td colspan="2">
                                 合同类型
                             </td>
@@ -437,6 +437,7 @@ export default {
             this.$refs.uploadAttachmentOther.clearFiles();
         },
         async saveIncomingApply() {
+            const $self = this;
             if (this.tableData.contractType == '合同签订(土地出让合同外)') {
                 this.tableData.contractType = '合同签订';
             } else if (

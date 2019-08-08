@@ -670,6 +670,14 @@ export default {
                     return false;
                 }
             }
+            if (this.formData.contractType == '合同签订(土地出让合同外)') {
+                this.formData.contractType = '合同签订';
+            } else if (
+                this.formData.contractType ==
+                '超出招采委审批条款的合同审批(合同调整审批)'
+            ) {
+                this.formData.contractType = '超出招采委审批条款的合同审批';
+            }
             $self.formData.tpxzName = $self.formData.tpxzId.join(',');
             let response = await $self.saveFormData(
                 '/api/v1/contract_forms/save',
