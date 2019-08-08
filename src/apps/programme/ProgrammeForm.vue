@@ -192,7 +192,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="24">
-                        <el-form-item label="征集公告附件" prop="attachmentsAnno">
+                        <el-form-item label="征集公告附件">
                             <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
@@ -356,14 +356,14 @@ export default {
                         trigger: 'blur'
                     }
                 ],
-                attachmentsAnno: [
-                    {
-                        type: 'array',
-                        required: true,
-                        message: '请输入征集公告附件',
-                        trigger: 'blur'
-                    }
-                ],
+                // attachmentsAnno: [
+                //     {
+                //         type: 'array',
+                //         required: true,
+                //         message: '请输入征集公告附件',
+                //         trigger: 'blur'
+                //     }
+                // ],
                 attachmentsIns: [
                     {
                         type: 'array',
