@@ -70,7 +70,7 @@
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">
-                        <el-form-item label="目标成本/预算金融(元)" prop="budgetAmount">
+                        <el-form-item label="目标成本/预算金额(元)" prop="budgetAmount">
                             <format-input separator="," :precision="2" v-model="formData.budgetAmount" :max="1000000000000" :min="-10000000" class="w300" empty-value="0" :minus="true" />
                         </el-form-item>
                     </el-col>
