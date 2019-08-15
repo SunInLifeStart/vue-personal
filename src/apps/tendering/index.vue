@@ -70,12 +70,12 @@
                 </el-table-column>
                 <el-table-column prop="estimatedAmount" label="预计金额">
                 </el-table-column>
-                <el-table-column prop="bidingSketch" label="标的简述">
+                <el-table-column prop="bidingSketch" label="标的简述" width="200">
                 </el-table-column>
                 <el-table-column label="单据状态">
                     <template slot-scope="scope">{{scope.row.status | filterStatus}}</template>
                 </el-table-column>
-                <el-table-column label="操作" width="200">
+                <el-table-column label="操作" width="70">
                     <template slot-scope="scope">
                         <el-tooltip class="item" effect="dark" content="编辑" placement="left" v-if="scope.row.status === '00' || scope.row.status === '02'">
                             <el-button type="text" icon="el-icon-edit-outline" @click="editForm(scope.row)"></el-button>
