@@ -36,35 +36,35 @@
                 </el-row>
                 <el-row class="counts">
                     <el-col :span="4">
-                        <span class="number">
+                        <span class="number" style="margin-left:30px;">
                             <countTo :startVal='0' :endVal='totalAssets' :duration='1000' :decimals="2"></countTo>
                             <label class="unit">亿</label>
                         </span>
                         <p>总投资额</p>
                     </el-col>
                     <el-col :span="5">
-                        <span class="number">
+                        <span class="number" style="margin-left:30px;">
                             <countTo :startVal='0' :endVal='fundedProjects' :duration='1000' :decimals="1"></countTo>
                             <label class="unit">亩</label>
                         </span>
                         <p>土地出让</p>
                     </el-col>
                     <el-col :span="5">
-                        <span class="number">
+                        <span class="number" style="margin-left:30px;">
                             <countTo :startVal='0' :endVal='serviceFirm' :duration='1000'></countTo>
                             <label class="unit">个</label>
                         </span>
                         <p>签约项目</p>
                     </el-col>
                     <el-col :span="5">
-                        <span class="number">
+                        <span class="number" style="margin-left:30px;">
                             <countTo :startVal='0' :endVal='construction' :duration='1000' :decimals="1"></countTo>
                             <label class="unit">亿</label>
                         </span>
                         <p>投产后年产值</p>
                     </el-col>
                     <el-col :span="5">
-                        <span class="number">
+                        <span class="number" style="margin-left:30px;">
                             <countTo :startVal='0' :endVal='nianchan' :duration='1000' :decimals="1"></countTo>
                             <label class="unit">亿</label>
                         </span>
