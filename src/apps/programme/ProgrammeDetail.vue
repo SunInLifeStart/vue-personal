@@ -64,7 +64,7 @@
                 </el-row>
                 <el-row>
                     <el-col :span="8">
-                        <el-form-item label="目标成本/预算金融(元)：">{{tableData.budgetAmount}}
+                        <el-form-item label="目标成本/预算金额(元)：">{{tableData.budgetAmount}}
                         </el-form-item>
                     </el-col>
                     <el-col :span="8">

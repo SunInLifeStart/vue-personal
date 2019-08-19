@@ -16,7 +16,7 @@
                     <el-submenu index="2">
                         <template slot="title">常用链接</template>
                         <!-- <el-menu-item index=""><a href="https://www.fxiaoke.com/" style="color:#fff;display:block" target="_blank">纷享销客</a></el-menu-item> -->
-                        <el-menu-item index=""><a href="http://zhizhao.bjzcdi.com" style="color:#fff;display:block" target="_blank">大数据平台</a></el-menu-item>
+                        <el-menu-item index=""><a href="http://zhizhao.bjzcdi.com:180" style="color:#fff;display:block" target="_blank">大数据平台</a></el-menu-item>
                         <el-menu-item index=""><a href="https://www.wind.com.cn/newsite/data.html" style="color:#fff;display:block" target="_blank">wind-数据服务</a></el-menu-item>       
                         <el-menu-item index=""><a href="https://creis.fang.com/land/home/index" style="color:#fff;display:block" target="_blank">CREIS指数</a></el-menu-item>       
                          <el-menu-item index=""><a href="http://mail.bjzcdi.com" style="color:#fff;display:block" target="_blank">邮箱链接</a></el-menu-item>
