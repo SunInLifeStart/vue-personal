@@ -196,7 +196,8 @@ export default {
             dialogVisibleCrumb: false,
             flowNodeUrl: '',
             typeJuder: '',
-            isAnnualPlanone: ''
+            isAnnualPlanone: '',
+            hasRead: []
         };
     },
     components: {
@@ -263,6 +264,7 @@ export default {
         },
         async getFormDetailsData() {
             let $self = this;
+            let waitRead = [];
             $self.actions = [];
             let response = await $self.getDetails();
             if (response) {
@@ -284,8 +286,24 @@ export default {
                 });
             }
             if ($self.tableData.status != '00') {
+                $self.hasRead = [];
                 let actions = await $self.getActions();
-                $self.actions = actions.data.types;
+                $self.hasRead = actions.data.types.filter(
+                    item => item.name == '已阅'
+                );
+                let noRead = actions.data.types.filter(
+                    item => item.name != '已阅'
+                );
+                if ($self.hasRead.length > 0) {
+                    $self.actions = noRead;
+                    setTimeout(function() {
+                        if ($self.hasRead[0]) {
+                            $self.actions.push($self.hasRead[0]);
+                        }
+                    }, 10000);
+                } else {
+                    $self.actions = noRead;
+                }
             }
             let comments = await $self.getComments();
             $self.comments = comments.data;
