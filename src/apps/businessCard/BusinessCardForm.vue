@@ -80,7 +80,7 @@
                                 <el-table-column prop="telephone" label="座机号">
                                     <template slot-scope="scope">
                                         <!-- @mousewheel.native.prevent -->
-                                        <el-input v-model="scope.row.telephone" type="number"></el-input>
+                                        <el-input v-model="scope.row.telephone" ></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="mailbox" label="邮箱">
