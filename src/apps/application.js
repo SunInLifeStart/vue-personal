@@ -286,6 +286,8 @@ export const publicMethods = {
                 $self.symbolEditForm();
             } else if ($self.currentAction.name == "发布到公司门户") {
                 $self.pushItToDoor();
+            } else if ($self.currentAction.name == "发布至公司门户") {
+                $self.pushOutgoingDoor();
             } else if ($self.currentAction.name == "编写会议纪要") {
                 $self.editMeetingSummary();
             } else if ($self.currentAction.name == "编辑会议附件") {

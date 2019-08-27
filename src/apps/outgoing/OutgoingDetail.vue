@@ -252,6 +252,55 @@ export default {
             );
             this.submitForm()
         },
+        pushOutgoingDoor() {
+            const self = this;
+            let arrurl = [];
+            if (this.tableData.text && typeof this.tableData.text == 'object') {
+                this.tableData.text.type = 'doc';
+                arrurl.push(this.tableData.text);
+            }
+            for (let data of this.tableData.attachments) {
+                arrurl.push(data);
+            }
+
+            const params = {
+                id: this.formId,
+                publisher:
+                    this.tableData.creatorName != null
+                        ? this.tableData.creatorName
+                        : null,
+                title:
+                    this.tableData.title != null ? this.tableData.title : null,
+                time:
+                    this.tableData.created != null
+                        ? this.tableData.created
+                        : null,
+                content:
+                    this.tableData.content != null
+                        ? this.tableData.content
+                        : null,
+                source:
+                    this.tableData.organName != null
+                        ? this.tableData.organName
+                        : null,
+                abstract: null,
+                tags: '集团发文',
+                url: arrurl,
+                img: [],
+                about: null
+            };
+            self.$axios
+                .post('/api/v1/portal/article', params, {})
+                .then(res => {
+                    self.msgTips('发布成功', 'success');
+                })
+                .catch(function() {
+                    self.$message({
+                        message: '操作失败',
+                        type: 'error'
+                    });
+                });
+        },
         attahmentsUplode() {
             this.dialogVisibleAttachment = true;
         },
