@@ -13,6 +13,7 @@
             </el-row>
         </div>
         <div class="formContent">
+            <!---->
             <div>
                 <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
@@ -22,7 +23,7 @@
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData' class="demo-form-inline" ref="formupdate" id='queryTable' style="height:100%">
+            <el-form :model='tableData' class="demo-form-inline" ref="formupdate" id='queryTable' style="height:300%">
                 <h4 style="text-align: center;">付款审批单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
                 <el-row>
                     <el-col :span="7">
