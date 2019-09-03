@@ -13,7 +13,7 @@
         <div class="formContent">
             <div>
                 <!--v-show="this.tableData.status && this.tableData.status == '04'"-->
-                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetail">提交</el-button>
+                <el-button type="primary" v-show="this.tableData.status && this.tableData.status == '00'" @click="commitDetailtt">提交</el-button>
                 <el-button type="primary" @click="getFlowNode" v-show="this.tableData.status && this.tableData.status != '04'">查看流程</el-button>
                 <el-button style="margin-left: 25px;" type="primary" @click="print" v-show="this.tableData.status && this.tableData.status == '04'">打印</el-button>
             </div>
@@ -418,6 +418,17 @@ export default {
         FilesOperate
     },
     methods: {
+        commitDetailtt() {
+            if (this.tableData.contractType == '合同签订(土地出让合同外)') {
+                this.tableData.contractType = '合同签订';
+            } else if (
+                this.tableData.contractType ==
+                '超出招采委审批条款的合同审批(合同调整审批)'
+            ) {
+                this.tableData.contractType = '超出招采委审批条款的合同审批';
+            }
+            this.commitDetail();
+        },
         getAttachmentId() {},
         attahmentsUplode() {
             this.dialogVisibleAttachment = true;
@@ -511,6 +522,16 @@ export default {
             }
         },
         doAction1(action) {
+            /** 
+            if (this.tableData.contractType == '合同签订(土地出让合同外)') {
+                this.tableData.contractType = '合同签订';
+            } else if (
+                this.tableData.contractType ==
+                '超出招采委审批条款的合同审批(合同调整审批)'
+            ) {
+                this.tableData.contractType = '超出招采委审批条款的合同审批';
+            }
+            */
             this.showSpan = false;
             if (
                 action.name == '上传签字盖章合同' ||
