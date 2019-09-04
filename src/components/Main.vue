@@ -1,68 +1,71 @@
 <template>
-  <div class="main">
-    <div class="main-container">
-      <Aside/>
-      <split-pane class="container" v-on:resize="resize" :min-percent="20" :default-percent="30" split="vertical">
-        <template slot="paneL">
-          <div slot="left" class="split-pane-left">
-            <div class="main-top">
-              <div class="main-top-left">
-                <el-dropdown @command="handleType">
-                  <el-button type="text">
-                    {{command}}
-                    <i class="el-icon-arrow-down el-icon--right"></i>
-                  </el-button>
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item :key="type" :command="type" v-for="type in types">{{type}}</el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
-              </div>
-              <div class="main-top-right"></div>
-            </div>
-            <div class="items">
-              <el-alert title type="success" center class="alert" v-if="getNewTodo > 0">
-                <a @click="loadNew">有新的待办事项</a>
-              </el-alert>
-              <div class="item" :class="{active:messageId==item.id}" @click="openContent(item)" :key="item.id" v-show="!item.hide" v-for="item in items">
-                <div class="avatar">
-                  <img src="@/assets/avatar.png" width="30" alt>
-                </div>
-                <div class="content">
-                  <div class="from" :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}">
-                    <div class="from-title">{{item.from.name}} - {{item.from.title}} - 「{{item.businessType.cn}}」</div>
-                    <div class="from-type">{{item.time|dateFromNow}}</div>
-                    <div class="from-delete" @click.stop="deleteTodo(item)" v-if="type != 'todo'">
-                      <el-button type="text" icon="el-icon-delete"></el-button>
+    <div class="main">
+        <div class="main-container">
+            <Aside/>
+            <split-pane class="container" v-on:resize="resize" :min-percent="20" :default-percent="30" split="vertical">
+                <template slot="paneL">
+                    <div slot="left" class="split-pane-left">
+                        <div class="main-top">
+                            <div class="main-top-left">
+                                <el-dropdown @command="handleType">
+                                    <el-button type="text">
+                                        {{command}}
+                                        <i class="el-icon-arrow-down el-icon--right"></i>
+                                    </el-button>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <el-dropdown-item :key="type" :command="type" v-for="type in types">{{type}}</el-dropdown-item>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </div>
+                            <div class="main-top-right"></div>
+                        </div>
+                        <div class="items">
+                            <el-alert title type="success" center class="alert" v-if="getNewTodo > 0">
+                                <a @click="loadNew">有新的待办事项</a>
+                            </el-alert>
+                            <div class="item" :class="{active:messageId==item.id}" @click="openContent(item,index)" :key="item.id" v-show="!item.hide" v-for="(item,index) in items">
+                                <div class="avatar">
+                                    <img src="@/assets/avatar.png" width="30" alt>
+                                </div>
+                                <div class="content">
+                                    <div class="from" :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}">
+                                        <div class="from-title">{{item.from.name}} - {{item.from.title}} - 「{{item.businessType.cn}}」</div>
+                                        <div class="from-type">{{item.time|dateFromNow}}</div>
+                                        <div class="from-delete" @click.stop="deleteTodo(item)" v-if="type != 'todo'">
+                                            <el-button type="text" icon="el-icon-delete"></el-button>
+                                        </div>
+                                    </div>
+                                    <div class="title" :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}">{{item.body.title}}</div>
+                                    <div class="describe" style="display:none;">{{item.body.content}}</div>
+                                </div>
+                            </div>
+                            <div class="empty-data" v-if="items.length==0">
+                                <img src="../assets/noData.png" width="200">
+                                <div style="margin-top:10px;font-size:16px;color:#aaa;text-align:center">此文件夹为空。</div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-                  <div class="title" :class="{todo: (type == 'todo' || type == 'reading') ? true : false,readed:item.readed}">{{item.body.title}}</div>
-                  <div class="describe" style="display:none;">{{item.body.content}}</div>
-                </div>
-              </div>
-              <div class="empty-data" v-if="items.length==0">
-                <img src="../assets/noData.png" width="200">
-                <div style="margin-top:10px;font-size:16px;color:#aaa;text-align:center">此文件夹为空。</div>
-              </div>
-            </div>
-          </div>
-        </template>
-        <template slot="paneR">
-          <div slot="right" class="split-pane-right">
-            <div class="main-top" v-if="!formId"></div>
-            <div class="split-pane-right-bottom">
-              <div class="forms">
-                <component ref="detail" :is="currentView" :formId="formId"></component>
-              </div>
-              <div class="empty-data" v-if="!formId && items.length>0">
-                <img src="../assets/noData.png" width="200">
-                <div style="margin-top:10px;font-size:16px;color:#aaa;">请选择要阅读的项目</div>
-              </div>
-            </div>
-          </div>
-        </template>
-      </split-pane>
+                </template>
+                <template slot="paneR">
+                    <div slot="right" class="split-pane-right">
+                        <div class="main-top" v-if="!formId"></div>
+                        <div class="split-pane-right-bottom">
+                            <div class="forms">
+                                <!--:class="{noread: this.showbutton ,readed:this.showbutton==false}"-->
+                                <!--:class="{noread: this.showbutton ,readed:this.showbutton==false}"-->
+                                <el-button v-if="type == 'reading' && this.showbutton" type="primary" style="position: absolute;top: 3px;right: 20px;z-index: 9999;" @click="hasreaded">已阅</el-button>
+                                <component ref="detail" :is="currentView" :formId="formId"></component>
+                            </div>
+                            <div class="empty-data" v-if="!formId && items.length>0">
+                                <img src="../assets/noData.png" width="200">
+                                <div style="margin-top:10px;font-size:16px;color:#aaa;">请选择要阅读的项目</div>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </split-pane>
+        </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -81,6 +84,8 @@ export default {
             crumb: {
                 items: []
             },
+            showbutton: false,
+            showshow: false,
             comment: '',
             currentView: '',
             newsView: '',
@@ -90,7 +95,8 @@ export default {
             dialogFormVisible: false,
             dialogFormNews: false,
             businessType: '',
-            attachments: undefined
+            attachments: undefined,
+            currentIndex: -1
         };
     },
     directives: {},
@@ -105,7 +111,9 @@ export default {
             this.getWorkFlow();
             this.$store.dispatch('addTodo', 0);
         },
-        openContent(item) {
+        openContent(item, index) {
+            const self = this;
+            this.showbutton = false;
             this.businessType = item.businessType;
             this.formId = '';
             if (this.businessType.en.indexOf('-') > -1) {
@@ -119,8 +127,30 @@ export default {
 
             this.formId = item.body.businessKey;
             this.messageId = item.id;
-
-            if (
+            if (this.type == 'reading' && !item.readed) {
+                this.currentIndex = index;
+                setTimeout(function() {
+                    self.showbutton = true;
+                    // self.showshow = true;
+                }, 10000);
+            }
+            if (this.type == 'todo' && !item.readed) {
+                axios
+                    .get(
+                        `/api/v1/push/${this.LoginData.uid}/messages/${
+                            item.id
+                        }/read?type=${this.type}`
+                    )
+                    .then(res => {
+                        if (res.data.status == 200) {
+                            // item.unreaded = true;
+                            this.$set(item, 'readed', true);
+                        }
+                    });
+            }
+        },
+        /**
+         *  if (
                 (this.type == 'todo' || this.type == 'reading') &&
                 !item.readed
             ) {
@@ -134,6 +164,26 @@ export default {
                         if (res.data.status == 200) {
                             // item.unreaded = true;
                             this.$set(item, 'readed', true);
+                        }
+                    });
+            }
+         */
+        hasreaded() {
+            if (this.showbutton) {
+                axios
+                    .get(
+                        `/api/v1/push/${this.LoginData.uid}/messages/${
+                            this.messageId
+                        }/read?type=${this.type}`
+                    )
+                    .then(res => {
+                        if (res.data.status == 200) {
+                            this.$set(
+                                this.items[this.currentIndex],
+                                'readed',
+                                true
+                            );
+                            this.showbutton = false;
                         }
                     });
             }
@@ -311,6 +361,13 @@ export default {
             flex: 0 0 auto;
             background: #fff; // padding: 0px 30px 30px 0px;
             height: 100%;
+            position: relative;
+            .noread {
+                background: red;
+            }
+            .readed {
+                background: gray;
+            }
         }
     }
 }

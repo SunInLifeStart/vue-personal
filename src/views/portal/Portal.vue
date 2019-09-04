@@ -20,6 +20,7 @@
                                 <div v-for="(item,index) in newsListRight" :key="item.articleId" v-if="index < 5">
                                     <h4 style="margin:0px;font-weight:normal;border-bottom: 1px solid #f9f8f8;">
                                         <router-link :to="{path:'/portal/list/newsList/1/'+item.articleId}">
+                                            <span style="background: red;color: white;font-style: italic;" v-show="item.showType">new</span>
                                             <span style="color: rgb(52, 136, 234);"> •</span> {{item.title | formTxtTitle}}
                                             <span style="float:right;display:inline-block">{{item.time | formDate}}</span>
                                         </router-link>
@@ -92,6 +93,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in anno" :key="item.articleId" style="padding-left:10px;">
+                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <span style="color: #ea3476;" v-if="index == 0"> •</span>
                                     <span style="color: #3488ea;" v-if="index != 0"> •</span>
                                     <router-link :to="'/portal/list/anno/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
@@ -109,6 +111,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in outgoing" :key="item.articleId" style="padding-left:10px;">
+                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <span style="color: #ea3476;" v-if="index == 0"> •</span>
                                     <span style="color: #3488ea;" v-if="index != 0"> •</span>
                                     <router-link :to="'/portal/list/outgoing/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
@@ -126,7 +129,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in addressList" :key="item.articleId" style="padding-left:20px; height:40px;line-height:40px">
-                                    <img src="@/assets/phone2.png" v-if="index == 0" style="top:12px;">
+                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <img src="@/assets/phone.png" v-if="index != 0" style="top:12px;">
                                     <router-link :to="'/portal/list/addressList/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
                                     <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
@@ -145,6 +148,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in duban" :key="item.id" style="padding-left:18px; height:40px;line-height:40px">
+                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <img src="@/assets/arrow.png" v-if="index == 0" style="top:15px;">
                                     <img src="@/assets/arrow2.png" v-if="index != 0" style="top:15px;">
                                     <router-link :to="'/portal/list/duban/1/' + item.id" :title="item.title"> {{item.title | formTxt}}</router-link>
@@ -164,6 +168,7 @@
                                 </h3>
                                 <ul>
                                     <li v-for="(item,index) in nstitution" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px">
+                                        <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                         <img src="@/assets/arrow.png" v-if="index == 0" style="top:15px;">
                                         <img src="@/assets/arrow2.png" v-if="index != 0" style="top:15px;">
                                         <router-link :to="'/portal/list/nstitution/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
@@ -182,6 +187,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in newDocs" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px" @click="showDocs(item)">
+                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <img src="@/assets/arrow.png" v-if="index == 0" style="top:15px;">
                                     <img src="@/assets/arrow2.png" v-if="index != 0" style="top:15px;"> {{item.name | formTxt}}
                                     <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
@@ -279,6 +285,23 @@ export default {
         // showDocs(item){
         //     this.common.preview(item);
         // },
+        timeCompare(time) {
+            if (time && time != '') {
+                let start = moment(new Date()).format('YYYY-MM-DD');
+                let end = moment(time).format('YYYY-MM-DD');
+                let time1 = Date.parse(start) / 1000;
+                let time2 = Date.parse(end) / 1000;
+                let time_ = time1 - time2;
+                let timecom = time_ / (3600 * 24);
+                if (timecom <= 5) {
+                    return true;
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        },
         showDocs(item) {
             if ('DOCX,PPTX,XLSX,DOC,XLS'.includes(item.type.toUpperCase())) {
                 this.openUrl = 'http://static1.yxpe.com.cn/edit.html?';
@@ -293,7 +316,11 @@ export default {
             axios
                 .post('/api/v1/inspect_forms/query', this.inspectParams)
                 .then(response => {
+                    for (let data of response.data.forms) {
+                        data.showType = this.timeCompare(data.created);
+                    }
                     this.duban = response.data.forms;
+                    console.log(this.duban);
                 });
         },
         getMsgList() {
@@ -344,36 +371,57 @@ export default {
                     .then(res => {
                         switch (item) {
                             case '新闻中心':
-                                // this.newsList = res.data.data;
                                 let arr_5 = [];
                                 for (var i = 0; i < res.data.data.length; i++) {
                                     if (res.data.data[i].img.length > 0) {
                                         arr_5.push(res.data.data[i]);
                                     }
                                 }
+                                for (let data of res.data.data) {
+                                    data.showType = this.timeCompare(data.time);
+                                }
                                 this.newsListRight = res.data.data;
                                 this.newsList = arr_5.slice(0, 5);
                                 console.log(this.newsListRight);
+
                                 break;
+
                             case '领导讲话':
                                 this.leaderSpeech = res.data.data;
                                 break;
+
                             case '通知公告':
+                                for (let data of res.data.data) {
+                                    data.showType = this.timeCompare(data.time);
+                                }
                                 this.anno = res.data.data;
                                 break;
                             case '集团发文':
+                                for (let data of res.data.data) {
+                                    data.showType = this.timeCompare(data.time);
+                                }
                                 this.outgoing = res.data.data;
+                                console.log(this.outgoing);
                                 break;
                             case '规章制度':
+                                for (let data of res.data.data) {
+                                    data.showType = this.timeCompare(data.time);
+                                }
                                 this.nstitution = res.data.data;
                                 break;
                             case '工作简报':
                                 this.briefing = res.data.data;
                                 break;
                             case '集团会表':
+                                for (let data of res.data.data) {
+                                    data.showType = this.timeCompare(data.time);
+                                }
                                 this.meetingTable = res.data.data;
                                 break;
                             case '通讯录':
+                                for (let data of res.data.data) {
+                                    data.showType = this.timeCompare(data.time);
+                                }
                                 this.addressList = res.data.data;
                                 break;
                             default:
@@ -392,7 +440,11 @@ export default {
                     options: [{ field: 'tags', filter: 'LIKE', value: '' }]
                 })
                 .then(res => {
-                    self.newDocs = res.data.forms.splice(0, 4);
+                    /**.splice(0, 4) */
+                    for (let data of res.data.forms) {
+                        data.showType = this.timeCompare(data.created);
+                    }
+                    self.newDocs = res.data.forms.splice(0, 7);
                 });
 
             axios.get('/api/v1/portal/focusing').then(res => {
@@ -555,9 +607,8 @@ export default {
                         padding-left: 33px;
                         font-size: 12px;
                         img {
-                            position: absolute;
-                            top: 8px;
-                            left: 3px;
+                            // top: 8px;
+                            //left: 30px;
                         }
                     }
                     li:hover {
