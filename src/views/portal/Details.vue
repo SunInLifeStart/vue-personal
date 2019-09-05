@@ -102,10 +102,20 @@ export default {
         hasreaded() {
             const self = this;
             console.log(this);
-            const params = {
-                formId: this.id,
-                uname: this.$store.getters.LoginData.uid
-            };
+            let params = {};
+            if (this.type == 'outgoing') {
+                params = {
+                    formId: this.id,
+                    uname: this.$store.getters.LoginData.uid
+                };
+            } else {
+                params = {
+                    formId: this.id,
+                    uname: this.$store.getters.LoginData.uid,
+                    type: this.type == 'anno' ? '1' : '0'
+                };
+            }
+
             let url = '';
             if (this.type == 'outgoing') {
                 url = '/api/v1/outgoing_forms/updateRead';
