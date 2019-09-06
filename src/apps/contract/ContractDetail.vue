@@ -126,7 +126,7 @@
                             <td colspan="2">
                                 合同附件
                             </td>
-                            <td colspan="6">
+                            <td colspan="6" style="padding-top:5px;padding-bottom:20px;">
                                 <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType1'">
                                     <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                                 </div>
@@ -139,6 +139,7 @@
                             <td colspan="6">
                                 <el-row>
                                     <el-col :span="24">
+                                        <!--
                                         <el-radio-group v-model="tableData.moneyRadio" disabled>
                                             <el-radio label="1">
                                                 {{tableData.contractAmount}} 元
@@ -146,6 +147,9 @@
                                             <el-radio label="2">其他 成本上线总额 {{tableData.uptotal}} 元
                                             </el-radio>
                                         </el-radio-group>
+                                        -->
+                                        <span v-if="tableData.moneyRadio == '1'"> {{tableData.contractAmount}} 元</span>
+                                        <span v-if="tableData.moneyRadio == '2'">其他 成本上线总额 {{tableData.uptotal}} 元</span>
                                     </el-col>
                                 </el-row>
                             </td>
@@ -155,10 +159,14 @@
                                 是否预算内
                             </td>
                             <td colspan="6">
+                                <!--
                                 <el-radio-group v-model="tableData.budget" disabled>
                                     <el-radio label="1">预算内</el-radio>
                                     <el-radio label="2">预算外</el-radio>
                                 </el-radio-group>
+                                -->
+                                <span v-if="tableData.budget == '1'">预算内</span>
+                                <span v-if="tableData.budget == '2'">预算外</span>
                             </td>
                         </tr>
                         <tr>
@@ -172,6 +180,7 @@
                                 合同期限
                             </td>
                             <td colspan="4">
+                                <!--
                                 <el-radio-group v-model="tableData.terminationPeople" disabled>
                                     <el-row>
                                         <el-col :span="24">
@@ -185,6 +194,9 @@
                                         </el-col>
                                     </el-row>
                                 </el-radio-group>
+                                -->
+                                <span v-if="tableData.terminationPeople == '1'">自{{tableData.effectiveStart}} 至{{tableData.effectiveEnd}}</span>
+                                <span v-if="tableData.terminationPeople == '2'">其他</span>
                             </td>
                         </tr>
                         <tr>
@@ -195,13 +207,19 @@
                                 合同所涉经济行为批准文件
                             </td>
                             <td colspan="4">
+                                <!--
                                 <el-radio-group v-model="tableData.paper" disabled>
                                     <el-radio label="1">股东大会</el-radio>
                                     <el-radio label="2">董事会决议</el-radio>
                                     <el-radio label="3">会议纪要</el-radio>
                                     <el-radio label="4">请示批件</el-radio>
                                     <el-radio label="5">其他</el-radio>
-                                </el-radio-group>
+                                </el-radio-group>-->
+                                <span v-if="tableData.paper == '1'">股东大会</span>
+                                <span v-if="tableData.paper == '2'">董事会决议</span>
+                                <span v-if="tableData.paper == '3'">会议纪要</span>
+                                <span v-if="tableData.paper == '4'">请示批件</span>
+                                <span v-if="tableData.paper == '5'">其他</span>
                             </td>
                         </tr>
                         <tr>
@@ -209,18 +227,23 @@
                                 合同相对方资质证照复印件
                             </td>
                             <td colspan="4">
+                                <!--
                                 <el-radio-group v-model="tableData.copy" disabled>
                                     <el-radio label="1">有</el-radio>
                                     <el-radio label="2">无（属已尽调投资项目或初次合作时已提供）</el-radio>
                                     <el-radio label="3">其他</el-radio>
                                 </el-radio-group>
+                                -->
+                                <span v-if="tableData.copy == '1'">有</span>
+                                <span v-if="tableData.copy == '2'">无（属已尽调投资项目或初次合作时已提供）</span>
+                                <span v-if="tableData.copy == '3'">其他</span>
                             </td>
                         </tr>
                         <tr>
                             <td colspan="2">
                                 合同所涉经济行为批准文件附件
                             </td>
-                            <td colspan="6">
+                            <td colspan="6" style="padding-top:5px;padding-bottom:20px;">
                                 <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType2'">
                                     <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                                 </div>
@@ -230,7 +253,7 @@
                             <td colspan="2">
                                 合同相对方资质证照复印件附件
                             </td>
-                            <td colspan="6">
+                            <td colspan="6" style="padding-top:5px;padding-bottom:20px;">
                                 <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType3'">
                                     <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                                 </div>
@@ -240,7 +263,7 @@
                             <td colspan="2">
                                 其他附件
                             </td>
-                            <td colspan="6">
+                            <td colspan="6" style="padding-top:5px;padding-bottom:20px;">
                                 <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType4'">
                                     <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                                 </div>
@@ -250,7 +273,7 @@
                             <td colspan="2">
                                 上传合同及校审表
                             </td>
-                            <td colspan="6">
+                            <td colspan="6" style="padding-top:5px;padding-bottom:20px;">
                                 <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType5'">
                                     <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                                 </div>
@@ -260,7 +283,7 @@
                             <td colspan="2">
                                 上传签字盖章合同
                             </td>
-                            <td colspan="6">
+                            <td colspan="6" style="padding-top:5px;padding-bottom:20px;">
                                 <div v-for="item in tableData.attachments" :key="item.id" style="float:left" v-show="item.attType == 'attType6'">
                                     <FilesOperate :item="item" :options="{preview:true,download:true}"></FilesOperate>
                                 </div>
@@ -272,11 +295,15 @@
 
                             </td>
                             <td colspan="6">
+                                <!--
                                 <el-radio-group v-model="tableData.shape" disabled>
                                     <el-radio label="2">固定综合单价</el-radio>
                                     <el-radio label="1">固定总价</el-radio>
                                     <el-radio label="3">其他</el-radio>
-                                </el-radio-group>
+                                </el-radio-group>-->
+                                <span v-if="tableData.shape == '1'">固定总价</span>
+                                <span v-if="tableData.shape == '2'">固定综合单价</span>
+                                <span v-if="tableData.shape == '3'">其他</span>
                             </td>
                         </tr>
                         <tr>
@@ -561,7 +588,6 @@ export default {
     html,
     body {
         height: inherit;
-        -webkit-print-color-adjust: exact;
     }
     #query-table {
         height: inherit;
