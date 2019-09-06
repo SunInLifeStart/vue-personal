@@ -561,6 +561,7 @@ export default {
     html,
     body {
         height: inherit;
+        -webkit-print-color-adjust: exact;
     }
     #query-table {
         height: inherit;
