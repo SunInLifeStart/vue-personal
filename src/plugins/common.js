@@ -49,6 +49,7 @@ export default {
         //var  event = new MouseEvent("click");
         a.download = name || "";
         a.href = url; // 将生成的URL设置为a.href属性
+        a.target = "_blank";
         a.dispatchEvent(event); // 触发a的单击事件
 
     },
