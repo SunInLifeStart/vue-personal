@@ -24,7 +24,7 @@
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model='tableData' id='queryTable' class="demo-form-inline" ref="formupdate" style="height:100%">
+            <el-form :model='tableData' id='queryTable' class="demo-form-inline" ref="formupdate" style="height:150%">
                 <h4 style="text-align: center;">报销审批单({{tableData.organName ? tableData.organName.split('-')[0]: ''}})</h4>
                 <el-row style="margin-top: 10px;">
                     <el-col :span="7">

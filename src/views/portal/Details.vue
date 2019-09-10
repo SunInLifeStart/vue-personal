@@ -212,12 +212,16 @@ export default {
                         }
                     }
                     if (aa) {
-                        this.showReadButton = true;
+                        setTimeout(() => {
+                            this.showReadButton = true;
+                        }, 10000);
                     } else {
                         this.showReadButton = false;
                     }
                 } else {
-                    this.showReadButton = true;
+                    setTimeout(() => {
+                        this.showReadButton = true;
+                    }, 10000);
                 }
                 /** 
                 if (

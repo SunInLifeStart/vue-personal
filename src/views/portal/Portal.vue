@@ -97,6 +97,7 @@
                                     <span style="color: #ea3476;" v-if="index == 0"> •</span>
                                     <span style="color: #3488ea;" v-if="index != 0"> •</span>
                                     <router-link :to="'/portal/list/anno/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
+                                    <span style="background: #7bdad2;color: white;padding: 1px;margin-left:5px;" v-if="item.showreaded">已阅</span>
                                     <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
                                 </li>
                             </ul>
@@ -115,6 +116,7 @@
                                     <span style="color: #ea3476;" v-if="index == 0"> •</span>
                                     <span style="color: #3488ea;" v-if="index != 0"> •</span>
                                     <router-link :to="'/portal/list/outgoing/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
+                                    <span style="background: #7bdad2;color: white;padding: 1px;margin-left:5px;" v-if="item.showreaded">已阅</span>
                                     <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
                                 </li>
                             </ul>
@@ -172,6 +174,7 @@
                                         <img src="@/assets/arrow.png" v-if="index == 0" style="top:15px;">
                                         <img src="@/assets/arrow2.png" v-if="index != 0" style="top:15px;">
                                         <router-link :to="'/portal/list/nstitution/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
+                                        <span style="background: #7bdad2;color: white;padding: 1px;margin-left:5px;" v-if="item.showreaded">已阅</span>
                                         <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
                                     </li>
                                 </ul>
@@ -392,12 +395,38 @@ export default {
 
                             case '通知公告':
                                 for (let data of res.data.data) {
+                                    data.showreaded = false;
+                                    if (data.readMan) {
+                                        let bb = data.readMan.split(',');
+                                        for (let data1 of bb) {
+                                            if (
+                                                data1 ==
+                                                this.$store.getters.LoginData
+                                                    .uid
+                                            ) {
+                                                data.showreaded = true;
+                                            }
+                                        }
+                                    }
                                     data.showType = this.timeCompare(data.time);
                                 }
                                 this.anno = res.data.data;
                                 break;
                             case '集团发文':
                                 for (let data of res.data.data) {
+                                    data.showreaded = false;
+                                    if (data.readMan) {
+                                        let bb = data.readMan.split(',');
+                                        for (let data1 of bb) {
+                                            if (
+                                                data1 ==
+                                                this.$store.getters.LoginData
+                                                    .uid
+                                            ) {
+                                                data.showreaded = true;
+                                            }
+                                        }
+                                    }
                                     data.showType = this.timeCompare(data.time);
                                 }
                                 this.outgoing = res.data.data;
@@ -405,6 +434,19 @@ export default {
                                 break;
                             case '规章制度':
                                 for (let data of res.data.data) {
+                                    data.showreaded = false;
+                                    if (data.readMan) {
+                                        let bb = data.readMan.split(',');
+                                        for (let data1 of bb) {
+                                            if (
+                                                data1 ==
+                                                this.$store.getters.LoginData
+                                                    .uid
+                                            ) {
+                                                data.showreaded = true;
+                                            }
+                                        }
+                                    }
                                     data.showType = this.timeCompare(data.time);
                                 }
                                 this.nstitution = res.data.data;
