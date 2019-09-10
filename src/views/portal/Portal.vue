@@ -20,7 +20,7 @@
                                 <div v-for="(item,index) in newsListRight" :key="item.articleId" v-if="index < 5">
                                     <h4 style="margin:0px;font-weight:normal;border-bottom: 1px solid #f9f8f8;">
                                         <router-link :to="{path:'/portal/list/newsList/1/'+item.articleId}">
-                                            <span style="background: red;color: white;font-style: italic;" v-show="item.showType">new</span>
+                                            <span style="background: #9e6e6e;color: white;font-style: italic;" v-show="item.showType">new</span>
                                             <span style="color: rgb(52, 136, 234);"> •</span> {{item.title | formTxtTitle}}
                                             <span style="float:right;display:inline-block">{{item.time | formDate}}</span>
                                         </router-link>
@@ -93,7 +93,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in anno" :key="item.articleId" style="padding-left:10px;">
-                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
+                                    <span style="background: #9e6e6e;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <span style="color: #ea3476;" v-if="index == 0"> •</span>
                                     <span style="color: #3488ea;" v-if="index != 0"> •</span>
                                     <router-link :to="'/portal/list/anno/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
@@ -112,7 +112,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in outgoing" :key="item.articleId" style="padding-left:10px;">
-                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
+                                    <span style="background: #9e6e6e;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <span style="color: #ea3476;" v-if="index == 0"> •</span>
                                     <span style="color: #3488ea;" v-if="index != 0"> •</span>
                                     <router-link :to="'/portal/list/outgoing/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
@@ -131,7 +131,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in addressList" :key="item.articleId" style="padding-left:20px; height:40px;line-height:40px">
-                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
+                                    <span style="background: #9e6e6e;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <img src="@/assets/phone.png" v-if="index != 0" style="top:12px;">
                                     <router-link :to="'/portal/list/addressList/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
                                     <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
@@ -150,7 +150,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in duban" :key="item.id" style="padding-left:18px; height:40px;line-height:40px">
-                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
+                                    <span style="background: #9e6e6e;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <img src="@/assets/arrow.png" v-if="index == 0" style="top:15px;">
                                     <img src="@/assets/arrow2.png" v-if="index != 0" style="top:15px;">
                                     <router-link :to="'/portal/list/duban/1/' + item.id" :title="item.title"> {{item.title | formTxt}}</router-link>
@@ -170,7 +170,7 @@
                                 </h3>
                                 <ul>
                                     <li v-for="(item,index) in nstitution" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px">
-                                        <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
+                                        <span style="background: #9e6e6e;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                         <img src="@/assets/arrow.png" v-if="index == 0" style="top:15px;">
                                         <img src="@/assets/arrow2.png" v-if="index != 0" style="top:15px;">
                                         <router-link :to="'/portal/list/nstitution/1/' + item.articleId" :title="item.title"> {{item.title | formTxt}}</router-link>
@@ -190,7 +190,7 @@
                             </h3>
                             <ul>
                                 <li v-for="(item,index) in newDocs" :key="item.articleId" style="padding-left:18px; height:40px;line-height:40px" @click="showDocs(item)">
-                                    <span style="background: red;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
+                                    <span style="background: #9e6e6e;color: white;padding: 1px;font-style: italic;" v-show="item.showType">new</span>
                                     <img src="@/assets/arrow.png" v-if="index == 0" style="top:15px;">
                                     <img src="@/assets/arrow2.png" v-if="index != 0" style="top:15px;"> {{item.name | formTxt}}
                                     <span style="float:right;margin-right:10px;">{{item.time | formDate}}</span>
