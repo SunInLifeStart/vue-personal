@@ -86,7 +86,7 @@
                     <el-col :span="24">
                         <el-form-item label="附件">
                             <!-- <FilesOperate :options="{uploadCommpoent:true,attachmentsList:rows.attachments}"></FilesOperate> -->
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="(item,index) in formData.attachments" :key="item.id" style="float:left">
@@ -455,7 +455,7 @@ export default {
                     self.formData.attachments.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            //this.$refs.upload.clearFiles();
         },
         submitUpload() {
             this.$refs.upload.submit();

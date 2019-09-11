@@ -1,90 +1,82 @@
 <template>
     <el-dialog title="收文" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">
         <div id="IncomingForm">
-        <el-form ref="formupdate" :model="formData" label-width="80px" :rules="rules">
-            <el-row>
-                <el-col :span="8">
-                    <el-form-item label="来文机关">
-                        <el-input v-model="formData.organ" placeholder="请填写来文机关"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="来文字号">
-                        <el-input v-model="formData.wordNo"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="份数" prop="numberCopies">
-                        <el-input v-model.number="formData.numberCopies"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="8">
-                    <el-form-item label="收文编号">
-                        <el-input v-model="formData.receiptNumber"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="收文日期">
-                        <el-date-picker v-model="formData.receiptDate" style="width:100%" type="date">
-                        </el-date-picker>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="紧急程度">
-                        <el-select v-model="formData.emergencyLevel" placeholder="请选择" style="width:100%">
-                            <el-option v-for="item in options_harry" :key="item.value_harryy" :label="item.label_xwfx" :value="item.value_harryy">
-                            </el-option>
-                        </el-select>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="公文标题" prop="title">
-                        <el-input v-model="formData.title"></el-input>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-            <!--<el-row>-->
+            <el-form ref="formupdate" :model="formData" label-width="80px" :rules="rules">
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="来文机关">
+                            <el-input v-model="formData.organ" placeholder="请填写来文机关"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="来文字号">
+                            <el-input v-model="formData.wordNo"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="份数" prop="numberCopies">
+                            <el-input v-model.number="formData.numberCopies"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="8">
+                        <el-form-item label="收文编号">
+                            <el-input v-model="formData.receiptNumber"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="收文日期">
+                            <el-date-picker v-model="formData.receiptDate" style="width:100%" type="date">
+                            </el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="8">
+                        <el-form-item label="紧急程度">
+                            <el-select v-model="formData.emergencyLevel" placeholder="请选择" style="width:100%">
+                                <el-option v-for="item in options_harry" :key="item.value_harryy" :label="item.label_xwfx" :value="item.value_harryy">
+                                </el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="公文标题" prop="title">
+                            <el-input v-model="formData.title"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <!--<el-row>-->
                 <!--<el-col :span="24">-->
-                    <!--<el-form-item label="便签">-->
-                        <!--<el-input v-model="formData.memo"></el-input>-->
-                    <!--</el-form-item>-->
+                <!--<el-form-item label="便签">-->
+                <!--<el-input v-model="formData.memo"></el-input>-->
+                <!--</el-form-item>-->
                 <!--</el-col>-->
-            <!--</el-row>-->
-            <el-row>
-                <el-col :span="24">
-                    <el-form-item label="附件">
-                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
-                            <i class="el-icon-plus"></i>
-                        </el-upload>
-                        <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                            <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
-                        </div>
-                    </el-form-item>
-                </el-col>
-            </el-row>
-        </el-form>
-    </div>
-        <el-dialog
-                :title="dialogTitle"
-                :visible.sync="dialogSelectCode"
-                width="30%"  append-to-body
-                center>
+                <!--</el-row>-->
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="附件">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+        <el-dialog :title="dialogTitle" :visible.sync="dialogSelectCode" width="30%" append-to-body center>
             <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
-                <el-option
-                        v-for="item in currentRoles"
-                        :key="item.code"
-                        :label="item.name"
-                        :value="item.code">
+                <el-option v-for="item in currentRoles" :key="item.code" :label="item.name" :value="item.code">
                 </el-option>
             </el-select>
             <span slot="footer" class="dialog-footer">
-                   <el-button type="default" @click="saveFormValidate()">保存</el-button>
-                   <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
-                </span>
+                <el-button type="default" @click="saveFormValidate()">保存</el-button>
+                <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+            </span>
         </el-dialog>
         <div slot="footer" class="dialog-footer">
             <el-button type="default" @click="saveFormValidate()">保存</el-button>
@@ -96,17 +88,17 @@
 /* eslint-disable */
 import axios from 'axios';
 import moment from 'moment';
-import FilesOperate from "../FilesOperate";
-import {publicMethods} from "../application.js";
+import FilesOperate from '../FilesOperate';
+import { publicMethods } from '../application.js';
 export default {
-    mixins:[publicMethods],
+    mixins: [publicMethods],
     name: 'IncomingForm',
     data() {
         return {
-            dialogTitle:"",
-            dialogSelectCode:false,
-            currentRoles:[],
-            branchCode:"",
+            dialogTitle: '',
+            dialogSelectCode: false,
+            currentRoles: [],
+            branchCode: '',
             formData: this.resetForm(),
             dialogFormVisible: false,
             createForm_status: false,
@@ -128,7 +120,7 @@ export default {
                     label_xwfx: '特急'
                 }
             ],
-            appFlowName:'incoming-form_incoming',
+            appFlowName: 'incoming-form_incoming',
             rules: {
                 title: [
                     { required: true, message: '请输入标题', trigger: 'blur' }
@@ -144,7 +136,7 @@ export default {
         };
     },
     props: ['formId'],
-      components: {
+    components: {
         FilesOperate
     },
     methods: {
@@ -154,11 +146,11 @@ export default {
                 self.formData.attachments.forEach(function(value, index) {
                     if (value.id == id) {
                         axios
-                        .get('/api/v1/incoming_forms/deleteAtt/' + id)
-                        .then(res => {
-                            self.formData.attachments.splice(index, 1);
-                        });
-                      //  self.formData.attachments.splice(index, 1);
+                            .get('/api/v1/incoming_forms/deleteAtt/' + id)
+                            .then(res => {
+                                self.formData.attachments.splice(index, 1);
+                            });
+                        //  self.formData.attachments.splice(index, 1);
                     }
                 });
             });
@@ -173,7 +165,7 @@ export default {
         createForm() {
             this.formData = this.resetForm();
             this.dialogFormVisible = this.createForm_status = true;
-            this.branchCode = "";
+            this.branchCode = '';
         },
         setDataFromParent(data) {
             this.formData = data;
@@ -182,44 +174,48 @@ export default {
             this.createForm_status = false;
         },
         async saveForm(params) {
-            if(this.createForm_status){
-                if(await this.juderCode() == "returnDialog"){
+            if (this.createForm_status) {
+                if ((await this.juderCode()) == 'returnDialog') {
                     return false;
                 }
             }
             if (this.formData.receiptDate) {
-                this.formData.receiptDate = moment(this.formData.receiptDate).format(
-                    'YYYY-MM-DD hh:mm:ss'
-                );
+                this.formData.receiptDate = moment(
+                    this.formData.receiptDate
+                ).format('YYYY-MM-DD hh:mm:ss');
             } else {
                 this.formData.receiptDate = moment(new Date()).format(
                     'YYYY-MM-DD hh:mm:ss'
                 );
             }
             let response = await this.saveFormData(
-                "/api/v1/incoming_forms/save",
+                '/api/v1/incoming_forms/save',
                 this.formData
             );
             if (response) {
                 this.formId = response.data.id;
-                this.dialogFormVisible = this.dialogSelectCode =  false;
+                this.dialogFormVisible = this.dialogSelectCode = false;
                 if (params) {
-                    this.msgTips("提交成功", "success");
+                    this.msgTips('提交成功', 'success');
                     if (this.createForm_status) {
                         this.startSignalForStart(); //如果是 "新建提交" 启动工作流（调用两次）
                     } else {
                         let actions = await this.getActions(); //如果是 "编辑提交" 启动工作流（调用一次）
-                        actions.data.types = actions.data.types.filter(
-                            function(item) {
-                                return item.action == "COMMIT";
-                            }
+                        actions.data.types = actions.data.types.filter(function(
+                            item
+                        ) {
+                            return item.action == 'COMMIT';
+                        });
+                        actions.data.types[0]['comment'] =
+                            actions.data.types[0].name;
+                        await this.startSignal(
+                            actions.data.types[0],
+                            'fromeEdit'
                         );
-                        actions.data.types[0]["comment"] =  actions.data.types[0].name;
-                        await this.startSignal(actions.data.types[0],"fromeEdit");
                         this.emitMessage();
                     }
                 } else {
-                    this.msgTips("保存成功", "success");
+                    this.msgTips('保存成功', 'success');
                     if (this.createForm_status) {
                         this.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
@@ -228,12 +224,12 @@ export default {
                 }
             } else {
                 if (params) {
-                    if(!this.dialogSelectCode){
-                        $self.msgTips("提交失败", "warning");
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('提交失败', 'warning');
                     }
                 } else {
-                    if(!this.dialogSelectCode){
-                        $self.msgTips("保存失败", "warning");
+                    if (!this.dialogSelectCode) {
+                        $self.msgTips('保存失败', 'warning');
                     }
                 }
             }
@@ -245,7 +241,7 @@ export default {
                     self.formData.attachments.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            // this.$refs.upload.clearFiles();
         },
         resetForm() {
             let formData = {
@@ -258,15 +254,15 @@ export default {
                 title: '',
                 attachments: [],
                 type: ''
-            }
-            return formData
+            };
+            return formData;
         }
     }
 };
 </script>
 <style lang="scss" scoped>
 #IncomingForm {
-   .uploadBtn {
+    .uploadBtn {
         margin-right: 10px;
         width: 100px;
         height: 130px;

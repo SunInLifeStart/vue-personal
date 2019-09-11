@@ -113,7 +113,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :multiple="true" :auto-upload="true" :with-credentials="true" :show-file-list="false">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -293,7 +293,8 @@ export default {
                 budget: true,
                 inbuget: true,
                 generalManagement:
-                    this.$store.getters.LoginData.code.split("_")[1] == 'generalManagementDepartment'
+                    this.$store.getters.LoginData.code.split('_')[1] ==
+                    'generalManagementDepartment'
                         ? true
                         : false
             };
@@ -393,7 +394,7 @@ export default {
                     self.formData.attachments.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            // this.$refs.upload.clearFiles();
         },
         submitUpload() {
             this.$refs.upload.submit();

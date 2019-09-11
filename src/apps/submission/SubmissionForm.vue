@@ -2,7 +2,7 @@
     <el-dialog title="部门呈报" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="75%" style="text-align: center;">
         <div id="SubmissionForm">
             <el-form ref="formupdate" :model="formData" label-width="130px" :rules="rules">
-                <el-row  v-if="isFromDetailsEdit">
+                <el-row v-if="isFromDetailsEdit">
                     <el-col :span="18">
                         <el-form-item label="呈报件编号" prop="submissionNo">
                             <el-input v-model="formData.submissionNo" type="input" placeholder="请选择自动生成或是手动生成" style="margin-left:0px; height: 16px;" :disabled="selectNumber!=='handNumber'"></el-input>
@@ -80,7 +80,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -235,7 +235,10 @@ export default {
                 }
             }
             $self.formData.text = JSON.stringify($self.formData.text);
-            if (this.$store.getters.LoginData.code.split("_")[1] == 'generalManagementDepartment') {
+            if (
+                this.$store.getters.LoginData.code.split('_')[1] ==
+                'generalManagementDepartment'
+            ) {
                 $self.formData.generalManagement = true;
             } else {
                 $self.formData.generalManagement = false;
@@ -268,7 +271,7 @@ export default {
                     }
                 } else {
                     $self.msgTips('保存成功', 'success');
-                    this.$emit('getFormDetails', $self.formId)
+                    this.$emit('getFormDetails', $self.formId);
                     if (this.createForm_status) {
                         $self.startSignalForSave(); //如果是 "新建保存"  启动保存工作流(调用一次)
                     } else {
@@ -311,7 +314,7 @@ export default {
                     self.formData.attachments.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            // this.$refs.upload.clearFiles();
         },
         selectInner(type) {
             if (type == 'autoNumber') {

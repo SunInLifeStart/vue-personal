@@ -193,7 +193,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="征集公告附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsAnno" :key="item.id" style="float:left">
@@ -205,7 +205,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="考察报告附件" prop="attachmentsIns">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsIns" :key="item.id" style="float:left">
@@ -217,7 +217,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="招标采购管理委员会会议纪要附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadMan" action="/api/v1/files/upload" :on-success="handleSuccessMan" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadMan" action="/api/v1/files/upload" :on-success="handleSuccessMan" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsMan" :key="item.id" style="float:left">
@@ -229,7 +229,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="其他附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachmentsOth" :key="item.id" style="float:left">
@@ -613,7 +613,7 @@ export default {
                     self.formData.attachmentsAnno.push(item);
                 });
             }
-            this.$refs.uploadAnno.clearFiles();
+            // this.$refs.uploadAnno.clearFiles();
         },
         handleSuccessMan(response, file) {
             const self = this;
@@ -622,7 +622,7 @@ export default {
                     self.formData.attachmentsMan.push(item);
                 });
             }
-            this.$refs.uploadMan.clearFiles();
+            // this.$refs.uploadMan.clearFiles();
         },
         handleSuccessIns(response, file) {
             const self = this;
@@ -631,7 +631,7 @@ export default {
                     self.formData.attachmentsIns.push(item);
                 });
             }
-            this.$refs.uploadIns.clearFiles();
+            // this.$refs.uploadIns.clearFiles();
         },
         handleSuccessOth(response, file) {
             const self = this;
@@ -640,7 +640,7 @@ export default {
                     self.formData.attachmentsOth.push(item);
                 });
             }
-            this.$refs.uploadOth.clearFiles();
+            // this.$refs.uploadOth.clearFiles();
         },
         submitUpload() {
             this.$refs.upload.submit();

@@ -94,7 +94,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="招标文件(评审版)附件" prop="biddingDocumentAttachment">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadDocument" action="/api/v1/files/upload" :on-success="handleSuccessDocument" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadDocument" action="/api/v1/files/upload" :on-success="handleSuccessDocument" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.biddingDocumentAttachment" :key="item.id" style="float:left">
@@ -106,7 +106,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="经审批的采购方案附件" prop="procurementSchemeAttachment">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadScheme" action="/api/v1/files/upload" :on-success="handleSuccessScheme" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadScheme" action="/api/v1/files/upload" :on-success="handleSuccessScheme" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.procurementSchemeAttachment" :key="item.id" style="float:left">
@@ -118,7 +118,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="其他附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOther" action="/api/v1/files/upload" :on-success="handleSuccessOther" accept="" :auto-upload="true" :with-credentials="true">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOther" action="/api/v1/files/upload" :on-success="handleSuccessOther" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.otherAttachment" :key="item.id" style="float:left">
@@ -414,7 +414,7 @@ export default {
                     self.formData.biddingDocumentAttachment.push(item);
                 });
             }
-            this.$refs.uploadDocument.clearFiles();
+            // this.$refs.uploadDocument.clearFiles();
         },
         handleSuccessScheme(response, file) {
             const self = this;
@@ -424,7 +424,7 @@ export default {
                     self.formData.procurementSchemeAttachment.push(item);
                 });
             }
-            this.$refs.uploadScheme.clearFiles();
+            // this.$refs.uploadScheme.clearFiles();
         },
         handleSuccessOther(response, file) {
             const self = this;
@@ -434,7 +434,7 @@ export default {
                     self.formData.otherAttachment.push(item);
                 });
             }
-            this.$refs.uploadOther.clearFiles();
+            // this.$refs.uploadOther.clearFiles();
         },
         submitUpload() {
             this.$refs.upload.submit();

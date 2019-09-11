@@ -115,7 +115,7 @@
                                 </el-table-column>
                                 <el-table-column label="附件" width="190" align="center">
                                     <template slot-scope="scope">
-                                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" accept="" :auto-upload="true" :with-credentials="true">
+                                        <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
                                         <div v-for="(item,index) in scope.row.attachments" :key="index" class="opertes">

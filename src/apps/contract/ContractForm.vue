@@ -256,7 +256,7 @@
                     <tr>
                         <td colspan="2">
                             合同所涉经济行为批准文件附件
-                            <el-upload name="files" :disabled="this.showSubmit == 'false'" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType2')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                            <el-upload name="files" :disabled="this.showSubmit == 'false'" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType2')" :on-success="handleSuccess" :multiple="true" :auto-upload="true" :with-credentials="true" :show-file-list="false">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                         </td>
@@ -269,7 +269,7 @@
                     <tr>
                         <td colspan="2">
                             合同相对方资质证照复印件附件
-                            <el-upload name="files" :disabled="this.showSubmit == 'false'" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType3')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                            <el-upload name="files" :disabled="this.showSubmit == 'false'" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType3')" :on-success="handleSuccess" :multiple="true" :auto-upload="true" :with-credentials="true" :show-file-list="false">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                         </td>
@@ -282,7 +282,7 @@
                     <tr>
                         <td colspan="2">
                             其他附件
-                            <el-upload name="files" :disabled="this.showSubmit == 'false'" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType4')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                            <el-upload name="files" :disabled="this.showSubmit == 'false'" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType4')" :on-success="handleSuccess" :multiple="true" :auto-upload="true" :with-credentials="true" :show-file-list="false">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                         </td>
@@ -295,7 +295,7 @@
                     <tr v-show="this.actionName == '上传合同及校审表'">
                         <td colspan="2">
                             上传合同及校审表
-                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType5')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType5')" :on-success="handleSuccess" :multiple="true" :auto-upload="true" :with-credentials="true" :show-file-list="false">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                         </td>
@@ -308,7 +308,7 @@
                     <tr v-show="this.actionName == '上传签字盖章合同'">
                         <td colspan="2">
                             上传签字盖章合同
-                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType6')" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                            <el-upload name="files" class="upload" ref="upload" action="/api/v1/files/upload" @click.native="clickAttach('attType6')" :on-success="handleSuccess" :multiple="true" :auto-upload="true" :with-credentials="true" :show-file-list="false">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                         </td>

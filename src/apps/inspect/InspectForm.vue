@@ -1,91 +1,91 @@
 <template>
-  <el-dialog title="督办管理" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
-    <div id="InspectForm">
-      <el-form ref="formData" :model="formData" label-width="130px">
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="标题:">
-              <el-input v-model="formData.title"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="立项人:">
-              <el-input v-model="formData.definer" disabled></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="立项单位:">
-              <el-input v-model="formData.definerUnit" disabled></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="被督办部门负责人:">
-              <el-select v-model="formData.inspector" filterable placeholder="请选择" style="width:100%">
-                <el-option v-for="item in inspectors" :key="item.id" :label="item.name" :value="item.id"></el-option>
-              </el-select>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="截至日期:">
-              <el-date-picker style="width:100%" type="date" v-model="formData.deadline" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="备注:">
-              <el-input v-model="formData.remark"></el-input>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="督办类型:">
-              <el-radio-group v-model="formData.lamp">
-                <el-radio label="红灯"></el-radio>
-                <el-radio label="黄灯"></el-radio>
-              </el-radio-group>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="内容:">
-              <el-input type="textarea" :autosize="{minRows: 5}" placeholder="请输入内容" v-model="formData.content"></el-input>
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="24">
-            <el-form-item label="附件">
-              <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
-                <i class="el-icon-plus"></i>
-              </el-upload>
-              <div v-for="item in formData.attachments" :key="item.id" style="float:left">
-                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
-              </div>
-            </el-form-item>
-          </el-col>
-        </el-row>
-      </el-form>
-    </div>
-    <el-dialog :title="dialogTitle" :visible.sync="dialogSelectCode" width="30%" append-to-body center>
-      <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
-        <el-option v-for="item in currentRoles" :key="item.code" :label="item.name" :value="item.code">
-        </el-option>
-      </el-select>
-      <span slot="footer" class="dialog-footer">
-        <el-button type="default" @click="saveFormValidate()">保存</el-button>
-        <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
-      </span>
+    <el-dialog title="督办管理" :visible.sync="dialogFormVisible" :close-on-click-modal="false" max-width="1280px" width="70%" style="text-align: center;">
+        <div id="InspectForm">
+            <el-form ref="formData" :model="formData" label-width="130px">
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="标题:">
+                            <el-input v-model="formData.title"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="立项人:">
+                            <el-input v-model="formData.definer" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="立项单位:">
+                            <el-input v-model="formData.definerUnit" disabled></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="被督办部门负责人:">
+                            <el-select v-model="formData.inspector" filterable placeholder="请选择" style="width:100%">
+                                <el-option v-for="item in inspectors" :key="item.id" :label="item.name" :value="item.id"></el-option>
+                            </el-select>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="截至日期:">
+                            <el-date-picker style="width:100%" type="date" v-model="formData.deadline" value-format="yyyy-MM-dd HH:mm:ss"></el-date-picker>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="12">
+                        <el-form-item label="备注:">
+                            <el-input v-model="formData.remark"></el-input>
+                        </el-form-item>
+                    </el-col>
+                    <el-col :span="12">
+                        <el-form-item label="督办类型:">
+                            <el-radio-group v-model="formData.lamp">
+                                <el-radio label="红灯"></el-radio>
+                                <el-radio label="黄灯"></el-radio>
+                            </el-radio-group>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="内容:">
+                            <el-input type="textarea" :autosize="{minRows: 5}" placeholder="请输入内容" v-model="formData.content"></el-input>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-form-item label="附件">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
+                                <i class="el-icon-plus"></i>
+                            </el-upload>
+                            <div v-for="item in formData.attachments" :key="item.id" style="float:left">
+                                <FilesOperate :item="item" :options="{preview:true,del:true,download:true}" @getId="getId"></FilesOperate>
+                            </div>
+                        </el-form-item>
+                    </el-col>
+                </el-row>
+            </el-form>
+        </div>
+        <el-dialog :title="dialogTitle" :visible.sync="dialogSelectCode" width="30%" append-to-body center>
+            <el-select v-model="branchCode" placeholder="请选择" style="width:100%">
+                <el-option v-for="item in currentRoles" :key="item.code" :label="item.name" :value="item.code">
+                </el-option>
+            </el-select>
+            <span slot="footer" class="dialog-footer">
+                <el-button type="default" @click="saveFormValidate()">保存</el-button>
+                <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+            </span>
+        </el-dialog>
+        <div slot="footer" class="dialog-footer">
+            <el-button type="default" @click="saveFormValidate()">保存</el-button>
+            <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
+        </div>
     </el-dialog>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="default" @click="saveFormValidate()">保存</el-button>
-      <el-button type="primary" @click="saveFormValidate(true)">提交</el-button>
-    </div>
-  </el-dialog>
 </template>
 <script>
 /* eslint-disable */
@@ -247,7 +247,7 @@ export default {
                             .then(res => {
                                 self.formData.attachments.splice(index, 1);
                             });
-                       // self.formData.attachments.splice(index, 1);
+                        // self.formData.attachments.splice(index, 1);
                     }
                 });
             });
@@ -337,7 +337,7 @@ export default {
                     self.formData.attachments.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            // this.$refs.upload.clearFiles();
         },
         submitUpload() {
             this.$refs.upload.submit();

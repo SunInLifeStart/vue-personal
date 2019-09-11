@@ -41,7 +41,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="公司门户图片以及附件">
-                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                            <el-upload name="files" class="upload-demo uploadBtn" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :multiple="true" :with-credentials="true" :show-file-list="false">
                                 <i class="el-icon-plus"></i>
                             </el-upload>
                             <div v-for="item in formData.attachments" :key="item.id" style="float:left">
@@ -280,7 +280,7 @@ export default {
                     console.log(self.formData);
                 });
             }
-            this.$refs.upload.clearFiles();
+           // this.$refs.upload.clearFiles();
         }
     },
     mounted() {}

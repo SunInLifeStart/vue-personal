@@ -391,7 +391,7 @@
                     </tr>
                     <tr>
                         <td colspan="2" class="fontBold">
-                            <el-upload name="files" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :auto-upload="true" :with-credentials="true" :show-file-list="false">
+                            <el-upload name="files" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :multiple="true" :auto-upload="true" :with-credentials="true" :show-file-list="false">
                                 <span class="span">*</span>
                                 <span style="color:#06940c">附件上传
                                     <i class="el-icon-plus"></i>
@@ -1522,7 +1522,7 @@ export default {
                     self.formData.attachments.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+           // this.$refs.upload.clearFiles();
         },
         downloadFile(url) {
             window.open(url, '_blank');

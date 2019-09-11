@@ -80,7 +80,7 @@
                                 <el-table-column prop="telephone" label="座机号">
                                     <template slot-scope="scope">
                                         <!-- @mousewheel.native.prevent -->
-                                        <el-input v-model="scope.row.telephone" ></el-input>
+                                        <el-input v-model="scope.row.telephone"></el-input>
                                     </template>
                                 </el-table-column>
                                 <el-table-column prop="mailbox" label="邮箱">
@@ -105,7 +105,7 @@
                                 </el-table-column>
                                 <el-table-column prop="" label="附件">
                                     <template slot-scope="scope">
-                                        <el-upload name="files" class="upload-demo uploadBtn" style="width:70px;height:110px" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :limit="1" accept="" :auto-upload="true" :with-credentials="true">
+                                        <el-upload name="files" class="upload-demo uploadBtn" style="width:70px;height:110px" ref="upload" action="/api/v1/files/upload" :on-success="handleSuccess" :on-preview="handlePreview" :on-remove="handleRemove" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                             <i class="el-icon-plus"></i>
                                         </el-upload>
                                         <div v-for="(item,index) in scope.row.attachments" :key="index" class="opertes">
@@ -456,7 +456,7 @@ export default {
                     self.formData.cardPrinting[aaa].attachments.push(item);
                 });
             }
-            this.$refs.upload.clearFiles();
+            // this.$refs.upload.clearFiles();
             // this.$refs.upload.clearBusinessCard();
         },
         submitUpload() {
