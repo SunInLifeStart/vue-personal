@@ -45,7 +45,7 @@ export default {
         }
     },
     created() {
-        this.subscribe();
+        // this.subscribe();
     },
     mounted: function() {
         
