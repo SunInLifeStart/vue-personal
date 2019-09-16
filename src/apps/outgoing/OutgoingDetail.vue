@@ -125,7 +125,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="编辑附件">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
@@ -196,7 +196,7 @@ export default {
             formId: '',
             leaderApprove: {
                 2: '总经理',
-                3: '总经理、董事长',
+                3: '总经理、董事长'
             },
             textarea: '',
             dialogVisible: false,
@@ -246,11 +246,8 @@ export default {
     methods: {
         saveForm() {
             this.tableData.text = JSON.stringify(this.tableData.text);
-            this.saveFormData(
-                "/api/v1/outgoing_forms/save",
-                this.tableData
-            );
-            this.submitForm()
+            this.saveFormData('/api/v1/outgoing_forms/save', this.tableData);
+            this.submitForm();
         },
         pushOutgoingDoor() {
             const self = this;
@@ -315,7 +312,7 @@ export default {
                     // self.$forceUpdate();
                 });
             }
-            this.$refs.uploadAttachmentOther.clearFiles();
+            // this.$refs.uploadAttachmentOther.clearFiles();
         },
         async saveIncomingApply() {
             const $self = this;

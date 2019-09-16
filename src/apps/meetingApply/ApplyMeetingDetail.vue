@@ -215,7 +215,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="上传会议纪要附件">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOther" action="/api/v1/files/upload" :on-success="handleSuccess" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOther" action="/api/v1/files/upload" :on-success="handleSuccess" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div style="margin-left: 5px">
@@ -237,7 +237,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="编辑附件">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAttachmentOther" action="/api/v1/files/upload" :on-success="handleAttachmentSuccess" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.attachments" :key="item.id" style="float:left">
@@ -506,7 +506,7 @@ export default {
                     self.$forceUpdate();
                 });
             }
-            this.$refs.uploadOther.clearFiles();
+            //  this.$refs.uploadOther.clearFiles();
         },
         handleAttachmentSuccess(response, file) {
             const self = this;
@@ -520,7 +520,7 @@ export default {
                     self.$forceUpdate();
                 });
             }
-            this.$refs.uploadAttachmentOther.clearFiles();
+            // this.$refs.uploadAttachmentOther.clearFiles();
         },
         async getDiscussionUser() {
             let a = await axios.get('/api/v1/users/list/organs');

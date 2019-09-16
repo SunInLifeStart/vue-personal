@@ -143,7 +143,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="供应商入库申请表附件" prop="">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadSto" action="/api/v1/files/upload" :on-success="handleSuccessSto" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadSto" action="/api/v1/files/upload" :on-success="handleSuccessSto" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.attachmentsSto" :key="item.id" style="float:left">
@@ -155,7 +155,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="考察报告附件">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.attachmentsIns" :key="item.id" style="float:left">
@@ -242,7 +242,7 @@ export default {
                     self.tableData.attachmentsSto.push(item);
                 });
             }
-            this.$refs.uploadSto.clearFiles();
+            //  this.$refs.uploadSto.clearFiles();
         },
         handleSuccessIns(response, file) {
             const self = this;
@@ -251,7 +251,7 @@ export default {
                     self.tableData.attachmentsIns.push(item);
                 });
             }
-            this.$refs.uploadIns.clearFiles();
+            // this.$refs.uploadIns.clearFiles();
         },
         async saveIncomingApply() {
             const $self = this;

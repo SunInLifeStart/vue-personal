@@ -206,7 +206,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="征集公告附件" prop="">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadAnno" action="/api/v1/files/upload" :on-success="handleSuccessAnno" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.attachmentsAnno" :key="item.id" style="float:left">
@@ -218,7 +218,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="考察报告附件" prop="">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadIns" action="/api/v1/files/upload" :on-success="handleSuccessIns" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.attachmentsIns" :key="item.id" style="float:left">
@@ -230,7 +230,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="招标采购管理委员会会议纪要附件">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadMan" action="/api/v1/files/upload" :on-success="handleSuccessMan" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadMan" action="/api/v1/files/upload" :on-success="handleSuccessMan" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.attachmentsMan" :key="item.id" style="float:left">
@@ -242,7 +242,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="其他附件">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOth" action="/api/v1/files/upload" :on-success="handleSuccessOth" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.attachmentsOth" :key="item.id" style="float:left">
@@ -353,7 +353,7 @@ export default {
                     self.tableData.attachmentsAnno.push(item);
                 });
             }
-            this.$refs.uploadAnno.clearFiles();
+            // this.$refs.uploadAnno.clearFiles();
         },
         handleSuccessMan(response, file) {
             const self = this;
@@ -362,7 +362,7 @@ export default {
                     self.tableData.attachmentsMan.push(item);
                 });
             }
-            this.$refs.uploadMan.clearFiles();
+            // this.$refs.uploadMan.clearFiles();
         },
         handleSuccessIns(response, file) {
             const self = this;
@@ -371,7 +371,7 @@ export default {
                     self.tableData.attachmentsIns.push(item);
                 });
             }
-            this.$refs.uploadIns.clearFiles();
+            // this.$refs.uploadIns.clearFiles();
         },
         handleSuccessOth(response, file) {
             const self = this;
@@ -380,7 +380,7 @@ export default {
                     self.tableData.attachmentsOth.push(item);
                 });
             }
-            this.$refs.uploadOth.clearFiles();
+            // this.$refs.uploadOth.clearFiles();
         },
         async saveIncomingApply() {
             const $self = this;
@@ -432,18 +432,18 @@ export default {
 };
 </script>
 <style>
-    @media print {
-        html,
-        body {
-            height: inherit;
-        }
-        #query-table {
-            height: inherit;
-        }
-        #queryTable {
-            height: inherit;
-        }
+@media print {
+    html,
+    body {
+        height: inherit;
     }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
+}
 </style>
 <style lang="scss" scoped>
 #ProgrammeDetail {

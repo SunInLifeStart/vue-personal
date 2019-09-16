@@ -20,7 +20,7 @@
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
                 <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
             </el-steps>
-            <el-form :model="tableData" id='queryTable' class="demo-form-inline" ref="formupdate" style="height:100%;"  label-width="140px">
+            <el-form :model="tableData" id='queryTable' class="demo-form-inline" ref="formupdate" style="height:100%;" label-width="140px">
                 <el-row>
                     <el-col :span="8">
                         <el-form-item label="流水号：">{{tableData.number}}
@@ -125,7 +125,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="招标文件(评审版)附件" prop="">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadDocument" action="/api/v1/files/upload" :on-success="handleSuccessDocument" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadDocument" action="/api/v1/files/upload" :on-success="handleSuccessDocument" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.biddingDocumentAttachment" :key="item.id" style="float:left">
@@ -137,7 +137,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="经审批的采购方案附件" prop="">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadScheme" action="/api/v1/files/upload" :on-success="handleSuccessScheme" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadScheme" action="/api/v1/files/upload" :on-success="handleSuccessScheme" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.procurementSchemeAttachment" :key="item.id" style="float:left">
@@ -149,7 +149,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="其他附件">
-                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOther" action="/api/v1/files/upload" :on-success="handleSuccessOther" accept="" :auto-upload="true" :with-credentials="true">
+                                <el-upload name="files" class="upload-demo uploadBtn" ref="uploadOther" action="/api/v1/files/upload" :on-success="handleSuccessOther" :multiple="true" :show-file-list="false" accept="" :auto-upload="true" :with-credentials="true">
                                     <i class="el-icon-plus"></i>
                                 </el-upload>
                                 <div v-for="item in tableData.otherAttachment" :key="item.id" style="float:left">
@@ -239,7 +239,7 @@ export default {
                     self.tableData.biddingDocumentAttachment.push(item);
                 });
             }
-            this.$refs.uploadDocument.clearFiles();
+            // this.$refs.uploadDocument.clearFiles();
         },
         handleSuccessScheme(response, file) {
             const self = this;
@@ -249,7 +249,7 @@ export default {
                     self.tableData.procurementSchemeAttachment.push(item);
                 });
             }
-            this.$refs.uploadScheme.clearFiles();
+            //  this.$refs.uploadScheme.clearFiles();
         },
         handleSuccessOther(response, file) {
             const self = this;
@@ -259,7 +259,7 @@ export default {
                     self.tableData.otherAttachment.push(item);
                 });
             }
-            this.$refs.uploadOther.clearFiles();
+            // this.$refs.uploadOther.clearFiles();
         },
         async saveIncomingApply() {
             const $self = this;
@@ -318,18 +318,18 @@ export default {
 };
 </script>
 <style>
-    @media print {
-        html,
-        body {
-            height: inherit;
-        }
-        #query-table {
-            height: inherit;
-        }
-        #queryTable {
-            height: inherit;
-        }
+@media print {
+    html,
+    body {
+        height: inherit;
     }
+    #query-table {
+        height: inherit;
+    }
+    #queryTable {
+        height: inherit;
+    }
+}
 </style>
 <style lang="scss">
 #TenderingDetail {
