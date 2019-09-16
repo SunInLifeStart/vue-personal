@@ -83,7 +83,7 @@
             </el-pagination>
         </el-card>
         <el-card class="box-card card_margin_10">
-            <ApplyMeetingDetail :formId="formBoardId" @refreshData="refreshBoardData" ref="ApplyMeetingDetail" @reloadList="reloadList" @resetStatus="resetStatus"></ApplyMeetingDetail>
+            <ApplyMeetingDetail  ref="ApplyMeetingDetail"></ApplyMeetingDetail>
         </el-card>
         <ApplyMeetingForm ref="ApplyMeetingForm" @reloadList="reloadList"></ApplyMeetingForm>
     </div>
