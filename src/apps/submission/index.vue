@@ -125,7 +125,7 @@ export default {
                 pageSize: 5,
                 desc: true,
                 options: [],
-                orderBy: 'id',
+                orderBy: 'draftTime',
                 draftUser: '',
                 organName: ''
             },
