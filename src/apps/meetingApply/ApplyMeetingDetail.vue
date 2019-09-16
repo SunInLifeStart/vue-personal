@@ -106,7 +106,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="关联议题：">
-                            <tr v-for="item in tableData.discussionContent">
+                            <tr v-for="(item,index) in tableData.discussionContent" :key="index">
                                 <td>
                                     <a href="javacript:void(0);" @click="common.open('#/apps/discussion/' + item.discussionId);">{{ item.discussionName }}</a>
                                 </td>
@@ -593,7 +593,7 @@ export default {
                                 this.dataOptions,
                                 item.department[item.department.length - 1]
                             );
-                            item.personOptions = this.person;
+                            item.personOptions = this.person || [];
                         } else {
                             item.department = [];
                             item.personOptions = [];
@@ -630,7 +630,8 @@ export default {
                                     this.dataOptions,
                                     item.department[item.department.length - 1]
                                 );
-                                item.personOptions = this.person;
+                                console.log(this.person)
+                                item.personOptions = this.person || [];
                             } else {
                                 item.department = [];
                                 item.personOptions = [];
@@ -640,6 +641,7 @@ export default {
                                 for (let i = 0; i < item.people.length; i++) {
                                     item.people[i] = parseInt(item.people[i]);
                                 }
+                            console.log(item.people)
                         }
                     );
                 }
