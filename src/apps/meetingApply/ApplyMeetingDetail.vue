@@ -75,7 +75,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="参会人员" prop="attendingDepartment">
-                                <tr v-for="(item,index) in tableData.attendingDepartment" :key="index" @contextmenu.prevent="deleteItem(item,index,'message')">
+                                <tr v-for="(item,index) in tableData.attendingDepartment" :key="index">
                                     <td colspan="4" style="width: 21%;">
                                         <!--<el-select v-model="item.department" placeholder="请输入参会部门" @change="changeDepartment(item, index)">-->
                                         <!--<el-option v-for="i in options"-->
@@ -118,7 +118,7 @@
                     <el-row>
                         <el-col :span="24">
                             <el-form-item label="列席人员" prop="phone">
-                                <tr v-for="(item,index) in tableData.sitIn" :key="index" @contextmenu.prevent="deleteItem(item,index,'sitIn')">
+                                <tr v-for="(item,index) in tableData.sitIn" :key="index">
                                     <td colspan="4" style="width: 21%;">
                                         <!--<el-select v-model="item.department" placeholder="请输入列席部门" @change="changeSitIn(item, index)">-->
                                         <!--<el-option v-for="i in options"-->
@@ -630,7 +630,6 @@ export default {
                                     this.dataOptions,
                                     item.department[item.department.length - 1]
                                 );
-                                console.log(this.person)
                                 item.personOptions = this.person || [];
                             } else {
                                 item.department = [];
@@ -641,7 +640,6 @@ export default {
                                 for (let i = 0; i < item.people.length; i++) {
                                     item.people[i] = parseInt(item.people[i]);
                                 }
-                            console.log(item.people)
                         }
                     );
                 }
