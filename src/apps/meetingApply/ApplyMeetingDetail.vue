@@ -19,7 +19,7 @@
 
             <br />
             <el-steps :active="crumbs.index" finish-status="success" class="crumbList" v-if="crumbs && crumbs.items">
-                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" :key="item.id" v-for="item in crumbs.items"></el-step>
+                <el-step :description="item.name" :title="item.assignes" icon="el-icon-check" v-for="(item,index) in crumbs.items" :key="index"></el-step>
             </el-steps>
             <el-form :model='tableData' id='queryTable' class="demo-form-inline" ref="formupdate" style="height:100%;margin-left:15px;">
                 <el-row>
