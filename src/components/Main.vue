@@ -52,8 +52,8 @@
                         <div class="split-pane-right-bottom">
                             <div class="forms">
                                 <!--:class="{noread: this.showbutton ,readed:this.showbutton==false}"-->
-                                <!--:class="{noread: this.showbutton ,readed:this.showbutton==false}"-->
-                                <el-button v-if="type == 'reading' && this.showbutton" type="primary" style="position: absolute;top: 3px;right: 20px;z-index: 9999;" @click="hasreaded">已阅</el-button>
+                                <!--:class="{noread: this.showbutton ,readed:this.showbutton==false}"@click="hasreaded"-->
+                                <el-button type="primary" v-if="type == 'reading' && this.showbutton" @click="hasreaded" :disabled="!this.showbuttoncolor" :class="{colorshowccc:!this.showbuttoncolor,colorshowfff:this.showbuttoncolor}" style="position: absolute;top: 3px;right: 20px;z-index: 9999;">已阅</el-button>
                                 <component ref="detail" :is="currentView" :formId="formId"></component>
                             </div>
                             <div class="empty-data" v-if="!formId && items.length>0">
@@ -85,6 +85,7 @@ export default {
                 items: []
             },
             showbutton: false,
+            showbuttoncolor: false,
             showshow: false,
             comment: '',
             currentView: '',
@@ -114,7 +115,8 @@ export default {
         openContent(item, index) {
             const self = this;
             this.showbutton = false;
-            this.businessType = item.businessType;
+            (this.showbuttoncolor = false),
+                (this.businessType = item.businessType);
             this.formId = '';
             if (this.businessType.en.indexOf('-') > -1) {
                 this.businessType = item.businessType.en.replace('-', '');
@@ -129,8 +131,9 @@ export default {
             this.messageId = item.id;
             if (this.type == 'reading' && !item.readed) {
                 this.currentIndex = index;
+                self.showbutton = true;
                 setTimeout(function() {
-                    self.showbutton = true;
+                    self.showbuttoncolor = true;
                     // self.showshow = true;
                 }, 10000);
             }
@@ -362,11 +365,13 @@ export default {
             background: #fff; // padding: 0px 30px 30px 0px;
             height: 100%;
             position: relative;
-            .noread {
-                background: red;
+            .colorshowccc {
+                background: #ccc;
+                border-color: #ccc;
             }
-            .readed {
-                background: gray;
+            .colorshowfff {
+                background: #337bb1;
+                border-color: #337bb1;
             }
         }
     }

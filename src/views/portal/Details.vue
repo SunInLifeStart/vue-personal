@@ -16,7 +16,7 @@
                 </div>
                 <div class="content">
                     <!-- {{data.url[0]}} -->
-                    <el-button type="primary" v-if="(this.type == 'outgoing' ||this.type == 'anno' || this.type == 'nstitution') && this.showReadButton" @click="hasreaded" style="position:absolute; top:10px; right:10px;">已阅</el-button>
+                    <el-button type="primary" :disabled="!this.showreadedColor" v-if="(this.type == 'outgoing' ||this.type == 'anno' || this.type == 'nstitution') && this.showReadButton" :class="{colorshowccc:!this.showreadedColor,colorshowfff:this.showreadedColor}" @click="hasreaded" style="position:absolute; top:10px; right:10px;">已阅</el-button>
                     <div class="title">
                         <h3>{{data.title}}</h3>
                         <p>
@@ -69,7 +69,8 @@ export default {
             data: {},
             inspectors: [],
             name: '',
-            showReadButton: false
+            showReadButton: false,
+            showreadedColor: false
         };
     },
     components: {
@@ -212,15 +213,19 @@ export default {
                         }
                     }
                     if (aa) {
+                        this.showReadButton = true;
+                        this.showreadedColor = false;
                         setTimeout(() => {
-                            this.showReadButton = true;
+                            this.showreadedColor = true;
                         }, 10000);
                     } else {
                         this.showReadButton = false;
                     }
                 } else {
+                    this.showReadButton = true;
+                    this.showreadedColor = false;
                     setTimeout(() => {
-                        this.showReadButton = true;
+                        this.showreadedColor = true;
                     }, 10000);
                 }
                 /** 
@@ -308,6 +313,14 @@ export default {
         border-radius: 5px;
         padding-bottom: 30px;
         position: relative;
+        .colorshowccc {
+            background-color: #ccc;
+            border-color: #ccc;
+        }
+        .colorshowfff {
+            background-color: #337bb1;
+            border-color: #337bb1;
+        }
         .newsContentDetails {
             padding: 0px 90px;
             text-align: left;
