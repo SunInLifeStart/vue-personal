@@ -119,7 +119,8 @@
                             公司参加陪同人员
                         </td>
                         <td colspan="3">
-                            <el-select v-model="formData.people" multiple placeholder="请选择陪同人员" filterable>
+                            <el-select v-model="formData.people" multiple placeholder="请选择陪同人员" filterable @change="
+                            changeuser">
                                 <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.name">
                                 </el-option>
                             </el-select>
@@ -252,12 +253,15 @@ export default {
     },
     mounted() {
         console.log(this.$store.getters.LoginData.Role);
-        this.getUsers();
-        this.organs();
+        //  this.getUsers();
+        //  this.organs();
         // this.getTravelList();
         // this.getSubmissionlList();
     },
     methods: {
+        changeuser() {
+            this.$forceUpdate();
+        },
         moneyChange() {
             this.formData.amountInWords = this.convertCurrency(
                 this.formData.amountInFigures
@@ -421,7 +425,8 @@ export default {
             this.organs();
             this.formData.submission = '';
             this.formData = data;
-            this.formData.people = data.accompanying.split(',');
+            this.formData.people =
+                data.accompanying == '' ? [] : data.accompanying.split(',');
             if (data.subId && data.subId != '') {
                 if (data.subView) {
                     this.formData.submission = parseInt(data.subId);
@@ -429,6 +434,7 @@ export default {
                     this.formData.submission = data.subId;
                 }
             }
+            console.log(this.formData);
             this.formId = data.id;
             this.dialogFormVisible = true;
             this.createForm_status = false;
@@ -612,7 +618,7 @@ export default {
                     self.formData.attachments.push(item);
                 });
             }
-           // this.$refs.upload.clearFiles();
+            // this.$refs.upload.clearFiles();
         },
         downloadFile(url) {
             window.open(url, '_blank');
