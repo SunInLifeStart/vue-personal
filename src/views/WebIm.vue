@@ -902,7 +902,7 @@ export default {
             flex: 1 1 auto;
             overflow: auto;
             -webkit-box-flex: 1;
-            height: 100%;
+            height: 100px;
             padding-bottom:50px;
             .emptytips {
                 text-align: center;
