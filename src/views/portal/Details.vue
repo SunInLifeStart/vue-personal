@@ -15,8 +15,8 @@
                     <router-link :to="{path:'/portal'}">首页</router-link>
                 </div>
                 <div class="content">
-                    <!-- {{data.url[0]}} -->
-                    <el-button type="primary" :disabled="!this.showreadedColor" v-if="(this.type == 'outgoing' ||this.type == 'anno' || this.type == 'nstitution') && this.showReadButton" :class="{colorshowccc:!this.showreadedColor,colorshowfff:this.showreadedColor}" @click="hasreaded" style="position:absolute; top:10px; right:10px;">已阅</el-button>
+                    <!-- style="position:absolute; top:10px; right:10px;" -->
+                    <el-button type="primary" :disabled="!this.showreadedColor" v-if="(this.type == 'outgoing' ||this.type == 'anno' || this.type == 'nstitution') && this.showReadButton" :class="{colorshowccc:!this.showreadedColor,colorshowfff:this.showreadedColor}" style="float:left;" @click="hasreaded">已阅</el-button>
                     <div class="title">
                         <h3>{{data.title}}</h3>
                         <p>
