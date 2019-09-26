@@ -26,18 +26,18 @@
                         </el-form-item>
                     </el-col>
                 </el-row>
-<!--                <el-row>-->
-<!--                    <el-form-item label="发布到">-->
-                        <!--
+                <!--                <el-row>-->
+                <!--                    <el-form-item label="发布到">-->
+                <!--
                     <el-col :span="6">
                         <el-checkbox label="公司网站" v-model="formData.toSite"></el-checkbox>
                     </el-col>
                     -->
-<!--                        <el-col :span="6">-->
-<!--                            <el-checkbox label="公司门户" v-model="formData.toPortal"></el-checkbox>-->
-<!--                        </el-col>-->
-<!--                    </el-form-item>-->
-<!--                </el-row>-->
+                <!--                        <el-col :span="6">-->
+                <!--                            <el-checkbox label="公司门户" v-model="formData.toPortal"></el-checkbox>-->
+                <!--                        </el-col>-->
+                <!--                    </el-form-item>-->
+                <!--                </el-row>-->
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="公司门户图片以及附件">
@@ -195,6 +195,7 @@ export default {
             });
         },
         getId(id) {
+            /** 
             let self = this;
             self.$confirm('是否删除?', '提示', { type: 'warning' }).then(() => {
                 self.formData.attachments.forEach(function(value, index) {
@@ -203,6 +204,46 @@ export default {
                     }
                 });
             });
+            */
+            const self = this;
+            if (this.formData.attachments.length > 0) {
+                this.$confirm('是否删除?', '提示', { type: 'warning' }).then(
+                    () => {
+                        const params = {
+                            id: id
+                        };
+                        axios
+                            .delete(
+                                '/api/v1/news_forms/deleteAtt?id=' + id,
+                                '',
+                                {
+                                    headers: {
+                                        'Content-type': 'application/json'
+                                    }
+                                }
+                            )
+                            .then(res => {
+                                self.formData.attachments.forEach(function(
+                                    item,
+                                    index
+                                ) {
+                                    if (item.id == id) {
+                                        self.formData.attachments.splice(
+                                            index,
+                                            1
+                                        );
+                                    }
+                                });
+                            })
+                            .catch(function() {
+                                self.$message({
+                                    message: '操作失败',
+                                    type: 'error'
+                                });
+                            });
+                    }
+                );
+            }
         },
         // 提交保存
         async saveForm(params) {
@@ -212,7 +253,10 @@ export default {
                     return false;
                 }
             }
-            if (this.$store.getters.LoginData.code.split("_")[1] == 'generalManagementDepartment') {
+            if (
+                this.$store.getters.LoginData.code.split('_')[1] ==
+                'generalManagementDepartment'
+            ) {
                 $self.formData.generalManagement = true;
             }
             $self.formData.pushAddr = [];
@@ -280,7 +324,7 @@ export default {
                     console.log(self.formData);
                 });
             }
-           // this.$refs.upload.clearFiles();
+            // this.$refs.upload.clearFiles();
         }
     },
     mounted() {}
