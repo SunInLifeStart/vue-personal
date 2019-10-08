@@ -35,7 +35,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="招标情况说明" prop="bidCondition">
-                            <el-input v-model="formData.bidCondition" type="textarea"></el-input>
+                            <el-input v-model="formData.bidCondition"></el-input>
                         </el-form-item>
                     </el-col>
                 </el-row>

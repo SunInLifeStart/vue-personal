@@ -56,7 +56,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="共同发起人">
-                            <el-input type="textarea" :autosize="{minRows: 2, maxRows: 5}" placeholder="请输入内容" v-model="formData.commonUser">
+                            <el-input placeholder="请输入内容" v-model="formData.commonUser">
                             </el-input>
                         </el-form-item>
                     </el-col>
@@ -64,7 +64,7 @@
                 <el-row>
                     <el-col :span="24">
                         <el-form-item label="备注">
-                            <el-input type="textarea" :autosize="{minRows: 2, maxRows: 5}" placeholder="请输入内容" v-model="formData.remarks">
+                            <el-input placeholder="请输入内容" v-model="formData.remarks">
                             </el-input>
                         </el-form-item>
                     </el-col>
