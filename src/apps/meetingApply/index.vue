@@ -162,11 +162,14 @@ export default {
         }
     },
     methods: {
-        reloadList(params) {
+        async reloadList(params) {
             if (params == 'reload') {
                 this.params.pageNum = 1;
                 this.getList();
             } else {
+                this.url = '/api/v1/meetingApply/queryList';
+                let response = await this.getQueryList();
+                this.tableData = response.data.content.list;
                 this.$refs.ApplyMeetingDetail.getFormDetails(params.id);
             }
         },
